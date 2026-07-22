@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T110229Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-001",
+  "timestamp_utc": "2026-07-22T11:02:29.818311+00:00",
+  "summary": "Slice 3: Claude-Konfiguration geprueft; keine unsupported Frontmatter-Felder; 4 Reviewer auf read-only reduziert; settings-Deny-Guardrails aktiviert.",
+  "branch": "wp-001-continuity-bootstrap",
+  "commit": "ee18456",
+  "git_status": "clean or unavailable",
+  "tests": "validate_handoff.py OK; 6/6 repository contract tests green",
+  "exact_next_step": "Slice 4: checkpoint.py/handover.py/validate_handoff.py Dry-Run; Verified Checkpoint 2."
+}
