@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T205518Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-001",
+  "timestamp_utc": "2026-07-22T20:55:18.547880+00:00",
+  "summary": "WP-014 gestartet: Objekt-360-Detailseite (Slice 1 Bau, Slice 2 Verlinkung) an frontend-engineer delegiert; Baseline verifiziert (191 Tests gruen, validate_handoff OK)",
+  "branch": "main",
+  "commit": "81ca764",
+  "git_status": "clean or unavailable",
+  "tests": "not run / not provided",
+  "exact_next_step": "Drei unabhaengige Reviews (Code / Product-User-Lead / Security) auswerten, Findings gebuendelt fixen, frisch verifizieren + Browser-QA"
+}
