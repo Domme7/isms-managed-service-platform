@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T193310Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-013",
+  "timestamp_utc": "2026-07-22T19:33:10.716727+00:00",
+  "summary": "WP-013 (ISMS-Kern-Welt, read-only) aktiv gesetzt; Slice 1 an frontend-engineer delegiert (View-Helfer + IsmsView, Ort ISMS live).",
+  "branch": "main",
+  "commit": "6230262",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/WORK_QUEUE.md",
+  "tests": "not run / not provided",
+  "exact_next_step": "Slice 1 bauen; danach Code+UX-Review + Browser-QA."
+}
