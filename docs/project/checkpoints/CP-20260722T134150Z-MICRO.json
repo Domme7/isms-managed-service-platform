@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T134150Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-003",
+  "timestamp_utc": "2026-07-22T13:41:50.127832+00:00",
+  "summary": "WP-003 angelegt (Datenvertraege + Demo-Seed aus Dok. 07); als aktives WP gesetzt, Slice-1 Build wird an Data-Graph-Builder delegiert.",
+  "branch": "main",
+  "commit": "8116e53",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/WORK_QUEUE.md\n?? context-packs/WP-003/\n?? work-packages/WP-003_KANONISCHE_DATENVERTRAEGE_UND_DEMO_SEED.md",
+  "tests": "not run / not provided",
+  "exact_next_step": "Slice 1: @isms/contracts (Objekt-/Beziehungsvertrag + Vokabulare + Zod-Schemas + Tests) bauen und unabhaengig reviewen."
+}

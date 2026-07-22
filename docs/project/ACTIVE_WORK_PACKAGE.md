@@ -1,13 +1,15 @@
 # Active Work Package
 
-- **ID:** WP-002
-- **Titel:** Technologie-ADR und ausführbares App-Grundgerüst
-- **Datei:** `work-packages/WP-002_TECH_ADR_UND_APP_GRUNDGERUEST.md`
-- **ADR:** `docs/architecture/adr/ADR-0001_app_stack_und_monorepo.md` (Accepted, Human Gate)
-- **Status:** Done (minimales lauffähiges Grundgerüst) — kein neues WP aktiv bis Start von WP-003
-- **Owner:** CTO-/Architecture-Agent
-- **Builder:** Platform/DevOps + Backend + Frontend
-- **Reviewer:** QA/Test (read-only) + Product Security & Privacy (read-only)
-- **Nächstes:** WP-003 (synthetische Demo-Datenverträge/Seed) — benötigt Docker-Entscheidung für lokale PostgreSQL/Redis (Folge-ADR)
+- **ID:** WP-003
+- **Titel:** Kanonische Datenverträge & synthetische Demo-Seed-Grundlage
+- **Datei:** `work-packages/WP-003_KANONISCHE_DATENVERTRAEGE_UND_DEMO_SEED.md`
+- **Context Pack:** `context-packs/WP-003/CONTEXT_PACK.md`
+- **Führende Quelle:** Dokument 07 (Digitaler Unternehmenszwilling & Informationsgraph)
+- **Status:** Active — Slice 1 (Contract-Kern `@isms/contracts`)
+- **Owner:** CTO-/Architecture-Agent (Orchestrator)
+- **Builder:** Data-Graph-Analytics-Agent
+- **Reviewer:** Code-Reviewer + Concept-Consistency-Reviewer (read-only)
+- **Human Gates:** keiner (keine DB/ORM/Docker, keine Kosten, nur synthetische Daten)
+- **Nächstes:** persistenz-WP (benötigt Docker/ORM-Entscheidung) erst nach WP-003
 
-> Hinweis: WP-001 (Repository & Continuity Bootstrap) ist als Phase-0-Baseline abgeschlossen und getaggt (`phase-0-baseline`).
+> Abgeschlossen: WP-001 (Phase-0-Baseline, getaggt) und WP-002 (Stack-ADR-0001 + lauffähiges Grundgerüst).
