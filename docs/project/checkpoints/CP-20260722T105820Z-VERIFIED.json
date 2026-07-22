@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T105820Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-001",
+  "timestamp_utc": "2026-07-22T10:58:20.998869+00:00",
+  "summary": "Slice 2: Paket auf Repository-Root gehoben (DR-0001), Git initialisiert (main), Phase-0-Baseline committet, Truth-Dateien abgeglichen.",
+  "branch": "wp-001-continuity-bootstrap",
+  "commit": "ac743df",
+  "git_status": "?? docs/project/checkpoints/CP-20260722T105820Z-MICRO.json\n?? docs/project/checkpoints/CP-20260722T105820Z-MICRO.md",
+  "tests": "validate_handoff.py OK; 6/6 repository contract tests green (post-promotion)",
+  "exact_next_step": "Slice 3: .claude Agents/Rules/Skills/Settings gegen Claude Code 2.1.201 pruefen; danach Micro Checkpoint 2."
+}

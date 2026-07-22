@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T105820Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-001",
+  "timestamp_utc": "2026-07-22T10:58:20.794682+00:00",
+  "summary": "Slice 1: Paketvalidierung, Manifest-Hashes und Capability-Check abgeschlossen.",
+  "branch": "wp-001-continuity-bootstrap",
+  "commit": "ac743df",
+  "git_status": "clean or unavailable",
+  "tests": "validate_handoff.py OK; 6/6 repository contract tests green",
+  "exact_next_step": "Slice 2: Git-/Truth-Baseline herstellen."
+}

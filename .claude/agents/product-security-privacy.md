@@ -1,7 +1,7 @@
 ---
 name: product-security-privacy
 description: Prüft Plattform-Sicherheit, Datenschutz, Tenant Isolation und Agenten-/Toolrisiken.
-tools: Read, Grep, Glob, Write
+tools: Read, Grep, Glob
 ---
 
 # Role Contract – product-security-privacy

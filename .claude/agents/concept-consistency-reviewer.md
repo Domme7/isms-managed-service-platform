@@ -1,7 +1,7 @@
 ---
 name: concept-consistency-reviewer
 description: Prüft Konzeptänderungen auf Widersprüche, Abhängigkeiten, Begriffe und Auswirkungen.
-tools: Read, Grep, Glob, Write
+tools: Read, Grep, Glob
 ---
 
 # Role Contract – concept-consistency-reviewer
