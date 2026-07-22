@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T223222Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-001",
+  "timestamp_utc": "2026-07-22T22:32:22.846955+00:00",
+  "summary": "WP-016 Mission Control Heute aktiviert: WP + Context Pack vom program-manager erstellt; Morning Mission bewusst NICHT im Scope (Seed traegt keine Aufgaben, Fristen, Kapazitaeten, Ereignisse, Historie) - begruendet im WP und im Produkt sichtbar. Faktenkorrektur 41 -> 40 Objekte in allen Statusdateien (am Seed nachgerechnet).",
+  "branch": "main",
+  "commit": "68510c7",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CURRENT_STATE.md\n M docs/project/OPEN_QUESTIONS.md\n M docs/project/reviews/WP-014_INDEPENDENT_REVIEW.md\n?? context-packs/WP-016/\n?? work-packages/WP-016_MISSION_CONTROL_HEUTE.md",
+  "tests": "not run / not provided",
+  "exact_next_step": "Slice 1 (lib/heute/data.ts + framing.ts + Unit-Tests) und Slice 2 (HeuteView/MissionControlContent, places.ts live, Render-Tests) an frontend-engineer delegieren, danach zwei unabhaengige Reviews"
+}

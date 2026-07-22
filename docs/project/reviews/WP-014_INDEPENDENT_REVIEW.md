@@ -28,15 +28,16 @@ Insgesamt **18 + 10 Findings** umgesetzt, die letzten sechs vom Orchestrator dir
 **1. Der größte Fund des Projekts wäre rückgängig gemacht worden.** In WP-013 war beanstandet worden,
 dass „Control · Status: wirksam" sich wie ein Prüfergebnis liest, obwohl es nur ein Lebenszyklus-Stand
 ist. Die neue, **generische** Objektseite trug diese Formulierung wieder ungerahmt — und zwar für alle
-41 Objekte statt nur im ISMS-Bereich. Behoben: „Lebenszyklus-Stand" statt „Status", plus seitenweite
+40 Objekte statt nur im ISMS-Bereich. Behoben: „Lebenszyklus-Stand" statt „Status", plus seitenweite
 Rahmung. Die Rahmung wurde in Runde 2 nochmals **präzisiert**, weil sie zu weit griff: der Status
 einer *Beziehung* darf laut Dok. 07 §9 R15 sehr wohl ein Prüfstatus sein („Nachweisbezug mit Zeitraum
 und Prüfstatus"). Eine Rahmung, die das leugnet, wäre selbst wieder unehrlich gewesen.
 
-**2. Eine erfundene Erwartung auf 36 von 41 Seiten.** Der Bau zeigte „Kein Nachweis verweist auf dieses
+**2. Eine erfundene Erwartung auf 39 von 40 Seiten.** Der Bau zeigte „Kein Nachweis verweist auf dieses
 Objekt" für *jedes* Objekt ohne `evidences`-Kante — auch für eine Organisation, eine Rolle, ein SLA.
 Dok. 07 §9 R15 sieht dort gar keinen Nachweisbezug vor; der Satz behauptete also eine Lücke, die
-fachlich keine ist. Behoben durch Einschränkung auf die nachweisfähigen Objekttypen. **Nebenwirkung
+fachlich keine ist. Behoben durch Einschränkung auf die nachweisfähigen Objekttypen — **nach dem Fix
+erscheint der Satz auf genau einer Seite** (nachgerechnet am Seed, nicht geschätzt). **Nebenwirkung
 mit Wert:** dadurch wurde der bis dahin unerreichbare Empty-Zustand real erreichbar — ein Zweig, den
 zwei Reviewer unabhängig als toten Code markiert hatten.
 
@@ -80,7 +81,7 @@ Maßnahme noch ein Servicebezug erfasst", während derselbe Bildschirm darunter 
 |---|---|
 | `pnpm test --force` (ohne Cache) | **265 Tests grün** — api 2 · contracts 55 · demo-seed 38 · web **151** · db 19 |
 | `pnpm --filter @isms/web run typecheck` | grün |
-| `pnpm build --force` | grün, 57 Seiten statisch, davon 41 Objektseiten (SSG) |
+| `pnpm build --force` | grün, 57 Seiten statisch, davon 40 Objektseiten (SSG) |
 | `python scripts/validate_handoff.py` | 4/4 OK |
 
 Web-Tests: 77 (vor WP-014) → 151.
@@ -106,7 +107,7 @@ trägt; eine rein visuelle Abnahme (Layout/Kontrast der neuen Abschnitte) steht 
 
 ## Offene Punkte für spätere Work Packages
 
-1. **31 von 41 Objektseiten** haben ein leeres „Was als Nächstes?". Alle Leersätze sind sachlich
+1. **31 von 40 Objektseiten** haben ein leeres „Was als Nächstes?" (am Seed nachgerechnet). Alle Leersätze sind sachlich
    richtig, wirken in dieser Menge aber wie ein Standardtext → Produktentscheidung, ob der Abschnitt
    für solche Typen überhaupt erscheinen soll.
 2. **`/services` trägt keinen seitenweiten Rahmungssatz** (anders als `/isms` und die Objektseite).
