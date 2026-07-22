@@ -46,13 +46,19 @@ describe('NAV_PLACES – acht stabile Orte (Dok. 06 06-D01)', () => {
     expect(getPlace('isms').live).toBe(true);
   });
 
+  it('markiert „Heute" als live und ohne geplanten Screen (WP-016 Slice 2)', () => {
+    const heute = getPlace('heute');
+    expect(heute.live).toBe(true);
+    // Der Ort ist kein Platzhalter mehr: die Ankündigung eines geplanten Screens entfällt.
+    expect(heute.plannedScreen).toBeUndefined();
+  });
+
   it('markiert die übrigen Platzhalter-Orte als (noch) nicht live', () => {
-    // Live sind bislang „Kunden" (Twin Explorer, WP-004/011), „Services" (WP-012 Slice 2)
-    // und „ISMS" (WP-013 Slice 1).
-    const placeholders = NAV_PLACES.filter(
-      (p) => p.id !== 'kunden' && p.id !== 'services' && p.id !== 'isms',
-    );
-    expect(placeholders).toHaveLength(5);
+    // Live sind bislang „Kunden" (Twin Explorer, WP-004/011), „Services" (WP-012 Slice 2),
+    // „ISMS" (WP-013 Slice 1) und „Heute" (WP-016 Slice 2).
+    const live: readonly string[] = ['kunden', 'services', 'isms', 'heute'];
+    const placeholders = NAV_PLACES.filter((p) => !live.includes(p.id));
+    expect(placeholders).toHaveLength(4);
     for (const place of placeholders) {
       expect(place.live).not.toBe(true);
     }

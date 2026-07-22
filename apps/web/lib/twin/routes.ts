@@ -31,6 +31,16 @@ export function objectDetailHref(tenantId: string, objectId: string): string {
   return `/twin/${encodeURIComponent(tenantId)}/objekt/${encodeURIComponent(objectId)}`;
 }
 
+/**
+ * Pfad der Mandanten-Detailseite des Twin-Explorers (`/twin/[tenantId]`). Ergänzt in WP-016
+ * Slice 1, damit der Einstieg „Zwilling" des Ortes „Heute" die Route nicht erneut zusammensetzt.
+ * Kodierung und Begründung identisch zu `objectDetailHref` (Segmente dürfen laut Contract
+ * beliebige nichtleere Strings sein).
+ */
+export function tenantDetailHref(tenantId: string): string {
+  return `/twin/${encodeURIComponent(tenantId)}`;
+}
+
 /** Führendes Kalenderdatum eines ISO-8601-Zeitstempels („2026-01-15T…" -> 2026/01/15). */
 const ISO_CALENDAR_DAY = /^(\d{4})-(\d{2})-(\d{2})/;
 

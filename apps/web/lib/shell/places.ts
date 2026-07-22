@@ -50,7 +50,9 @@ export const NAV_PLACES: readonly NavPlace[] = [
     hint: 'Mission Control, Wiederaufnahme, persönliche Entscheidungen und Aufgaben',
     question: 'Was hat sich seit meinem letzten Besuch verändert und was verdient Aufmerksamkeit?',
     match: ['/heute'],
-    plannedScreen: 'S01 – Mission Control',
+    // WP-016 Slice 2: der Ort zeigt echten, aus dem Demo-Seed abgeleiteten Inhalt
+    // (Mission Control read-only, ohne Morning Mission – die Lücke wird auf der Seite benannt).
+    live: true,
   },
   {
     id: 'kunden',

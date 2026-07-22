@@ -43,6 +43,7 @@
 
 - FINDING-0001: Master-Index-Einstiegspfad weicht von gebauter Struktur ab (Low).
 - FINDING-0002: `validate_handoff.py` prüft keine Status-Aktualität/Branch/Tag (Med); aktive-WP-Prüfung inzwischen WP-agnostisch gemacht.
+- FINDING-0005: **Kein Linter im Stack**, obwohl „Lint" in den Acceptance Criteria steht (Low) — Entscheidung offen: Linter einführen oder die Anforderung streichen. Bis dahin wird sie nicht still übersprungen.
 
 ## Exact Next Step
 
