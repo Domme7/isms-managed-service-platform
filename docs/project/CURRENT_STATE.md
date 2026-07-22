@@ -14,7 +14,8 @@
 - **Stack entschieden (ADR-0001): TypeScript · Next.js · NestJS · PostgreSQL · pnpm + Turborepo**,
 - **lauffähiges Grundgerüst:** `apps/api` (NestJS, `GET /health` live geprüft) + `apps/web` (Next.js App-Shell),
 - **Vitest-Smoke-Test grün; typecheck + build für beide Apps grün; App-CI auf GitHub**,
-- Continuity-Tooling, Checkpoints, Handover, unabhängige QA-/Security-Review (WP-001).
+- Continuity-Tooling, Checkpoints, Handover, unabhängige QA-/Security-Review (WP-001),
+- **`docs/project/PROJECT_UNDERSTANDING.md`** — destilliertes Gesamtverständnis aus allen 24 Konzeptdokumenten (schneller Einstieg für neue Sessions; nicht autoritativ).
 
 ## Verifikations-Evidence (WP-002)
 
