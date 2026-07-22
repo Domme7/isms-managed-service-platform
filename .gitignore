@@ -15,12 +15,15 @@ __pycache__/
 .venv/
 venv/
 
-# JS/TS and build outputs (future)
+# JS/TS and build outputs
 node_modules/
 dist/
 build/
 .next/
 coverage/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
 
 # IDE and OS
 .DS_Store
