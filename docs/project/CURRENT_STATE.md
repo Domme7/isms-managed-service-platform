@@ -1,8 +1,8 @@
 # Current State
 
-**Stand:** WP-004 abgeschlossen — **erstes sichtbares Produkt: Digital Twin Explorer läuft im Browser** (`/twin`)  
-**Phase:** 1 (Demo Foundation)  
-**Aktives Work Package:** WP-004 (**Done**); nächstes offen (WP-011 App-Shell / Persistenz / Twin-Ausbau)  
+**Stand:** WP-007 abgeschlossen — Persistenzschicht `@isms/db` (PostgreSQL/Drizzle, tenant-isoliert); Twin Explorer live  
+**Phase:** 1→2 (Demo Foundation + Persistenz)  
+**Aktives Work Package:** WP-007 (**Done**); nächstes WP-011 App-Shell  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Minimales, lauffähiges Monorepo-Grundgerüst; noch keine Produktfeatures  
@@ -18,7 +18,8 @@
 - **`docs/project/PROJECT_UNDERSTANDING.md`** — destilliertes Gesamtverständnis aus allen 24 Konzeptdokumenten (schneller Einstieg für neue Sessions; nicht autoritativ),
 - **`@isms/contracts`** (WP-003 Slice 1): kanonischer Objekt-/Beziehungsvertrag (F01–F09 / R01–R25) aus Dok. 07, Zod-Schemas, **55 Tests**; zwei unabhängige Reviews (KONZEPTTREU / Freigabe mit Minor-Fixes), `PROVENANCE.md` + offene Fragen O-D07-01…11,
 - **`@isms/demo-seed`** (WP-003 Slice 2): 4 synthetische Demo-Mandanten + kohärenter Nordwerk-Objektgraph (17 Objekte / 15 Beziehungen), validiert gegen die Contracts, **24 Tests** mit Negativbeweisen für Tenant-Isolation, referenzielle Integrität, Owner-Refs; Seed-Manifest + Storyline; zwei unabhängige Reviews (KONZEPTTREU / Freigabe),
-- **Digital Twin Explorer** (WP-004): read-only Ansicht in `apps/web` (`/twin`, `/twin/[tenantId]`), rendert den Demo-Seed (Objekte nach Familie F01–F09, Beziehungen mit deutschen Klartext-Labels + Vertrauensgrad, Datenqualität), Empty-State, deutsches 404, barrierearm (main/Skip-Link/Headings); zwei unabhängige Reviews + visuelle Browser-QA. **Monorepo gesamt: 94 Tests grün.**
+- **Digital Twin Explorer** (WP-004): read-only Ansicht in `apps/web` (`/twin`, `/twin/[tenantId]`), rendert den Demo-Seed (Objekte nach Familie F01–F09, Beziehungen mit deutschen Klartext-Labels + Vertrauensgrad, Datenqualität), Empty-State, deutsches 404, barrierearm (main/Skip-Link/Headings); zwei unabhängige Reviews + visuelle Browser-QA,
+- **`@isms/db`** (WP-007): Persistenzschicht PostgreSQL/Drizzle — Schema/Migration/tenant-scoped Repos/Seed-Loader aus den Contracts, getestet gegen **PGlite** (kein Docker), serverseitige Tenant-Isolation mit Negativbeweisen; Code- + Security-Review (SICHER FÜR DEMO-SCOPE); RLS-Härtung → FINDING-0004. **Monorepo gesamt: 112 Tests grün.**
 
 ## Verifikations-Evidence (WP-002)
 
@@ -41,9 +42,8 @@
 
 ## Exact Next Step
 
-**WP-004 ist abgeschlossen — der Explorer läuft im Browser** (`pnpm --filter @isms/web dev` → `http://localhost:3000/twin`).
-Nächstes WP offen zwischen:
-- **WP-011:** App-Shell/Navigation/Login/Rollen- & Mandantenwechsel (Dok. 06) — die volle Erlebniswelt-Hülle;
-- **Persistenz-WP:** PostgreSQL (benötigt Docker-/ORM-Human-Gate);
-- **Twin-Ausbau:** narrative Ursache-Wirkungs-Kette / Impact Path (FINDING-0003) bzw. weitere Demo-Mandanten mit Graph.
-Weiterhin ohne stille Stack-/Kostenbindung; Checkpoints + Push ins private Backup.
+**WP-007 (Persistenz) ist abgeschlossen.** Nächstes: **WP-011 App-Shell** (Navigation/Login-Simulation/Rollen-
+& Mandantenwechsel, Dok. 06) als Fundament für die rollenbezogenen Erlebniswelten; danach die
+**Berater-/Managed-Service-Welt** (Owner-Wahl). Ausrichtung: alle 9 Phasen. Owner installiert Docker Desktop
+parallel (voller Server; PGlite deckt Dev/Test). Offene Härtung: FINDING-0004 (DB-RLS). Weiterhin Checkpoints
++ Push nach jedem WP.

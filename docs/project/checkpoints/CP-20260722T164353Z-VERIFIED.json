@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T164353Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-007",
+  "timestamp_utc": "2026-07-22T16:43:53.496157+00:00",
+  "summary": "WP-007 DONE: Persistenzschicht @isms/db (PostgreSQL/Drizzle) aus den Contracts; tenant-scoped Repos + Schreib-Guard; Seed-Loader; getestet gegen PGlite (kein Docker). Zwei unabhaengige Reviews (Code FREIGABE + Security SICHER FUER DEMO-SCOPE), Minor-Fixes umgesetzt (reset-Guard, Upsert-Set/Relationship-Guard-Tests). RLS-Haertung -> FINDING-0004.",
+  "branch": "main",
+  "commit": "ac8f499",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CURRENT_STATE.md\n M docs/project/WORK_QUEUE.md\n M pnpm-lock.yaml\n?? docs/project/reviews/WP-007_INDEPENDENT_REVIEW.md\n?? docs/project/risks/FINDING-0004_db_rls_least_privilege_hardening.md\n?? packages/db/",
+  "tests": "db 18 (frisch); Monorepo typecheck 7/7, test 7/7, build 5/5 = 112 Tests; validate OK; 6/6 repo tests; Tenant-Isolation Positiv+Negativ bewiesen",
+  "exact_next_step": "WP-011 App-Shell (Navigation/Login-Simulation/Rollen- & Mandantenwechsel, Dok. 06); danach Berater/Managed-Service-Welt. Owner installiert Docker parallel."
+}
