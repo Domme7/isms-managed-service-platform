@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T164625Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-011",
+  "timestamp_utc": "2026-07-22T16:46:25.899899+00:00",
+  "summary": "WP-011 (App-Shell + Rollen-/Mandanten-Simulation) angelegt/aktiv; Build an Frontend-Engineer delegiert. Aus Dok. 06 (acht Orte) + Dok. 03 (Rollen). Keine echte Auth/DB.",
+  "branch": "main",
+  "commit": "d361a46",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/WORK_QUEUE.md\n?? context-packs/WP-011/\n?? work-packages/WP-011_APP_SHELL_ROLLEN_MANDANT.md",
+  "tests": "not run / not provided",
+  "exact_next_step": "Shell + Login-/Rollensimulation + Mandantenwechsel bauen, Explorer einbetten, Render-Tests, visuelle QA."
+}

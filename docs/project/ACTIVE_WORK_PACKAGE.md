@@ -1,13 +1,14 @@
 # Active Work Package
 
-- **ID:** WP-007
-- **Titel:** Persistenz der Twin-Kernobjekte (PostgreSQL + Drizzle)
-- **Datei:** `work-packages/WP-007_PERSISTENZ_TWIN_KERN_DRIZZLE.md`
-- **Status:** **Done** — `@isms/db` (Schema/Migration/tenant-scoped Repos/Seed-Loader), PGlite-getestet (18 Tests), 2 unabhängige Reviews (Code + Security). **Monorepo 112 Tests grün.**
-- **ADR:** ADR-0002 (PostgreSQL + Drizzle; PGlite Dev/Test, Docker Server)
-- **Reviews:** `docs/project/reviews/WP-007_INDEPENDENT_REVIEW.md`
-- **Folge-Härtung:** `FINDING-0004` (RLS + least-privilege, vor API/Prod)
-- **Human Gate (offen, nicht blockierend):** Owner installiert Docker Desktop für den vollen Server (PGlite deckt Dev/Test).
-- **Nächstes:** WP-011 App-Shell (Navigation/Login/Rollen- & Mandantenwechsel, Dok. 06) → danach Berater/Managed-Service-Welt.
+- **ID:** WP-011
+- **Titel:** App-Shell, Navigation & Rollen-/Mandantenwechsel (Simulation)
+- **Datei:** `work-packages/WP-011_APP_SHELL_ROLLEN_MANDANT.md`
+- **Context Pack:** `context-packs/WP-011/CONTEXT_PACK.md`
+- **Führende Quellen:** Dok. 06 (Shell/acht Orte) + Dok. 03 (Rollen R01–R12); Mandanten aus `@isms/demo-seed`
+- **Status:** Active — Bau in `apps/web` (globale Shell + Login-/Rollensimulation + Mandantenwechsel)
+- **Builder:** Frontend-Engineer-Agent
+- **Reviewer:** Code-Reviewer + Product-User-Lead (read-only)
+- **Human Gates:** keiner (synthetische Simulation, keine echte Auth/DB/Kosten)
+- **Nächstes:** Berater-/Managed-Service-Welt (Owner-Wahl); später echte Auth (WP-005) + DB-Anbindung (API-WP, FINDING-0004 RLS).
 
-> Abgeschlossen: WP-001, WP-002, WP-003, WP-004 (Twin Explorer live), WP-007 (Persistenz). Ausrichtung: alle 9 Phasen.
+> Abgeschlossen: WP-001, WP-002, WP-003, WP-004 (Twin Explorer), WP-007 (Persistenz `@isms/db`). Ausrichtung: alle 9 Phasen.
