@@ -38,9 +38,14 @@ describe('NAV_PLACES – acht stabile Orte (Dok. 06 06-D01)', () => {
     expect(kunden.live).toBe(true);
   });
 
-  it('markiert Platzhalter-Orte als (noch) nicht live', () => {
-    const placeholders = NAV_PLACES.filter((p) => p.id !== 'kunden');
-    expect(placeholders).toHaveLength(7);
+  it('markiert „Services" als live (WP-012 Slice 2: echte Seed-Inhalte)', () => {
+    expect(getPlace('services').live).toBe(true);
+  });
+
+  it('markiert die übrigen Platzhalter-Orte als (noch) nicht live', () => {
+    // Live sind bislang „Kunden" (Twin Explorer, WP-004/011) und „Services" (WP-012 Slice 2).
+    const placeholders = NAV_PLACES.filter((p) => p.id !== 'kunden' && p.id !== 'services');
+    expect(placeholders).toHaveLength(6);
     for (const place of placeholders) {
       expect(place.live).not.toBe(true);
     }

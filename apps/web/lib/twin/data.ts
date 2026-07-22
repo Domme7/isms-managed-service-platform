@@ -118,7 +118,8 @@ export function relationshipTypeId(relationshipType: string): string | undefined
  * Deutsche Klartext-Labels für Beziehungstypen – REINE UI-PRÄSENTATIONSSCHICHT (Dok. 06
  * P03/P04/D08 „Klartext vor Fachsprache"). Der kanonische snake_case-Typ bleibt unverändert
  * und wird sekundär weiter angezeigt; hier wird NICHTS am Modell/Contract/Seed erfunden.
- * Abgedeckt sind die im Nordwerk-Seed genutzten Typen; nicht abgebildete Typen fallen auf den
+ * Abgedeckt sind die im Demo-Seed genutzten Typen (ISMS-Kerngraph WP-003 sowie
+ * Managed-Service-Schicht WP-012); nicht abgebildete Typen fallen auf den
  * technischen Namen zurück.
  */
 const REL_TYPE_TO_LABEL_DE: Readonly<Record<string, string>> = {
@@ -133,6 +134,11 @@ const REL_TYPE_TO_LABEL_DE: Readonly<Record<string, string>> = {
   satisfies: 'erfüllt',
   evidences: 'belegt',
   remediates: 'behebt',
+  // Managed-Service-Schicht (WP-012, Dok. 07 §9 R19–R22):
+  requires: 'benötigt',
+  contributes_to: 'trägt bei zu',
+  delivered_by: 'erbracht durch',
+  covered_by: 'abgedeckt durch',
 };
 
 /** Deutsches UI-Label eines Beziehungstyps (oder `undefined`, dann technischen Namen nutzen). */

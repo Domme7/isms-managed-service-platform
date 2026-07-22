@@ -270,8 +270,10 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
       'Synthetische Service Instance (Dok. 13 §4.3), fachliches Muster SO12 (Dok. 14 §5.2). ' +
       'Ergebnisversprechen (MS01): Leitung und CISO-Rolle erhalten je Quartal ein freigabefähiges, ' +
       'quellenbelegtes Bild von Risikolage, Control-Wirksamkeit und offenen Entscheidungen. ' +
-      'Der Service befindet sich aktuell im Service Review (Dok. 13 §11): der Berichtsrhythmus ' +
-      'wird gemeinsam angepasst. Keine Preis- oder Angebotsinhalte (MS15).',
+      'Der Service befindet sich aktuell im Service Review (Dok. 13 §15): der Berichtsrhythmus ' +
+      'wird gemeinsam angepasst. Shared Responsibility (MS03): Nordwerk benennt Empfänger, ' +
+      'Prioritäten und Freigaben; der Betreiber erstellt, prüft und liefert die Berichte. ' +
+      'Keine Preis- oder Angebotsinhalte (MS15).',
     lifecycle_status: 'Review', // Service-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: K.ROLE_CISO, owner_kind: 'fachlich', role: 'Kunden-Owner (Service)' }],
     quality: [
@@ -737,6 +739,8 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
       'Synthetische Service Instance im eigenen Mandanten des Betreibers, fachliches Muster SO06 ' +
       '(Dok. 14 §5.2). Ergebnisversprechen (MS01): Prüftermine sind planbar vorbereitet, ' +
       'Nachweislücken und Findings werden früh sichtbar und gesteuert. ' +
+      'Shared Responsibility (MS03): Fachbereiche liefern Nachweise und Entscheidungen; das ' +
+      'Delivery-Team plant, prüft und steuert die Audit-Vorbereitung. ' +
       'Wichtig: Dieser Seed modelliert KEINE mandantenübergreifende Leistungserbringung; alle ' +
       'Beziehungen enden an der Mandantengrenze (siehe OFFENE FRAGE O-WP012-03). Keine Preise.',
     lifecycle_status: 'aktiv', // Service-Lifecycle (Dok. 05 §7)
@@ -751,8 +755,10 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
     description:
       'Synthetische Service Instance, fachliches Muster SO04 (Dok. 14 §5.2). ' +
       'Ergebnisversprechen (MS01): Vorgaben sind aktuell, freigegeben, verständlich und ' +
-      'tatsächlich anwendbar; fällige Reviews laufen nicht still ab. Der Service ist konfiguriert, ' +
-      'aber noch nicht aktiv – der Zustand wird bewusst ehrlich gezeigt. Keine Preise.',
+      'tatsächlich anwendbar; fällige Reviews laufen nicht still ab. Shared Responsibility (MS03): ' +
+      'Vorgaben-Owner entscheiden und geben frei; das Delivery-Team pflegt Lifecycle, Fristen und ' +
+      'Nachweise. Der Service ist konfiguriert, aber noch nicht aktiv – der Zustand wird bewusst ' +
+      'ehrlich gezeigt. Keine Preise.',
     lifecycle_status: 'konfiguriert', // Service-Lifecycle (Dok. 05 §7)
     owner_ids: [
       { owner_id: P.ROLE_SERVICE_LEAD, owner_kind: 'fachlich', role: 'Managed Service Lead' },

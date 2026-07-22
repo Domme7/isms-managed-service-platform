@@ -235,6 +235,14 @@ describe('Demo-Seed – Mandanten & Determinismus', () => {
       .map((o) => o.object_id);
     expect(notOrdered).toEqual([]);
   });
+
+  it('Bitemporalität gilt auch für alle Beziehungen (valid_from < recorded_at)', () => {
+    // WP-012-Review M3: Beziehungen nutzen dieselben Zeitachsen wie Objekte – explizit absichern.
+    const notOrdered = relationships
+      .filter((r) => !(Date.parse(r.valid_time.from) < Date.parse(r.record_time.recorded_at)))
+      .map((r) => r.relationship_id);
+    expect(notOrdered).toEqual([]);
+  });
 });
 
 describe('Demo-Seed – Managed-Service-Schicht (WP-012 Slice 1)', () => {
@@ -299,11 +307,21 @@ describe('Demo-Seed – Managed-Service-Schicht (WP-012 Slice 1)', () => {
   });
 
   it('enthält keine Preis-, Währungs- oder Vertragsbetragsangaben (D-015, synthetisch)', () => {
-    // Harte Guardrail: weder Währungszeichen noch Beträge dürfen im Seed auftauchen.
-    const currency = /(€|\bEUR\b|\bUSD\b|\$|\bCHF\b|\bTagessatz\b|\bStundensatz\b)/;
-    const offenders = objects
-      .filter((o) => currency.test(`${o.display_name} ${o.description ?? ''}`))
-      .map((o) => o.object_id);
+    // Harte Guardrail (case-insensitive, WP-012-Review): weder Währungszeichen noch Beträge –
+    // geprüft über Objekte, Beziehungstexte UND Mandantenbeschreibungen.
+    const currency =
+      /(€|\bEUR\b|\bEuro\b|\bCent\b|\bUSD\b|\$|\bGBP\b|\bCHF\b|\bTagessatz\b|\bStundensatz\b)/i;
+    const offenders = [
+      ...objects
+        .filter((o) => currency.test(`${o.display_name} ${o.description ?? ''}`))
+        .map((o) => o.object_id),
+      ...relationships
+        .filter((r) => currency.test(`${r.status ?? ''} ${r.effectiveness_assumption ?? ''}`))
+        .map((r) => r.relationship_id),
+      ...tenants
+        .filter((t) => currency.test(`${t.display_name} ${t.description ?? ''}`))
+        .map((t) => t.tenant_id),
+    ];
     expect(offenders).toEqual([]);
   });
 });

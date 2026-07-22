@@ -87,7 +87,8 @@ export const NAV_PLACES: readonly NavPlace[] = [
     hint: 'Katalog, aktive Services, Delivery, SLA, Wert und Reviews',
     question: 'Was wird geliefert, mit welcher Qualität und welchem Wert?',
     match: ['/services'],
-    plannedScreen: 'S09 – Service Workspace',
+    // WP-012 Slice 2: der Ort zeigt echten, aus dem Demo-Seed abgeleiteten Inhalt.
+    live: true,
   },
   {
     id: 'reports',
