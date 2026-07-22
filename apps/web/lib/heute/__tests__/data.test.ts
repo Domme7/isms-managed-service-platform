@@ -11,13 +11,15 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { OBJECT_FAMILY_ID } from '@isms/contracts';
+import { OBJECT_FAMILY_ID, OBJECT_TYPE } from '@isms/contracts';
 import { DEMO_SEED, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
 
 import { buildIsmsCoreView } from '../../isms/data';
 import { getManagedServicesForTenant } from '../../services/data';
+import { getPlace } from '../../shell/places';
 import { familyForType } from '../../twin/data';
-import { objectDetailHref } from '../../twin/routes';
+import { EVIDENCE_TARGET_TYPES } from '../../twin/object-detail';
+import { objectDetailHref, tenantDetailHref } from '../../twin/routes';
 import {
   buildMissionControl,
   buildMissionControlModel,
@@ -82,16 +84,26 @@ describe('deriveRecordingWaves – Erfassungswellen werden abgeleitet, nicht ang
     expect(waves.map((w) => w.dateDisplay)).toEqual(['15.01.2026', '16.02.2026']);
     expect(waves[0]).toMatchObject({
       recordedOn: '2026-01-15',
-      recordedAt: '2026-01-15T08:00:00.000Z',
       objectCount: 17,
       relationshipCount: 15,
     });
     expect(waves[1]).toMatchObject({
       recordedOn: '2026-02-16',
-      recordedAt: '2026-02-16T08:00:00.000Z',
       objectCount: 14,
       relationshipCount: 28,
     });
+    // Eine Welle ist eine TAGESGRUPPE und trägt deshalb bewusst KEINEN Zeitstempel eines
+    // einzelnen Datensatzes: die Anzeige würde daraus sonst eine Uhrzeit der ganzen Gruppe machen.
+    for (const wave of waves) {
+      expect(Object.keys(wave).sort()).toEqual([
+        'dateDisplay',
+        'objectCount',
+        'recordedOn',
+        'relationshipCount',
+        'scopeIds',
+      ]);
+      expect(wave.recordedOn).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
 
     // Jede Welle ist vollständig verbucht – keine Kante und kein Objekt fällt heraus.
     expect(waves.reduce((sum, w) => sum + w.objectCount, 0)).toBe(objects.length);
@@ -313,6 +325,26 @@ describe('deriveObservations – gezählt, nicht bewertet', () => {
     expect(observations).toHaveLength(4);
   });
 
+  it('führt in der vierten Beobachtung GENAU die nachweisfähigen Typen auf (aus der Konstante)', () => {
+    // AC 1 „nichts hartkodiert": Label und Ermittlungsregel nennen die Typen aus
+    // EVIDENCE_TARGET_TYPES. Stünde die Liste als Fließtext im Satz, bliebe sie bei einer
+    // Änderung der Konstante still falsch – dieser Test schlägt dann an (Review-Fix).
+    const observation = deriveObservations(objectsOf(TENANT_ID.NORDWERK), []).find(
+      (o) => o.id === 'ohne_nachweisbezug',
+    );
+    if (!observation) throw new Error('Beobachtung „ohne_nachweisbezug" fehlt');
+
+    for (const typ of EVIDENCE_TARGET_TYPES) {
+      expect(observation.totalLabel, typ).toContain(typ);
+      expect(observation.method, typ).toContain(typ);
+    }
+    // Und kein weiterer kanonischer Objekttyp steht im Label.
+    const erlaubt: readonly string[] = EVIDENCE_TARGET_TYPES;
+    for (const typ of OBJECT_TYPE.filter((t) => !erlaubt.includes(t))) {
+      expect(observation.totalLabel, typ).not.toContain(typ);
+    }
+  });
+
   it('weist auch für einen leeren Mandanten alle vier Beobachtungen mit 0 aus', () => {
     const observations = deriveObservations([], []);
     expect(observations).toHaveLength(4);
@@ -429,6 +461,20 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
     expect(model.placeEntryPoints[1].stock[0].count).toBe(6);
     expect(model.placeEntryPoints[2].stock[0].count).toBe(3);
     expect(model.placeEntryPoints.every((p) => p.isEmpty === false)).toBe(true);
+    expect(model.placeEntryPoints[0].href).toBe(tenantDetailHref(TENANT_ID.NORDWERK));
+  });
+
+  it('trägt am Zwilling-Einstieg KEINE Portfolio-Leitfrage (die Zielseite beantwortet sie nicht)', () => {
+    const model = modelOrThrow(TENANT_ID.NORDWERK);
+    const [zwilling, isms, services] = model.placeEntryPoints;
+
+    // Der Einstieg führt in den Workspace GENAU DIESES Mandanten, nicht ins Portfolio – eine
+    // Portfolio-Sicht ist auf „Heute" Nicht-Ziel. Die Leitfrage des Ortes „Kunden" entfällt
+    // deshalb hier (Review-Fix), bleibt aber an den beiden anderen Orten unverändert.
+    expect(zwilling.question).toBeUndefined();
+    expect(isms.question).toBe(getPlace('isms').question);
+    expect(services.question).toBe(getPlace('services').question);
+    expect(getPlace('kunden').question).toMatch(/Portfolio/);
   });
 
   it('benennt leere Orte, statt sie zu verstecken (06-D01)', () => {
@@ -600,22 +646,30 @@ describe('Wächtertest – gezählt wird, bewertet wird nicht', () => {
   });
 
   it('verwendet in Beobachtungs- und Historientexten kein Bewertungsvokabular', () => {
+    // Regex statt `includes`: die Prüfung ist ausdrücklich SCHREIBWEISENUNABHÄNGIG („score" klein
+    // geschrieben fiel vorher durch) und deckt auch Partizipien ab („empfohlen" matcht weder
+    // /empfehl/ noch /Empfehlung/) – Review-Fix.
     const verboten = [
-      'Score',
-      'Ampel',
-      'Reifegrad',
-      'Trend',
-      'Prozent',
-      '%',
-      'Schwellenwert',
-      'Rang',
-      'Priorität',
-      'Frist',
-      'fällig',
-      'Empfehlung',
-      'empfehlen',
-      'kritisch',
-      'Schweregrad',
+      /\bScore\b/i,
+      /Ampel/i,
+      /Reifegrad/i,
+      /\bTrend/i,
+      /Prozent/i,
+      /%/,
+      /Schwellenwert/i,
+      /\bRang\b/i,
+      /Priorität/i,
+      /\bFrist/i,
+      /fällig/i,
+      /Empfehlung/i,
+      /empfehl/i,
+      /empfohlen/i,
+      /Handlungsbedarf/i,
+      /dringend/i,
+      /vorrangig/i,
+      /bewertet/i,
+      /kritisch/i,
+      /Schweregrad/i,
     ];
     for (const tenant of DEMO_SEED.tenants) {
       const model = modelOrThrow(tenant.tenant_id);
@@ -623,8 +677,8 @@ describe('Wächtertest – gezählt wird, bewertet wird nicht', () => {
         ...model.observations.flatMap((o) => [o.label, o.totalLabel, o.method]),
         model.historyState.statement,
       ].join('\n');
-      for (const wort of verboten) {
-        expect(texte).not.toContain(wort);
+      for (const muster of verboten) {
+        expect(muster.test(texte), `${tenant.tenant_id}: „${muster}"`).toBe(false);
       }
     }
   });

@@ -32,8 +32,10 @@ export function objectDetailHref(tenantId: string, objectId: string): string {
 }
 
 /**
- * Pfad der Mandanten-Detailseite des Twin-Explorers (`/twin/[tenantId]`). Ergänzt in WP-016
- * Slice 1, damit der Einstieg „Zwilling" des Ortes „Heute" die Route nicht erneut zusammensetzt.
+ * Pfad der Mandanten-Detailseite des Twin-Explorers (`/twin/[tenantId]`). EINZIGE Stelle, an der
+ * diese Route gebildet wird: Mandantenübersicht, Mandanten- und Objekt-360-Seite sowie der
+ * Einstieg „Zwilling" des Ortes „Heute" verlinken über diesen Helfer (Review-Fix – vorher setzten
+ * vier Aufrufstellen die Route selbst zusammen, ohne die Kodierung).
  * Kodierung und Begründung identisch zu `objectDetailHref` (Segmente dürfen laut Contract
  * beliebige nichtleere Strings sein).
  */

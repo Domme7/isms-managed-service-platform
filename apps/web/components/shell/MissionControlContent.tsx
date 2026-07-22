@@ -10,7 +10,8 @@
  *   „Wo stehe ich?", „Was ist erfasst worden?", „Was weiß ich über die Datenlage?",
  *   „Wo steige ich ein?" – gefolgt vom Ehrlichkeitsblock „Was hier bewusst nicht steht".
  * Die Daten sind für alle zwölf Rollen IDENTISCH (Dok. 06 06-D05, Dok. 10 ENTSCHEIDUNG 10-02);
- * die Rolle ändert nur Reihenfolge und Sprache. Kein Rollen-Gating (Dok. 19 folgt später).
+ * die Rolle ändert die REIHENFOLGE der Abschnitte und die Leitfrage der Erlebniswelt – sonst
+ * weicht kein Wort ab (per Rollen-Gleichheitstest belegt). Kein Rollen-Gating.
  *
  * NICHT enthalten (WP-016 Nicht-Ziele): Morning Mission, Veränderungsfeed, Wiederaufnahme,
  * Score, Ampel, Reifegrad, Trend, Prozentwert, Schwellenwert, Prioritätsrang, Frist, Empfehlung,
@@ -61,8 +62,10 @@ export function MissionControlContent({ role, tenant }: { role: DemoRole; tenant
   const model = buildMissionControl(tenant.tenant_id);
   const world = worldForRole(role);
   const place = getPlace('heute');
-  // Unbekannte Rolle (z. B. verändertes localStorage): die Seite rahmt dann nicht rollenbezogen,
-  // zeigt aber dieselben Daten in kanonischer Reihenfolge – Muster `getRole`.
+  // NICHT ERREICHBAR, bewusst fail-soft belassen: `parseSession` verwirft unbekannte Rollen-IDs,
+  // die Prop trägt immer eine der zwölf kanonischen Rollen. Fiele die Rahmung dennoch aus (z. B.
+  // verändertes localStorage bei künftig gelockerter Session-Prüfung), zeigt die Seite dieselben
+  // Daten in kanonischer Reihenfolge, statt leer zu bleiben – Muster `getRole`.
   const sectionOrder = framingForRole(role.id)?.sectionOrder ?? MISSION_SECTION_IDS;
 
   return (
@@ -77,8 +80,9 @@ export function MissionControlContent({ role, tenant }: { role: DemoRole; tenant
         Read-only Startpunkt auf dem synthetischen Demo-Datenbestand des aktiven Mandanten: wo Sie
         stehen, was im Datenbestand erfasst wurde, was über dessen Lage bekannt ist und wo Sie
         einsteigen können. Die Leitfrage wird nur so weit beantwortet, wie der Datenbestand sie
-        belegt – der Teil „seit meinem letzten Besuch" ist nicht belegt und steht am Seitenende als
-        benannte Lücke.
+        belegt: Der Teil „seit meinem letzten Besuch" ist nicht belegt – und auch „was verdient
+        Aufmerksamkeit" wird hier nicht beantwortet. Diese Seite zählt und benennt, sie
+        priorisiert nicht. Beides steht am Seitenende als benannte Lücke.
       </p>
 
       {model ? (
@@ -99,8 +103,9 @@ export function MissionControlContent({ role, tenant }: { role: DemoRole; tenant
           <HonestySection model={model} />
         </>
       ) : (
-        /* Fail-loud statt stiller Leerseite: mit einer aufgelösten Session nicht erreichbar,
-           weil `resolveSession` nur bekannte Mandanten liefert. */
+        /* NICHT ERREICHBAR, bewusst fail-loud: die Prop ist ein `DemoTenant` aus dem Seed, und
+           `resolveSession` liefert ausschließlich bekannte Mandanten. Bricht diese Zusicherung
+           künftig, zeigt die Seite den Bruch sichtbar an, statt still leer zu bleiben. */
         <div className="tw-empty" role="note">
           <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>
             Mandant im Datenbestand nicht auflösbar
@@ -179,8 +184,10 @@ function ContextBar({
       <div>
         <dt>Datenstand (zuletzt im System erfasst)</dt>
         <dd>
+          {/* Kalendertag statt vollständigem Zeitstempel: die Anzeige nennt einen Tag, und eine
+              Uhrzeit ist für die Tagesgruppe nicht belegt (`RecordingWave.recordedOn`). */}
           {letzte ? (
-            <time dateTime={letzte.recordedAt}>{letzte.dateDisplay}</time>
+            <time dateTime={letzte.recordedOn}>{letzte.dateDisplay}</time>
           ) : (
             'keine Erfassung im Datenbestand'
           )}
@@ -247,7 +254,9 @@ function StandortSection({
       <h2 id={headingId}>{MISSION_SECTIONS.standort.title}</h2>
 
       <h3>Aktive Rolle</h3>
-      {/* Rollenangaben vollständig aus `lib/shell/roles.ts` (Dok. 03 §3) – nichts übersetzt. */}
+      {/* Rollenangaben vollständig aus `lib/shell/roles.ts` (Dok. 03 §3) – nichts übersetzt.
+          Der NAME der Erlebniswelt steht bereits querschnittlich in der Kontextzeile und wird
+          hier nicht wiederholt; neu ist an dieser Stelle ihre Leitfrage. */}
       <dl className="tw-meta">
         <dt>Rollen-ID</dt>
         <dd>{role.id}</dd>
@@ -257,16 +266,24 @@ function StandortSection({
         <dd>{role.sphere}</dd>
         <dt>Kernverantwortung</dt>
         <dd>{role.responsibility}</dd>
-        <dt>Erlebniswelt</dt>
-        <dd>{world.name}</dd>
         <dt>Leitfrage dieser Erlebniswelt</dt>
-        <dd>{world.leitfrage}</dd>
+        {/* Die Weltleitfrage darf nicht ungerahmt stehen bleiben: sie fragt je nach Welt nach
+            Entscheidungen, Kurs oder Portfolio – alles Dinge, die genau diese Seite bewusst NICHT
+            beantwortet. Ohne den Zusatz erzeugt sie dieselbe unerfüllte Erwartung, die der Lead
+            für die Ortsleitfrage bereits ausräumt (Review-Fix). */}
+        <dd>
+          {world.leitfrage}
+          <span className="sv-item-note">
+            Diese Leitfrage rahmt die Erlebniswelt, nicht diese Seite: hier wird gezählt und
+            benannt.
+          </span>
+        </dd>
       </dl>
       <p className="tw-muted">
-        Die Rolle ist in dieser Demo reine Perspektive: Sie ordnet die Abschnitte dieser Seite und
-        wählt die Sprache. Sie entscheidet nicht über Zugriff – alle zwölf Rollen sehen hier
-        dieselben Daten desselben Mandanten (Dok. 06 06-D05). Eine echte Rechtevergabe entsteht in
-        einem eigenen Work Package.
+        Die Rolle ist in dieser Demo reine Perspektive: Sie ordnet die Abschnitte dieser Seite,
+        und diese Reihenfolge ist keine Rangfolge. Sie entscheidet nicht über Zugriff – alle zwölf
+        Rollen sehen hier dieselben Daten desselben Mandanten (Dok. 06 06-D05). Rechte und
+        Zugriffskontrolle sind in dieser Demo nicht abgebildet.
       </p>
 
       <h3>Aktiver Mandant</h3>
@@ -386,7 +403,7 @@ function WaveItem({ wave }: { wave: RecordingWave }) {
   return (
     <li>
       <span className="sv-item-name">
-        <time dateTime={wave.recordedAt}>{wave.dateDisplay}</time>
+        <time dateTime={wave.recordedOn}>{wave.dateDisplay}</time>
       </span>
       <span className="sv-item-meta">
         {` · ${anzahl(wave.objectCount, 'Objekt', 'Objekte')} · ${anzahl(
@@ -491,6 +508,13 @@ function EinstiegSection({ model, tenant }: { model: MissionControlModel; tenant
   );
 }
 
+/**
+ * `.sv-item-meta` ist eine INLINE-Auszeichnung (globals.css: nur Farbe und Schriftgröße),
+ * `.sv-item-note` dagegen `display: block`. Je Listeneintrag steht deshalb höchstens EINE
+ * Metazeile; jede weitere Zeile ist eine Note. Zwei aufeinanderfolgende Metazeilen liefen im
+ * Browser sonst zu einem Fließtext zusammen, weil JSX den reinen Zeilenumbruch zwischen zwei
+ * Elementen entfernt (Review-Fix, Muster aus `components/isms/IsmsCards.tsx`).
+ */
 function PlaceEntryItem({ entry }: { entry: PlaceEntryPoint }) {
   return (
     <li>
@@ -500,7 +524,9 @@ function PlaceEntryItem({ entry }: { entry: PlaceEntryPoint }) {
       <span className="sv-item-meta">
         {` · ${entry.stock.map((item) => `${item.count} ${item.label}`).join(' · ')}`}
       </span>
-      <span className="sv-item-meta">{entry.question}</span>
+      {/* Leitfrage des Ortes – entfällt, wo der Einstieg sie nicht beantwortet (siehe
+          `derivePlaceEntryPoints`). */}
+      {entry.question ? <span className="sv-item-note">{entry.question}</span> : null}
       {entry.isEmpty ? (
         /* Leerer Ort wird benannt, nicht versteckt (Dok. 06 06-D01 / §17). */
         <span className="sv-item-note">
@@ -525,7 +551,9 @@ function ObjectEntryItem({ entry }: { entry: ObjectEntryPoint }) {
           'Objekte',
         )} dieser Familie in diesem Mandanten`}
       </span>
-      <span className="sv-item-meta">{entry.familyLeitfrage}</span>
+      {/* Leitfrage der Familie als eigene Zeile (`sv-item-note`, block-level) – siehe
+          `PlaceEntryItem`: zwei Metazeilen liefen im Browser zusammen. */}
+      <span className="sv-item-note">{entry.familyLeitfrage}</span>
     </li>
   );
 }
@@ -548,28 +576,31 @@ function HonestySection({ model }: { model: MissionControlModel }) {
     <section aria-labelledby="heute-luecke">
       <h2 id="heute-luecke">Was hier bewusst nicht steht</h2>
       <p className="sv-edge-note">
-        Drei im Konzept beschriebene Bausteine dieses Ortes fehlen, weil der Demo-Datenbestand sie
-        nicht trägt. Sie werden hier benannt statt verborgen (Dok. 06 §17): ein leerer Platzhalter
-        oder ein erfundener Inhalt wäre die schlechtere Antwort.
+        Drei im Konzept beschriebene Bausteine dieses Ortes fehlen. Die Ursache ist je Baustein
+        eine andere und steht darunter jeweils dabei – Datenbestand, Objektvertrag oder
+        Anmelde-Simulation. Sie werden hier benannt statt verborgen (Dok. 06 §17): ein leerer
+        Platzhalter oder ein erfundener Inhalt wäre die schlechtere Antwort.
       </p>
       <ul className="sv-items">
         <li>
           <span className="sv-item-name">Morning Mission (Tagesmission mit Reihenfolge)</span>
+          {/* Kanonische Typnamen: für „Task" und „Decision Record" führt die einzige Quelle
+              deutscher Objekttyp-Glossen (`OBJECT_TYPE_LABEL_DE` in `lib/twin/data.ts`) bewusst
+              KEINE Übersetzung – hier wird keine erfunden (Review-Fix). */}
           <span className="sv-item-note">
-            Ursache in der Datenlage: Der Demo-Datenbestand enthält keine Objekte der Typen
-            „Aufgabe (Task)" und „Entscheidung (Decision Record)" – beide stehen im kanonischen
-            Katalog (Dok. 07 §6), sind aber in keinem Mandanten angelegt. Der Objektvertrag
-            (Dok. 07 §7) kennt außerdem kein Feld für Fälligkeit, Aufwand, Kapazität oder
-            Priorität. Ohne Aufgaben und ohne diese Angaben wäre jede Tagesmission und jede
-            Reihenfolge erfunden.
+            Ursache in der Datenlage: Der Demo-Datenbestand enthält keine Objekte der Typen „Task"
+            und „Decision Record" – beide stehen im kanonischen Katalog (Dok. 07 §6), sind aber in
+            keinem Mandanten angelegt. Der Objektvertrag (Dok. 07 §7) kennt außerdem kein Feld für
+            Fälligkeit, Aufwand, Kapazität oder Priorität. Ohne Aufgaben und ohne diese Angaben
+            wäre jede Tagesmission und jede Reihenfolge erfunden.
           </span>
         </li>
         <li>
           <span className="sv-item-name">Veränderungsfeed („neu seit …")</span>
           <span className="sv-item-note">
-            Ursache in der Datenlage: Es gibt kein Ereignis- und kein Änderungsobjekt; die einzige
-            belegte Zeitangabe der Systemachse ist der Erfassungszeitpunkt, und der ist keine
-            Änderung. Hinzu kommt die aus den Daten abgeleitete Historienlage:{' '}
+            Ursache im Datenmodell: Es gibt kein Ereignis- und kein Änderungsobjekt; die einzige
+            Zeitangabe, die die Systemachse überhaupt kennt, ist der Erfassungszeitpunkt – und der
+            ist keine Änderung. Hinzu kommt die aus den Daten abgeleitete Historienlage:{' '}
             {model.historyState.statement}
           </span>
         </li>

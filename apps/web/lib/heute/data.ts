@@ -21,9 +21,12 @@
  * speichert ohnehin nur Rolle und Mandant (WP-011) – ein „letzter Besuch" existiert nicht.
  *
  * MANDANTENTRENNUNG (Sicherheitsgrenze, Dok. 07 §17/P09): jede Ableitung arbeitet strikt
- * innerhalb EINES Mandanten. `buildMissionControlModel` filtert die übergebenen Listen zusätzlich
- * selbst auf `tenant_id` (Defense in Depth) – mandantenfremde Objekte und Kanten können das
- * Ergebnis damit auch dann nicht verändern, wenn ein Aufrufer eine ungefilterte Liste übergibt.
+ * innerhalb EINES Mandanten. `buildMissionControlModel` filtert die übergebenen OBJEKT- und
+ * KANTENLISTEN zusätzlich selbst auf `tenant_id` (Defense in Depth) – mandantenfremde Objekte
+ * und Kanten verändern das Ergebnis deshalb auch dann nicht, wenn ein Aufrufer eine ungefilterte
+ * Liste übergibt. Der vierte Parameter `stock` ist dagegen eine bereits MANDANTENGEBUNDENE
+ * Vorberechnung des Aufrufers (`buildIsmsCoreView`, `getManagedServicesForTenant`) und wird nicht
+ * erneut geprüft; er trägt Zahlen, keine Objekte oder Kennungen.
  *
  * // OFFENE FRAGE O-WP016-07: Der Objektvertrag (Dok. 07 §7) kennt kein Feld, das eine
  * // Erfassungswelle fachlich BENENNT („ISMS-Kerngraph", „Managed-Service-Schicht" sind Fakten
@@ -74,10 +77,15 @@ export interface TenantStanding {
  * keine Historie – nur der Zeitpunkt, zu dem der Datensatz ins System kam.
  */
 export interface RecordingWave {
-  /** Kalendertag der Erfassung als ISO-Datum („2026-01-15") – Sortier- und Gruppierschlüssel. */
+  /**
+   * Kalendertag der Erfassung als ISO-Datum („2026-01-15") – Sortier- und Gruppierschlüssel und
+   * zugleich der maschinenlesbare Wert für `<time dateTime=…>`.
+   *
+   * Bewusst OHNE Uhrzeit: eine Welle ist eine Tagesgruppe. Der vollständige Zeitstempel eines
+   * einzelnen Datensatzes wäre eine Uhrzeit, die für die Gruppe niemand belegt hat (Review-Fix);
+   * ein reines Datum ist ein gültiger `time`-Wert und deckt sich exakt mit `dateDisplay`.
+   */
   readonly recordedOn: string;
-  /** Erster belegter vollständiger Zeitstempel dieses Tages (für `<time dateTime=…>`). */
-  readonly recordedAt: string;
   /** Deutsches Datum über `formatIsoDateDe` („15.01.2026"). */
   readonly dateDisplay: string;
   readonly objectCount: number;
@@ -105,7 +113,6 @@ export function deriveRecordingWaves(
   relationships: readonly RelationshipEnvelope[],
 ): RecordingWave[] {
   interface Bucket {
-    recordedAt: string;
     objectCount: number;
     relationshipCount: number;
     scopeIds: string[];
@@ -116,7 +123,7 @@ export function deriveRecordingWaves(
     const day = calendarDay(recordedAt);
     const existing = buckets.get(day);
     if (existing) return existing;
-    const created: Bucket = { recordedAt, objectCount: 0, relationshipCount: 0, scopeIds: [] };
+    const created: Bucket = { objectCount: 0, relationshipCount: 0, scopeIds: [] };
     buckets.set(day, created);
     return created;
   };
@@ -136,7 +143,6 @@ export function deriveRecordingWaves(
     .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
     .map(([recordedOn, bucket]) => ({
       recordedOn,
-      recordedAt: bucket.recordedAt,
       dateDisplay: formatIsoDateDe(recordedOn),
       objectCount: bucket.objectCount,
       relationshipCount: bucket.relationshipCount,
@@ -274,9 +280,29 @@ export interface DataObservation {
   readonly method: string;
 }
 
+/** Verbindet Bezeichnungen deutsch: „A", „A und B", „A, B und C" (Muster `TenantDetailView`). */
+function joinDe(items: readonly string[]): string {
+  if (items.length <= 1) return items[0] ?? '';
+  return `${items.slice(0, -1).join(', ')} und ${items[items.length - 1]}`;
+}
+
+/**
+ * Sichtbare Aufzählung der laut Dok. 07 §9 R15 nachweisfähigen Objekttypen – ERZEUGT aus
+ * `EVIDENCE_TARGET_TYPES` statt ausgeschrieben. Ändert sich die Konstante, ändert sich der Text
+ * mit (Review-Fix: vorher stand „Control, Measure und Decision Record" als Literal im Satz und
+ * wäre bei einer Änderung still falsch geworden).
+ */
+const NACHWEISFAEHIGE_TYPEN = joinDe(EVIDENCE_TARGET_TYPES);
+
 /**
  * Die vier belegbaren Beobachtungen. Reihenfolge = feste Katalogreihenfolge dieser Liste,
  * ausdrücklich KEINE Sortierung nach Schwere oder Häufigkeit.
+ *
+ * // Beobachtung (b) benennt die bekannte Lücke O-WP014-03 (Scopes sind im Demo-Seed nicht als
+ * // eigene Objekte materialisiert). Die interne Findings-ID steht bewusst NUR HIER im Kommentar
+ * // und nicht im Nutzertext: im Produkt wird die Sache benannt, nicht die Fundstelle
+ * // (Review-Fix; Konzeptverweise wie „Dok. 07 §9 R15" bleiben dagegen sichtbar, weil sie die
+ * // Herkunft der Regel belegen).
  */
 export function deriveObservations(
   objects: readonly ObjectEnvelope[],
@@ -313,7 +339,8 @@ export function deriveObservations(
       label: 'Objekte ohne erfassten Owner',
       count: ohneOwner,
       total: objects.length,
-      totalLabel: 'Objekte dieses Mandanten',
+      // Dativ: die Labels erscheinen ausschließlich in der Form „<count> von <total> <label>".
+      totalLabel: 'Objekten dieses Mandanten',
       method:
         'Gezählt werden Objekte dieses Mandanten, deren Feld „owner_ids" leer ist (Dok. 07 §7). ' +
         'Ob ein Owner fachlich erforderlich ist, sagt der Datenbestand nicht – hier steht nur, ' +
@@ -324,12 +351,12 @@ export function deriveObservations(
       label: 'Scope-Kennungen ohne eigenes Objekt',
       count: scopeOhneObjekt,
       total: scopeIds.size,
-      totalLabel: 'verschiedene Scope-Kennungen dieses Mandanten',
+      totalLabel: 'verschiedenen Scope-Kennungen dieses Mandanten',
       method:
         'Gezählt werden die verschiedenen Kennungen aus „scope_ids" aller Objekte dieses ' +
         'Mandanten, zu denen es im Datenbestand kein Objekt mit derselben Kennung gibt. ' +
-        'Das ist die bekannte Lücke O-WP014-03: Scopes sind im Demo-Datenbestand nicht als ' +
-        'eigene Objekte angelegt; die Zuordnung bleibt deshalb als rohe Kennung sichtbar.',
+        'Scopes sind im Demo-Datenbestand nicht als eigene Objekte angelegt; die Zuordnung ' +
+        'bleibt deshalb als rohe Kennung sichtbar.',
     },
     {
       id: 'kante_ohne_vertrauensgrad',
@@ -339,19 +366,23 @@ export function deriveObservations(
       totalLabel: 'Beziehungen dieses Mandanten',
       method:
         'Gezählt werden Beziehungen dieses Mandanten ohne Wert im Feld „confidence" ' +
-        '(Dok. 07 §9). Ein fehlender Vertrauensgrad wird nicht ersetzt und nicht geschätzt.',
+        '(Dok. 07 §9). Ein fehlender Vertrauensgrad wird nicht ersetzt und nicht geschätzt. ' +
+        'Ob für eine Beziehung fachlich ein Vertrauensgrad erforderlich ist, sagt der ' +
+        'Datenbestand nicht – hier steht nur, ob einer erfasst ist.',
     },
     {
       id: 'ohne_nachweisbezug',
       label: 'Nachweisfähige Objekte ohne eingehende Nachweis-Beziehung',
       count: ohneNachweis,
       total: nachweisfaehige.length,
-      totalLabel: 'Objekte der Typen Control, Measure und Decision Record',
+      totalLabel: `Objekten der Typen ${NACHWEISFAEHIGE_TYPEN}`,
       method:
-        'Gezählt werden Objekte der Typen Control, Measure und Decision Record – laut ' +
+        `Gezählt werden Objekte der Typen ${NACHWEISFAEHIGE_TYPEN} – laut ` +
         'Dok. 07 §9 R15 die möglichen Ziele einer „evidences"-Beziehung –, auf die im ' +
         'Datenbestand keine solche Beziehung zeigt. Andere Objekttypen bleiben außen vor, ' +
-        'weil für sie kein Nachweisbezug vorgesehen ist.',
+        'weil für sie kein Nachweisbezug vorgesehen ist. Ob für ein Objekt fachlich ein ' +
+        'Nachweis erforderlich ist, sagt der Datenbestand nicht – hier steht nur, ob eine ' +
+        'Nachweis-Beziehung erfasst ist.',
     },
   ];
 }
@@ -371,8 +402,12 @@ export interface PlaceEntryPoint {
   readonly placeId: PlaceId;
   readonly label: string;
   readonly href: string;
-  /** Leitfrage des Ortes, gelesen aus `lib/shell/places.ts` (Dok. 06 §7). */
-  readonly question: string;
+  /**
+   * Leitfrage des Ortes, gelesen aus `lib/shell/places.ts` (Dok. 06 §7). Optional: sie entfällt,
+   * wenn der Einstieg nicht auf den Ort selbst, sondern auf eine engere Zielseite führt und die
+   * Leitfrage des Ortes dort nicht beantwortet wird (siehe Einstieg „Zwilling dieses Mandanten").
+   */
+  readonly question?: string;
   readonly stock: readonly EntryStockItem[];
   /** `true`, wenn alle Bestandsangaben 0 sind – der Ort wird trotzdem BENANNT, nicht versteckt. */
   readonly isEmpty: boolean;
@@ -443,19 +478,22 @@ export function derivePlaceEntryPoints(
   relationships: readonly RelationshipEnvelope[],
   stock: TenantStock,
 ): PlaceEntryPoint[] {
-  const kunden = getPlace('kunden');
   const isms = getPlace('isms');
   const services = getPlace('services');
 
   const entries: PlaceEntryPoint[] = [
     {
-      placeId: kunden.id,
+      placeId: getPlace('kunden').id,
       // Abweichend vom Navigationslabel „Kunden": dieser Einstieg führt NICHT ins Portfolio,
       // sondern in den Customer Workspace GENAU DIESES Mandanten (Dok. 06 §4, Hinweis „Für
       // Kundenrollen ggf. direkt der eigene Workspace"). Der Ort selbst bleibt „kunden".
+      //
+      // Die Leitfrage des Ortes („Wessen digitalen Zwilling und Portfolio sehe ich …") bleibt
+      // deshalb WEG: eine Portfolio-Sicht ist auf „Heute" Nicht-Ziel, und die Zielseite dieses
+      // Links beantwortet sie nicht (Review-Fix). Label und Bestandsangabe sagen bereits, was
+      // dort steht; für /isms und /services bleibt die Leitfrage des Ortes unverändert.
       label: 'Zwilling dieses Mandanten',
       href: tenantDetailHref(tenantId),
-      question: kunden.question,
       stock: [
         { label: 'Objekte', count: objects.length },
         { label: 'Beziehungen', count: relationships.length },
@@ -503,9 +541,16 @@ export interface MissionControlModel {
 /**
  * Baut das vollständige Modell aus übergebenen Listen – die REINE Kernfunktion.
  *
- * Filtert die Listen zusätzlich selbst auf `tenant.tenant_id`: die Mandantengrenze ist eine
- * Sicherheitsgrenze und darf nicht davon abhängen, dass der Aufrufer bereits richtig gefiltert
- * hat (Dok. 07 §17/P09). Fremde Objekte und Kanten verändern deshalb kein Ergebnis.
+ * Filtert die OBJEKT- und KANTENLISTEN zusätzlich selbst auf `tenant.tenant_id`: die
+ * Mandantengrenze ist eine Sicherheitsgrenze und darf nicht davon abhängen, dass der Aufrufer
+ * bereits richtig gefiltert hat (Dok. 07 §17/P09). Fremde Objekte und Kanten verändern deshalb
+ * kein Ergebnis.
+ *
+ * `stock` ist davon ausgenommen und wird ungeprüft übernommen: es ist eine bereits
+ * mandantengebundene Vorberechnung des Aufrufers (zwei Zahlen, keine Objekte und keine
+ * Kennungen). Wer hier fremde Zahlen hineingibt, sieht fremde Zahlen – das ist eine Aussage über
+ * diese Signatur, keine stille Zusicherung (Review-Fix; vorher behauptete der Kommentar mehr
+ * Isolation, als der Code leistet).
  */
 export function buildMissionControlModel(
   tenant: DemoTenant,

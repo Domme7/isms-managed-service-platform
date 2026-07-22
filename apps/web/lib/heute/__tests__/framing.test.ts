@@ -15,7 +15,6 @@ import {
   WORLD_FRAMINGS,
   framingForRole,
   framingForWorld,
-  orderedSections,
   type MissionSectionId,
 } from '../framing';
 
@@ -80,22 +79,15 @@ describe('Abschnittsreihenfolge – Betonung ohne Datenunterschied', () => {
     }
   });
 
-  it('betont genau den Abschnitt direkt nach „Wo stehe ich?"', () => {
-    for (const worldId of WORLD_IDS) {
-      const framing = framingForWorld(worldId);
-      expect(framing.emphasis).toBe(framing.sectionOrder[1]);
-      expect(framing.emphasis).not.toBe<MissionSectionId>('standort');
-    }
-  });
-
   it('rahmt die vier Welten unterschiedlich (die Rahmung ist wirksam, nicht dekorativ)', () => {
     const reihenfolgen = WORLD_IDS.map((id) => framingForWorld(id).sectionOrder.join('>'));
     expect(new Set(reihenfolgen).size).toBe(4);
   });
 
-  it('liefert zu jeder Reihenfolge die sichtbaren Überschriften', () => {
-    const titles = orderedSections(framingForWorld('assurance')).map((s) => s.title);
-    expect(titles).toEqual([
+  it('trägt zu jeder Abschnittskennung eine sichtbare Überschrift (jede ist eine Frage)', () => {
+    // Die Reihenfolge einer Welt wird von `MissionControlContent` direkt über `sectionOrder`
+    // gerendert; der frühere Helfer `orderedSections` war unbenutzt und ist entfernt.
+    expect(framingForWorld('assurance').sectionOrder.map((id) => MISSION_SECTIONS[id].title)).toEqual([
       'Wo stehe ich?',
       'Was ist erfasst worden?',
       'Was weiß ich über die Datenlage?',
@@ -140,7 +132,6 @@ describe('Kein Rollen-Gating – die Rahmung trägt keine Daten', () => {
     for (const worldId of WORLD_IDS) {
       expect(Object.keys(framingForWorld(worldId)).sort()).toEqual([
         'avoidQuote',
-        'emphasis',
         'experienceQuote',
         'orderRationale',
         'quoteSource',

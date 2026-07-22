@@ -31,7 +31,7 @@ import type {
   ResolvedOwner,
   ResolvedScope,
 } from '../../lib/twin/object-detail';
-import { formatIsoDateDe, objectDetailHref } from '../../lib/twin/routes';
+import { formatIsoDateDe, objectDetailHref, tenantDetailHref } from '../../lib/twin/routes';
 import { objectTypeDisplay, relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
 
 /* -----------------------------------------------------------------------------
@@ -168,7 +168,7 @@ function EmptyNext({ tenantId }: { tenantId: string }) {
   return (
     <>
       {' Weiter zu '}
-      <Link href={`/twin/${tenantId}`}>
+      <Link href={tenantDetailHref(tenantId)}>
         allen modellierten Objekten und Beziehungen dieses Mandanten
       </Link>
       .
@@ -236,7 +236,7 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
       {/* Kein „Zurück": die Seite wird auch aus /isms und /services heraus betreten, dorthin
           führt dieser Link nicht. Er benennt daher sein Ziel (Muster „← Alle Mandanten" in
           `TenantDetailView`); das Ziel selbst bleibt unverändert. */}
-      <Link className="tw-back" href={`/twin/${tenantId}`}>
+      <Link className="tw-back" href={tenantDetailHref(tenantId)}>
         ← Alle Objekte von {tenant.display_name}
       </Link>
 

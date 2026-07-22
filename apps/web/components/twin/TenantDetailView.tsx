@@ -11,6 +11,7 @@
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
 import { getModeledTenants, type TenantDetailModel } from '../../lib/twin/data';
+import { tenantDetailHref } from '../../lib/twin/routes';
 import { Badge } from './Badge';
 import { ObjectCard } from './ObjectCard';
 import { RelationshipList } from './RelationshipList';
@@ -145,7 +146,7 @@ function EmptyGraphState({
         {modeledTenants.length > 0 ? (
           <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
             {modeledTenants.map((t) => (
-              <Link key={t.tenant_id} className="tw-cta" href={`/twin/${t.tenant_id}`}>
+              <Link key={t.tenant_id} className="tw-cta" href={tenantDetailHref(t.tenant_id)}>
                 {t.display_name} ansehen →
               </Link>
             ))}

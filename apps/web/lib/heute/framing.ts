@@ -14,6 +14,13 @@
  *    `docs/concept/active/06_UX_UI_NAVIGATION_ERLEBNISWELTEN_v1.0.md` §5 zitiert; die jeweilige
  *    Quellzeile steht am Zitat.
  *
+ * NUR QUELLBELEG, BEWUSST NICHT GERENDERT: `experienceQuote`, `avoidQuote`, `quoteSource` und
+ * `orderRationale` belegen im Code, WORAUS die Reihenfolge abgeleitet ist (WP-016 Acceptance 10),
+ * und werden von keiner Komponente angezeigt. Das ist Absicht: `orderRationale` enthält Begriffe
+ * wie „Empfehlung" und „Serviceangebot", die im Produkt nicht erscheinen dürfen (WP-016
+ * Nicht-Ziele, Dok. 13 MS15) – sie stehen hier als Zitat der Quelle, nicht als Aussage der Seite.
+ * Wirksam gerendert wird ausschließlich `sectionOrder`.
+ *
  * // OFFENE FRAGE O-WP016-01: Dok. 06 §7 S01/§8 beschreibt die INHALTE von Mission Control,
  * // aber KEINE rollen- oder weltabhängige Reihenfolge. Rollenbezogen dokumentiert sind nur
  * // „Erlebnis" und „Bewusst vermeiden" je WELT (§5), nicht je Rolle. Die unten festgelegte
@@ -74,13 +81,7 @@ export interface WorldFraming {
    * Leeres wird benannt statt versteckt).
    */
   readonly sectionOrder: readonly MissionSectionId[];
-  /**
-   * Betonter Abschnitt = der Abschnitt direkt nach „Wo stehe ich?". „Wo stehe ich?" steht in
-   * jeder Welt zuerst, weil Dok. 06 §6 Rolle, Mandant, Scope und Datenstand querschnittlich
-   * sichtbar verlangt; die Betonung entsteht also erst danach.
-   */
-  readonly emphasis: MissionSectionId;
-  /** Ableitung der Reihenfolge im Klartext, mit Bezug auf die beiden Zitate. */
+  /** Ableitung der Reihenfolge im Klartext, mit Bezug auf die beiden Zitate (nur Quellbeleg). */
   readonly orderRationale: string;
 }
 
@@ -104,7 +105,6 @@ export const WORLD_FRAMINGS: Readonly<Record<WorldId, WorldFraming>> = {
     avoidQuote: 'Keine Roh-Control-Listen, keine operative Task-Wand.',
     quoteSource: 'Dok. 06 v1.0 §5, „Executive World" (Felder „Erlebnis" / „Bewusst vermeiden")',
     sectionOrder: ['standort', 'datenlage', 'erfassung', 'einstieg'],
-    emphasis: 'datenlage',
     orderRationale:
       'Von den im Feld „Erlebnis" genannten Punkten ist im Demo-Datenbestand allein ' +
       '„Unsicherheit" belegt – Entscheidungen, Impact, Optionen und Investitionswirkung sind ' +
@@ -120,7 +120,6 @@ export const WORLD_FRAMINGS: Readonly<Record<WorldId, WorldFraming>> = {
     quoteSource:
       'Dok. 06 v1.0 §5, „Customer Operations World" (Felder „Erlebnis" / „Bewusst vermeiden")',
     sectionOrder: ['standort', 'datenlage', 'einstieg', 'erfassung'],
-    emphasis: 'datenlage',
     orderRationale:
       'Das Feld „Erlebnis" nennt „Datenlücken" ausdrücklich; Morning Mission und Wiederaufnahme ' +
       'sind im Datenbestand nicht belegt und werden auf dieser Seite offen als Lücke benannt. ' +
@@ -135,7 +134,6 @@ export const WORLD_FRAMINGS: Readonly<Record<WorldId, WorldFraming>> = {
     quoteSource:
       'Dok. 06 v1.0 §5, „Consulting & Service World" (Felder „Erlebnis" / „Bewusst vermeiden")',
     sectionOrder: ['standort', 'einstieg', 'datenlage', 'erfassung'],
-    emphasis: 'einstieg',
     orderRationale:
       'Belegt sind von den im Feld „Erlebnis" genannten Punkten die Einstiege in Services und ' +
       'Deliverables, nicht Kapazität, Reise oder Opportunity. Deshalb steht der Einstieg vorn. ' +
@@ -151,7 +149,6 @@ export const WORLD_FRAMINGS: Readonly<Record<WorldId, WorldFraming>> = {
     quoteSource:
       'Dok. 06 v1.0 §5, „Assurance & Administration World" (Felder „Erlebnis" / „Bewusst vermeiden")',
     sectionOrder: ['standort', 'erfassung', 'datenlage', 'einstieg'],
-    emphasis: 'erfassung',
     orderRationale:
       'Das Feld „Erlebnis" nennt „Datenherkunft" und „Versionen" – genau das beantwortet der ' +
       'Erfassungsabschnitt (record_time und die abgeleitete Versionsaussage, Dok. 07 §11). ' +
@@ -173,9 +170,4 @@ export function framingForRole(roleId: string): WorldFraming | undefined {
   const role = getRole(roleId);
   if (!role) return undefined;
   return framingForWorld(worldForRole(role).id);
-}
-
-/** Die vier Abschnitte in der Reihenfolge einer Welt (Titel inklusive). */
-export function orderedSections(framing: WorldFraming): readonly MissionSection[] {
-  return framing.sectionOrder.map((id) => MISSION_SECTIONS[id]);
 }

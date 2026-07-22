@@ -8,6 +8,7 @@
  */
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
+import { tenantDetailHref } from '../../lib/twin/routes';
 import { Badge } from './Badge';
 
 export function TenantOverview({ tenants }: { tenants: readonly DemoTenant[] }) {
@@ -28,7 +29,7 @@ export function TenantOverview({ tenants }: { tenants: readonly DemoTenant[] }) 
         <ul className="tw-grid">
           {tenants.map((tenant) => (
             <li key={tenant.tenant_id}>
-              <Link className="tw-card tw-card-link" href={`/twin/${tenant.tenant_id}`}>
+              <Link className="tw-card tw-card-link" href={tenantDetailHref(tenant.tenant_id)}>
                 <span className="tw-card-title">{tenant.display_name}</span>
                 <span className="tw-card-sub">{tenant.industry}</span>
                 <span className="tw-badge-row">

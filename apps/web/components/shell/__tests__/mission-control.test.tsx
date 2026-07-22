@@ -57,6 +57,11 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'Heute' })).toBeInTheDocument();
     expect(screen.getByText(getPlace('heute').question)).toBeInTheDocument();
+    // Der Lead muss BEIDE Hälften der Leitfrage dementieren: „seit meinem letzten Besuch" ist
+    // nicht belegt, und „was verdient Aufmerksamkeit" wird bewusst nicht beantwortet. Ohne
+    // Assertion könnte dieser Satz still verschwinden – er ist die Ehrlichkeitsklammer der Seite.
+    expect(screen.getByText(/ist nicht belegt – und auch/)).toBeInTheDocument();
+    expect(screen.getByText(/priorisiert nicht/)).toBeInTheDocument();
 
     for (const section of Object.values(MISSION_SECTIONS)) {
       expect(screen.getByRole('heading', { level: 2, name: section.title })).toBeInTheDocument();
@@ -98,8 +103,12 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
     expect(
       within(kontext).getByText(/scope-nordwerk-isms-core · scope-nordwerk-managed-service/),
     ).toBeInTheDocument();
-    // Datenstand = Systemachse (record_time) der zuletzt erfassten Welle.
+    // Datenstand = Systemachse (record_time) der zuletzt erfassten Welle, als Kalendertag.
     expect(within(kontext).getByText('16.02.2026')).toBeInTheDocument();
+    expect(within(kontext).getByText('16.02.2026').closest('time')).toHaveAttribute(
+      'dateTime',
+      '2026-02-16',
+    );
   });
 });
 
@@ -108,7 +117,7 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
  * --------------------------------------------------------------------------- */
 
 describe('MissionControlContent – „Wo stehe ich?"', () => {
-  it('nennt Rolle mit R-ID, Produktrolle, Sphäre, Kernverantwortung, Welt und Weltleitfrage', () => {
+  it('nennt Rolle mit R-ID, Produktrolle, Sphäre, Kernverantwortung und Weltleitfrage', () => {
     const auditor = role('R07');
     render(<MissionControlContent role={auditor} tenant={tenant(TENANT_ID.NORDWERK)} />);
 
@@ -121,15 +130,31 @@ describe('MissionControlContent – „Wo stehe ich?"', () => {
     expect(within(abschnitt).getByText(auditor.sphere)).toBeInTheDocument();
     expect(within(abschnitt).getByText(auditor.responsibility)).toBeInTheDocument();
     expect(
-      within(abschnitt).getByText('Assurance & Administration World'),
-    ).toBeInTheDocument();
-    expect(
       within(abschnitt).getByText(
         'Ist die Aussage belastbar, der Zugriff kontrolliert und der Betrieb nachvollziehbar?',
       ),
     ).toBeInTheDocument();
     // Rolle ist Perspektive, keine Berechtigung.
     expect(within(abschnitt).getByText(/dieselben Daten desselben Mandanten/)).toBeInTheDocument();
+    expect(within(abschnitt).getByText(/keine Rangfolge/)).toBeInTheDocument();
+    // Die Leitfrage der Erlebniswelt fragt je nach Welt nach Entscheidungen, Kurs oder Portfolio –
+    // alles Dinge, die diese Seite bewusst NICHT beantwortet. Sie darf deshalb nicht ungerahmt
+    // stehen (Review-Fix), sonst erzeugt sie genau die Erwartung, die der Lead ausräumt.
+    expect(within(abschnitt).getByText(/rahmt die Erlebniswelt, nicht diese Seite/)).toBeInTheDocument();
+    // Kein Funktionsversprechen: die Seite sagt, was NICHT abgebildet ist, nicht was kommt.
+    expect(abschnitt.textContent ?? '').toMatch(/nicht abgebildet/);
+    expect(abschnitt.textContent ?? '').not.toMatch(/Work Package|entsteht in einem eigenen/);
+  });
+
+  it('wiederholt den Namen der Erlebniswelt nicht (er steht querschnittlich in der Kontextzeile)', () => {
+    render(<MissionControlContent role={role('R07')} tenant={tenant(TENANT_ID.NORDWERK)} />);
+    const abschnitt = screen
+      .getByRole('heading', { level: 2, name: MISSION_SECTIONS.standort.title })
+      .closest('section') as HTMLElement;
+    const kontext = screen.getByRole('group', { name: 'Kontext dieser Seite' });
+
+    expect(within(kontext).getByText('Assurance & Administration World')).toBeInTheDocument();
+    expect(abschnitt.textContent ?? '').not.toContain('Assurance & Administration World');
   });
 
   it('zeigt Mandant, Branche und den aus dem Seed abgeleiteten Bestand (Nordwerk 31/43)', () => {
@@ -183,9 +208,11 @@ describe('MissionControlContent – „Was ist erfasst worden?"', () => {
     expect(wellen).toHaveLength(2);
 
     expect(within(wellen[0]).getByText('15.01.2026')).toBeInTheDocument();
+    // Das maschinenlesbare Datum deckt sich mit dem sichtbaren Text: eine Welle ist eine
+    // Tagesgruppe, eine Uhrzeit ist für sie nicht belegt (Review-Fix).
     expect(within(wellen[0]).getByText('15.01.2026').closest('time')).toHaveAttribute(
       'dateTime',
-      '2026-01-15T08:00:00.000Z',
+      '2026-01-15',
     );
     expect(
       within(wellen[0]).getByText(/17 Objekte · 15 Beziehungen an diesem Tag im System erfasst/),
@@ -277,16 +304,17 @@ describe('MissionControlContent – „Was weiß ich über die Datenlage?"', () 
     render(<MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />);
     const abschnitt = datenlageAbschnitt();
 
-    expect(within(abschnitt).getByText(/22 von 31 Objekte dieses Mandanten/)).toBeInTheDocument();
+    // Nach „von" steht der Dativ – die Zeile wird als ganzer Satz gelesen.
+    expect(within(abschnitt).getByText(/22 von 31 Objekten dieses Mandanten/)).toBeInTheDocument();
     expect(
-      within(abschnitt).getByText(/2 von 2 verschiedene Scope-Kennungen dieses Mandanten/),
+      within(abschnitt).getByText(/2 von 2 verschiedenen Scope-Kennungen dieses Mandanten/),
     ).toBeInTheDocument();
     expect(
       within(abschnitt).getByText(/32 von 43 Beziehungen dieses Mandanten/),
     ).toBeInTheDocument();
     expect(
       within(abschnitt).getByText(
-        /1 von 2 Objekte der Typen Control, Measure und Decision Record/,
+        /1 von 2 Objekten der Typen Control, Measure und Decision Record/,
       ),
     ).toBeInTheDocument();
   });
@@ -301,7 +329,7 @@ describe('MissionControlContent – „Was weiß ich über die Datenlage?"', () 
     // Der Consulting Operator trägt keine nachweisfähigen Objekttypen: 0 von 0.
     expect(
       within(datenlageAbschnitt()).getByText(
-        /0 von 0 Objekte der Typen Control, Measure und Decision Record/,
+        /0 von 0 Objekten der Typen Control, Measure und Decision Record/,
       ),
     ).toBeInTheDocument();
   });
@@ -334,6 +362,66 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
     expect(within(abschnitt).getByText(/31 Objekte · 43 Beziehungen/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/6 ISMS-Kernobjekte/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/3 Managed Services/)).toBeInTheDocument();
+
+    // Der Zwilling-Einstieg führt in den Workspace DIESES Mandanten, nicht ins Portfolio – die
+    // Portfolio-Leitfrage des Ortes „Kunden" darf an ihm nicht stehen (Review-Fix).
+    const zwilling = within(abschnitt)
+      .getByRole('link', { name: 'Zwilling dieses Mandanten' })
+      .closest('li') as HTMLElement;
+    expect(zwilling.textContent ?? '').not.toContain(getPlace('kunden').question);
+    expect(zwilling.textContent ?? '').not.toMatch(/Portfolio/);
+    // Die Leitfragen der beiden anderen Orte bleiben unverändert sichtbar.
+    expect(within(abschnitt).getByText(getPlace('isms').question)).toBeInTheDocument();
+    expect(within(abschnitt).getByText(getPlace('services').question)).toBeInTheDocument();
+  });
+
+  /**
+   * REGRESSION (Browser-Befund aus dem Review): `.sv-item-meta` ist in `globals.css` eine
+   * INLINE-Auszeichnung (nur Farbe und Schriftgröße), `.sv-item-note` dagegen `display: block`.
+   * Zwei aufeinanderfolgende `.sv-item-meta` in einem Listeneintrag liefen im Browser zu einem
+   * Fließtext zusammen („… 43 BeziehungenWessen digitalen Zwilling …"), weil JSX den reinen
+   * Zeilenumbruch zwischen zwei Elementen entfernt.
+   *
+   * Geprüft wird deshalb die STRUKTUR (höchstens eine Metazeile je Eintrag, jede weitere Zeile
+   * ist eine block-level Note) – `textContent` allein kann den fehlenden Umbruch nicht sehen und
+   * war genau deshalb blind. Zusätzlich wird nachgewiesen, dass beide Aussagen überhaupt im
+   * Eintrag stehen.
+   */
+  it('setzt je Listeneintrag höchstens EINE inline-Metazeile (sonst laufen zwei Zeilen zusammen)', () => {
+    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR]) {
+      const { container, unmount } = render(
+        <MissionControlContent role={role('R01')} tenant={tenant(tenantId)} />,
+      );
+
+      const eintraege = Array.from(container.querySelectorAll('.sv-items > li'));
+      expect(eintraege.length).toBeGreaterThan(0);
+      for (const li of eintraege) {
+        const metaKinder = Array.from(li.children).filter((el) =>
+          el.classList.contains('sv-item-meta'),
+        );
+        expect(metaKinder.length, li.textContent ?? '').toBeLessThanOrEqual(1);
+      }
+      unmount();
+    }
+  });
+
+  it('zeigt Bestand UND Leitfrage je Objekt-Einstieg – die Leitfrage als eigene Zeile', () => {
+    const model = buildMissionControl(TENANT_ID.NORDWERK);
+    if (!model) throw new Error('Testfixture fehlt: Nordwerk-Modell');
+
+    render(<MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />);
+    const abschnitt = einstiegAbschnitt();
+
+    for (const entry of model.objectEntryPoints) {
+      const li = within(abschnitt)
+        .getByRole('link', { name: entry.name })
+        .closest('li') as HTMLElement;
+      const text = li.textContent ?? '';
+      expect(text).toContain(entry.objectTypeDisplay);
+      expect(text).toContain(entry.familyLeitfrage);
+      // Die Leitfrage steht in der block-level Note, nicht in einer zweiten Inline-Metazeile.
+      expect(li.querySelector('.sv-item-note')?.textContent).toBe(entry.familyLeitfrage);
+    }
   });
 
   it('benennt einen Ort ohne Bestand, statt ihn auszublenden (Consulting Operator: ISMS leer)', () => {
@@ -429,7 +517,7 @@ describe('MissionControlContent – Empty-States für Mandanten ohne Datenbestan
       ).toBeInTheDocument();
       // Die vier Abschnitte bleiben stehen; die Zählungen weisen 0 aus.
       expect(abschnittsTitel()).toHaveLength(5);
-      expect(screen.getByText(/0 von 0 Objekte dieses Mandanten/)).toBeInTheDocument();
+      expect(screen.getByText(/0 von 0 Objekten dieses Mandanten/)).toBeInTheDocument();
     });
 
     it(`nennt für ${leer.display_name} keinen anderen Mandanten`, () => {
@@ -461,10 +549,18 @@ function datenprofil(container: HTMLElement): { hrefs: string[]; werte: string[]
     container.querySelectorAll(
       '.tw-stat-num, .tw-stat-label, .sv-item-name, .sv-item-meta, .sv-item-note',
     ),
-  )
-    .map((el) => el.textContent ?? '')
-    .sort();
-  return { hrefs, werte };
+  ).map((el) => el.textContent ?? '');
+
+  // Die Kontextzeile gehört ausdrücklich dazu: dort stehen Mandant, Scope-Kennungen und
+  // Datenstand – der wahrscheinlichste Ort für ein versehentliches Rollen-Gating. Ausgenommen
+  // sind genau die zwei bewusst rollenabhängigen Felder (Rahmung, keine Daten).
+  const rollenabhaengig = ['Aktive Rolle', 'Erlebniswelt'];
+  const kontextWerte = Array.from(container.querySelectorAll('.od-context > div'))
+    .filter((eintrag) => !rollenabhaengig.includes(eintrag.querySelector('dt')?.textContent ?? ''))
+    .map((eintrag) => eintrag.querySelector('dd')?.textContent ?? '');
+  expect(kontextWerte.length).toBeGreaterThan(0);
+
+  return { hrefs, werte: [...werte, ...kontextWerte].sort() };
 }
 
 describe('MissionControlContent – identische Datenmenge über alle zwölf Rollen', () => {
@@ -515,7 +611,11 @@ describe('MissionControlContent – Negativbeweis Mandantentrennung (Dok. 07 §1
  * 9. Keine Bewertung im gerenderten Text (WP-016 Acceptance 7)
  * --------------------------------------------------------------------------- */
 
-/** Bewertungsvokabular, das auf dieser Seite NIRGENDS vorkommen darf. */
+/**
+ * Bewertungsvokabular, das auf dieser Seite NIRGENDS vorkommen darf. Ergänzt um Partizipien und
+ * Dringlichkeitswörter (Review-Fix): „empfohlen" matcht weder /empfehl/ noch /Empfehlung/ und
+ * lief deshalb bisher am Wächter vorbei.
+ */
 const BEWERTUNG_VERBOTEN = [
   /\bScore\b/i,
   /Ampel/i,
@@ -528,8 +628,25 @@ const BEWERTUNG_VERBOTEN = [
   /Schweregrad/i,
   /Empfehlung/i,
   /empfehl/i,
+  /empfohlen/i,
+  /Handlungsbedarf/i,
+  /dringend/i,
+  /vorrangig/i,
+  /bewertet/i,
   /kritisch/i,
   /Serviceangebot/i,
+];
+
+/**
+ * WORTGLEICHE NEGATIONEN aus dem Produkt: Sätze, die genau dieses Vokabular ausdrücklich
+ * VERNEINEN. Sie sind die ehrliche Rahmung der Seite („gezählt wird – bewertet wird nicht") und
+ * dürfen nicht dadurch aus dem Produkt gedrängt werden, dass der Wächter jedes Vorkommen des
+ * Wortes verbietet. Sie werden vor der Prüfung aus dem Text entfernt – und jede Ausnahme wird
+ * selbst geprüft: verschwindet der Satz, schlägt der Test fehl, statt still zu verfallen.
+ */
+const ERLAUBTE_NEGATIONEN = [
+  'Es wird nichts bewertet, gewichtet oder empfohlen.',
+  'Hier wird gezählt und benannt, nicht bewertet:',
 ];
 
 /**
@@ -546,7 +663,14 @@ describe('MissionControlContent – kein Score, keine Ampel, keine Empfehlung', 
         const { container, unmount } = render(
           <MissionControlContent role={demoRole} tenant={tenant(tenantId)} />,
         );
-        const text = container.textContent ?? '';
+        let text = container.textContent ?? '';
+        for (const negation of ERLAUBTE_NEGATIONEN) {
+          expect(
+            text,
+            `${demoRole.id}/${tenantId}: die begründete Ausnahme „${negation}" steht nicht mehr im Text`,
+          ).toContain(negation);
+          text = text.split(negation).join(' ');
+        }
         for (const muster of BEWERTUNG_VERBOTEN) {
           expect(
             muster.test(text),
@@ -591,9 +715,12 @@ describe('MissionControlContent – Ehrlichkeitsblock „Was hier bewusst nicht 
     expect(within(abschnitt).getByText(/Veränderungsfeed/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/Wiederaufnahme/)).toBeInTheDocument();
 
+    // Kanonische Typnamen: `OBJECT_TYPE_LABEL_DE` (einzige Quelle deutscher Glossen) führt für
+    // „Task" und „Decision Record" bewusst keine Übersetzung – hier wird keine erfunden.
     expect(
-      within(abschnitt).getByText(/keine Objekte der Typen\s+„Aufgabe \(Task\)"/),
+      within(abschnitt).getByText(/keine Objekte der Typen\s+„Task"\s+und\s+„Decision Record"/),
     ).toBeInTheDocument();
+    expect(abschnitt.textContent ?? '').not.toMatch(/Aufgabe \(Task\)|Entscheidung \(Decision/);
     expect(within(abschnitt).getByText(/kein Ereignis- und kein Änderungsobjekt/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/keinen Besuchszeitpunkt/)).toBeInTheDocument();
     // Datenlücke statt Roadmap: kein Termin- und kein Funktionsversprechen.
