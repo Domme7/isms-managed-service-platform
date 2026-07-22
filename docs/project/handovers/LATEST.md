@@ -1,8 +1,8 @@
 # Latest Handover
 
-- **Aktuell:** `HND-20260722T164626Z.md`
+- **Aktuell:** `HND-20260722T170749Z.md`
 - **Work Package:** WP-011
 - **Status:** Active / Handover created
 - **Branch:** `main`
-- **Commit:** `d361a46`
-- **Exact Next Step:** RESUME: git status pruefen. Falls apps/web Shell-Aenderungen (app/(shell)/*, /login, Rollen-/Mandanten-Context) vorhanden: unabhaengig reviewen (Code + Product-User-Lead), pnpm --filter @isms/web test + visuelle QA, dann committen+pushen+Verified Checkpoint. Falls nicht: WP-011-Build neu anstossen gemaess work-packages/WP-011_APP_SHELL_ROLLEN_MANDANT.md (Builder=frontend-engineer). Danach Berater-/Managed-Service-Welt. Persistenz @isms/db bereit (DB-Anbindung erst mit API-WP + FINDING-0004 RLS). Keine echte Auth/realen Daten; nach jedem WP committen+pushen+LATEST aktualisieren.
+- **Commit:** `15f382e`
+- **Exact Next Step:** RESUME (WP-011 abschliessen): 1) Unabhaengigen Review starten - code-reviewer + product-user-lead ueber apps/web/(shell), components/shell/*, lib/shell/*, app/login (bereits committet, HEAD). 2) Visuelle Browser-QA: pnpm --filter @isms/web dev -> /login, /heute, /twin, Rollen-/Mandantenwechsel, Platzhalterseiten, 404 (Screenshot/DOM). 3) Findings beheben -> committen -> WP-011 auf DONE (Review-Notiz docs/project/reviews/WP-011_INDEPENDENT_REVIEW.md, Verified Checkpoint, CURRENT_STATE/Balken). 4) Danach naechstes WP: Berater-/Managed-Service-Welt (Portfolio/SLA/Kapazitaet, Dok. 13-15) - Owner-Wahl. Offene Haertung: FINDING-0004 (DB-RLS) vor DB-Anbindung ans UI. Keine echte Auth/realen Daten; nach jedem WP committen+pushen+LATEST aktualisieren.

@@ -1,36 +1,41 @@
+'use client';
+
 /**
- * Startseite – führt in den Digital Twin Explorer (WP-004).
- * Reine Navigation; keine Fachlogik.
+ * Einstieg `/` (WP-011): leitet auf einen sinnvollen Default weiter.
+ *  - angemeldet (Simulation)  -> `/heute` (Standard-Startpunkt, Dok. 06 06-D02)
+ *  - nicht angemeldet         -> `/login` (Rollen-/Mandanten-Simulation)
+ *
+ * Da die Auswahl clientseitig (localStorage) liegt, erfolgt die Weiterleitung nach dem Mount.
+ * Ohne JavaScript bleiben die expliziten Links als Fallback funktionsfähig.
  */
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useSession } from '../components/shell/SessionProvider';
 
 export default function Home() {
+  const router = useRouter();
+  const { session, hydrated } = useSession();
+
+  useEffect(() => {
+    if (!hydrated) return;
+    router.replace(session ? '/heute' : '/login');
+  }, [hydrated, session, router]);
+
   return (
-    <main className="tw-container">
+    <main className="tw-container" aria-busy={!hydrated}>
       <p className="tw-eyebrow">ISMS Managed Service Platform</p>
-      <h1>Digitaler Unternehmenszwilling</h1>
+      <h1>Weiterleitung …</h1>
       <p className="tw-lead">
-        Erste sichtbare Produktfläche der Demo-Welt: ein read-only Explorer, der den synthetischen
-        Demo-Seed rendert – Mandanten, Objekte nach Familie und ihre Beziehungen.
+        Sie werden zum passenden Startpunkt geführt. Falls das nicht automatisch geschieht:
       </p>
-
-      <nav aria-label="Haupteinstieg">
-        <ul className="tw-grid">
-          <li>
-            <Link className="tw-card tw-card-link" href="/twin">
-              <span className="tw-card-title">Digital Twin Explorer</span>
-              <span className="tw-card-sub">Mandanten &amp; Objektgraph ansehen</span>
-              <span className="tw-cta" aria-hidden="true">
-                Öffnen →
-              </span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-
-      <p className="tw-muted" style={{ marginTop: '2rem', fontSize: '0.85rem' }}>
-        Stack laut ADR-0001 · WP-004 · Daten aus <code>@isms/demo-seed</code> (rein synthetisch,
-        keine DB/Auth).
+      <p className="tw-empty-actions">
+        <Link className="tw-cta" href="/login">
+          Zur Anmelde-Simulation →
+        </Link>
+        <Link className="tw-cta" href="/heute">
+          Zur App (Heute) →
+        </Link>
       </p>
     </main>
   );

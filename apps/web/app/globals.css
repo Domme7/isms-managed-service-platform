@@ -11,6 +11,17 @@
   --tw-surface-2: #f6f7f9;
   --tw-accent: #1f4fd8;
   --tw-focus: #1f4fd8;
+
+  /* Shell-Tokens (Dok. 06 §18: Navy = Struktur, Teal = aktive Orientierung). */
+  --shell-navy: #12233f;
+  --shell-navy-2: #1b3357;
+  --shell-teal: #0b6e6e;
+  --shell-teal-soft: #e2f1f1;
+  --shell-topbar-h: 3.5rem;
+  --shell-nav-w: 232px;
+  --shell-demo: #7a4b00;
+  --shell-demo-bg: #fdf1d6;
+  --shell-demo-line: #ecd9a6;
 }
 
 * {
@@ -380,4 +391,410 @@ h3 {
   .tw-summary {
     gap: 1rem;
   }
+}
+
+/* =============================================================================
+   App-Shell (WP-011): Topbar, Demo-Hinweis, Seitennavigation der acht Orte, main.
+   ========================================================================== */
+
+.shell-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sichtbare Fokusringe auf allen interaktiven Shell-Elementen. */
+.shell button:focus-visible,
+.shell select:focus-visible,
+.shell a:focus-visible,
+.login-page button:focus-visible,
+.login-page select:focus-visible,
+.login-page input:focus-visible,
+.login-page a:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* --- Topbar --------------------------------------------------------------- */
+.shell-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  min-height: var(--shell-topbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.4rem 1rem;
+  background: var(--shell-navy);
+  color: #ffffff;
+  flex-wrap: wrap;
+}
+
+.shell-topbar-left,
+.shell-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.shell-brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  color: #ffffff;
+  text-decoration: none;
+}
+.shell-brand-mark {
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: #ffffff;
+  color: var(--shell-navy);
+  padding: 0.1rem 0.4rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+.shell-brand-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.shell-demo-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--shell-demo);
+  background: var(--shell-demo-bg);
+  border: 1px solid var(--shell-demo-line);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+}
+
+.shell-nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  padding: 0.3rem 0.55rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.shell-switch {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.shell-switch-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.shell-switch-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #c6d2e6;
+}
+.shell-select {
+  background: #ffffff;
+  color: var(--tw-ink);
+  border: 1px solid #ffffff;
+  border-radius: 6px;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.82rem;
+  max-width: 15rem;
+}
+
+.shell-signout {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 6px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.shell-signout:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.shell-signin-link {
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.shell-context-loading {
+  color: #c6d2e6;
+}
+
+/* --- Demo-Banner ---------------------------------------------------------- */
+.shell-demo-banner {
+  background: var(--shell-demo-bg);
+  color: var(--shell-demo);
+  border-bottom: 1px solid var(--shell-demo-line);
+  padding: 0.5rem 1rem;
+  font-size: 0.83rem;
+  line-height: 1.4;
+}
+
+/* --- Body: Seitennavigation + Inhalt -------------------------------------- */
+.shell-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--shell-nav-w) minmax(0, 1fr);
+  align-items: start;
+}
+
+.shell-nav {
+  position: sticky;
+  top: var(--shell-topbar-h);
+  align-self: start;
+  border-right: 1px solid var(--tw-line);
+  background: var(--tw-surface);
+  padding: 0.85rem 0.6rem;
+  min-height: calc(100vh - var(--shell-topbar-h));
+}
+.shell-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.shell-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  color: var(--tw-ink);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.shell-nav-item:hover {
+  background: var(--tw-surface-2);
+}
+.shell-nav-marker {
+  width: 3px;
+  height: 1.15rem;
+  border-radius: 3px;
+  background: transparent;
+  flex: none;
+}
+.shell-nav-item--active {
+  background: var(--shell-teal-soft);
+  color: #08403f;
+}
+.shell-nav-item--active .shell-nav-marker {
+  background: var(--shell-teal);
+}
+.shell-nav-label {
+  flex: 1;
+}
+.shell-nav-soon {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tw-muted);
+  background: var(--tw-surface-2);
+  border: 1px solid var(--tw-line);
+  border-radius: 999px;
+  padding: 0.05rem 0.4rem;
+}
+
+.shell-main {
+  min-width: 0;
+}
+.shell-main .tw-container {
+  max-width: 960px;
+  padding-top: 1.75rem;
+}
+
+/* --- Responsive: Nav einklappbar ------------------------------------------ */
+@media (max-width: 860px) {
+  .shell-nav-toggle {
+    display: inline-flex;
+  }
+  .shell-body {
+    grid-template-columns: 1fr;
+  }
+  .shell-nav {
+    position: static;
+    min-height: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--tw-line);
+    display: none;
+  }
+  .shell-body[data-nav-open='true'] .shell-nav {
+    display: block;
+  }
+  .shell-nav-list {
+    flex-direction: column;
+  }
+}
+
+/* =============================================================================
+   Login-Simulation (WP-011)
+   ========================================================================== */
+.login-page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+.login-card {
+  background: var(--tw-surface);
+  border: 1px solid var(--tw-line);
+  border-radius: 12px;
+  padding: 1.5rem 1.5rem 1.75rem;
+}
+.login-demo-notice {
+  background: var(--shell-demo-bg);
+  color: var(--shell-demo);
+  border: 1px solid var(--shell-demo-line);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  margin: 0.75rem 0 1.5rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.login-fieldset {
+  border: 1px solid var(--tw-line);
+  border-radius: 10px;
+  padding: 1rem 1.1rem 1.2rem;
+  margin: 0;
+}
+.login-legend {
+  font-weight: 700;
+  padding: 0 0.4rem;
+  font-size: 1rem;
+}
+.login-hint {
+  color: var(--tw-muted);
+  font-size: 0.85rem;
+  margin: 0 0 0.9rem;
+}
+.login-role-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.login-role-world {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--shell-teal);
+  margin: 0 0 0.5rem;
+}
+.login-role-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.6rem;
+}
+.login-role-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'radio id'
+    'radio name'
+    'radio resp';
+  align-items: center;
+  gap: 0.05rem 0.5rem;
+  border: 1px solid var(--tw-line);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  cursor: pointer;
+}
+.login-role-option:hover {
+  border-color: var(--shell-teal);
+}
+.login-role-option--active {
+  border-color: var(--shell-teal);
+  background: var(--shell-teal-soft);
+  box-shadow: 0 0 0 1px var(--shell-teal) inset;
+}
+.login-role-option input {
+  grid-area: radio;
+  align-self: start;
+  margin-top: 0.2rem;
+}
+.login-role-id {
+  grid-area: id;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--tw-muted);
+}
+.login-role-name {
+  grid-area: name;
+  font-weight: 700;
+}
+.login-role-resp {
+  grid-area: resp;
+  font-size: 0.8rem;
+  color: var(--tw-ink-soft);
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 26rem;
+}
+.login-field-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--tw-ink-soft);
+}
+.login-tenant-select {
+  color: var(--tw-ink);
+  border: 1px solid var(--tw-line);
+  padding: 0.45rem 0.5rem;
+  font-size: 0.95rem;
+  max-width: 26rem;
+}
+.login-tenant-desc {
+  color: var(--tw-ink-soft);
+  font-size: 0.85rem;
+  margin: 0.7rem 0 0;
+}
+
+.login-submit {
+  align-self: flex-start;
+  background: var(--shell-teal);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.login-submit:hover {
+  background: #095757;
 }

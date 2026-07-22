@@ -1,6 +1,7 @@
 /**
  * Eigener 404 für den Digital-Twin-Bereich (WP-004, A3).
- * Rendert innerhalb des Twin-Layouts (`main#inhalt`), daher hier nur der Inhalt.
+ * Seit WP-011 unter der Shell-Gruppe: rendert innerhalb des Shell-`main#inhalt`,
+ * daher hier nur der Inhalt.
  */
 import Link from 'next/link';
 

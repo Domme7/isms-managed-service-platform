@@ -7,8 +7,8 @@
  * UI-Navigation, KEINE Zugriffslogik.
  */
 import { notFound } from 'next/navigation';
-import { TenantDetailView } from '../../../components/twin/TenantDetailView';
-import { buildTenantDetail, getTenant, getTenants } from '../../../lib/twin/data';
+import { TenantDetailView } from '../../../../components/twin/TenantDetailView';
+import { buildTenantDetail, getTenant, getTenants } from '../../../../lib/twin/data';
 
 export function generateStaticParams() {
   return getTenants().map((tenant) => ({ tenantId: tenant.tenant_id }));

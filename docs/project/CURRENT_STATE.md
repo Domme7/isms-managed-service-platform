@@ -1,8 +1,8 @@
 # Current State
 
-**Stand:** WP-007 abgeschlossen — Persistenzschicht `@isms/db` (PostgreSQL/Drizzle, tenant-isoliert); Twin Explorer live  
+**Stand:** WP-011 App-Shell **gebaut** (acht Orte + Rollen-/Mandanten-Simulation + eingebetteter Explorer) — **unabh. Review + Browser-QA ausstehend**; WP-007 Persistenz done  
 **Phase:** 1→2 (Demo Foundation + Persistenz)  
-**Aktives Work Package:** WP-007 (**Done**); nächstes WP-011 App-Shell  
+**Aktives Work Package:** WP-011 (Built, self-verified 36 Web-Tests; Review + Browser-QA ausstehend)  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Minimales, lauffähiges Monorepo-Grundgerüst; noch keine Produktfeatures  
