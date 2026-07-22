@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T180850Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-012",
+  "timestamp_utc": "2026-07-22T18:08:50.578902+00:00",
+  "summary": "WP-012 (Berater-/Managed-Service-Welt, read-only) angelegt/aktiv. Slice 1: Managed-Service-Demo-Daten im Seed (nur kanonische F09-Typen: Managed Service, SLA, Deliverable) aus Dok. 13-15. Slice 2: Services-Ansicht in der Shell. An Data-Graph-Builder delegiert.",
+  "branch": "main",
+  "commit": "fd69a9b",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/WORK_QUEUE.md\n?? context-packs/WP-012/\n?? work-packages/WP-012_BERATER_MANAGED_SERVICE_WELT.md",
+  "tests": "not run / not provided",
+  "exact_next_step": "Slice 1 bauen: Seed um synthetische Managed Services + SLA + Deliverables erweitern (mehrere Mandanten), Tests/Manifest mitziehen."
+}
