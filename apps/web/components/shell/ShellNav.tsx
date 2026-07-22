@@ -36,9 +36,13 @@ export function ShellNav({
                 <span className="shell-nav-marker" aria-hidden="true" />
                 <span className="shell-nav-label">{place.label}</span>
                 {place.live ? null : (
-                  <span className="shell-nav-soon" aria-hidden="true">
-                    bald
-                  </span>
+                  <>
+                    <span className="shell-nav-soon" aria-hidden="true">
+                      bald
+                    </span>
+                    {/* Status auch für Assistive Tech, nicht nur visuell (Dok. 06 06-D11, WP-011 Review M2). */}
+                    <span className="shell-visually-hidden"> (noch nicht verfügbar)</span>
+                  </>
                 )}
               </Link>
             </li>

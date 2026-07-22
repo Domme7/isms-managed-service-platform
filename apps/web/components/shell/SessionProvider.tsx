@@ -52,6 +52,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const signIn = useCallback((roleId: string, tenantId: string) => {
     const next: DemoSession = { roleId, tenantId };
+    // Defensiv (WP-011 Code-Review-Nit): nur setzen, wenn Rolle+Mandant real auflösbar sind.
+    if (!resolveSession(next)) return;
     setSession(next);
     try {
       window.localStorage.setItem(SESSION_STORAGE_KEY, serializeSession(next));

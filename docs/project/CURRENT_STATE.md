@@ -1,8 +1,8 @@
 # Current State
 
-**Stand:** WP-011 App-Shell **gebaut** (acht Orte + Rollen-/Mandanten-Simulation + eingebetteter Explorer) — **unabh. Review + Browser-QA ausstehend**; WP-007 Persistenz done  
+**Stand:** WP-011 App-Shell **fertig** (acht Orte + Rollen-/Mandanten-Simulation + eingebetteter Explorer; 2 Reviews + Browser-QA); WP-007 Persistenz done  
 **Phase:** 1→2 (Demo Foundation + Persistenz)  
-**Aktives Work Package:** WP-011 (Built, self-verified 36 Web-Tests; Review + Browser-QA ausstehend)  
+**Aktives Work Package:** WP-011 (**Done**); nächstes: Berater-/Managed-Service-Welt  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Minimales, lauffähiges Monorepo-Grundgerüst; noch keine Produktfeatures  
