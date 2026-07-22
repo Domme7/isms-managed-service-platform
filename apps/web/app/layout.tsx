@@ -1,14 +1,15 @@
 import type { ReactNode } from 'react';
+import './globals.css';
 
 export const metadata = {
   title: 'ISMS Managed Service Platform',
-  description: 'Phase-0 App-Shell',
+  description: 'Phase-1 Digital Twin Explorer (read-only)',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="de">
-      <body style={{ margin: 0, fontFamily: 'system-ui, sans-serif' }}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

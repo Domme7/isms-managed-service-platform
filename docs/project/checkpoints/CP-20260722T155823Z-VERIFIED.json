@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T155823Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-004",
+  "timestamp_utc": "2026-07-22T15:58:23.138274+00:00",
+  "summary": "WP-004 DONE: read-only Digital Twin Explorer in apps/web (/twin, /twin/[tenantId]) rendert @isms/demo-seed. Zwei unabhaengige Reviews (Code + UX, FREIGABE MIT MINOR-FIXES), alle Fixes umgesetzt (A11y, Klartext-Labels, confirmation_level, qualitativer Vertrauensgrad, deutsches 404), visuelle Browser-QA bestanden. 94 Tests gruen monorepo-weit.",
+  "branch": "main",
+  "commit": "4e93c7d",
+  "git_status": "M apps/web/app/layout.tsx\n M apps/web/app/page.tsx\n M apps/web/next.config.mjs\n M apps/web/package.json\n M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CURRENT_STATE.md\n M docs/project/WORK_QUEUE.md\n M pnpm-lock.yaml\n?? .claude/launch.json\n?? apps/web/app/globals.css\n?? apps/web/app/twin/\n?? apps/web/components/\n?? apps/web/lib/\n?? apps/web/test/\n?? apps/web/vitest.config.ts\n?? docs/project/reviews/WP-004_INDEPENDENT_REVIEW.md\n?? docs/project/risks/FINDING-0003_twin_explorer_narrative_chain.md",
+  "tests": "frisch: web 13 (5 Render + 8 Unit); Monorepo 94 (api 2, contracts 55, demo-seed 24, web 13); build 4/4, typecheck 6/6; validate OK; 6/6 repo tests; Live-DOM-QA /twin, Nordwerk, Empty-State, 404",
+  "exact_next_step": "Naechstes WP offen: WP-011 App-Shell/Login (Dok. 06) | Persistenz-WP PostgreSQL (Docker/ORM Human Gate) | Twin-Ausbau (FINDING-0003 narrative Kette)."
+}

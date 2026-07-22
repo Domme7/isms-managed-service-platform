@@ -1,8 +1,8 @@
 # Latest Handover
 
-- **Aktuell:** `HND-20260722T143725Z.md`
-- **Work Package:** WP-003
+- **Aktuell:** `HND-20260722T155823Z.md`
+- **Work Package:** WP-004
 - **Status:** Active / Handover created
 - **Branch:** `main`
-- **Commit:** `f6275db`
-- **Exact Next Step:** WP-004 waehlen: (a) read-only Digital Twin Explorer in apps/web, der den Demo-Seed rendert (empfohlen, kein DB/Docker); (b) Persistenz-WP PostgreSQL (Docker+ORM Human Gate); (c) App-Shell/Login/Rollenwechsel/Mandantenkontext (Dok. 06). Keine realen Daten; weiterhin Checkpoints + Push.
+- **Commit:** `4e93c7d`
+- **Exact Next Step:** Naechstes WP mit dem Owner waehlen: (a) WP-011 App-Shell/Navigation/Login/Rollen- & Mandantenwechsel (Dok. 06); (b) Persistenz-WP PostgreSQL - benoetigt Docker-/ORM-Human-Gate; (c) Twin-Ausbau (narrative Ursache-Wirkungs-Kette/Impact Path, FINDING-0003, bzw. weitere Demo-Mandanten mit Graph). Keine realen Daten; weiterhin Checkpoints + Push. Explorer starten: pnpm --filter @isms/web dev -> http://localhost:3000/twin
