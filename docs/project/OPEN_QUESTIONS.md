@@ -45,7 +45,7 @@ sichtbar. Details: `packages/demo-seed/seed-manifest.json` (open_questions) und 
 |---|---|---|---|
 | O-WP012-01 | Dok. 13 trennt Service **Definition/Offer/Instance**; kanonisch existiert nur `Managed Service` | nur die Service Instance materialisiert | Concept Author (Dok. 07/13-Abgleich) |
 | O-WP012-02 | **Service Run** (Dok. 13 §4.5) und **Work Package** (Dok. 15 §4.4) haben keinen Objekttyp | Deliverables hängen direkt an der Service Instance | Concept Author |
-| O-WP012-03 | **Portfolio/Engagement** (Dok. 15) sind mandantenübergreifend, ohne kanonischen Typ | Portfolio nur als UI-Aggregation je Mandant, nie per Kante | Concept Author / CTO |
-| O-WP012-04 | R21 `delivered_by` zielt auf „Provider Team", Cross-Tenant-Kanten sind verboten | Delivery-Team je Mandant als tenant-eigenes `Team` (reversibel) | Concept Author / Security |
+| O-WP012-03 | **Portfolio** (Dok. 15 §4.1, mandantenübergreifend) und **Engagement** (§4.2, je Kunde) haben keinen kanonischen Typ — wird Engagement Twin-Objekt oder M27-Modulobjekt? | Portfolio nur als UI-Aggregation je Mandant, nie per Kante | Concept Author / CTO |
+| O-WP012-04 | R21 `delivered_by` zielt auf „Provider Team"; Dok. 07 §7/§17 sieht dafür **freigegebene Plattformobjekte/Plattformreferenzen** vor, die im Contract noch nicht ausgeprägt sind | Übergang: Delivery-Team je Mandant als tenant-eigenes `Team` (reversibel) | Concept Author / Security |
 | O-WP012-05 | Keine typisierten SLA-/KPI-Felder im Objektvertrag (Betriebszeit, Reaktionszeit, Zielwert) | Werte als Klartext in `description`; keine erfundenen Felder | Concept Author (Dok. 07 §7-Erweiterung?) |
-| O-WP012-06 | `part_of`/`evidences` an `Deliverable`: nur durch Regel-, nicht Beispielspalte von Dok. 07 §9 gedeckt | verwendet, als bestätigungsbedürftig markiert | Concept Author |
+| O-WP012-06 | **F09-Komposition via `part_of`** (SLA/Deliverable/Review → Managed Service) und `evidences`-Quelldomäne `Deliverable`: nur durch Regel-, nicht Beispielspalte von Dok. 07 §9 gedeckt (verallgemeinert per Concept-Review) | verwendet, als bestätigungsbedürftig markiert | Concept Author |
