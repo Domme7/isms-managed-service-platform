@@ -389,8 +389,41 @@ h3 {
   padding: 1.5rem;
   color: var(--tw-ink-soft);
 }
-.tw-empty h3 {
+.tw-empty h3,
+.tw-empty h4 {
   margin-top: 0;
+}
+
+/* Objekt-360 (WP-014): querschnittliche Kontextzeile der Detailseite (Dok. 06 §6).
+   Bewusst die einzige neue Klasse – alle übrigen Bausteine der Seite nutzen das
+   bestehende Vokabular (.tw-meta, .tw-rel-*, .tw-quality-*, .tw-empty, .sv-*). */
+.od-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  background: var(--tw-surface);
+  border: 1px solid var(--tw-line);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin: 0 0 1.5rem;
+}
+.od-context > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.od-context dt {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tw-muted);
+}
+.od-context dd {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--tw-ink);
 }
 
 @media (max-width: 640px) {

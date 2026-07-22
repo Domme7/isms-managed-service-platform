@@ -10,9 +10,15 @@ import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { DEMO_SEED, TENANT_ID } from '@isms/demo-seed';
+import { RelationshipList } from '../RelationshipList';
 import { TenantDetailView } from '../TenantDetailView';
 import { TenantOverview } from '../TenantOverview';
-import { buildTenantDetail, getTenant } from '../../../lib/twin/data';
+import {
+  buildTenantDetail,
+  getTenant,
+  type ResolvedRelationship,
+} from '../../../lib/twin/data';
+import { objectDetailHref } from '../../../lib/twin/object-detail';
 
 function tenantOrThrow(tenantId: string) {
   const tenant = getTenant(tenantId);
@@ -81,6 +87,97 @@ describe('TenantDetailView – Nordwerk (mit Graph)', () => {
     for (const object of nordwerkObjects) {
       expect(screen.queryByText(object.object_id)).not.toBeInTheDocument();
     }
+  });
+});
+
+/**
+ * WP-014 Slice 2 (Acceptance 4/10): Der Twin-Explorer endet nicht mehr in Listen – Objektkarten
+ * und beide Endpunkte jeder Beziehung führen auf die Objekt-360-Detailseite. Der Mandant des
+ * Links ist immer der Mandant der Route (kein Link über die Mandantengrenze, Dok. 07 §17/P09).
+ */
+describe('TenantDetailView – Verlinkung auf die Objekt-360-Seite (WP-014 Slice 2)', () => {
+  const model = buildTenantDetail(tenantOrThrow(TENANT_ID.NORDWERK));
+
+  it('verlinkt jeden Objektnamen der Objektkarten auf seine Detailseite', () => {
+    render(<TenantDetailView model={model} />);
+
+    // Reihenfolge der Karten = Reihenfolge der Familiengruppen (kanonisch F01..F09).
+    const erwartet = model.familyGroups.flatMap((group) => group.objects);
+    const kartenkoepfe = screen.getAllByRole('heading', { level: 4 });
+    expect(kartenkoepfe).toHaveLength(erwartet.length);
+    expect(erwartet.length).toBeGreaterThanOrEqual(1);
+
+    kartenkoepfe.forEach((heading, index) => {
+      const object = erwartet[index];
+      const link = within(heading).getByRole('link');
+      expect(link).toHaveTextContent(object.display_name);
+      expect(link).toHaveAttribute(
+        'href',
+        objectDetailHref(TENANT_ID.NORDWERK, object.object_id),
+      );
+    });
+  });
+
+  it('verlinkt BEIDE Endpunkte jeder Beziehung auf die jeweilige Detailseite', () => {
+    const { container } = render(<TenantDetailView model={model} />);
+
+    const items = Array.from(container.querySelectorAll('li.tw-rel-item'));
+    expect(items).toHaveLength(model.relationships.length);
+
+    items.forEach((item, index) => {
+      const rel = model.relationships[index];
+      const hrefs = Array.from(item.querySelectorAll('a')).map((a) => a.getAttribute('href'));
+      expect(hrefs).toEqual([
+        objectDetailHref(TENANT_ID.NORDWERK, rel.source_id),
+        objectDetailHref(TENANT_ID.NORDWERK, rel.target_id),
+      ]);
+    });
+  });
+
+  it('hält jeden Objektlink im Mandanten der Route (kein Kontextverlust)', () => {
+    const { container } = render(<TenantDetailView model={model} />);
+
+    const nordwerkIds = new Set(
+      DEMO_SEED.objects
+        .filter((o) => o.tenant_id === TENANT_ID.NORDWERK)
+        .map((o) => o.object_id),
+    );
+    const hrefs = Array.from(container.querySelectorAll('a[href*="/objekt/"]')).map((a) =>
+      a.getAttribute('href'),
+    );
+    expect(hrefs.length).toBeGreaterThanOrEqual(1);
+
+    const prefix = `/twin/${TENANT_ID.NORDWERK}/objekt/`;
+    for (const href of hrefs) {
+      expect(href?.startsWith(prefix)).toBe(true);
+      // Jedes Linkziel ist ein Objekt DIESES Mandanten – nie ein fremdes.
+      expect(nordwerkIds.has((href as string).slice(prefix.length))).toBe(true);
+    }
+  });
+
+  it('verlinkt einen nicht auflösbaren Endpunkt bewusst NICHT (Fail-loud)', () => {
+    // Synthetische, konstruierte Kante: der Endpunkt existiert nicht als Objekt.
+    const dangling: ResolvedRelationship = {
+      relationship_id: 'test-dangling',
+      relationship_type: 'processes',
+      relationship_type_id: 'R07',
+      relationship_type_label: 'verarbeitet',
+      source_id: 'geist-quelle',
+      target_id: 'geist-ziel',
+      source_name: 'geist-quelle',
+      target_name: 'geist-ziel',
+      source_resolved: false,
+      target_resolved: false,
+      assertion_kind: 'assertiert',
+    };
+
+    const { container } = render(
+      <RelationshipList relationships={[dangling]} tenantId={TENANT_ID.NORDWERK} />,
+    );
+
+    expect(container.querySelectorAll('a')).toHaveLength(0);
+    expect(screen.getAllByText('geist-quelle').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('geist-ziel').length).toBeGreaterThanOrEqual(1);
   });
 });
 

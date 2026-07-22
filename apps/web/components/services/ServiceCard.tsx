@@ -11,8 +11,16 @@
  * Lange SLA-/Deliverable-Texte öffnen sich per <details> (progressive Offenlegung, P06).
  *
  * Heading-Ebene: h3 (Service) > h4 (Kartenabschnitte).
+ *
+ * WP-014 Slice 2: Servicename und jedes verknüpfte Objekt (SLA, Deliverable, Review, Objekte im
+ * Serviceumfang, Voraussetzungen, Ziel-/Kennzahlbezug) verlinken auf die Objekt-360-Seite
+ * (`/twin/<tenantId>/objekt/<objectId>`). `tenantId` ist der AKTIVE Mandant der
+ * Session-Simulation (WP-011), durchgereicht von `ServicesContent` – niemals hartkodiert und
+ * niemals ein fremder Mandant (Dok. 07 §17/P09). Nicht auflösbare Endpunkte bleiben ohne Link.
  */
+import Link from 'next/link';
 import { relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
+import { objectDetailHref } from '../../lib/twin/object-detail';
 import type {
   ManagedServiceView,
   ServiceComponentItem,
@@ -33,18 +41,50 @@ function contributionTargetLabel(targetType: string): string {
   return targetType;
 }
 
+/**
+ * Objektname als Link auf seine Detailseite; ein nicht auflösbarer Endpunkt bleibt reiner Text
+ * (rohe ID), damit kein Link eine unbelegte Existenz behauptet (Fail-loud).
+ */
+function ItemName({
+  tenantId,
+  objectId,
+  name,
+  resolved,
+}: {
+  tenantId: string;
+  objectId: string;
+  name: string;
+  resolved: boolean;
+}) {
+  if (!resolved) {
+    return <span className="sv-item-name">{name}</span>;
+  }
+  return (
+    <Link className="sv-item-name" href={objectDetailHref(tenantId, objectId)}>
+      {name}
+    </Link>
+  );
+}
+
 function ComponentItems({
   items,
   detailsLabel,
+  tenantId,
 }: {
   items: readonly ServiceComponentItem[];
   detailsLabel: string;
+  tenantId: string;
 }) {
   return (
     <ul className="sv-items">
       {items.map((item) => (
         <li key={item.object_id}>
-          <span className="sv-item-name">{item.name}</span>
+          <ItemName
+            tenantId={tenantId}
+            objectId={item.object_id}
+            name={item.name}
+            resolved={item.resolved}
+          />
           <span className="sv-item-meta"> · Status: {item.lifecycle_status}</span>
           {item.description ? (
             <details className="sv-details">
@@ -58,12 +98,17 @@ function ComponentItems({
   );
 }
 
-function ScopeItems({ items }: { items: readonly ServiceScopeItem[] }) {
+function ScopeItems({ items, tenantId }: { items: readonly ServiceScopeItem[]; tenantId: string }) {
   return (
     <ul className="sv-items">
       {items.map((item) => (
         <li key={item.object_id}>
-          <span className="sv-item-name">{item.name}</span>
+          <ItemName
+            tenantId={tenantId}
+            objectId={item.object_id}
+            name={item.name}
+            resolved={item.resolved}
+          />
           <span className="sv-item-meta">
             {' '}
             · {item.object_type}
@@ -75,13 +120,15 @@ function ScopeItems({ items }: { items: readonly ServiceScopeItem[] }) {
   );
 }
 
-export function ServiceCard({ view }: { view: ManagedServiceView }) {
+export function ServiceCard({ view, tenantId }: { view: ManagedServiceView; tenantId: string }) {
   const { service, slas, deliverables, reviews, delivery_team_names, covered, required, contributions } =
     view;
 
   return (
     <li className="sv-card">
-      <h3 className="tw-card-title">{service.display_name}</h3>
+      <h3 className="tw-card-title">
+        <Link href={objectDetailHref(tenantId, service.object_id)}>{service.display_name}</Link>
+      </h3>
       <p className="tw-card-sub">
         Managed Service · Status: {service.lifecycle_status}
         {delivery_team_names.length > 0 ? (
@@ -98,14 +145,18 @@ export function ServiceCard({ view }: { view: ManagedServiceView }) {
 
       <h4>SLA – Leistungszusagen</h4>
       {slas.length > 0 ? (
-        <ComponentItems items={slas} detailsLabel="SLA-Details anzeigen" />
+        <ComponentItems items={slas} detailsLabel="SLA-Details anzeigen" tenantId={tenantId} />
       ) : (
         <p className="sv-item-meta">Kein SLA im Demo-Datenbestand hinterlegt.</p>
       )}
 
       <h4>Deliverables (prüfbare Ergebnisse)</h4>
       {deliverables.length > 0 ? (
-        <ComponentItems items={deliverables} detailsLabel="Deliverable-Details anzeigen" />
+        <ComponentItems
+          items={deliverables}
+          detailsLabel="Deliverable-Details anzeigen"
+          tenantId={tenantId}
+        />
       ) : (
         <p className="sv-item-meta">Kein Deliverable im Demo-Datenbestand hinterlegt.</p>
       )}
@@ -113,7 +164,7 @@ export function ServiceCard({ view }: { view: ManagedServiceView }) {
       {reviews.length > 0 ? (
         <>
           <h4>Outcome Review</h4>
-          <ComponentItems items={reviews} detailsLabel="Review-Details anzeigen" />
+          <ComponentItems items={reviews} detailsLabel="Review-Details anzeigen" tenantId={tenantId} />
         </>
       ) : null}
 
@@ -121,7 +172,7 @@ export function ServiceCard({ view }: { view: ManagedServiceView }) {
         <>
           <h4>Im Serviceumfang (abgedeckte Risiken, Controls &amp; Nachweise)</h4>
           <p className="sv-edge-note">Beziehung: {edgeNote('covered_by')}</p>
-          <ScopeItems items={covered} />
+          <ScopeItems items={covered} tenantId={tenantId} />
         </>
       ) : null}
 
@@ -129,7 +180,7 @@ export function ServiceCard({ view }: { view: ManagedServiceView }) {
         <>
           <h4>Voraussetzungen</h4>
           <p className="sv-edge-note">Beziehung: {edgeNote('requires')}</p>
-          <ScopeItems items={required} />
+          <ScopeItems items={required} tenantId={tenantId} />
         </>
       ) : null}
 
@@ -142,7 +193,12 @@ export function ServiceCard({ view }: { view: ManagedServiceView }) {
           <ul className="sv-items">
             {contributions.map((c) => (
               <li key={c.relationship_id}>
-                <span className="sv-item-name">{c.target_name}</span>
+                <ItemName
+                  tenantId={tenantId}
+                  objectId={c.target_id}
+                  name={c.target_name}
+                  resolved={c.target_resolved}
+                />
                 <span className="sv-item-meta">
                   {' '}
                   · {contributionTargetLabel(c.target_type)} · Herkunft der Aussage: {c.assertion_kind}

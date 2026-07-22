@@ -26,6 +26,12 @@ import { confidenceQualitative } from '../twin/data';
  * View-Modelle
  * --------------------------------------------------------------------------- */
 
+/**
+ * `resolved` (ergänzt in WP-014 Slice 2): `false`, wenn der Endpunkt im Mandanten nicht
+ * auflösbar war (dann trägt `name` die rohe ID). Ein solcher Verweis wird bewusst NICHT auf
+ * die Objekt-360-Seite verlinkt – ein Link würde eine nicht belegte Existenz behaupten.
+ */
+
 /** Über `part_of` an einen Service gehängtes Objekt (SLA, Deliverable oder Review). */
 export interface ServiceComponentItem {
   readonly object_id: string;
@@ -33,6 +39,7 @@ export interface ServiceComponentItem {
   readonly object_type: string;
   readonly lifecycle_status: string;
   readonly description: string;
+  readonly resolved: boolean;
 }
 
 /** Über `covered_by`/`requires` verknüpftes Objekt des ISMS-Graphen (aufgelöster Name). */
@@ -40,6 +47,7 @@ export interface ServiceScopeItem {
   readonly object_id: string;
   readonly name: string;
   readonly object_type: string;
+  readonly resolved: boolean;
   /** Kantenstatus aus dem Seed (z. B. „im Serviceumfang", „Voraussetzung erfüllt"). */
   readonly edge_status?: string;
 }
@@ -50,6 +58,8 @@ export interface ServiceContribution {
   readonly target_id: string;
   readonly target_name: string;
   readonly target_type: string;
+  /** `false`, wenn das Ziel im Mandanten nicht auflösbar war (kein Link, siehe oben). */
+  readonly target_resolved: boolean;
   readonly assertion_kind: string;
   /** Qualitativ + Wert (z. B. „mittel (0,75)"), falls die Kante einen Vertrauensgrad trägt. */
   readonly confidence_display?: string;
@@ -97,6 +107,7 @@ function toComponentItem(obj: ObjectEnvelope | undefined, fallbackId: string): S
       object_type: 'unbekannt',
       lifecycle_status: 'unbekannt',
       description: '',
+      resolved: false,
     };
   }
   return {
@@ -106,6 +117,7 @@ function toComponentItem(obj: ObjectEnvelope | undefined, fallbackId: string): S
     lifecycle_status: obj.lifecycle_status,
     // `description` ist im Envelope optional; leere Beschreibung wird als leer gerendert.
     description: obj.description ?? '',
+    resolved: true,
   };
 }
 
@@ -118,6 +130,7 @@ function toScopeItem(
     object_id: obj?.object_id ?? fallbackId,
     name: obj?.display_name ?? fallbackId,
     object_type: obj?.object_type ?? 'unbekannt',
+    resolved: obj !== undefined,
     edge_status: edgeStatus,
   };
 }
@@ -176,6 +189,7 @@ function buildServiceView(
           target_id: rel.target_id,
           target_name: target?.display_name ?? rel.target_id,
           target_type: target?.object_type ?? 'unbekannt',
+          target_resolved: target !== undefined,
           assertion_kind: rel.assertion_kind,
           confidence_display:
             typeof rel.confidence === 'number'

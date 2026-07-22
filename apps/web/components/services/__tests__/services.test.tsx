@@ -13,11 +13,16 @@
 import { render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { TENANT_ID } from '@isms/demo-seed';
+import { DEMO_SEED, TENANT_ID } from '@isms/demo-seed';
 import { ServicesContent } from '../ServicesContent';
 import { ServicesView } from '../ServicesView';
 import { SessionProvider } from '../../shell/SessionProvider';
 import { resolveSession, type ResolvedSession } from '../../../lib/shell/session';
+import {
+  buildPortfolioOverview,
+  getManagedServicesForTenant,
+} from '../../../lib/services/data';
+import { objectDetailHref } from '../../../lib/twin/object-detail';
 
 function session(roleId: string, tenantId: string): ResolvedSession {
   const resolved = resolveSession({ roleId, tenantId });
@@ -83,6 +88,94 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
     expect(
       within(portfolio).getAllByText('Keine Managed Services im aktuellen Demo-Datenbestand.'),
     ).toHaveLength(2);
+  });
+});
+
+/**
+ * WP-014 Slice 2 (Acceptance 10): Aus der Services-Ansicht führt jeder Objektname auf die
+ * Objekt-360-Detailseite. In der Mandanten-Sicht ist das immer der AKTIVE Mandant der
+ * Session-Simulation; in der Portfolio-Sicht immer der Mandant der jeweiligen Zeile – niemals
+ * ein fremder Mandant (Dok. 07 §17/P09).
+ */
+describe('ServicesContent – Verlinkung auf die Objekt-360-Seite (WP-014 Slice 2)', () => {
+  it('verlinkt Servicekopf, Komponenten, Serviceumfang und Wirkungsbeitrag', () => {
+    const { role, tenant } = session('R08', TENANT_ID.NORDWERK);
+    render(<ServicesContent role={role} tenant={tenant} />);
+
+    const views = getManagedServicesForTenant(TENANT_ID.NORDWERK);
+    expect(views.length).toBeGreaterThanOrEqual(1);
+
+    for (const view of views) {
+      const heading = screen.getByRole('heading', { level: 3, name: view.service.display_name });
+      expect(within(heading).getByRole('link')).toHaveAttribute(
+        'href',
+        objectDetailHref(TENANT_ID.NORDWERK, view.service.object_id),
+      );
+
+      const card = heading.closest('li');
+      if (!card) throw new Error(`Servicekarte fehlt: ${view.service.display_name}`);
+
+      const verknuepft = [
+        ...view.slas.map((i) => ({ name: i.name, object_id: i.object_id })),
+        ...view.deliverables.map((i) => ({ name: i.name, object_id: i.object_id })),
+        ...view.reviews.map((i) => ({ name: i.name, object_id: i.object_id })),
+        ...view.covered.map((i) => ({ name: i.name, object_id: i.object_id })),
+        ...view.required.map((i) => ({ name: i.name, object_id: i.object_id })),
+        ...view.contributions.map((c) => ({ name: c.target_name, object_id: c.target_id })),
+      ];
+      for (const item of verknuepft) {
+        expect(within(card).getAllByRole('link', { name: item.name })[0]).toHaveAttribute(
+          'href',
+          objectDetailHref(TENANT_ID.NORDWERK, item.object_id),
+        );
+      }
+    }
+  });
+
+  it('verlinkt in der Portfolio-Sicht jeden Service im Mandanten SEINER Zeile', () => {
+    const { role, tenant } = session('R08', TENANT_ID.NORDWERK);
+    render(<ServicesContent role={role} tenant={tenant} />);
+
+    const portfolio = screen.getByRole('region', { name: 'Portfolio: Alle Mandanten' });
+    const entries = buildPortfolioOverview().filter((e) => e.service_count > 0);
+    // Mindestens ein Eintrag betrifft einen ANDEREN Mandanten als den aktiven – genau dort
+    // muss der Link dessen eigenen Mandanten tragen (keine Mandantenvermischung).
+    expect(entries.some((e) => e.tenant.tenant_id !== TENANT_ID.NORDWERK)).toBe(true);
+
+    for (const entry of entries) {
+      const card = within(portfolio)
+        .getByRole('heading', { level: 3, name: entry.tenant.display_name })
+        .closest('li');
+      if (!card) throw new Error(`Portfolio-Karte fehlt: ${entry.tenant.display_name}`);
+
+      for (const service of entry.services) {
+        expect(within(card).getByRole('link', { name: service.name })).toHaveAttribute(
+          'href',
+          objectDetailHref(entry.tenant.tenant_id, service.object_id),
+        );
+      }
+    }
+  });
+
+  it('adressiert jeden Objektlink auf ein Objekt genau dieses Mandanten', () => {
+    const { role, tenant } = session('R08', TENANT_ID.NORDWERK);
+    const { container } = render(<ServicesContent role={role} tenant={tenant} />);
+
+    const tenantByObjectId = new Map(
+      DEMO_SEED.objects.map((o) => [o.object_id, o.tenant_id] as const),
+    );
+    const hrefs = Array.from(container.querySelectorAll('a[href*="/objekt/"]')).map(
+      (a) => a.getAttribute('href') ?? '',
+    );
+    expect(hrefs.length).toBeGreaterThanOrEqual(1);
+
+    for (const href of hrefs) {
+      const treffer = /^\/twin\/([^/]+)\/objekt\/([^/]+)$/.exec(href);
+      expect(treffer).not.toBeNull();
+      const [, tenantId, objectId] = treffer as RegExpExecArray;
+      // Der Mandant im Link ist exakt der Mandant des verlinkten Objekts.
+      expect(tenantByObjectId.get(objectId)).toBe(tenantId);
+    }
   });
 });
 

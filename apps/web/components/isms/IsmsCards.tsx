@@ -13,8 +13,15 @@
  *
  * Beschreibungen öffnen sich per <details> (progressive Offenlegung, Dok. 06 P06).
  * Heading-Ebene: h3 (Karte) > h4 (Kartenabschnitte).
+ *
+ * WP-014 Slice 2: Kartenkopf und jedes verknüpfte Objekt verlinken auf die Objekt-360-Seite
+ * (`/twin/<tenantId>/objekt/<objectId>`). Der `tenantId` ist der AKTIVE Mandant der
+ * Session-Simulation (WP-011) – derselbe Mandant, aus dem die Karten abgeleitet sind; er wird
+ * von `IsmsContent` durchgereicht und niemals hartkodiert (Dok. 07 §17/P09).
  */
+import Link from 'next/link';
 import { relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
+import { objectDetailHref } from '../../lib/twin/object-detail';
 import type {
   ControlView,
   EvidenceView,
@@ -46,8 +53,49 @@ function linkMeta(link: IsmsLink): string {
   return ` · ${parts.join(' · ')}`;
 }
 
+/** Kartenkopf: Objektname als Link auf die Objekt-360-Detailseite (WP-014 Slice 2). */
+function CardTitle({
+  tenantId,
+  objectId,
+  name,
+}: {
+  tenantId: string;
+  objectId: string;
+  name: string;
+}) {
+  return (
+    <h3 className="tw-card-title">
+      <Link href={objectDetailHref(tenantId, objectId)}>{name}</Link>
+    </h3>
+  );
+}
+
+/**
+ * Name eines verknüpften Objekts als Link auf seine Detailseite. Ein im Mandanten nicht
+ * auflösbarer Verweis bleibt bewusst reiner Text (rohe ID) – ein Link würde eine Existenz
+ * behaupten, die nicht belegt ist (Fail-loud, Muster `ObjectDetailView`).
+ */
+function LinkName({ link, tenantId }: { link: IsmsLink; tenantId: string }) {
+  if (!link.resolved) {
+    return <span className="sv-item-name">{link.name}</span>;
+  }
+  return (
+    <Link className="sv-item-name" href={objectDetailHref(tenantId, link.object_id)}>
+      {link.name}
+    </Link>
+  );
+}
+
 /** Liste verknüpfter Objekte (eine Kantenart) mit ehrlichem Leer-Hinweis. */
-function LinkItems({ links, emptyText }: { links: readonly IsmsLink[]; emptyText: string }) {
+function LinkItems({
+  links,
+  emptyText,
+  tenantId,
+}: {
+  links: readonly IsmsLink[];
+  emptyText: string;
+  tenantId: string;
+}) {
   if (links.length === 0) {
     return <p className="sv-item-meta">{emptyText}</p>;
   }
@@ -55,7 +103,7 @@ function LinkItems({ links, emptyText }: { links: readonly IsmsLink[]; emptyText
     <ul className="sv-items">
       {links.map((link) => (
         <li key={link.relationship_id}>
-          <span className="sv-item-name">{link.name}</span>
+          <LinkName link={link} tenantId={tenantId} />
           <span className="sv-item-meta">{linkMeta(link)}</span>
           {link.effectiveness_assumption ? (
             /* UX-Review MINOR-1: Annahme klar als Annahme kennzeichnen, nicht als belegte Wirkung. */
@@ -104,30 +152,42 @@ function CoveredNote({ names }: { names: readonly string[] }) {
  * Risiken-Sektion: Risk, Risikoszenario (Herkunft), Schwachstelle (Ursprung)
  * --------------------------------------------------------------------------- */
 
-export function RiskCard({ view }: { view: RiskView }) {
+export function RiskCard({ view, tenantId }: { view: RiskView; tenantId: string }) {
   return (
     <li className="sv-card">
-      <h3 className="tw-card-title">{view.risk.name}</h3>
+      <CardTitle tenantId={tenantId} objectId={view.risk.object_id} name={view.risk.name} />
       <p className="tw-card-sub">{`Risiko (Risk) · Status: ${view.risk.lifecycle_status}`}</p>
       <DescriptionDetails text={view.risk.description} label={view.risk.name} />
 
       <h4>Betrifft (Wirkung)</h4>
       <p className="sv-edge-note">Beziehung: {edgeNote('affects')}</p>
-      <LinkItems links={view.affects} emptyText="Keine affects-Beziehung im Demo-Datenbestand." />
+      <LinkItems
+        links={view.affects}
+        tenantId={tenantId}
+        emptyText="Keine affects-Beziehung im Demo-Datenbestand."
+      />
 
       <h4>Wird gemindert durch</h4>
       <p className="sv-edge-note">Beziehung: {edgeNote('mitigates')}</p>
-      <LinkItems links={view.mitigated_by} emptyText="Keine mitigates-Beziehung im Demo-Datenbestand." />
+      <LinkItems
+        links={view.mitigated_by}
+        tenantId={tenantId}
+        emptyText="Keine mitigates-Beziehung im Demo-Datenbestand."
+      />
 
       <CoveredNote names={view.covered_by_services} />
     </li>
   );
 }
 
-export function ScenarioCard({ view }: { view: ScenarioView }) {
+export function ScenarioCard({ view, tenantId }: { view: ScenarioView; tenantId: string }) {
   return (
     <li className="sv-card">
-      <h3 className="tw-card-title">{view.scenario.name}</h3>
+      <CardTitle
+        tenantId={tenantId}
+        objectId={view.scenario.object_id}
+        name={view.scenario.name}
+      />
       <p className="tw-card-sub">{`Risikoszenario (Risk Scenario) · Status: ${view.scenario.lifecycle_status}`}</p>
       <DescriptionDetails text={view.scenario.description} label={view.scenario.name} />
 
@@ -137,7 +197,7 @@ export function ScenarioCard({ view }: { view: ScenarioView }) {
         <ul className="sv-items">
           {view.threatened_by.map((link) => (
             <li key={link.relationship_id}>
-              <span className="sv-item-name">{link.name}</span>
+              <LinkName link={link} tenantId={tenantId} />
               <span className="sv-item-meta">{linkMeta(link)}</span>
               {link.also_threatens.length > 0 ? (
                 <span className="sv-item-note">
@@ -153,25 +213,41 @@ export function ScenarioCard({ view }: { view: ScenarioView }) {
 
       <h4>Wird gemindert durch</h4>
       <p className="sv-edge-note">Beziehung: {edgeNote('mitigates')}</p>
-      <LinkItems links={view.mitigated_by} emptyText="Keine mitigates-Beziehung im Demo-Datenbestand." />
+      <LinkItems
+        links={view.mitigated_by}
+        tenantId={tenantId}
+        emptyText="Keine mitigates-Beziehung im Demo-Datenbestand."
+      />
     </li>
   );
 }
 
-export function WeaknessCard({ view }: { view: WeaknessView }) {
+export function WeaknessCard({ view, tenantId }: { view: WeaknessView; tenantId: string }) {
   return (
     <li className="sv-card">
-      <h3 className="tw-card-title">{view.weakness.name}</h3>
+      <CardTitle
+        tenantId={tenantId}
+        objectId={view.weakness.object_id}
+        name={view.weakness.name}
+      />
       <p className="tw-card-sub">{`Schwachstelle (Weakness) · Status: ${view.weakness.lifecycle_status}`}</p>
       <DescriptionDetails text={view.weakness.description} label={view.weakness.name} />
 
       <h4>Exponiert (betroffener Informationswert)</h4>
       <p className="sv-edge-note">Beziehung: {edgeNote('exposes')}</p>
-      <LinkItems links={view.exposes} emptyText="Keine exposes-Beziehung im Demo-Datenbestand." />
+      <LinkItems
+        links={view.exposes}
+        tenantId={tenantId}
+        emptyText="Keine exposes-Beziehung im Demo-Datenbestand."
+      />
 
       <h4>Wird behoben durch</h4>
       <p className="sv-edge-note">Beziehung: {edgeNote('remediates')}</p>
-      <LinkItems links={view.remediated_by} emptyText="Keine remediates-Beziehung im Demo-Datenbestand." />
+      <LinkItems
+        links={view.remediated_by}
+        tenantId={tenantId}
+        emptyText="Keine remediates-Beziehung im Demo-Datenbestand."
+      />
     </li>
   );
 }
@@ -180,10 +256,10 @@ export function WeaknessCard({ view }: { view: WeaknessView }) {
  * Controls-Sektion
  * --------------------------------------------------------------------------- */
 
-export function ControlCard({ view }: { view: ControlView }) {
+export function ControlCard({ view, tenantId }: { view: ControlView; tenantId: string }) {
   return (
     <li className="sv-card">
-      <h3 className="tw-card-title">{view.control.name}</h3>
+      <CardTitle tenantId={tenantId} objectId={view.control.object_id} name={view.control.name} />
       {/* UX-Review MAJOR-1: „wirksam" ist ein Lebenszyklus-Stand (Dok. 05 §7), KEIN Prüfergebnis.
           Ohne Rahmung liest ein Nicht-Experte das als erwiesene Wirksamkeit. Daher explizit
           benannt und eingeordnet (Dok. 08 §14.3/§27, Erklärbarkeit jedes sichtbaren Status). */}
@@ -200,7 +276,11 @@ export function ControlCard({ view }: { view: ControlView }) {
         Beziehung: {edgeNote('implements')} – Umsetzungsstand der Implementierung; „implementiert"
         ist <strong>kein</strong> Wirksamkeitsnachweis für das Control.
       </p>
-      <LinkItems links={view.implementations} emptyText="Keine Umsetzung im Demo-Datenbestand verknüpft." />
+      <LinkItems
+        links={view.implementations}
+        tenantId={tenantId}
+        emptyText="Keine Umsetzung im Demo-Datenbestand verknüpft."
+      />
 
       <h4>Erfüllte Anforderung (Requirement)</h4>
       <p className="sv-edge-note">
@@ -210,7 +290,7 @@ export function ControlCard({ view }: { view: ControlView }) {
         <ul className="sv-items">
           {view.satisfies.map((link) => (
             <li key={link.relationship_id}>
-              <span className="sv-item-name">{link.name}</span>
+              <LinkName link={link} tenantId={tenantId} />
               <span className="sv-item-meta">
                 {linkMeta(link)}
                 {link.framework_name ? ` · Framework: ${link.framework_name}` : ''}
@@ -224,11 +304,19 @@ export function ControlCard({ view }: { view: ControlView }) {
 
       <h4>Nachweis-Stand (Evidence)</h4>
       <p className="sv-edge-note">Beziehung: {edgeNote('evidences')}</p>
-      <LinkItems links={view.evidenced_by} emptyText="Keine evidences-Beziehung im Demo-Datenbestand." />
+      <LinkItems
+        links={view.evidenced_by}
+        tenantId={tenantId}
+        emptyText="Keine evidences-Beziehung im Demo-Datenbestand."
+      />
 
       <h4>Mindert (Risikobezug)</h4>
       <p className="sv-edge-note">Beziehung: {edgeNote('mitigates')}</p>
-      <LinkItems links={view.mitigates} emptyText="Keine mitigates-Beziehung im Demo-Datenbestand." />
+      <LinkItems
+        links={view.mitigates}
+        tenantId={tenantId}
+        emptyText="Keine mitigates-Beziehung im Demo-Datenbestand."
+      />
 
       <CoveredNote names={view.covered_by_services} />
     </li>
@@ -239,20 +327,28 @@ export function ControlCard({ view }: { view: ControlView }) {
  * Maßnahmen-Sektion
  * --------------------------------------------------------------------------- */
 
-export function MeasureCard({ view }: { view: MeasureView }) {
+export function MeasureCard({ view, tenantId }: { view: MeasureView; tenantId: string }) {
   return (
     <li className="sv-card">
-      <h3 className="tw-card-title">{view.measure.name}</h3>
+      <CardTitle tenantId={tenantId} objectId={view.measure.object_id} name={view.measure.name} />
       <p className="tw-card-sub">{`Maßnahme (Measure) · Status: ${view.measure.lifecycle_status}`}</p>
       <DescriptionDetails text={view.measure.description} label={view.measure.name} />
 
       <h4>Behebt (Schwachstelle/Finding)</h4>
       <p className="sv-edge-note">Beziehung: {edgeNote('remediates')}</p>
-      <LinkItems links={view.remediates} emptyText="Keine remediates-Beziehung im Demo-Datenbestand." />
+      <LinkItems
+        links={view.remediates}
+        tenantId={tenantId}
+        emptyText="Keine remediates-Beziehung im Demo-Datenbestand."
+      />
 
       <h4>Mindert (Szenario/Risiko)</h4>
       <p className="sv-edge-note">Beziehung: {edgeNote('mitigates')}</p>
-      <LinkItems links={view.mitigates} emptyText="Keine mitigates-Beziehung im Demo-Datenbestand." />
+      <LinkItems
+        links={view.mitigates}
+        tenantId={tenantId}
+        emptyText="Keine mitigates-Beziehung im Demo-Datenbestand."
+      />
     </li>
   );
 }
@@ -261,16 +357,20 @@ export function MeasureCard({ view }: { view: MeasureView }) {
  * Nachweise-Sektion
  * --------------------------------------------------------------------------- */
 
-export function EvidenceCard({ view }: { view: EvidenceView }) {
+export function EvidenceCard({ view, tenantId }: { view: EvidenceView; tenantId: string }) {
   return (
     <li className="sv-card">
-      <h3 className="tw-card-title">{view.evidence.name}</h3>
+      <CardTitle tenantId={tenantId} objectId={view.evidence.object_id} name={view.evidence.name} />
       <p className="tw-card-sub">{`Nachweis (Evidence) · Status: ${view.evidence.lifecycle_status}`}</p>
       <DescriptionDetails text={view.evidence.description} label={view.evidence.name} />
 
       <h4>Belegt</h4>
       <p className="sv-edge-note">Beziehung: {edgeNote('evidences')}</p>
-      <LinkItems links={view.evidences} emptyText="Keine evidences-Beziehung im Demo-Datenbestand." />
+      <LinkItems
+        links={view.evidences}
+        tenantId={tenantId}
+        emptyText="Keine evidences-Beziehung im Demo-Datenbestand."
+      />
 
       <CoveredNote names={view.covered_by_services} />
     </li>

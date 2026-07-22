@@ -12,10 +12,12 @@
 import { render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
+import { DEMO_SEED, DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
 import { IsmsContent } from '../IsmsContent';
 import { IsmsView } from '../IsmsView';
 import { SessionProvider } from '../../shell/SessionProvider';
+import { buildIsmsCoreView } from '../../../lib/isms/data';
+import { objectDetailHref } from '../../../lib/twin/object-detail';
 
 function tenant(tenantId: string): DemoTenant {
   const found = DEMO_TENANTS.find((t) => t.tenant_id === tenantId);
@@ -112,6 +114,77 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
       within(evidenceCard).getByText('Nachweis (Evidence) · Status: akzeptiert'),
     ).toBeInTheDocument();
     expect(within(evidenceCard).getByText('Backup & Recovery Control')).toBeInTheDocument();
+  });
+});
+
+/**
+ * WP-014 Slice 2 (Acceptance 10): Aus der ISMS-Ansicht führt jeder Objektname auf die
+ * Objekt-360-Detailseite. Der Mandant des Links ist ausschließlich der AKTIVE Mandant der
+ * Session-Simulation – hier der als Prop übergebene Mandant (Dok. 07 §17/P09).
+ */
+describe('IsmsContent – Verlinkung auf die Objekt-360-Seite (WP-014 Slice 2)', () => {
+  const view = buildIsmsCoreView(TENANT_ID.NORDWERK);
+  const kartenkoepfe = [
+    ...view.risks.map((v) => v.risk),
+    ...view.scenarios.map((v) => v.scenario),
+    ...view.weaknesses.map((v) => v.weakness),
+    ...view.controls.map((v) => v.control),
+    ...view.measures.map((v) => v.measure),
+    ...view.evidence.map((v) => v.evidence),
+  ];
+
+  it('verlinkt jeden Kartenkopf auf die Detailseite seines Objekts', () => {
+    render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+
+    expect(kartenkoepfe.length).toBeGreaterThanOrEqual(6);
+    for (const ref of kartenkoepfe) {
+      const heading = screen.getByRole('heading', { level: 3, name: ref.name });
+      expect(within(heading).getByRole('link')).toHaveAttribute(
+        'href',
+        objectDetailHref(TENANT_ID.NORDWERK, ref.object_id),
+      );
+    }
+  });
+
+  it('verlinkt die verknüpften Objekte einer Karte (LinkItems) auf ihre Detailseite', () => {
+    render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+
+    const controlView = view.controls.find((c) => c.control.name === 'Backup & Recovery Control');
+    if (!controlView) throw new Error('Testfixture fehlt: Control „Backup & Recovery Control"');
+    const controlCard = cardByHeading(controlView.control.name);
+
+    // Umsetzung, erfüllte Anforderung, Nachweis und Risikobezug – alle als Links.
+    const verknuepft = [
+      ...controlView.implementations,
+      ...controlView.satisfies,
+      ...controlView.evidenced_by,
+      ...controlView.mitigates,
+    ];
+    expect(verknuepft.length).toBeGreaterThanOrEqual(4);
+    for (const link of verknuepft) {
+      expect(within(controlCard).getByRole('link', { name: link.name })).toHaveAttribute(
+        'href',
+        objectDetailHref(TENANT_ID.NORDWERK, link.object_id),
+      );
+    }
+  });
+
+  it('adressiert JEDEN Objektlink im aktiven Mandanten (nie ein fremdes Objekt)', () => {
+    const { container } = render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+
+    const nordwerkIds = new Set(
+      DEMO_SEED.objects.filter((o) => o.tenant_id === TENANT_ID.NORDWERK).map((o) => o.object_id),
+    );
+    const prefix = objectDetailHref(TENANT_ID.NORDWERK, '');
+    const hrefs = Array.from(container.querySelectorAll('a[href*="/objekt/"]')).map(
+      (a) => a.getAttribute('href') ?? '',
+    );
+
+    expect(hrefs.length).toBeGreaterThanOrEqual(kartenkoepfe.length);
+    for (const href of hrefs) {
+      expect(href.startsWith(prefix)).toBe(true);
+      expect(nordwerkIds.has(href.slice(prefix.length))).toBe(true);
+    }
   });
 });
 

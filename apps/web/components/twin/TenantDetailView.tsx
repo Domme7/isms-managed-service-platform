@@ -42,6 +42,7 @@ export function TenantDetailView({ model }: { model: TenantDetailModel }) {
           relationships={relationships}
           objectCount={objectCount}
           relationshipCount={relationshipCount}
+          tenantId={tenant.tenant_id}
         />
       ) : (
         <EmptyGraphState tenantName={tenant.display_name} modeledTenants={getModeledTenants()} />
@@ -50,12 +51,19 @@ export function TenantDetailView({ model }: { model: TenantDetailModel }) {
   );
 }
 
+/**
+ * `tenantId` (WP-014 Slice 2): Mandant dieser Route – wird an Objektkarten und Beziehungsliste
+ * durchgereicht, damit jeder Objektlink im Mandanten der Seite bleibt (Dok. 07 §17/P09).
+ */
 function TenantGraph({
   familyGroups,
   relationships,
   objectCount,
   relationshipCount,
-}: Pick<TenantDetailModel, 'familyGroups' | 'relationships' | 'objectCount' | 'relationshipCount'>) {
+  tenantId,
+}: Pick<TenantDetailModel, 'familyGroups' | 'relationships' | 'objectCount' | 'relationshipCount'> & {
+  tenantId: string;
+}) {
   const familyCount = familyGroups.length;
 
   return (
@@ -91,6 +99,7 @@ function TenantGraph({
                 object={object}
                 familyId={group.id}
                 familyName={group.name}
+                tenantId={tenantId}
               />
             ))}
           </ul>
@@ -101,7 +110,7 @@ function TenantGraph({
       <p className="tw-muted">
         Gerichtete Kanten (Quelle —Typ→ Ziel) im kanonischen Beziehungsmodell (Dok. 07 §9).
       </p>
-      <RelationshipList relationships={relationships} />
+      <RelationshipList relationships={relationships} tenantId={tenantId} />
     </>
   );
 }

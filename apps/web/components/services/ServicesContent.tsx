@@ -49,7 +49,13 @@ export function ServicesContent({ role, tenant }: { role: DemoRole; tenant: Demo
         {services.length > 0 ? (
           <ul className="sv-list">
             {services.map((view) => (
-              <ServiceCard key={view.service.object_id} view={view} />
+              // Objekt-Links dieser Karte (WP-014 Slice 2) tragen ausschließlich den AKTIVEN
+              // Mandanten der Session-Simulation – denselben, aus dem die Services stammen.
+              <ServiceCard
+                key={view.service.object_id}
+                view={view}
+                tenantId={tenant.tenant_id}
+              />
             ))}
           </ul>
         ) : (

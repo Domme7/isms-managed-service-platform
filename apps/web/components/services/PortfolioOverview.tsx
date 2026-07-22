@@ -7,9 +7,16 @@
  * nur für die Consulting & Service World ist eine reine Anzeige-Verdichtung (Demo),
  * KEINE Sicherheitsgrenze. Status immer als Text, nie nur Farbe (Dok. 06 06-D11).
  *
+ * WP-014 Slice 2: Jeder Servicename verlinkt auf seine Objekt-360-Seite. Der Mandant des Links
+ * ist IMMER `entry.tenant.tenant_id`, also der Mandant, aus dessen Objekten die Zeile gebildet
+ * wurde – es entsteht kein Link über die Mandantengrenze (Dok. 07 §17/P09). Die Mandantenkarte
+ * selbst bleibt unverlinkt: ein Mandant ist kein Graph-Objekt und hat keine Objektseite.
+ *
  * Heading-Ebene: h2 (Sektion) > h3 (Mandantenkarte).
  */
+import Link from 'next/link';
 import type { PortfolioTenantEntry } from '../../lib/services/data';
+import { objectDetailHref } from '../../lib/twin/object-detail';
 
 export function PortfolioOverview({ entries }: { entries: readonly PortfolioTenantEntry[] }) {
   return (
@@ -36,7 +43,12 @@ export function PortfolioOverview({ entries }: { entries: readonly PortfolioTena
               <ul className="sv-items">
                 {entry.services.map((service) => (
                   <li key={service.object_id}>
-                    <span className="sv-item-name">{service.name}</span>
+                    <Link
+                      className="sv-item-name"
+                      href={objectDetailHref(entry.tenant.tenant_id, service.object_id)}
+                    >
+                      {service.name}
+                    </Link>
                     <span className="sv-item-meta"> · Status: {service.lifecycle_status}</span>
                   </li>
                 ))}

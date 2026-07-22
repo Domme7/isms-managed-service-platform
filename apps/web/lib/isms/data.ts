@@ -71,6 +71,12 @@ export interface IsmsLink {
   readonly object_id: string;
   readonly name: string;
   readonly object_type: string;
+  /**
+   * `false`, wenn der Endpunkt im Mandanten nicht auflösbar war (dann trägt `name` die rohe ID).
+   * Ergänzt in WP-014 Slice 2: ein solcher Verweis wird bewusst NICHT auf die Objekt-360-Seite
+   * verlinkt – ein Link würde eine nicht belegte Existenz behaupten (Fail-loud).
+   */
+  readonly resolved: boolean;
   /** Objektstatus des verknüpften Objekts (falls im Mandanten auflösbar). */
   readonly lifecycle_status?: string;
   /** Kantenstatus aus dem Seed (z. B. „geprüft" bei evidences). */
@@ -188,6 +194,7 @@ function toLink(
     object_id: endpointId,
     name: obj?.display_name ?? endpointId,
     object_type: obj?.object_type ?? 'unbekannt',
+    resolved: obj !== undefined,
     lifecycle_status: obj?.lifecycle_status,
     edge_status: rel.status,
     assertion_kind: rel.assertion_kind,

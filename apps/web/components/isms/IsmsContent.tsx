@@ -25,6 +25,10 @@ import {
 
 export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
   const view = buildIsmsCoreView(tenant.tenant_id);
+  // Mandant für alle Objekt-Links dieser Ansicht (WP-014 Slice 2): ausschließlich der AKTIVE
+  // Mandant der Session-Simulation – derselbe, aus dem die Karten abgeleitet sind. Niemals
+  // hartkodiert und niemals ein fremder Mandant (Dok. 07 §17/P09).
+  const tenantId = tenant.tenant_id;
 
   return (
     <>
@@ -72,13 +76,21 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
               emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Risiken, Szenarien oder Schwachstellen modelliert."
             >
               {view.risks.map((risk) => (
-                <RiskCard key={risk.risk.object_id} view={risk} />
+                <RiskCard key={risk.risk.object_id} view={risk} tenantId={tenantId} />
               ))}
               {view.scenarios.map((scenario) => (
-                <ScenarioCard key={scenario.scenario.object_id} view={scenario} />
+                <ScenarioCard
+                  key={scenario.scenario.object_id}
+                  view={scenario}
+                  tenantId={tenantId}
+                />
               ))}
               {view.weaknesses.map((weakness) => (
-                <WeaknessCard key={weakness.weakness.object_id} view={weakness} />
+                <WeaknessCard
+                  key={weakness.weakness.object_id}
+                  view={weakness}
+                  tenantId={tenantId}
+                />
               ))}
             </SectionList>
           </section>
@@ -95,7 +107,7 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
               emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Controls modelliert."
             >
               {view.controls.map((control) => (
-                <ControlCard key={control.control.object_id} view={control} />
+                <ControlCard key={control.control.object_id} view={control} tenantId={tenantId} />
               ))}
             </SectionList>
           </section>
@@ -111,7 +123,7 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
               emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Maßnahmen modelliert."
             >
               {view.measures.map((measure) => (
-                <MeasureCard key={measure.measure.object_id} view={measure} />
+                <MeasureCard key={measure.measure.object_id} view={measure} tenantId={tenantId} />
               ))}
             </SectionList>
           </section>
@@ -128,7 +140,7 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
               emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Nachweise vom Typ Evidence modelliert."
             >
               {view.evidence.map((ev) => (
-                <EvidenceCard key={ev.evidence.object_id} view={ev} />
+                <EvidenceCard key={ev.evidence.object_id} view={ev} tenantId={tenantId} />
               ))}
             </SectionList>
           </section>

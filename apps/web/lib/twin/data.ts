@@ -139,6 +139,9 @@ const REL_TYPE_TO_LABEL_DE: Readonly<Record<string, string>> = {
   contributes_to: 'trägt bei zu',
   delivered_by: 'erbracht durch',
   covered_by: 'abgedeckt durch',
+  // Historie/Ablösung (WP-014, Dok. 07 §9 R24): die Objekt-360-Seite benennt die Ablösung
+  // explizit, damit eine fehlende Versionshistorie in Klartext begründet werden kann.
+  supersedes: 'löst ab',
 };
 
 /** Deutsches UI-Label eines Beziehungstyps (oder `undefined`, dann technischen Namen nutzen). */
@@ -166,8 +169,22 @@ export interface ResolvedRelationship {
   readonly relationship_type: string;
   readonly relationship_type_id?: string;
   readonly relationship_type_label?: string;
+  /**
+   * Rohe Endpunkt-Kennungen. Ergänzt in WP-014 Slice 2, damit die Beziehungsliste beide
+   * Endpunkte auf ihre Objekt-360-Detailseite verlinken kann (Dok. 07 §10). Die Namensfelder
+   * bleiben unverändert – hier wird nichts umbenannt und nichts am Modell erfunden.
+   */
+  readonly source_id: string;
+  readonly target_id: string;
   readonly source_name: string;
   readonly target_name: string;
+  /**
+   * `false`, wenn der Endpunkt in der übergebenen Objektmenge nicht auflösbar war (dann trägt
+   * `*_name` die rohe ID). Die UI verlinkt einen solchen Endpunkt bewusst NICHT – ein Link
+   * würde eine Existenz behaupten, die nicht belegt ist (Fail-loud statt stiller Lücke).
+   */
+  readonly source_resolved: boolean;
+  readonly target_resolved: boolean;
   readonly assertion_kind: string;
   readonly confidence?: number;
 }
@@ -192,8 +209,12 @@ export function resolveRelationships(
     relationship_type: r.relationship_type,
     relationship_type_id: relationshipTypeId(r.relationship_type),
     relationship_type_label: relationshipTypeLabel(r.relationship_type),
+    source_id: r.source_id,
+    target_id: r.target_id,
     source_name: nameById.get(r.source_id) ?? r.source_id,
     target_name: nameById.get(r.target_id) ?? r.target_id,
+    source_resolved: nameById.has(r.source_id),
+    target_resolved: nameById.has(r.target_id),
     assertion_kind: r.assertion_kind,
     confidence: r.confidence,
   }));

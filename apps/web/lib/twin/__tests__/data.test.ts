@@ -104,6 +104,20 @@ describe('resolveRelationships', () => {
     expect(processes?.relationship_type_label).toBe('verarbeitet');
   });
 
+  it('behält beide rohen Endpunkt-IDs für die Objekt-Verlinkung (WP-014 Slice 2)', () => {
+    const resolved = resolveRelationships(NORDWERK_OBJECTS, NORDWERK_RELATIONSHIPS);
+    expect(resolved).toHaveLength(NORDWERK_RELATIONSHIPS.length);
+
+    // Jede aufgelöste Kante trägt exakt die IDs der Quellkante – unverändert, nicht abgeleitet.
+    for (const [index, rel] of NORDWERK_RELATIONSHIPS.entries()) {
+      expect(resolved[index].source_id).toBe(rel.source_id);
+      expect(resolved[index].target_id).toBe(rel.target_id);
+      // Im vollständigen Kerngraphen ist jeder Endpunkt auflösbar (Seed-Integrität).
+      expect(resolved[index].source_resolved).toBe(true);
+      expect(resolved[index].target_resolved).toBe(true);
+    }
+  });
+
   it('fällt bei einer Dangling-Kante auf die rohe ID zurück (Lücke sichtbar)', () => {
     const dangling = {
       ...NORDWERK_RELATIONSHIPS[0],
@@ -116,6 +130,10 @@ describe('resolveRelationships', () => {
     expect(resolved).toHaveLength(1);
     expect(resolved[0].source_name).toBe('ghost-source');
     expect(resolved[0].target_name).toBe('ghost-target');
+    // Fail-loud auch für die Verlinkung: ein nicht auflösbarer Endpunkt wird als solcher
+    // markiert, damit die UI ihn NICHT verlinkt (keine behauptete Existenz).
+    expect(resolved[0].source_resolved).toBe(false);
+    expect(resolved[0].target_resolved).toBe(false);
   });
 });
 

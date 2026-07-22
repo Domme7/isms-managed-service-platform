@@ -6,18 +6,27 @@
  * Datenqualitäts-Dimensionen mit `confirmation_level`/`note` (Dok. 07 §12). Nichts wird
  * abgeleitet oder erfunden – nur was in `quality_state.dimensions` steht.
  *
+ * WP-014 Slice 2: Der Objektname ist ein Link auf die Objekt-360-Detailseite
+ * (`/twin/<tenantId>/objekt/<objectId>`). `tenantId` kommt aus dem Routenparameter der
+ * Mandantenseite – also aus dem Mandanten, dessen Objekte hier gezeigt werden; ein Link über
+ * die Mandantengrenze entsteht dadurch nicht (Dok. 07 §17/P09).
+ *
  * Heading-Ebene: h4 (eine Ebene unter der Familien-Überschrift h3).
  */
+import Link from 'next/link';
 import type { ObjectEnvelope } from '@isms/contracts';
+import { objectDetailHref } from '../../lib/twin/object-detail';
 
 export function ObjectCard({
   object,
   familyId,
   familyName,
+  tenantId,
 }: {
   object: ObjectEnvelope;
   familyId: string;
   familyName: string;
+  tenantId: string;
 }) {
   const { confidentiality, protection_need } = object.classification;
   const hasClassification = Boolean(confidentiality || protection_need);
@@ -25,7 +34,9 @@ export function ObjectCard({
 
   return (
     <li className="tw-card">
-      <h4 className="tw-card-title">{object.display_name}</h4>
+      <h4 className="tw-card-title">
+        <Link href={objectDetailHref(tenantId, object.object_id)}>{object.display_name}</Link>
+      </h4>
       <p className="tw-card-sub">{object.object_type}</p>
 
       <dl className="tw-meta">

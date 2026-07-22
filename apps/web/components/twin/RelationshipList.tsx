@@ -6,10 +6,45 @@
  * (`processes`) bleibt sekundär sichtbar (Dok. 06 „Klartext vor Fachsprache" – reine UI-Schicht).
  * Assertion-Art (Dok. 07 §9) und – falls vorhanden – der Vertrauensgrad qualitativ (nicht als
  * nackte Zahl). Quell-/Ziel-IDs sind bereits auf `display_name` aufgelöst (siehe lib/twin/data.ts).
+ *
+ * WP-014 Slice 2: BEIDE Endpunkte sind Links auf ihre Objekt-360-Detailseite (navigierbarer
+ * Graph, Dok. 07 §10). `tenantId` stammt aus dem Routenparameter der Mandantenseite – dieselbe
+ * Mandantengrenze, aus der die Beziehungen stammen. Ein nicht auflösbarer Endpunkt wird bewusst
+ * NICHT verlinkt, sondern bleibt rohe ID (Fail-loud, keine behauptete Existenz).
  */
+import Link from 'next/link';
 import { confidenceQualitative, type ResolvedRelationship } from '../../lib/twin/data';
+import { objectDetailHref } from '../../lib/twin/object-detail';
 
-export function RelationshipList({ relationships }: { relationships: readonly ResolvedRelationship[] }) {
+/** Ein Endpunkt der Kette: Link auf die Detailseite, sofern das Objekt aufgelöst werden konnte. */
+function EndpointNode({
+  tenantId,
+  objectId,
+  name,
+  resolved,
+}: {
+  tenantId: string;
+  objectId: string;
+  name: string;
+  resolved: boolean;
+}) {
+  if (!resolved) {
+    return <span className="tw-rel-node">{name}</span>;
+  }
+  return (
+    <Link className="tw-rel-node" href={objectDetailHref(tenantId, objectId)}>
+      {name}
+    </Link>
+  );
+}
+
+export function RelationshipList({
+  relationships,
+  tenantId,
+}: {
+  relationships: readonly ResolvedRelationship[];
+  tenantId: string;
+}) {
   return (
     <ul className="tw-rel-list">
       {relationships.map((rel) => {
@@ -25,7 +60,12 @@ export function RelationshipList({ relationships }: { relationships: readonly Re
             aria-label={`${rel.source_name} ${label} ${rel.target_name}`}
           >
             <div className="tw-rel-line">
-              <span className="tw-rel-node">{rel.source_name}</span>
+              <EndpointNode
+                tenantId={tenantId}
+                objectId={rel.source_id}
+                name={rel.source_name}
+                resolved={rel.source_resolved}
+              />
               <span className="tw-rel-arrow" aria-hidden="true">
                 —
               </span>
@@ -33,7 +73,12 @@ export function RelationshipList({ relationships }: { relationships: readonly Re
               <span className="tw-rel-arrow" aria-hidden="true">
                 →
               </span>
-              <span className="tw-rel-node">{rel.target_name}</span>
+              <EndpointNode
+                tenantId={tenantId}
+                objectId={rel.target_id}
+                name={rel.target_name}
+                resolved={rel.target_resolved}
+              />
             </div>
             <div className="tw-rel-meta">
               <span className="tw-rel-tech">Typ: {rel.relationship_type}</span> · Assertion-Art:{' '}
