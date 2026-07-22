@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T152222Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-004",
+  "timestamp_utc": "2026-07-22T15:22:22.459926+00:00",
+  "summary": "WP-004 angelegt (read-only Digital Twin Explorer in apps/web, rendert Demo-Seed; aus Dok. 06/07). Aktiv gesetzt; ID-Kollision geloest (App Shell -> WP-011). Build wird an Frontend-Engineer delegiert.",
+  "branch": "main",
+  "commit": "d719868",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/WORK_QUEUE.md\n?? context-packs/WP-004/\n?? work-packages/WP-004_DIGITAL_TWIN_EXPLORER_READONLY.md",
+  "tests": "not run / not provided",
+  "exact_next_step": "Slice 1: Explorer-Seite (Mandantenuebersicht + Nordwerk-Objekte/-Beziehungen + Empty-State) bauen, Render-Test, dann visuelle QA."
+}

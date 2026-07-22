@@ -1,15 +1,15 @@
 # Active Work Package
 
-- **ID:** WP-003
-- **Titel:** Kanonische Datenverträge & synthetische Demo-Seed-Grundlage
-- **Datei:** `work-packages/WP-003_KANONISCHE_DATENVERTRAEGE_UND_DEMO_SEED.md`
-- **Status:** **Done** (Slices 1–3) — `@isms/contracts` + `@isms/demo-seed`, zwei unabhängige Reviews je Slice, 79 Tests grün
-- **Führende Quelle:** Dokument 07 (Digitaler Unternehmenszwilling & Informationsgraph)
-- **Reviews:** `docs/project/reviews/WP-003_SLICE1_INDEPENDENT_REVIEW.md`, `…SLICE2…`
-- **Human Gates:** offen (nicht blockierend): O-D07-02/03 (Lifecycle-Konzeptwidersprüche, Concept Author)
-- **Nächstes (Kandidaten, Entscheidung offen):**
-  - **WP-004a (empfohlen):** read-only „Digital Twin Explorer"-Ansicht in `apps/web`, die den Demo-Seed rendert (Tenants + Nordwerk-Graph). Kein DB/Docker, sichtbarer Fortschritt.
-  - **WP-004b:** Persistenz-WP (PostgreSQL) — benötigt Docker-/ORM-Entscheidung (Human Gate).
-  - **WP-004c:** App-Shell/Login/Rollenwechsel/Mandantenkontext (Phase 1, Dok. 06).
+- **ID:** WP-004
+- **Titel:** Digital Twin Explorer (read-only)
+- **Datei:** `work-packages/WP-004_DIGITAL_TWIN_EXPLORER_READONLY.md`
+- **Context Pack:** `context-packs/WP-004/CONTEXT_PACK.md`
+- **Führende Quellen:** Dokument 06 (UX/Seitenanatomie/Zustände) + Dokument 07 (Zwilling), Daten aus `@isms/demo-seed`
+- **Status:** Active — Slice 1 (Explorer-Seite in `apps/web`, rendert den Demo-Seed)
+- **Owner:** CTO-/Architecture-Agent (Orchestrator)
+- **Builder:** Frontend-Engineer-Agent
+- **Reviewer:** Code-Reviewer + Product-User-Lead (UX/Frontend-Regeln), read-only
+- **Human Gates:** keiner (kein DB/ORM/Docker/Auth, keine Kosten, nur synthetische Daten)
+- **Nächstes:** WP-011 (App Shell/Login/Rollenwechsel) bzw. Persistenz-WP (Docker/ORM-Gate)
 
-> Abgeschlossen: WP-001 (Phase-0-Baseline), WP-002 (Stack-ADR-0001 + Grundgerüst), WP-003 (Datenverträge + Demo-Seed).
+> Abgeschlossen: WP-001 (Phase-0-Baseline), WP-002 (Stack + Grundgerüst), WP-003 (Datenverträge + Demo-Seed).
