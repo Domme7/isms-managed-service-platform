@@ -22,7 +22,7 @@ export interface DemoTenant {
   readonly industry: string;
   /** Kurze, synthetische Kontextbeschreibung des Demo-Mandanten. */
   readonly description: string;
-  /** Ob dieser Mandant in Slice 2 bereits einen kohärenten Objektgraphen besitzt. */
+  /** Ob dieser Mandant im aktuellen Seed bereits eigene Objekte im Zwilling besitzt. */
   readonly has_object_graph: boolean;
 }
 
@@ -34,9 +34,10 @@ export const TENANT_ID = {
 } as const;
 
 /**
- * Die vier Demo-Mandanten. Nur Nordwerk erhält in Slice 2 einen ausmodellierten
- * Objektgraphen; die übrigen drei sind als stabile Mandantendefinitionen angelegt
- * (Graphen folgen in späteren Work Packages, konsistent zu Dok. 07 §20).
+ * Die vier Demo-Mandanten. Ausmodelliert sind derzeit Nordwerk (ISMS-Kerngraph +
+ * Managed-Service-Schicht) und der Consulting Operator Demo (Managed-Service-Schicht,
+ * WP-012 Slice 1). Finovia und MediCore bleiben bewusst ohne Objekte – sie belegen den
+ * Empty-State und folgen in späteren Work Packages (konsistent zu Dok. 07 §20).
  */
 export const DEMO_TENANTS: readonly DemoTenant[] = [
   {
@@ -77,6 +78,7 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
       'Synthetischer Managed-Service-Betreiber, der ISMS-Dienstleistungen für ' +
       'mehrere Mandanten erbringt. Dient als Demo-Kontext für Serviceverantwortung, ' +
       'Deliverables und mandantenübergreifende, ausschließlich anonymisierte Benchmarks.',
-    has_object_graph: false,
+    // WP-012 Slice 1: eigene Managed-Service-Objekte vorhanden (Service, SLA, Deliverable).
+    has_object_graph: true,
   },
 ] as const;

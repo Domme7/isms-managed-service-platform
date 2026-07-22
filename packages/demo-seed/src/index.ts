@@ -8,5 +8,6 @@
 
 export * from './tenants';
 export * from './nordwerk-graph';
+export * from './managed-services';
 export * from './integrity';
 export * from './seed';

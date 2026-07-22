@@ -7,6 +7,15 @@ import type { DbHandle } from './client';
 
 const TENANT_NORDWERK = 'tenant-nordwerk';
 const TENANT_FINOVIA = 'tenant-finovia';
+const TENANT_OPERATOR = 'tenant-consulting-operator';
+
+/**
+ * Seed-Umfang je Mandant (siehe seed-loader.spec.ts): Nordwerk 31 Objekte / 43 Beziehungen
+ * (ISMS-Kerngraph 17/15 + Managed-Service-Schicht 14/28), Consulting Operator Demo 9/11.
+ */
+const NORDWERK_OBJECT_COUNT = 31;
+const NORDWERK_RELATIONSHIP_COUNT = 43;
+const OPERATOR_OBJECT_COUNT = 9;
 const FROM = '2026-02-01T00:00:00.000Z';
 const RECORDED = '2026-02-05T08:00:00.000Z';
 
@@ -75,7 +84,7 @@ describe('Tenant-Isolation – Deny by Default (Positiv + Negativ)', () => {
 
   it('Negativ (Objekte): Nordwerk sieht KEINE Finovia-Objekte', async () => {
     const nordwerkObjs = await objectsRepo.listByTenant(handle.db, TENANT_NORDWERK);
-    expect(nordwerkObjs).toHaveLength(17);
+    expect(nordwerkObjs).toHaveLength(NORDWERK_OBJECT_COUNT);
     const ids = nordwerkObjs.map((o) => o.object_id);
     expect(ids).not.toContain('finovia-asset-a');
     expect(ids).not.toContain('finovia-asset-b');
@@ -86,9 +95,30 @@ describe('Tenant-Isolation – Deny by Default (Positiv + Negativ)', () => {
     expect(leaked).toBeUndefined();
   });
 
+  it('Negativ (Objekte): Nordwerk sieht KEINE Objekte des Consulting Operator Demo', async () => {
+    // Seit WP-012 trägt ein zweiter Seed-Mandant eigene Objekte – die Trennung muss auch
+    // zwischen zwei ausmodellierten Mandanten halten, nicht nur gegen einen Testmandanten.
+    const nordwerkObjs = await objectsRepo.listByTenant(handle.db, TENANT_NORDWERK);
+    const operatorObjs = await objectsRepo.listByTenant(handle.db, TENANT_OPERATOR);
+
+    expect(operatorObjs).toHaveLength(OPERATOR_OBJECT_COUNT);
+    expect(operatorObjs.every((o) => o.object_id.startsWith('operator-'))).toBe(true);
+
+    const nordwerkIds = new Set(nordwerkObjs.map((o) => o.object_id));
+    expect(operatorObjs.filter((o) => nordwerkIds.has(o.object_id))).toEqual([]);
+
+    // Cross-Tenant getById in beide Richtungen liefert nichts.
+    expect(
+      await objectsRepo.getById(handle.db, TENANT_NORDWERK, 'operator-service-audit-readiness'),
+    ).toBeUndefined();
+    expect(
+      await objectsRepo.getById(handle.db, TENANT_OPERATOR, 'nordwerk-service-evidence-operations'),
+    ).toBeUndefined();
+  });
+
   it('Negativ (Beziehungen): Nordwerk sieht KEINE Finovia-Beziehung', async () => {
     const nordwerkRels = await relationshipsRepo.listByTenant(handle.db, TENANT_NORDWERK);
-    expect(nordwerkRels).toHaveLength(15);
+    expect(nordwerkRels).toHaveLength(NORDWERK_RELATIONSHIP_COUNT);
     expect(nordwerkRels.map((r) => r.relationship_id)).not.toContain('finovia-rel-1');
 
     const leaked = await relationshipsRepo.getById(handle.db, TENANT_NORDWERK, 'finovia-rel-1');
@@ -103,7 +133,7 @@ describe('Tenant-Isolation – Deny by Default (Positiv + Negativ)', () => {
 
     // Die Finovia-Daten bleiben unverändert, Nordwerk unberührt.
     const nordwerkObjs = await objectsRepo.listByTenant(handle.db, TENANT_NORDWERK);
-    expect(nordwerkObjs).toHaveLength(17);
+    expect(nordwerkObjs).toHaveLength(NORDWERK_OBJECT_COUNT);
   });
 
   it('Negativ (Schreiben, Beziehung): Upsert mit fremdem Tenant-Param wird abgewiesen', async () => {
@@ -114,7 +144,7 @@ describe('Tenant-Isolation – Deny by Default (Positiv + Negativ)', () => {
 
     // Nordwerk-Beziehungen bleiben unverändert.
     const nordwerkRels = await relationshipsRepo.listByTenant(handle.db, TENANT_NORDWERK);
-    expect(nordwerkRels).toHaveLength(15);
+    expect(nordwerkRels).toHaveLength(NORDWERK_RELATIONSHIP_COUNT);
     expect(nordwerkRels.map((r) => r.relationship_id)).not.toContain('finovia-rel-1');
   });
 });

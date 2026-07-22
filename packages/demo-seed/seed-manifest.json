@@ -1,27 +1,48 @@
 {
-  "seed_version": "1.0.0",
+  "seed_version": "1.1.0",
   "generated_by": "@isms/demo-seed",
   "deterministic": true,
   "reset_hint": "Reine In-Memory-/Datei-Fixture ohne Datenbank. 'Reset' = erneuter Import von DEMO_SEED (packages/demo-seed/src/seed.ts). Alle object_id/relationship_id/tenant_id sowie valid_time/record_time sind fest kodiert (kein Date.now(), kein Zufall) -> jeder Lauf ist identisch.",
-  "synthetic_data_notice": "Alle Inhalte sind frei erfunden und synthetisch (Demo-Datenregel). Keine realen Unternehmen, Personen, Preise oder internen Templates. Struktur/Vokabular strikt aus Dok. 07 v1.0 via @isms/contracts.",
+  "synthetic_data_notice": "Alle Inhalte sind frei erfunden und synthetisch (Demo-Datenregel). Keine realen Unternehmen, Personen, Kunden, Vertraege, internen Templates - und KEINE Preise. SLA-Werte sind illustrative Designannahmen (Dok. 14 Abschnitt 8.4), keine Vertragszusagen. Struktur/Vokabular strikt aus Dok. 07 v1.0 via @isms/contracts.",
   "structure_source": {
     "concept_doc": "docs/concept/active/07_DIGITALER_UNTERNEHMENSZWILLING_INFORMATIONSGRAPH_v1.0.md",
     "contract_package": "@isms/contracts",
     "object_families": "F01-F09 (Dok. 07 Abschnitt 6)",
     "relationship_types": "R01-R25 (Dok. 07 Abschnitt 9)"
   },
+  "content_sources": {
+    "isms_core_graph": "Dok. 07 (Struktur) + synthetische Workshop-Fixture (WP-003 Slice 2)",
+    "managed_service_layer": "Dok. 13 (Service Instance, Deliverable, Outcome Review, Shared Responsibility), Dok. 14 (Service Offers SO02-SO06/SO12, Service-Level-Baender Abschnitt 8.4 als illustrative Designannahmen), Dok. 15 (Portfolio/Engagement - nur soweit kanonisch abbildbar); WP-012 Slice 1"
+  },
   "tenants": [
     { "tenant_id": "tenant-nordwerk", "display_name": "Nordwerk Manufacturing SE", "has_object_graph": true },
     { "tenant_id": "tenant-finovia", "display_name": "Finovia Digital Bank AG", "has_object_graph": false },
     { "tenant_id": "tenant-medicore", "display_name": "MediCore Health Services GmbH", "has_object_graph": false },
-    { "tenant_id": "tenant-consulting-operator", "display_name": "Consulting Operator Demo", "has_object_graph": false }
+    { "tenant_id": "tenant-consulting-operator", "display_name": "Consulting Operator Demo", "has_object_graph": true }
   ],
   "counts": {
     "tenants": 4,
-    "objects": 17,
-    "relationships": 15
+    "objects": 40,
+    "relationships": 54,
+    "objects_by_tenant": {
+      "tenant-nordwerk": 31,
+      "tenant-finovia": 0,
+      "tenant-medicore": 0,
+      "tenant-consulting-operator": 9
+    },
+    "relationships_by_tenant": {
+      "tenant-nordwerk": 43,
+      "tenant-finovia": 0,
+      "tenant-medicore": 0,
+      "tenant-consulting-operator": 11
+    },
+    "layers": {
+      "isms_core_nordwerk": { "objects": 17, "relationships": 15 },
+      "managed_service_nordwerk": { "objects": 14, "relationships": 28 },
+      "managed_service_consulting_operator": { "objects": 9, "relationships": 11 }
+    }
   },
-  "object_families_used": ["F01", "F02", "F03", "F06", "F07", "F08"],
+  "object_families_used": ["F01", "F02", "F03", "F06", "F07", "F08", "F09"],
   "relationship_types_used": [
     "part_of",
     "owns",
@@ -33,9 +54,22 @@
     "implements",
     "satisfies",
     "evidences",
-    "remediates"
+    "remediates",
+    "requires",
+    "contributes_to",
+    "delivered_by",
+    "covered_by"
   ],
-  "nordwerk_chain": "Geschäftsprozess Auftragsabwicklung --processes--> Information Asset Kundenauftragsdaten; Weakness ERP-Schnittstelle --exposes--> Asset; Threat Ransomware --threatens--> Risk Scenario/Asset; Risk Betriebsunterbrechung --affects--> Prozess/Asset; Control Backup & Recovery --mitigates--> Risk; Control Implementation --implements--> Control; Control --satisfies--> Requirement A.8.13; Evidence Restore-Test --evidences--> Control; Measure Patch-Management --remediates--> Weakness / --mitigates--> Risk Scenario.",
-  "storyline": "Nordwerk Manufacturing SE (synthetischer Fertigungskonzern) betreibt in 'Werk Nord - Produktion' den Kernprozess 'Auftragsabwicklung', der die 'Kundenauftragsdaten' verarbeitet. Eine ungepatchte ERP-Integrationsschnittstelle exponiert diese Daten; eine Ransomware-Bedrohung droht sie zu verschluesseln. Daraus entsteht das Risiko einer Betriebsunterbrechung. Ein Backup-&-Recovery-Control (lokal umgesetzt als Backup-Job, erfuellt Requirement A.8.13) mindert das Risiko; ein Restore-Test-Protokoll belegt seine Wirksamkeit. Eine Patch-Management-Massnahme behandelt die Schwaeche und mindert das Szenario.",
-  "notes": "counts werden durch packages/demo-seed/src/seed.spec.ts gegen DEMO_SEED verifiziert (Manifest-Konsistenz)."
+  "nordwerk_chain": "Geschaeftsprozess Auftragsabwicklung --processes--> Information Asset Kundenauftragsdaten; Weakness ERP-Schnittstelle --exposes--> Asset; Threat Ransomware --threatens--> Risk Scenario/Asset; Risk Betriebsunterbrechung --affects--> Prozess/Asset; Control Backup & Recovery --mitigates--> Risk; Control Implementation --implements--> Control; Control --satisfies--> Requirement A.8.13; Evidence Restore-Test --evidences--> Control; Measure Patch-Management --remediates--> Weakness / --mitigates--> Risk Scenario.",
+  "managed_service_chain": "SLA/Deliverable/Review --part_of--> Managed Service; Managed Service/Deliverable --delivered_by--> Team (Delivery-Verantwortung im selben Mandanten); Risk/Control/Control Implementation/Evidence --covered_by--> Managed Service (liegt im Serviceumfang); Managed Service --requires--> Control/Evidence; Managed Service/Control --contributes_to--> Objective/KPI; Deliverable Evidence-Pack --evidences--> Control; Risk --affects--> Objective.",
+  "storyline": "Nordwerk Manufacturing SE (synthetischer Fertigungskonzern) betreibt in 'Werk Nord - Produktion' den Kernprozess 'Auftragsabwicklung', der die 'Kundenauftragsdaten' verarbeitet. Eine ungepatchte ERP-Integrationsschnittstelle exponiert diese Daten; eine Ransomware-Bedrohung droht sie zu verschluesseln. Daraus entsteht das Risiko einer Betriebsunterbrechung. Ein Backup-&-Recovery-Control (lokal umgesetzt als Backup-Job, erfuellt Requirement A.8.13) mindert das Risiko; ein Restore-Test-Protokoll belegt seine Wirksamkeit. Eine Patch-Management-Massnahme behandelt die Schwaeche und mindert das Szenario. Darauf setzt die Managed-Service-Schicht auf: drei synthetische Service Instances (kontinuierliches Risiko- & Control-Monitoring, Nachweis-/Evidence-Betrieb, Management- & Entscheidungsreporting) decken Risiko, Control, Control-Implementierung und Nachweis ab, liefern SLA und Deliverables und zahlen auf das Ziel 'Auditfaehigkeit' sowie die KPI 'Nachweisquote priorisierter Controls' ein. Ein Outcome Review Q2/2026 prueft, ob die Wirkung eingetreten ist; der Reporting-Service steht deshalb im Zustand 'Review' und sein Management-Report ist bewusst noch Entwurf. Der Consulting Operator Demo traegt als zweiter Mandant zwei eigene Service Instances (Audit-Readiness-Betrieb aktiv, Policy-Lifecycle-Betrieb konfiguriert), damit die spaetere Portfolio-Sicht mehrere Mandanten zeigt. Finovia und MediCore bleiben bewusst ohne Objekte und belegen den Empty-State.",
+  "open_questions": [
+    "O-WP012-01: Dok. 13 trennt Service Definition / Service Offer / Service Instance; Dok. 07 kennt nur den Typ 'Managed Service'. Nur die Service Instance ist materialisiert.",
+    "O-WP012-02: 'Service Run' (Dok. 13) und 'Work Package' (Dok. 15) haben keinen kanonischen Objekttyp; Deliverables haengen direkt an der Service Instance.",
+    "O-WP012-03: 'Portfolio'/'Engagement' (Dok. 15) sind mandantenuebergreifende Steuerungsobjekte ohne kanonischen Typ; die Portfolio-Sicht entsteht nur durch Aggregation je Mandant, nie durch Kanten.",
+    "O-WP012-04: R21 delivered_by zeigt auf ein 'Provider Team'; da Cross-Tenant-Kanten verboten sind, wird das Delivery-Team je Mandant als tenant-eigenes Team-Objekt modelliert.",
+    "O-WP012-05: Dok. 07 kennt keine typisierten SLA-/KPI-Felder (Zeiten, Schwellen, Zielwerte); diese Angaben stehen als Klartext in 'description'.",
+    "O-WP012-06: Fuer 'Deliverable' nennt Dok. 07 nur R21 als Beispielkante; die zusaetzlich genutzten part_of- und evidences-Kanten folgen der Regelspalte, nicht der Beispielspalte."
+  ],
+  "notes": "counts (gesamt und pro Tenant), has_object_graph, object_families_used und relationship_types_used werden durch packages/demo-seed/src/seed.spec.ts gegen DEMO_SEED verifiziert (Manifest-Konsistenz)."
 }

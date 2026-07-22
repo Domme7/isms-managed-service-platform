@@ -30,10 +30,18 @@ describe('TenantOverview', () => {
     }
   });
 
-  it('markiert Nordwerk mit "Objektgraph vorhanden"', () => {
+  it('markiert je Mandant genau den aus dem Seed abgeleiteten Graph-Zustand', () => {
     render(<TenantOverview tenants={DEMO_SEED.tenants} />);
-    expect(screen.getByText(/Objektgraph vorhanden/)).toBeInTheDocument();
-    expect(screen.getAllByText(/kein Objektgraph/).length).toBeGreaterThanOrEqual(3);
+
+    // Aus dem Seed abgeleitet statt hartkodiert: seit WP-012 tragen Nordwerk UND der
+    // Consulting Operator Demo Objekte; Finovia/MediCore bleiben ohne Graph (Empty-State).
+    const withGraph = DEMO_SEED.tenants.filter((t) => t.has_object_graph);
+    const withoutGraph = DEMO_SEED.tenants.filter((t) => !t.has_object_graph);
+
+    expect(withGraph.length).toBeGreaterThanOrEqual(2);
+    expect(withoutGraph.map((t) => t.tenant_id)).toContain(TENANT_ID.FINOVIA);
+    expect(screen.getAllByText(/Objektgraph vorhanden/)).toHaveLength(withGraph.length);
+    expect(screen.getAllByText(/kein Objektgraph/)).toHaveLength(withoutGraph.length);
   });
 });
 

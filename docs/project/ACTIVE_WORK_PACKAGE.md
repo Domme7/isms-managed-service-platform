@@ -5,7 +5,7 @@
 - **Datei:** `work-packages/WP-012_BERATER_MANAGED_SERVICE_WELT.md`
 - **Context Pack:** `context-packs/WP-012/CONTEXT_PACK.md`
 - **Führende Quellen:** Dok. 13 (Betriebsmodell), 14 (Katalog/SLA), 15 (Berater-Ops), 06 (Consulting & Service World)
-- **Status:** Active — **Slice 1** (Managed-Service-Demo-Daten in `@isms/demo-seed`, nur kanonische F09-Typen)
+- **Status:** Active — **Slice 1 gebaut & selbst-verifiziert** (+23 Objekte/+39 Beziehungen, 152 Tests grün; unabh. Review ausstehend); **Slice 2** (Services-Ansicht) offen
 - **Builder:** Slice 1 Data-Graph-Analytics · Slice 2 Frontend-Engineer
 - **Reviewer:** Code-Reviewer + Concept-Consistency bzw. Product-User-Lead (read-only)
 - **Human Gates:** keiner (read-only, synthetisch, keine DB/Auth/Kosten/Preise)

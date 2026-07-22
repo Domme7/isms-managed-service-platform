@@ -10,9 +10,14 @@
 import type { ObjectEnvelope, RelationshipEnvelope } from '@isms/contracts';
 import { DEMO_TENANTS, type DemoTenant } from './tenants';
 import { NORDWERK_OBJECTS, NORDWERK_RELATIONSHIPS } from './nordwerk-graph';
+import { MANAGED_SERVICE_OBJECTS, MANAGED_SERVICE_RELATIONSHIPS } from './managed-services';
 
-/** Version der Seed-Grundlage (SemVer). Muss zu `seed-manifest.json` passen. */
-export const SEED_VERSION = '1.0.0';
+/**
+ * Version der Seed-Grundlage (SemVer). Muss zu `seed-manifest.json` passen.
+ * 1.1.0 (WP-012 Slice 1): additive Managed-Service-Schicht (F09) für Nordwerk und den
+ * Consulting Operator Demo; keine Änderung an bestehenden Objekten/Beziehungen.
+ */
+export const SEED_VERSION = '1.1.0';
 
 export interface DemoSeed {
   readonly version: string;
@@ -22,12 +27,16 @@ export interface DemoSeed {
 }
 
 /**
- * Der vollständige Demo-Seed. Aktuell trägt nur Nordwerk einen Objektgraphen; die übrigen
- * drei Mandanten sind als stabile Definitionen vorhanden (Graphen folgen in späteren WPs).
+ * Der vollständige Demo-Seed: ISMS-Kerngraph (Nordwerk) + Managed-Service-Schicht
+ * (Nordwerk und Consulting Operator Demo). Finovia und MediCore bleiben bewusst ohne
+ * Objekte (Empty-State-Nachweis; Graphen folgen in späteren WPs).
+ *
+ * Die Verkettung ist eine reine Listenkonkatenation – jedes Objekt und jede Beziehung
+ * trägt weiterhin genau eine `tenant_id`, es entsteht KEINE Cross-Tenant-Kante (P09).
  */
 export const DEMO_SEED: DemoSeed = {
   version: SEED_VERSION,
   tenants: DEMO_TENANTS,
-  objects: NORDWERK_OBJECTS,
-  relationships: NORDWERK_RELATIONSHIPS,
+  objects: [...NORDWERK_OBJECTS, ...MANAGED_SERVICE_OBJECTS],
+  relationships: [...NORDWERK_RELATIONSHIPS, ...MANAGED_SERVICE_RELATIONSHIPS],
 };

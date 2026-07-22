@@ -8,11 +8,12 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { NORDWERK_OBJECTS, NORDWERK_RELATIONSHIPS } from '@isms/demo-seed';
+import { NORDWERK_OBJECTS, NORDWERK_RELATIONSHIPS, TENANT_ID } from '@isms/demo-seed';
 import {
   confidenceQualitative,
   familyForType,
   getModeledTenants,
+  getObjectsForTenant,
   groupObjectsByFamily,
   relationshipTypeId,
   relationshipTypeLabel,
@@ -48,9 +49,10 @@ describe('relationshipTypeId / relationshipTypeLabel', () => {
 
 describe('groupObjectsByFamily', () => {
   it('gruppiert in kanonischer F01..F09-Reihenfolge und lässt leere Familien weg', () => {
+    // `NORDWERK_OBJECTS` ist der ISMS-Kerngraph (WP-003) OHNE die Managed-Service-Schicht.
     const groups = groupObjectsByFamily(NORDWERK_OBJECTS);
 
-    // Nordwerk belegt genau F01, F02, F03, F06, F07, F08.
+    // Der Kerngraph belegt genau F01, F02, F03, F06, F07, F08.
     expect(groups.map((g) => g.id)).toEqual(['F01', 'F02', 'F03', 'F06', 'F07', 'F08']);
 
     // Reihenfolge ist strikt aufsteigend und jede Gruppe ist nicht leer.
@@ -59,6 +61,34 @@ describe('groupObjectsByFamily', () => {
     for (const group of groups) {
       expect(group.objects.length).toBeGreaterThanOrEqual(1);
     }
+  });
+
+  it('die vollständige Mandantensicht von Nordwerk enthält zusätzlich F09 (Serviceschicht)', () => {
+    // Seit WP-012 trägt Nordwerk auch F09-Objekte (Managed Service, SLA, Deliverable,
+    // Objective, KPI, Review) – die Detailseite muss sie mit anzeigen.
+    const groups = groupObjectsByFamily(getObjectsForTenant(TENANT_ID.NORDWERK));
+    expect(groups.map((g) => g.id)).toEqual(['F01', 'F02', 'F03', 'F06', 'F07', 'F08', 'F09']);
+
+    const f09 = groups.find((g) => g.id === 'F09');
+    expect(f09?.objects.map((o) => o.object_type)).toContain('Managed Service');
+    expect(f09?.objects.map((o) => o.object_type)).toContain('SLA');
+    expect(f09?.objects.map((o) => o.object_type)).toContain('Deliverable');
+  });
+
+  it('der Consulting Operator Demo hat eine eigene, isolierte Objektsicht', () => {
+    const operatorObjects = getObjectsForTenant(TENANT_ID.CONSULTING_OPERATOR);
+    expect(operatorObjects.length).toBeGreaterThanOrEqual(1);
+    expect(operatorObjects.every((o) => o.tenant_id === TENANT_ID.CONSULTING_OPERATOR)).toBe(true);
+
+    // Keine Vermischung mit Nordwerk-Objekten (Mandantengrenze in der View-Schicht).
+    const nordwerkIds = new Set(
+      getObjectsForTenant(TENANT_ID.NORDWERK).map((o) => o.object_id),
+    );
+    expect(operatorObjects.filter((o) => nordwerkIds.has(o.object_id))).toEqual([]);
+  });
+
+  it('Finovia bleibt ohne Objekte (Empty-State-Nachweis)', () => {
+    expect(getObjectsForTenant(TENANT_ID.FINOVIA)).toEqual([]);
   });
 });
 
