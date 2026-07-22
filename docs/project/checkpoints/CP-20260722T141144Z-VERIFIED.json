@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T141144Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-003",
+  "timestamp_utc": "2026-07-22T14:11:44.425977+00:00",
+  "summary": "WP-003 Slice 1 done: @isms/contracts (Objekt-/Beziehungsvertrag F01-F09/R01-R25 aus Dok. 07, Zod v4, Bitemporalitaet). Zwei unabhaengige Reviews (KONZEPTTREU / Freigabe mit Minor-Fixes), Minor-Fixes umgesetzt, 55 Tests gruen.",
+  "branch": "main",
+  "commit": "61b5d0d",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CURRENT_STATE.md\n M docs/project/OPEN_QUESTIONS.md\n M docs/project/WORK_QUEUE.md\n D packages/contracts/.gitkeep\n M pnpm-lock.yaml\n?? docs/project/reviews/WP-003_SLICE1_INDEPENDENT_REVIEW.md\n?? packages/contracts/PROVENANCE.md\n?? packages/contracts/package.json\n?? packages/contracts/src/\n?? packages/contracts/tsconfig.build.json\n?? packages/contracts/tsconfig.json",
+  "tests": "frisch: 55 vitest passed (voc 14, rel 18, obj 23); pnpm typecheck/build/test gruen; validate OK; 6/6 repo tests",
+  "exact_next_step": "WP-003 Slice 2: synthetische Demo-Seed-Grundlage (4 Mandanten + Objektgraph + Manifest + Isolationstests), ohne DB/ORM."
+}
