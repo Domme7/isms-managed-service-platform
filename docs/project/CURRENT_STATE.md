@@ -4,6 +4,7 @@
 **Phase:** 0 – Repository Bootstrap (Baseline erreicht)  
 **Aktives Work Package:** WP-001 – Repository & Continuity Bootstrap (**Done**); kein neues WP aktiv bis Human Gate für WP-002  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tag:** `phase-0-baseline`  
+**Remote:** privat `Domme7/isms-managed-service-platform` (GitHub, DR-0002) — main + Tag + WP-001-Branch gepusht; CI grün  
 **Implementierungsstatus:** Produktcode noch nicht begonnen  
 **Konzeptstatus:** 24 aktive Markdown-Dokumente vollständig, Manifest-Hashes verifiziert
 
@@ -17,7 +18,8 @@
 - Capability-Check + Claude-Config-Review (`docs/project/capability/`),
 - Reviewer-Rollen auf read-only reduziert; Deny-Guardrails in `.claude/settings.json` aktiv,
 - Continuity-Tooling verifiziert; Context-Loss-/Resume-Drill bestanden,
-- unabhängige QA- und Security-Review dokumentiert (`docs/project/reviews/`).
+- unabhängige QA- und Security-Review dokumentiert (`docs/project/reviews/`),
+- **privates GitHub-Backup eingerichtet (DR-0002); Remote-Push verifiziert, GitHub-Actions „Repository Contract" grün.**
 
 ## Capability-Ergebnis
 
@@ -27,7 +29,7 @@
 
 ## Noch nicht gesichert oder entschieden
 
-- GitHub-Remote, Owner und Schutzregeln (Human Gate, O-GH-001) — es ist **kein Remote** konfiguriert,
+- Branch-Protection/Required-Checks auf `main` (O-GH-002, im Free-Tier eingeschränkt; für Backup nicht nötig),
 - finaler App-Technologiestack (WP-002 / CTO-ADR, Human Gate),
 - produktive Cloud-, CI- oder API-Ressourcen,
 - reale Daten und produktive Integrationen.
