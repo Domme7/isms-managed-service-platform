@@ -10,7 +10,9 @@
 - **Human Gates:** keiner
 
 ## Ziel
-Die **Consulting & Service World** (Rollen R08/R09) im Ort „Services" der Shell erlebbar machen:
+Die **Consulting & Service World** (Rollen R08–R11; ursprünglich „R08/R09" formuliert, in der
+Umsetzung bewusst auf die ganze Welt gemäß Dok. 06 §5 ausgelegt — dokumentierte Auslegung, keine
+stille Abweichung) im Ort „Services" der Shell erlebbar machen:
 ein read-only Portfolio-/Service-Blick auf synthetische Managed-Service-Daten — welche Services laufen
 für welchen Mandanten, mit welchem Leistungsversprechen und welchem Stand.
 
@@ -35,7 +37,7 @@ Tenant-Isolation, stabile IDs, Determinismus und Manifest-Counts wie in WP-003 b
 
 ### Slice 2 – „Services"-Ansicht in der Shell (`apps/web`)
 Der Ort **Services** zeigt read-only: Service-Liste je Mandant (Name, Typ, Status/Lifecycle, SLA-Kurzinfo,
-Deliverables) und — für R08/R09 — eine mandantenübergreifende **Portfolio-Übersicht** (welcher Mandant hat
+Deliverables) und — für die Consulting & Service World — eine mandantenübergreifende **Portfolio-Übersicht** (welcher Mandant hat
 welche Services). Zustände (Empty für Mandanten ohne Services), Klartext-Labels, barrierearm, responsiv.
 
 ## Acceptance Criteria

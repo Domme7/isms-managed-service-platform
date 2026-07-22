@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T193221Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-012",
+  "timestamp_utc": "2026-07-22T19:32:21.475015+00:00",
+  "summary": "WP-012 DONE: Berater-/Managed-Service-Welt (read-only). Seed-Schicht (+23 Obj/+39 Kanten, kanonische F09-Typen aus Dok. 13-15) + Services-Ansicht (Outcome-first, SLA/Deliverables/Wirkungsbeitrag, Portfolio fuer Consulting World, Empty-States). 4 unabhaengige Reviews (2x Code, Concept KONZEPTTREU, UX) + Browser-QA; alle Minor-Fixes umgesetzt. Konzeptluecken O-WP012-01..06 dokumentiert + CCP-001..003 als Human-Gate-Vorlagen.",
+  "branch": "main",
+  "commit": "3fdf28d",
+  "git_status": "M apps/web/components/services/PortfolioOverview.tsx\n M apps/web/components/services/ServicesContent.tsx\n M apps/web/components/services/ServicesView.tsx\n M apps/web/lib/services/data.ts\n M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CURRENT_STATE.md\n M docs/project/WORK_QUEUE.md\n M work-packages/WP-012_BERATER_MANAGED_SERVICE_WELT.md\n?? docs/project/reviews/WP-012_INDEPENDENT_REVIEW.md",
+  "tests": "170 Tests gruen (api 2, contracts 55, demo-seed 38, web 56, db 19); build/typecheck gruen; validate OK; Browser-QA R08/Nordwerk + R03/Finovia bestanden",
+  "exact_next_step": "WP-013 ISMS-Kern-Welt starten (Entwurf bereit): Ort ISMS mit Risiken/Controls/Massnahmen/Evidence aus dem Seed, Builder frontend-engineer, dann Review+QA."
+}

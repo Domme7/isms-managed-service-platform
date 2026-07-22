@@ -9,6 +9,7 @@
  *
  * Heading-Hierarchie: h1 (Ort) > h2 (Sektion) > h3 (Service-/Mandantenkarte) > h4 (Karteninhalt).
  */
+import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
 import { worldForRole, type DemoRole } from '../../lib/shell/roles';
 import {
@@ -42,7 +43,9 @@ export function ServicesContent({ role, tenant }: { role: DemoRole; tenant: Demo
       </p>
 
       <section aria-labelledby="mandanten-services">
-        <h2 id="mandanten-services">Aktive Services für {tenant.display_name}</h2>
+        {/* Zustandstreue (UX-Review MINOR-1): auch „Review"/„konfiguriert" werden gelistet –
+            daher neutral „Managed Services", der Status steht je Karte daneben. */}
+        <h2 id="mandanten-services">Managed Services für {tenant.display_name}</h2>
         {services.length > 0 ? (
           <ul className="sv-list">
             {services.map((view) => (
@@ -95,9 +98,15 @@ function EmptyServices({ tenant }: { tenant: DemoTenant }) {
           ? `Services laufen derzeit für ${names}; weitere Mandanten folgen in späteren Ausbaustufen.`
           : 'Im aktuellen Demo-Seed ist noch kein Mandant mit Services modelliert.'}
       </p>
-      <p className="tw-muted" style={{ marginBottom: 0 }}>
+      <p className="tw-muted">
         Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Demo-Seed
         abgeleitete Services – keine erfundenen Angebote und keine Preise.
+      </p>
+      {/* Nächster Schritt im Empty-State (Dok. 06 §17, UX-Review MINOR-3). */}
+      <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
+        <Link className="tw-cta" href="/login">
+          Mandant wechseln (Anmelde-Simulation) →
+        </Link>
       </p>
     </div>
   );

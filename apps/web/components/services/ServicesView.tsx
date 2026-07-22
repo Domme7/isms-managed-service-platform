@@ -7,6 +7,12 @@
  * mit Link zur Login-Simulation, sonst Inhalt für aktive Rolle + Mandant.
  * Die Rollen-/Mandanten-Auswahl ist reine Demo-Perspektive – KEINE Authz, KEINE
  * Sicherheitsgrenze (`.claude/rules/frontend.md`, Dok. 19 folgt in einem späteren WP).
+ *
+ * BEWUSSTE DEMO-ENTSCHEIDUNG (Code-Review MINOR-1, reversibel): Diese Ansicht ist
+ * session-abhängig client-gerendert; dadurch landet der synthetische `DEMO_SEED` im
+ * Client-Bundle (~76 kB für /services). Für die Demo akzeptiert; spätere Alternative:
+ * Views serverseitig ableiten und als Props übergeben (Muster `/twin`), relevant sobald
+ * Bundle-Budgets (Dok. 18) verbindlich werden.
  */
 import Link from 'next/link';
 import { useSession } from '../shell/SessionProvider';

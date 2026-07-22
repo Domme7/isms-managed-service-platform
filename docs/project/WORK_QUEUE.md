@@ -7,7 +7,8 @@
 | P1 | WP-003 | Kanonische Datenverträge (`@isms/contracts`) & synthetische Demo-Seed | 1 | **Done (Slices 1–3, 2× Review, 79 Tests)** | WP-002 ✓, Dok. 07 | keine DB/ORM/Docker, keine realen Daten |
 | P1 | WP-004 | Digital Twin Explorer (read-only) — Demo-Seed im Browser | 1 | **Done (2× Review + visuelle QA, 94 Tests)** | WP-003 ✓, Dok. 06/07 | keiner (kein DB/Auth/Docker) |
 | P1 | WP-011 | App-Shell, Navigation & Rollen-/Mandantenwechsel (Simulation) | 1 | **Done (Code+UX Review + Browser-QA, 36 Web-Tests)** | WP-004 ✓, Dok. 06/03 | keiner (synthetisch, keine echte Auth) |
-| P1 | WP-012 | Berater-/Managed-Service-Welt (read-only): Service-Demo-Daten + „Services"-Ansicht | 1/6 | **Active (Slice 1)** | WP-011 ✓, Dok. 13–15 | keiner (synthetisch, keine realen Preise) |
+| P1 | WP-012 | Berater-/Managed-Service-Welt (read-only): Service-Demo-Daten + „Services"-Ansicht | 1/6 | **Done (4× Review + Browser-QA, 170 Tests)** | WP-011 ✓, Dok. 13–15 | CCP-002 (Konzeptfragen, Human Gate) |
+| P1 | WP-013 | ISMS-Kern-Welt (read-only): Ort „ISMS" mit Risiken/Controls/Maßnahmen/Evidence | 1/3 | **Draft bereit** | WP-012 ✓, Dok. 08/06 | keiner (read-only, synthetisch) |
 | P1 | WP-005 | Lokale Authentisierungssimulation, Rollen- und Tenant-Wechsel | 1 | Planned | WP-002, Security ADR | Security Review |
 | P1 | WP-006 | Customer Workspace – erster vertikaler Pfad | 1–2 | Planned | WP-003–005 | Product + ISMS Review |
 | P2 | WP-007 | Persistenz der Twin-Kernobjekte (PostgreSQL + Drizzle) | 2 | **Done (Code+Security Review, 18 DB-Tests, 112 gesamt)** | WP-003 ✓, ADR-0002 | RLS-Härtung: FINDING-0004 |

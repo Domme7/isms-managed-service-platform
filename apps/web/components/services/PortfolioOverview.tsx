@@ -15,9 +15,11 @@ export function PortfolioOverview({ entries }: { entries: readonly PortfolioTena
   return (
     <section aria-labelledby="portfolio">
       <h2 id="portfolio">Portfolio: Alle Mandanten</h2>
+      {/* Klartext ohne interne Arbeits-IDs (UX-Review MINOR-2); fachlicher Hintergrund der
+          rein mandantenweisen Aggregation: OFFENE FRAGE O-WP012-03, Dok. 07 P09. */}
       <p className="tw-muted">
         Welche Mandanten haben welche Services? Aggregation je Mandant nebeneinander – ohne
-        mandantenübergreifende Verknüpfung (O-WP012-03). Sichtbar für die Service-Organisation
+        mandantenübergreifende Verknüpfung. Sichtbar für die Service-Organisation
         (Consulting &amp; Service World); reine Anzeige-Verdichtung in der Demo, keine
         Sicherheitsgrenze.
       </p>

@@ -81,6 +81,13 @@ export interface ManagedServiceView {
  * (unerwartet – die Seed-Integritätstests schließen Dangling-Kanten aus), fällt der Name
  * bewusst auf die rohe ID zurück, damit die Lücke sichtbar wird statt still zu verschwinden
  * (Muster aus `resolveRelationships` in `lib/twin/data.ts`).
+ *
+ * PRÄZISIERUNG (Code-Review MINOR-2): Im `part_of`-Zweig greift dieses Fail-loud nur
+ * teilweise — eine dangling Quelle erhielte `object_type: 'unbekannt'` und würde damit
+ * keiner der drei Listen (SLA/Deliverable/Review) zugeordnet, also NICHT angezeigt.
+ * Abgesichert wird das ausschließlich durch die Seed-Integritätstests (kein Dangling im
+ * Seed, `packages/demo-seed/src/seed.spec.ts`). Sollte der Seed je dynamisch werden,
+ * unbekannte `part_of`-Quellen sichtbar machen (eigene „Sonstige"-Liste).
  */
 function toComponentItem(obj: ObjectEnvelope | undefined, fallbackId: string): ServiceComponentItem {
   if (!obj) {
