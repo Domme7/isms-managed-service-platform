@@ -9,7 +9,7 @@
 | P1 | WP-011 | App-Shell, Navigation & Rollen-/Mandantenwechsel (Simulation) | 1 | **Done (Code+UX Review + Browser-QA, 36 Web-Tests)** | WP-004 ✓, Dok. 06/03 | keiner (synthetisch, keine echte Auth) |
 | P1 | WP-012 | Berater-/Managed-Service-Welt (read-only): Service-Demo-Daten + „Services"-Ansicht | 1/6 | **Done (4× Review + Browser-QA, 170 Tests)** | WP-011 ✓, Dok. 13–15 | CCP-002 (Konzeptfragen, Human Gate) |
 | P1 | WP-013 | ISMS-Kern-Welt (read-only): Ort „ISMS" mit Risiken/Controls/Maßnahmen/Evidence | 1/3 | **Done (Code+UX Review + Browser-QA, 77 Web-Tests)** | WP-012 ✓, Dok. 08/06 | keiner (read-only, synthetisch) |
-| P1 | WP-014 | Objekt-360-Detailseite (read-only): fünf Fragen je Objekt, navigierbarer Graph | 1/2 | **Draft bereit** | WP-013 ✓, Dok. 07 §10 / Dok. 06 | keiner (read-only, synthetisch) |
+| P1 | WP-014 | Objekt-360-Detailseite (read-only): fünf Fragen je Objekt, navigierbarer Graph | 1/2 | **Done (3× Review + 2 Nachprüfungen + Browser-QA, 151 Web-Tests)** | WP-013 ✓, Dok. 07 §10 / Dok. 06 | keiner (read-only, synthetisch) |
 | P1 | WP-015 | Visuelles Design (minimal) — Uplift zurückgenommen, nur dezenter Hintergrund | 1 | **Done (DR-0003, Owner-Entscheidung)** | WP-011..013 ✓, Dok. 06 §18 | keiner (rein visuell) |
 | P1 | WP-005 | Lokale Authentisierungssimulation, Rollen- und Tenant-Wechsel | 1 | Planned | WP-002, Security ADR | Security Review |
 | P1 | WP-006 | Customer Workspace – erster vertikaler Pfad | 1–2 | Planned | WP-003–005 | Product + ISMS Review |

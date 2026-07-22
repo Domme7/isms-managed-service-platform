@@ -1,11 +1,11 @@
 # Current State
 
-**Stand:** WP-013 **fertig** — drei Orte der Shell sind echt: Zwilling (Kunden), Services (Managed-Service-Welt) und ISMS (Risk & Control). Je Welt unabhängige Doppel-Reviews + Browser-QA  
+**Stand:** WP-014 **fertig** — der Demo-Graph ist durchgängig begehbar: jedes der 41 Objekte hat eine Objekt-360-Detailseite, Twin, ISMS und Services verlinken darauf. Drei unabhängige Reviews + zwei Nachprüfungsrunden + Browser-QA  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** **WP-015 Visual Design Uplift** (Owner-Feedback); danach WP-014 (Objekt-360)  
+**Aktives Work Package:** keins — nächster Vorschlag: **Heute/Morning Mission** für die Kundenrolle (Dok. 10, read-only, ohne Scoring)  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
-**Implementierungsstatus:** Lauffähige Demo-App (Shell + 3 Erlebnisflächen, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
+**Implementierungsstatus:** Lauffähige Demo-App (Shell + 3 Erlebnisflächen + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
 **Konzeptstatus:** 24 aktive Markdown-Dokumente vollständig, Manifest-Hashes verifiziert
 
 ## Gesichert
@@ -23,6 +23,7 @@
 - **Managed-Service-Welt** (WP-012): Seed-Schicht (+23 Objekte/+39 Kanten, kanonische F09-Typen aus Dok. 13–15) + „Services"-Ansicht (Outcome-first-Karten, SLA/Deliverables/Wirkungsbeitrag, Portfolio für Consulting World, Empty-States); 4 Reviews (inkl. KONZEPTTREU) + Browser-QA; Konzeptlücken als O-WP012-01..06 + CCP-002 dokumentiert,
 - **ISMS-Kern-Welt** (WP-013): Ort „ISMS" mit Risiken (Threat-/Weakness-Herkunft), Controls (Umsetzung, erfülltes Requirement + Framework, Nachweis-Stand), Maßnahmen und Nachweisen — Dok.-08-Ehrlichkeitsregeln im Produkt erklärt („wirksam" = Lebenszyklus-Stand, kein Prüfergebnis); Datenlücke Risiko↔Szenario sichtbar (O-WP013-01); 2 Reviews + Browser-QA,
 - **3 Concept Change Proposals** (`research/change-proposals/CCP-001..003`) als Human-Gate-Vorlagen für die 8 Konzeptlücken; **WP-013-Entwurf** (ISMS-Kern-Welt) liegt bereit,
+- **Objekt-360-Detailseite** (WP-014): generische read-only Route `/twin/[tenantId]/objekt/[objectId]` für **jedes** der 41 Seed-Objekte, beantwortet die fünf Fragen der universellen Seitenanatomie (Dok. 06 §6) aus Envelope + Kanten; ein-/ausgehende Kanten richtungstreu und verlinkt (Objekt-360-Navigationsvertrag Dok. 07 §10/§21), Bitemporalität als getrennte Achsen, Historienlücke **aus den Daten abgeleitet**; Tenant-Isolation im Routing per Test belegt (mandantenfremde ID == unbekannte ID, auch im Seitentitel); Verlinkung aus Twin-Explorer, ISMS- und Services-Ansicht; **3 unabhängige Reviews + 2 Nachprüfungsrunden** (die zweite fand eine vom Fix erzeugte Regression) + Browser-QA; 10 Konzeptlücken als O-WP014-01..11 benannt statt gefüllt, Abweichungen in DR-0004. **Monorepo gesamt: 265 Tests grün.**
 - **`@isms/db`** (WP-007): Persistenzschicht PostgreSQL/Drizzle — Schema/Migration/tenant-scoped Repos/Seed-Loader aus den Contracts, getestet gegen **PGlite** (kein Docker), serverseitige Tenant-Isolation mit Negativbeweisen; Code- + Security-Review (SICHER FÜR DEMO-SCOPE); RLS-Härtung → FINDING-0004. **Monorepo gesamt: 112 Tests grün.**
 
 ## Verifikations-Evidence (WP-002)
@@ -45,9 +46,15 @@
 
 ## Exact Next Step
 
-**WP-013 ist abgeschlossen.** Aktiv: **WP-015 Visual Design Uplift** (Owner-Feedback „mehr Wow"; rein
-visuelle Schicht — die 77 Web-Tests müssen unverändert grün bleiben). Danach: **WP-014 Objekt-360-
-Detailseite** (Entwurf bereit) — macht den Graphen durchgängig klickbar.
+**WP-014 ist abgeschlossen** (Review-Notiz: `reviews/WP-014_INDEPENDENT_REVIEW.md`). Der Demo-Graph ist
+damit erstmals durchgängig begehbar statt in Listen zu enden.
+
+**Nächster Schritt (Vorschlag nach Briefing §8):** **Heute/Morning Mission** für die Kundenrolle
+(Dok. 10) — read-only, **ohne Scoring und ohne Priorisierung**; heute ist `/heute` nur ein Platzhalter.
+Danach: Executive-Welt (Dok. 06/10), dann API-Schicht + DB→UI — letzteres **erst nach FINDING-0004**.
+
 Offene Human Gates (nicht blockierend): CCP-001/002/003 (Konzeptentscheidungen), Docker-Desktop-Start
 beim Owner (reale Postgres-Validierung von `@isms/db`), FINDING-0004 (DB-RLS vor DB→UI-Anbindung).
+Neu hinzugekommen: **O-WP014-09** (voller `DEMO_SEED` im Client-Bundle) ist spätestens mit der
+DB→UI-Anbindung gemeinsam mit FINDING-0004 zu lösen.
 Ausrichtung: alle 9 Phasen; Checkpoints + Push nach jedem WP.

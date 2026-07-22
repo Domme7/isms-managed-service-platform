@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T221908Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-001",
+  "timestamp_utc": "2026-07-22T22:19:08.793265+00:00",
+  "summary": "WP-014 Objekt-360-Detailseite abgeschlossen: generische read-only Route fuer alle 41 Seed-Objekte (fuenf Fragen aus Dok. 06 \u00a76), richtungstreue ein-/ausgehende Kanten als Links, Bitemporalitaet getrennt, Historienluecke abgeleitet, Tenant-Isolation im Routing per Test belegt; Verlinkung aus Twin/ISMS/Services. Drei unabhaengige Reviews + zwei Nachpruefungsrunden (die zweite fand eine vom Fix erzeugte Regression) + Browser-QA. 265 Tests gruen, typecheck+build gruen, validate_handoff OK.",
+  "branch": "main",
+  "commit": "f50fca6",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CURRENT_STATE.md\n M docs/project/WORK_QUEUE.md\n?? docs/project/reviews/WP-014_INDEPENDENT_REVIEW.md",
+  "tests": "not run / not provided",
+  "exact_next_step": "Neues Work Package Heute/Morning Mission (Dok. 10, read-only, ohne Scoring) vom program-manager erstellen lassen und bauen"
+}
