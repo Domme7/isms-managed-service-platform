@@ -1,0 +1,9 @@
+{
+  "seed_id": "demo-nova-industries-v1",
+  "synthetic": true,
+  "frozen_time": "2026-07-01T08:00:00+02:00",
+  "tenants": [],
+  "users": [],
+  "expected_outputs": [],
+  "reset_command": "TBD after stack ADR"
+}

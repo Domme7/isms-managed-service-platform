@@ -1,0 +1,8 @@
+# Nach dem GitHub-Owner-/Team-Gate ersetzen und als `.github/CODEOWNERS` aktivieren.
+# Beispiel:
+# * @OWNER
+# /docs/concept/ @PRODUCT_OWNER @DOMAIN_OWNER
+# /apps/web/ @FRONTEND_OWNER @UX_REVIEWER
+# /apps/api/ @BACKEND_OWNER @ARCHITECTURE_REVIEWER
+# /infra/ @PLATFORM_OWNER @SECURITY_REVIEWER
+# /.claude/ @GITHUB_STEWARD @SECURITY_REVIEWER

@@ -1,0 +1,12 @@
+# Normalize line endings for text files, treat binaries explicitly
+* text=auto eol=lf
+
+# Binary read-fassungen and assets
+*.pdf binary
+*.docx binary
+*.pptx binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.zip binary

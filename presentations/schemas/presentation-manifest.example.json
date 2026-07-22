@@ -1,0 +1,17 @@
+{
+  "presentation_id": "executive-monthly-review",
+  "audience": "executive",
+  "tenant": "demo-nova-industries",
+  "reporting_period": "YYYY-MM",
+  "template_version": "1.0",
+  "data_snapshot": "snapshot-id",
+  "sections": [
+    "executive_summary",
+    "risk_trends",
+    "decisions",
+    "investment_options",
+    "next_steps"
+  ],
+  "humor_mode": "off",
+  "status": "draft"
+}

@@ -1,0 +1,46 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# Python tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# JS/TS and build outputs (future)
+node_modules/
+dist/
+build/
+.next/
+coverage/
+
+# IDE and OS
+.DS_Store
+.idea/
+.vscode/
+
+# Generated reports and presentations
+presentations/generated/*
+!presentations/generated/.gitkeep
+reports/generated/*
+!reports/generated/.gitkeep
+
+# Local databases and runtime state
+*.db
+*.sqlite
+*.sqlite3
+.tmp/
+tmp/
+logs/
+
+# Claude local-only memory/settings
+CLAUDE.local.md
+.claude/local/

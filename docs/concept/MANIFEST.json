@@ -1,0 +1,152 @@
+{
+  "library": "ISMS Managed Service Platform",
+  "manifest_version": "1.0",
+  "active_master_index": "00_MASTER_INDEX_UND_PROJEKTVERFASSUNG_v1.2.md",
+  "active_document_count": 24,
+  "documents": [
+    {
+      "file": "00_MASTER_INDEX_UND_PROJEKTVERFASSUNG_v1.2.md",
+      "sha256": "a3ef2d734198b8cf071112457d2f56d16c38af9e04f7fb555bcb68f08d97bb02",
+      "bytes": 28413,
+      "status": "active"
+    },
+    {
+      "file": "01_PRODUKTVISION_PROBLEM_BUSINESS_CASE_v1.0.md",
+      "sha256": "c50822f70cd3133ba960fdd99932e7a42327db9b945ca272f79451f56b1cf0cf",
+      "bytes": 34868,
+      "status": "active"
+    },
+    {
+      "file": "02_MARKT_WETTBEWERBER_DIFFERENZIERUNG_v1.0.md",
+      "sha256": "ef45ed185e7cd784a3ae32a11eb72cdc9ee472a8886d7d7c02a17904f8ac5fec",
+      "bytes": 43246,
+      "status": "active"
+    },
+    {
+      "file": "03_ZIELGRUPPEN_ROLLEN_ARBEITSSITUATIONEN_v1.0.md",
+      "sha256": "40ba902611a16afcb8101a0707728644568a89c932c1b8003012b31fa2c12697",
+      "bytes": 12386,
+      "status": "active"
+    },
+    {
+      "file": "04_NUTZERREISEN_SERVICE_LEBENSZYKLUS_v1.0.md",
+      "sha256": "8f31b96390c6646463aec014a5f1394b78428573e6f315077b825d14a88ceba1",
+      "bytes": 14616,
+      "status": "active"
+    },
+    {
+      "file": "05_PRODUKTLANDKARTE_FUNKTIONSUMFANG_v1.0.md",
+      "sha256": "71de48f7e38d5528a502ca62b9a6d685e938963a75c2ee8261e55b0b773cd0b6",
+      "bytes": 24151,
+      "status": "active"
+    },
+    {
+      "file": "06_UX_UI_NAVIGATION_ERLEBNISWELTEN_v1.0.md",
+      "sha256": "9b7ae95e2657380c66a6ead1028d93bfcf2f598c19d93cf4843b75d98c5648bb",
+      "bytes": 22600,
+      "status": "active"
+    },
+    {
+      "file": "07_DIGITALER_UNTERNEHMENSZWILLING_INFORMATIONSGRAPH_v1.0.md",
+      "sha256": "a16cd2a87e5642c0cff433d116c222e7c284e42bd356fc17f9f25d255de28c6d",
+      "bytes": 26433,
+      "status": "active"
+    },
+    {
+      "file": "08_ISMS_KERNPROZESSE_v1.0.md",
+      "sha256": "73f136b0448cb57411fe83d18a4b6281676cdd80b2faec2dd7ce9fc4c95f2bab",
+      "bytes": 45929,
+      "status": "active"
+    },
+    {
+      "file": "09_REIFEGRAD_RISIKEN_BEDROHUNGEN_CONTROL_INTELLIGENCE_v1.0.md",
+      "sha256": "7ab7c9dc885efa1af70d37daf23e8f7c55e5757bfe8d0a026f984900a5e5e6f1",
+      "bytes": 48991,
+      "status": "active"
+    },
+    {
+      "file": "10_DECISION_CENTER_KPIS_SIMULATIONEN_v1.0.md",
+      "sha256": "70563031c88b017b38022840db720079a3efa8811322840335c7a566b280be91",
+      "bytes": 50112,
+      "status": "active"
+    },
+    {
+      "file": "11_ZUSAMMENARBEIT_AUFGABEN_KOMMUNIKATION_v1.0.md",
+      "sha256": "badb29a306d9e4ce22c26e4bae6e43217ca7b059c56d86631f9a52f41041b097",
+      "bytes": 55156,
+      "status": "active"
+    },
+    {
+      "file": "12_REPORTING_PDF_PRAESENTATIONS_ENGINE_v1.1.md",
+      "sha256": "e7057c3a936af8686febf23b2173f37e3e71c3cdacee337b781a56c351747906",
+      "bytes": 70216,
+      "status": "active"
+    },
+    {
+      "file": "13_MANAGED_SERVICE_BETRIEBSMODELL_v1.0.md",
+      "sha256": "46c57848ffa1c9e871a44d9e9b92da99fb1aa162e3b937579fe0efd55f4f6768",
+      "bytes": 60257,
+      "status": "active"
+    },
+    {
+      "file": "14_SERVICEKATALOG_PAKETE_SLAS_PREISLOGIK_v1.0.md",
+      "sha256": "e91aa5da3605acaf3d2186590a9480d8af200f43cf3f7dd90c4a8683ea95e6f3",
+      "bytes": 56298,
+      "status": "active"
+    },
+    {
+      "file": "15_BERATER_OPERATIONS_PORTFOLIO_RESSOURCENPLANUNG_v1.0.md",
+      "sha256": "d09eed468e09e713ada41f528811e89b4744d9cb82c6accbae5c638d336b3218",
+      "bytes": 54217,
+      "status": "active"
+    },
+    {
+      "file": "16_KUNDEN_ONBOARDING_ZIELPROFIL_LIFECYCLE_v1.0.md",
+      "sha256": "d24123a45e15212e6a106b2eafed5c0e37dfd6431ecbb014f9ffc1a89634ff7a",
+      "bytes": 58512,
+      "status": "active"
+    },
+    {
+      "file": "17_INTEGRATIONEN_AUTOMATISIERUNG_WORKFLOW_DESIGNER_v1.0.md",
+      "sha256": "b7d66aeebc57637602bc7dc87d8df7affb57e83025613f1d27e867817cfd5ae5",
+      "bytes": 69100,
+      "status": "active"
+    },
+    {
+      "file": "18_TECHNISCHE_ARCHITEKTUR_PLATTFORMBETRIEB_v1.0.md",
+      "sha256": "86b1eae81e85f049a7538ffcfc19e518d96dcfdf7337bf424001f917af4832cc",
+      "bytes": 71867,
+      "status": "active"
+    },
+    {
+      "file": "19_SICHERHEIT_DATENSCHUTZ_RECHTE_AUDITIERBARKEIT_v1.0.md",
+      "sha256": "830879c548c79541477d3c00df91a9d7e6ada66f6cde89bc4a03b7766b644ef9",
+      "bytes": 76589,
+      "status": "active"
+    },
+    {
+      "file": "20A_KI_FUNKTIONEN_GUARDRAILS_v1.0.md",
+      "sha256": "31bb37d9b89b0ea372f12a21ffe1f612d8d1ed9a814940f3aec87f093b3622b1",
+      "bytes": 60507,
+      "status": "active"
+    },
+    {
+      "file": "20B_VIRTUELLE_KI_FIRMA_AGENTENORGANISATION_v1.0.md",
+      "sha256": "debbb0b6acf0216c94d2af16a357e84426154d9cc5a77336b1bd5064057d3fe4",
+      "bytes": 54646,
+      "status": "active"
+    },
+    {
+      "file": "20C_CLAUDE_CODE_GITHUB_CHECKPOINTS_BAUPLAN_v1.0.md",
+      "sha256": "4713c91c064edf4095121caae559e3c9a476b2cf40699cfaf2a1534877bd9d1a",
+      "bytes": 72940,
+      "status": "active"
+    },
+    {
+      "file": "21_RESEARCH_INNOVATION_KONTINUIERLICHE_PRODUKTENTWICKLUNG_v1.0.md",
+      "sha256": "f929f8c3d343208e73c0ef6e99fe61c8c1a42bedb94237c4913c6e5566e0689f",
+      "bytes": 65809,
+      "status": "active"
+    }
+  ]
+}
