@@ -11,6 +11,7 @@
 | P1 | WP-013 | ISMS-Kern-Welt (read-only): Ort „ISMS" mit Risiken/Controls/Maßnahmen/Evidence | 1/3 | **Done (Code+UX Review + Browser-QA, 77 Web-Tests)** | WP-012 ✓, Dok. 08/06 | keiner (read-only, synthetisch) |
 | P1 | WP-014 | Objekt-360-Detailseite (read-only): fünf Fragen je Objekt, navigierbarer Graph | 1/2 | **Done (3× Review + 2 Nachprüfungen + Browser-QA, 151 Web-Tests)** | WP-013 ✓, Dok. 07 §10 / Dok. 06 | keiner (read-only, synthetisch) |
 | P1 | WP-015 | Visuelles Design (minimal) — Uplift zurückgenommen, nur dezenter Hintergrund | 1 | **Done (DR-0003, Owner-Entscheidung)** | WP-011..013 ✓, Dok. 06 §18 | keiner (rein visuell) |
+| P1 | WP-016 | Mission Control „Heute" (read-only, **ohne** Morning Mission) | 1 | **Active** | WP-011…014 ✓, Dok. 06 §7 S01/§5/§17 | keiner (read-only, synthetisch) |
 | P1 | WP-005 | Lokale Authentisierungssimulation, Rollen- und Tenant-Wechsel | 1 | Planned | WP-002, Security ADR | Security Review |
 | P1 | WP-006 | Customer Workspace – erster vertikaler Pfad | 1–2 | Planned | WP-003–005 | Product + ISMS Review |
 | P2 | WP-007 | Persistenz der Twin-Kernobjekte (PostgreSQL + Drizzle) | 2 | **Done (Code+Security Review, 18 DB-Tests, 112 gesamt)** | WP-003 ✓, ADR-0002 | RLS-Härtung: FINDING-0004 |
