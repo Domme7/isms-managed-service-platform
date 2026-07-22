@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T161229Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-007",
+  "timestamp_utc": "2026-07-22T16:12:29.450288+00:00",
+  "summary": "Persistenz-Weg gewaehlt (Owner: echte PostgreSQL/Docker). ADR-0002: Drizzle + PGlite (Dev/Test) + Docker-Postgres (Server). WP-007 angelegt/aktiv; Build an Backend-Engineer delegiert.",
+  "branch": "main",
+  "commit": "153f74e",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/OPEN_QUESTIONS.md\n M docs/project/WORK_QUEUE.md\n?? context-packs/WP-007/\n?? docs/architecture/adr/ADR-0002_persistenz_postgres_drizzle.md\n?? work-packages/WP-007_PERSISTENZ_TWIN_KERN_DRIZZLE.md",
+  "tests": "not run / not provided",
+  "exact_next_step": "Slice 1: @isms/db Drizzle-Schema aus @isms/contracts + Migration + PGlite-Provider; tenant-scoped Repos; Seed-Loader; PGlite-Tests."
+}
