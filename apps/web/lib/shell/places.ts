@@ -69,7 +69,8 @@ export const NAV_PLACES: readonly NavPlace[] = [
     hint: 'Digital Twin, Scope, Risiken, Controls, Maßnahmen, Policies, Evidence, Audits',
     question: 'Warum ist ein Risiko hoch, welche Controls wirken und wie ist es belegt?',
     match: ['/isms'],
-    plannedScreen: 'S06 – Risk & Control Workspace',
+    // WP-013 Slice 1: der Ort zeigt echten, aus dem Demo-Seed abgeleiteten Inhalt.
+    live: true,
   },
   {
     id: 'entscheidungen',

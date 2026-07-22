@@ -802,6 +802,8 @@ h3 {
 /* =============================================================================
    Services – read-only Managed-Service-Sicht (WP-012 Slice 2).
    Karten einspaltig (inhaltsdicht), Portfolio nutzt das bestehende .tw-grid.
+   Die Kartenbausteine (.sv-*) werden bewusst auch von der ISMS-Kern-Sicht
+   (WP-013, components/isms) wiederverwendet – gleiche Anatomie und Zustände.
    ========================================================================== */
 .sv-list {
   list-style: none;

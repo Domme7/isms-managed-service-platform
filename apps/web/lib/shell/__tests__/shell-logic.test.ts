@@ -42,10 +42,17 @@ describe('NAV_PLACES – acht stabile Orte (Dok. 06 06-D01)', () => {
     expect(getPlace('services').live).toBe(true);
   });
 
+  it('markiert „ISMS" als live (WP-013 Slice 1: Risk & Control-Sicht aus dem Seed)', () => {
+    expect(getPlace('isms').live).toBe(true);
+  });
+
   it('markiert die übrigen Platzhalter-Orte als (noch) nicht live', () => {
-    // Live sind bislang „Kunden" (Twin Explorer, WP-004/011) und „Services" (WP-012 Slice 2).
-    const placeholders = NAV_PLACES.filter((p) => p.id !== 'kunden' && p.id !== 'services');
-    expect(placeholders).toHaveLength(6);
+    // Live sind bislang „Kunden" (Twin Explorer, WP-004/011), „Services" (WP-012 Slice 2)
+    // und „ISMS" (WP-013 Slice 1).
+    const placeholders = NAV_PLACES.filter(
+      (p) => p.id !== 'kunden' && p.id !== 'services' && p.id !== 'isms',
+    );
+    expect(placeholders).toHaveLength(5);
     for (const place of placeholders) {
       expect(place.live).not.toBe(true);
     }
