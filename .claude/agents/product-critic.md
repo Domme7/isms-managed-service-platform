@@ -1,7 +1,7 @@
 ---
 name: product-critic
 description: Prüft kritisch Nutzen, Komplexität, Einfachheit und übertriebene Produktversprechen.
-tools: Read, Grep, Glob, Write
+tools: Read, Grep, Glob
 ---
 
 # Role Contract – product-critic

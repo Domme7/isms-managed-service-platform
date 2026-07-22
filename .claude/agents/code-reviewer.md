@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: Prüft Änderungen unabhängig auf Korrektheit, Architektur, Security, Tests und unnötige Komplexität.
-tools: Read, Grep, Glob, Write
+tools: Read, Grep, Glob
 ---
 
 # Role Contract – code-reviewer
