@@ -1,8 +1,8 @@
 # Latest Handover
 
-- **Aktuell:** `HND-20260722T200638Z.md`
-- **Work Package:** WP-015
+- **Aktuell:** `HND-20260722T204009Z.md`
+- **Work Package:** WP-014
 - **Status:** Active / Handover created
 - **Branch:** `main`
-- **Commit:** `9eab52e`
-- **Exact Next Step:** WP-015 Slice bauen (frontend-engineer): Design-Tokens in globals.css, Tiefe/Layer, Status-Chips (immer mit Text), Micro-Interaktionen mit prefers-reduced-motion, optional Dark Mode; HARTE GRENZE: keine Inhalts-/Logikaenderung, die 77 Tests muessen unveraendert gruen bleiben, Kontrast >= AA. Danach Review (Product-User-Lead + Code) + Browser-QA ueber Login/Heute/Zwilling/Services/ISMS. Danach WP-014 Objekt-360.
+- **Commit:** `475d27a`
+- **Exact Next Step:** 1) docs/project/CONTINUATION_BRIEFING.md lesen (Arbeitszyklus + Parallelitaetsregeln + harte Regeln + offene Gates). 2) WP-014 Slice 1 starten: work-packages/WP-014_OBJEKT_360_DETAILSEITE.md an frontend-engineer delegieren (Objekt-Detailseite /twin/[tenantId]/objekt/[objectId], fuenf Fragen aus Dok. 06, ein-/ausgehende Kanten als Links, Tenant-Isolation im Routing, ehrliche Datenluecke bei Historie). 3) Danach Slice 2 (Verlinkung aus Twin/ISMS/Services) + Code- und UX-Review + Browser-QA -> WP-014 done. 4) Danach weiter gemaess Briefing §8. NICHT autonom entscheiden: CCP-001..003, Docker/Kosten, FINDING-0004 RLS vor DB->UI. Nach jedem WP committen+pushen+LATEST aktualisieren + Fortschrittsbalken berichten.
