@@ -14,7 +14,9 @@ export default function NotFound() {
         veraltet oder wurde falsch eingegeben.
       </p>
       <p>
-        <Link className="tw-card-link" href="/heute">
+        {/* `tw-back` wie im Twin-404: `tw-card-link` ist für ganze Karten gedacht und
+            würde den einzigen Rückweg farblos und ohne Unterstreichung rendern (UX-Review F8). */}
+        <Link className="tw-back" href="/heute">
           ← Zur Startseite (Heute)
         </Link>
       </p>
