@@ -22,9 +22,12 @@ Lauffähige Demo-App (read-only, rein synthetisch). Drei Orte der Shell sind ech
 | Managed-Service-Welt | WP-012 ✅ |
 | ISMS-Kern-Welt | WP-013 ✅ |
 | Visuelles Design | WP-015 ✅ (minimal, DR-0003) |
-| **Nächstes** | **WP-014 Objekt-360-Detailseite** (Entwurf + Context Pack liegen bereit) |
+| Objekt-360-Detailseite | WP-014 ✅ (Graph durchgängig begehbar, 40 Objektseiten) |
+| Mission Control „Heute" | WP-016 ✅ (**ohne** Morning Mission — Datenlage trägt sie nicht) |
+| **Nächstes** | **Owner-Entscheidung:** Seed/Contract um Aufgaben+Entscheidungen erweitern (O-WP016-03/-04) **oder** Executive-Welt — beide WPs existieren noch nicht |
 
-Testlage: **191 Tests grün** (api 2 · contracts 55 · demo-seed 38 · web 77 · db 19). CI grün.
+Testlage: **343 Tests grün** (api 2 · contracts 55 · demo-seed 38 · web 229 · db 19). CI grün.
+Es gibt **keinen Linter** im Stack (FINDING-0005) — „Lint" in Acceptance Criteria läuft ins Leere.
 
 ---
 
@@ -115,6 +118,14 @@ Keine Wall-of-Text; der Owner nutzt die Balken zum strategischen Steuern.
 4. **Ripple mitziehen.** Seed-Änderungen brechen Counts in `demo-seed`-, `db`- und `web`-Tests — im
    selben Pass anpassen, sonst rot.
 5. **Turbo-Cache täuscht.** Für echte Verifikation `pnpm --filter <pkg> exec vitest run` (frisch) nutzen.
+6. **Agentenzahlen nachrechnen, nicht übernehmen.** „41 Objekte" wanderte aus einem Builder-Bericht
+   ungeprüft in drei Statusdateien; es sind 40. Zahlen am Seed verifizieren, bevor sie Projektwahrheit werden.
+7. **Manche Fehler sieht keine Testschicht.** Zwei benachbarte inline-Spans ließen im Browser Text
+   zusammenlaufen — `textContent` fügt zwischen Elementen nie Whitespace ein, also kann kein
+   Text-Assertion das finden. Für Layout-Effekte **Struktur** prüfen und im Browser die Geometrie messen.
+8. **Ein zweiter Reviewdurchgang lohnt sich.** In WP-014 und WP-016 hat jeweils erst die Nachprüfung
+   eine Regression gefunden, die der Fix-Pass selbst erzeugt hatte.
+9. **Explizit stagen, nie `git add -A`.** Ein Bau ist so versehentlich in einen Docs-Commit gerutscht.
 
 ---
 
@@ -122,9 +133,12 @@ Keine Wall-of-Text; der Owner nutzt die Balken zum strategischen Steuern.
 
 Reihenfolge ist Vorschlag, der Orchestrator darf verfeinern (Vision nie verkleinern):
 
-1. **WP-014** Objekt-360-Detailseite → macht den Graphen durchgängig klickbar *(Entwurf bereit)*
-2. **Heute/Morning Mission** für die Kundenrolle (Dok. 10) — erst read-only, ohne Scoring
-3. **Executive-Welt** (Dok. 06/10): wenige verdichtete Entscheidungen
+1. ~~WP-014 Objekt-360-Detailseite~~ ✅ · ~~WP-016 Mission Control „Heute"~~ ✅
+2. **Blocker für ganz Dok. 10 sichtbar geworden:** der Seed trägt keine `Task`- und keine
+   `Decision Record`-Objekte, der Objektvertrag keine Frist-/Aufwand-/Kapazitäts-/Prioritätsfelder
+   (O-WP016-03/-04). Das blockiert **Morning Mission und Decision Center gleichermaßen**.
+   → Entweder Seed/Contract erweitern (Human Gate, Concept Author) oder vorerst umgehen.
+3. **Executive-Welt** (Dok. 06/10): wenige verdichtete Entscheidungen — läuft in dieselbe Grenze
 4. **API-Schicht + DB→UI** (NestJS) — **erst nach FINDING-0004 (RLS)**
 5. **Reporting/Presentation-as-Code** (Dok. 12)
 6. **Integrationen/Workflow** (Dok. 17), **KI-Guardrails** (Dok. 20A) — späte Phasen
@@ -139,7 +153,7 @@ Stand sichern, `LATEST.md` erneuern, Übergabe-Prompt ausgeben — **nicht** mit
 
 ```bash
 pnpm install
-pnpm test && pnpm typecheck && pnpm build     # erwartet: alles grün, 191 Tests
+pnpm test --force && pnpm typecheck && pnpm build   # erwartet: alles grün, 343 Tests
 python scripts/validate_handoff.py
 pnpm --filter @isms/web dev                   # http://localhost:3000/login
 ```
