@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T111642Z-RELEASE",
+  "type": "release",
+  "work_package": "WP-001",
+  "timestamp_utc": "2026-07-22T11:16:42.994591+00:00",
+  "summary": "Phase-0-Baseline erreicht: WP-001 (Slices 1-6) done, nach main gemerged, Tag phase-0-baseline.",
+  "branch": "main",
+  "commit": "490928d",
+  "git_status": "M docs/project/handovers/LATEST.md\n?? docs/project/handovers/HND-20260722T111642Z.md",
+  "tests": "validate_handoff.py OK; 6/6 repository contract tests green",
+  "exact_next_step": "Human Gate fuer App-Stack (WP-002)."
+}

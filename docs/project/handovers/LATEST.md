@@ -1,8 +1,8 @@
 # Latest Handover
 
-- **Aktuell:** `HND-20260722T110413Z.md`
+- **Aktuell:** `HND-20260722T111642Z.md`
 - **Work Package:** WP-001
 - **Status:** Active / Handover created
-- **Branch:** `wp-001-continuity-bootstrap`
-- **Commit:** `06d30df`
-- **Exact Next Step:** Slice 5: Context-Loss-/Resume-Drill ausfuehren und als Evidence dokumentieren; danach Slice 6 (WP-002-Entwurf, Release-Checkpoint, Tag).
+- **Branch:** `main`
+- **Commit:** `490928d`
+- **Exact Next Step:** HUMAN GATE: App-Stack/Package-Manager/Umgebung via CTO-ADR freigeben, dann WP-002 (work-packages/WP-002_TECH_ADR_UND_APP_GRUNDGERUEST.md) in Slices starten. Kein Remote konfiguriert; optionaler Push benoetigt Human Gate O-GH-001.
