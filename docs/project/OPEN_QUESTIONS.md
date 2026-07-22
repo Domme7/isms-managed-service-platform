@@ -4,7 +4,7 @@ Diese Fragen sind aus der Konzeptbibliothek übernommen und dürfen nicht still 
 
 | ID | Frage | Blockiert WP-001? | Owner / Gate |
 |---|---|---:|---|
-| O-TECH-001 | Welcher konkrete App-Stack und Package Manager werden verwendet? | nein | CTO ADR vor WP-002 |
+| O-TECH-001 | Welcher konkrete App-Stack und Package Manager werden verwendet? | **gelöst (ADR-0001)** | TypeScript/Next.js/NestJS/PostgreSQL, pnpm |
 | O-GH-001 | Unter welchem privaten GitHub-Konto oder welcher Organisation liegt das Repository? | **gelöst (DR-0002)** | privat `Domme7/isms-managed-service-platform` |
 | O-GH-002 | Welche Branch-Protection-Funktionen stehen im gewählten Plan zur Verfügung? | nein | Capability Check |
 | O-CLAUDE-001 | Welche Claude-Code-Version, Agents, Skills und Hooks sind tatsächlich verfügbar? | ja | Capability Check |

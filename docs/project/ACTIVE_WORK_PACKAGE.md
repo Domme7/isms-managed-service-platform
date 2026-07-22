@@ -1,11 +1,13 @@
 # Active Work Package
 
-- **ID:** WP-001
-- **Titel:** Repository & Continuity Bootstrap
-- **Datei:** `work-packages/WP-001_REPOSITORY_CONTINUITY_BOOTSTRAP.md`
-- **Context Pack:** `context-packs/WP-001/CONTEXT_PACK.md`
-- **Status:** Done (Phase-0-Baseline) — kein neues Work Package aktiv bis Human Gate für WP-002
-- **Owner:** CEO-/Orchestrator-Agent
-- **Builder:** GitHub Steward + Project Memory + Platform/DevOps
-- **Reviewer:** QA/Test + Security/Privacy + Human Product Owner bei materialem Gate
-- **Nächstes:** `work-packages/WP-002_TECH_ADR_UND_APP_GRUNDGERUEST.md` (Draft, benötigt Stack-Human-Gate)
+- **ID:** WP-002
+- **Titel:** Technologie-ADR und ausführbares App-Grundgerüst
+- **Datei:** `work-packages/WP-002_TECH_ADR_UND_APP_GRUNDGERUEST.md`
+- **ADR:** `docs/architecture/adr/ADR-0001_app_stack_und_monorepo.md` (Accepted, Human Gate)
+- **Status:** Done (minimales lauffähiges Grundgerüst) — kein neues WP aktiv bis Start von WP-003
+- **Owner:** CTO-/Architecture-Agent
+- **Builder:** Platform/DevOps + Backend + Frontend
+- **Reviewer:** QA/Test (read-only) + Product Security & Privacy (read-only)
+- **Nächstes:** WP-003 (synthetische Demo-Datenverträge/Seed) — benötigt Docker-Entscheidung für lokale PostgreSQL/Redis (Folge-ADR)
+
+> Hinweis: WP-001 (Repository & Continuity Bootstrap) ist als Phase-0-Baseline abgeschlossen und getaggt (`phase-0-baseline`).

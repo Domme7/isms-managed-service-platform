@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T122953Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-002",
+  "timestamp_utc": "2026-07-22T12:29:53.601106+00:00",
+  "summary": "WP-002: Stack-ADR (ADR-0001) + lauffaehiges Grundgeruest (NestJS /health live, Next.js Shell); test/typecheck/build gruen; App-CI ergaenzt; Validator WP-agnostisch + deps-Skip.",
+  "branch": "main",
+  "commit": "668108e",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CURRENT_STATE.md\n M docs/project/OPEN_QUESTIONS.md\n M docs/project/WORK_QUEUE.md\n M scripts/validate_handoff.py",
+  "tests": "pnpm test 2/2; typecheck+build green (api+web); /health live 200 + 404; validate OK; 6/6 repo tests",
+  "exact_next_step": "WP-003: Docker/DB-Entscheidung + ORM-Wahl, dann synthetische Seed-Datenvertraege."
+}

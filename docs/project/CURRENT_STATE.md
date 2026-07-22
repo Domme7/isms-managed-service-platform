@@ -1,47 +1,42 @@
 # Current State
 
-**Stand:** WP-001 abgeschlossen (Slices 1–6) — Phase-0-Baseline nach `main` gemerged und getaggt  
-**Phase:** 0 – Repository Bootstrap (Baseline erreicht)  
-**Aktives Work Package:** WP-001 – Repository & Continuity Bootstrap (**Done**); kein neues WP aktiv bis Human Gate für WP-002  
-**Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tag:** `phase-0-baseline`  
-**Remote:** privat `Domme7/isms-managed-service-platform` (GitHub, DR-0002) — main + Tag + WP-001-Branch gepusht; CI grün  
-**Implementierungsstatus:** Produktcode noch nicht begonnen  
+**Stand:** WP-002 abgeschlossen — lauffähiges Phase-0 App-Grundgerüst (Stack per ADR-0001)  
+**Phase:** 0 → 1 (Grundgerüst steht)  
+**Aktives Work Package:** WP-002 (**Done**); nächstes WP-003, noch nicht gestartet  
+**Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
+**Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
+**Implementierungsstatus:** Minimales, lauffähiges Monorepo-Grundgerüst; noch keine Produktfeatures  
 **Konzeptstatus:** 24 aktive Markdown-Dokumente vollständig, Manifest-Hashes verifiziert
 
 ## Gesichert
 
-- aktive und archivierte Konzeptquellen (24/24, Hashes geprüft),
-- Master-Index v1.2, Startprompt und globale Claude-Regeln,
-- Agentenverträge, Context-Pack-System, Checkpoint-/Handover-Vorlagen,
-- Git-Repository initialisiert; **WP-001-Arbeit nach `main` gemerged, Tag `phase-0-baseline` gesetzt**,
-- Übergabepaket auf Repository-Root gehoben, PDF-Lesefassungen unter `docs/concept/pdf/` (DR-0001),
-- Capability-Check + Claude-Config-Review (`docs/project/capability/`),
-- Reviewer-Rollen auf read-only reduziert; Deny-Guardrails in `.claude/settings.json` aktiv,
-- Continuity-Tooling verifiziert; Context-Loss-/Resume-Drill bestanden,
-- unabhängige QA- und Security-Review dokumentiert (`docs/project/reviews/`),
-- **privates GitHub-Backup eingerichtet (DR-0002); Remote-Push verifiziert, GitHub-Actions „Repository Contract" grün.**
+- Phase-0-Baseline (WP-001) abgeschlossen, getaggt, privat auf GitHub gesichert,
+- **Stack entschieden (ADR-0001): TypeScript · Next.js · NestJS · PostgreSQL · pnpm + Turborepo**,
+- **lauffähiges Grundgerüst:** `apps/api` (NestJS, `GET /health` live geprüft) + `apps/web` (Next.js App-Shell),
+- **Vitest-Smoke-Test grün; typecheck + build für beide Apps grün; App-CI auf GitHub**,
+- Continuity-Tooling, Checkpoints, Handover, unabhängige QA-/Security-Review (WP-001).
 
-## Capability-Ergebnis
+## Verifikations-Evidence (WP-002)
 
-- Python 3.11.9 ✓ · Git 2.47.0 ✓ · Claude Code 2.1.201 ✓ · Node v24 ✓
-- **GitHub CLI (`gh`): nicht installiert** · **Docker: nicht installiert** – kein WP-001-Blocker.
-- `validate_handoff.py` OK · 6/6 Repository-Tests grün.
+- `pnpm test` → 2/2 grün · `pnpm typecheck` → grün (api+web) · `pnpm build` → grün (api+web)
+- API live: `GET /health` → `{"status":"ok","service":"isms-api","phase":"phase-0-skeleton",...}`; unbekannte Route → 404
+- `validate_handoff.py` OK · 6/6 Repository-Tests grün · GitHub Actions „Repository Contract" + „App CI"
 
 ## Noch nicht gesichert oder entschieden
 
-- Branch-Protection/Required-Checks auf `main` (O-GH-002, im Free-Tier eingeschränkt; für Backup nicht nötig),
-- finaler App-Technologiestack (WP-002 / CTO-ADR, Human Gate),
-- produktive Cloud-, CI- oder API-Ressourcen,
-- reale Daten und produktive Integrationen.
+- **Docker** für lokale PostgreSQL/Redis (nicht installiert) — Voraussetzung für WP-003 (Folge-ADR),
+- ORM/Migrationstool (Prisma vs. Drizzle) — Entscheidung bei WP-003,
+- Authentisierung/Tenant-Trennung (WP-005), produktive Cloud/CI, reale Daten,
+- Branch-Protection auf `main` (O-GH-002).
 
 ## Offene Findings (nicht blockierend)
 
 - FINDING-0001: Master-Index-Einstiegspfad weicht von gebauter Struktur ab (Low).
-- FINDING-0002: `validate_handoff.py` prüft keine Status-Aktualität/Branch/Tag/Cross-Datei-Konsistenz (Med, Tooling-Härtung).
+- FINDING-0002: `validate_handoff.py` prüft keine Status-Aktualität/Branch/Tag (Med); aktive-WP-Prüfung inzwischen WP-agnostisch gemacht.
 
 ## Exact Next Step
 
-**Human Gate erforderlich, um WP-002 zu starten:** finalen App-Stack, Package Manager und
-Umgebungsmodell freigeben (CTO-ADR). Ohne diese Freigabe darf kein Produktgrundgerüst materialisiert
-werden. Danach WP-002 gemäß `work-packages/WP-002_TECH_ADR_UND_APP_GRUNDGERUEST.md` in Slices
-abarbeiten. Ein optionaler Remote/Push benötigt separat Human Gate O-GH-001.
+**WP-003 vorbereiten:** (1) Entscheidung Docker Desktop installieren vs. leichte DB-Alternative für lokale
+PostgreSQL/Redis (Folge-ADR); (2) ORM wählen (Prisma vs. Drizzle); danach synthetische Demo-Datenverträge
+und Seed-Manifest gemäß `work-packages/WP-003` in kleinen Slices. Keine realen Daten. Weiterhin Checkpoints
++ Push ins private Backup.

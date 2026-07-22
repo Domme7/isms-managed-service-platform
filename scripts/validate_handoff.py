@@ -62,11 +62,16 @@ def main() -> None:
         fail(f'LATEST.md target missing: {handover_name}')
 
     active_wp = (ROOT / 'docs/project/ACTIVE_WORK_PACKAGE.md').read_text(encoding='utf-8')
-    if 'WP-001' not in active_wp:
-        fail('active work package is not WP-001')
+    m_wp = re.search(r'WP-\d{3}', active_wp)
+    if not m_wp:
+        fail('active work package id (WP-xxx) not found in ACTIVE_WORK_PACKAGE.md')
+    active_wp_id = m_wp.group(0)
+    if not list((ROOT / 'work-packages').glob(f'{active_wp_id}_*.md')):
+        fail(f'active work package file missing for {active_wp_id}')
 
+    skip_dirs = {'.git', 'node_modules', 'dist', '.next', '.turbo', 'build', 'coverage'}
     for p in ROOT.rglob('*'):
-        if not p.is_file() or '.git' in p.parts:
+        if not p.is_file() or skip_dirs & set(p.parts):
             continue
         if p.suffix.lower() in {'.png','.jpg','.jpeg','.pdf','.docx','.zip'}:
             continue
