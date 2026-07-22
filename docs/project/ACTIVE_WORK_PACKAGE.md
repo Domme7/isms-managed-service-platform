@@ -1,14 +1,13 @@
 # Active Work Package
 
-- **ID:** WP-013
-- **Titel:** ISMS-Kern-Welt (read-only)
-- **Datei:** `work-packages/WP-013_ISMS_KERN_WELT_READONLY.md`
-- **Context Pack:** `context-packs/WP-013/CONTEXT_PACK.md`
-- **Führende Quellen:** Dok. 08 (ISMS-Kernprozesse, Zustände) + Dok. 06 (S06 Risk & Control Workspace, Zustände); Daten aus `@isms/demo-seed`
-- **Status:** Active — Slice 1 (View-Helfer + `IsmsView`, Ort „ISMS" live)
-- **Builder:** Frontend-Engineer-Agent
-- **Reviewer:** Code-Reviewer + Product-User-Lead (read-only)
-- **Human Gates:** keiner (read-only, synthetisch; kein Scoring/Reifegrad — Dok. 09/10 sind spätere WPs)
-- **Abgrenzung:** „implementiert ≠ wirksam" bleibt getrennt (08-D07/08-D20); keine Seed-/Contract-Änderung; Lücken als OFFENE FRAGE.
+- **ID:** WP-015
+- **Titel:** Visual Design Uplift (Erlebnisqualität ohne Substanzverlust)
+- **Datei:** `work-packages/WP-015_VISUAL_DESIGN_UPLIFT.md`
+- **Context Pack:** `context-packs/WP-015/CONTEXT_PACK.md`
+- **Auslöser:** Owner-Feedback — „etwas futuristischer, mehr Wow, nicht so langweilig"
+- **Status:** Active — rein visuelle Schicht (Design-Tokens, Tiefe, Status-Chips, Micro-Interaktionen, ggf. Dark Mode)
+- **Builder:** Frontend-Engineer · **Reviewer:** Product-User-Lead + Code-Reviewer
+- **Harte Grenzen:** keine Inhalts-/Logikänderung (die 77 Web-Tests müssen unverändert grün bleiben); Kontrast ≥ AA; Fokus sichtbar; Status nie nur Farbe; `prefers-reduced-motion` respektiert; kein neues Framework.
+- **Nächstes danach:** WP-014 (Objekt-360-Detailseite, Entwurf bereit) — macht den Graphen durchgängig klickbar.
 
-> Abgeschlossen: WP-001..004, 007, 011, 012. Offene Human Gates (nicht blockierend): CCP-001..003, Docker-Start, FINDING-0004.
+> Abgeschlossen: WP-001..004, 007, 011, 012, **013** (ISMS-Kern-Welt). Offene Human Gates (nicht blockierend): CCP-001..003, Docker-Engine-Start, FINDING-0004.

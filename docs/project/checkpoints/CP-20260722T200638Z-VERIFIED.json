@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T200638Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-013",
+  "timestamp_utc": "2026-07-22T20:06:38.320364+00:00",
+  "summary": "WP-013 DONE: ISMS-Kern-Welt (read-only) mit Risiken/Controls/Massnahmen/Nachweisen. Zwei unabhaengige Reviews; UX-MAJOR-1 behoben (Control-Status als Lebenszyklus-Stand gerahmt, kein Pruefergebnis) inkl. seitenweiter Rahmung; Wirkungsannahme gekennzeichnet; Datenluecke Risiko<->Szenario im Produkt sichtbar; Sektions-Empty-States; Sprache entjargonisiert (auch Services angeglichen); A11y-Summaries.",
+  "branch": "main",
+  "commit": "9eab52e",
+  "git_status": "M apps/web/components/isms/IsmsCards.tsx\n M apps/web/components/isms/IsmsContent.tsx\n M apps/web/components/isms/__tests__/isms.test.tsx\n M apps/web/components/services/PortfolioOverview.tsx\n M apps/web/components/services/ServiceCard.tsx\n M apps/web/components/services/ServicesContent.tsx\n M apps/web/components/services/__tests__/services.test.tsx\n M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CURRENT_STATE.md\n M docs/project/WORK_QUEUE.md\n?? context-packs/WP-015/\n?? docs/project/reviews/WP-013_INDEPENDENT_REVIEW.md\n?? work-packages/WP-015_VISUAL_DESIGN_UPLIFT.md",
+  "tests": "web 77 gruen; typecheck/build/Monorepo gruen; validate OK; Browser-QA bestanden",
+  "exact_next_step": "WP-015 Visual Design Uplift (Owner-Feedback: mehr Wow), danach WP-014 Objekt-360."
+}

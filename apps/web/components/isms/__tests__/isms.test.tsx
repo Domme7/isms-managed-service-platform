@@ -74,8 +74,12 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
     render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
     const controlCard = cardByHeading('Backup & Recovery Control');
 
-    // Control-Status als eigener Text an der Karte …
-    expect(within(controlCard).getByText('Control · Status: wirksam')).toBeInTheDocument();
+    // Control-Stand als eigener Text an der Karte – bewusst als Lebenszyklus-Stand gerahmt
+    // (UX-Review MAJOR-1: „wirksam" ist kein Prüfergebnis).
+    expect(
+      within(controlCard).getByText('Control · Lebenszyklus-Stand: wirksam'),
+    ).toBeInTheDocument();
+    expect(within(controlCard).getByText(/kein Prüfergebnis/)).toBeInTheDocument();
 
     // … und der Implementierungsstatus getrennt an der Implementation-Zeile.
     const impl = within(controlCard).getByText('Backup-Job Werk Nord (ERP)');
@@ -91,7 +95,7 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
 
     // Evidence-Stand mit Kantenstatus (evidences).
     const evidenceItem = within(controlCard).getByText('Restore-Test-Protokoll Q2/2026');
-    expect(evidenceItem.parentElement?.textContent).toMatch(/Kantenstatus: geprüft/);
+    expect(evidenceItem.parentElement?.textContent).toMatch(/Prüfstand der Beziehung: geprüft/);
   });
 
   it('zeigt Maßnahmen- und Nachweis-Karte mit Status und Bezug', () => {
@@ -121,12 +125,12 @@ describe('IsmsContent – Empty-State (Mandanten ohne ISMS-Kernobjekte)', () => 
         name: 'Keine ISMS-Kernobjekte für Consulting Operator Demo',
       }),
     ).toBeInTheDocument();
-    // Aus dem Seed abgeleitet: Nordwerk ist der (einzige) ausmodellierte ISMS-Mandant.
+    // Aus dem Seed abgeleitet, aber ohne fremde Mandantennamen (UX-Review MINOR-6).
     expect(
-      screen.getByText(/derzeit für Nordwerk Manufacturing SE ausmodelliert/),
+      screen.getByText(/derzeit für einen anderen Demo-Mandanten ausmodelliert/),
     ).toBeInTheDocument();
-    // Ehrlicher Hinweis: Services laufen (Ort „Services"), aber kein eigener ISMS-Kerngraph.
-    expect(screen.getByText(/laufen Managed Services/)).toBeInTheDocument();
+    // Ehrlicher Hinweis: der Betreiber ist Erbringer, nicht Empfänger (UX-Review MINOR-7).
+    expect(screen.getByText(/sind Managed-Service-Objekte modelliert/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Services' })).toHaveAttribute('href', '/services');
     // Nächster Schritt (Dok. 06 §17).
     expect(screen.getByRole('link', { name: /Mandant wechseln/ })).toHaveAttribute(

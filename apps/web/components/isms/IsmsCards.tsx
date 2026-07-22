@@ -32,12 +32,16 @@ function edgeNote(type: string): string {
   return `${id ? `${id} · ` : ''}${label} (${type})`;
 }
 
-/** Sekundäre Meta-Zeile eines verknüpften Objekts – Status/Kantenstatus immer als Text. */
+/**
+ * Sekundäre Meta-Zeile eines verknüpften Objekts – Status immer als Text.
+ * Klartext vor Fachsprache (UX-Review MINOR-5): „Herkunft der Aussage" statt „Assertion-Art",
+ * „Prüfstand der Beziehung" statt „Kantenstatus".
+ */
 function linkMeta(link: IsmsLink): string {
   const parts = [link.object_type];
   if (link.lifecycle_status) parts.push(`Status: ${link.lifecycle_status}`);
-  if (link.edge_status) parts.push(`Kantenstatus: ${link.edge_status}`);
-  parts.push(`Assertion-Art: ${link.assertion_kind}`);
+  if (link.edge_status) parts.push(`Prüfstand der Beziehung: ${link.edge_status}`);
+  parts.push(`Herkunft der Aussage: ${link.assertion_kind}`);
   if (link.confidence_display) parts.push(`Vertrauensgrad: ${link.confidence_display}`);
   return ` · ${parts.join(' · ')}`;
 }
@@ -54,7 +58,10 @@ function LinkItems({ links, emptyText }: { links: readonly IsmsLink[]; emptyText
           <span className="sv-item-name">{link.name}</span>
           <span className="sv-item-meta">{linkMeta(link)}</span>
           {link.effectiveness_assumption ? (
-            <span className="sv-item-note">{link.effectiveness_assumption}</span>
+            /* UX-Review MINOR-1: Annahme klar als Annahme kennzeichnen, nicht als belegte Wirkung. */
+            <span className="sv-item-note">
+              Wirkungsannahme (nicht nachgewiesen): {link.effectiveness_assumption}
+            </span>
           ) : null}
         </li>
       ))}
@@ -62,12 +69,18 @@ function LinkItems({ links, emptyText }: { links: readonly IsmsLink[]; emptyText
   );
 }
 
-/** Objektbeschreibung hinter <details> (lange Texte nicht aufdrängen, Dok. 06 P06). */
-function DescriptionDetails({ text }: { text: string }) {
+/**
+ * Objektbeschreibung hinter <details> (lange Texte nicht aufdrängen, Dok. 06 P06).
+ * A11y (Reviews MINOR-8/NIT-1): der Objektname steht visuell versteckt im Summary, damit
+ * Screenreader-Nutzer die sonst namensgleichen Bedienelemente unterscheiden können.
+ */
+function DescriptionDetails({ text, label }: { text: string; label: string }) {
   if (!text) return null;
   return (
     <details className="sv-details">
-      <summary>Beschreibung anzeigen</summary>
+      <summary>
+        Beschreibung anzeigen<span className="shell-visually-hidden">: {label}</span>
+      </summary>
       <p className="sv-desc">{text}</p>
     </details>
   );
@@ -82,7 +95,7 @@ function CoveredNote({ names }: { names: readonly string[] }) {
   return (
     <p className="sv-edge-note">
       Im Serviceumfang von: {names.join(', ')}{' '}
-      <span className="sv-tech">({edgeNote('covered_by')} – Hinweis aus dem Demo-Seed)</span>
+      <span className="sv-tech">({edgeNote('covered_by')} – Hinweis aus dem Demo-Datenbestand)</span>
     </p>
   );
 }
@@ -96,15 +109,15 @@ export function RiskCard({ view }: { view: RiskView }) {
     <li className="sv-card">
       <h3 className="tw-card-title">{view.risk.name}</h3>
       <p className="tw-card-sub">{`Risiko (Risk) · Status: ${view.risk.lifecycle_status}`}</p>
-      <DescriptionDetails text={view.risk.description} />
+      <DescriptionDetails text={view.risk.description} label={view.risk.name} />
 
       <h4>Betrifft (Wirkung)</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('affects')}</p>
-      <LinkItems links={view.affects} emptyText="Keine affects-Kante im Demo-Seed." />
+      <p className="sv-edge-note">Beziehung: {edgeNote('affects')}</p>
+      <LinkItems links={view.affects} emptyText="Keine affects-Beziehung im Demo-Datenbestand." />
 
       <h4>Wird gemindert durch</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('mitigates')}</p>
-      <LinkItems links={view.mitigated_by} emptyText="Keine mitigates-Kante im Demo-Seed." />
+      <p className="sv-edge-note">Beziehung: {edgeNote('mitigates')}</p>
+      <LinkItems links={view.mitigated_by} emptyText="Keine mitigates-Beziehung im Demo-Datenbestand." />
 
       <CoveredNote names={view.covered_by_services} />
     </li>
@@ -116,10 +129,10 @@ export function ScenarioCard({ view }: { view: ScenarioView }) {
     <li className="sv-card">
       <h3 className="tw-card-title">{view.scenario.name}</h3>
       <p className="tw-card-sub">{`Risikoszenario (Risk Scenario) · Status: ${view.scenario.lifecycle_status}`}</p>
-      <DescriptionDetails text={view.scenario.description} />
+      <DescriptionDetails text={view.scenario.description} label={view.scenario.name} />
 
       <h4>Herkunft: Bedrohung</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('threatens')}</p>
+      <p className="sv-edge-note">Beziehung: {edgeNote('threatens')}</p>
       {view.threatened_by.length > 0 ? (
         <ul className="sv-items">
           {view.threatened_by.map((link) => (
@@ -135,12 +148,12 @@ export function ScenarioCard({ view }: { view: ScenarioView }) {
           ))}
         </ul>
       ) : (
-        <p className="sv-item-meta">Keine threatens-Kante im Demo-Seed.</p>
+        <p className="sv-item-meta">Keine threatens-Beziehung im Demo-Datenbestand.</p>
       )}
 
       <h4>Wird gemindert durch</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('mitigates')}</p>
-      <LinkItems links={view.mitigated_by} emptyText="Keine mitigates-Kante im Demo-Seed." />
+      <p className="sv-edge-note">Beziehung: {edgeNote('mitigates')}</p>
+      <LinkItems links={view.mitigated_by} emptyText="Keine mitigates-Beziehung im Demo-Datenbestand." />
     </li>
   );
 }
@@ -150,15 +163,15 @@ export function WeaknessCard({ view }: { view: WeaknessView }) {
     <li className="sv-card">
       <h3 className="tw-card-title">{view.weakness.name}</h3>
       <p className="tw-card-sub">{`Schwachstelle (Weakness) · Status: ${view.weakness.lifecycle_status}`}</p>
-      <DescriptionDetails text={view.weakness.description} />
+      <DescriptionDetails text={view.weakness.description} label={view.weakness.name} />
 
       <h4>Exponiert (betroffener Informationswert)</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('exposes')}</p>
-      <LinkItems links={view.exposes} emptyText="Keine exposes-Kante im Demo-Seed." />
+      <p className="sv-edge-note">Beziehung: {edgeNote('exposes')}</p>
+      <LinkItems links={view.exposes} emptyText="Keine exposes-Beziehung im Demo-Datenbestand." />
 
       <h4>Wird behoben durch</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('remediates')}</p>
-      <LinkItems links={view.remediated_by} emptyText="Keine remediates-Kante im Demo-Seed." />
+      <p className="sv-edge-note">Beziehung: {edgeNote('remediates')}</p>
+      <LinkItems links={view.remediated_by} emptyText="Keine remediates-Beziehung im Demo-Datenbestand." />
     </li>
   );
 }
@@ -171,20 +184,27 @@ export function ControlCard({ view }: { view: ControlView }) {
   return (
     <li className="sv-card">
       <h3 className="tw-card-title">{view.control.name}</h3>
-      {/* Control-Lebenszyklus (Dok. 05 §7) – getrennt vom Implementierungsstatus unten. */}
-      <p className="tw-card-sub">{`Control · Status: ${view.control.lifecycle_status}`}</p>
-      <DescriptionDetails text={view.control.description} />
+      {/* UX-Review MAJOR-1: „wirksam" ist ein Lebenszyklus-Stand (Dok. 05 §7), KEIN Prüfergebnis.
+          Ohne Rahmung liest ein Nicht-Experte das als erwiesene Wirksamkeit. Daher explizit
+          benannt und eingeordnet (Dok. 08 §14.3/§27, Erklärbarkeit jedes sichtbaren Status). */}
+      <p className="tw-card-sub">{`Control · Lebenszyklus-Stand: ${view.control.lifecycle_status}`}</p>
+      <p className="sv-edge-note">
+        Lebenszyklus-Stand aus dem Demo-Datenbestand – <strong>kein Prüfergebnis</strong>. Design-
+        und Betriebswirksamkeit werden in dieser Ansicht nicht bewertet; eine Wirksamkeitsprüfung
+        (Control Test) ist im Demo-Datenbestand nicht modelliert.
+      </p>
+      <DescriptionDetails text={view.control.description} label={view.control.name} />
 
       <h4>Umsetzung (Control Implementation)</h4>
       <p className="sv-edge-note">
-        Kante: {edgeNote('implements')} – Umsetzungsstand der Implementierung; „implementiert"
-        ist KEIN Wirksamkeitsnachweis für das Control (08-D07).
+        Beziehung: {edgeNote('implements')} – Umsetzungsstand der Implementierung; „implementiert"
+        ist <strong>kein</strong> Wirksamkeitsnachweis für das Control.
       </p>
-      <LinkItems links={view.implementations} emptyText="Keine implements-Kante im Demo-Seed." />
+      <LinkItems links={view.implementations} emptyText="Keine Umsetzung im Demo-Datenbestand verknüpft." />
 
       <h4>Erfüllte Anforderung (Requirement)</h4>
       <p className="sv-edge-note">
-        Kante: {edgeNote('satisfies')}; Framework-Zuordnung: {edgeNote('part_of')}
+        Beziehung: {edgeNote('satisfies')}; Framework-Zuordnung: {edgeNote('part_of')}
       </p>
       {view.satisfies.length > 0 ? (
         <ul className="sv-items">
@@ -203,12 +223,12 @@ export function ControlCard({ view }: { view: ControlView }) {
       )}
 
       <h4>Nachweis-Stand (Evidence)</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('evidences')}</p>
-      <LinkItems links={view.evidenced_by} emptyText="Keine evidences-Kante im Demo-Seed." />
+      <p className="sv-edge-note">Beziehung: {edgeNote('evidences')}</p>
+      <LinkItems links={view.evidenced_by} emptyText="Keine evidences-Beziehung im Demo-Datenbestand." />
 
       <h4>Mindert (Risikobezug)</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('mitigates')}</p>
-      <LinkItems links={view.mitigates} emptyText="Keine mitigates-Kante im Demo-Seed." />
+      <p className="sv-edge-note">Beziehung: {edgeNote('mitigates')}</p>
+      <LinkItems links={view.mitigates} emptyText="Keine mitigates-Beziehung im Demo-Datenbestand." />
 
       <CoveredNote names={view.covered_by_services} />
     </li>
@@ -224,15 +244,15 @@ export function MeasureCard({ view }: { view: MeasureView }) {
     <li className="sv-card">
       <h3 className="tw-card-title">{view.measure.name}</h3>
       <p className="tw-card-sub">{`Maßnahme (Measure) · Status: ${view.measure.lifecycle_status}`}</p>
-      <DescriptionDetails text={view.measure.description} />
+      <DescriptionDetails text={view.measure.description} label={view.measure.name} />
 
       <h4>Behebt (Schwachstelle/Finding)</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('remediates')}</p>
-      <LinkItems links={view.remediates} emptyText="Keine remediates-Kante im Demo-Seed." />
+      <p className="sv-edge-note">Beziehung: {edgeNote('remediates')}</p>
+      <LinkItems links={view.remediates} emptyText="Keine remediates-Beziehung im Demo-Datenbestand." />
 
       <h4>Mindert (Szenario/Risiko)</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('mitigates')}</p>
-      <LinkItems links={view.mitigates} emptyText="Keine mitigates-Kante im Demo-Seed." />
+      <p className="sv-edge-note">Beziehung: {edgeNote('mitigates')}</p>
+      <LinkItems links={view.mitigates} emptyText="Keine mitigates-Beziehung im Demo-Datenbestand." />
     </li>
   );
 }
@@ -246,11 +266,11 @@ export function EvidenceCard({ view }: { view: EvidenceView }) {
     <li className="sv-card">
       <h3 className="tw-card-title">{view.evidence.name}</h3>
       <p className="tw-card-sub">{`Nachweis (Evidence) · Status: ${view.evidence.lifecycle_status}`}</p>
-      <DescriptionDetails text={view.evidence.description} />
+      <DescriptionDetails text={view.evidence.description} label={view.evidence.name} />
 
       <h4>Belegt</h4>
-      <p className="sv-edge-note">Kante: {edgeNote('evidences')}</p>
-      <LinkItems links={view.evidences} emptyText="Keine evidences-Kante im Demo-Seed." />
+      <p className="sv-edge-note">Beziehung: {edgeNote('evidences')}</p>
+      <LinkItems links={view.evidences} emptyText="Keine evidences-Beziehung im Demo-Datenbestand." />
 
       <CoveredNote names={view.covered_by_services} />
     </li>

@@ -42,7 +42,7 @@ export function PortfolioOverview({ entries }: { entries: readonly PortfolioTena
                 ))}
               </ul>
             ) : (
-              <p className="sv-item-meta">Keine Managed Services im aktuellen Demo-Seed.</p>
+              <p className="sv-item-meta">Keine Managed Services im aktuellen Demo-Datenbestand.</p>
             )}
           </li>
         ))}

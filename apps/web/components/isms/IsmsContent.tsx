@@ -10,6 +10,7 @@
  *
  * Heading-Hierarchie: h1 (Ort) > h2 (Sektion) > h3 (Karte) > h4 (Karteninhalt).
  */
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
 import { buildIsmsCoreView, getIsmsCoreTenants, hasManagedServices } from '../../lib/isms/data';
@@ -39,8 +40,16 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
         Read-only Demo-Sicht auf den synthetischen ISMS-Kerngraphen des aktiven Mandanten:
         Risiken mit Herkunft, Controls mit Umsetzung und Nachweisen, Maßnahmen und Evidence –
         aus demselben Datenmodell wie der digitale Zwilling. Es werden nur belegte Seed-Stände
-        gezeigt; Implementierungs- und Wirksamkeitsaussagen bleiben getrennt (08-D07), ohne
+        gezeigt; Implementierungs- und Wirksamkeitsaussagen bleiben strikt getrennt, ohne
         Scoring, Ampeln oder Reifegrade.
+      </p>
+      {/* UX-Review MAJOR-1 (seitenweite Rahmung): jede sichtbare Status-Angabe ist ein
+          Lebenszyklus-Stand des Objekts, kein Prüf-/Auditergebnis – gilt auch für Status in
+          Verweis-Zeilen, nicht nur an den Kartenköpfen. */}
+      <p className="tw-muted">
+        <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben sind
+        Lebenszyklus-Stände der Objekte aus dem Demo-Datenbestand – <strong>keine
+        Prüfergebnisse</strong> und keine bewertete Wirksamkeit.
       </p>
 
       {view.isEmpty ? (
@@ -53,10 +62,15 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
           <section aria-labelledby="isms-risiken">
             <h2 id="isms-risiken">Risiken</h2>
             <p className="tw-muted">
-              Risiko, Szenario-Herkunft und Schwachstellen-Ursprung als Klartext-Kette aus dem
-              Demo-Seed – ohne Score oder Ampel (Bewertungslogik folgt später, Dok. 09).
+              Risiko, Szenario-Herkunft und Schwachstellen-Ursprung als Klartext – ohne Score oder
+              Ampel (eine Bewertungslogik entsteht in einer späteren Phase). <strong>Datenlücke:</strong>{' '}
+              Szenario, Schwachstelle und Risiko sind im aktuellen Datenmodell nicht direkt
+              miteinander verknüpft – ein Zusammenhang wird hier bewusst nicht behauptet.
             </p>
-            <ul className="sv-list">
+            <SectionList
+              isEmpty={view.risks.length + view.scenarios.length + view.weaknesses.length === 0}
+              emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Risiken, Szenarien oder Schwachstellen modelliert."
+            >
               {view.risks.map((risk) => (
                 <RiskCard key={risk.risk.object_id} view={risk} />
               ))}
@@ -66,7 +80,7 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
               {view.weaknesses.map((weakness) => (
                 <WeaknessCard key={weakness.weakness.object_id} view={weakness} />
               ))}
-            </ul>
+            </SectionList>
           </section>
 
           <section aria-labelledby="isms-controls">
@@ -74,13 +88,16 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
             <p className="tw-muted">
               Control-Stand, Umsetzung, erfüllte Anforderung und Nachweis-Stand – der Status des
               Controls (z. B. „wirksam") und der Status seiner Implementierung (z. B.
-              „implementiert") werden getrennt ausgewiesen und nie verrechnet (08-D07).
+              „implementiert") werden getrennt ausgewiesen und nie verrechnet.
             </p>
-            <ul className="sv-list">
+            <SectionList
+              isEmpty={view.controls.length === 0}
+              emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Controls modelliert."
+            >
               {view.controls.map((control) => (
                 <ControlCard key={control.control.object_id} view={control} />
               ))}
-            </ul>
+            </SectionList>
           </section>
 
           <section aria-labelledby="isms-massnahmen">
@@ -89,24 +106,31 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
               Was getan wird und worauf es wirkt: eine Maßnahme behebt eine Schwachstelle
               (remediates) oder mindert ein Szenario/Risiko (mitigates).
             </p>
-            <ul className="sv-list">
+            <SectionList
+              isEmpty={view.measures.length === 0}
+              emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Maßnahmen modelliert."
+            >
               {view.measures.map((measure) => (
                 <MeasureCard key={measure.measure.object_id} view={measure} />
               ))}
-            </ul>
+            </SectionList>
           </section>
 
           <section aria-labelledby="isms-nachweise">
             <h2 id="isms-nachweise">Nachweise</h2>
             <p className="tw-muted">
-              Nachweise mit Status und belegtem Objekt – Evidenz statt Behauptung (Dok. 08 P08):
-              gezeigt wird nur, was eine evidences-Kante im Seed trägt.
+              Nachweise mit Status und belegtem Objekt – Evidenz statt Behauptung. Gezeigt werden
+              hier Objekte vom Typ „Nachweis (Evidence)"; weitere Nachweisquellen – etwa ein
+              Service-Deliverable – erscheinen an der jeweiligen Control-Karte.
             </p>
-            <ul className="sv-list">
+            <SectionList
+              isEmpty={view.evidence.length === 0}
+              emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Nachweise vom Typ Evidence modelliert."
+            >
               {view.evidence.map((ev) => (
                 <EvidenceCard key={ev.evidence.object_id} view={ev} />
               ))}
-            </ul>
+            </SectionList>
           </section>
         </>
       )}
@@ -114,10 +138,19 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
   );
 }
 
-/** Verbindet Namen deutsch: „A", „A und B", „A, B und C". */
-function joinDe(names: readonly string[]): string {
-  if (names.length <= 1) return names[0] ?? '';
-  return `${names.slice(0, -1).join(', ')} und ${names[names.length - 1]}`;
+/**
+ * Sektionsinhalt mit ehrlichem Leer-Hinweis (Code-Review MINOR-2, `.claude/rules/frontend.md`).
+ * Greift, wenn ein Mandant zwar ISMS-Objekte hat, aber eine einzelne Klasse leer ist.
+ */
+function SectionList({ isEmpty, emptyText, children }: { isEmpty: boolean; emptyText: string; children: ReactNode }) {
+  if (isEmpty) {
+    return (
+      <p className="tw-empty" role="note">
+        {emptyText}
+      </p>
+    );
+  }
+  return <ul className="sv-list">{children}</ul>;
 }
 
 /**
@@ -128,28 +161,27 @@ function joinDe(names: readonly string[]): string {
  */
 function EmptyIsms({ tenant }: { tenant: DemoTenant }) {
   const modeled = getIsmsCoreTenants();
-  const names = joinDe(modeled.map((t) => t.display_name));
   const tenantHasServices = hasManagedServices(tenant.tenant_id);
 
   return (
     <div className="tw-empty" role="note">
       <h3>Keine ISMS-Kernobjekte für {tenant.display_name}</h3>
       <p style={{ marginTop: 0 }}>
-        Für <strong>{tenant.display_name}</strong> sind im aktuellen Demo-Seed keine Risiken,
+        Für <strong>{tenant.display_name}</strong> sind im aktuellen Demo-Datenbestand keine Risiken,
         Controls, Maßnahmen oder Nachweise modelliert.{' '}
         {modeled.length > 0
-          ? `Die Risiko- und Control-Sicht ist derzeit für ${names} ausmodelliert; weitere Mandanten folgen in späteren Ausbaustufen.`
-          : 'Im aktuellen Demo-Seed ist noch kein Mandant mit ISMS-Kernobjekten modelliert.'}
+          ? `Die Risiko- und Control-Sicht ist derzeit für ${modeled.length === 1 ? 'einen anderen Demo-Mandanten' : `${modeled.length} andere Demo-Mandanten`} ausmodelliert; weitere folgen in späteren Ausbaustufen.`
+          : 'Im aktuellen Demo-Datenbestand ist noch kein Mandant mit ISMS-Kernobjekten modelliert.'}
       </p>
       {tenantHasServices ? (
         <p className="tw-muted">
-          Hinweis: Für diesen Mandanten laufen Managed Services (siehe Ort{' '}
-          <Link href="/services">Services</Link>) – der eigene ISMS-Kerngraph ist hier bewusst
-          noch nicht modelliert.
+          Hinweis: In diesem Mandanten sind Managed-Service-Objekte modelliert (siehe Ort{' '}
+          <Link href="/services">Services</Link>). Eigene Risiken, Controls, Maßnahmen und
+          Nachweise führt er hier nicht.
         </p>
       ) : null}
       <p className="tw-muted">
-        Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Demo-Seed
+        Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Demo-Datenbestand
         abgeleitete Objekte – keine erfundenen Risiken, Controls oder Bewertungen.
       </p>
       {/* Nächster Schritt im Empty-State (Dok. 06 §17). */}

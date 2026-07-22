@@ -81,7 +81,7 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
     expect(within(portfolio).getByText('2 Managed Services')).toBeInTheDocument();
     expect(within(portfolio).getAllByText('0 Managed Services')).toHaveLength(2);
     expect(
-      within(portfolio).getAllByText('Keine Managed Services im aktuellen Demo-Seed.'),
+      within(portfolio).getAllByText('Keine Managed Services im aktuellen Demo-Datenbestand.'),
     ).toHaveLength(2);
   });
 });

@@ -1,8 +1,8 @@
 # Current State
 
-**Stand:** WP-012 **fertig** — erste rollenbezogene Erlebniswelt (Consulting & Service World): Managed-Service-Schicht im Seed + „Services"-Ansicht mit Portfolio; 4 unabhängige Reviews + Browser-QA  
+**Stand:** WP-013 **fertig** (ISMS-Kern-Welt); WP-012 — erste rollenbezogene Erlebniswelt (Consulting & Service World): Managed-Service-Schicht im Seed + „Services"-Ansicht mit Portfolio; 4 unabhängige Reviews + Browser-QA  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** WP-012 (**Done**); nächstes: **WP-013 ISMS-Kern-Welt** (Entwurf bereit)  
+**Aktives Work Package:** **WP-015 Visual Design Uplift** (Owner-Feedback); danach WP-014 (Objekt-360)  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Minimales, lauffähiges Monorepo-Grundgerüst; noch keine Produktfeatures  

@@ -100,14 +100,14 @@ export function ServiceCard({ view }: { view: ManagedServiceView }) {
       {slas.length > 0 ? (
         <ComponentItems items={slas} detailsLabel="SLA-Details anzeigen" />
       ) : (
-        <p className="sv-item-meta">Kein SLA im Demo-Seed hinterlegt.</p>
+        <p className="sv-item-meta">Kein SLA im Demo-Datenbestand hinterlegt.</p>
       )}
 
       <h4>Deliverables (prüfbare Ergebnisse)</h4>
       {deliverables.length > 0 ? (
         <ComponentItems items={deliverables} detailsLabel="Deliverable-Details anzeigen" />
       ) : (
-        <p className="sv-item-meta">Kein Deliverable im Demo-Seed hinterlegt.</p>
+        <p className="sv-item-meta">Kein Deliverable im Demo-Datenbestand hinterlegt.</p>
       )}
 
       {reviews.length > 0 ? (
@@ -120,7 +120,7 @@ export function ServiceCard({ view }: { view: ManagedServiceView }) {
       {covered.length > 0 ? (
         <>
           <h4>Im Serviceumfang (abgedeckte Risiken, Controls &amp; Nachweise)</h4>
-          <p className="sv-edge-note">Kante: {edgeNote('covered_by')}</p>
+          <p className="sv-edge-note">Beziehung: {edgeNote('covered_by')}</p>
           <ScopeItems items={covered} />
         </>
       ) : null}
@@ -128,7 +128,7 @@ export function ServiceCard({ view }: { view: ManagedServiceView }) {
       {required.length > 0 ? (
         <>
           <h4>Voraussetzungen</h4>
-          <p className="sv-edge-note">Kante: {edgeNote('requires')}</p>
+          <p className="sv-edge-note">Beziehung: {edgeNote('requires')}</p>
           <ScopeItems items={required} />
         </>
       ) : null}
@@ -137,7 +137,7 @@ export function ServiceCard({ view }: { view: ManagedServiceView }) {
         <>
           <h4>Wirkungsbeitrag (Ziele &amp; Kennzahlen)</h4>
           <p className="sv-edge-note">
-            Kante: {edgeNote('contributes_to')} – begründeter Beitrag ohne Garantie (Dok. 07 R20)
+            Beziehung: {edgeNote('contributes_to')} – begründeter Beitrag ohne Garantie
           </p>
           <ul className="sv-items">
             {contributions.map((c) => (
@@ -145,7 +145,7 @@ export function ServiceCard({ view }: { view: ManagedServiceView }) {
                 <span className="sv-item-name">{c.target_name}</span>
                 <span className="sv-item-meta">
                   {' '}
-                  · {contributionTargetLabel(c.target_type)} · Assertion-Art: {c.assertion_kind}
+                  · {contributionTargetLabel(c.target_type)} · Herkunft der Aussage: {c.assertion_kind}
                   {c.confidence_display ? ` · Vertrauensgrad: ${c.confidence_display}` : ''}
                 </span>
                 {c.effectiveness_assumption ? (
