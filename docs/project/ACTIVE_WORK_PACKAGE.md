@@ -3,13 +3,13 @@
 - **ID:** WP-003
 - **Titel:** Kanonische Datenverträge & synthetische Demo-Seed-Grundlage
 - **Datei:** `work-packages/WP-003_KANONISCHE_DATENVERTRAEGE_UND_DEMO_SEED.md`
-- **Context Pack:** `context-packs/WP-003/CONTEXT_PACK.md`
+- **Status:** **Done** (Slices 1–3) — `@isms/contracts` + `@isms/demo-seed`, zwei unabhängige Reviews je Slice, 79 Tests grün
 - **Führende Quelle:** Dokument 07 (Digitaler Unternehmenszwilling & Informationsgraph)
-- **Status:** Active — **Slice 1 done** (`@isms/contracts`, unabhängig reviewt, 55 Tests grün); nächstes **Slice 2**
-- **Owner:** CTO-/Architecture-Agent (Orchestrator)
-- **Builder:** Data-Graph-Analytics-Agent
-- **Reviewer:** Code-Reviewer + Concept-Consistency-Reviewer (read-only, dokumentiert in `docs/project/reviews/`)
-- **Human Gates:** keiner blockierend; offen: O-D07-02/03 (Lifecycle-Konzeptwidersprüche, Concept Author)
-- **Slice 2:** synthetische Demo-Seed-Grundlage (4 Demo-Mandanten + kohärenter Objektgraph für einen Mandanten + Seed-Manifest + Integritäts-/Tenant-Isolationstests), weiterhin ohne DB/ORM.
+- **Reviews:** `docs/project/reviews/WP-003_SLICE1_INDEPENDENT_REVIEW.md`, `…SLICE2…`
+- **Human Gates:** offen (nicht blockierend): O-D07-02/03 (Lifecycle-Konzeptwidersprüche, Concept Author)
+- **Nächstes (Kandidaten, Entscheidung offen):**
+  - **WP-004a (empfohlen):** read-only „Digital Twin Explorer"-Ansicht in `apps/web`, die den Demo-Seed rendert (Tenants + Nordwerk-Graph). Kein DB/Docker, sichtbarer Fortschritt.
+  - **WP-004b:** Persistenz-WP (PostgreSQL) — benötigt Docker-/ORM-Entscheidung (Human Gate).
+  - **WP-004c:** App-Shell/Login/Rollenwechsel/Mandantenkontext (Phase 1, Dok. 06).
 
-> Abgeschlossen: WP-001 (Phase-0-Baseline) und WP-002 (Stack-ADR-0001 + lauffähiges Grundgerüst).
+> Abgeschlossen: WP-001 (Phase-0-Baseline), WP-002 (Stack-ADR-0001 + Grundgerüst), WP-003 (Datenverträge + Demo-Seed).

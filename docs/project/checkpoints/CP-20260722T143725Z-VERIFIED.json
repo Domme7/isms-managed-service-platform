@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T143725Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-003",
+  "timestamp_utc": "2026-07-22T14:37:25.668396+00:00",
+  "summary": "WP-003 DONE: @isms/contracts + @isms/demo-seed (17 Objekte/15 Beziehungen, 4 Mandanten), streng aus Dok. 07. Je Slice zwei unabhaengige Reviews (KONZEPTTREU / Freigabe), Minor-Fixes umgesetzt, 79 Tests gruen monorepo-weit.",
+  "branch": "main",
+  "commit": "f6275db",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CURRENT_STATE.md\n M docs/project/WORK_QUEUE.md\n M pnpm-lock.yaml\n M turbo.json\n?? docs/project/reviews/WP-003_SLICE2_INDEPENDENT_REVIEW.md\n?? packages/demo-seed/",
+  "tests": "frisch: contracts 55 + demo-seed 24 = 79; pnpm build 4/4, typecheck 5/5; validate OK; 6/6 repo tests",
+  "exact_next_step": "WP-004 Entscheidung: (a) read-only Digital Twin Explorer in apps/web (empfohlen, kein DB), (b) Persistenz-WP (Docker/ORM Human Gate), (c) App-Shell/Login/Tenant (Dok. 06)."
+}

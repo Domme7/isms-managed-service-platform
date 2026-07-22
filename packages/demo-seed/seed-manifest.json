@@ -1,0 +1,41 @@
+{
+  "seed_version": "1.0.0",
+  "generated_by": "@isms/demo-seed",
+  "deterministic": true,
+  "reset_hint": "Reine In-Memory-/Datei-Fixture ohne Datenbank. 'Reset' = erneuter Import von DEMO_SEED (packages/demo-seed/src/seed.ts). Alle object_id/relationship_id/tenant_id sowie valid_time/record_time sind fest kodiert (kein Date.now(), kein Zufall) -> jeder Lauf ist identisch.",
+  "synthetic_data_notice": "Alle Inhalte sind frei erfunden und synthetisch (Demo-Datenregel). Keine realen Unternehmen, Personen, Preise oder internen Templates. Struktur/Vokabular strikt aus Dok. 07 v1.0 via @isms/contracts.",
+  "structure_source": {
+    "concept_doc": "docs/concept/active/07_DIGITALER_UNTERNEHMENSZWILLING_INFORMATIONSGRAPH_v1.0.md",
+    "contract_package": "@isms/contracts",
+    "object_families": "F01-F09 (Dok. 07 Abschnitt 6)",
+    "relationship_types": "R01-R25 (Dok. 07 Abschnitt 9)"
+  },
+  "tenants": [
+    { "tenant_id": "tenant-nordwerk", "display_name": "Nordwerk Manufacturing SE", "has_object_graph": true },
+    { "tenant_id": "tenant-finovia", "display_name": "Finovia Digital Bank AG", "has_object_graph": false },
+    { "tenant_id": "tenant-medicore", "display_name": "MediCore Health Services GmbH", "has_object_graph": false },
+    { "tenant_id": "tenant-consulting-operator", "display_name": "Consulting Operator Demo", "has_object_graph": false }
+  ],
+  "counts": {
+    "tenants": 4,
+    "objects": 17,
+    "relationships": 15
+  },
+  "object_families_used": ["F01", "F02", "F03", "F06", "F07", "F08"],
+  "relationship_types_used": [
+    "part_of",
+    "owns",
+    "processes",
+    "exposes",
+    "threatens",
+    "affects",
+    "mitigates",
+    "implements",
+    "satisfies",
+    "evidences",
+    "remediates"
+  ],
+  "nordwerk_chain": "Geschäftsprozess Auftragsabwicklung --processes--> Information Asset Kundenauftragsdaten; Weakness ERP-Schnittstelle --exposes--> Asset; Threat Ransomware --threatens--> Risk Scenario/Asset; Risk Betriebsunterbrechung --affects--> Prozess/Asset; Control Backup & Recovery --mitigates--> Risk; Control Implementation --implements--> Control; Control --satisfies--> Requirement A.8.13; Evidence Restore-Test --evidences--> Control; Measure Patch-Management --remediates--> Weakness / --mitigates--> Risk Scenario.",
+  "storyline": "Nordwerk Manufacturing SE (synthetischer Fertigungskonzern) betreibt in 'Werk Nord - Produktion' den Kernprozess 'Auftragsabwicklung', der die 'Kundenauftragsdaten' verarbeitet. Eine ungepatchte ERP-Integrationsschnittstelle exponiert diese Daten; eine Ransomware-Bedrohung droht sie zu verschluesseln. Daraus entsteht das Risiko einer Betriebsunterbrechung. Ein Backup-&-Recovery-Control (lokal umgesetzt als Backup-Job, erfuellt Requirement A.8.13) mindert das Risiko; ein Restore-Test-Protokoll belegt seine Wirksamkeit. Eine Patch-Management-Massnahme behandelt die Schwaeche und mindert das Szenario.",
+  "notes": "counts werden durch packages/demo-seed/src/seed.spec.ts gegen DEMO_SEED verifiziert (Manifest-Konsistenz)."
+}

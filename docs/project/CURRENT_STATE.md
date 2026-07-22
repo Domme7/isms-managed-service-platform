@@ -1,8 +1,8 @@
 # Current State
 
-**Stand:** WP-003 Slice 1 abgeschlossen — kanonische Datenverträge `@isms/contracts` aus Dok. 07  
+**Stand:** WP-003 abgeschlossen — Datenverträge `@isms/contracts` + synthetische Demo-Seed `@isms/demo-seed`  
 **Phase:** 1 (Demo Foundation)  
-**Aktives Work Package:** WP-003 (Slice 1 done, Slice 2 offen)  
+**Aktives Work Package:** WP-003 (**Done**); nächstes WP-004 (Kandidaten, Entscheidung offen)  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Minimales, lauffähiges Monorepo-Grundgerüst; noch keine Produktfeatures  
@@ -16,7 +16,8 @@
 - **Vitest-Smoke-Test grün; typecheck + build für beide Apps grün; App-CI auf GitHub**,
 - Continuity-Tooling, Checkpoints, Handover, unabhängige QA-/Security-Review (WP-001),
 - **`docs/project/PROJECT_UNDERSTANDING.md`** — destilliertes Gesamtverständnis aus allen 24 Konzeptdokumenten (schneller Einstieg für neue Sessions; nicht autoritativ),
-- **`@isms/contracts`** (WP-003 Slice 1): kanonischer Objekt-/Beziehungsvertrag (F01–F09 / R01–R25) aus Dok. 07, Zod-Schemas, **55 Tests grün**; zwei unabhängige Reviews (KONZEPTTREU / Freigabe mit Minor-Fixes), `PROVENANCE.md` + offene Fragen O-D07-01…11.
+- **`@isms/contracts`** (WP-003 Slice 1): kanonischer Objekt-/Beziehungsvertrag (F01–F09 / R01–R25) aus Dok. 07, Zod-Schemas, **55 Tests**; zwei unabhängige Reviews (KONZEPTTREU / Freigabe mit Minor-Fixes), `PROVENANCE.md` + offene Fragen O-D07-01…11,
+- **`@isms/demo-seed`** (WP-003 Slice 2): 4 synthetische Demo-Mandanten + kohärenter Nordwerk-Objektgraph (17 Objekte / 15 Beziehungen), validiert gegen die Contracts, **24 Tests** mit Negativbeweisen für Tenant-Isolation, referenzielle Integrität, Owner-Refs; Seed-Manifest + Storyline; zwei unabhängige Reviews (KONZEPTTREU / Freigabe). **Monorepo gesamt: 79 Tests grün.**
 
 ## Verifikations-Evidence (WP-002)
 
@@ -39,7 +40,9 @@
 
 ## Exact Next Step
 
-**WP-003 Slice 2:** synthetische Demo-Seed-Grundlage — vier Demo-Mandanten (Nordwerk, Finovia, MediCore,
-Consulting Operator Demo) + kohärenter Objektgraph für einen Mandanten + Seed-Manifest, mit Tests für
-stabile IDs, Tenant-Isolation und referenzielle Integrität. Weiterhin **ohne DB/ORM**. Danach Slice 3
-(Abschluss/Review). Keine realen Daten. Weiterhin Checkpoints + Push ins private Backup.
+**WP-003 ist abgeschlossen.** Nächstes WP-004 — Entscheidung offen zwischen:
+- **WP-004a (empfohlen):** read-only „Digital Twin Explorer" in `apps/web`, der den Demo-Seed rendert
+  (Tenants + Nordwerk-Graph) — kein DB/Docker, sofort sichtbarer Fortschritt im Browser;
+- **WP-004b:** Persistenz-WP (PostgreSQL) — benötigt Docker-/ORM-Entscheidung (Human Gate);
+- **WP-004c:** App-Shell/Login/Rollenwechsel/Mandantenkontext (Phase 1, Dok. 06).
+Weiterhin ohne stille Stack-/Kostenbindung; Checkpoints + Push ins private Backup.
