@@ -14,7 +14,7 @@
  */
 import Link from 'next/link';
 import { confidenceQualitative, type ResolvedRelationship } from '../../lib/twin/data';
-import { objectDetailHref } from '../../lib/twin/object-detail';
+import { objectDetailHref } from '../../lib/twin/routes';
 
 /** Ein Endpunkt der Kette: Link auf die Detailseite, sofern das Objekt aufgelöst werden konnte. */
 function EndpointNode({

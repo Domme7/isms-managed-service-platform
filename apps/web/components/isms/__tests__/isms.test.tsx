@@ -14,9 +14,10 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { DEMO_SEED, DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
 import { IsmsContent } from '../IsmsContent';
+import { MeasureCard } from '../IsmsCards';
 import { IsmsView } from '../IsmsView';
 import { SessionProvider } from '../../shell/SessionProvider';
-import { buildIsmsCoreView } from '../../../lib/isms/data';
+import { buildIsmsCoreView, type IsmsLink, type MeasureView } from '../../../lib/isms/data';
 import { objectDetailHref } from '../../../lib/twin/object-detail';
 
 function tenant(tenantId: string): DemoTenant {
@@ -51,7 +52,7 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
 
     // Risiko mit Status als Text (nie nur Farbe, Dok. 06 06-D11).
     const riskCard = cardByHeading('Betriebsunterbrechung Auftragsabwicklung');
-    expect(within(riskCard).getByText('Risiko (Risk) · Status: behandelt')).toBeInTheDocument();
+    expect(within(riskCard).getByText('Risiko (Risk) · Lebenszyklus-Stand: behandelt')).toBeInTheDocument();
     // Betroffenheit über die reale affects-Kante mit deutschem Label.
     expect(within(riskCard).getByText(/betrifft \(affects\)/)).toBeInTheDocument();
     expect(within(riskCard).getByText('Auftragsabwicklung')).toBeInTheDocument();
@@ -85,7 +86,8 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
 
     // … und der Implementierungsstatus getrennt an der Implementation-Zeile.
     const impl = within(controlCard).getByText('Backup-Job Werk Nord (ERP)');
-    expect(impl.parentElement?.textContent).toMatch(/Status: implementiert/);
+    // Wortlaut identisch zur Objekt-360-Seite (Review-Fix): „Lebenszyklus-Stand", nicht „Status".
+    expect(impl.parentElement?.textContent).toMatch(/Lebenszyklus-Stand: implementiert/);
     // Die Implementation-Zeile behauptet KEINE Wirksamkeit.
     expect(impl.parentElement?.textContent).not.toMatch(/wirksam/);
 
@@ -95,9 +97,10 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
       /Framework: ISO\/IEC 27001:2022 \(Demo-Katalog\)/,
     );
 
-    // Evidence-Stand mit Kantenstatus (evidences).
+    // Evidence-Stand mit Kantenstatus (evidences) – wortgleich zur Objekt-360-Seite.
     const evidenceItem = within(controlCard).getByText('Restore-Test-Protokoll Q2/2026');
-    expect(evidenceItem.parentElement?.textContent).toMatch(/Prüfstand der Beziehung: geprüft/);
+    expect(evidenceItem.parentElement?.textContent).toMatch(/Status der Beziehung: geprüft/);
+    expect(controlCard.textContent).not.toContain('Prüfstand der Beziehung');
   });
 
   it('zeigt Maßnahmen- und Nachweis-Karte mit Status und Bezug', () => {
@@ -105,13 +108,13 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
 
     const measureCard = cardByHeading('Härtung & Patch-Management ERP-Schnittstelle');
     expect(
-      within(measureCard).getByText('Maßnahme (Measure) · Status: in Arbeit'),
+      within(measureCard).getByText('Maßnahme (Measure) · Lebenszyklus-Stand: in Arbeit'),
     ).toBeInTheDocument();
     expect(within(measureCard).getByText(/behebt \(remediates\)/)).toBeInTheDocument();
 
     const evidenceCard = cardByHeading('Restore-Test-Protokoll Q2/2026');
     expect(
-      within(evidenceCard).getByText('Nachweis (Evidence) · Status: akzeptiert'),
+      within(evidenceCard).getByText('Nachweis (Evidence) · Lebenszyklus-Stand: akzeptiert'),
     ).toBeInTheDocument();
     expect(within(evidenceCard).getByText('Backup & Recovery Control')).toBeInTheDocument();
   });
@@ -185,6 +188,45 @@ describe('IsmsContent – Verlinkung auf die Objekt-360-Seite (WP-014 Slice 2)',
       expect(href.startsWith(prefix)).toBe(true);
       expect(nordwerkIds.has(href.slice(prefix.length))).toBe(true);
     }
+  });
+});
+
+/**
+ * Fail-loud an der Mandantengrenze (Sicherheits-Review): ein im Mandanten nicht auflösbarer
+ * Verweis darf NICHT verlinkt werden. Der Zweig ist mit dem echten Seed unerreichbar (keine
+ * Dangling-Kanten) und wird deshalb mit einer synthetischen, handgebauten Karte belegt –
+ * Muster `twin.test.tsx` (RelationshipList).
+ */
+describe('IsmsCards – nicht auflösbarer Verweis bleibt ohne Link', () => {
+  it('rendert die rohe Kennung als Text statt als Objektlink', () => {
+    const geisterlink: IsmsLink = {
+      relationship_id: 'test-dangling',
+      relationship_type: 'remediates',
+      object_id: 'geist-ziel',
+      name: 'geist-ziel',
+      object_type: 'unbekannt',
+      resolved: false,
+      assertion_kind: 'assertiert',
+    };
+    const view: MeasureView = {
+      measure: {
+        object_id: 'test-measure',
+        name: 'Synthetische Testmaßnahme',
+        object_type: 'Measure',
+        lifecycle_status: 'in Arbeit',
+        description: '',
+      },
+      remediates: [geisterlink],
+      mitigates: [],
+    };
+
+    const { container } = render(<MeasureCard view={view} tenantId={TENANT_ID.NORDWERK} />);
+
+    // Der Kartenkopf verlinkt weiterhin auf das eigene Objekt; der Geisterverweis nicht.
+    const hrefs = Array.from(container.querySelectorAll('a')).map((a) => a.getAttribute('href'));
+    expect(hrefs).toEqual([objectDetailHref(TENANT_ID.NORDWERK, 'test-measure')]);
+    expect(screen.getByText('geist-ziel')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'geist-ziel' })).not.toBeInTheDocument();
   });
 });
 

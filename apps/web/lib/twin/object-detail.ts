@@ -55,8 +55,10 @@ import {
   OBJECT_FAMILIES,
   type ObjectEnvelope,
   type ObjectFamilyId,
+  type ObjectType,
   type QualityDimensionAssessment,
   type RelationshipEnvelope,
+  type RelationshipType,
   type SourceRef,
 } from '@isms/contracts';
 import { DEMO_SEED, type DemoTenant } from '@isms/demo-seed';
@@ -105,7 +107,11 @@ export interface ObjectEdge {
   readonly assertion_kind: string;
   /** Qualitativ + Wert (z. B. „mittel (0,7)"), falls die Kante einen Vertrauensgrad trägt. */
   readonly confidence_display?: string;
-  /** Kantenstatus aus dem Seed (z. B. „geprüft"); wertoffen laut Contract. */
+  /**
+   * Kantenstatus aus dem Seed (z. B. „geprüft", „im Serviceumfang", „Voraussetzung erfüllt");
+   * wertoffen laut Contract. Die UI beschriftet ihn deshalb neutral als „Status der Beziehung" –
+   * nicht als „Prüfstand", weil der Wert im Seed keine Prüfaussage sein muss (Review-Fix).
+   */
   readonly edge_status?: string;
   /** Fachliche Gültigkeit der Kante (getrennt von der Systemerfassung). */
   readonly valid_from: string;
@@ -161,6 +167,10 @@ export interface ObjectIdentity {
  * (Dok. 07 §9): R10 affects, R09 threatens, R08 exposes, R12 mitigates, R20 contributes_to,
  * R19 requires. Beide Richtungen werden berücksichtigt, da die Kantenrichtung der Semantik des
  * Typs folgt, nicht der Leserichtung.
+ *
+ * `satisfies readonly RelationshipType[]` koppelt die Liste hart an das kanonische Vokabular
+ * (`packages/contracts/src/vocabularies.ts`): ein Tippfehler bricht den Typecheck, statt die
+ * Filterung still leerlaufen zu lassen (Review-Fix).
  */
 export const IMPORTANCE_EDGE_TYPES = [
   'affects',
@@ -169,7 +179,7 @@ export const IMPORTANCE_EDGE_TYPES = [
   'mitigates',
   'contributes_to',
   'requires',
-] as const;
+] as const satisfies readonly RelationshipType[];
 
 export interface ObjectImportance {
   readonly confidentiality?: string;
@@ -239,8 +249,50 @@ export interface ObjectEvolution {
 /**
  * Art der Beobachtung. Es sind ausschließlich BELEGTE Verweise (bzw. eine belegbare
  * Nicht-Existenz) – bewusst keine Empfehlung, kein Vorschlag, keine Priorisierung.
+ *
+ * `service` und `deckung` sind dieselbe Kante (R22 covered_by) aus den beiden möglichen
+ * Blickrichtungen: `service` = dieses Objekt liegt im Umfang eines Managed Service (ausgehend),
+ * `deckung` = dieses Objekt deckt ein anderes Objekt im Serviceumfang ab (eingehend). Ohne die
+ * zweite Richtung blieben die Serviceseiten hier leer, obwohl der Seed die Kanten trägt
+ * (Review-Fix). Beides ist eine Seed-Aussage, kein Angebot.
  */
-export type NextObservationKind = 'massnahme' | 'service' | 'nachweis' | 'ohne_nachweis';
+export type NextObservationKind =
+  | 'massnahme'
+  | 'service'
+  | 'deckung'
+  | 'nachweis'
+  | 'ohne_nachweis';
+
+/**
+ * Objekttypen, die laut Dok. 07 §9 R15 überhaupt Ziel einer `evidences`-Kante sein können –
+ * nur für sie ist ein FEHLENDER Nachweisbezug eine belegbare Beobachtung. R15 lautet:
+ * „evidences | Evidence -> Control/Measure/Decision" (Dok. 07 §9 Zeile R15,
+ * `packages/contracts/src/vocabularies.ts` R15). Die kanonische Schreibweise der Typen stammt
+ * aus demselben Vokabular (F06 „Control", F08 „Measure", F09 „Decision Record").
+ *
+ * EHRLICHE EINORDNUNG (keine stille Auflösung, `.claude/rules/docs.md`): „Evidence ->
+ * Control/Measure/Decision" steht in Dok. 07 §9 in der BEISPIEL-Spalte, und das Projekt hat
+ * diese Spalte in WP-012 (OFFENE FRAGE O-WP012-06) bewusst als NICHT abschließend behandelt.
+ * Hier wird sie trotzdem als Einschränkung genutzt, weil die Alternative – die Beobachtung
+ * „Kein Nachweis verweist auf dieses Objekt." für JEDEN Objekttyp – eine Erwartung behauptet,
+ * die das Modell für Organisation, Rolle, SLA, KPI, Objective oder Managed Service nirgends
+ * belegt. Das ist eine reine, reversible ANZEIGE-Entscheidung: sie ändert weder Seed noch
+ * Contract und unterdrückt keinen belegten Nachweis (vorhandene `evidences`-Kanten werden
+ * unabhängig vom Objekttyp weiterhin als Beobachtung gezeigt).
+ *
+ * „Control Implementation" (F06) ist bewusst NICHT enthalten: R15 nennt „Control", und der
+ * eigene Objekttyp der Umsetzung wird hier nicht stillschweigend mitgemeint.
+ *
+ * `satisfies readonly ObjectType[]` koppelt die Liste hart an den Objekttyp-Katalog: eine
+ * abweichende Schreibweise bricht den Typecheck, statt die Beobachtung still abzuschalten
+ * (Review-Fix; „Decision Record" ist im Demo-Seed nicht materialisiert und wäre sonst von
+ * keinem Test gedeckt).
+ */
+export const EVIDENCE_TARGET_TYPES = [
+  'Control',
+  'Measure',
+  'Decision Record',
+] as const satisfies readonly ObjectType[];
 
 export interface NextObservation {
   readonly kind: NextObservationKind;
@@ -372,6 +424,7 @@ function buildIdentity(
 
 /** (5) Belegte Verweise als Beobachtung mit Quelle – ohne jede Empfehlung. */
 function buildNextObservations(
+  objectType: string,
   outgoing: readonly ObjectEdge[],
   incoming: readonly ObjectEdge[],
 ): NextObservation[] {
@@ -407,9 +460,31 @@ function buildNextObservations(
     });
   }
 
+  // Gegenrichtung derselben Kante (Review-Fix): dieses Objekt ist ZIEL einer covered_by-Kante,
+  // deckt also andere Objekte im Serviceumfang ab. Das ist die Regel-Blickrichtung jeder
+  // Managed-Service-Seite; ohne sie widerspräche „Was als Nächstes?" dem Abschnitt „Womit hängt
+  // es zusammen?" derselben Seite. Reine Seed-Aussage, kein Serviceangebot.
+  for (const edge of incoming) {
+    if (edge.relationship_type !== 'covered_by') continue;
+    observations.push({
+      kind: 'deckung',
+      relationship_id: edge.relationship_id,
+      relationship_type: edge.relationship_type,
+      object_id: edge.neighbor_id,
+      name: edge.neighbor_name,
+      object_type: edge.neighbor_type,
+      lifecycle_status: edge.neighbor_lifecycle_status,
+    });
+  }
+
   // Nachweisbezug (R15 evidences, Evidence -> dieses Objekt). Fehlt er, ist die Abwesenheit
   // selbst die belegte Beobachtung – sie wird benannt und nicht still weggelassen.
+  // ABER nur bei Objekttypen, die laut R15 überhaupt Ziel einer Nachweiskante sein können
+  // (siehe EVIDENCE_TARGET_TYPES): für eine Organisation, eine Rolle, ein SLA oder eine
+  // Kennzahl sieht das Modell keinen Nachweisbezug vor – dort wäre „kein Nachweis" eine
+  // erfundene Erwartung statt einer Beobachtung.
   const evidenceEdges = incoming.filter((edge) => edge.relationship_type === 'evidences');
+  const evidenceTargetTypes: readonly string[] = EVIDENCE_TARGET_TYPES;
   if (evidenceEdges.length > 0) {
     for (const edge of evidenceEdges) {
       observations.push({
@@ -422,7 +497,7 @@ function buildNextObservations(
         lifecycle_status: edge.neighbor_lifecycle_status,
       });
     }
-  } else {
+  } else if (evidenceTargetTypes.includes(objectType)) {
     observations.push({ kind: 'ohne_nachweis' });
   }
 
@@ -441,8 +516,11 @@ export function buildObjectDetail(
   const tenant = getTenant(tenantId);
   if (!tenant) return undefined;
 
+  // Genau EINE Suchimplementierung (Review-Fix): `getObjectForTenant` ist die Stelle, an der
+  // die Mandantengrenze für ein einzelnes Objekt gezogen wird. Die vollständige Objektliste
+  // wird ohnehin für die Nachbar-Auflösung (`byId`) gebraucht.
   const objects = getObjectsForTenant(tenantId);
-  const object = objects.find((o) => o.object_id === objectId);
+  const object = getObjectForTenant(tenantId, objectId);
   if (!object) return undefined;
 
   const byId = new Map(objects.map((o) => [o.object_id, o] as const));
@@ -505,7 +583,7 @@ export function buildObjectDetail(
           supersededBy.length > 0,
       },
     },
-    next_observations: buildNextObservations(outgoing, incoming),
+    next_observations: buildNextObservations(object.object_type, outgoing, incoming),
   };
 }
 
@@ -514,29 +592,10 @@ export function buildObjectDetail(
  * --------------------------------------------------------------------------- */
 
 /**
- * Pfad der Objekt-360-Detailseite. EINZIGE Stelle, an der die Route gebildet wird (WP-014
- * Slice 2) – Twin-Explorer, ISMS- und Services-Ansicht verlinken über diesen Helfer.
- *
- * Der Mandant ist Pflichtparameter und muss IMMER der Mandant des verlinkten Objekts sein:
- * bei der Twin-Route aus dem Routenparameter, bei den session-gebundenen Ansichten aus dem
- * aktiven Mandanten der Session (WP-011). Ein Link über die Mandantengrenze ist verboten
- * (Dok. 07 §17/P09) und würde auf der Zielseite ohnehin als 404 enden, weil
- * `buildObjectDetail` mandantenfremde Objekte als nicht existent behandelt.
+ * `objectDetailHref` und `formatIsoDateDe` wohnen in `lib/twin/routes.ts` – bewusst in einem
+ * SEED-FREIEN Modul, damit Client-Komponenten sie nutzen können, ohne den statischen
+ * `DEMO_SEED`-Import dieses Moduls (alle Mandanten) in ihren Bundle-Graphen zu ziehen
+ * (Review-Fix). Hier bleibt der Re-Export, damit Route, View-Modell und Tests unverändert
+ * eine Importstelle haben.
  */
-export function objectDetailHref(tenantId: string, objectId: string): string {
-  return `/twin/${tenantId}/objekt/${objectId}`;
-}
-
-/**
- * ISO-8601-Zeitstempel als deutsches Datum („15.01.2026"), bewusst in UTC gerechnet, damit
- * Anzeige, Tests und Build zeitzonenunabhängig identisch sind. Der exakte Zeitpunkt bleibt in
- * der Anzeige über das `dateTime`-Attribut erhalten; ein unlesbarer Wert wird fail-loud roh
- * durchgereicht statt still ersetzt.
- */
-export function formatIsoDateDe(iso: string): string {
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return iso;
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  return `${day}.${month}.${date.getUTCFullYear()}`;
-}
+export { formatIsoDateDe, objectDetailHref } from './routes';

@@ -19,8 +19,12 @@
  * niemals ein fremder Mandant (Dok. 07 §17/P09). Nicht auflösbare Endpunkte bleiben ohne Link.
  */
 import Link from 'next/link';
-import { relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
-import { objectDetailHref } from '../../lib/twin/object-detail';
+import { objectTypeDisplay, relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
+// `lib/twin/routes.ts` ist seed-frei und wird hier präventiv genutzt: diese Datei landet über
+// `ServicesView` im Client-Bundle. Ein Schutz ist das heute NICHT – der DEMO_SEED liegt über
+// `lib/twin/data.ts` bzw. `lib/services/data.ts` ohnehin im Client-Graphen (offene Frage
+// O-WP014-09); die Auslagerung vermeidet lediglich eine weitere Seed-Kante.
+import { objectDetailHref } from '../../lib/twin/routes';
 import type {
   ManagedServiceView,
   ServiceComponentItem,
@@ -34,11 +38,13 @@ function edgeNote(type: string): string {
   return `${id ? `${id} · ` : ''}${label} (${type})`;
 }
 
-/** Deutsches Klartext-Label des Zieltyps eines Wirkungsbeitrags (Typ sekundär). */
+/**
+ * Deutsches Klartext-Label des Zieltyps eines Wirkungsbeitrags (Typ sekundär).
+ * Die Glossen („Ziel (Objective)", „Kennzahl (KPI)") stehen seit dem Review-Fix in
+ * `lib/twin/data.ts` – EINE Quelle für alle Ansichten; die Ausgabe bleibt unverändert.
+ */
 function contributionTargetLabel(targetType: string): string {
-  if (targetType === 'Objective') return 'Ziel (Objective)';
-  if (targetType === 'KPI') return 'Kennzahl (KPI)';
-  return targetType;
+  return objectTypeDisplay(targetType);
 }
 
 /**
@@ -85,7 +91,9 @@ function ComponentItems({
             name={item.name}
             resolved={item.resolved}
           />
-          <span className="sv-item-meta"> · Status: {item.lifecycle_status}</span>
+          {/* „Lebenszyklus-Stand" statt „Status": derselbe Wortlaut wie auf der Objekt-360-Seite
+              und in der ISMS-Ansicht – ein Lebenszyklus-Stand ist kein Prüfergebnis (Dok. 08 08-D07). */}
+          <span className="sv-item-meta"> · Lebenszyklus-Stand: {item.lifecycle_status}</span>
           {item.description ? (
             <details className="sv-details">
               <summary>{detailsLabel}</summary>
@@ -109,10 +117,12 @@ function ScopeItems({ items, tenantId }: { items: readonly ServiceScopeItem[]; t
             name={item.name}
             resolved={item.resolved}
           />
+          {/* Der Kantenstatus wird beschriftet: unbeschriftet las sich „· Voraussetzung erfüllt"
+              wie ein Prüfergebnis, obwohl es ein Feld der Beziehung ist (Review-Fix WP-014). */}
           <span className="sv-item-meta">
             {' '}
             · {item.object_type}
-            {item.edge_status ? ` · ${item.edge_status}` : ''}
+            {item.edge_status ? ` · Status der Beziehung: ${item.edge_status}` : ''}
           </span>
         </li>
       ))}
@@ -130,7 +140,7 @@ export function ServiceCard({ view, tenantId }: { view: ManagedServiceView; tena
         <Link href={objectDetailHref(tenantId, service.object_id)}>{service.display_name}</Link>
       </h3>
       <p className="tw-card-sub">
-        Managed Service · Status: {service.lifecycle_status}
+        Managed Service · Lebenszyklus-Stand: {service.lifecycle_status}
         {delivery_team_names.length > 0 ? (
           <>
             {' '}

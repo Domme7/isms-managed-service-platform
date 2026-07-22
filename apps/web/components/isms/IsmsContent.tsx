@@ -47,13 +47,17 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
         gezeigt; Implementierungs- und Wirksamkeitsaussagen bleiben strikt getrennt, ohne
         Scoring, Ampeln oder Reifegrade.
       </p>
-      {/* UX-Review MAJOR-1 (seitenweite Rahmung): jede sichtbare Status-Angabe ist ein
-          Lebenszyklus-Stand des Objekts, kein Prüf-/Auditergebnis – gilt auch für Status in
-          Verweis-Zeilen, nicht nur an den Kartenköpfen. */}
+      {/* UX-Review MAJOR-1 (seitenweite Rahmung): jede sichtbare OBJEKT-Status-Angabe ist ein
+          Lebenszyklus-Stand, kein Prüf-/Auditergebnis – gilt auch für Status in Verweis-Zeilen,
+          nicht nur an den Kartenköpfen. Der „Status der Beziehung" (Kantenstatus, z. B. „geprüft"
+          am Nachweisbezug) ist davon ausgenommen: er ist ein Feld der Kante und darf laut
+          Dok. 07 §9 R15 einen Prüfstatus tragen (Review-Fix, wortgleich mit `ObjectDetailView`). */}
       <p className="tw-muted">
-        <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben sind
-        Lebenszyklus-Stände der Objekte aus dem Demo-Datenbestand – <strong>keine
-        Prüfergebnisse</strong> und keine bewertete Wirksamkeit.
+        <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
+        Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
+        keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
+        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt
+        für einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
       </p>
 
       {view.isEmpty ? (

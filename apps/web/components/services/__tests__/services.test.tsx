@@ -15,12 +15,15 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { DEMO_SEED, TENANT_ID } from '@isms/demo-seed';
 import { ServicesContent } from '../ServicesContent';
+import { ServiceCard } from '../ServiceCard';
 import { ServicesView } from '../ServicesView';
 import { SessionProvider } from '../../shell/SessionProvider';
 import { resolveSession, type ResolvedSession } from '../../../lib/shell/session';
 import {
   buildPortfolioOverview,
   getManagedServicesForTenant,
+  type ManagedServiceView,
+  type ServiceScopeItem,
 } from '../../../lib/services/data';
 import { objectDetailHref } from '../../../lib/twin/object-detail';
 
@@ -58,7 +61,7 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
 
     // Deliverable im Entwurf: Status als Text, nie nur Farbe (Dok. 06 06-D11).
     const draft = screen.getByText('Management-Report Q2/2026 (Entwurf, synthetisch)');
-    expect(draft.parentElement?.textContent).toMatch(/Status: Entwurf/);
+    expect(draft.parentElement?.textContent).toMatch(/Lebenszyklus-Stand: Entwurf/);
 
     // Wirkungsbeitrag qualitativ statt nackter Zahl (Dok. 06 P04; Muster aus dem Twin).
     expect(screen.getAllByText(/Vertrauensgrad: hoch \(0,8\)/).length).toBeGreaterThanOrEqual(1);
@@ -97,6 +100,43 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
  * Session-Simulation; in der Portfolio-Sicht immer der Mandant der jeweiligen Zeile – niemals
  * ein fremder Mandant (Dok. 07 §17/P09).
  */
+/**
+ * Fail-loud an der Mandantengrenze (Sicherheits-Review): ein im Mandanten nicht auflösbarer
+ * Endpunkt darf NICHT verlinkt werden. Der Zweig ist mit dem echten Seed unerreichbar (keine
+ * Dangling-Kanten) und wird deshalb mit einem synthetisch überschriebenen Serviceumfang belegt –
+ * Muster `twin.test.tsx` (RelationshipList).
+ */
+describe('ServiceCard – nicht auflösbarer Endpunkt bleibt ohne Link', () => {
+  it('rendert die rohe Kennung als Text statt als Objektlink', () => {
+    const basis = getManagedServicesForTenant(TENANT_ID.NORDWERK)[0];
+    expect(basis).toBeDefined();
+
+    const geisterobjekt: ServiceScopeItem = {
+      object_id: 'geist-ziel',
+      name: 'geist-ziel',
+      object_type: 'unbekannt',
+      resolved: false,
+    };
+    const view: ManagedServiceView = {
+      ...basis,
+      slas: [],
+      deliverables: [],
+      reviews: [],
+      covered: [geisterobjekt],
+      required: [],
+      contributions: [],
+    };
+
+    const { container } = render(<ServiceCard view={view} tenantId={TENANT_ID.NORDWERK} />);
+
+    // Der Servicekopf verlinkt weiterhin auf sein eigenes Objekt; der Geisterverweis nicht.
+    const hrefs = Array.from(container.querySelectorAll('a')).map((a) => a.getAttribute('href'));
+    expect(hrefs).toEqual([objectDetailHref(TENANT_ID.NORDWERK, basis.service.object_id)]);
+    expect(screen.getByText('geist-ziel')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'geist-ziel' })).not.toBeInTheDocument();
+  });
+});
+
 describe('ServicesContent – Verlinkung auf die Objekt-360-Seite (WP-014 Slice 2)', () => {
   it('verlinkt Servicekopf, Komponenten, Serviceumfang und Wirkungsbeitrag', () => {
     const { role, tenant } = session('R08', TENANT_ID.NORDWERK);

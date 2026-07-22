@@ -10,7 +10,15 @@
  * benannt (fehlende Versionshistorie, nicht auflösbare Scope-Referenz, fehlender Nachweis).
  *
  * Heading-Hierarchie: h1 (Objektname) > h2 (je Frage) > h3 (Block innerhalb einer Frage).
- * Status steht immer als Text, nie nur als Farbe (Dok. 06 06-D11).
+ * Status steht immer als Text, nie nur als Farbe (Dok. 06 06-D11): der OBJEKT-Status ist gerahmt
+ * als Lebenszyklus-Stand (kein Prüfergebnis), der Status einer BEZIEHUNG ist ein Feld der Kante
+ * und kann laut Dok. 07 §9 R15 auch ein Prüfstatus sein (Rahmungssatz wortgleich mit
+ * `IsmsContent`).
+ *
+ * Jede Frage gibt eine eigene Antwort: Frage 2 zeigt die Bezüge verdichtet (Label, Nachbar,
+ * Richtung) und verweist für Herkunft, Vertrauensgrad und Gültigkeit auf Frage 3; dort steht
+ * jede Kante genau einmal vollständig. Die Leserichtung folgt immer der Seed-Kante
+ * (Quelle —Typ→ Ziel), auch bei eingehenden Kanten.
  *
  * NICHT enthalten (WP-014 Nicht-Ziele): Score, Reifegrad, verdichteter Vertrauensindikator,
  * Empfehlung, Handlungsvorschlag, Angebot, Graphvisualisierung, Schreibfunktion.
@@ -23,8 +31,8 @@ import type {
   ResolvedOwner,
   ResolvedScope,
 } from '../../lib/twin/object-detail';
-import { formatIsoDateDe, objectDetailHref } from '../../lib/twin/object-detail';
-import { relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
+import { formatIsoDateDe, objectDetailHref } from '../../lib/twin/routes';
+import { objectTypeDisplay, relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
 
 /* -----------------------------------------------------------------------------
  * Kleine Formathelfer (Klartext vor Fachsprache, Dok. 06 P03/P04)
@@ -46,41 +54,82 @@ function DateValue({ iso }: { iso: string }) {
  * Kantenliste (Frage 2 und Frage 3)
  * --------------------------------------------------------------------------- */
 
+/** Nachbarobjekt als Link – nicht auflösbarer Endpunkt bleibt bewusst reiner Text (Fail-loud). */
+function NeighborNode({ edge, tenantId }: { edge: ObjectEdge; tenantId: string }) {
+  if (!edge.neighbor_resolved) {
+    return <span className="tw-rel-node">{edge.neighbor_name}</span>;
+  }
+  return (
+    <Link className="tw-rel-node" href={objectDetailHref(tenantId, edge.neighbor_id)}>
+      {edge.neighbor_name}
+    </Link>
+  );
+}
+
+/**
+ * Die Kante als lesbare Kette in der RICHTUNG DER SEED-AUSSAGE (Muster `RelationshipList`:
+ * Quelle —Typ→ Ziel). Bei einer EINGEHENDEN Kante steht deshalb der Nachbar vorne und dieses
+ * Objekt hinten – sonst würde die Zeile die Aussage umkehren („R09 · bedroht → Ransomware"
+ * läse sich auf der Asset-Seite als „Asset bedroht den Angriff", also das Gegenteil der Kante).
+ */
+function EdgeLine({ edge, tenantId }: { edge: ObjectEdge; tenantId: string }) {
+  const label = edge.relationship_type_label ?? edge.relationship_type;
+  const primary = edge.relationship_type_id ? `${edge.relationship_type_id} · ${label}` : label;
+
+  return (
+    <div className="tw-rel-line">
+      {edge.orientation === 'eingehend' ? (
+        <>
+          <NeighborNode edge={edge} tenantId={tenantId} />
+          <span className="tw-rel-arrow" aria-hidden="true">
+            —
+          </span>
+          <span className="tw-rel-type">{primary}</span>
+          <span className="tw-rel-arrow" aria-hidden="true">
+            →
+          </span>
+          <span className="tw-rel-node">dieses Objekt</span>
+        </>
+      ) : (
+        <>
+          <span className="tw-rel-type">{primary}</span>
+          <span className="tw-rel-arrow" aria-hidden="true">
+            →
+          </span>
+          <NeighborNode edge={edge} tenantId={tenantId} />
+        </>
+      )}
+      <span className="tw-rel-tech">({edge.relationship_type})</span>
+    </div>
+  );
+}
+
 /**
  * Eine Kante mit allen von Dok. 07 §21 geforderten Angaben und einem Link auf die Detailseite
  * des Nachbarobjekts. Ist der Endpunkt im Mandanten nicht auflösbar, wird bewusst KEIN Link
  * gerendert, sondern die rohe ID mit Hinweis – ein Link würde eine Existenz behaupten, die
  * nicht belegt ist (Fail-loud statt stiller Lücke).
+ *
+ * „Lebenszyklus-Stand" statt „Status" und „Status der Beziehung" statt „Prüfstand der
+ * Beziehung": beides sind wertoffene Seed-Stände, keine Prüfergebnisse (Review-Fix, Muster
+ * `IsmsCards`/Dok. 08 §14.3). Ein fehlender Vertrauensgrad wird ausgeschrieben statt still
+ * weggelassen (Dok. 07 §21 „Datenlücken werden nicht still verborgen").
  */
 function EdgeItem({ edge, tenantId }: { edge: ObjectEdge; tenantId: string }) {
-  const label = edge.relationship_type_label ?? edge.relationship_type;
-  const primary = edge.relationship_type_id ? `${edge.relationship_type_id} · ${label}` : label;
-
   const meta = [
     `Richtung: ${edge.orientation} (${edge.direction})`,
-    `Objekttyp: ${edge.neighbor_type}`,
+    `Objekttyp: ${objectTypeDisplay(edge.neighbor_type)}`,
   ];
-  if (edge.neighbor_lifecycle_status) meta.push(`Status: ${edge.neighbor_lifecycle_status}`);
+  if (edge.neighbor_lifecycle_status) {
+    meta.push(`Lebenszyklus-Stand: ${edge.neighbor_lifecycle_status}`);
+  }
   meta.push(`Herkunft der Aussage: ${edge.assertion_kind}`);
-  if (edge.confidence_display) meta.push(`Vertrauensgrad: ${edge.confidence_display}`);
-  if (edge.edge_status) meta.push(`Prüfstand der Beziehung: ${edge.edge_status}`);
+  meta.push(`Vertrauensgrad: ${edge.confidence_display ?? 'nicht erfasst'}`);
+  if (edge.edge_status) meta.push(`Status der Beziehung: ${edge.edge_status}`);
 
   return (
     <li className="tw-rel-item">
-      <div className="tw-rel-line">
-        <span className="tw-rel-type">{primary}</span>
-        <span className="tw-rel-arrow" aria-hidden="true">
-          →
-        </span>
-        {edge.neighbor_resolved ? (
-          <Link className="tw-rel-node" href={objectDetailHref(tenantId, edge.neighbor_id)}>
-            {edge.neighbor_name}
-          </Link>
-        ) : (
-          <span className="tw-rel-node">{edge.neighbor_name}</span>
-        )}
-        <span className="tw-rel-tech">({edge.relationship_type})</span>
-      </div>
+      <EdgeLine edge={edge} tenantId={tenantId} />
       <div className="tw-rel-meta">
         {meta.join(' · ')}
         <br />
@@ -110,23 +159,66 @@ function EdgeItem({ edge, tenantId }: { edge: ObjectEdge; tenantId: string }) {
   );
 }
 
+/**
+ * Nächster Schritt im Leerzustand (Dok. 06 §17: Empty-Text nennt Nutzen UND einen Weg,
+ * Muster `TenantDetailView`/`IsmsContent`). Bewusst ein bereits bestehender Weg – die
+ * Mandantenseite zeigt alle modellierten Objekte und Beziehungen desselben Mandanten.
+ */
+function EmptyNext({ tenantId }: { tenantId: string }) {
+  return (
+    <>
+      {' Weiter zu '}
+      <Link href={`/twin/${tenantId}`}>
+        allen modellierten Objekten und Beziehungen dieses Mandanten
+      </Link>
+      .
+    </>
+  );
+}
+
+/**
+ * Kantenliste in zwei Ausprägungen (Review-Fix: vorher zwei zeichengleiche Komponenten):
+ *  - `voll` (Frage 3): jede Kante mit Metazeile, Gültigkeit und Hinweisen,
+ *  - `kompakt` (Frage 2): nur deutsches Label, Nachbarname als Link und Richtung. Frage 2 soll
+ *    eine eigene Antwort geben und nicht denselben Block wie Frage 3 ein zweites Mal in
+ *    identischer Tiefe zeigen; vollständig steht jede Kante genau einmal unter „Womit hängt es
+ *    zusammen?".
+ *
+ * Der React-Key trägt zusätzlich den Listenindex: eine Kollision ist mit `relationship_id` +
+ * `orientation` zwar nicht konstruierbar (eine Selbstbezugskante erzeugt zwei Einträge mit
+ * UNTERSCHIEDLICHER orientation), der Index härtet den Schlüssel aber ohne Umbau der Sortier-/
+ * Filterlogik ab (Review-Fix).
+ *
+ * Der Empty-Text erklärt die Lücke, wiederholt aber NICHT den Link auf die Mandantenseite – der
+ * steht bereits als Kopfzeile der Seite und stünde auf einer dünnen Seite sonst mehrfach
+ * identisch im Text (Review-Fix). Im Abschnitt „Was als Nächstes?" bleibt er.
+ */
 function EdgeList({
   edges,
   tenantId,
   emptyText,
+  variant = 'voll',
 }: {
   edges: readonly ObjectEdge[];
   tenantId: string;
   emptyText: string;
+  variant?: 'voll' | 'kompakt';
 }) {
   if (edges.length === 0) {
     return <p className="sv-item-meta">{emptyText}</p>;
   }
   return (
     <ul className="tw-rel-list">
-      {edges.map((edge) => (
-        <EdgeItem key={`${edge.relationship_id}-${edge.orientation}`} edge={edge} tenantId={tenantId} />
-      ))}
+      {edges.map((edge, index) => {
+        const key = `${edge.relationship_id}-${edge.orientation}-${index}`;
+        return variant === 'kompakt' ? (
+          <li className="tw-rel-item" key={key}>
+            <EdgeLine edge={edge} tenantId={tenantId} />
+          </li>
+        ) : (
+          <EdgeItem key={key} edge={edge} tenantId={tenantId} />
+        );
+      })}
     </ul>
   );
 }
@@ -141,8 +233,11 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
 
   return (
     <>
+      {/* Kein „Zurück": die Seite wird auch aus /isms und /services heraus betreten, dorthin
+          führt dieser Link nicht. Er benennt daher sein Ziel (Muster „← Alle Mandanten" in
+          `TenantDetailView`); das Ziel selbst bleibt unverändert. */}
       <Link className="tw-back" href={`/twin/${tenantId}`}>
-        ← Zurück zu {tenant.display_name}
+        ← Alle Objekte von {tenant.display_name}
       </Link>
 
       <p className="tw-eyebrow">Objekt-360 · Digitaler Zwilling</p>
@@ -152,6 +247,21 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
       <p className="tw-question">
         Was ist dieses Objekt, warum ist es wichtig, womit hängt es zusammen, wie entwickelt es
         sich – und was ist dazu im Demo-Datenbestand belegt?
+      </p>
+
+      {/* Seitenweite Rahmung (UX-Review MAJOR-1 aus WP-013): auch hier erscheinen Status-Werte
+          wie „wirksam" – an dieser Stelle sogar ungerahmt in jeder Kanten- und
+          Beobachtungszeile. Die Rahmung gilt ausdrücklich nur für den OBJEKT-Status; der Status
+          einer BEZIEHUNG ist ein eigenes Feld der Kante und kann laut Dok. 07 §9 R15
+          („Nachweisbezug mit Zeitraum und Prüfstatus") sehr wohl einen Prüfstatus tragen –
+          diese Unterscheidung würde ein pauschales „keine Prüfergebnisse" verschweigen
+          (Review-Fix). */}
+      <p className="tw-muted">
+        <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
+        Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
+        keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
+        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt
+        für einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
       </p>
 
       <ContextBar model={model} />
@@ -179,14 +289,16 @@ function ContextBar({ model }: { model: ObjectDetailModel }) {
   const { tenant, identity, evolution } = model;
 
   return (
-    <dl className="od-context" aria-label="Kontext dieser Objektseite">
+    /* `role="group"` (Review-Fix A11y): `dl` hat keine verlässliche implizite Rolle, ein
+       `aria-label` darauf wird von manchen Screenreadern ignoriert. */
+    <dl className="od-context" role="group" aria-label="Kontext dieser Objektseite">
       <div>
         <dt>Mandant</dt>
         <dd>{tenant.display_name}</dd>
       </div>
       <div>
         <dt>Objekttyp</dt>
-        <dd>{identity.object_type}</dd>
+        <dd>{objectTypeDisplay(identity.object_type)}</dd>
       </div>
       <div>
         <dt>Objektfamilie</dt>
@@ -223,7 +335,9 @@ function IdentitySection({ identity }: { identity: ObjectDetailModel['identity']
 
       <dl className="tw-meta">
         <dt>Objekttyp</dt>
-        <dd>{identity.object_type}</dd>
+        {/* Deutsche Glosse + kanonischer Typ (eine Quelle: `lib/twin/data.ts`), damit derselbe
+            Objekttyp hier genauso lesbar ist wie in der ISMS-Ansicht. */}
+        <dd>{objectTypeDisplay(identity.object_type)}</dd>
 
         <dt>Objektfamilie</dt>
         <dd>
@@ -351,30 +465,46 @@ function ImportanceSection({
   return (
     <section aria-labelledby="frage-warum-wichtig">
       <h2 id="frage-warum-wichtig">Warum ist es wichtig?</h2>
+
+      {/* Review-Fix: Frage 2 wiederholte bislang die Klassifikation aus Frage 1 als eigenen
+          Block und dieselben Kanten wie Frage 3 in identischer Detailtiefe. Die Klassifikation
+          steht jetzt in EINEM Satz mit Verweis auf „Was ist das?", die Bezüge verdichtet. */}
+      {/* Ohne belegte Klassifikation wäre die verdichtete Zeile eine Aneinanderreihung von
+          „nicht erfasst" – dann steht stattdessen ein klarer Satz (Review-Fix). */}
       <p className="sv-edge-note">
-        Gezeigt werden die erfasste Klassifikation und die belegten Bezüge zu Risiken und Zielen –
-        ohne Gewichtung, ohne Score und ohne Reifegrad. Eine darüber hinausgehende Kritikalität ist
-        im kanonischen Objektvertrag nicht erfasst und wird hier nicht abgeleitet.
+        {importance.has_classification ? (
+          <>
+            Erfasste Klassifikation (Details unter „Was ist das?"): Schutzbedarf{' '}
+            {importance.protection_need ?? 'nicht erfasst'}, Vertraulichkeit{' '}
+            {importance.confidentiality ?? 'nicht erfasst'} –{' '}
+          </>
+        ) : (
+          <>Im Demo-Datenbestand ist für dieses Objekt keine Klassifikation erfasst – </>
+        )}
+        ohne Gewichtung, ohne Score und ohne Reifegrad. Eine darüber hinausgehende Kritikalität
+        ist im kanonischen Objektvertrag nicht erfasst und wird hier nicht abgeleitet.
       </p>
 
-      <dl className="tw-meta">
-        <dt>Schutzbedarf</dt>
-        <dd>{importance.protection_need ?? 'nicht erfasst'}</dd>
-
-        <dt>Vertraulichkeit</dt>
-        <dd>{importance.confidentiality ?? 'nicht erfasst'}</dd>
-      </dl>
-
-      <h3>Belegte Bezüge zu Risiken und Zielen</h3>
+      {/* Die Überschrift nennt genau die Typmenge, die tatsächlich gefiltert wird: `requires`
+          (R19) verbindet ein Objekt nicht mit einem Risiko oder Ziel, sondern mit einer
+          verbindlichen Voraussetzung – z. B. mit einem Managed Service. Ohne diese Nennung
+          stünde ein Service unter „Risiken und Ziele" (Review-Fix). */}
+      <h3>Belegte Bezüge zu Risiken, Zielen und Voraussetzungen</h3>
       <p className="sv-edge-note">
         Berücksichtigte Kantentypen: {edgeNote('affects')}, {edgeNote('threatens')},{' '}
         {edgeNote('exposes')}, {edgeNote('mitigates')}, {edgeNote('contributes_to')},{' '}
-        {edgeNote('requires')}.
+        {edgeNote('requires')}. {edgeNote('requires')} ist dabei kein Risiko-/Zielbezug, sondern
+        eine verbindliche Abhängigkeit im jeweiligen Scope (Dok. 07 §9 R19).
+      </p>
+      <p className="sv-edge-note">
+        Verdichtete Darstellung. Alle Beziehungen mit Herkunft, Vertrauensgrad und Gültigkeit
+        stehen unter „Womit hängt es zusammen?".
       </p>
       <EdgeList
+        variant="kompakt"
         edges={importance.edges}
         tenantId={tenantId}
-        emptyText="Keine Kante dieses Typs im Demo-Seed: Dieses Objekt ist im Demo-Datenbestand mit keinem Risiko und keinem Ziel verbunden."
+        emptyText="Keine Kante dieses Typs im Demo-Seed: Dieses Objekt ist im Demo-Datenbestand mit keinem Risiko, keinem Ziel und keiner Voraussetzung verbunden."
       />
     </section>
   );
@@ -402,14 +532,14 @@ function ConnectionsSection({
       <EdgeList
         edges={connections.outgoing}
         tenantId={tenantId}
-        emptyText="Keine ausgehende Kante dieses Objekts im Demo-Seed."
+        emptyText="Keine ausgehende Kante dieses Objekts im Demo-Seed: Von diesem Objekt geht im Demo-Datenbestand keine Aussage über ein anderes Objekt aus."
       />
 
       <h3>Eingehende Beziehungen (dieses Objekt ist Ziel)</h3>
       <EdgeList
         edges={connections.incoming}
         tenantId={tenantId}
-        emptyText="Keine eingehende Kante auf dieses Objekt im Demo-Seed."
+        emptyText="Keine eingehende Kante auf dieses Objekt im Demo-Seed: Kein anderes Objekt dieses Mandanten verweist im Demo-Datenbestand auf dieses Objekt."
       />
     </section>
   );
@@ -566,9 +696,16 @@ function NextSection({
           ))}
         </ul>
       ) : (
+        /* Erreichbar für Objekttypen ohne Maßnahmen-, Service- und Nachweisbezug (z. B. eine
+           Organisation): dort erscheint auch „kein Nachweis" nicht, weil die Beobachtung auf die
+           laut Dok. 07 §9 R15 nachweisfähigen Objekttypen begrenzt ist (`EVIDENCE_TARGET_TYPES`).
+           Der NUTZERTEXT sagt das evidenzgebunden – die Ableitung aus der Beispielspalte ist eine
+           Anzeigeentscheidung (O-WP014-10), keine Modellaussage (Review-Fix). */
         <p className="sv-item-meta">
-          Kein belegter Verweis im Demo-Seed: Dieses Objekt trägt weder eine verknüpfte Maßnahme
-          noch einen Servicebezug oder Nachweis.
+          Kein belegter Verweis im Demo-Seed: Für dieses Objekt ist im Demo-Datenbestand weder
+          eine Maßnahme noch ein Servicebezug erfasst; auch ein Nachweisbezug ist für diesen
+          Objekttyp im Demo-Datenbestand nicht modelliert.
+          <EmptyNext tenantId={tenantId} />
         </p>
       )}
     </section>
@@ -593,15 +730,39 @@ function ObservationItem({
     );
   }
 
-  const lead =
-    observation.kind === 'massnahme'
-      ? 'Verknüpfte Maßnahme'
-      : observation.kind === 'service'
-        ? 'Im Umfang des Managed Service'
-        : 'Verknüpfter Nachweis';
+  // Exhaustiv über `NextObservationKind`: eine künftige sechste Art fällt NICHT still auf
+  // „Verknüpfter Nachweis" zurück, sondern bricht den Typecheck (`never`-Zweig). Die Union ist im
+  // Review-Zyklus bereits einmal gewachsen (`deckung`) – ein falsch beschrifteter Beleg wäre genau
+  // die Art stiller Fehlaussage, die dieses WP vermeiden soll.
+  let lead: string;
+  switch (observation.kind) {
+    case 'massnahme':
+      lead = 'Verknüpfte Maßnahme';
+      break;
+    case 'service':
+      lead = 'Im Umfang des Managed Service';
+      break;
+    case 'deckung':
+      /* Gegenrichtung derselben R22-Kante: Beobachtung aus dem Seed, kein Angebot. */
+      lead = 'Deckt im Serviceumfang ab';
+      break;
+    case 'nachweis':
+      lead = 'Verknüpfter Nachweis';
+      break;
+    default: {
+      const unbekannt: never = observation.kind;
+      throw new Error(`Unbehandelte Beobachtungsart: ${String(unbekannt)}`);
+    }
+  }
 
-  const meta = [`Objekttyp: ${observation.object_type}`];
-  if (observation.lifecycle_status) meta.push(`Status: ${observation.lifecycle_status}`);
+  // Fehlanzeige und Typname bleiben unterscheidbar: kein menschenlesbarer Sentinel durch die
+  // Typ-Lookup-Funktion (Review-Fix).
+  const meta = [
+    `Objekttyp: ${observation.object_type ? objectTypeDisplay(observation.object_type) : 'nicht erfasst'}`,
+  ];
+  if (observation.lifecycle_status) {
+    meta.push(`Lebenszyklus-Stand: ${observation.lifecycle_status}`);
+  }
   if (observation.relationship_type) meta.push(`Beleg: ${edgeNote(observation.relationship_type)}`);
 
   return (

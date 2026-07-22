@@ -15,7 +15,7 @@
  */
 import Link from 'next/link';
 import type { ObjectEnvelope } from '@isms/contracts';
-import { objectDetailHref } from '../../lib/twin/object-detail';
+import { objectDetailHref } from '../../lib/twin/routes';
 
 export function ObjectCard({
   object,

@@ -18,6 +18,7 @@ import {
   TENANT_ID,
 } from '@isms/demo-seed';
 import {
+  EVIDENCE_TARGET_TYPES,
   buildObjectDetail,
   formatIsoDateDe,
   getObjectForTenant,
@@ -271,16 +272,123 @@ describe('Was als Nächstes? – ausschließlich belegte Beobachtungen', () => {
     expect(control.next_observations.some((o) => o.kind === 'ohne_nachweis')).toBe(false);
   });
 
-  it('benennt einen fehlenden Nachweisbezug als Beobachtung statt ihn zu verschweigen', () => {
+  it('nennt auf der Managed-Service-Seite die EINGEHENDEN Deckungsbezüge (Gegenrichtung von R22)', () => {
+    // Review-Fix: covered_by wurde nur ausgehend ausgewertet. Ein Managed Service ist aber immer
+    // ZIEL dieser Kante – seine Seite blieb dadurch leer, obwohl der Seed die Kanten trägt.
+    const service = detailOrThrow(
+      TENANT_ID.NORDWERK,
+      NORDWERK_SERVICE_OBJECT_ID.SERVICE_RISK_CONTROL_MONITORING,
+    );
+
+    const eingehendeDeckung = service.connections.incoming.filter(
+      (e) => e.relationship_type === 'covered_by',
+    );
+    expect(eingehendeDeckung.length).toBeGreaterThanOrEqual(1);
+
+    const deckung = service.next_observations.filter((o) => o.kind === 'deckung');
+    expect(deckung.map((o) => o.object_id)).toEqual(eingehendeDeckung.map((e) => e.neighbor_id));
+    // Lebenszyklus-Stand des Nachbarn wie bei den übrigen Beobachtungen.
+    expect(deckung.map((o) => o.lifecycle_status)).toEqual(
+      eingehendeDeckung.map((e) => e.neighbor_lifecycle_status),
+    );
+    expect(deckung.every((o) => o.relationship_type === 'covered_by')).toBe(true);
+    expect(deckung.some((o) => o.object_id === O.CTRL_BACKUP)).toBe(true);
+
+    // Der Abschnitt ist damit nicht mehr leer (Widerspruch zur Kantenliste derselben Seite).
+    expect(service.next_observations.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('deckt sich objektweit mit den tatsächlichen Kanten (Wächtertest über den ganzen Seed)', () => {
+    // Jede Beobachtung mit Beleg muss eine REALE Kante genau dieses Objekts sein – mit
+    // identischem Kantentyp, Nachbarn und Lebenszyklus-Stand. Und umgekehrt: jede
+    // covered_by-Kante des Objekts erzeugt genau eine Beobachtung.
+    for (const { tenantId, objectId } of getObjectRouteParams()) {
+      const model = detailOrThrow(tenantId, objectId);
+      const kanten = [...model.connections.outgoing, ...model.connections.incoming];
+
+      for (const beobachtung of model.next_observations) {
+        if (beobachtung.kind === 'ohne_nachweis') {
+          expect(beobachtung.relationship_id).toBeUndefined();
+          continue;
+        }
+        const kante = kanten.find((e) => e.relationship_id === beobachtung.relationship_id);
+        expect(kante).toBeDefined();
+        expect(kante?.relationship_type).toBe(beobachtung.relationship_type);
+        expect(kante?.neighbor_id).toBe(beobachtung.object_id);
+        expect(kante?.neighbor_name).toBe(beobachtung.name);
+        expect(kante?.neighbor_lifecycle_status).toBe(beobachtung.lifecycle_status);
+      }
+
+      const covered = kanten.filter((e) => e.relationship_type === 'covered_by');
+      const serviceBezug = model.next_observations.filter(
+        (o) => o.kind === 'service' || o.kind === 'deckung',
+      );
+      expect(serviceBezug).toHaveLength(covered.length);
+    }
+  });
+
+  it('benennt einen fehlenden Nachweisbezug nur bei Objekttypen, die laut R15 Nachweisziel sein können', () => {
+    // Dok. 07 §9 R15: „evidences | Evidence -> Control/Measure/Decision" (siehe
+    // EVIDENCE_TARGET_TYPES). Eine Maßnahme OHNE Nachweiskante -> Beobachtung.
+    const measure = detailOrThrow(TENANT_ID.NORDWERK, O.MEASURE_PATCH);
+    expect(measure.connections.incoming.some((e) => e.relationship_type === 'evidences')).toBe(
+      false,
+    );
+    expect(measure.next_observations.some((o) => o.kind === 'ohne_nachweis')).toBe(true);
+
+    // Die Organisation dagegen ist für R15 gar kein Nachweisziel – dort wäre „kein Nachweis"
+    // eine erfundene Erwartung und darf NICHT erscheinen (der Abschnitt bleibt leer).
     const org = detailOrThrow(TENANT_ID.NORDWERK, O.ORG);
-    expect(org.next_observations.map((o) => o.kind)).toEqual(['ohne_nachweis']);
+    expect(org.next_observations).toEqual([]);
+  });
+
+  it('erzeugt die Beobachtung „ohne Nachweis" ausschließlich für die R15-Zieltypen', () => {
+    // Wächtertest über den GESAMTEN Seed: kein anderer Objekttyp bekommt die Aussage.
+    const typen = new Set<string>();
+    for (const { tenantId, objectId } of getObjectRouteParams()) {
+      const model = detailOrThrow(tenantId, objectId);
+      if (model.next_observations.some((o) => o.kind === 'ohne_nachweis')) {
+        typen.add(model.identity.object_type);
+      }
+    }
+    for (const typ of typen) {
+      expect(EVIDENCE_TARGET_TYPES as readonly string[]).toContain(typ);
+    }
+    // Gegenprobe: der Seed enthält mindestens einen solchen Fall (sonst wäre der Test blind).
+    expect(typen.size).toBeGreaterThanOrEqual(1);
+  });
+
+  it('bindet den Leersatz an die Seed-Invariante: jedes evidences-Ziel ist ein R15-Zieltyp', () => {
+    // Der Nutzertext „auch ein Nachweisbezug ist für diesen Objekttyp im Demo-Datenbestand
+    // nicht modelliert" ist eine Aussage ÜBER den Seed, wird aber aus EVIDENCE_TARGET_TYPES
+    // abgeleitet. Beides deckt sich nur, solange keine `evidences`-Kante auf einen Objekttyp
+    // AUSSERHALB dieser Liste zeigt. Käme eine hinzu (z. B. auf ein SLA), wäre der Satz auf den
+    // Geschwisterseiten dieses Typs falsch – ohne diesen Test würde das niemand bemerken.
+    const typById = new Map(DEMO_SEED.objects.map((o) => [o.object_id, o.object_type] as const));
+    const zieltypen = DEMO_SEED.relationships
+      .filter((r) => r.relationship_type === 'evidences')
+      .map((r) => typById.get(r.target_id));
+
+    // Gegenprobe: der Seed trägt überhaupt Nachweiskanten (sonst prüft die Schleife nichts).
+    expect(zieltypen.length).toBeGreaterThanOrEqual(1);
+    for (const typ of zieltypen) {
+      expect(EVIDENCE_TARGET_TYPES as readonly string[]).toContain(typ);
+    }
   });
 });
 
 describe('formatIsoDateDe', () => {
-  it('formatiert deterministisch in UTC als TT.MM.JJJJ', () => {
+  it('formatiert deterministisch als TT.MM.JJJJ', () => {
     expect(formatIsoDateDe('2026-01-15T08:00:00.000Z')).toBe('15.01.2026');
     expect(formatIsoDateDe('2026-02-01T00:00:00.000Z')).toBe('01.02.2026');
+  });
+
+  it('verschiebt einen Zeitstempel MIT Offset nicht auf den Vortag', () => {
+    // Der Contract erlaubt Offsets (`common.ts`: z.iso.datetime({ offset: true })). Eine
+    // UTC-Umrechnung hätte hier „31.12.2025" geliefert – also die fachliche Gültigkeit
+    // verschoben. Gelesen wird deshalb der Kalendertag der Zeichenkette selbst.
+    expect(formatIsoDateDe('2026-01-01T00:00:00+01:00')).toBe('01.01.2026');
+    expect(formatIsoDateDe('2026-01-01T23:00:00-05:00')).toBe('01.01.2026');
   });
 
   it('reicht einen unlesbaren Wert fail-loud roh durch', () => {
@@ -293,6 +401,13 @@ describe('objectDetailHref (WP-014 Slice 2)', () => {
     expect(objectDetailHref(TENANT_ID.NORDWERK, O.PROC_AUFTRAGSABWICKLUNG)).toBe(
       `/twin/${TENANT_ID.NORDWERK}/objekt/${O.PROC_AUFTRAGSABWICKLUNG}`,
     );
+  });
+
+  it('kodiert Sonderzeichen in beiden Segmenten (keine abgeschnittene oder fremde Route)', () => {
+    // Der Contract erlaubt für tenant_id/object_id beliebige nichtleere Strings; eine Kennung
+    // mit „/", „#" oder „?" würde ohne Kodierung eine ANDERE Route erzeugen.
+    expect(objectDetailHref('t/1', 'o?2#3')).toBe('/twin/t%2F1/objekt/o%3F2%233');
+    expect(objectDetailHref('t 1', 'o 2')).toBe('/twin/t%201/objekt/o%202');
   });
 
   it('erzeugt für JEDES Seed-Objekt eine Route, die auf eine existierende Seite zeigt', () => {

@@ -16,7 +16,9 @@
  */
 import Link from 'next/link';
 import type { PortfolioTenantEntry } from '../../lib/services/data';
-import { objectDetailHref } from '../../lib/twin/object-detail';
+// Seed-freies Routenmodul (Review-Fix): diese Datei landet über `ServicesView` im Client-Bundle
+// und darf den statischen DEMO_SEED-Import von `lib/twin/object-detail.ts` nicht mitziehen.
+import { objectDetailHref } from '../../lib/twin/routes';
 
 export function PortfolioOverview({ entries }: { entries: readonly PortfolioTenantEntry[] }) {
   return (
@@ -49,7 +51,7 @@ export function PortfolioOverview({ entries }: { entries: readonly PortfolioTena
                     >
                       {service.name}
                     </Link>
-                    <span className="sv-item-meta"> · Status: {service.lifecycle_status}</span>
+                    <span className="sv-item-meta"> · Lebenszyklus-Stand: {service.lifecycle_status}</span>
                   </li>
                 ))}
               </ul>

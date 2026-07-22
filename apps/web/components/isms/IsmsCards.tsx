@@ -20,8 +20,12 @@
  * von `IsmsContent` durchgereicht und niemals hartkodiert (Dok. 07 §17/P09).
  */
 import Link from 'next/link';
-import { relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
-import { objectDetailHref } from '../../lib/twin/object-detail';
+import { objectTypeDisplay, relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
+// `lib/twin/routes.ts` ist seed-frei und wird hier präventiv genutzt: diese Datei landet über
+// `IsmsView` im Client-Bundle. Ein Schutz ist das heute NICHT – der DEMO_SEED liegt über
+// `lib/twin/data.ts` bzw. `lib/isms/data.ts` ohnehin im Client-Graphen (offene Frage
+// O-WP014-09); die Auslagerung vermeidet lediglich eine weitere Seed-Kante.
+import { objectDetailHref } from '../../lib/twin/routes';
 import type {
   ControlView,
   EvidenceView,
@@ -41,13 +45,16 @@ function edgeNote(type: string): string {
 
 /**
  * Sekundäre Meta-Zeile eines verknüpften Objekts – Status immer als Text.
- * Klartext vor Fachsprache (UX-Review MINOR-5): „Herkunft der Aussage" statt „Assertion-Art",
- * „Prüfstand der Beziehung" statt „Kantenstatus".
+ * Klartext vor Fachsprache (UX-Review MINOR-5): „Herkunft der Aussage" statt „Assertion-Art".
+ *
+ * Wortlaut identisch zur Objekt-360-Seite (`ObjectDetailView`, Review-Fix): „Lebenszyklus-Stand"
+ * für den Objektstand und „Status der Beziehung" für den wertoffenen Kantenstatus. Der Kartenkopf
+ * verlinkt direkt dorthin – dieselbe Datenlage darf einen Klick entfernt nicht anders heißen.
  */
 function linkMeta(link: IsmsLink): string {
   const parts = [link.object_type];
-  if (link.lifecycle_status) parts.push(`Status: ${link.lifecycle_status}`);
-  if (link.edge_status) parts.push(`Prüfstand der Beziehung: ${link.edge_status}`);
+  if (link.lifecycle_status) parts.push(`Lebenszyklus-Stand: ${link.lifecycle_status}`);
+  if (link.edge_status) parts.push(`Status der Beziehung: ${link.edge_status}`);
   parts.push(`Herkunft der Aussage: ${link.assertion_kind}`);
   if (link.confidence_display) parts.push(`Vertrauensgrad: ${link.confidence_display}`);
   return ` · ${parts.join(' · ')}`;
@@ -156,7 +163,7 @@ export function RiskCard({ view, tenantId }: { view: RiskView; tenantId: string 
   return (
     <li className="sv-card">
       <CardTitle tenantId={tenantId} objectId={view.risk.object_id} name={view.risk.name} />
-      <p className="tw-card-sub">{`Risiko (Risk) · Status: ${view.risk.lifecycle_status}`}</p>
+      <p className="tw-card-sub">{`${objectTypeDisplay('Risk')} · Lebenszyklus-Stand: ${view.risk.lifecycle_status}`}</p>
       <DescriptionDetails text={view.risk.description} label={view.risk.name} />
 
       <h4>Betrifft (Wirkung)</h4>
@@ -188,7 +195,7 @@ export function ScenarioCard({ view, tenantId }: { view: ScenarioView; tenantId:
         objectId={view.scenario.object_id}
         name={view.scenario.name}
       />
-      <p className="tw-card-sub">{`Risikoszenario (Risk Scenario) · Status: ${view.scenario.lifecycle_status}`}</p>
+      <p className="tw-card-sub">{`${objectTypeDisplay('Risk Scenario')} · Lebenszyklus-Stand: ${view.scenario.lifecycle_status}`}</p>
       <DescriptionDetails text={view.scenario.description} label={view.scenario.name} />
 
       <h4>Herkunft: Bedrohung</h4>
@@ -230,7 +237,7 @@ export function WeaknessCard({ view, tenantId }: { view: WeaknessView; tenantId:
         objectId={view.weakness.object_id}
         name={view.weakness.name}
       />
-      <p className="tw-card-sub">{`Schwachstelle (Weakness) · Status: ${view.weakness.lifecycle_status}`}</p>
+      <p className="tw-card-sub">{`${objectTypeDisplay('Weakness')} · Lebenszyklus-Stand: ${view.weakness.lifecycle_status}`}</p>
       <DescriptionDetails text={view.weakness.description} label={view.weakness.name} />
 
       <h4>Exponiert (betroffener Informationswert)</h4>
@@ -263,7 +270,7 @@ export function ControlCard({ view, tenantId }: { view: ControlView; tenantId: s
       {/* UX-Review MAJOR-1: „wirksam" ist ein Lebenszyklus-Stand (Dok. 05 §7), KEIN Prüfergebnis.
           Ohne Rahmung liest ein Nicht-Experte das als erwiesene Wirksamkeit. Daher explizit
           benannt und eingeordnet (Dok. 08 §14.3/§27, Erklärbarkeit jedes sichtbaren Status). */}
-      <p className="tw-card-sub">{`Control · Lebenszyklus-Stand: ${view.control.lifecycle_status}`}</p>
+      <p className="tw-card-sub">{`${objectTypeDisplay('Control')} · Lebenszyklus-Stand: ${view.control.lifecycle_status}`}</p>
       <p className="sv-edge-note">
         Lebenszyklus-Stand aus dem Demo-Datenbestand – <strong>kein Prüfergebnis</strong>. Design-
         und Betriebswirksamkeit werden in dieser Ansicht nicht bewertet; eine Wirksamkeitsprüfung
@@ -331,7 +338,7 @@ export function MeasureCard({ view, tenantId }: { view: MeasureView; tenantId: s
   return (
     <li className="sv-card">
       <CardTitle tenantId={tenantId} objectId={view.measure.object_id} name={view.measure.name} />
-      <p className="tw-card-sub">{`Maßnahme (Measure) · Status: ${view.measure.lifecycle_status}`}</p>
+      <p className="tw-card-sub">{`${objectTypeDisplay('Measure')} · Lebenszyklus-Stand: ${view.measure.lifecycle_status}`}</p>
       <DescriptionDetails text={view.measure.description} label={view.measure.name} />
 
       <h4>Behebt (Schwachstelle/Finding)</h4>
@@ -361,7 +368,7 @@ export function EvidenceCard({ view, tenantId }: { view: EvidenceView; tenantId:
   return (
     <li className="sv-card">
       <CardTitle tenantId={tenantId} objectId={view.evidence.object_id} name={view.evidence.name} />
-      <p className="tw-card-sub">{`Nachweis (Evidence) · Status: ${view.evidence.lifecycle_status}`}</p>
+      <p className="tw-card-sub">{`${objectTypeDisplay('Evidence')} · Lebenszyklus-Stand: ${view.evidence.lifecycle_status}`}</p>
       <DescriptionDetails text={view.evidence.description} label={view.evidence.name} />
 
       <h4>Belegt</h4>
