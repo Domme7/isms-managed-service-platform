@@ -1,8 +1,8 @@
 # Latest Handover
 
-- **Aktuell:** `HND-20260722T155823Z.md`
-- **Work Package:** WP-004
+- **Aktuell:** `HND-20260722T162106Z.md`
+- **Work Package:** WP-007
 - **Status:** Active / Handover created
 - **Branch:** `main`
-- **Commit:** `4e93c7d`
-- **Exact Next Step:** Naechstes WP mit dem Owner waehlen: (a) WP-011 App-Shell/Navigation/Login/Rollen- & Mandantenwechsel (Dok. 06); (b) Persistenz-WP PostgreSQL - benoetigt Docker-/ORM-Human-Gate; (c) Twin-Ausbau (narrative Ursache-Wirkungs-Kette/Impact Path, FINDING-0003, bzw. weitere Demo-Mandanten mit Graph). Keine realen Daten; weiterhin Checkpoints + Push. Explorer starten: pnpm --filter @isms/web dev -> http://localhost:3000/twin
+- **Commit:** `cdd3913`
+- **Exact Next Step:** RESUME: 'git status' pruefen. Falls 'packages/db/' vorhanden (WP-007-Build): unabhaengig reviewen (Code + Product-Security-Privacy Tenant-Isolation), 'pnpm --filter @isms/db test' (PGlite) + 'pnpm test' verifizieren, dann committen + pushen + Verified Checkpoint. Falls nicht vorhanden: WP-007 Slice-1-Build neu anstossen gemaess work-packages/WP-007_PERSISTENZ_TWIN_KERN_DRIZZLE.md (Builder=backend-engineer). Danach WP-007 Slices 2-3, dann WP-011 App-Shell + Berater/Managed-Service-Welt. Owner installiert Docker Desktop parallel (voller Server; PGlite deckt Dev/Test). Keine realen Daten; nach jedem WP committen+pushen+LATEST aktualisieren.
