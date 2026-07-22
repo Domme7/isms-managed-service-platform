@@ -34,3 +34,18 @@ Slice 1 nicht (beide Varianten bleiben bis dahin dual erhalten).
 | O-D07-09 | Kardinalitäts-/Zyklenregeln für Beziehungen (§24 07-O02 offen) | Lücke (späteres WP) | nicht als Constraint erzwungen | Concept / CTO |
 | O-D07-10 | Objektseitige Assertion-Art: §7 kennt kein objektseitiges `assertion_kind` (nur Beziehung §9); P05/§21 verlangt die Unterscheidung auch für Objekte | Beobachtung | indirekt über `quality_state.Bestätigung` + `source_refs` | Concept Author |
 | O-D07-11 | `confirmation_level` derzeit auf jeder Qualitätsdimension erlaubt (§12 ordnet Skala nur „Bestätigung" zu) | Refinement (später) | als bekannte Unter-Constraint notiert | Builder / CTO |
+
+## Dokument 13–15 vs. Contract – Managed-Service-Modellfragen (aus WP-012 Slice 1)
+
+Beim Ausmodellieren der Managed-Service-Demo-Schicht (nur kanonische Typen, nichts erfunden) wurden
+folgende echte Lücken zwischen Dok. 13–15 und dem kanonischen Objektmodell (Dok. 07 / `@isms/contracts`)
+sichtbar. Details: `packages/demo-seed/seed-manifest.json` (open_questions) und README.
+
+| ID | Frage | Aktueller Umgang | Owner / Gate |
+|---|---|---|---|
+| O-WP012-01 | Dok. 13 trennt Service **Definition/Offer/Instance**; kanonisch existiert nur `Managed Service` | nur die Service Instance materialisiert | Concept Author (Dok. 07/13-Abgleich) |
+| O-WP012-02 | **Service Run** (Dok. 13 §4.5) und **Work Package** (Dok. 15 §4.4) haben keinen Objekttyp | Deliverables hängen direkt an der Service Instance | Concept Author |
+| O-WP012-03 | **Portfolio/Engagement** (Dok. 15) sind mandantenübergreifend, ohne kanonischen Typ | Portfolio nur als UI-Aggregation je Mandant, nie per Kante | Concept Author / CTO |
+| O-WP012-04 | R21 `delivered_by` zielt auf „Provider Team", Cross-Tenant-Kanten sind verboten | Delivery-Team je Mandant als tenant-eigenes `Team` (reversibel) | Concept Author / Security |
+| O-WP012-05 | Keine typisierten SLA-/KPI-Felder im Objektvertrag (Betriebszeit, Reaktionszeit, Zielwert) | Werte als Klartext in `description`; keine erfundenen Felder | Concept Author (Dok. 07 §7-Erweiterung?) |
+| O-WP012-06 | `part_of`/`evidences` an `Deliverable`: nur durch Regel-, nicht Beispielspalte von Dok. 07 §9 gedeckt | verwendet, als bestätigungsbedürftig markiert | Concept Author |
