@@ -1,11 +1,11 @@
 # Current State
 
-**Stand:** WP-014 **fertig** — der Demo-Graph ist durchgängig begehbar: jedes der 40 Objekte hat eine Objekt-360-Detailseite, Twin, ISMS und Services verlinken darauf. Drei unabhängige Reviews + zwei Nachprüfungsrunden + Browser-QA  
+**Stand:** WP-016 **fertig** — `/heute` ist kein Platzhalter mehr; alle vier Orte des Kernwegs sind echt. Die Morning Mission wurde bewusst **nicht** gebaut (Datenlage trägt sie nicht) und die Lücke im Produkt benannt  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** keins — nächster Vorschlag: **Heute/Morning Mission** für die Kundenrolle (Dok. 10, read-only, ohne Scoring)  
+**Aktives Work Package:** keins — nächster Vorschlag: **Seed-Erweiterung um Aufgaben/Entscheidungen** (O-WP016-03) als Voraussetzung für WP-008, oder Executive-Welt  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
-**Implementierungsstatus:** Lauffähige Demo-App (Shell + 3 Erlebnisflächen + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
+**Implementierungsstatus:** Lauffähige Demo-App (Shell + Heute + 3 Erlebnisflächen + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
 **Konzeptstatus:** 24 aktive Markdown-Dokumente vollständig, Manifest-Hashes verifiziert
 
 ## Gesichert
@@ -24,6 +24,7 @@
 - **ISMS-Kern-Welt** (WP-013): Ort „ISMS" mit Risiken (Threat-/Weakness-Herkunft), Controls (Umsetzung, erfülltes Requirement + Framework, Nachweis-Stand), Maßnahmen und Nachweisen — Dok.-08-Ehrlichkeitsregeln im Produkt erklärt („wirksam" = Lebenszyklus-Stand, kein Prüfergebnis); Datenlücke Risiko↔Szenario sichtbar (O-WP013-01); 2 Reviews + Browser-QA,
 - **3 Concept Change Proposals** (`research/change-proposals/CCP-001..003`) als Human-Gate-Vorlagen für die 8 Konzeptlücken; **WP-013-Entwurf** (ISMS-Kern-Welt) liegt bereit,
 - **Objekt-360-Detailseite** (WP-014): generische read-only Route `/twin/[tenantId]/objekt/[objectId]` für **jedes** der 40 Seed-Objekte, beantwortet die fünf Fragen der universellen Seitenanatomie (Dok. 06 §6) aus Envelope + Kanten; ein-/ausgehende Kanten richtungstreu und verlinkt (Objekt-360-Navigationsvertrag Dok. 07 §10/§21), Bitemporalität als getrennte Achsen, Historienlücke **aus den Daten abgeleitet**; Tenant-Isolation im Routing per Test belegt (mandantenfremde ID == unbekannte ID, auch im Seitentitel); Verlinkung aus Twin-Explorer, ISMS- und Services-Ansicht; **3 unabhängige Reviews + 2 Nachprüfungsrunden** (die zweite fand eine vom Fix erzeugte Regression) + Browser-QA; 10 Konzeptlücken als O-WP014-01..11 benannt statt gefüllt, Abweichungen in DR-0004. **Monorepo gesamt: 265 Tests grün.**
+- **Mission Control „Heute"** (WP-016): `/heute` beantwortet seine Leitfrage (Dok. 06 §7 S01) so weit, wie der Datenbestand sie trägt — Standort (Rolle/Mandant/Bestand), belegte **Erfassungswellen** (ausdrücklich kein Änderungsfeed), vier **gezählte, unbewertete** Beobachtungen mit Grundgesamtheit und Ermittlungsregel, Einstiegspunkte. Rollenrahmung ordnet nur die Abschnitte, alle zwölf Rollen sehen dieselben Daten (per Test). **Die Morning Mission (Dok. 10 §5) wurde bewusst nicht gebaut** — der Seed trägt keine `Task`-/`Decision Record`-Objekte, der Objektvertrag keine Frist-/Aufwand-/Kapazitätsfelder, es gibt keine Ereignisse und keine Versionshistorie; die Lücke ist im Produkt benannt statt gefüllt. 2 Reviews + 2 Gegenprüfungen + Browser-QA; O-WP016-01..08, FINDING-0005 (kein Linter im Stack). **Monorepo gesamt: 343 Tests grün.**
 - **`@isms/db`** (WP-007): Persistenzschicht PostgreSQL/Drizzle — Schema/Migration/tenant-scoped Repos/Seed-Loader aus den Contracts, getestet gegen **PGlite** (kein Docker), serverseitige Tenant-Isolation mit Negativbeweisen; Code- + Security-Review (SICHER FÜR DEMO-SCOPE); RLS-Härtung → FINDING-0004. **Monorepo gesamt: 112 Tests grün.**
 
 ## Verifikations-Evidence (WP-002)
@@ -47,12 +48,25 @@
 
 ## Exact Next Step
 
-**WP-014 ist abgeschlossen** (Review-Notiz: `reviews/WP-014_INDEPENDENT_REVIEW.md`). Der Demo-Graph ist
-damit erstmals durchgängig begehbar statt in Listen zu enden.
+**WP-014 und WP-016 sind abgeschlossen** (Review-Notizen: `reviews/WP-014_INDEPENDENT_REVIEW.md`,
+`reviews/WP-016_INDEPENDENT_REVIEW.md`). Der Demo-Graph ist durchgängig begehbar, und `/heute` ist
+kein Platzhalter mehr — alle vier Orte des Kernwegs (Heute · Zwilling · ISMS · Services) sind echt.
 
-**Nächster Schritt (Vorschlag nach Briefing §8):** **Heute/Morning Mission** für die Kundenrolle
-(Dok. 10) — read-only, **ohne Scoring und ohne Priorisierung**; heute ist `/heute` nur ein Platzhalter.
-Danach: Executive-Welt (Dok. 06/10), dann API-Schicht + DB→UI — letzteres **erst nach FINDING-0004**.
+**Nächster Schritt — hier ist eine Owner-Entscheidung sinnvoll, aber nicht blockierend:**
+
+WP-016 hat eine harte Grenze sichtbar gemacht: **der Demo-Seed trägt keine Aufgaben und keine
+Entscheidungen** (`Task` F08 und `Decision Record` F09 stehen im Contract, sind aber in keinem
+Mandanten materialisiert), und der Objektvertrag kennt **keine Frist-, Aufwand-, Kapazitäts- oder
+Prioritätsfelder** (O-WP016-03, O-WP016-04). Das blockiert **Morning Mission und Decision Center
+gleichermaßen** — also Dok. 10 als Ganzes.
+
+Zwei sinnvolle Wege:
+1. **Seed-/Contract-Erweiterung um Aufgaben und Entscheidungen** (eigenes WP, Voraussetzung für
+   WP-008). Berührt den Objektvertrag → braucht Concept Author und vermutlich ein Human Gate.
+2. **Executive-Welt** (Dok. 06 §10 / Dok. 10 §8) — geht dem Problem vorerst aus dem Weg, läuft aber
+   in dieselbe Grenze, sobald verdichtete Entscheidungen gefordert sind.
+
+Danach: API-Schicht + DB→UI — **erst nach FINDING-0004** und O-WP014-09.
 
 Offene Human Gates (nicht blockierend): CCP-001/002/003 (Konzeptentscheidungen), Docker-Desktop-Start
 beim Owner (reale Postgres-Validierung von `@isms/db`), FINDING-0004 (DB-RLS vor DB→UI-Anbindung).

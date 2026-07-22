@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260722T234031Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-001",
+  "timestamp_utc": "2026-07-22T23:40:31.665056+00:00",
+  "summary": "WP-016 Mission Control Heute abgeschlossen: /heute ist kein Platzhalter mehr - Standort, belegte Erfassungswellen, vier gezaehlte unbewertete Beobachtungen mit Grundgesamtheit und Ermittlungsregel, Einstiegspunkte, Rollenrahmung ohne Datenunterschied. Die Morning Mission wurde bewusst NICHT gebaut, weil der Datenbestand sie nicht traegt; die Luecke ist im Produkt benannt. Zwei unabhaengige Reviews + zwei Gegenpruefungen (Renderfehler gefunden, den kein Test sehen konnte) + Browser-QA. 343 Tests gruen, typecheck+build gruen, validate_handoff OK.",
+  "branch": "main",
+  "commit": "ebe3da9",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CURRENT_STATE.md\n M docs/project/WORK_QUEUE.md\n?? docs/project/reviews/WP-016_INDEPENDENT_REVIEW.md",
+  "tests": "not run / not provided",
+  "exact_next_step": "Owner-Entscheidung: Seed-/Contract-Erweiterung um Aufgaben und Entscheidungen (O-WP016-03/-04, Voraussetzung fuer WP-008) ODER Executive-Welt (Dok. 06 \u00a710). Beide WPs existieren noch nicht."
+}

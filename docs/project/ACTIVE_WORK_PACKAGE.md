@@ -1,27 +1,28 @@
 # Active Work Package
 
-- **ID:** WP-016
-- **Titel:** Mission Control „Heute" (read-only, **ohne** Morning Mission)
-- **Datei:** `work-packages/WP-016_MISSION_CONTROL_HEUTE.md`
-- **Context Pack:** `context-packs/WP-016/CONTEXT_PACK.md`
-- **Führende Quellen:** Dok. 06 §7 S01 (Leitfrage) + §5 (Erlebniswelten) + §17 (Zustände);
-  Dok. 10 §5 **nur zur Abgrenzung**
-- **Status:** Active — Slice 1 (View-Helfer + Rollenrahmung + Unit-Tests)
-- **Builder:** Frontend-Engineer · **Reviewer:** Code-Reviewer + Product-User-Lead
-- **Human Gates:** keiner (read-only, synthetisch)
-- **Ziel des WP:** `/heute` ist der letzte Platzhalter auf dem Kernweg Login → Startpunkt →
-  Zwilling/ISMS/Services. Er beantwortet seine Leitfrage so weit, **wie der Datenbestand es belegt**,
-  und sagt für den Rest ehrlich, dass und warum er fehlt.
+- **ID:** — (kein aktives Work Package)
+- **Zuletzt abgeschlossen:** **WP-016 Mission Control „Heute"** (read-only, **ohne** Morning Mission)
+  - Datei: `work-packages/WP-016_MISSION_CONTROL_HEUTE.md`
+  - Context Pack: `context-packs/WP-016/CONTEXT_PACK.md`
+  - Review-Notiz: `docs/project/reviews/WP-016_INDEPENDENT_REVIEW.md`
+  - Ergebnis: `/heute` ist kein Platzhalter mehr; 343 Tests grün; Browser-QA dokumentiert
+  - Offene Fragen: **O-WP016-01…08** · Findings: **FINDING-0005** (kein Linter im Stack)
 
-## Bewusste Abgrenzung (nicht verhandelbar in diesem WP)
+## Nächster Schritt — Owner-Entscheidung sinnvoll, nicht blockierend
 
-Die **Morning Mission** (Dok. 10 §5) wird **nicht** gebaut. Sie verlangt Mission, „Warum heute"
-(Frist, Eskalation), erwarteten Impact, empfohlene Reihenfolge und reale Kapazität. Der Seed trägt
-davon nichts: keine `Task`- und keine `Decision Record`-Objekte, keine Fristen/Kapazitäten/Aufwände
-im Objektvertrag, keine Ereignisse, keine Versionshistorie. Jede Mission wäre erfunden. Die dafür
-nötige Priorisierungs- und Impact-Logik ist ohnehin **WP-008** (Phase 4) vorbehalten.
-Offene Fragen dazu: **O-WP016-02, -03, -04**.
+WP-016 hat eine harte Grenze sichtbar gemacht: der Seed trägt **keine Aufgaben und keine
+Entscheidungen**, und der Objektvertrag kennt **keine Frist-/Aufwand-/Kapazitäts-/Prioritätsfelder**
+(O-WP016-03, O-WP016-04). Das blockiert **Morning Mission und Decision Center gleichermaßen** —
+also Dok. 10 als Ganzes.
 
-> Abgeschlossen: WP-001..004, 007, 011, 012, 013, 014, 015.
+1. **Seed-/Contract-Erweiterung um Aufgaben und Entscheidungen** — eigenes WP, Voraussetzung für
+   WP-008. Berührt den Objektvertrag → Concept Author + vermutlich Human Gate.
+2. **Executive-Welt** (Dok. 06 §10 / Dok. 10 §8) — weicht dem Problem vorerst aus, läuft aber in
+   dieselbe Grenze, sobald verdichtete Entscheidungen gefordert sind.
+
+Ein WP + Context Pack existiert für **beide** Wege noch nicht und muss vom `program-manager`
+erstellt werden.
+
+> Abgeschlossen: WP-001..004, 007, 011, 012, 013, 014, 015, **016**.
 > Offene Human Gates (nicht blockierend): CCP-001..003, Docker-Engine-Start, FINDING-0004,
 > O-WP014-09 (voller Seed im Client-Bundle) vor der DB→UI-Anbindung.
