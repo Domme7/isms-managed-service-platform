@@ -171,3 +171,17 @@ Vollständige Herleitung: `work-packages/WP-020_VERDICHTUNG_DASHBOARD_EINSTIEG.m
 | ID | Frage | Art | Aktueller Umgang | Owner / Gate |
 |---|---|---|---|---|
 | O-KONZ-02 | Dok. 20C (D20C-002, „Entwicklungsverfassung" Regel 2) verlangt „Markdown vor PDF" — Widerspruch zu DR-0006 (PDF-Originale sind Produktwahrheit) | Konzeptkonflikt (PDF vs. Owner-Schicht) | DR-0006 ist die spätere, bewusste Owner-Entscheidung nach FINDING-0007 und geht vor; Konflikt in der 20C-Kopfnotiz und im WP-023-Nachtrag benannt, nicht still aufgelöst | Concept Author / Owner (CCP oder PDF-Revision) |
+
+## WP-032 – Reports, Wissen, Administration
+
+| ID | Frage | Art | Aktueller Umgang | Owner / Gate |
+|---|---|---|---|---|
+| O-WP032-02 | Die Leitfragen der drei Platzhalter-Orte sind aspirativ (Generator/Suche/Durchsetzung, die es nicht gibt) — DR-0013 verbietet die Frage, die im nächsten Satz zurückgenommen wird | DR-0013-Spannung | gerendert wird die **beantwortbare** Frage; die Konzept-Leitfrage bleibt in `places.ts` mit Begründung | Product / Concept Author |
+| O-WP032-03 | Administrations-Leitfrage fordert ein Sicherheits-**Urteil**, das eine Leseansicht nicht bejahen kann | Ehrlichkeitsfrage | Frage am Seitenende in drei Teile zerlegt und einzeln beantwortet; ausdrücklich **kein** Sicherheitsurteil, weder beruhigend noch alarmierend | Security + Product |
+| O-WP032-04 | „Wissen" ist am dünnsten konzeptgedeckt (eine Nav-Zeile; Dok. 21 ist **nicht** der Wissensort) — Glossar-only akzeptabel oder eigenes Konzept nötig? | Konzeptlücke | Slice 3 baut das Glossar aus den Vokabularen; Rest benannt | Concept Author / Owner |
+| O-WP032-09 | Dok. 06 sagt für Administration „nur bei entsprechender Berechtigung" — mit echter Auth: Ort **verbergen** oder „kein Zugriff" zeigen? (Dok. 19 „Metadatenlecks" spricht gegen Preisgeben der Existenz) | Security-Frage | heute für jede Perspektive sichtbar, auf der Seite ehrlich benannt | Security (mit WP-030) |
+| **O-WP032-10** | **Regelkonflikt:** DR-0013 verbietet Rollencodes im UI, der Kontextleisten-Wächter **verlangt** `R12 · Name`. Beides gleichzeitig heute unerfüllbar | **Regelkonflikt** | Administration führt selbst keinen Code; Auflösung (Leiste **und** Wächter gemeinsam) gehört zu **WP-028** | QA + Product (WP-028) |
+| O-WP032-11 | „kurzlebige Demo- oder Testidentitäten" ist ein PDF-wörtlicher **Identitätstyp des Zielprodukts** und erscheint dadurch im UI — kein DR-0011-Disclaimer über unseren Bestand | Abgrenzungsfrage | wörtlich belassen statt still zu streichen (Weglassen wäre stille Konzeptänderung) | Concept Author (bestätigen) |
+| O-WP032-12 | PDF-wörtliche Katalogzeile bringt „Kosten"/„Profitabilität" auf die Administrationsseite; ein globaler Wächter dagegen existiert nicht (Profitabilitäts-Verbot gilt nur für die Kunden-Startseite) | Wächter-Reichweite | wörtlich belassen, im QA-/Domain-Gate zu quittieren | QA + Domain |
+| O-WP032-13 | Dok. 03 führt „Sphäre" nur als Spaltenwert und definiert die vier Werte nirgends | Konzeptlücke | wörtlicher Wert als Überschrift; die Erklärzeile ist als **Lesehilfe des Produkts** markiert, keine Quellaussage | Concept Author |
+| O-WP032-14 | Der Mandantengrenzen-Wächter schlägt auch auf korrekte **Verneinungen** an („über andere Mandanten sagt die Anwendung nichts") | bekannte Eigenschaft | richtig so (Sicherheitseigenschaft); kostet Formulierungsspielraum — nicht entschärfen | QA |
