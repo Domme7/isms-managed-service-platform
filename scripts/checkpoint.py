@@ -38,7 +38,10 @@ def active_work_package() -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument('--type', choices=['micro','verified','handover','release'], required=True)
+    # 'micro' wurde 2026-07-23 abgeschafft (Doku-Restrukturierung + Prozess-Review): der Commit IST
+    # der Micro-Checkpoint. 22 Micro-Dateien lagen ungelesen und teils mit falscher WP-Nummer im
+    # Repo - Artefakte ohne Leser sind Ballast. Bestand: docs/project/archive/checkpoints-micro/.
+    ap.add_argument('--type', choices=['verified','handover','release'], required=True)
     ap.add_argument('--summary', required=True)
     ap.add_argument('--next-step', required=True)
     ap.add_argument('--tests', default=None)

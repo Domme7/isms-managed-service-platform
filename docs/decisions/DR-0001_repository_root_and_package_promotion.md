@@ -53,3 +53,10 @@ Phase-0-Baseline ist als atomarer Root-Commit gesichert.
 
 Wird durch einen neuen DR ersetzt, falls Repository-Root, Branch-Modell oder
 PDF-Ablage material geändert werden.
+
+## Nachtrag 2026-07-23 (Doku-Restrukturierung)
+
+`PACKAGE_MANIFEST.json` liegt jetzt unter `docs/project/archive/` — es beschreibt den
+Auslieferungsstand vom 2026-07-22 und seine relativen Pfade stimmen seit der Owner-beauftragten
+Restrukturierung (u. a. `capability/` → `archive/capability/`) nicht mehr mit dem Repo überein.
+Es bleibt als historischer Beleg erhalten und wird nicht gepflegt.

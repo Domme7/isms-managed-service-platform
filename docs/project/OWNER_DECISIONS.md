@@ -44,7 +44,7 @@ Entschiedene Karten stehen im Decision Record, nicht mehr hier: **DR-0007** (E-0
   Ehrlichkeitswirkung.
 - **Offene Fragen neu bewerten**, die Artefakte der Ableitung sind.
 - **Prozessautomatisierung** in kleinen Schritten.
-- **Aufräumen**: Micro-Checkpoints, `PROJECT_UNDERSTANDING.md` als historisch markieren,
+- **Aufräumen**: Micro-Checkpoints, `archive/PROJECT_UNDERSTANDING.md` als historisch markieren,
   Regel-Redundanz auf eine Quelle reduzieren.
 
 ## Was nie ohne den Owner passiert

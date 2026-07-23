@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'docs/project/capability/CAPABILITY_CHECK_RESULT.md'
+OUT = ROOT / 'docs/project/archive/capability/CAPABILITY_CHECK_RESULT.md'
 
 
 def cmd_version(command: list[str]) -> str:

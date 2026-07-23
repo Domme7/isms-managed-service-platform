@@ -1,11 +1,14 @@
 # Welche Konzeptquelle gilt?
 
-**Kurz: die PDFs.**
+**Kurz: die PDFs — plus die Owner-Entscheidungen danach.** Das vollständige Schichtenmodell
+(1. PDF-Basis → 2. Steuerungsschicht `docs/decisions/` → 3. Ideen `research/ideas/`) steht in
+`docs/README.md`. Die PDFs sind eingefroren (Juli 2026); DRs ergänzen und präzisieren sie und
+gehen bei Konflikt vor (gleicher Autor: der Owner).
 
 | Ordner | Rolle |
 |---|---|
 | `pdf/` | **Produktwahrheit.** Die 24 vom Owner geschriebenen Originaldokumente. Bei jeder Abweichung gilt diese Fassung. |
-| `active/` | **Arbeitsfassung.** Aus den PDFs abgeleitetes Markdown — durchsuchbar und zitierbar, aber nachweislich **nicht verlustfrei**. |
+| `active/` | **Arbeitsfassung.** Aus den PDFs abgeleitetes Markdown. **Dok. 03–07 sind seit WP-019 quellentreu neu abgeleitet** (Kopfnotiz je Datei); der Rest ist nachweislich **nicht verlustfrei** (FINDING-0007). |
 | `abgleich/` | Der vollstaendige Abgleich beider Fassungen vom 2026-07-23. |
 | `archive/` | Vorgaengerversionen. Nicht verwenden. |
 | `MANIFEST.json` | Hashes der Markdown-Dateien. Erkennt unbemerkte Aenderungen — sagt **nichts** ueber Treue zum PDF. |
@@ -23,6 +26,11 @@ Am 2026-07-23 wurden alle 24 Markdown-Fassungen gegen ihre PDFs geprueft:
 
 Die fuenf schwerwiegenden sind ausgerechnet Rollen, Nutzerreisen, Produktlandkarte, UX und der
 digitale Zwilling — also genau die Dokumente, aus denen alles Gebaute abgeleitet ist.
+
+**Stand nach WP-019:** Genau diese fuenf (Dok. 03–07) wurden quellentreu neu abgeleitet und
+gegengeprueft; die Vorgaenger liegen in `archive/`. Die 14 material abweichenden folgen mit
+WP-023, der automatische Treue-Check mit WP-024. Bis dahin gilt fuer Dok. 08–24 weiterhin:
+vor jeder Produktaussage das PDF gegenlesen.
 
 Verlorene Beispiele: die komplette Tabelle der neun verbindlichen Seitenbausteine (Dok. 06 §6.1),
 der Cross-Tenant-Schutz („Entwuerfe, Uploads und Freigaben duerfen nicht still in einen anderen

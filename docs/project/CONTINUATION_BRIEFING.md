@@ -55,7 +55,6 @@ Zitiere immer den **Abschnittstitel**, nicht nur die Nummer — die Nummerierung
 | **`docs/concept/pdf/*.pdf` (24 Originale)** | **Produktwahrheit — Pflichtlektüre (DR-0006).** Bei Abweichung gilt das PDF. Textextraktion mit Python + `pypdf`. |
 | `docs/concept/active/*.md` (24 Dokumente) | Arbeitsfassung. **Dok. 03–07 seit WP-019 quellentreu** (Kopfnotiz mit Konkordanz beachten); die übrigen weiterhin nicht verlustfrei (FINDING-0007, WP-023). Eine Aussage, die nur hier steht, ist begründungspflichtig. |
 | `docs/concept/MANIFEST.json` | Hashes; `validate_handoff.py` prüft sie |
-| `docs/project/PROJECT_UNDERSTANDING.md` | destilliertes Gesamtverständnis für den schnellen Einstieg — **nicht** autoritativ |
 | `docs/project/OPEN_QUESTIONS.md` | alle benannten Konzeptlücken (O-…) — hier steht, was bewusst **nicht** gebaut wurde |
 | `docs/decisions/`, `docs/architecture/adr/` | getroffene Entscheidungen samt Begründung |
 | `docs/project/reviews/` | was frühere Reviews gefunden haben — vermeidet Wiederholung derselben Fehler |
@@ -100,7 +99,7 @@ Seit WP-018: `pnpm lint` (Biome), `pnpm qa:visual <WP>` (Screenshots + axe nach 
 ## 2. Arbeitszyklus je Work Package (verbindlich)
 
 1. **Planen** – WP + Context Pack existiert (oder per `program-manager` erstellen lassen), aktiv setzen,
-   Micro-Checkpoint, **committen + pushen**.
+   **committen + pushen** (der Commit ist der Checkpoint; Micro-Checkpoints sind abgeschafft).
 2. **Bauen** – an einen Fach-Agenten delegieren (`frontend-engineer`, `backend-engineer`,
    `data-graph-analytics`). Der Builder **committet nie selbst**.
 3. **Prüfen** – **Gates risikobasiert besetzen** (Dok. 20B §36, nicht einfach „zwei Reviews"),

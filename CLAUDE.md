@@ -38,16 +38,19 @@ Die ISMS Managed Service Platform ist ein mandantenfähiges, rollenbasiertes Bet
    Archiv.** Bei jeder Abweichung zwischen PDF und Markdown gilt **das PDF** (DR-0006). Alles, was
    in ein Datenmodell, eine Acceptance Criterion oder eine Produktaussage einfließt, wird im PDF
    gegengelesen. Textextraktion: Python + `pypdf`.
-2. **Arbeitsfassung: `docs/concept/active/` (24 Markdown-Dokumente)** — durchsuchbar und zitierbar,
-   aber nachweislich **nicht** verlustfrei aus den PDFs abgeleitet (FINDING-0007). Eine Aussage,
-   die **nur** im Markdown steht, ist begründungspflichtig.
-3. Master-Index: `docs/concept/active/00_MASTER_INDEX_UND_PROJEKTVERFASSUNG_v1.2.md`
-4. Aktueller Status: `docs/project/CURRENT_STATE.md`
-5. Aktives Work Package: `docs/project/ACTIVE_WORK_PACKAGE.md`
-6. Letzter Wiedereinstieg: `docs/project/handovers/LATEST.md`
-7. Entscheidungen: `docs/architecture/adr/` und `docs/decisions/`
-8. Code, Tests und Migrationen sind Umsetzungswahrheit, nicht Produktwahrheit.
-9. Chat, Transcript und lokales Memory sind nicht autoritativ.
+2. **Arbeitsfassung: `docs/concept/active/` (24 Markdown-Dokumente)** — durchsuchbar und zitierbar.
+   **Dok. 03–07 sind seit WP-019 quellentreu neu abgeleitet** (Kopfnotiz je Datei); der Rest ist
+   nachweislich **nicht** verlustfrei (FINDING-0007). Eine Aussage, die **nur** im Markdown steht,
+   ist begründungspflichtig.
+3. **Schichtenmodell der Produktwahrheit:** PDF-Basis → Owner-Entscheidungen (`docs/decisions/`,
+   gehen bei Konflikt vor) → Ideen (`research/ideas/`). Navigator: `docs/README.md`.
+4. Master-Index: `docs/concept/active/00_MASTER_INDEX_UND_PROJEKTVERFASSUNG_v1.2.md`
+5. Aktueller Status: `docs/project/CURRENT_STATE.md`
+6. Aktives Work Package: `docs/project/ACTIVE_WORK_PACKAGE.md`
+7. Letzter Wiedereinstieg: `docs/project/handovers/LATEST.md`
+8. Entscheidungen: `docs/architecture/adr/` und `docs/decisions/`
+9. Code, Tests und Migrationen sind Umsetzungswahrheit, nicht Produktwahrheit.
+10. Chat, Transcript und lokales Memory sind nicht autoritativ.
 
 ## Start jeder Session
 
@@ -61,8 +64,8 @@ Die ISMS Managed Service Platform ist ein mandantenfähiges, rollenbasiertes Bet
 
 - Arbeite in kleinen, outcome-orientierten Work Packages.
 - Verändere möglichst nur ein primäres Modul pro Work Package.
-- Nach jedem logischen Teilziel: Micro Checkpoint.
-- Spätestens nach drei bis fünf materiellen Dateiänderungen: Statusprüfung und Checkpoint.
+- Nach jedem logischen Teilziel: committen + pushen (der Commit ist der Checkpoint).
+- Spätestens nach drei bis fünf materiellen Dateiänderungen: Statusprüfung und Commit.
 - Nach erfolgreichem Test-/Review-Zyklus: Verified Checkpoint.
 - Vor Session-, Rollen- oder Worktreewechsel: Handover Checkpoint.
 - Der Stand ist **jederzeit** übernahmefähig: nach jedem logischen Teilziel committen und pushen,
@@ -134,7 +137,7 @@ Ein Work Package ist nur done, wenn:
 python scripts/validate_handoff.py
 python scripts/capability_check.py
 python -m unittest discover -s tests/repository -p "test_*.py"
-python scripts/checkpoint.py --type micro --summary "..." --next-step "..."
+python scripts/checkpoint.py --type verified --summary "..." --tests "..." --next-step "..."
 python scripts/handover.py --summary "..." --next-step "..."
 ```
 
