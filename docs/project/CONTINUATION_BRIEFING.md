@@ -84,8 +84,18 @@ Es gibt **keinen Linter** im Stack (FINDING-0005) — „Lint" in Acceptance Cri
    Micro-Checkpoint, **committen + pushen**.
 2. **Bauen** – an einen Fach-Agenten delegieren (`frontend-engineer`, `backend-engineer`,
    `data-graph-analytics`). Der Builder **committet nie selbst**.
-3. **Prüfen** – **zwei unabhängige Reviews** (`code-reviewer` + `product-user-lead` bzw.
-   `concept-consistency-reviewer`, bei Sicherheitsthemen `product-security-privacy`). Builder ≠ Reviewer.
+3. **Prüfen** – **Gates risikobasiert besetzen** (Dok. 20B §36, nicht einfach „zwei Reviews"),
+   Builder ≠ Reviewer, und der Builder darf ein Finding nie selbst schließen (§31.3):
+   - **immer:** Code Quality (`code-reviewer`) + Product (`product-user-lead`)
+   - **immer bei fachlichem Inhalt:** Domain (`isms-domain-lead`, bei Bedrohungsbezug
+     `cyber-threat-lead`) — war bis WP-016 nie besetzt, siehe **FINDING-0006**
+   - **immer bei neuen Tests:** QA (`qa-test-engineer`) — sonst prüft der Builder seine eigenen
+     Tests (Dok. 20B §38 „Builder reviewt sich selbst")
+   - **bei Contract-/Modul-/Persistenzänderung:** Architecture (`cto-architecture`)
+   - **bei Sicherheits-/Mandantenthemen:** Security & Privacy (`product-security-privacy`)
+   - **bei Konzeptbezug:** `concept-consistency-reviewer`
+   Danach **eine zweite Runde**: dieselben Reviewer prüfen nach, ob ihre Findings behoben sind —
+   das hat bisher **jedes Mal** eine vom Fix erzeugte Regression gefunden.
 4. **Fixen** – Findings gebündelt in *einem* Pass umsetzen (nicht tröpfchenweise).
 5. **Verifizieren** – frisch (ohne Turbo-Cache) testen, `pnpm build/typecheck`, `validate_handoff.py`,
    plus **Browser-QA** bei UI-Arbeit (Dev-Server starten, DOM/Text prüfen, Server wieder stoppen).
