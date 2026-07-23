@@ -128,13 +128,18 @@ function makeObject(input: {
     lifecycle_status: input.lifecycle_status,
     scope_ids: scopes,
     owner_ids: input.owner_ids ?? [],
-    classification: input.classification ?? { confidentiality: 'intern', protection_need: 'normal' },
+    classification: input.classification ?? {
+      confidentiality: 'intern',
+      protection_need: 'normal',
+    },
     source_refs: input.source_refs ?? [CHARTER_SOURCE],
     valid_time: { from: SERVICE_VALID_FROM, to: null },
     record_time: { recorded_at: SERVICE_RECORDED_AT },
     version: 1,
     quality_state: {
-      dimensions: input.quality ?? [{ dimension: 'Bestätigung', confirmation_level: 'freigegeben' }],
+      dimensions: input.quality ?? [
+        { dimension: 'Bestätigung', confirmation_level: 'freigegeben' },
+      ],
     },
   };
 }
@@ -222,7 +227,9 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     description:
       'Synthetisches Delivery-Team des Managed-Service-Betreibers, abgebildet im Mandanten ' +
       'Nordwerk. Trägt die Delivery-Verantwortung der aktiven Service Instances (Ziel von ' +
-      'R21 delivered_by). Siehe OFFENE FRAGE O-WP012-04: ein Provider-Team wird bewusst ' +
+      // AC-24-Korrektur (WP-018): interne Fragen-Kennung aus dem gerenderten Produkttext
+      // entfernt (Prozessvokabular-Wächter); die OFFENE FRAGE selbst bleibt benannt.
+      'R21 delivered_by). Siehe OFFENE FRAGE: ein Provider-Team wird bewusst ' +
       'tenant-eigen modelliert, weil mandantenübergreifende Kanten verboten sind.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -294,7 +301,8 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
       'Geschäftsstunden, P2 in 1 Geschäftstag, P3 in 2 Geschäftstagen; Delivery Time: monatlicher ' +
       'Risiko- & Control-Review innerhalb von 5 Geschäftstagen nach Periodenende. ' +
       'Keine Preise und keine Service Credits im Demo-Seed. ' +
-      'Siehe OFFENE FRAGE O-WP012-05: Dok. 07 §7 kennt keine typisierten SLA-Felder, daher Klartext.',
+      // AC-24-Korrektur (WP-018): Kennung entfernt, OFFENE FRAGE bleibt benannt.
+      'Siehe OFFENE FRAGE: Dok. 07 §7 kennt keine typisierten SLA-Felder, daher Klartext.',
     lifecycle_status: 'Freigegeben',
   }),
   nordwerkServiceObject({
@@ -351,7 +359,8 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     description:
       'Synthetisches Nachweispaket des Evidence-Betriebs: gebündelte, geprüfte Nachweise zu den ' +
       'priorisierten Controls inklusive Gültigkeitsfenster und offener Lücken. Grundlage für die ' +
-      'Kante `evidences` auf das Backup-&-Recovery-Control (siehe OFFENE FRAGE O-WP012-06).',
+      // AC-24-Korrektur (WP-018): Kennung entfernt, OFFENE FRAGE bleibt benannt.
+      'Kante `evidences` auf das Backup-&-Recovery-Control (siehe OFFENE FRAGE).',
     lifecycle_status: 'Freigegeben',
   }),
   nordwerkServiceObject({
@@ -390,7 +399,8 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     description:
       'Synthetische Messgröße: Anteil der priorisierten Controls mit gültigem, akzeptiertem ' +
       'Nachweis. Illustrativer Demo-Zielkorridor: 90 %. KPI ist Messgröße, nicht Leistungs' +
-      'versprechen (Dok. 14 §8.1). Siehe OFFENE FRAGE O-WP012-05: Dok. 07 §7 kennt keine ' +
+      // AC-24-Korrektur (WP-018): Kennung entfernt, OFFENE FRAGE bleibt benannt.
+      'versprechen (Dok. 14 §8.1). Siehe OFFENE FRAGE: Dok. 07 §7 kennt keine ' +
       'typisierten KPI-Wert-/Zielfelder, daher Klartext statt erfundener Felder.',
     lifecycle_status: 'Freigegeben',
     scope_ids: [SCOPE_NORDWERK_ISMS_CORE],
@@ -742,7 +752,8 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
       'Shared Responsibility (MS03): Fachbereiche liefern Nachweise und Entscheidungen; das ' +
       'Delivery-Team plant, prüft und steuert die Audit-Vorbereitung. ' +
       'Wichtig: Dieser Seed modelliert KEINE mandantenübergreifende Leistungserbringung; alle ' +
-      'Beziehungen enden an der Mandantengrenze (siehe OFFENE FRAGE O-WP012-03). Keine Preise.',
+      // AC-24-Korrektur (WP-018): Kennung entfernt, OFFENE FRAGE bleibt benannt.
+      'Beziehungen enden an der Mandantengrenze (siehe OFFENE FRAGE). Keine Preise.',
     lifecycle_status: 'aktiv', // Service-Lifecycle (Dok. 05 §7)
     owner_ids: [
       { owner_id: P.ROLE_SERVICE_LEAD, owner_kind: 'fachlich', role: 'Managed Service Lead' },

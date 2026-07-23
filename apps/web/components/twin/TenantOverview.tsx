@@ -36,10 +36,13 @@ export function TenantOverview({ tenants }: { tenants: readonly DemoTenant[] }) 
                 <span className="tw-card-title">{tenant.display_name}</span>
                 <span className="tw-card-sub">{tenant.industry}</span>
                 <span className="tw-badge-row">
+                  {/* AC-24-Korrektur (WP-018): „Demo-Slice" → „Demo" – „Slice" ist
+                      Prozessvokabular (Wächter `prozessvokabular.test.tsx`), nur die
+                      Prozesskennung entfernt, keine Umformulierung darüber hinaus. */}
                   {tenant.has_object_graph ? (
                     <Badge variant="graph">Objektgraph vorhanden</Badge>
                   ) : (
-                    <Badge variant="nograph">kein Objektgraph (Demo-Slice)</Badge>
+                    <Badge variant="nograph">kein Objektgraph (Demo)</Badge>
                   )}
                 </span>
                 <span className="tw-cta" aria-hidden="true">

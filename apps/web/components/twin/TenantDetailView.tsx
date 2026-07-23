@@ -62,13 +62,20 @@ function TenantGraph({
   objectCount,
   relationshipCount,
   tenantId,
-}: Pick<TenantDetailModel, 'familyGroups' | 'relationships' | 'objectCount' | 'relationshipCount'> & {
+}: Pick<
+  TenantDetailModel,
+  'familyGroups' | 'relationships' | 'objectCount' | 'relationshipCount'
+> & {
   tenantId: string;
 }) {
   const familyCount = familyGroups.length;
 
   return (
     <>
+      {/* biome-ignore lint/a11y/useAriaPropsSupportedByRole: Bestandszustand (`aria-label` auf
+          generischem `div` ist laut ARIA nicht zugesichert). Eine Korrektur (Rolle ergänzen oder
+          Label entfernen) wäre eine Produktänderung außerhalb von WP-018 – als A11y-Befund für
+          die sichtbare Abnahme (Slice 2) vorgemerkt, nicht still behoben. */}
       <div className="tw-summary" aria-label="Kennzahlen des Objektgraphen">
         <div className="tw-stat">
           <span className="tw-stat-num">{objectCount}</span>
@@ -135,13 +142,15 @@ function EmptyGraphState({
     <>
       <h2 id="objektgraph">Objektgraph</h2>
       <div className="tw-empty" role="note">
-        <h3>Kein Objektgraph in dieser Demo-Slice</h3>
+        {/* AC-24-Korrektur (WP-018): „Demo-Slice" → „Demo" (hier und im Fallback-Zweig
+            unten) – „Slice" ist Prozessvokabular; minimale Entfernung, nichts Neues. */}
+        <h3>Kein Objektgraph in dieser Demo</h3>
         <p style={{ marginTop: 0 }}>
           Für <strong>{tenantName}</strong> ist im aktuellen Demo-Seed noch kein digitaler Zwilling
           modelliert.{' '}
           {modeledTenants.length > 0
             ? `Ausmodelliert ist bislang ${modeledNames}; die übrigen Mandanten folgen in späteren Ausbaustufen.`
-            : 'In dieser Demo-Slice ist noch kein Mandant vollständig ausmodelliert.'}
+            : 'In dieser Demo ist noch kein Mandant vollständig ausmodelliert.'}
         </p>
         {modeledTenants.length > 0 ? (
           <p className="tw-empty-actions" style={{ marginBottom: 0 }}>

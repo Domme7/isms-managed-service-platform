@@ -13,11 +13,7 @@ import { DEMO_SEED, TENANT_ID } from '@isms/demo-seed';
 import { RelationshipList } from '../RelationshipList';
 import { TenantDetailView } from '../TenantDetailView';
 import { TenantOverview } from '../TenantOverview';
-import {
-  buildTenantDetail,
-  getTenant,
-  type ResolvedRelationship,
-} from '../../../lib/twin/data';
+import { buildTenantDetail, getTenant, type ResolvedRelationship } from '../../../lib/twin/data';
 import { objectDetailHref } from '../../../lib/twin/object-detail';
 
 function tenantOrThrow(tenantId: string) {
@@ -80,9 +76,7 @@ describe('TenantDetailView – Nordwerk (mit Graph)', () => {
     expect(within(edge).getByText(/processes/)).toBeInTheDocument();
 
     // Generisch: KEINE rohe object_id irgendwo im Detail-Output (alle Endpunkte aufgelöst).
-    const nordwerkObjects = DEMO_SEED.objects.filter(
-      (o) => o.tenant_id === TENANT_ID.NORDWERK,
-    );
+    const nordwerkObjects = DEMO_SEED.objects.filter((o) => o.tenant_id === TENANT_ID.NORDWERK);
     expect(nordwerkObjects.length).toBeGreaterThanOrEqual(1);
     for (const object of nordwerkObjects) {
       expect(screen.queryByText(object.object_id)).not.toBeInTheDocument();
@@ -111,10 +105,7 @@ describe('TenantDetailView – Verlinkung auf die Objekt-360-Seite (WP-014 Slice
       const object = erwartet[index];
       const link = within(heading).getByRole('link');
       expect(link).toHaveTextContent(object.display_name);
-      expect(link).toHaveAttribute(
-        'href',
-        objectDetailHref(TENANT_ID.NORDWERK, object.object_id),
-      );
+      expect(link).toHaveAttribute('href', objectDetailHref(TENANT_ID.NORDWERK, object.object_id));
     });
   });
 
@@ -138,9 +129,7 @@ describe('TenantDetailView – Verlinkung auf die Objekt-360-Seite (WP-014 Slice
     const { container } = render(<TenantDetailView model={model} />);
 
     const nordwerkIds = new Set(
-      DEMO_SEED.objects
-        .filter((o) => o.tenant_id === TENANT_ID.NORDWERK)
-        .map((o) => o.object_id),
+      DEMO_SEED.objects.filter((o) => o.tenant_id === TENANT_ID.NORDWERK).map((o) => o.object_id),
     );
     const hrefs = Array.from(container.querySelectorAll('a[href*="/objekt/"]')).map((a) =>
       a.getAttribute('href'),
@@ -187,7 +176,8 @@ describe('TenantDetailView – Empty-State (ohne Graph)', () => {
     render(<TenantDetailView model={model} />);
 
     expect(model.objectCount).toBe(0);
-    expect(screen.getByText(/Kein Objektgraph in dieser Demo-Slice/i)).toBeInTheDocument();
+    // Wortlaut ohne „Slice" seit der AC-24-Korrektur (WP-018, Prozessvokabular-Wächter).
+    expect(screen.getByText(/Kein Objektgraph in dieser Demo/i)).toBeInTheDocument();
     // Kein Objekt-/Beziehungsbereich, wenn kein Graph vorhanden ist.
     expect(screen.queryByRole('heading', { name: /Objekte nach Familie/ })).not.toBeInTheDocument();
 
