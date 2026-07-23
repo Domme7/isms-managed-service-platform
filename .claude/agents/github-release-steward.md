@@ -60,7 +60,7 @@ Security, QA, Human Owner bei Remote/Schutzregeln.
 ## Budget
 
 - auf das aktive Work Package begrenzt
-- bei Scope Drift oder unübersichtlichem Context stoppen und checkpointen
+- bei Scope Drift stoppen, Stand sichern und checkpointen
 
 ## Stop Conditions
 

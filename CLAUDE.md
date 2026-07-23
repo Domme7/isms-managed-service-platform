@@ -31,6 +31,9 @@ Die ISMS Managed Service Platform ist ein mandantenfähiges, rollenbasiertes Bet
 - Spätestens nach drei bis fünf materiellen Dateiänderungen: Statusprüfung und Checkpoint.
 - Nach erfolgreichem Test-/Review-Zyklus: Verified Checkpoint.
 - Vor Session-, Rollen- oder Worktreewechsel: Handover Checkpoint.
+- Der Stand ist **jederzeit** übernahmefähig: nach jedem logischen Teilziel committen und pushen,
+  Statusdateien mit dem Code aktualisieren. Eine neue Session muss allein aus dem Repository
+  weiterarbeiten können.
 - Tests und Dokumentation entstehen mit der Funktion.
 - Builder und finaler Reviewer sind getrennt.
 - Parallele Writer verwenden getrennte Branches/Worktrees und stabile Verträge.
@@ -40,7 +43,7 @@ Die ISMS Managed Service Platform ist ein mandantenfähiges, rollenbasiertes Bet
 - Lade niemals pauschal alle Konzeptdokumente.
 - Nutze das Context Pack des aktiven Work Packages.
 - Bei fehlender Information lies gezielt die referenzierte Quelle.
-- Erfinde keine Produktentscheidung, um eine Kontextlücke zu kaschieren.
+- Erfinde keine Produktentscheidung, um eine Informationslücke zu kaschieren.
 
 ## Sicherheit und Daten
 
@@ -63,7 +66,7 @@ Sichern, dokumentieren und eskalieren bei:
 - unsicherer Authentisierung, Autorisierung, Mandantentrennung oder Datenschutzlage,
 - kritischem offenen Security Finding,
 - deutlich wachsendem Work-Package-Scope,
-- unübersichtlichem Context ohne frischen Checkpoint,
+- unklarem Stand ohne frischen Checkpoint,
 - nicht sicher integrierbaren Paralleländerungen.
 
 ## Definition of Done – Kurzform

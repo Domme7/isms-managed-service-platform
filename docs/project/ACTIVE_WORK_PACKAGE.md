@@ -1,28 +1,29 @@
 # Active Work Package
 
-- **ID:** — (kein aktives Work Package)
-- **Zuletzt abgeschlossen:** **WP-016 Mission Control „Heute"** (read-only, **ohne** Morning Mission)
-  - Datei: `work-packages/WP-016_MISSION_CONTROL_HEUTE.md`
-  - Context Pack: `context-packs/WP-016/CONTEXT_PACK.md`
-  - Review-Notiz: `docs/project/reviews/WP-016_INDEPENDENT_REVIEW.md`
-  - Ergebnis: `/heute` ist kein Platzhalter mehr; 343 Tests grün; Browser-QA dokumentiert
-  - Offene Fragen: **O-WP016-01…08** · Findings: **FINDING-0005** (kein Linter im Stack)
+- **ID:** WP-017
+- **Titel:** Entscheidungen im Zwilling (Seed-Erweiterung + Ort „Entscheidungen", read-only)
+- **Datei:** `work-packages/WP-017_ENTSCHEIDUNGEN_IM_ZWILLING.md`
+- **Context Pack:** `context-packs/WP-017/CONTEXT_PACK.md`
+- **Führende Quellen:** Dok. 07 §9 (R23 `decided_in`, R15, R24) · Dok. 10 §9 **nur zur Abgrenzung**
+  · Dok. 06 §7/§17
+- **Status:** Active — Slice 1 (Seed: Decision Records + Ablösepaar)
+- **Builder:** Frontend-/Data-Engineer · **Reviewer:** Code-Reviewer + Product-User-Lead
+- **Human Gates:** keiner — `Decision Record` steht bereits im Contract-Vokabular, die
+  Materialisierung im Seed ist **keine** Contract-Änderung
+- **Ziel des WP:** Der Ort „Entscheidungen" wird echt, und der Seed bekommt seine **erste belegte
+  Versionshistorie** (R24 `supersedes`) — damit wird beweisbar, dass die Historien-Aussagen aus
+  WP-014/WP-016 wirklich abgeleitet und nicht hartkodiert sind.
 
-## Nächster Schritt — Owner-Entscheidung sinnvoll, nicht blockierend
+## Zwei Befunde, die den Zuschnitt bestimmt haben
 
-WP-016 hat eine harte Grenze sichtbar gemacht: der Seed trägt **keine Aufgaben und keine
-Entscheidungen**, und der Objektvertrag kennt **keine Frist-/Aufwand-/Kapazitäts-/Prioritätsfelder**
-(O-WP016-03, O-WP016-04). Das blockiert **Morning Mission und Decision Center gleichermaßen** —
-also Dok. 10 als Ganzes.
+1. **`Task` hat keinen einzigen Beziehungstyp** in Dok. 07 §9 (R01–R25) — weder als Quelle noch als
+   Ziel. Aufgaben wären beziehungslose Waisen im Graphen. Sie werden deshalb **nicht** materialisiert
+   (O-WP017-01). Damit bleibt die **Morning Mission weiterhin blockiert**.
+2. **Eine Decision Card (Dok. 10 §9) ist nicht baubar:** von 14 Pflichtfeldern haben 7 **keinen**
+   Träger im Objektvertrag (u. a. Optionen, Baseline, Wirkung, Ressourcen, Frist, Approver,
+   Outcome Check), 6 nur teilweise (O-WP017-02, -05). Die Seite zeigt deshalb ein **Register
+   belegter Entscheidungen**, keine Decision Card — und sagt das sichtbar.
 
-1. **Seed-/Contract-Erweiterung um Aufgaben und Entscheidungen** — eigenes WP, Voraussetzung für
-   WP-008. Berührt den Objektvertrag → Concept Author + vermutlich Human Gate.
-2. **Executive-Welt** (Dok. 06 §10 / Dok. 10 §8) — weicht dem Problem vorerst aus, läuft aber in
-   dieselbe Grenze, sobald verdichtete Entscheidungen gefordert sind.
-
-Ein WP + Context Pack existiert für **beide** Wege noch nicht und muss vom `program-manager`
-erstellt werden.
-
-> Abgeschlossen: WP-001..004, 007, 011, 012, 013, 014, 015, **016**.
+> Abgeschlossen: WP-001..004, 007, 011..016.
 > Offene Human Gates (nicht blockierend): CCP-001..003, Docker-Engine-Start, FINDING-0004,
-> O-WP014-09 (voller Seed im Client-Bundle) vor der DB→UI-Anbindung.
+> O-WP014-09 (voller Seed im Client-Bundle) vor der DB→UI-Anbindung, FINDING-0005 (kein Linter).

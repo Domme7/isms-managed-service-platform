@@ -6,6 +6,53 @@ Diese Datei ist die Arbeitsweise; **Produktwahrheit** bleibt `docs/concept/activ
 
 ---
 
+## 0. „Mach weiter" – das genügt als Auftrag
+
+Diese Datei ist so gebaut, dass eine neue Session mit **einem einzigen Satz** starten kann:
+*„Übernimm das Projekt in `C:/Users/Domme/Desktop/coding/apps/ISMS` und mach weiter."*
+Alles Weitere steht im Repository. Reihenfolge:
+
+1. `CLAUDE.md` — verbindliche Arbeitsregeln
+2. **diese Datei** — Arbeitsweise, Leitplanken, Lektionen
+3. `docs/project/CURRENT_STATE.md` — wo das Projekt steht
+4. `docs/project/handovers/LATEST.md` — letzter Stand und exakter nächster Schritt
+5. `docs/project/ACTIVE_WORK_PACKAGE.md` — was gerade läuft (oder dass nichts läuft)
+
+Dann verifizieren:
+
+```bash
+pnpm install && pnpm test --force && python scripts/validate_handoff.py
+```
+
+**Und die App wirklich ansehen, nicht nur den Code lesen.** Der Zustand des Produkts steht nicht
+vollständig in den Statusdateien — starte den Dev-Server und geh die vier echten Orte durch
+(`/heute`, `/twin`, `/isms`, `/services`), inklusive einer Objekt-360-Seite und eines
+Mandantenwechsels. Vieles, was in Reviews gefunden wurde, war nur dort sichtbar (siehe §7).
+
+```bash
+pnpm --filter @isms/web dev      # http://localhost:3000/login
+```
+
+**Wo die Produktwahrheit liegt:**
+
+| Quelle | Rolle |
+|---|---|
+| `docs/concept/active/*.md` (24 Dokumente) | **verbindlich** — daraus wird abgeleitet |
+| `docs/concept/pdf/*.pdf` (24 Originale) | die ursprünglich gelieferten Konzeptdokumente; bei Zweifeln am Markdown hier gegenlesen |
+| `docs/concept/MANIFEST.json` | Hashes; `validate_handoff.py` prüft sie |
+| `docs/project/PROJECT_UNDERSTANDING.md` | destilliertes Gesamtverständnis für den schnellen Einstieg — **nicht** autoritativ |
+| `docs/project/OPEN_QUESTIONS.md` | alle benannten Konzeptlücken (O-…) — hier steht, was bewusst **nicht** gebaut wurde |
+| `docs/decisions/`, `docs/architecture/adr/` | getroffene Entscheidungen samt Begründung |
+| `docs/project/reviews/` | was frühere Reviews gefunden haben — vermeidet Wiederholung derselben Fehler |
+
+Lade **nicht** alle Konzeptdokumente pauschal (`CLAUDE.md`, Context-Regel) — nimm das Context Pack
+des aktiven Work Packages und lies gezielt nach.
+
+Der Owner muss **nie** einen Übergabetext aus einem Chat kopieren. Wenn etwas davon nicht stimmt,
+ist das ein Fehler in der Arbeitsweise, kein Grund nachzufragen — dann zuerst den Stand korrigieren.
+
+---
+
 ## 1. Wo das Projekt steht
 
 Lauffähige Demo-App (read-only, rein synthetisch). Drei Orte der Shell sind echt:
@@ -144,8 +191,20 @@ Reihenfolge ist Vorschlag, der Orchestrator darf verfeinern (Vision nie verklein
 6. **Integrationen/Workflow** (Dok. 17), **KI-Guardrails** (Dok. 20A) — späte Phasen
 
 **Realistische Erwartung:** Das Gesamtprodukt (9 Phasen, 33 Module) ist ein Marathon über viele
-Sessions. Eine Session baut typischerweise 1–3 Work Packages. Wenn der Kontext voll wird:
-Stand sichern, `LATEST.md` erneuern, Übergabe-Prompt ausgeben — **nicht** mitten im WP abbrechen.
+Sessions. Eine Session baut typischerweise 1–3 Work Packages.
+
+**Der Stand ist immer übernahmefähig — das ist eine laufende Pflicht, kein Notfallverfahren.**
+Eine neue Session braucht nichts als den Satz „mach weiter": Sie liest `CURRENT_STATE.md`,
+`handovers/LATEST.md` und `ACTIVE_WORK_PACKAGE.md` und weiß, wo das Projekt steht und was als
+Nächstes dran ist. Damit das jederzeit stimmt:
+
+- **Nach jedem logischen Teilziel committen und `git push origin main`** — nicht erst am WP-Ende.
+- **Statusdateien mit dem Code aktualisieren**, nicht nachgelagert: `CURRENT_STATE.md`,
+  `ACTIVE_WORK_PACKAGE.md`, `WORK_QUEUE.md`, `handovers/LATEST.md`.
+- **Auch mitten im Work Package** muss aus dem Repository hervorgehen, was gerade läuft, was fertig
+  ist und was der nächste Schritt wäre — dafür sind die Micro Checkpoints da.
+- Es wird **nie** mitten in einem Work Package abgebrochen, ohne dass der Stand gesichert und
+  beschrieben ist.
 
 ---
 

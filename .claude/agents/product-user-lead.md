@@ -60,7 +60,7 @@ Human Product Owner bei Scope-/Visionänderung; Product Critic Review.
 ## Budget
 
 - auf das aktive Work Package begrenzt
-- bei Scope Drift oder unübersichtlichem Context stoppen und checkpointen
+- bei Scope Drift stoppen, Stand sichern und checkpointen
 
 ## Stop Conditions
 

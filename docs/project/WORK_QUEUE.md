@@ -12,6 +12,7 @@
 | P1 | WP-014 | Objekt-360-Detailseite (read-only): fünf Fragen je Objekt, navigierbarer Graph | 1/2 | **Done (3× Review + 2 Nachprüfungen + Browser-QA, 151 Web-Tests)** | WP-013 ✓, Dok. 07 §10 / Dok. 06 | keiner (read-only, synthetisch) |
 | P1 | WP-015 | Visuelles Design (minimal) — Uplift zurückgenommen, nur dezenter Hintergrund | 1 | **Done (DR-0003, Owner-Entscheidung)** | WP-011..013 ✓, Dok. 06 §18 | keiner (rein visuell) |
 | P1 | WP-016 | Mission Control „Heute" (read-only, **ohne** Morning Mission) | 1 | **Done (2 Reviews + 2 Gegenpruefungen + Browser-QA, 229 Web-Tests)** | WP-011…014 ✓, Dok. 06 §7 S01/§5/§17 | keiner (read-only, synthetisch) |
+| P1 | WP-017 | Entscheidungen im Zwilling: Decision Records im Seed + Ort „Entscheidungen“ | 1/4 | **Active** | WP-016 ✓, Dok. 07 §9 (R23/R15/R24) | keiner (Typ steht im Contract, keine Vertragsänderung) |
 | P1 | WP-005 | Lokale Authentisierungssimulation, Rollen- und Tenant-Wechsel | 1 | Planned | WP-002, Security ADR | Security Review |
 | P1 | WP-006 | Customer Workspace – erster vertikaler Pfad | 1–2 | Planned | WP-003–005 | Product + ISMS Review |
 | P2 | WP-007 | Persistenz der Twin-Kernobjekte (PostgreSQL + Drizzle) | 2 | **Done (Code+Security Review, 18 DB-Tests, 112 gesamt)** | WP-003 ✓, ADR-0002 | RLS-Härtung: FINDING-0004 |
@@ -19,8 +20,9 @@
 | P2 | WP-009 | Report Package + erstes reproduzierbares Executive Deck | 5 | Planned | WP-006–008 | Presentation Review |
 | P2 | WP-010 | Research-/Concept-Change-Pipeline im Repository | kontinuierlich | Planned | WP-001 | Human Gate bei aktiver Konzeptänderung |
 
-WP-001, WP-002 und WP-003 sind abgeschlossen. **Aktiv ist WP-004** (read-only Digital Twin Explorer,
-rendert den Demo-Seed im Browser — kein DB/Docker/Auth). Die ursprüngliche „App Shell" ist als **WP-011**
-neu eingeordnet (die volle Shell/Login folgt, wenn interaktive rollenbezogene Erlebniswelten gebaut werden).
-Persistenz (PostgreSQL) bleibt ein eigenes späteres WP mit Docker-/ORM-Human-Gate. Die Reihenfolge darf der
-Orchestrator verfeinern, ohne die Produktvision zu verkleinern.
+**Aktiv ist WP-017** (Entscheidungen im Zwilling). Abgeschlossen sind WP-001…004, 007 und 011…016 —
+die Statusspalte oben ist maßgeblich, dieser Absatz nur Orientierung.
+
+Persistenz (`@isms/db`, WP-007) existiert, ist aber bewusst **noch nicht** ans UI angebunden; das
+geschieht erst nach FINDING-0004 (DB-RLS) und O-WP014-09 (voller Seed im Client-Bundle).
+Die Reihenfolge darf der Orchestrator verfeinern, ohne die Produktvision zu verkleinern.
