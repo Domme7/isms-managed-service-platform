@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260723T185133Z-VERIFIED",
+  "type": "verified",
+  "work_package": "WP-020 \u2013 Verdichtungs-Umbau, Dashboard-Schicht aus belegten Daten, neuer Einstiegsfluss (DR-0008/DR-0009)",
+  "timestamp_utc": "2026-07-23T18:51:33.042647+00:00",
+  "summary": "WP-020 abgeschlossen: Verdichtung, Dashboard-Schicht aus belegten Daten, neuer Einstiegsfluss, Rollenvarianten, Cross-Tenant-Schutz. 6 Gates x 2 Reviewrunden, 2 Fix-Paesse. FINDING-0009 geschlossen, FINDING-0008 auf 7 Seiten saniert.",
+  "branch": "main",
+  "commit": "276d538",
+  "git_status": "clean or unavailable",
+  "tests": "Monorepo 580 gruen (api 2, contracts 55, demo-seed 54, web 450, db 19); lint + typecheck gruen; axe sauber (nur Objekt-360-Altbestand)",
+  "exact_next_step": "Kundenwelt Stufe 1 (WP-006, geschnitten) bauen, dann 2-3 Cockpit-Varianten -> STOPP fuer visuelle Owner-Freigabe (DR-0010)"
+}
