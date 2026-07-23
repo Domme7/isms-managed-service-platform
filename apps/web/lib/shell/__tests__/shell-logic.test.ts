@@ -78,10 +78,21 @@ describe('NAV_PLACES – acht stabile Orte (Dok. 06 06-D01)', () => {
     );
   });
 
+  it('markiert „Reports" als live und ohne geplanten Screen (WP-032 Slice 2)', () => {
+    const reports = getPlace('reports');
+    expect(reports.live).toBe(true);
+    // Der Ort ist kein Platzhalter mehr: die Ankündigung eines geplanten Screens entfällt.
+    expect(reports.plannedScreen).toBeUndefined();
+    // KONZEPTANKER: Die Leitfrage des Screenkatalogs bleibt unverändert erhalten. Die Seite
+    // rendert sie NICHT als sichtbare Überschrift (sie setzt einen Generator voraus, den es
+    // nicht gibt) und führt stattdessen mit Struktur und gezählter Grundlage (O-WP032-02).
+    expect(reports.question).toBe('Welche Geschichte soll aus demselben Datenstand entstehen?');
+  });
+
   it('markiert die übrigen Platzhalter-Orte als (noch) nicht live', () => {
     // Live sind bislang „Kunden" (Twin Explorer, WP-004/011), „Services" (WP-012 Slice 2),
-    // „ISMS" (WP-013 Slice 1), „Heute" (WP-016 Slice 2), „Entscheidungen" (WP-017 Slice 2)
-    // und „Administration" (WP-032 Slice 1).
+    // „ISMS" (WP-013 Slice 1), „Heute" (WP-016 Slice 2), „Entscheidungen" (WP-017 Slice 2),
+    // „Administration" (WP-032 Slice 1) und „Reports" (WP-032 Slice 2).
     const live: readonly string[] = [
       'kunden',
       'services',
@@ -89,9 +100,10 @@ describe('NAV_PLACES – acht stabile Orte (Dok. 06 06-D01)', () => {
       'heute',
       'entscheidungen',
       'administration',
+      'reports',
     ];
     const placeholders = NAV_PLACES.filter((p) => !live.includes(p.id));
-    expect(placeholders).toHaveLength(2);
+    expect(placeholders).toHaveLength(1);
     for (const place of placeholders) {
       expect(place.live).not.toBe(true);
       // Ein Platzhalter-Ort behält seine ehrliche Ankündigung (`PlaceholderPage` zeigt sie).

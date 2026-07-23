@@ -34,6 +34,7 @@ import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ServicesContent } from '../services/ServicesContent';
+import { ReportsContent } from '../reports/ReportsContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
@@ -209,6 +210,11 @@ const RENDERER_JE_LIVE_ORT = {
   ),
   services: rollenMandantenMatrix('/services', (r, t) =>
     render(<ServicesContent role={r} tenant={t} />),
+  ),
+  // Reports (WP-032 Slice 2): trägt lange, wörtlich aus der Quelle übernommene Strukturtexte –
+  // volle Rollen-/Mandantenmatrix inklusive der leeren Mandanten.
+  reports: rollenMandantenMatrix('/reports', (r, t) =>
+    render(<ReportsContent role={r} tenant={t} />),
   ),
   // Administration (WP-032 Slice 1): sicherheitsnaher Ort mit langen Struktur- und Lückentexten –
   // volle Rollen-/Mandantenmatrix inklusive der leeren Mandanten (Leerzustand ist die

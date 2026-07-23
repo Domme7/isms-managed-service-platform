@@ -34,6 +34,7 @@ import { AdministrationContent } from '../administration/AdministrationContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
+import { ReportsContent } from '../reports/ReportsContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { AppShell } from '../shell/AppShell';
 import { MissionControlContent } from '../shell/MissionControlContent';
@@ -101,6 +102,10 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
     isms: (t) => render(<IsmsContent role={role('R03')} tenant={t} />),
     entscheidungen: (t) => render(<EntscheidungenContent role={role('R03')} tenant={t} />),
     services: (t) => render(<ServicesContent role={role('R03')} tenant={t} />),
+    // Reports (WP-032 Slice 2): der Leerzustand der Datengrundlage ist mandantenlokal; die
+    // mandantenneutrale Berichtsstruktur bleibt sichtbar, darf aber keine Existenzaussage über
+    // weitere Mandanten erzeugen (der Fallkatalog nennt Betreiber-Sichten).
+    reports: (t) => render(<ReportsContent role={role('R02')} tenant={t} />),
     // Administration (WP-032 Slice 1): sicherheitsnaher Ort – der Leerzustand darf weder eine
     // Existenzaussage über andere Mandanten machen noch das globale Rollen-/Strukturmodell als
     // „Konten dieses Mandanten" ausgeben. Bewusst mit der Administrationsrolle geprüft.

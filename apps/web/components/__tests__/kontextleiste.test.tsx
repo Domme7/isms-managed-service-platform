@@ -42,6 +42,7 @@ import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ServicesContent } from '../services/ServicesContent';
+import { ReportsContent } from '../reports/ReportsContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { CONTEXT_GAPS, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
 import { SessionProvider } from '../shell/SessionProvider';
@@ -89,6 +90,7 @@ const HAUPTSEITE_JE_LIVE_ORT: Partial<Record<PlaceId, () => RenderResult>> = {
     render(<EntscheidungenContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   services: () =>
     render(<ServicesContent role={role('R08')} tenant={tenant(TENANT_ID.NORDWERK)} />),
+  reports: () => render(<ReportsContent role={role('R02')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   administration: () =>
     render(<AdministrationContent role={role('R12')} tenant={tenant(TENANT_ID.NORDWERK)} />),
 };
@@ -192,6 +194,9 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     services: () =>
       // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
       render(<ServicesContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
+    reports: () =>
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
+      render(<ReportsContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
     administration: () =>
       // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
       render(<AdministrationContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),

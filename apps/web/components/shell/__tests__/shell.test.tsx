@@ -21,7 +21,7 @@ import { AppShell } from '../AppShell';
 import { LoginForm } from '../LoginForm';
 import { PlaceholderPage } from '../PlaceholderPage';
 import { SessionProvider } from '../SessionProvider';
-import { NAV_PLACES, getPlace } from '../../../lib/shell/places';
+import { NAV_PLACES } from '../../../lib/shell/places';
 import { DEMO_ROLES } from '../../../lib/shell/roles';
 import {
   SESSION_STORAGE_KEY,
@@ -405,14 +405,32 @@ describe('LoginPage – Simulation beschriftet, Anmeldung erzeugt die NEUTRALE S
 });
 
 describe('PlaceholderPage – ehrliche Empty-Message', () => {
+  /**
+   * FIXTURE-WECHSEL (WP-032 Slice 2): Bis hierher lief dieser Test auf dem Ort „Reports". Der
+   * ist seit Slice 2 live und trägt deshalb keinen `plannedScreen` mehr. Geprüft wird jetzt der
+   * verbliebene Platzhalter-Ort. Die REGEL bleibt unverändert (Ort, Leitfrage, ehrliche
+   * Empty-Message, Klartext-Screenname ohne Screen-Code) – gewechselt hat nur das Testobjekt.
+   * Der Testling wird bewusst aus `NAV_PLACES` gezogen, damit er nicht auf einen Ort zeigt, der
+   * inzwischen live ist.
+   */
+  const platzhalter = NAV_PLACES.find((p) => p.live !== true);
+
+  it('es gibt (noch) einen Platzhalter-Ort, auf dem diese Message greift', () => {
+    // Blindheitsschutz: ohne Platzhalter-Ort wäre der Test unten leer statt grün. Fällt der
+    // letzte Ort weg, muss hier bewusst auf eine synthetische Fixture umgestellt werden.
+    expect(platzhalter, 'kein Platzhalter-Ort mehr in NAV_PLACES').toBeDefined();
+    expect(platzhalter?.plannedScreen).toBeTruthy();
+  });
+
   it('zeigt Ort, Leitfrage und die „entsteht in einer späteren Phase"-Message', () => {
-    render(<PlaceholderPage place={getPlace('reports')} />);
-    expect(screen.getByRole('heading', { level: 1, name: 'Reports' })).toBeInTheDocument();
+    if (!platzhalter) throw new Error('Testfixture fehlt: Platzhalter-Ort');
+    render(<PlaceholderPage place={platzhalter} />);
+    expect(screen.getByRole('heading', { level: 1, name: platzhalter.label })).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { name: /entsteht in einer späteren Phase/i }),
     ).toBeInTheDocument();
-    // WP-028/DR-0013: der geplante Screen erscheint als Klartext-Name, ohne Screen-Code „S10".
-    expect(screen.getByText(/Reporting Studio/)).toBeInTheDocument();
-    expect(screen.queryByText(/S10/)).not.toBeInTheDocument();
+    // WP-028/DR-0013: der geplante Screen erscheint als Klartext-Name, ohne Screen-Code („S…").
+    expect(screen.getByText(new RegExp(platzhalter.plannedScreen as string))).toBeInTheDocument();
+    expect(screen.queryByText(/\bS\d{2}\b/)).not.toBeInTheDocument();
   });
 });

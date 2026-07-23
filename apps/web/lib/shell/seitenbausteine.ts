@@ -121,7 +121,7 @@ export function getBaustein(id: BausteinId): Seitenbaustein {
 
 /**
  * Orte der Konvention: die Live-Hauptseiten (`heute`/`kunden`/`isms`/`entscheidungen`/
- * `services`/`administration`) plus zwei Detailseiten UNTER bestehenden Orten (Muster: eigene
+ * `services`/`reports`/`administration`) plus zwei Detailseiten UNTER bestehenden Orten (Muster: eigene
  * Zuordnung, kein neuer Nav-Ort). `objekt360` liegt unter „Kunden"/„ISMS"/„Services";
  * `kundenstart` ist die
  * Kunden-Startseite „verwalten" unter dem Ort „Kunden" (WP-006 Slice 1). Beide sind KEINE
@@ -133,6 +133,7 @@ export type BausteinOrt =
   | 'isms'
   | 'entscheidungen'
   | 'services'
+  | 'reports'
   | 'administration'
   | 'objekt360'
   | 'kundenstart';
@@ -342,6 +343,45 @@ export const BAUSTEIN_ABDECKUNG: Readonly<Record<BausteinOrt, readonly BausteinZ
       status: 'teilweise',
       wo: 'Vertrauensgrad des Wirkungsbeitrags an den Karten.',
       fehlt: 'Ein seitenweiter Vertrauenswert (benannte Lücke in der Kontextleiste).',
+    },
+  ],
+  reports: [
+    {
+      baustein: 'question_header',
+      status: 'teilweise',
+      wo: 'Leitfrage am Seitenkopf; Gegenstand sind die gezählte Grundlage und die Berichtsstruktur.',
+      fehlt:
+        'Ein Seiten-Status und ein Seiten-Owner (die Seite ist kein Bericht und trägt beides nicht).',
+    },
+    { baustein: 'context_bar', status: 'vorhanden', wo: 'Kontextleiste unter dem Seitenkopf.' },
+    {
+      baustein: 'summary_pulse',
+      status: 'teilweise',
+      wo: 'Gezählte Grundgesamtheiten des aktiven Mandanten je Herkunftsbereich.',
+      fehlt: FEHLT_SUMMARY,
+    },
+    {
+      baustein: 'relationship_panel',
+      status: 'verweis',
+      wo: 'Beziehungen je Objekt auf den Objektseiten der verlinkten Fachorte.',
+    },
+    { baustein: 'impact_panel', status: 'ohne_traeger', grund: GRUND_IMPACT },
+    { baustein: 'decision_card', status: 'ohne_traeger', grund: GRUND_DECISION_CARD },
+    { baustein: 'action_rail', status: 'ohne_traeger', grund: GRUND_ACTION_RAIL },
+    {
+      baustein: 'history_decision_record',
+      status: 'ohne_traeger',
+      grund:
+        'Versionen, Freigaben und Änderungsverlauf entstehen an einem erzeugten Bericht; im ' +
+        'Datenbestand gibt es keinen Bericht, dessen Verlauf hier stehen könnte.',
+    },
+    {
+      baustein: 'trust_layer',
+      status: 'teilweise',
+      wo: 'Herkunft und Aktualität der gezählten Grundlage (nur der aktive Mandant, zuletzt erfasster Stand).',
+      fehlt:
+        'Quellen-, Vertrauens- und Freigabeangaben je Aussage; sie entstehen erst mit einem ' +
+        'erzeugten Bericht.',
     },
   ],
   administration: [

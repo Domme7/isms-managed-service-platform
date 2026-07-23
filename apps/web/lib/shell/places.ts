@@ -101,10 +101,18 @@ export const NAV_PLACES: readonly NavPlace[] = [
     label: 'Reports',
     href: '/reports',
     hint: 'Briefings, PDF/PPTX, Management Review, Exporte',
+    // KONZEPTANKER (bewusst unverändert): die Leitfrage des Screenkatalogs. Sie setzt einen
+    // Generator voraus, den es nicht gibt („aus demselben Datenstand entstehen"). Die Seite
+    // rendert sie deshalb NICHT als sichtbare Überschrift, die sie im nächsten Satz zurücknehmen
+    // müsste (DR-0013 Nr. 1), sondern führt mit der Frage, die sie heute beantwortet: welche
+    // Berichte das Produkt vorsieht und welches Material des aktiven Mandanten dafür erfasst
+    // ist. Ob der `question`-Wortlaut selbst überarbeitet wird, ist eine Produkt-/
+    // Owner-Entscheidung (O-WP032-02) und wird hier nicht vorweggenommen.
     question: 'Welche Geschichte soll aus demselben Datenstand entstehen?',
     match: ['/reports'],
-    // WP-028/DR-0013: kein Screen-Code (S10) im gerenderten Text; Klartext-Name genügt.
-    plannedScreen: 'Reporting Studio',
+    // WP-032 Slice 2: der Ort zeigt echten Inhalt (gezählte Datengrundlage des aktiven
+    // Mandanten + Berichts-/Präsentationsstruktur). Damit entfällt die Platzhalter-Ankündigung.
+    live: true,
   },
   {
     id: 'wissen',
