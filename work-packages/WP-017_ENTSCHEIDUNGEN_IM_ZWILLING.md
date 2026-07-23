@@ -91,8 +91,14 @@ Daraus lässt sich – ehrlich und nur teilweise – abbilden:
 | Outcome Check | – | **fehlt** |
 | Provenance | `source_refs`, `assertion_kind`, `quality_state` | **teilweise** – keine Methoden-/Szenarioversion |
 
-Sieben Pflichtfelder haben **keinen Träger**, sechs sind **nur teilweise** belegt. Eine Seite,
-die das „Decision Card" nennt, würde eine Vollständigkeit behaupten, die es nicht gibt.
+**Neun** Pflichtfelder haben **keinen Träger**, **fünf** sind **nur teilweise** belegt. Eine
+Seite, die das „Decision Card" nennt, würde eine Vollständigkeit behaupten, die es nicht gibt.
+
+> *Korrektur 2026-07-23:* Hier stand „sieben / sechs" — arithmetisch unmöglich (13 von 14) und mit
+> „Alternativen" ein Feldname, den Dok. 10 nicht führt. Nachgerechnet gegen das PDF (Abschnitt
+> „Decision Cards" / „Pflichtfelder") und gegen `DECISION_CARD_FIELDS`. Genau diese Zahl war der
+> Anlass für Review-Finding F-04: die Projektdokumente beschönigten die Lücke, die dieses Work
+> Package beweisen soll.
 
 **b) Die Leitfrage des Ortes ist auf dieser Datenlage nicht beantwortbar.** `places.ts` führt für
 `entscheidungen` die Leitfrage aus Dok. 06 §7 S03: *„Welche Geschäftsentscheidung ist **jetzt
@@ -459,7 +465,7 @@ darf im Code still entschieden werden.
 | ID (Vorschlag) | Frage | Art | Umgang in WP-017 | Owner / Gate |
 |---|---|---|---|---|
 | **O-WP017-01** | **`Task` (F08) hat in Dok. 07 §9 keine einzige Beziehungszeile.** Der Typ steht im Objektkatalog (§6, F08), kommt aber in **keiner** der 25 Beziehungszeilen R01–R25 vor – weder als Quelle noch als Ziel. Eine Aufgabe wäre damit nicht an Maßnahme, Control, Person, Risiko oder Entscheidung anbindbar | **Konzeptlücke** (blockierend für Dok. 10 §5 / WP-008) | **Tasks werden nicht materialisiert.** Kein vorhandener Kantentyp wird zweckentfremdet; die Lücke wird im Seed-Kommentar und im Produkt (`/heute`) benannt | Concept Author (fehlt eine Zeile in §9, oder lebt „Task" bewusst außerhalb des Graphen – vgl. Dok. 11?) |
-| **O-WP017-02** | **Decision Card vs. Objektvertrag:** Dok. 10 §9.1 verlangt 14 Pflichtfelder; der Objektvertrag (Dok. 07 §7) trägt sieben davon gar nicht (Auslöser, Baseline, Optionen, Wirkung, Ressourcen, Abhängigkeiten, Frist, Outcome Check) und sechs nur teilweise | **Konzeptlücke** (erweitert O-WP016-04) | nichts erfunden; die Lücke ist im Produkt feldweise benannt und per Wächtertest gegen den Contract abgesichert | Concept Author (Envelope-Felder, eigener Objekttyp „Decision Card" oder Moduldaten außerhalb des Zwillings? Ergänzung zu CCP-002/003) |
+| **O-WP017-02** | **Decision Card vs. Objektvertrag:** Dok. 10 §9.1 verlangt 14 Pflichtfelder; der Objektvertrag trägt **neun** davon gar nicht (Auslöser, Baseline, Optionen, Wirkung, Ressourcen, Abhängigkeiten, Empfehlung, Frist, Outcome Check) und **fünf** nur teilweise | **Konzeptlücke** (erweitert O-WP016-04) | nichts erfunden; die Lücke ist im Produkt feldweise benannt und per Wächtertest gegen den Contract abgesichert | Concept Author (Envelope-Felder, eigener Objekttyp „Decision Card" oder Moduldaten außerhalb des Zwillings? Ergänzung zu CCP-002/003) |
 | **O-WP017-03** | **Lebenszyklus einer abgelösten Entscheidung:** `LIFECYCLE_STATUS_DECISION` (Dok. 05 §7) kennt nur „vorbereitet, zur Freigabe, genehmigt, abgelehnt, umgesetzt, überprüft" – **keinen** Zustand für „abgelöst/überholt". Der generische Katalog (Dok. 07 §8) kennt „Überholt: durch neue Version ersetzt; historisch sichtbar" | **Konzeptlücke** (verwandt mit O-D07-02/03) | die Vorgängerentscheidung erhält den **generischen** Zustand `Überholt`; die Union der Vokabulare lässt das zu, eine kanonische Bestätigung steht aus | Concept Author (Entscheidungs-Lifecycle ergänzen oder generischen Zustand offiziell zulassen?) |
 | **O-WP017-04** | **Zielbezug vs. Auslöser:** Dok. 10 §9.1 führt beide als getrennte Pflichtfelder; kanonisch existiert nur **R23 `decided_in`** („Verknüpft fachlichen Zustand mit menschlicher Entscheidung"). Offen, welches der beiden Felder R23 abbildet – und wodurch das jeweils andere belegt würde | **Konzeptlücke** | die R23-Kante wird neutral als „Bezug" dargestellt und **nicht** als „Auslöser" ausgegeben; „Auslöser" bleibt im Ehrlichkeitsblock als fehlend benannt | Concept Author |
 | **O-WP017-05** | **Approver fehlt im Modell:** Dok. 10 §9.1 verlangt „Owner **und** Approver"; der Objektvertrag kennt nur `owner_ids` mit `owner_kind ∈ {fachlich, technisch}` – keine freigabeberechtigte Rolle. Auch R03 `owns` trägt nur Verantwortung, nicht Freigabe | **Konzeptlücke** | kein erfundener Approver, keine Umdeutung von `owner_kind`; im Produkt als fehlend benannt | Concept Author + Product (neue `owner_kind`-Ausprägung, eigenes Feld oder eigener Kantentyp?) |

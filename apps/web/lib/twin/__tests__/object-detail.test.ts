@@ -225,23 +225,55 @@ describe('Wie entwickelt es sich? – Historie wird abgeleitet, nicht erfunden',
     expect(threat.object.quality_state.confidence_indicator).toBeUndefined();
   });
 
-  it('leitet „keine Historie" aus Version, replaced_at und supersedes-Kanten ab (Wächtertest)', () => {
-    // Der Seed trägt ausschließlich version 1, kein replaced_at und keine supersedes-Kante.
-    // Sobald sich das ändert, muss dieser Test fehlschlagen – die Aussage der Seite ist
-    // abgeleitet, nicht konstant.
+  it('leitet die Historie objektweise aus Version, replaced_at und supersedes-Kanten ab (Wächtertest)', () => {
+    // Der Seed trägt weiterhin ausschließlich version 1 und kein replaced_at – die Ablösung ist
+    // FACHLICH modelliert (R24 zwischen zwei eigenständigen Objekten, O-WP017-07). Sobald sich
+    // das ändert, muss dieser Test fehlschlagen: die Aussage der Seite ist abgeleitet, nicht
+    // konstant. Geprüft werden seit WP-017 BEIDE Ausprägungen – Objekte ohne Ablösung und das
+    // eine belegte Ablösepaar.
     expect(DEMO_SEED.objects.every((o) => o.version === 1)).toBe(true);
     expect(DEMO_SEED.objects.every((o) => !o.record_time.replaced_at)).toBe(true);
-    expect(DEMO_SEED.relationships.some((r) => r.relationship_type === 'supersedes')).toBe(false);
 
+    const supersedesKanten = DEMO_SEED.relationships.filter(
+      (r) => r.relationship_type === 'supersedes',
+    );
+    expect(supersedesKanten).toHaveLength(1);
+    const [ablösung] = supersedesKanten;
+    // Richtung laut Dok. 07 §9 R24: die Quelle ist der Nachfolger, das Ziel der Vorgänger.
+    const nachfolgerId = ablösung.source_id;
+    const vorgaengerId = ablösung.target_id;
+
+    let mitHistorie = 0;
     for (const { tenantId, objectId } of getObjectRouteParams()) {
       const { history } = detailOrThrow(tenantId, objectId).evolution;
+      // Für JEDES Objekt gilt weiterhin: keine Datensatzversion, kein Ersetzungszeitpunkt.
       expect(history.has_previous_version).toBe(false);
       expect(history.has_replacement_record).toBe(false);
-      expect(history.supersedes).toEqual([]);
-      expect(history.superseded_by).toEqual([]);
-      expect(history.has_history).toBe(false);
       expect(history.version).toBe(1);
+
+      if (objectId === nachfolgerId) {
+        // Nachfolger: löst ab (ausgehend) – und wird selbst nicht abgelöst.
+        expect(history.supersedes.map((e) => e.neighbor_id)).toEqual([vorgaengerId]);
+        expect(history.supersedes.map((e) => e.orientation)).toEqual(['ausgehend']);
+        expect(history.superseded_by).toEqual([]);
+        expect(history.has_history).toBe(true);
+        mitHistorie += 1;
+      } else if (objectId === vorgaengerId) {
+        // Vorgänger: wurde abgelöst (eingehend) – und löst selbst nichts ab.
+        expect(history.superseded_by.map((e) => e.neighbor_id)).toEqual([nachfolgerId]);
+        expect(history.superseded_by.map((e) => e.orientation)).toEqual(['eingehend']);
+        expect(history.supersedes).toEqual([]);
+        expect(history.has_history).toBe(true);
+        mitHistorie += 1;
+      } else {
+        // Alle übrigen Objekte: unverändert KEINE Historie – die Lücke bleibt benannt.
+        expect(history.supersedes, objectId).toEqual([]);
+        expect(history.superseded_by, objectId).toEqual([]);
+        expect(history.has_history, objectId).toBe(false);
+      }
     }
+    // Beide Ausprägungen sind belegt (sonst wäre der Wächter einseitig).
+    expect(mitHistorie).toBe(2);
   });
 });
 

@@ -14,6 +14,7 @@ import { describe, expect, it } from 'vitest';
 import { OBJECT_FAMILY_ID, OBJECT_TYPE } from '@isms/contracts';
 import { DEMO_SEED, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
 
+import { buildDecisionRegister } from '../../entscheidungen/data';
 import { buildIsmsCoreView } from '../../isms/data';
 import { getManagedServicesForTenant } from '../../services/data';
 import { getPlace } from '../../shell/places';
@@ -47,6 +48,13 @@ function modelOrThrow(tenantId: string): MissionControlModel {
   return model;
 }
 
+/** Erste Bestandszahl eines Orts-Einstiegs – über die Orts-ID statt über einen Index. */
+function stockOf(model: MissionControlModel, placeId: string): number {
+  const entry = model.placeEntryPoints.find((p) => p.placeId === placeId);
+  if (!entry) throw new Error(`Kein Orts-Einstieg für „${placeId}"`);
+  return entry.stock[0].count;
+}
+
 const objectsOf = (tenantId: string) => DEMO_SEED.objects.filter((o) => o.tenant_id === tenantId);
 const relationshipsOf = (tenantId: string) =>
   DEMO_SEED.relationships.filter((r) => r.tenant_id === tenantId);
@@ -59,7 +67,11 @@ const FIXTURE_TENANT_META: DemoTenant = {
   has_object_graph: true,
 };
 
-const NO_STOCK: TenantStock = { ismsCoreObjectCount: 0, managedServiceCount: 0 };
+const NO_STOCK: TenantStock = {
+  ismsCoreObjectCount: 0,
+  managedServiceCount: 0,
+  decisionCount: 0,
+};
 
 /* -----------------------------------------------------------------------------
  * (2) Was ist erfasst worden? – Erfassungswellen
@@ -79,9 +91,11 @@ describe('deriveRecordingWaves – Erfassungswellen werden abgeleitet, nicht ang
 
     const waves = deriveRecordingWaves(objects, relationships);
     expect(waves).toHaveLength(belegteTage.size);
-    expect(waves).toHaveLength(2);
+    // Seit WP-017 trägt Nordwerk drei Erfassungswellen (Kerngraph, Serviceschicht,
+    // Entscheidungsschicht) – die Zahl folgt weiterhin den Daten, nicht dem Work Package.
+    expect(waves).toHaveLength(3);
 
-    expect(waves.map((w) => w.dateDisplay)).toEqual(['15.01.2026', '16.02.2026']);
+    expect(waves.map((w) => w.dateDisplay)).toEqual(['15.01.2026', '16.02.2026', '16.03.2026']);
     expect(waves[0]).toMatchObject({
       recordedOn: '2026-01-15',
       objectCount: 17,
@@ -91,6 +105,11 @@ describe('deriveRecordingWaves – Erfassungswellen werden abgeleitet, nicht ang
       recordedOn: '2026-02-16',
       objectCount: 14,
       relationshipCount: 28,
+    });
+    expect(waves[2]).toMatchObject({
+      recordedOn: '2026-03-16',
+      objectCount: 3,
+      relationshipCount: 8,
     });
     // Eine Welle ist eine TAGESGRUPPE und trägt deshalb bewusst KEINEN Zeitstempel eines
     // einzelnen Datensatzes: die Anzeige würde daraus sonst eine Uhrzeit der ganzen Gruppe machen.
@@ -110,7 +129,7 @@ describe('deriveRecordingWaves – Erfassungswellen werden abgeleitet, nicht ang
     expect(waves.reduce((sum, w) => sum + w.relationshipCount, 0)).toBe(relationships.length);
   });
 
-  it('leitet für den Consulting Operator GENAU EINE Welle ab (Gegenprobe zu „zwei Wellen")', () => {
+  it('leitet für den Consulting Operator GENAU EINE Welle ab (Gegenprobe zu den drei Nordwerk-Wellen)', () => {
     const waves = deriveRecordingWaves(
       objectsOf(TENANT_ID.CONSULTING_OPERATOR),
       relationshipsOf(TENANT_ID.CONSULTING_OPERATOR),
@@ -166,6 +185,11 @@ describe('deriveRecordingWaves – Erfassungswellen werden abgeleitet, nicht ang
       'scope-nordwerk-isms-core',
       'scope-nordwerk-managed-service',
     ]);
+    // Die Entscheidungsschicht legt keine neue Scope-Kennung an; sie nutzt die belegten.
+    expect(waves[2].scopeIds).toEqual([
+      'scope-nordwerk-isms-core',
+      'scope-nordwerk-managed-service',
+    ]);
 
     const operator = deriveRecordingWaves(
       objectsOf(TENANT_ID.CONSULTING_OPERATOR),
@@ -189,23 +213,59 @@ describe('deriveHistoryState – die Aussage folgt den Daten (Fixture-Negativbew
     objectsOf(TENANT_ID.NORDWERK),
     relationshipsOf(TENANT_ID.NORDWERK),
   );
+  /**
+   * Fixture-Referenz „keine Historie". Sie ersetzt den Seed als Kontrastpunkt genau dort, wo der
+   * Seed seit WP-017 SELBST eine Ablösung trägt – der Negativbeweis „andere Datenlage ⇒ andere
+   * Aussage" bleibt damit vollständig erhalten, ohne von der aktuellen Seed-Lage abzuhängen.
+   */
+  const fixtureOhneHistorie = deriveHistoryState(
+    [fixtureObject({ object_id: 'ohne-historie' })],
+    [],
+  );
 
-  it('leitet „keine Historie" aus Version, replaced_at und supersedes-Kanten ab', () => {
-    // Gegenprobe an den Rohdaten: sobald sich der Seed ändert, muss dieser Test fehlschlagen.
+  it('leitet die BELEGTE Historie aus Version, replaced_at und supersedes-Kanten ab', () => {
+    // Gegenprobe an den Rohdaten: die Aussage folgt dem Seed, nicht dem Text. Seit WP-017 trägt
+    // Nordwerk genau eine Ablösekette (R24) – Datensatzversionen und Ersetzungszeitpunkte
+    // bleiben dagegen bewusst ungenutzt (fachliche Ablösung statt Datensatzversion, O-WP017-07).
+    const supersedesKanten = relationshipsOf(TENANT_ID.NORDWERK).filter(
+      (r) => r.relationship_type === 'supersedes',
+    );
     expect(objectsOf(TENANT_ID.NORDWERK).every((o) => o.version === 1)).toBe(true);
     expect(objectsOf(TENANT_ID.NORDWERK).every((o) => !o.record_time.replaced_at)).toBe(true);
-    expect(
-      relationshipsOf(TENANT_ID.NORDWERK).some((r) => r.relationship_type === 'supersedes'),
-    ).toBe(false);
+    expect(supersedesKanten).toHaveLength(1);
 
-    expect(seedState.hasHistory).toBe(false);
+    expect(seedState.hasHistory).toBe(true);
     expect(seedState.maxVersion).toBe(1);
     expect(seedState.objectsWithPreviousVersion).toBe(0);
     expect(seedState.objectsWithReplacementRecord).toBe(0);
-    expect(seedState.supersedesEdgeCount).toBe(0);
-    expect(seedState.statement).toContain('nicht erfasst');
-    // Die Zahl im Satz stammt aus den Daten, nicht aus dem Text.
-    expect(seedState.statement).toContain(`alle ${objectsOf(TENANT_ID.NORDWERK).length} Objekte`);
+    expect(seedState.supersedesEdgeCount).toBe(supersedesKanten.length);
+    expect(seedState.statement).toContain('belegt');
+    // Die Zahl im Satz stammt aus den Daten – und der Numerus stimmt bei genau einem Beleg.
+    expect(seedState.statement).toContain('1 „supersedes"-Beziehung ist erfasst');
+    expect(seedState.statement).not.toContain('Beziehungen sind erfasst');
+    // Die beiden anderen Belegarten sind NICHT belegt und stehen deshalb auch nicht im Satz.
+    expect(seedState.statement).not.toContain('Version größer 1');
+    expect(seedState.statement).not.toContain('Ersetzungszeitpunkt');
+  });
+
+  it('liefert für einen Mandanten OHNE Ablösung weiterhin „keine Historie" (Gegenprobe am Seed)', () => {
+    // Zweite Ausprägung derselben Ableitung, ebenfalls am echten Seed: der Consulting Operator
+    // trägt keine supersedes-Kante – die Aussage bleibt dort die benannte Lücke.
+    const operator = deriveHistoryState(
+      objectsOf(TENANT_ID.CONSULTING_OPERATOR),
+      relationshipsOf(TENANT_ID.CONSULTING_OPERATOR),
+    );
+    expect(
+      relationshipsOf(TENANT_ID.CONSULTING_OPERATOR).some(
+        (r) => r.relationship_type === 'supersedes',
+      ),
+    ).toBe(false);
+    expect(operator.hasHistory).toBe(false);
+    expect(operator.supersedesEdgeCount).toBe(0);
+    expect(operator.statement).toContain('nicht erfasst');
+    expect(operator.statement).toContain(
+      `alle ${objectsOf(TENANT_ID.CONSULTING_OPERATOR).length} Objekte`,
+    );
   });
 
   it('erzeugt bei `version: 2` eine ANDERE Aussage', () => {
@@ -254,8 +314,14 @@ describe('deriveHistoryState – die Aussage folgt den Daten (Fixture-Negativbew
     );
     expect(state.hasHistory).toBe(true);
     expect(state.supersedesEdgeCount).toBe(1);
-    expect(state.statement).not.toBe(seedState.statement);
+    // Kontrast gegen die Datenlage OHNE Historie (der Seed trägt seit WP-017 selbst genau eine
+    // Ablösekette und taugt hier deshalb nicht mehr als Gegenstück).
+    expect(state.statement).not.toBe(fixtureOhneHistorie.statement);
     expect(state.statement).toContain('supersedes');
+    // Umgekehrte Probe: gleiche Datenlage ⇒ gleiche Aussage. Die Fixture bildet exakt die Lage
+    // des Seeds nach (eine supersedes-Kante, keine Version > 1, kein Ersetzungszeitpunkt) und
+    // muss deshalb denselben Satz erzeugen – die Aussage ist abgeleitet, nicht datenspezifisch.
+    expect(state.statement).toBe(seedState.statement);
   });
 
   it('benennt einen leeren Mandanten ehrlich, statt eine Historie zu behaupten', () => {
@@ -297,10 +363,12 @@ describe('deriveObservations – gezählt, nicht bewertet', () => {
     const observations = deriveObservations(objects, relationships);
     const byId = new Map(observations.map((o) => [o.id, o] as const));
 
-    expect(byId.get('ohne_owner')).toMatchObject({ count: 22, total: 31 });
+    expect(byId.get('ohne_owner')).toMatchObject({ count: 22, total: 34 });
     expect(byId.get('scope_ohne_objekt')).toMatchObject({ count: 2, total: 2 });
-    expect(byId.get('kante_ohne_vertrauensgrad')).toMatchObject({ count: 32, total: 43 });
-    expect(byId.get('ohne_nachweisbezug')).toMatchObject({ count: 1, total: 2 });
+    expect(byId.get('kante_ohne_vertrauensgrad')).toMatchObject({ count: 40, total: 51 });
+    // Seit WP-017 zählen auch die drei `Decision Record`-Objekte zu den nachweisfähigen Typen
+    // (EVIDENCE_TARGET_TYPES); genau eine Entscheidung trägt eine `evidences`-Kante.
+    expect(byId.get('ohne_nachweisbezug')).toMatchObject({ count: 3, total: 5 });
 
     // Unabhängige Gegenrechnung an den Rohdaten (der Test rechnet nicht die Funktion nach,
     // sondern die REGEL – so fällt eine geänderte Regel auf).
@@ -446,27 +514,35 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
     expect(entries.map((e) => e.familyObjectCount)).toEqual([1, 2, 6]);
   });
 
-  it('nennt die drei belegten Orte mit dem Bestand des aktiven Mandanten', () => {
+  it('nennt die vier belegten Orte mit dem Bestand des aktiven Mandanten', () => {
     const model = modelOrThrow(TENANT_ID.NORDWERK);
-    expect(model.placeEntryPoints.map((p) => p.placeId)).toEqual(['kunden', 'isms', 'services']);
+    // Reihenfolge der Navigation (Dok. 06 §4): Kunden, ISMS, Entscheidungen, Services.
+    expect(model.placeEntryPoints.map((p) => p.placeId)).toEqual([
+      'kunden',
+      'isms',
+      'entscheidungen',
+      'services',
+    ]);
     expect(model.placeEntryPoints.map((p) => p.href)).toEqual([
       `/twin/${TENANT_ID.NORDWERK}`,
       '/isms',
+      '/entscheidungen',
       '/services',
     ]);
     expect(model.placeEntryPoints[0].stock).toEqual([
-      { label: 'Objekte', count: 31 },
-      { label: 'Beziehungen', count: 43 },
+      { label: 'Objekte', count: 34 },
+      { label: 'Beziehungen', count: 51 },
     ]);
-    expect(model.placeEntryPoints[1].stock[0].count).toBe(6);
-    expect(model.placeEntryPoints[2].stock[0].count).toBe(3);
+    expect(stockOf(model, 'isms')).toBe(6);
+    expect(stockOf(model, 'entscheidungen')).toBe(3);
+    expect(stockOf(model, 'services')).toBe(3);
     expect(model.placeEntryPoints.every((p) => p.isEmpty === false)).toBe(true);
     expect(model.placeEntryPoints[0].href).toBe(tenantDetailHref(TENANT_ID.NORDWERK));
   });
 
-  it('trägt am Zwilling-Einstieg KEINE Portfolio-Leitfrage (die Zielseite beantwortet sie nicht)', () => {
+  it('trägt an Zwilling und Entscheidungen KEINE Leitfrage (die Zielseite beantwortet sie nicht)', () => {
     const model = modelOrThrow(TENANT_ID.NORDWERK);
-    const [zwilling, isms, services] = model.placeEntryPoints;
+    const [zwilling, isms, entscheidungen, services] = model.placeEntryPoints;
 
     // Der Einstieg führt in den Workspace GENAU DIESES Mandanten, nicht ins Portfolio – eine
     // Portfolio-Sicht ist auf „Heute" Nicht-Ziel. Die Leitfrage des Ortes „Kunden" entfällt
@@ -475,15 +551,22 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
     expect(isms.question).toBe(getPlace('isms').question);
     expect(services.question).toBe(getPlace('services').question);
     expect(getPlace('kunden').question).toMatch(/Portfolio/);
+
+    // Dieselbe Regel am Ort „Entscheidungen": dessen Leitfrage ist eine Dringlichkeitsfrage, die
+    // die Zielseite ausdrücklich NICHT beantwortet. Ungerahmt am Einstieg erzeugte sie genau die
+    // Erwartung, die die Zielseite ausräumt.
+    expect(entscheidungen.question).toBeUndefined();
+    expect(getPlace('entscheidungen').question).toMatch(/jetzt erforderlich/);
   });
 
   it('benennt leere Orte, statt sie zu verstecken (06-D01)', () => {
     const model = modelOrThrow(TENANT_ID.FINOVIA);
-    expect(model.placeEntryPoints).toHaveLength(3);
+    expect(model.placeEntryPoints).toHaveLength(4);
     expect(model.placeEntryPoints.every((p) => p.isEmpty)).toBe(true);
     expect(model.placeEntryPoints.map((p) => p.href)).toEqual([
       `/twin/${TENANT_ID.FINOVIA}`,
       '/isms',
+      '/entscheidungen',
       '/services',
     ]);
   });
@@ -499,9 +582,14 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
         core.controls.length +
         core.measures.length +
         core.evidence.length;
-      expect(model.placeEntryPoints[1].stock[0].count).toBe(erwartet);
-      expect(model.placeEntryPoints[2].stock[0].count).toBe(
+      expect(stockOf(model, 'isms')).toBe(erwartet);
+      expect(stockOf(model, 'services')).toBe(
         getManagedServicesForTenant(tenant.tenant_id).length,
+      );
+      // Der Entscheidungs-Bestand kommt aus dem Register des Ortes selbst, nicht aus einer
+      // zweiten Zählung über die Objekttypen (Review-Fix: /heute kannte den Ort gar nicht).
+      expect(stockOf(model, 'entscheidungen')).toBe(
+        buildDecisionRegister(tenant.tenant_id)?.decisions.length ?? 0,
       );
     }
   });
@@ -515,8 +603,8 @@ describe('buildMissionControl – Bestand, Empty-State und Mandantengrenze', () 
   it('zeigt den aus dem Seed abgeleiteten Bestand des aktiven Mandanten', () => {
     const nordwerk = modelOrThrow(TENANT_ID.NORDWERK);
     expect(nordwerk.tenantStanding.tenant.display_name).toBe('Nordwerk Manufacturing SE');
-    expect(nordwerk.tenantStanding.objectCount).toBe(31);
-    expect(nordwerk.tenantStanding.relationshipCount).toBe(43);
+    expect(nordwerk.tenantStanding.objectCount).toBe(34);
+    expect(nordwerk.tenantStanding.relationshipCount).toBe(51);
     expect(nordwerk.tenantStanding.isEmpty).toBe(false);
 
     const operator = modelOrThrow(TENANT_ID.CONSULTING_OPERATOR);
@@ -534,7 +622,7 @@ describe('buildMissionControl – Bestand, Empty-State und Mandantengrenze', () 
       expect(model.recordingWaves).toEqual([]);
       expect(model.observations).toHaveLength(4);
       expect(model.objectEntryPoints).toEqual([]);
-      expect(model.placeEntryPoints).toHaveLength(3);
+      expect(model.placeEntryPoints).toHaveLength(4);
       expect(model.historyState.hasHistory).toBe(false);
       expect(model.objectEntryRule.length).toBeGreaterThan(0);
     }
@@ -617,8 +705,9 @@ describe('buildMissionControl – Bestand, Empty-State und Mandantengrenze', () 
         DEMO_SEED.objects,
         DEMO_SEED.relationships,
         {
-          ismsCoreObjectCount: model.placeEntryPoints[1].stock[0].count,
-          managedServiceCount: model.placeEntryPoints[2].stock[0].count,
+          ismsCoreObjectCount: stockOf(model, 'isms'),
+          managedServiceCount: stockOf(model, 'services'),
+          decisionCount: stockOf(model, 'entscheidungen'),
         },
       );
       expect(ausGesamtseed).toEqual(model);
@@ -688,7 +777,7 @@ describe('Wächtertest – gezählt wird, bewertet wird nicht', () => {
     const tage = model.recordingWaves.map((w) => w.recordedOn);
     expect(tage).toEqual([...tage].sort());
 
-    // Die Beobachtungsreihenfolge ist unabhängig von den Zählwerten (hier absteigend 32, 22, 2, 1
+    // Die Beobachtungsreihenfolge ist unabhängig von den Zählwerten (hier absteigend 40, 22, 3, 2
     // – die Katalogreihenfolge bleibt davon unberührt).
     expect(model.observations.map((o) => o.id)).toEqual([
       'ohne_owner',

@@ -14,8 +14,9 @@
  * 10. Sitzungsrahmen `HeuteView`: „nicht angemeldet" und angemeldeter Zustand.
  *
  * Die im Ehrlichkeitsblock behaupteten Datenlücken werden zusätzlich GEGEN DEN DATENBESTAND
- * festgenagelt (keine Task-/Decision-Record-Objekte, keine supersedes-Kante), damit der Text
- * nicht still veraltet.
+ * festgenagelt (keine `Task`-Objekte) – und die seit WP-017 belegte Lage (`Decision Record` und
+ * genau eine `supersedes`-Kante) wird ebenso festgenagelt, damit der Text weder still veraltet
+ * noch still zu viel behauptet.
  */
 import { render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -24,6 +25,7 @@ import { DEMO_SEED, DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-
 import { HeuteView } from '../HeuteView';
 import { MissionControlContent } from '../MissionControlContent';
 import { SessionProvider } from '../SessionProvider';
+import { buildDecisionRegister } from '../../../lib/entscheidungen/data';
 import { buildMissionControl } from '../../../lib/heute/data';
 import { framingForRole, MISSION_SECTIONS } from '../../../lib/heute/framing';
 import { getPlace } from '../../../lib/shell/places';
@@ -104,10 +106,11 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
       within(kontext).getByText(/scope-nordwerk-isms-core · scope-nordwerk-managed-service/),
     ).toBeInTheDocument();
     // Datenstand = Systemachse (record_time) der zuletzt erfassten Welle, als Kalendertag.
-    expect(within(kontext).getByText('16.02.2026')).toBeInTheDocument();
-    expect(within(kontext).getByText('16.02.2026').closest('time')).toHaveAttribute(
+    // Seit WP-017 ist das die dritte Welle (Entscheidungsschicht).
+    expect(within(kontext).getByText('16.03.2026')).toBeInTheDocument();
+    expect(within(kontext).getByText('16.03.2026').closest('time')).toHaveAttribute(
       'dateTime',
-      '2026-02-16',
+      '2026-03-16',
     );
   });
 });
@@ -157,7 +160,7 @@ describe('MissionControlContent – „Wo stehe ich?"', () => {
     expect(abschnitt.textContent ?? '').not.toContain('Assurance & Administration World');
   });
 
-  it('zeigt Mandant, Branche und den aus dem Seed abgeleiteten Bestand (Nordwerk 31/43)', () => {
+  it('zeigt Mandant, Branche und den aus dem Seed abgeleiteten Bestand (Nordwerk 34/51)', () => {
     const nordwerk = tenant(TENANT_ID.NORDWERK);
     render(<MissionControlContent role={role('R01')} tenant={nordwerk} />);
 
@@ -167,9 +170,9 @@ describe('MissionControlContent – „Wo stehe ich?"', () => {
 
     expect(within(abschnitt).getByText(nordwerk.display_name)).toBeInTheDocument();
     expect(within(abschnitt).getByText(nordwerk.industry)).toBeInTheDocument();
-    expect(within(abschnitt).getByText('31')).toBeInTheDocument();
+    expect(within(abschnitt).getByText('34')).toBeInTheDocument();
     expect(within(abschnitt).getByText('Objekte dieses Mandanten')).toBeInTheDocument();
-    expect(within(abschnitt).getByText('43')).toBeInTheDocument();
+    expect(within(abschnitt).getByText('51')).toBeInTheDocument();
     expect(within(abschnitt).getByText('Beziehungen dieses Mandanten')).toBeInTheDocument();
   });
 
@@ -200,12 +203,12 @@ describe('MissionControlContent – „Was ist erfasst worden?"', () => {
       .closest('section') as HTMLElement;
   }
 
-  it('listet für Nordwerk genau zwei Wellen mit Datum, Anzahl und Scope-Kennungen', () => {
+  it('listet für Nordwerk genau drei Wellen mit Datum, Anzahl und Scope-Kennungen', () => {
     render(<MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />);
     const abschnitt = erfassungsAbschnitt();
 
     const wellen = within(abschnitt).getAllByRole('listitem');
-    expect(wellen).toHaveLength(2);
+    expect(wellen).toHaveLength(3);
 
     expect(within(wellen[0]).getByText('15.01.2026')).toBeInTheDocument();
     // Das maschinenlesbare Datum deckt sich mit dem sichtbaren Text: eine Welle ist eine
@@ -227,6 +230,17 @@ describe('MissionControlContent – „Was ist erfasst worden?"', () => {
     ).toBeInTheDocument();
     expect(
       within(wellen[1]).getByText(
+        /scope-nordwerk-isms-core, scope-nordwerk-managed-service/,
+      ),
+    ).toBeInTheDocument();
+
+    // Dritte Welle (WP-017, Entscheidungsschicht) – ohne neue Scope-Kennung.
+    expect(within(wellen[2]).getByText('16.03.2026')).toBeInTheDocument();
+    expect(
+      within(wellen[2]).getByText(/3 Objekte · 8 Beziehungen an diesem Tag im System erfasst/),
+    ).toBeInTheDocument();
+    expect(
+      within(wellen[2]).getByText(
         /scope-nordwerk-isms-core, scope-nordwerk-managed-service/,
       ),
     ).toBeInTheDocument();
@@ -262,8 +276,21 @@ describe('MissionControlContent – „Was ist erfasst worden?"', () => {
       }),
     ).toBeInTheDocument();
     // Die Aussage stammt aus der Datenableitung, nicht aus einem konstanten Seitentext.
-    expect(within(abschnitt).getByText(model.historyState.statement)).toBeInTheDocument();
-    expect(model.historyState.statement).toMatch(/keine „supersedes"-Beziehung/);
+    // Seit WP-017 ist sie für Nordwerk BELEGT (eine Ablösekette, Dok. 07 §9 R24) – der Wächter
+    // prüft deshalb die belegte Aussage samt korrektem Numerus bei genau einem Beleg.
+    expect(within(abschnitt).getAllByText(model.historyState.statement).length).toBeGreaterThanOrEqual(1);
+    expect(model.historyState.statement).toMatch(
+      /Eine Versionshistorie ist im Datenbestand belegt: 1 „supersedes"-Beziehung ist erfasst/,
+    );
+    expect(model.historyState.statement).not.toMatch(/Beziehungen sind erfasst/);
+
+    // Gegenprobe am ECHTEN Seed: ein Mandant ohne Ablösung behält die benannte Lücke.
+    const operator = buildMissionControl(TENANT_ID.CONSULTING_OPERATOR);
+    if (!operator) throw new Error('Testfixture fehlt: Operator-Modell');
+    expect(operator.historyState.statement).toMatch(/keine „supersedes"-Beziehung/);
+
+    // Ablösung ist kein Änderungsfeed – das muss der Abschnitt weiterhin aussprechen.
+    expect(within(abschnitt).getByText(/kein Änderungsfeed/)).toBeInTheDocument();
   });
 });
 
@@ -300,21 +327,23 @@ describe('MissionControlContent – „Was weiß ich über die Datenlage?"', () 
     });
   });
 
-  it('nennt die belegten Zählwerte für Nordwerk (22/31, 2/2, 32/43, 1/2)', () => {
+  it('nennt die belegten Zählwerte für Nordwerk (22/34, 2/2, 40/51, 3/5)', () => {
     render(<MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />);
     const abschnitt = datenlageAbschnitt();
 
     // Nach „von" steht der Dativ – die Zeile wird als ganzer Satz gelesen.
-    expect(within(abschnitt).getByText(/22 von 31 Objekten dieses Mandanten/)).toBeInTheDocument();
+    expect(within(abschnitt).getByText(/22 von 34 Objekten dieses Mandanten/)).toBeInTheDocument();
     expect(
       within(abschnitt).getByText(/2 von 2 verschiedenen Scope-Kennungen dieses Mandanten/),
     ).toBeInTheDocument();
     expect(
-      within(abschnitt).getByText(/32 von 43 Beziehungen dieses Mandanten/),
+      within(abschnitt).getByText(/40 von 51 Beziehungen dieses Mandanten/),
     ).toBeInTheDocument();
+    // Seit WP-017 sind auch die drei `Decision Record`-Objekte nachweisfähig (R15); genau eines
+    // trägt eine `evidences`-Kante.
     expect(
       within(abschnitt).getByText(
-        /1 von 2 Objekten der Typen Control, Measure und Decision Record/,
+        /3 von 5 Objekten der Typen Control, Measure und Decision Record/,
       ),
     ).toBeInTheDocument();
   });
@@ -346,7 +375,7 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
       .closest('section') as HTMLElement;
   }
 
-  it('verlinkt die drei belegten Orte mit dem Bestand des aktiven Mandanten', () => {
+  it('verlinkt die vier belegten Orte mit dem Bestand des aktiven Mandanten', () => {
     render(<MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />);
     const abschnitt = einstiegAbschnitt();
 
@@ -354,14 +383,24 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
       within(abschnitt).getByRole('link', { name: 'Zwilling dieses Mandanten' }),
     ).toHaveAttribute('href', `/twin/${TENANT_ID.NORDWERK}`);
     expect(within(abschnitt).getByRole('link', { name: 'ISMS' })).toHaveAttribute('href', '/isms');
+    // Seit WP-017 ist auch der Ort „Entscheidungen" belegt – er fehlte hier, obwohl die
+    // Überschrift „Orte mit Bestand dieses Mandanten" lautet (Review-Fix).
+    expect(within(abschnitt).getByRole('link', { name: 'Entscheidungen' })).toHaveAttribute(
+      'href',
+      '/entscheidungen',
+    );
     expect(within(abschnitt).getByRole('link', { name: 'Services' })).toHaveAttribute(
       'href',
       '/services',
     );
 
-    expect(within(abschnitt).getByText(/31 Objekte · 43 Beziehungen/)).toBeInTheDocument();
+    expect(within(abschnitt).getByText(/34 Objekte · 51 Beziehungen/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/6 ISMS-Kernobjekte/)).toBeInTheDocument();
+    expect(within(abschnitt).getByText(/3 erfasste Entscheidungen/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/3 Managed Services/)).toBeInTheDocument();
+
+    // Die Bestandszahl stammt aus demselben Register wie die Zielseite – keine zweite Zählregel.
+    expect(buildDecisionRegister(TENANT_ID.NORDWERK)?.decisions).toHaveLength(3);
 
     // Der Zwilling-Einstieg führt in den Workspace DIESES Mandanten, nicht ins Portfolio – die
     // Portfolio-Leitfrage des Ortes „Kunden" darf an ihm nicht stehen (Review-Fix).
@@ -370,9 +409,27 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
       .closest('li') as HTMLElement;
     expect(zwilling.textContent ?? '').not.toContain(getPlace('kunden').question);
     expect(zwilling.textContent ?? '').not.toMatch(/Portfolio/);
-    // Die Leitfragen der beiden anderen Orte bleiben unverändert sichtbar.
+    // Die Leitfragen der beiden Orte, deren Zielseite sie beantwortet, bleiben sichtbar.
     expect(within(abschnitt).getByText(getPlace('isms').question)).toBeInTheDocument();
     expect(within(abschnitt).getByText(getPlace('services').question)).toBeInTheDocument();
+    // Die Leitfrage des Ortes „Entscheidungen" dagegen NICHT: die Zielseite beantwortet sie
+    // ausdrücklich nicht, ungerahmt wäre sie hier ein Versprechen.
+    const entscheidungen = within(abschnitt)
+      .getByRole('link', { name: 'Entscheidungen' })
+      .closest('li') as HTMLElement;
+    expect(entscheidungen.textContent ?? '').not.toContain(getPlace('entscheidungen').question);
+  });
+
+  it('benennt einen Ort ohne Bestand, statt ihn auszublenden (Consulting Operator)', () => {
+    render(
+      <MissionControlContent role={role('R08')} tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)} />,
+    );
+    const eintrag = within(einstiegAbschnitt())
+      .getByRole('link', { name: 'Entscheidungen' })
+      .closest('li') as HTMLElement;
+
+    expect(eintrag.textContent ?? '').toMatch(/0 erfasste Entscheidungen/);
+    expect(eintrag.textContent ?? '').toMatch(/im Datenbestand nichts modelliert/);
   });
 
   /**
@@ -715,28 +772,48 @@ describe('MissionControlContent – Ehrlichkeitsblock „Was hier bewusst nicht 
     expect(within(abschnitt).getByText(/Veränderungsfeed/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/Wiederaufnahme/)).toBeInTheDocument();
 
-    // Kanonische Typnamen: `OBJECT_TYPE_LABEL_DE` (einzige Quelle deutscher Glossen) führt für
-    // „Task" und „Decision Record" bewusst keine Übersetzung – hier wird keine erfunden.
+    // Kanonischer Typname: `OBJECT_TYPE_LABEL_DE` (einzige Quelle deutscher Glossen) führt für
+    // „Task" bewusst keine Übersetzung – hier wird keine erfunden.
     expect(
-      within(abschnitt).getByText(/keine Objekte der Typen\s+„Task"\s+und\s+„Decision Record"/),
+      within(abschnitt).getByText(/keine Objekte des Typs\s+„Task"/),
     ).toBeInTheDocument();
     expect(abschnitt.textContent ?? '').not.toMatch(/Aufgabe \(Task\)|Entscheidung \(Decision/);
+    // WP-017: Der Satz darf NICHT mehr behaupten, es gäbe keine `Decision Record`-Objekte –
+    // seit der Entscheidungsschicht wäre das falsch.
+    expect(abschnitt.textContent ?? '').not.toMatch(/„Decision Record"/);
     expect(within(abschnitt).getByText(/kein Ereignis- und kein Änderungsobjekt/)).toBeInTheDocument();
+    // Ablösung ≠ Änderungsfeed: die belegte Historie darf nicht zum Ereignisstrom umgedeutet werden.
+    expect(within(abschnitt).getByText(/ergibt kein „neu seit …"/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/keinen Besuchszeitpunkt/)).toBeInTheDocument();
     // Datenlücke statt Roadmap: kein Termin- und kein Funktionsversprechen.
     expect(within(abschnitt).getByText(/kein Zeitplan/)).toBeInTheDocument();
     expect(abschnitt.textContent ?? '').not.toMatch(/kommt bald|in Kürze|geplant für/i);
   });
 
-  it('deckt sich mit dem Datenbestand: keine Task-/Decision-Record-Objekte, keine supersedes-Kante', () => {
-    const aufgabenOderEntscheidungen = DEMO_SEED.objects.filter(
-      (o) => o.object_type === 'Task' || o.object_type === 'Decision Record',
+  it('deckt sich mit dem Datenbestand: KEINE Task-Objekte (Beleg für die fehlende Morning Mission)', () => {
+    // Diese Hälfte des Wächters bleibt hart: `Task` (F08) hat in Dok. 07 §9 keine einzige
+    // Beziehungszeile und wird deshalb bewusst nicht materialisiert (O-WP017-01). Sobald ein
+    // `Task`-Objekt entsteht, ist die Begründung auf der Seite zu prüfen.
+    expect(DEMO_SEED.objects.filter((o) => o.object_type === 'Task')).toEqual([]);
+  });
+
+  it('deckt sich mit dem Datenbestand: Decision Records und GENAU EINE supersedes-Kante sind belegt', () => {
+    // Zweite Hälfte des vormals gemeinsamen Wächters: seit WP-017 ist diese Lage belegt statt
+    // leer. Sie wird hier festgenagelt, damit der Ehrlichkeitsblock nicht still zu viel oder zu
+    // wenig behauptet.
+    const entscheidungen = DEMO_SEED.objects.filter((o) => o.object_type === 'Decision Record');
+    expect(entscheidungen.length).toBeGreaterThanOrEqual(1);
+    expect([...new Set(entscheidungen.map((o) => o.tenant_id))]).toEqual([TENANT_ID.NORDWERK]);
+
+    const ablösungen = DEMO_SEED.relationships.filter(
+      (r) => r.relationship_type === 'supersedes',
     );
-    expect(aufgabenOderEntscheidungen).toEqual([]);
-    expect(
-      DEMO_SEED.relationships.filter((r) => r.relationship_type === 'supersedes'),
-    ).toEqual([]);
+    expect(ablösungen).toHaveLength(1);
+
+    // Die Ablösung ist FACHLICH modelliert: keine Datensatzversion, kein Ersetzungszeitpunkt
+    // (O-WP017-07). Beides bleibt damit weiterhin ehrlich als „nicht genutzt" beschreibbar.
     expect(DEMO_SEED.objects.filter((o) => o.version !== 1)).toEqual([]);
+    expect(DEMO_SEED.objects.filter((o) => o.record_time.replaced_at)).toEqual([]);
   });
 });
 

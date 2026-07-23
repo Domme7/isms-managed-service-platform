@@ -318,8 +318,18 @@ export function buildIsmsCoreView(tenantId: string): IsmsCoreView {
  * --------------------------------------------------------------------------- */
 
 /**
- * Mandanten, deren ISMS-Kernsicht im aktuellen Seed Inhalte trägt – aus dem Seed abgeleitet,
- * damit die Empty-State-Aussage automatisch korrekt bleibt, sobald weitere Graphen entstehen.
+ * Mandanten, deren ISMS-Kernsicht im aktuellen Seed Inhalte trägt.
+ *
+ * ⚠️ NUR FÜR TESTS UND SEED-DIAGNOSE — **niemals** im Produkt rendern. Diese Funktion zählt
+ * mandantenübergreifend. Bis 2026-07-23 speiste sie den Empty-State von `/isms` mit dem Satz
+ * „Die Risiko- und Control-Sicht ist derzeit für einen anderen Demo-Mandanten ausmodelliert" —
+ * eine Existenzaussage über einen FREMDEN Mandanten und damit eine Mandantengrenzverletzung
+ * (Dok. 07, Abschnitt „Mandantenfähigkeit, Rechte und Datenschutz" / P09).
+ *
+ * Derselbe Defekt entstand unabhängig ein zweites Mal in WP-017 auf `/entscheidungen` und wurde
+ * dort in der Gegenprüfung gefunden. Zwei unabhängige Vorkommen derselben Fehlerklasse: der
+ * Leerzustand ist die Stelle, an der die Versuchung entsteht, „nicht hier, aber woanders" zu
+ * sagen. Ein Leerzustand darf ausschließlich etwas über den EIGENEN Mandanten aussagen.
  */
 export function getIsmsCoreTenants(): DemoTenant[] {
   return DEMO_SEED.tenants.filter((t) => !buildIsmsCoreView(t.tenant_id).isEmpty);

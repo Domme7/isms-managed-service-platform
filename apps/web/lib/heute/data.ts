@@ -25,8 +25,9 @@
  * KANTENLISTEN zusätzlich selbst auf `tenant_id` (Defense in Depth) – mandantenfremde Objekte
  * und Kanten verändern das Ergebnis deshalb auch dann nicht, wenn ein Aufrufer eine ungefilterte
  * Liste übergibt. Der vierte Parameter `stock` ist dagegen eine bereits MANDANTENGEBUNDENE
- * Vorberechnung des Aufrufers (`buildIsmsCoreView`, `getManagedServicesForTenant`) und wird nicht
- * erneut geprüft; er trägt Zahlen, keine Objekte oder Kennungen.
+ * Vorberechnung des Aufrufers (`buildIsmsCoreView`, `getManagedServicesForTenant`,
+ * `buildDecisionRegister`) und wird nicht erneut geprüft; er trägt Zahlen, keine Objekte oder
+ * Kennungen.
  *
  * // OFFENE FRAGE O-WP016-07: Der Objektvertrag (Dok. 07 §7) kennt kein Feld, das eine
  * // Erfassungswelle fachlich BENENNT („ISMS-Kerngraph", „Managed-Service-Schicht" sind Fakten
@@ -40,6 +41,7 @@
 import type { ObjectEnvelope, ObjectFamilyId, RelationshipEnvelope } from '@isms/contracts';
 import type { DemoTenant } from '@isms/demo-seed';
 
+import { buildDecisionRegister } from '../entscheidungen/data';
 import { buildIsmsCoreView } from '../isms/data';
 import { getManagedServicesForTenant } from '../services/data';
 import { getPlace, type PlaceId } from '../shell/places';
@@ -51,7 +53,28 @@ import {
   objectTypeDisplay,
 } from '../twin/data';
 import { EVIDENCE_TARGET_TYPES } from '../twin/object-detail';
-import { formatIsoDateDe, objectDetailHref, tenantDetailHref } from '../twin/routes';
+import {
+  calendarDay,
+  formatIsoDateDe,
+  objectDetailHref,
+  tenantDetailHref,
+} from '../twin/routes';
+
+/* -----------------------------------------------------------------------------
+ * Sprachform
+ * --------------------------------------------------------------------------- */
+
+/**
+ * „1 Objekt" / „14 Objekte" – reine Sprachform, keine Rundung und keine Verdichtung.
+ *
+ * Wohnt hier statt in `components/shell/MissionControlContent.tsx`, weil auch die REACT-FREIEN
+ * Ableitungen dieses Moduls Klartextsätze bilden (siehe `historyStatement`) und der Numerus dort
+ * genauso stimmen muss. Es gibt bewusst genau EINE Implementierung; die Komponente importiert
+ * sie von hier.
+ */
+export function anzahl(count: number, singular: string, plural: string): string {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
 
 /* -----------------------------------------------------------------------------
  * (1) Wo stehe ich? – Bestand des aktiven Mandanten
@@ -150,11 +173,6 @@ export function deriveRecordingWaves(
     }));
 }
 
-/** Kalendertag eines ISO-Zeitstempels; unlesbare Werte werden fail-loud roh durchgereicht. */
-function calendarDay(iso: string): string {
-  return /^\d{4}-\d{2}-\d{2}/.test(iso) ? iso.slice(0, 10) : iso;
-}
-
 /* -----------------------------------------------------------------------------
  * (2b) Historienlage – abgeleitet, nicht konstant
  * --------------------------------------------------------------------------- */
@@ -232,22 +250,29 @@ function historyStatement(facts: {
       'Ein Erfassungszeitpunkt ist deshalb keine Änderung und kein Verlauf.'
     );
   }
+  // Numerus über `anzahl()`: dieser Zweig lief bis WP-017 ausschließlich gegen Fixtures und ist
+  // seit der Entscheidungsschicht sichtbarer Produkttext. Bei genau EINEM Beleg stand hier
+  // vorher „1 „supersedes"-Beziehungen sind erfasst" (Plural bei Eins).
   const belege: string[] = [];
   if (facts.objectsWithPreviousVersion > 0) {
     belege.push(
-      `${facts.objectsWithPreviousVersion} Objekte tragen eine Version größer 1 ` +
-        `(höchste belegte Version: ${facts.maxVersion})`,
+      `${anzahl(facts.objectsWithPreviousVersion, 'Objekt trägt', 'Objekte tragen')} ` +
+        `eine Version größer 1 (höchste belegte Version: ${facts.maxVersion})`,
     );
   }
   if (facts.objectsWithReplacementRecord > 0) {
     belege.push(
-      `${facts.objectsWithReplacementRecord} Objekte tragen einen Ersetzungszeitpunkt ` +
-        '(record_time.replaced_at)',
+      `${anzahl(facts.objectsWithReplacementRecord, 'Objekt trägt', 'Objekte tragen')} ` +
+        'einen Ersetzungszeitpunkt (record_time.replaced_at)',
     );
   }
   if (facts.supersedesEdgeCount > 0) {
     belege.push(
-      `${facts.supersedesEdgeCount} „supersedes"-Beziehungen sind erfasst (Dok. 07 §9 R24)`,
+      `${anzahl(
+        facts.supersedesEdgeCount,
+        '„supersedes"-Beziehung ist',
+        '„supersedes"-Beziehungen sind',
+      )} erfasst (Dok. 07 §9 R24)`,
     );
   }
   return `Eine Versionshistorie ist im Datenbestand belegt: ${belege.join('; ')}.`;
@@ -442,13 +467,16 @@ export const OBJECT_ENTRY_RULE =
 
 /**
  * Bestandsangaben, die dieses Modul nicht selbst zählen darf, ohne die vorhandene Fachlogik zu
- * duplizieren: die ISMS-Kernsicht (`buildIsmsCoreView`) und die Managed Services
- * (`getManagedServicesForTenant`) sind bereits definiert. `buildMissionControl` ermittelt beide
- * und reicht sie in die reinen Funktionen hinein – so bleiben diese fixture-testbar.
+ * duplizieren: die ISMS-Kernsicht (`buildIsmsCoreView`), die Managed Services
+ * (`getManagedServicesForTenant`) und das Entscheidungsregister (`buildDecisionRegister`) sind
+ * bereits definiert. `buildMissionControl` ermittelt alle drei und reicht sie in die reinen
+ * Funktionen hinein – so bleiben diese fixture-testbar und es entsteht keine zweite Zählregel.
  */
 export interface TenantStock {
   readonly ismsCoreObjectCount: number;
   readonly managedServiceCount: number;
+  /** Objekte vom Typ `Decision Record` des Mandanten – gezählt vom Ort „Entscheidungen" selbst. */
+  readonly decisionCount: number;
 }
 
 export function deriveObjectEntryPoints(
@@ -479,6 +507,7 @@ export function derivePlaceEntryPoints(
   stock: TenantStock,
 ): PlaceEntryPoint[] {
   const isms = getPlace('isms');
+  const entscheidungen = getPlace('entscheidungen');
   const services = getPlace('services');
 
   const entries: PlaceEntryPoint[] = [
@@ -510,6 +539,17 @@ export function derivePlaceEntryPoints(
           count: stock.ismsCoreObjectCount,
         },
       ],
+    },
+    {
+      placeId: entscheidungen.id,
+      label: entscheidungen.label,
+      href: entscheidungen.href,
+      // Die Leitfrage des Ortes („Welche Geschäftsentscheidung ist jetzt erforderlich?") entfällt
+      // hier aus DEMSELBEN Grund wie am Zwilling-Einstieg: die Zielseite beantwortet sie
+      // ausdrücklich nicht (ohne Frist, Aufwand, Kapazität und Priorität wäre jede
+      // Dringlichkeitsaussage erfunden) und sagt das direkt unter der Frage. Ungerahmt an diesem
+      // Einstieg erzeugte sie genau die Erwartung, die die Zielseite ausräumt.
+      stock: [{ label: 'erfasste Entscheidungen', count: stock.decisionCount }],
     },
     {
       placeId: services.id,
@@ -601,6 +641,9 @@ export function buildMissionControl(tenantId: string): MissionControlModel | und
       ismsCore.measures.length +
       ismsCore.evidence.length,
     managedServiceCount: getManagedServicesForTenant(tenantId).length,
+    // Keine zweite Zählregel: die Entscheidungen zählt der Ort „Entscheidungen" selbst. Ein
+    // unbekannter Mandant kommt hier nicht an (`getTenant` hat oben bereits abgebrochen).
+    decisionCount: buildDecisionRegister(tenantId)?.decisions.length ?? 0,
   };
 
   return buildMissionControlModel(

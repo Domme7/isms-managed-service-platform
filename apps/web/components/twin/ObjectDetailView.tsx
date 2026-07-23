@@ -608,22 +608,29 @@ function EvolutionSection({
               Es existieren frühere Versionen dieses Objekts (aktuelle Version {history.version}).
             </p>
           ) : null}
+          {/* Aussage über GENAU DIESES Objekt: seit WP-017 trägt der Datenbestand sehr wohl eine
+              Ablösekette – ein „im Demo-Seed gibt es keine" wäre hier falsch. Erreichbar bleibt
+              der Leerfall nur, wenn eine Historie allein über Version/Ersetzungszeitpunkt belegt
+              ist (im heutigen Seed nicht der Fall). */}
           <EdgeList
             edges={[...history.supersedes, ...history.superseded_by]}
             tenantId={tenantId}
-            emptyText="Keine supersedes-Kante im Demo-Seed."
+            emptyText="Für dieses Objekt ist keine Ablösungskante erfasst."
           />
         </>
       ) : (
         /* Partial data (Dok. 06 §17): die Lücke wird benannt und aus den Daten begründet –
            keine erfundene Timeline, kein konstanter Platzhaltertext. */
         <div className="tw-empty" role="note">
-          <h4>Keine Versionshistorie im Demo-Seed</h4>
+          {/* Überschrift bewusst OBJEKTBEZOGEN (WP-017): „im Demo-Seed" wäre seit der
+              Entscheidungsschicht eine falsche Aussage über den ganzen Datenbestand – dort ist
+              eine Ablösung belegt. Die Lücke gilt für dieses Objekt, und genau das steht hier. */}
+          <h4>Keine Versionshistorie für dieses Objekt</h4>
           <p style={{ marginBottom: 0 }}>
             Abgeleitet aus dem Objekt selbst: Version {history.version}, kein Ersetzungszeitpunkt
             (record_time.replaced_at) und keine Ablösungskante ({edgeNote('supersedes')}). Frühere
-            Stände sind damit im Demo-Datenbestand nicht rekonstruierbar; es wird bewusst kein
-            Verlauf konstruiert.
+            Stände dieses Objekts sind damit im Demo-Datenbestand nicht rekonstruierbar; es wird
+            bewusst kein Verlauf konstruiert.
           </p>
         </div>
       )}

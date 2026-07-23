@@ -8,7 +8,8 @@
  *     Risiko, Control, Evidence, Maßnahme und Managed Service ausschließlich über gerenderte
  *     Links erreichbar, ohne dass der Mandant wechselt.
  *  4. Empty-Texte („keine Kante … im Demo-Seed") und die abgeleitete Aussage
- *     „Keine Versionshistorie im Demo-Seed".
+ *     „Keine Versionshistorie für dieses Objekt" – seit WP-017 in BEIDEN Ausprägungen geprüft
+ *     (Objekt ohne Ablösung vs. das belegte Ablösepaar).
  *  5. Datenlücken sichtbar (Partial data): nicht auflösbare Scope-Kennung.
  */
 import { render, screen, within } from '@testing-library/react';
@@ -100,15 +101,44 @@ describe('ObjectDetailView – Seitenanatomie', () => {
     ).toBeInTheDocument();
   });
 
-  it('gibt die fehlende Versionshistorie als abgeleitete Datenlücke aus', () => {
+  it('gibt die fehlende Versionshistorie als abgeleitete Datenlücke aus (Objekt ohne Ablösung)', () => {
     render(<ObjectDetailView model={model} />);
 
+    // Objektbezogen formuliert: der Datenbestand als Ganzes trägt seit WP-017 sehr wohl eine
+    // Ablösung – nur dieses Objekt nicht.
     expect(
-      screen.getByRole('heading', { name: 'Keine Versionshistorie im Demo-Seed' }),
+      screen.getByRole('heading', { name: 'Keine Versionshistorie für dieses Objekt' }),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/keine Ablösungskante \(R24 · löst ab \(supersedes\)\)/),
     ).toBeInTheDocument();
+  });
+
+  it('zeigt für das Ablösepaar BEIDE Richtungen statt der Lücke (WP-017)', () => {
+    // Zweite Ausprägung derselben Ableitung, aus dem Seed ermittelt statt hartkodiert.
+    const ablösung = DEMO_SEED.relationships.find((r) => r.relationship_type === 'supersedes');
+    if (!ablösung) throw new Error('Testfixture fehlt: supersedes-Kante');
+
+    const nachfolger = detailOrThrow(TENANT_ID.NORDWERK, ablösung.source_id);
+    const vorgaenger = detailOrThrow(TENANT_ID.NORDWERK, ablösung.target_id);
+
+    const { unmount } = render(<ObjectDetailView model={nachfolger} />);
+    expect(
+      screen.queryByRole('heading', { name: 'Keine Versionshistorie für dieses Objekt' }),
+    ).toBeNull();
+    // Der Nachfolger verlinkt auf den abgelösten Stand – der bleibt sichtbar, nicht ausgeblendet.
+    expect(
+      screen.getAllByRole('link', { name: vorgaenger.object.display_name }).length,
+    ).toBeGreaterThanOrEqual(1);
+    unmount();
+
+    render(<ObjectDetailView model={vorgaenger} />);
+    expect(
+      screen.queryByRole('heading', { name: 'Keine Versionshistorie für dieses Objekt' }),
+    ).toBeNull();
+    expect(
+      screen.getAllByRole('link', { name: nachfolger.object.display_name }).length,
+    ).toBeGreaterThanOrEqual(1);
   });
 });
 

@@ -18,8 +18,9 @@ des aktiven Mandanten mit Entscheidungsfrage, Kontext, Lebenszyklus-Stand, Owner
 Zeitachsen, den über R23 verknüpften Bezugsobjekten, den über R15 verknüpften Nachweisen und der
 **Ablösekette über R24** – der ersten **belegten** Historie im Produkt.
 
-**Ausdrücklich NICHT Teil dieses WP:** die **Decision Card** nach Dok. 10 §9 (14 Pflichtfelder,
-davon sieben ohne Träger im Objektvertrag), jede Dringlichkeits-/Priorisierungsaussage
+**Ausdrücklich NICHT Teil dieses WP:** die **Decision Card** nach Dok. 10 (Abschnitt
+„Decision Cards", 14 Pflichtfelder, davon **neun** ohne Träger im Objektvertrag und fünf nur
+teilweise — am 2026-07-23 gegen das PDF nachgerechnet), jede Dringlichkeits-/Priorisierungsaussage
 („jetzt erforderlich" ist ohne Frist und Priorität nicht beantwortbar), Optionen, Baseline,
 Wirkung, Ressourcen, Kostenband, Empfehlung, Freigabe-Workflow, Simulation, Executive- oder
 Customer Decision Center – und **keine `Task`-Objekte** (Begründung siehe „Verbindliche

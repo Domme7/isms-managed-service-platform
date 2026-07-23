@@ -240,10 +240,18 @@ describe('IsmsContent – Empty-State (Mandanten ohne ISMS-Kernobjekte)', () => 
         name: 'Keine ISMS-Kernobjekte für Consulting Operator Demo',
       }),
     ).toBeInTheDocument();
-    // Aus dem Seed abgeleitet, aber ohne fremde Mandantennamen (UX-Review MINOR-6).
+    // Der Leerzustand sagt ausschließlich etwas über DIESEN Mandanten.
+    //
+    // Bis 2026-07-23 stand hier die Erwartung „derzeit für einen anderen Demo-Mandanten
+    // ausmodelliert". Der Test hat also genau die Mandantengrenzverletzung festgeschrieben, die er
+    // hätte verhindern sollen: ein Nutzer ohne eigene Objekte erfuhr, dass ein FREMDER Mandant
+    // welche trägt (Dok. 07, Abschnitt „Mandantenfähigkeit, Rechte und Datenschutz" / P09).
+    // Gefunden erst, als derselbe Defekt in WP-017 ein zweites Mal entstand.
     expect(
-      screen.getByText(/derzeit für einen anderen Demo-Mandanten ausmodelliert/),
+      screen.getByText(/Der Ort bleibt erreichbar und zeigt hier ausschließlich, was für diesen/),
     ).toBeInTheDocument();
+    expect(document.body.textContent ?? '').not.toMatch(/anderen? (Demo-)?Mandanten/i);
+    expect(document.body.textContent ?? '').not.toContain('Nordwerk Manufacturing SE');
     // Ehrlicher Hinweis: der Betreiber ist Erbringer, nicht Empfänger (UX-Review MINOR-7).
     expect(screen.getByText(/sind Managed-Service-Objekte modelliert/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Services' })).toHaveAttribute('href', '/services');

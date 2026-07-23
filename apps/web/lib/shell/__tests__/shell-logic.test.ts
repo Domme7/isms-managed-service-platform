@@ -53,14 +53,26 @@ describe('NAV_PLACES – acht stabile Orte (Dok. 06 06-D01)', () => {
     expect(heute.plannedScreen).toBeUndefined();
   });
 
+  it('markiert „Entscheidungen" als live und ohne geplanten Screen (WP-017 Slice 2)', () => {
+    const entscheidungen = getPlace('entscheidungen');
+    expect(entscheidungen.live).toBe(true);
+    // Der Ort ist kein Platzhalter mehr: die Ankündigung eines geplanten Screens entfällt.
+    expect(entscheidungen.plannedScreen).toBeUndefined();
+    // Die Leitfrage bleibt unverändert erhalten – die Seite beantwortet sie nicht, sondern
+    // benennt sichtbar, warum sie auf dieser Datenlage nicht beantwortbar ist (O-WP017-06).
+    expect(entscheidungen.question).toBe('Welche Geschäftsentscheidung ist jetzt erforderlich?');
+  });
+
   it('markiert die übrigen Platzhalter-Orte als (noch) nicht live', () => {
     // Live sind bislang „Kunden" (Twin Explorer, WP-004/011), „Services" (WP-012 Slice 2),
-    // „ISMS" (WP-013 Slice 1) und „Heute" (WP-016 Slice 2).
-    const live: readonly string[] = ['kunden', 'services', 'isms', 'heute'];
+    // „ISMS" (WP-013 Slice 1), „Heute" (WP-016 Slice 2) und „Entscheidungen" (WP-017 Slice 2).
+    const live: readonly string[] = ['kunden', 'services', 'isms', 'heute', 'entscheidungen'];
     const placeholders = NAV_PLACES.filter((p) => !live.includes(p.id));
-    expect(placeholders).toHaveLength(4);
+    expect(placeholders).toHaveLength(3);
     for (const place of placeholders) {
       expect(place.live).not.toBe(true);
+      // Ein Platzhalter-Ort behält seine ehrliche Ankündigung (`PlaceholderPage` zeigt sie).
+      expect(place.plannedScreen).toBeTruthy();
     }
   });
 });

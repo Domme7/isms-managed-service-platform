@@ -32,6 +32,7 @@ import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
 
 import {
+  anzahl,
   buildMissionControl,
   type DataObservation,
   type MissionControlModel,
@@ -47,11 +48,6 @@ import {
 } from '../../lib/heute/framing';
 import { getPlace } from '../../lib/shell/places';
 import { worldForRole, type DemoRole, type ExperienceWorld } from '../../lib/shell/roles';
-
-/** „1 Objekt" / „14 Objekte" – reine Sprachform, keine Rundung und keine Verdichtung. */
-function anzahl(count: number, singular: string, plural: string): string {
-  return `${count} ${count === 1 ? singular : plural}`;
-}
 
 /** Stabile DOM-ID je Abschnitt (für `aria-labelledby`). */
 function sectionHeadingId(id: MissionSectionId): string {
@@ -389,8 +385,9 @@ function ErfassungSection({ model }: { model: MissionControlModel }) {
       <p>
         Wann etwas ins System kam, sagt nichts darüber, ob sich fachlich etwas geändert hat. Diese
         Seite macht daraus deshalb kein „neu", kein „geändert" und keinen Verlauf. Ein
-        Veränderungsfeed bräuchte Ereignisse oder Vorversionen – beides trägt der Datenbestand
-        nicht.
+        Veränderungsfeed bräuchte Ereignisobjekte – die trägt der Datenbestand nicht. Wo eine
+        fachliche Ablösung erfasst ist, verbindet sie zwei eigenständige Objekte und ist damit
+        ebenfalls kein Änderungsfeed.
       </p>
       {/* Aus den Daten abgeleitete Aussage (höchste Version, Ersetzungszeitpunkt,
           supersedes-Kanten) – kein konstanter Text, siehe `deriveHistoryState`. */}
@@ -567,9 +564,9 @@ function ObjectEntryItem({ entry }: { entry: ObjectEntryPoint }) {
  *
  * Bewusst ohne Termin- und ohne Funktionsversprechen („kommt bald" wäre eine Zusage, die dieses
  * Work Package nicht geben darf). Die Historienaussage ist aus den Daten abgeleitet; die Aussagen
- * über fehlende Aufgaben-/Entscheidungsobjekte und über die fehlenden Vertragsfelder sind Aussagen
- * über Datenbestand und Objektvertrag und werden im Render-Test gegen den Datenbestand
- * festgenagelt, damit sie nicht still veralten.
+ * über fehlende Aufgabenobjekte (`Task`) und über die fehlenden Vertragsfelder sind Aussagen über
+ * Datenbestand und Objektvertrag und werden im Render-Test gegen den Datenbestand festgenagelt,
+ * damit sie nicht still veralten.
  */
 function HonestySection({ model }: { model: MissionControlModel }) {
   return (
@@ -584,23 +581,33 @@ function HonestySection({ model }: { model: MissionControlModel }) {
       <ul className="sv-items">
         <li>
           <span className="sv-item-name">Morning Mission (Tagesmission mit Reihenfolge)</span>
-          {/* Kanonische Typnamen: für „Task" und „Decision Record" führt die einzige Quelle
-              deutscher Objekttyp-Glossen (`OBJECT_TYPE_LABEL_DE` in `lib/twin/data.ts`) bewusst
-              KEINE Übersetzung – hier wird keine erfunden (Review-Fix). */}
+          {/* Kanonischer Typname: für „Task" führt die einzige Quelle deutscher
+              Objekttyp-Glossen (`OBJECT_TYPE_LABEL_DE` in `lib/twin/data.ts`) bewusst KEINE
+              Übersetzung – hier wird keine erfunden (Review-Fix).
+
+              WP-017: Der Satz nannte vorher auch „Decision Record" als nicht vorhanden. Seit der
+              Entscheidungsschicht im Demo-Datenbestand wäre das falsch; er ist deshalb auf „Task"
+              verengt. Die Begründung trägt weiterhin: es fehlen die Aufgabenobjekte UND die
+              Vertragsfelder für Fälligkeit, Aufwand, Kapazität und Priorität. */}
           <span className="sv-item-note">
-            Ursache in der Datenlage: Der Demo-Datenbestand enthält keine Objekte der Typen „Task"
-            und „Decision Record" – beide stehen im kanonischen Katalog (Dok. 07 §6), sind aber in
-            keinem Mandanten angelegt. Der Objektvertrag (Dok. 07 §7) kennt außerdem kein Feld für
-            Fälligkeit, Aufwand, Kapazität oder Priorität. Ohne Aufgaben und ohne diese Angaben
-            wäre jede Tagesmission und jede Reihenfolge erfunden.
+            Ursache in der Datenlage: Der Demo-Datenbestand enthält keine Objekte des Typs „Task" –
+            der Typ steht im kanonischen Katalog (Dok. 07 §6), ist aber in keinem Mandanten
+            angelegt. Der Objektvertrag (Dok. 07 §7) kennt außerdem kein Feld für Fälligkeit,
+            Aufwand, Kapazität oder Priorität. Ohne Aufgaben und ohne diese Angaben wäre jede
+            Tagesmission und jede Reihenfolge erfunden.
           </span>
         </li>
         <li>
           <span className="sv-item-name">Veränderungsfeed („neu seit …")</span>
+          {/* WP-017: Ablösung ≠ Änderungsfeed. Die Historienaussage darunter kann seit der
+              Entscheidungsschicht „belegt" lauten – daraus darf kein Ereignisstrom werden. */}
           <span className="sv-item-note">
             Ursache im Datenmodell: Es gibt kein Ereignis- und kein Änderungsobjekt; die einzige
             Zeitangabe, die die Systemachse überhaupt kennt, ist der Erfassungszeitpunkt – und der
-            ist keine Änderung. Hinzu kommt die aus den Daten abgeleitete Historienlage:{' '}
+            ist keine Änderung. Eine erfasste fachliche Ablösung (Dok. 07 §9 R24) verbindet zwei
+            eigenständige Objekte und sagt, welcher Stand welchen ersetzt hat; sie ist damit kein
+            Ereignis- und kein Änderungsfeed und ergibt kein „neu seit …". Aus den Daten
+            abgeleitete Historienlage:{' '}
             {model.historyState.statement}
           </span>
         </li>

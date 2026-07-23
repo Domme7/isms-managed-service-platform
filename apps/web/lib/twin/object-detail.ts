@@ -285,8 +285,9 @@ export type NextObservationKind =
  *
  * `satisfies readonly ObjectType[]` koppelt die Liste hart an den Objekttyp-Katalog: eine
  * abweichende Schreibweise bricht den Typecheck, statt die Beobachtung still abzuschalten
- * (Review-Fix; „Decision Record" ist im Demo-Seed nicht materialisiert und wäre sonst von
- * keinem Test gedeckt).
+ * (Review-Fix). Seit WP-017 ist „Decision Record" im Demo-Seed materialisiert und damit auch
+ * durch Daten gedeckt: genau eine Entscheidung trägt eine `evidences`-Kante, die übrigen werden
+ * als „ohne Nachweisbezug" ausgewiesen.
  */
 export const EVIDENCE_TARGET_TYPES = [
   'Control',

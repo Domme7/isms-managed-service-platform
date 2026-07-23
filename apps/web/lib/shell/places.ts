@@ -81,7 +81,10 @@ export const NAV_PLACES: readonly NavPlace[] = [
     hint: 'Decision Records, Freigaben, Risikoakzeptanz, Investitionsoptionen',
     question: 'Welche Geschäftsentscheidung ist jetzt erforderlich?',
     match: ['/entscheidungen'],
-    plannedScreen: 'S03 – Executive Experience / Decision Center',
+    // WP-017 Slice 2: der Ort zeigt echten, aus dem Demo-Seed abgeleiteten Inhalt (read-only
+    // Entscheidungsregister). Die Leitfrage bleibt unverändert stehen – die Seite benennt
+    // sichtbar, dass sie auf dieser Datenlage nicht beantwortbar ist (O-WP017-06).
+    live: true,
   },
   {
     id: 'services',

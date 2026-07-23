@@ -178,6 +178,11 @@ const REL_TYPE_TO_LABEL_DE: Readonly<Record<string, string>> = {
   // Historie/Ablösung (WP-014, Dok. 07 §9 R24): die Objekt-360-Seite benennt die Ablösung
   // explizit, damit eine fehlende Versionshistorie in Klartext begründet werden kann.
   supersedes: 'löst ab',
+  // Entscheidungsschicht (WP-017, Dok. 07 §9 R23 „Verknüpft fachlichen Zustand mit menschlicher
+  // Entscheidung"). Bewusst NEUTRAL als Bezug formuliert und nicht als „Auslöser": welches der
+  // beiden Decision-Card-Pflichtfelder (Zielbezug/Auslöser) R23 abbildet, ist offen
+  // (O-WP017-04) – hier wird nichts entschieden, was das Konzept nicht sagt.
+  decided_in: 'entschieden in',
 };
 
 /** Deutsches UI-Label eines Beziehungstyps (oder `undefined`, dann technischen Namen nutzen). */

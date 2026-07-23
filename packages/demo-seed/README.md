@@ -1,11 +1,11 @@
 # @isms/demo-seed – Synthetische Demo-Seed-Grundlage
 
 Deterministische, **rein synthetische** Demo-Datenbasis des digitalen Unternehmenszwillings
-(WP-003 Slice 2: ISMS-Kerngraph; WP-012 Slice 1: Managed-Service-Schicht). Reine typisierte
-Daten + Integritätshelfer – **keine Datenbank, kein ORM, keine UI**. Der Seed wird später nur
-auf Repositories gemappt.
+(WP-003 Slice 2: ISMS-Kerngraph; WP-012 Slice 1: Managed-Service-Schicht; WP-017 Slice 1:
+Entscheidungsschicht). Reine typisierte Daten + Integritätshelfer – **keine Datenbank, kein ORM,
+keine UI**. Der Seed wird später nur auf Repositories gemappt.
 
-Aktuelle Seed-Version: **1.1.0** · **40 Objekte / 54 Beziehungen** über zwei Mandanten.
+Aktuelle Seed-Version: **1.2.0** · **43 Objekte / 62 Beziehungen** über zwei Mandanten.
 
 ## Struktur vs. Inhalt
 
@@ -23,7 +23,7 @@ Aktuelle Seed-Version: **1.1.0** · **40 Objekte / 54 Beziehungen** über zwei M
 
 | tenant_id | Anzeigename | Objekte / Beziehungen | Inhalt |
 |---|---|---|---|
-| `tenant-nordwerk` | Nordwerk Manufacturing SE | 31 / 43 | ISMS-Kerngraph (17/15) + Managed-Service-Schicht (14/28) |
+| `tenant-nordwerk` | Nordwerk Manufacturing SE | 34 / 51 | ISMS-Kerngraph (17/15) + Managed-Service-Schicht (14/28) + Entscheidungsschicht (3/8) |
 | `tenant-finovia` | Finovia Digital Bank AG | 0 / 0 | bewusst leer (Empty-State) |
 | `tenant-medicore` | MediCore Health Services GmbH | 0 / 0 | bewusst leer (spätere WPs) |
 | `tenant-consulting-operator` | Consulting Operator Demo | 9 / 11 | Managed-Service-Schicht (WP-012) |
@@ -121,13 +121,77 @@ fachliche Rolle            --R03 owns-->           Managed Service   (Operator)
 | O-WP012-05 | Dok. 07 §7 kennt keine typisierten SLA-/KPI-Felder (Zeiten, Schwellen, Zielwerte) → Klartext in `description`. |
 | O-WP012-06 | Für `Deliverable` nennt Dok. 07 §9 nur R21 als Beispiel; `part_of`/`evidences` folgen der Regelspalte, nicht der Beispielspalte. |
 
+## Entscheidungsschicht (WP-017 Slice 1, `src/decisions.ts`)
+
+Fachlich abgeleitet aus **Dok. 07** (F09 `Decision Record` §6, Objektvertrag §7, Lebenszyklus §8,
+Beziehungen R03/R15/R23/R24 §9, Bitemporalität §11), **Dok. 10 §9.2** („Nach Freigabe wird die
+Karte zum unveränderbaren Decision Record. Korrekturen erfolgen als neue Version oder Nachtrag.")
+und **Dok. 05 §7** (Entscheidungs-Lifecycle).
+
+**Ausdrücklich keine Decision Card** nach Dok. 10, Abschnitt „Decision Cards“ / „Pflichtfelder“
+(§9.1). Die 14 Pflichtfeldnamen lauten dort wörtlich: Entscheidungsfrage, Zielbezug, Auslöser,
+Baseline, Optionen, Wirkung, Ressourcen, Abhängigkeiten, Confidence, Empfehlung, „Owner und
+Approver“, Frist, Outcome Check, Provenance. Im Objektvertrag haben **neun** davon **keinen
+Träger** (Auslöser, Baseline, Optionen, Wirkung, Ressourcen, Abhängigkeiten, Empfehlung, Frist,
+Outcome Check), die übrigen **fünf** (Entscheidungsfrage, Zielbezug, Confidence, „Owner und
+Approver“, Provenance) nur **teilweise**. Sie werden weder als Feld noch als Klartext in
+`description` erfunden. Ebenso wenig enthält die Schicht Fristen, Aufwände, Kapazitäten, Prioritäten,
+Bewertungen, Empfehlungen – oder Preise.
+
+### Nordwerk (3 Objekte / 8 Beziehungen)
+
+| Entscheidungsfrage (`display_name`) | Lebenszyklus-Stand | fachliche Gültigkeit | Anbindung |
+|---|---|---|---|
+| Womit wird das Risiko der Betriebsunterbrechung in der Auftragsabwicklung abgesichert? | `Überholt` (Dok. 07 §8) | 2026-01-05 **bis** 2026-03-01 (geschlossen) | `decided_in` vom Risiko, `evidences` vom Restore-Test-Protokoll, `owns` von der CISO-Rolle; **Ziel** der `supersedes`-Kante |
+| Wird die Absicherung der Auftragsabwicklung um die Härtung der ERP-Schnittstelle erweitert? | `genehmigt` (Dok. 05 §7) | ab 2026-03-01 (offen) | **`supersedes` → Vorgänger**, `decided_in` vom Risiko, `owns` von der CISO-Rolle |
+| In welchem Rhythmus liefert der Reporting-Service sein Managementbild? | `zur Freigabe` (Dok. 05 §7) | ab 2026-03-01 (offen) | `decided_in` vom Managed Service „Management- & Entscheidungsreporting", `owns` von der CISO-Rolle |
+
+### Kanonische Entscheidungskanten (source → target)
+
+```
+Risk / Managed Service --R23 decided_in--> Decision Record   („Risk/Change/Service -> Decision Record")
+Decision Record        --R24 supersedes--> Decision Record   (NACHFOLGER ist die Quelle)
+Evidence               --R15 evidences-->  Decision Record   („Evidence -> Control/Measure/Decision")
+fachliche Rolle        --R03 owns-->       Decision Record   („Person/Rolle/Einheit -> Objekt")
+```
+
+### Ablösung ohne historische Überschreibung
+
+Die Ablösung ist **fachlich** modelliert (R24 zwischen zwei eigenständigen Objekten): der
+abgelöste Stand trägt ein **geschlossenes** `valid_time`-Intervall, behält aber `version: 1` und
+**kein** `record_time.replaced_at` und bleibt vollständig sichtbar. Damit trägt der Seed erstmals
+eine **belegte** Versionshistorie – die entsprechenden Produktaussagen (`/heute`, Objekt-360)
+sind aus den Daten abgeleitet und nicht hartkodiert.
+
+### Offene Fragen (nicht erfunden, bewusst offen)
+
+| ID | Lücke |
+|---|---|
+| O-WP017-01 | `Task` (F08) kommt in Dok. 07 §9 in **keiner** Zeile R01–R25 vor → kein `Task` materialisiert, kein Kantentyp zweckentfremdet. |
+| O-WP017-02 | **Neun** der 14 Decision-Card-Pflichtfelder (Dok. 10, „Decision Cards“/„Pflichtfelder“) haben im Objektvertrag keinen Träger, **fünf** nur teilweise → nichts erfunden. |
+| O-WP017-03 | `LIFECYCLE_STATUS_DECISION` kennt keinen Zustand „abgelöst" → generischer Zustand `Überholt` (Dok. 07 §8); kanonische Bestätigung steht aus. |
+| O-WP017-04 | „Zielbezug" und „Auslöser" sind getrennte Pflichtfelder, kanonisch existiert nur R23 → die Kante wird neutral als Bezug modelliert. |
+| O-WP017-05 | „Approver" hat im Modell keinen Träger (`owner_ids` trägt nur `fachlich`/`technisch`, R03 nur Verantwortung) → kein erfundener Approver. |
+| O-WP017-07 | Datensatzversion (`version`/`replaced_at`) vs. fachliche Ablösung (R24) existieren ohne Regel nebeneinander → hier R24, `version: 1`, kein `replaced_at`. |
+| O-WP017-08 | Ob der Betreiber-Mandant eigene Entscheidungen tragen soll, ist offen → nur Nordwerk ausmodelliert. |
+| — | Ein fachliches **Ende** der Bezugs-/Nachweis-/Verantwortungskanten des abgelösten Stands ist im Konzept nicht belegt → diese Kanten bleiben offen. |
+
 ## Determinismus & Reset
 
 Alle IDs und Zeitstempel (`valid_time`, `record_time`) sind fest kodiert – kein `Date.now()`,
 kein Zufall. „Reset“ = erneuter Import von `DEMO_SEED` (`src/seed.ts`); jeder Lauf ist
-identisch. Bitemporalität ist sichtbar: der ISMS-Kerngraph ist fachlich ab 2026-01-01 gültig und
-am 2026-01-15 erfasst; die Managed-Service-Schicht ist fachlich ab 2026-02-01 gültig und am
-2026-02-16 erfasst (die Serviceschicht setzt zeitlich auf dem Kerngraphen auf).
+identisch. Bitemporalität ist sichtbar, und der Seed trägt **drei** Erfassungswellen
+(Systemachse `record_time`):
+
+| erfasst am | Schicht | Objekte / Beziehungen | fachlich gültig ab |
+|---|---|---|---|
+| 2026-01-15 | ISMS-Kerngraph (Nordwerk) | 17 / 15 | 2026-01-01 |
+| 2026-02-16 | Managed-Service-Schicht (Nordwerk + Consulting Operator) | 23 / 39 | 2026-02-01 |
+| 2026-03-16 | Entscheidungsschicht (Nordwerk) | 3 / 8 | je Objekt gesetzt (2026-01-05 bzw. 2026-03-01) |
+
+Für **jedes** Objekt und **jede** Beziehung gilt `valid_time.from < record_time.recorded_at`.
+Die Entscheidungsschicht ist die erste Schicht mit **objektweise** gesetzter fachlicher
+Gültigkeit, weil der abgelöste Stand ein geschlossenes Intervall braucht.
 
 ## Exporte
 
@@ -136,6 +200,9 @@ am 2026-01-15 erfasst; die Managed-Service-Schicht ist fachlich ab 2026-02-01 g�
 - `NORDWERK_SERVICE_OBJECTS`, `NORDWERK_SERVICE_RELATIONSHIPS`, `NORDWERK_SERVICE_OBJECT_ID`,
   `OPERATOR_OBJECTS`, `OPERATOR_RELATIONSHIPS`, `OPERATOR_OBJECT_ID`,
   `MANAGED_SERVICE_OBJECTS`, `MANAGED_SERVICE_RELATIONSHIPS` (Serviceschicht)
+- `NORDWERK_DECISION_OBJECTS`, `NORDWERK_DECISION_RELATIONSHIPS`,
+  `NORDWERK_DECISION_OBJECT_ID`, `DECISION_OBJECTS`, `DECISION_RELATIONSHIPS`
+  (Entscheidungsschicht)
 - `DEMO_SEED`, `SEED_VERSION`, `DemoSeed`
 - Integritätshelfer: `findDuplicateIds`, `indexObjectsById`,
   `findDanglingRelationships`, `findCrossTenantRelationships`, `findUnresolvedOwnerRefs`
@@ -147,7 +214,7 @@ am 2026-01-15 erfasst; die Managed-Service-Schicht ist fachlich ab 2026-02-01 g�
 2. **Stabile/eindeutige IDs** – keine doppelten `object_id`/`relationship_id`; der
    Duplikat-Detektor wird zusätzlich per Negativ-Beweis geprüft.
 3. **Tenant-Isolation** – jede Beziehung ist tenant-konsistent, die Objekt-/Kantenzahl wird
-   **pro Mandant** geprüft (Nordwerk 31/43, Operator 9/11, Finovia/MediCore 0/0) und keine
+   **pro Mandant** geprüft (Nordwerk 34/51, Operator 9/11, Finovia/MediCore 0/0) und keine
    Mandantensicht enthält fremde Objekte; ein bewusst konstruierter Cross-Tenant-Fall wird vom
    Isolationsprüfer erkannt (beweist die Isolation).
 4. **Referenzielle Integrität** – jede Beziehung zeigt auf existierende Objekte; Negativ-Beweise
@@ -160,5 +227,13 @@ am 2026-01-15 erfasst; die Managed-Service-Schicht ist fachlich ab 2026-02-01 g�
    SLA, mindestens ein Deliverable und eine `delivered_by`-Kante auf ein Team **desselben**
    Mandanten; die Services docken über `covered_by`/`requires` am ISMS-Kerngraphen an; der Seed
    enthält keinerlei Währungs-/Preisangabe (Guardrail-Test).
-8. **Manifest-Konsistenz** – `seed-manifest.json` stimmt in Version, Gesamt- und Pro-Tenant-Counts,
+8. **Entscheidungsschicht** – nur Nordwerk trägt `Decision Record`-Objekte; jede Entscheidung hat
+   mindestens eine eingehende `decided_in`-Kante von einem bestehenden Objekt, einen auflösbaren
+   Owner **und** eine eingehende `owns`-Kante derselben Rolle; genau ein `supersedes`-Paar in der
+   Richtung Nachfolger → Vorgänger mit geschlossenem `valid_time` am Vorgänger und lückenlosem
+   Anschluss der Nachfolgerin; die `evidences`-Quelle ist ein Objekt vom Typ `Evidence`;
+   `version` bleibt 1 und `replaced_at` ungesetzt; Guardrail gegen Frist-, Aufwands-,
+   Kapazitäts-, Prioritäts-, Alternativen-, Baseline- und Wirkungsangaben in Namen, Beschreibungen
+   und Kantentexten der Schicht.
+9. **Manifest-Konsistenz** – `seed-manifest.json` stimmt in Version, Gesamt- und Pro-Tenant-Counts,
    `has_object_graph`, `object_families_used` und `relationship_types_used` mit `DEMO_SEED` überein.

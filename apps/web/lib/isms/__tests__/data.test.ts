@@ -168,10 +168,19 @@ describe('buildIsmsCoreView – Nordwerk (ISMS-Kerngraph vollständig aufgelöst
     );
     expect(evidence?.evidence.name).toBe('Restore-Test-Protokoll Q2/2026');
     expect(evidence?.evidence.lifecycle_status).toBe('akzeptiert');
+    // Seit WP-017 belegt derselbe Nachweis ZWEI Objekte: das Control (R15 „Evidence -> Control")
+    // und den abgelösten Entscheidungsstand (R15 „Evidence -> … /Decision"). Beide Kanten stehen
+    // in Datenbestandsreihenfolge und werden hier vollständig festgenagelt – die Liste bleibt
+    // exakt, sie wird nicht auf „enthält" abgeschwächt.
     expect(evidence!.evidences).toEqual([
       expect.objectContaining({
         name: 'Backup & Recovery Control',
         object_type: 'Control',
+        edge_status: 'geprüft',
+      }),
+      expect.objectContaining({
+        object_id: 'nordwerk-decision-risikobehandlung-backup',
+        object_type: 'Decision Record',
         edge_status: 'geprüft',
       }),
     ]);

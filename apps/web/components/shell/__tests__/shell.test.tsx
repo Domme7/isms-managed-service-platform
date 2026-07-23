@@ -66,6 +66,19 @@ describe('AppShell – Navigation der acht Orte', () => {
     }
   });
 
+  it('kennzeichnet genau die noch nicht ausgebauten Orte als „noch nicht verfügbar"', () => {
+    // WP-017 Slice 2: „Entscheidungen" ist live und darf diese Kennzeichnung NICHT mehr tragen.
+    // Abgeleitet aus `NAV_PLACES` statt hartkodiert – der Test zieht mit jedem weiteren Ort mit.
+    renderShell();
+    const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
+    for (const place of NAV_PLACES) {
+      const link = within(nav).getByRole('link', { name: new RegExp(place.label) });
+      const nichtVerfuegbar = (link.textContent ?? '').includes('noch nicht verfügbar');
+      expect(nichtVerfuegbar, `Ort „${place.label}"`).toBe(place.live !== true);
+    }
+    expect(NAV_PLACES.filter((p) => p.live === true).map((p) => p.id)).toContain('entscheidungen');
+  });
+
   it('markiert den aktiven Ort mit aria-current="page"', () => {
     renderShell({ activeId: 'kunden' });
     const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });

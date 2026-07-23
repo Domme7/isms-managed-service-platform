@@ -13,7 +13,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
-import { buildIsmsCoreView, getIsmsCoreTenants, hasManagedServices } from '../../lib/isms/data';
+import { buildIsmsCoreView, hasManagedServices } from '../../lib/isms/data';
 import {
   ControlCard,
   EvidenceCard,
@@ -176,18 +176,22 @@ function SectionList({ isEmpty, emptyText, children }: { isEmpty: boolean; empty
  * Services, aber keine eigenen Risiken/Controls tragen (Consulting Operator).
  */
 function EmptyIsms({ tenant }: { tenant: DemoTenant }) {
-  const modeled = getIsmsCoreTenants();
   const tenantHasServices = hasManagedServices(tenant.tenant_id);
 
   return (
     <div className="tw-empty" role="note">
       <h3>Keine ISMS-Kernobjekte für {tenant.display_name}</h3>
+      {/* MANDANTENLOKAL. Hier stand bis 2026-07-23: „Die Risiko- und Control-Sicht ist derzeit für
+          einen anderen Demo-Mandanten ausmodelliert." Das war eine Existenzaussage über einen
+          FREMDEN Mandanten und damit eine Mandantengrenzverletzung (Dok. 07, Abschnitt
+          „Mandantenfähigkeit, Rechte und Datenschutz" / P09): ein Nutzer ohne eigene Objekte erfuhr,
+          dass ein anderer welche trägt. Gefunden in der Gegenprüfung zu WP-017, wo derselbe Defekt
+          auf /entscheidungen behoben wurde — dieser hier bestand seit WP-013 unbemerkt.
+          Der Leerzustand sagt jetzt ausschließlich etwas über DIESEN Mandanten. */}
       <p style={{ marginTop: 0 }}>
         Für <strong>{tenant.display_name}</strong> sind im aktuellen Demo-Datenbestand keine Risiken,
-        Controls, Maßnahmen oder Nachweise modelliert.{' '}
-        {modeled.length > 0
-          ? `Die Risiko- und Control-Sicht ist derzeit für ${modeled.length === 1 ? 'einen anderen Demo-Mandanten' : `${modeled.length} andere Demo-Mandanten`} ausmodelliert; weitere folgen in späteren Ausbaustufen.`
-          : 'Im aktuellen Demo-Datenbestand ist noch kein Mandant mit ISMS-Kernobjekten modelliert.'}
+        Controls, Maßnahmen oder Nachweise modelliert. Der Ort bleibt erreichbar und zeigt hier
+        ausschließlich, was für diesen Mandanten belegt ist.
       </p>
       {tenantHasServices ? (
         <p className="tw-muted">

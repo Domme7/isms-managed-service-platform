@@ -10,11 +10,12 @@ const TENANT_FINOVIA = 'tenant-finovia';
 const TENANT_OPERATOR = 'tenant-consulting-operator';
 
 /**
- * Seed-Umfang je Mandant (siehe seed-loader.spec.ts): Nordwerk 31 Objekte / 43 Beziehungen
- * (ISMS-Kerngraph 17/15 + Managed-Service-Schicht 14/28), Consulting Operator Demo 9/11.
+ * Seed-Umfang je Mandant (siehe seed-loader.spec.ts): Nordwerk 34 Objekte / 51 Beziehungen
+ * (ISMS-Kerngraph 17/15 + Managed-Service-Schicht 14/28 + Entscheidungsschicht 3/8),
+ * Consulting Operator Demo 9/11.
  */
-const NORDWERK_OBJECT_COUNT = 31;
-const NORDWERK_RELATIONSHIP_COUNT = 43;
+const NORDWERK_OBJECT_COUNT = 34;
+const NORDWERK_RELATIONSHIP_COUNT = 51;
 const OPERATOR_OBJECT_COUNT = 9;
 const FROM = '2026-02-01T00:00:00.000Z';
 const RECORDED = '2026-02-05T08:00:00.000Z';

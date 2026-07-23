@@ -62,3 +62,16 @@ export function formatIsoDateDe(iso: string): string {
   if (!match) return iso;
   return `${match[3]}.${match[2]}.${match[1]}`;
 }
+
+/**
+ * Kalendertag eines ISO-8601-Zeitstempels als ISO-Kürzel („2026-03-16T08:00:00Z" -> „2026-03-16").
+ * Unlesbare Werte werden fail-loud roh durchgereicht statt still ersetzt.
+ *
+ * Wohnt hier neben `formatIsoDateDe` und aus demselben Grund: die Funktion lag zeichengleich in
+ * `lib/heute/data.ts` und `lib/entscheidungen/data.ts`; zwei Kopien derselben Regel können
+ * auseinanderlaufen (Review-Fix). Bewusst getrennt von `formatIsoDateDe`: dieses Ergebnis ist
+ * MASCHINENLESBAR (Gruppierungsschlüssel, `dateTime`-Attribut), jenes ist die Anzeigeform.
+ */
+export function calendarDay(iso: string): string {
+  return ISO_CALENDAR_DAY.test(iso) ? iso.slice(0, 10) : iso;
+}

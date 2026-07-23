@@ -19,10 +19,13 @@
 1. **`Task` hat keinen einzigen Beziehungstyp** in Dok. 07 §9 (R01–R25) — weder als Quelle noch als
    Ziel. Aufgaben wären beziehungslose Waisen im Graphen. Sie werden deshalb **nicht** materialisiert
    (O-WP017-01). Damit bleibt die **Morning Mission weiterhin blockiert**.
-2. **Eine Decision Card (Dok. 10 §9) ist nicht baubar:** von 14 Pflichtfeldern haben 7 **keinen**
-   Träger im Objektvertrag (u. a. Optionen, Baseline, Wirkung, Ressourcen, Frist, Approver,
-   Outcome Check), 6 nur teilweise (O-WP017-02, -05). Die Seite zeigt deshalb ein **Register
-   belegter Entscheidungen**, keine Decision Card — und sagt das sichtbar.
+2. **Eine Decision Card (Dok. 10, Abschnitt „Decision Cards") ist nicht baubar:** von 14
+   Pflichtfeldern haben **neun keinen** Träger im Objektvertrag (Auslöser, Baseline, Optionen,
+   Wirkung, Ressourcen, Abhängigkeiten, Empfehlung, Frist, Outcome Check), **fünf** nur teilweise
+   (O-WP017-02, -05). Die Seite zeigt deshalb ein **Register belegter Entscheidungen**, keine
+   Decision Card — und sagt das sichtbar. *(Zahl am 2026-07-23 gegen das PDF und gegen
+   `DECISION_CARD_FIELDS` nachgerechnet; die frühere Angabe „7 / 6" war falsch — sie ergab
+   zusammen 13 statt 14 und nannte „Alternativen", ein Feld, das es in Dok. 10 nicht gibt.)*
 
 > Abgeschlossen: WP-001..004, 007, 011..016.
 > Offene Human Gates (nicht blockierend): CCP-001..003, Docker-Engine-Start, FINDING-0004,
