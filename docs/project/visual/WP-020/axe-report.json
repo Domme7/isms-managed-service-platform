@@ -20,288 +20,20 @@
     {
       "slug": "heute-neutral",
       "pfad": "/heute",
-      "anzahlVerstoesse": {
-        "serious": 1
-      },
-      "verstoesse": [
-        {
-          "id": "dlitem",
-          "impact": "serious",
-          "beschreibung": "Ensure <dt> and <dd> elements are contained by a <dl>",
-          "hilfe": "<dt> and <dd> elements must be contained by a <dl>",
-          "hilfeUrl": "https://dequeuniversity.com/rules/axe/4.12/dlitem?application=playwright",
-          "wcagTags": [
-            "wcag2a",
-            "wcag131"
-          ],
-          "stellen": [
-            {
-              "ziel": "div:nth-child(1) > dt",
-              "html": "<dt>Aktiver Mandant</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(1) > dd",
-              "html": "<dd>Nordwerk Manufacturing SE</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dt",
-              "html": "<dt>Aktive Produktrolle</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dd",
-              "html": "<dd>neutral – keine Rolle gewählt</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > dt",
-              "html": "<dt>Vertretung (zeitlich begrenzt)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – die Anmelde-Simulation speichert nur Rolle und Mandant; eine zeitlich begrenzte Vertretung kennt der Datenbestand nicht.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dt",
-              "html": "<dt>Scope-Kennungen</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dd",
-              "html": "<dd>scope-nordwerk-isms-core · scope-nordwerk-managed-service</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dt",
-              "html": "<dt>Datenstand (zuletzt im System erfasst)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dd",
-              "html": "<dd><time datetime=\"2026-03-16\">16.03.2026</time></dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > dt",
-              "html": "<dt>Vertraulichkeitsstufe und Exportrestriktion</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – im Datenbestand tragen nur einzelne Objekte eine Vertraulichkeitsstufe (sichtbar auf der jeweiligen Objektseite); für Mandant oder Seite ist keine Stufe und keine Exportrestriktion erfasst.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > dt",
-              "html": "<dt>Vertrauensgrad bei abgeleiteten Aussagen</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">kein seitenweiter Wert erfasst – belegte Vertrauensangaben stehen an einzelnen Beziehungen und Objekten; ein zusammengefasster Wert würde hier eine Aussage behaupten, die der Datenbestand nicht trägt.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            }
-          ]
-        }
-      ]
+      "anzahlVerstoesse": {},
+      "verstoesse": []
     },
     {
       "slug": "heute",
       "pfad": "/heute",
-      "anzahlVerstoesse": {
-        "serious": 1
-      },
-      "verstoesse": [
-        {
-          "id": "dlitem",
-          "impact": "serious",
-          "beschreibung": "Ensure <dt> and <dd> elements are contained by a <dl>",
-          "hilfe": "<dt> and <dd> elements must be contained by a <dl>",
-          "hilfeUrl": "https://dequeuniversity.com/rules/axe/4.12/dlitem?application=playwright",
-          "wcagTags": [
-            "wcag2a",
-            "wcag131"
-          ],
-          "stellen": [
-            {
-              "ziel": "div:nth-child(1) > dt",
-              "html": "<dt>Aktiver Mandant</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(1) > dd",
-              "html": "<dd>Nordwerk Manufacturing SE</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dt",
-              "html": "<dt>Aktive Produktrolle</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dd",
-              "html": "<dd>R01 · Executive Sponsor</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > dt",
-              "html": "<dt>Vertretung (zeitlich begrenzt)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – die Anmelde-Simulation speichert nur Rolle und Mandant; eine zeitlich begrenzte Vertretung kennt der Datenbestand nicht.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dt",
-              "html": "<dt>Scope-Kennungen</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dd",
-              "html": "<dd>scope-nordwerk-isms-core · scope-nordwerk-managed-service</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dt",
-              "html": "<dt>Datenstand (zuletzt im System erfasst)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dd",
-              "html": "<dd><time datetime=\"2026-03-16\">16.03.2026</time></dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > dt",
-              "html": "<dt>Vertraulichkeitsstufe und Exportrestriktion</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – im Datenbestand tragen nur einzelne Objekte eine Vertraulichkeitsstufe (sichtbar auf der jeweiligen Objektseite); für Mandant oder Seite ist keine Stufe und keine Exportrestriktion erfasst.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > dt",
-              "html": "<dt>Vertrauensgrad bei abgeleiteten Aussagen</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">kein seitenweiter Wert erfasst – belegte Vertrauensangaben stehen an einzelnen Beziehungen und Objekten; ein zusammengefasster Wert würde hier eine Aussage behaupten, die der Datenbestand nicht trägt.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(8) > dt",
-              "html": "<dt>Erlebniswelt</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(8) > dd",
-              "html": "<dd>Executive World</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            }
-          ]
-        }
-      ]
+      "anzahlVerstoesse": {},
+      "verstoesse": []
     },
     {
       "slug": "twin",
       "pfad": "/twin",
-      "anzahlVerstoesse": {
-        "serious": 1
-      },
-      "verstoesse": [
-        {
-          "id": "dlitem",
-          "impact": "serious",
-          "beschreibung": "Ensure <dt> and <dd> elements are contained by a <dl>",
-          "hilfe": "<dt> and <dd> elements must be contained by a <dl>",
-          "hilfeUrl": "https://dequeuniversity.com/rules/axe/4.12/dlitem?application=playwright",
-          "wcagTags": [
-            "wcag2a",
-            "wcag131"
-          ],
-          "stellen": [
-            {
-              "ziel": "div:nth-child(1) > dt",
-              "html": "<dt>Aktiver Mandant</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(1) > dd",
-              "html": "<dd>Nordwerk Manufacturing SE</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dt",
-              "html": "<dt>Aktive Produktrolle</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dd",
-              "html": "<dd>R01 · Executive Sponsor</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > dt",
-              "html": "<dt>Vertretung (zeitlich begrenzt)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – die Anmelde-Simulation speichert nur Rolle und Mandant; eine zeitlich begrenzte Vertretung kennt der Datenbestand nicht.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dt",
-              "html": "<dt>Objektkontext dieser Seite</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dd",
-              "html": "<dd>Übersicht aller Demo-Mandanten (Portfolio des Ortes „Kunden\")</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dt",
-              "html": "<dt>Datenstand des aktiven Mandanten (zuletzt im System erfasst)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dd",
-              "html": "<dd><time datetime=\"2026-03-16\">16.03.2026</time></dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > dt",
-              "html": "<dt>Vertraulichkeitsstufe und Exportrestriktion</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – im Datenbestand tragen nur einzelne Objekte eine Vertraulichkeitsstufe (sichtbar auf der jeweiligen Objektseite); für Mandant oder Seite ist keine Stufe und keine Exportrestriktion erfasst.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > dt",
-              "html": "<dt>Vertrauensgrad bei abgeleiteten Aussagen</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">kein seitenweiter Wert erfasst – belegte Vertrauensangaben stehen an einzelnen Beziehungen und Objekten; ein zusammengefasster Wert würde hier eine Aussage behaupten, die der Datenbestand nicht trägt.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            }
-          ]
-        }
-      ]
+      "anzahlVerstoesse": {},
+      "verstoesse": []
     },
     {
       "slug": "twin-tenant-nordwerk",
@@ -312,288 +44,20 @@
     {
       "slug": "isms",
       "pfad": "/isms",
-      "anzahlVerstoesse": {
-        "serious": 1
-      },
-      "verstoesse": [
-        {
-          "id": "dlitem",
-          "impact": "serious",
-          "beschreibung": "Ensure <dt> and <dd> elements are contained by a <dl>",
-          "hilfe": "<dt> and <dd> elements must be contained by a <dl>",
-          "hilfeUrl": "https://dequeuniversity.com/rules/axe/4.12/dlitem?application=playwright",
-          "wcagTags": [
-            "wcag2a",
-            "wcag131"
-          ],
-          "stellen": [
-            {
-              "ziel": "div:nth-child(1) > dt",
-              "html": "<dt>Aktiver Mandant</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(1) > dd",
-              "html": "<dd>Nordwerk Manufacturing SE</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dt",
-              "html": "<dt>Aktive Produktrolle</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dd",
-              "html": "<dd>R01 · Executive Sponsor</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > dt",
-              "html": "<dt>Vertretung (zeitlich begrenzt)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – die Anmelde-Simulation speichert nur Rolle und Mandant; eine zeitlich begrenzte Vertretung kennt der Datenbestand nicht.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dt",
-              "html": "<dt>Scope-Kennungen der ISMS-Kernobjekte</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dd",
-              "html": "<dd>scope-nordwerk-isms-core</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dt",
-              "html": "<dt>Datenstand der ISMS-Kernobjekte (zuletzt im System erfasst)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dd",
-              "html": "<dd><time datetime=\"2026-01-15\">15.01.2026</time></dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > dt",
-              "html": "<dt>Vertraulichkeitsstufe und Exportrestriktion</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – im Datenbestand tragen nur einzelne Objekte eine Vertraulichkeitsstufe (sichtbar auf der jeweiligen Objektseite); für Mandant oder Seite ist keine Stufe und keine Exportrestriktion erfasst.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > dt",
-              "html": "<dt>Vertrauensgrad bei abgeleiteten Aussagen</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">kein seitenweiter Wert erfasst – belegte Vertrauensangaben stehen an einzelnen Beziehungen und Objekten; ein zusammengefasster Wert würde hier eine Aussage behaupten, die der Datenbestand nicht trägt.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            }
-          ]
-        }
-      ]
+      "anzahlVerstoesse": {},
+      "verstoesse": []
     },
     {
       "slug": "services",
       "pfad": "/services",
-      "anzahlVerstoesse": {
-        "serious": 1
-      },
-      "verstoesse": [
-        {
-          "id": "dlitem",
-          "impact": "serious",
-          "beschreibung": "Ensure <dt> and <dd> elements are contained by a <dl>",
-          "hilfe": "<dt> and <dd> elements must be contained by a <dl>",
-          "hilfeUrl": "https://dequeuniversity.com/rules/axe/4.12/dlitem?application=playwright",
-          "wcagTags": [
-            "wcag2a",
-            "wcag131"
-          ],
-          "stellen": [
-            {
-              "ziel": "div:nth-child(1) > dt",
-              "html": "<dt>Aktiver Mandant</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(1) > dd",
-              "html": "<dd>Nordwerk Manufacturing SE</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dt",
-              "html": "<dt>Aktive Produktrolle</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dd",
-              "html": "<dd>R01 · Executive Sponsor</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > dt",
-              "html": "<dt>Vertretung (zeitlich begrenzt)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – die Anmelde-Simulation speichert nur Rolle und Mandant; eine zeitlich begrenzte Vertretung kennt der Datenbestand nicht.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dt",
-              "html": "<dt>Scope-Kennungen der Managed Services</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dd",
-              "html": "<dd>scope-nordwerk-isms-core · scope-nordwerk-managed-service</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dt",
-              "html": "<dt>Datenstand der Managed Services (zuletzt im System erfasst)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dd",
-              "html": "<dd><time datetime=\"2026-02-16\">16.02.2026</time></dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > dt",
-              "html": "<dt>Vertraulichkeitsstufe und Exportrestriktion</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – im Datenbestand tragen nur einzelne Objekte eine Vertraulichkeitsstufe (sichtbar auf der jeweiligen Objektseite); für Mandant oder Seite ist keine Stufe und keine Exportrestriktion erfasst.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > dt",
-              "html": "<dt>Vertrauensgrad bei abgeleiteten Aussagen</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">kein seitenweiter Wert erfasst – belegte Vertrauensangaben stehen an einzelnen Beziehungen und Objekten; ein zusammengefasster Wert würde hier eine Aussage behaupten, die der Datenbestand nicht trägt.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            }
-          ]
-        }
-      ]
+      "anzahlVerstoesse": {},
+      "verstoesse": []
     },
     {
       "slug": "entscheidungen",
       "pfad": "/entscheidungen",
-      "anzahlVerstoesse": {
-        "serious": 1
-      },
-      "verstoesse": [
-        {
-          "id": "dlitem",
-          "impact": "serious",
-          "beschreibung": "Ensure <dt> and <dd> elements are contained by a <dl>",
-          "hilfe": "<dt> and <dd> elements must be contained by a <dl>",
-          "hilfeUrl": "https://dequeuniversity.com/rules/axe/4.12/dlitem?application=playwright",
-          "wcagTags": [
-            "wcag2a",
-            "wcag131"
-          ],
-          "stellen": [
-            {
-              "ziel": "div:nth-child(1) > dt",
-              "html": "<dt>Aktiver Mandant</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(1) > dd",
-              "html": "<dd>Nordwerk Manufacturing SE</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dt",
-              "html": "<dt>Aktive Produktrolle</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(2) > dd",
-              "html": "<dd>R01 · Executive Sponsor</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > dt",
-              "html": "<dt>Vertretung (zeitlich begrenzt)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(3) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – die Anmelde-Simulation speichert nur Rolle und Mandant; eine zeitlich begrenzte Vertretung kennt der Datenbestand nicht.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dt",
-              "html": "<dt>Scope-Kennungen der Entscheidungen</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(4) > dd",
-              "html": "<dd>scope-nordwerk-isms-core · scope-nordwerk-managed-service</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dt",
-              "html": "<dt>Datenstand der Entscheidungen (zuletzt im System erfasst)</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(5) > dd",
-              "html": "<dd><time datetime=\"2026-03-16\">16.03.2026</time></dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > dt",
-              "html": "<dt>Vertraulichkeitsstufe und Exportrestriktion</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(6) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">nicht erfasst – im Datenbestand tragen nur einzelne Objekte eine Vertraulichkeitsstufe (sichtbar auf der jeweiligen Objektseite); für Mandant oder Seite ist keine Stufe und keine Exportrestriktion erfasst.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > dt",
-              "html": "<dt>Vertrauensgrad bei abgeleiteten Aussagen</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(7) > .od-context-gap",
-              "html": "<dd class=\"od-context-gap\">kein seitenweiter Wert erfasst – belegte Vertrauensangaben stehen an einzelnen Beziehungen und Objekten; ein zusammengefasster Wert würde hier eine Aussage behaupten, die der Datenbestand nicht trägt.</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(8) > dt",
-              "html": "<dt>Erfasste Entscheidungen</dt>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            },
-            {
-              "ziel": "div:nth-child(8) > dd",
-              "html": "<dd>3</dd>",
-              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
-            }
-          ]
-        }
-      ]
+      "anzahlVerstoesse": {},
+      "verstoesse": []
     },
     {
       "slug": "objekt-360-risk-betriebsunterbrechung",
@@ -676,6 +140,18 @@
           ]
         }
       ]
+    },
+    {
+      "slug": "heute-dashboard-r03",
+      "pfad": "/heute",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "heute-leerer-mandant",
+      "pfad": "/heute",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
     }
   ]
 }

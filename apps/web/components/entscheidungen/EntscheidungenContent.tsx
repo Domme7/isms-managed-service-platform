@@ -100,19 +100,29 @@ export function EntscheidungenContent({
 
       {/* Die Grenze steht DIREKT unter der Leitfrage, nicht erst am Seitenende: eine
           Dringlichkeitsfrage darf nicht erst nach dem ganzen Inhalt relativiert werden
-          (Korrektur aus dem WP-016-Review). Die id macht den Absatz im Test adressierbar. */}
-      <p className="tw-muted" id="entscheidungen-rahmung">
-        <strong>Diese Frage beantwortet die Seite nicht.</strong> „Jetzt erforderlich" ist eine
-        Aussage über Dringlichkeit; sie setzt eine Frist, einen Aufwand, eine verfügbare Kapazität
-        und eine Priorität voraus. Der kanonische Objektvertrag (Dok. 07, Abschnitt „Objektvertrag,
-        Identität und Metadaten") kennt keines dieser Felder, und der Datenbestand trägt sie nicht –
-        jede Reihung nach Dringlichkeit wäre erfunden. Beantwortet wird deshalb die engere,
-        belegbare Frage:{' '}
-        <strong>
-          Welche Entscheidungen sind im Datenbestand dieses Mandanten erfasst, worauf beziehen sie
-          sich, wie sind sie belegt und was hat sie abgelöst?
-        </strong>
-      </p>
+          (Korrektur aus dem WP-016-Review). Seit dem Review-Pass (Product-Finding): zwei
+          Sätze, der Begründungsapparat aufklappbar (P06). Die id umfasst BEIDES – der
+          Vokabular-Wächter der Seite nimmt exakt dieses Element aus dem Datenabschnitts-Scan. */}
+      <div className="tw-muted" id="entscheidungen-rahmung">
+        <p style={{ margin: 0 }}>
+          <strong>Diese Frage beantwortet die Seite heute nicht:</strong> „jetzt erforderlich" wäre
+          eine Aussage über Dringlichkeit, für die der Datenbestand keine Träger hat. Beantwortet
+          wird die belegbare Frage:{' '}
+          <strong>
+            Welche Entscheidungen sind erfasst, worauf beziehen sie sich, wie sind sie belegt und
+            was hat sie abgelöst?
+          </strong>
+        </p>
+        <details className="rahmung-details">
+          <summary>Begründung im Einzelnen</summary>
+          <p style={{ marginBottom: 0 }}>
+            „Jetzt erforderlich" setzt eine Frist, einen Aufwand, eine verfügbare Kapazität und eine
+            Priorität voraus. Der kanonische Objektvertrag (Dok. 07, Abschnitt „Objektvertrag,
+            Identität und Metadaten") kennt keines dieser Felder, und der Datenbestand trägt sie
+            nicht – jede Reihung nach Dringlichkeit wäre erfunden.
+          </p>
+        </details>
+      </div>
 
       <p className="tw-lead">
         Read-only Register der Entscheidungen des aktiven Mandanten, abgeleitet aus dem

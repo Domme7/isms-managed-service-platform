@@ -35,9 +35,11 @@ import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { AppShell } from '../shell/AppShell';
 import { MissionControlContent } from '../shell/MissionControlContent';
-import { NAV_PLACES } from '../../lib/shell/places';
+import { TenantDetailView } from '../twin/TenantDetailView';
+import { NAV_PLACES, type PlaceId } from '../../lib/shell/places';
 import { DEMO_ROLES, getRole, type DemoRole } from '../../lib/shell/roles';
 import { resolveSession } from '../../lib/shell/session';
+import { buildTenantDetail } from '../../lib/twin/data';
 
 function tenant(tenantId: string): DemoTenant {
   const found = DEMO_TENANTS.find((t) => t.tenant_id === tenantId);
@@ -54,6 +56,9 @@ function role(roleId: string): DemoRole {
 /**
  * Formulierungen, mit denen eine Seite über andere Mandanten spricht. Bewusst über die konkreten
  * historischen Sätze hinaus: eine Umformulierung soll den Test ebenfalls auslösen.
+ * Erweitert im Review-Pass (Security-Finding) um Zähl-/„weitere"-Formulierungen; der
+ * Fixture-Negativbeweis unten belegt, dass jedes Muster greift und legitime mandantenlokale
+ * Sätze („… dieses Mandanten") NICHT anschlagen.
  */
 const FREMDER_MANDANT = [
   /anderen? (Demo-)?Mandanten/i,
@@ -63,44 +68,57 @@ const FREMDER_MANDANT = [
   /Mandanten? ausmodelliert/i,
   /bei (einem|anderen) Mandanten/i,
   /weitere folgen/i,
+  // Review-Pass: direkte Mandanten-Zählungen und „weitere/übrige Mandanten"-Ankündigungen.
+  /\d+\s+(?:Demo-)?Mandanten/i,
+  /weitere\s+(?:\S+\s+)?Mandanten/i,
+  /(?:ü|ue)brigen?\s+Mandanten/i,
 ];
 
 /** Mandanten ohne eigenen Objektgraphen — hier greifen die Leerzustände. */
 const LEERE_MANDANTEN = [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE];
 
 describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandantenfähigkeit", P09)', () => {
-  const orte: { name: string; render: (t: DemoTenant) => RenderResult }[] = [
-    { name: '/isms', render: (t) => render(<IsmsContent role={role('R03')} tenant={t} />) },
-    {
-      name: '/entscheidungen',
-      render: (t) => render(<EntscheidungenContent role={role('R03')} tenant={t} />),
-    },
-    {
-      name: '/heute',
-      render: (t) => render(<MissionControlContent role={role('R03')} tenant={t} />),
-    },
-    {
-      // WP-020 Slice 1: `/services` steht seither ebenfalls unter dem Wächter. Bewusst mit
-      // einer Rolle AUSSERHALB der Consulting & Service World (R03): für R08–R11 rendert die
-      // Seite zusätzlich die Portfolio-Übersicht — eine DOKUMENTIERTE mandantenübergreifende
-      // Verdichtung (O-WP012-03), die legitim fremde Mandanten nennt und kein Leerzustand ist.
-      // Der Wächter zielt auf den mandantenlokalen Leerzustand, den jede Rolle sieht.
-      name: '/services',
-      render: (t) => render(<ServicesContent role={role('R03')} tenant={t} />),
-    },
-  ];
+  /**
+   * REGISTER der mandantenlokalen Leerzustände je `live: true`-Ort (Review-Pass, Security-/
+   * QA-Finding: vorher eine lose Liste ohne Meta-Absicherung – ein neuer echter Ort konnte
+   * still am Wächter vorbeigehen). Die Meta-Assertion unten gleicht gegen `NAV_PLACES` ab.
+   *
+   * DOKUMENTIERTE AUSNAHME (kein Registereintrag nötig, aber hier benannt): Der Ort „kunden"
+   * wird über seine MANDANTEN-DETAILSEITE geprüft (`TenantDetailView` des leeren Mandanten).
+   * Seine ÜBERSICHT (`TenantOverview`, `/twin`) ist die bewusst mandantenübergreifende
+   * Portfolio-Seite – sie LISTET alle Demo-Mandanten als Auswahl (O-WP020-11, benannter
+   * Objektkontext „Übersicht aller Demo-Mandanten") und ist kein Leerzustand; sie unter
+   * diesen Scan zu stellen wäre ein Kategorienfehler, kein Sicherheitsgewinn.
+   * `/services` bewusst mit einer Rolle AUSSERHALB der Consulting & Service World (R03):
+   * für R08–R11 rendert die Seite zusätzlich die dokumentierte Portfolio-Verdichtung
+   * (O-WP012-03), die legitim fremde Mandanten nennt und kein Leerzustand ist.
+   */
+  const LEERZUSTAND_JE_LIVE_ORT: Partial<Record<PlaceId, (t: DemoTenant) => RenderResult>> = {
+    heute: (t) => render(<MissionControlContent role={role('R03')} tenant={t} />),
+    kunden: (t) => render(<TenantDetailView model={buildTenantDetail(t)} />),
+    isms: (t) => render(<IsmsContent role={role('R03')} tenant={t} />),
+    entscheidungen: (t) => render(<EntscheidungenContent role={role('R03')} tenant={t} />),
+    services: (t) => render(<ServicesContent role={role('R03')} tenant={t} />),
+  };
 
-  for (const ort of orte) {
+  it('Meta: das Register deckt exakt die live-Orte aus NAV_PLACES ab (neuer echter Ort ⇒ hier eintragen)', () => {
+    const liveOrte = NAV_PLACES.filter((p) => p.live)
+      .map((p) => p.id)
+      .sort();
+    expect(Object.keys(LEERZUSTAND_JE_LIVE_ORT).sort()).toEqual(liveOrte);
+  });
+
+  for (const [ortName, renderOrt] of Object.entries(LEERZUSTAND_JE_LIVE_ORT)) {
     for (const tenantId of LEERE_MANDANTEN) {
-      it(`${ort.name} nennt für ${tenantId} keinen fremden Mandanten`, () => {
-        const { container } = ort.render(tenant(tenantId));
+      it(`${ortName} nennt für ${tenantId} keinen fremden Mandanten`, () => {
+        const { container } = renderOrt(tenant(tenantId));
         const text = container.textContent ?? '';
         // Blindheitsschutz: der Leerzustand muss überhaupt etwas gerendert haben, sonst wäre
         // jede Negativassertion trivial erfüllt.
         expect(text.length).toBeGreaterThan(80);
 
         for (const muster of FREMDER_MANDANT) {
-          expect(text).not.toMatch(muster);
+          expect(text, `${ortName}/${tenantId}: „${muster}"`).not.toMatch(muster);
         }
 
         // Und konkret: kein Anzeigename und keine ID eines anderen Mandanten im DOM.
@@ -111,6 +129,40 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
       });
     }
   }
+
+  it('Fixture-Negativbeweis: jedes FREMDER_MANDANT-Muster greift – legitime Sätze nicht', () => {
+    // Jedes Muster wird von mindestens einer (historisch echten oder konstruierten)
+    // Leak-Formulierung ausgelöst – der Wächter ist nicht blind.
+    const leaks = [
+      'Die Sicht ist derzeit für einen anderen Demo-Mandanten ausmodelliert.',
+      'Diese Ansicht existiert für andere Mandanten.',
+      'Services laufen für 2 Mandanten.',
+      'Ausmodelliert sind 2 von 4 Mandanten.',
+      'Für einen Mandanten ausmodelliert.',
+      'Mehr Daten gibt es bei einem Mandanten mit Graph.',
+      'Weitere folgen in späteren Ausbaustufen.',
+      'Im Datenbestand sind 2 Mandanten modelliert.',
+      'Weitere ausmodellierte Mandanten folgen.',
+      'Die übrigen Mandanten folgen später.',
+    ];
+    for (const muster of FREMDER_MANDANT) {
+      expect(
+        leaks.some((satz) => muster.test(satz)),
+        `Kein Fixture löst „${muster}" aus – der Beweis wäre blind`,
+      ).toBe(true);
+    }
+    // Legitime, mandantenLOKALE Formulierungen (echte Produkttexte) schlagen NICHT an.
+    for (const legitim of [
+      '34 Objekte dieses Mandanten',
+      '51 Beziehungen dieses Mandanten im Demo-Datenbestand',
+      'Datenbestand von Nordwerk Manufacturing SE (nur der aktive Mandant)',
+      'Gezählt wird ausschließlich der aktive Mandant.',
+    ]) {
+      for (const muster of FREMDER_MANDANT) {
+        expect(muster.test(legitim), `„${muster}" schlägt auf „${legitim}" an`).toBe(false);
+      }
+    }
+  });
 
   it('der Consulting Operator erfährt nichts über Nordwerks Entscheidungen', () => {
     // Dieser Mandant trägt Objekte, aber KEINE Entscheidungen - genau die Konstellation, in der

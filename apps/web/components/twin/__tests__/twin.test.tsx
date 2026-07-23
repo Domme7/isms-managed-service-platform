@@ -171,19 +171,32 @@ describe('TenantDetailView – Verlinkung auf die Objekt-360-Seite (WP-014 Slice
 });
 
 describe('TenantDetailView – Empty-State (ohne Graph)', () => {
-  it('zeigt einen aus dem Seed abgeleiteten Empty-State für Finovia', () => {
+  it('zeigt einen MANDANTENLOKALEN Empty-State für Finovia (kein fremder Mandant)', () => {
+    // Review-Pass WP-020 (Security-Finding, Regel VERSCHÄRFT statt abgeschwächt): der frühere
+    // Empty-State nannte fremde Mandanten samt Links („Ausmodelliert ist bislang …") – die
+    // vierte Fundstelle der Leerzustands-Leak-Klasse (Dok. 07 „Mandantenfähigkeit"/P09).
+    // Dieser Test hatte den Leak festgeschrieben; jetzt beweist er das Gegenteil.
     const model = buildTenantDetail(tenantOrThrow(TENANT_ID.FINOVIA));
-    render(<TenantDetailView model={model} />);
+    const { container } = render(<TenantDetailView model={model} />);
 
     expect(model.objectCount).toBe(0);
-    // Wortlaut ohne „Slice" seit der AC-24-Korrektur (WP-018, Prozessvokabular-Wächter).
-    expect(screen.getByText(/Kein Objektgraph in dieser Demo/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Kein Objektgraph für Finovia Digital Bank AG' }),
+    ).toBeInTheDocument();
     // Kein Objekt-/Beziehungsbereich, wenn kein Graph vorhanden ist.
     expect(screen.queryByRole('heading', { name: /Objekte nach Familie/ })).not.toBeInTheDocument();
 
-    // "Nächster Schritt": Link auf einen tatsächlich ausmodellierten Mandanten (aus dem Seed
-    // abgeleitet, nicht hartkodiert). Nordwerk trägt has_object_graph = true.
-    const nextLink = screen.getByRole('link', { name: /Nordwerk Manufacturing SE ansehen/ });
-    expect(nextLink).toHaveAttribute('href', `/twin/${TENANT_ID.NORDWERK}`);
+    // Nächster Schritt führt in die Mandanten-ÜBERSICHT (bewusst mandantenübergreifende
+    // Portfolio-Seite) – NICHT auf fremde Detailseiten.
+    expect(screen.getByRole('link', { name: /Zur Mandantenübersicht/ })).toHaveAttribute(
+      'href',
+      '/twin',
+    );
+    // Negativbeweis: kein Name und keine ID eines anderen Mandanten im DOM.
+    const html = container.innerHTML;
+    for (const fremd of DEMO_SEED.tenants.filter((t) => t.tenant_id !== TENANT_ID.FINOVIA)) {
+      expect(html).not.toContain(fremd.display_name);
+      expect(html).not.toContain(fremd.tenant_id);
+    }
   });
 });

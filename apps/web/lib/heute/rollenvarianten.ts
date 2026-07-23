@@ -12,9 +12,10 @@
  *   | Service Lead | SLA, Eskalationen, Qualität, Auslastung, Profitabilität     | Objektdetails ohne Eskalationsbezug |
  *
  * Die Spalten „Missionsfokus"/„Ausblendung" stehen unten WÖRTLICH als Quellbeleg
- * (`missionsfokusQuote`/`ausblendungQuote`, Muster `framing.ts`: NUR Code-Doku, bewusst nicht
- * gerendert – gerendert werden die kuratierten Sätze `fokusBelegtText`/`fokusLueckenText`/
- * `ausblendungText`).
+ * (`missionsfokusQuote`/`ausblendungQuote`, Muster `framing.ts`). Der Fließtext der Ebene 1
+ * nutzt die kuratierten Sätze `fokusBelegtText`/`fokusLueckenText`/`ausblendungText`; die
+ * wörtlichen Zitate werden ausschließlich im aufklappbaren „Quelle der Variante"-Block der
+ * NORMIERTEN Rollen gezeigt (Product-Fix F4: Quellenbeleg statt Konzept-Jargon im Fließtext).
  *
  * ZUORDNUNG TABELLENZEILE → ROLLE (Dok. 03, Abschnitt „Kanonisches Rollenmodell";
  * Builder-Entscheidung, reversibel, im Abschlussbericht ausgewiesen):
@@ -85,15 +86,23 @@ export interface Rollenvariante {
   readonly id: VariantId;
   /** Zeilenname wörtlich aus der PDF-Tabelle „Rollenvarianten". */
   readonly name: string;
-  /** Spalte „Missionsfokus" wörtlich (NUR Quellbeleg, nicht gerendert – Muster framing.ts). */
+  /** Spalte „Missionsfokus" wörtlich – Quellbeleg, gerendert nur im „Quelle"-Block (normiert). */
   readonly missionsfokusQuote: string;
-  /** Spalte „Ausblendung" wörtlich (NUR Quellbeleg, nicht gerendert). */
+  /** Spalte „Ausblendung" wörtlich – Quellbeleg, gerendert nur im „Quelle"-Block (normiert). */
   readonly ausblendungQuote: string;
   /** Quellzeile beider Zitate. */
   readonly quoteSource: string;
   /** Kachel-Reihenfolge der Ebene 1: JEDE Kachel genau einmal – Betonung, kein Entzug. */
   readonly tileOrder: readonly TileId[];
-  /** SICHTBAR: welche Fokus-Kacheln belegt sind und nach vorn rücken. */
+  /** Die vom Missionsfokus nach vorn gezogenen Kacheln (die Köpfe der `tileOrder`). */
+  readonly fokusKacheln: readonly TileId[];
+  /**
+   * SICHTBAR: welche Fokus-Kacheln nach vorn rücken. Bewusst TRÄGER-neutral formuliert
+   * („die Kachel zu …"), weil die Kachel je Mandant auch leer sein kann – ob sie für den
+   * AKTIVEN Mandanten Bestand trägt, ergänzt `fokusBelegtTextFuer` aus der echten Kachellage
+   * (Review-Finding: der statische Text behauptete Belegtheit, die z. B. der Consulting
+   * Operator nicht hat).
+   */
   readonly fokusBelegtText: string;
   /** SICHTBAR: welche Fokusinhalte keinen Träger haben (benannte Lücke, DR-0005). */
   readonly fokusLueckenText: string;
@@ -128,9 +137,10 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'objekte_owner',
       'kanten_vertrauensgrad',
     ],
+    fokusKacheln: ['risiken_minderung'],
     fokusBelegtText:
-      'Nach vorn gezogen: der erfasste Minderungs-Stand der Risiken – die einzige Kachel, ' +
-      'die einen Punkt des Missionsfokus belegt trägt.',
+      'Nach vorn gezogen: die Kachel zum Minderungs-Stand der Risiken – der einzige Punkt ' +
+      'des Missionsfokus mit einem Kachel-Träger.',
     fokusLueckenText:
       'Vom Missionsfokus dieser Variante ohne Träger im Datenbestand und deshalb als Lücke ' +
       'benannt statt erfunden: Freigaben, Zielabweichung, Investition – und eine „Top"-Auswahl ' +
@@ -160,13 +170,22 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'services',
       'lebenszyklus_zaehlung',
     ],
+    fokusKacheln: [
+      'risiken_minderung',
+      'isms_kern',
+      'controls_nachweis',
+      'objekte_owner',
+      'kanten_vertrauensgrad',
+    ],
     fokusBelegtText:
-      'Nach vorn gezogen: der Minderungs-Stand der Risiken, die ISMS-Kernobjekte (darunter ' +
-      'die Maßnahmen), der Nachweis-Stand der Controls sowie die beiden Abdeckungen, die ' +
-      'Datenlücken zählen (Owner je Objekt, Vertrauensgrad je Beziehung).',
+      'Nach vorn gezogen: die Kacheln zu Risiko-Minderung, ISMS-Kernobjekten (darunter die ' +
+      'Maßnahmen), Nachweis-Stand der Controls und den beiden Datenlücken-Zählungen ' +
+      '(Owner je Objekt, Vertrauensgrad je Beziehung).',
     fokusLueckenText:
-      'Vom Missionsfokus dieser Variante ohne Träger im Datenbestand: Reviews (es ist kein ' +
-      'Review-Vorgang erfasst).',
+      'Vom Missionsfokus dieser Variante ohne eigene Kachel: Reviews – der Datenbestand ' +
+      'trägt einen Service-Outcome-Review (Ort „Services") und Bestätigungsstufen je ' +
+      'Datensatz, aber keine Kachel der Ebene 1 zeigt Reviews; ein ISMS-Review-Vorgang mit ' +
+      'Person, Zeitpunkt und Ergebnis ist nicht erfasst.',
     ausblendungText:
       'Die normierte Ausblendung („Portfolio-/Umsatzsicht") ist heute gegenstandslos: diese ' +
       `Seite enthält weder eine Portfolio- noch eine Umsatzdarstellung. ${ERREICHBARKEIT}`,
@@ -192,9 +211,9 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'objekte_owner',
       'kanten_vertrauensgrad',
     ],
+    fokusKacheln: ['services'],
     fokusBelegtText:
-      'Nach vorn gezogen: die Managed Services dieses Mandanten – an ihnen hängen die ' +
-      'erfassten Deliverables.',
+      'Nach vorn gezogen: die Kachel der Managed Services – an ihnen hängen die Deliverables.',
     fokusLueckenText:
       'Vom Missionsfokus dieser Variante ohne Träger im Datenbestand: Mandantenpriorität, ' +
       'Audits, Kapazität und Reise.',
@@ -223,9 +242,10 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'objekte_owner',
       'kanten_vertrauensgrad',
     ],
+    fokusKacheln: ['services'],
     fokusBelegtText:
-      'Nach vorn gezogen: die Managed Services dieses Mandanten – an ihnen stehen die ' +
-      'erfassten SLA-Angaben.',
+      'Nach vorn gezogen: die Kachel der Managed Services – an ihnen stehen die SLA-Angaben ' +
+      'je Service.',
     fokusLueckenText:
       'Vom Missionsfokus dieser Variante ohne Träger im Datenbestand: Eskalationen, ' +
       'Servicequalität als erfasster Messwert, Auslastung und Profitabilität.',
@@ -285,6 +305,28 @@ export function varianteForRole(roleId: string | null): VariantZuordnung {
 /** Kachel-Reihenfolge einer Rolle (bzw. kanonisch für neutral/ohne Variante). */
 export function kachelOrdnungForRole(roleId: string | null): readonly TileId[] {
   return varianteForRole(roleId).variante?.tileOrder ?? KANONISCHE_KACHELORDNUNG;
+}
+
+/**
+ * SICHTBARER Betonungssatz FÜR DEN AKTIVEN MANDANTEN (Review-Finding Domain F2): der statische
+ * Varianten-Text beschreibt, WELCHE Kacheln der Fokus nach vorn zieht; ob sie für den aktiven
+ * Mandanten Bestand tragen, entscheidet die echte Kachellage (`hatDaten`, abgeleitet aus dem
+ * Dashboard-Modell: Grundgesamtheit bzw. Zählwerte > 0). Tragen Fokus-Kacheln keinen Bestand,
+ * wird das gesagt statt behauptet – die Kacheln selbst benennen ihre Lücke zusätzlich.
+ */
+export function fokusBelegtTextFuer(
+  variante: Rollenvariante,
+  hatDaten: ReadonlyMap<TileId, boolean>,
+): string {
+  const leere = variante.fokusKacheln.filter((id) => hatDaten.get(id) === false);
+  if (leere.length === 0) return variante.fokusBelegtText;
+  const alleLeer = leere.length === variante.fokusKacheln.length;
+  return (
+    variante.fokusBelegtText +
+    (alleLeer
+      ? ' Für den aktiven Mandanten tragen diese Kacheln derzeit keinen Bestand – sie benennen ihre Lücke selbst.'
+      : ' Für den aktiven Mandanten tragen nicht alle diese Kacheln Bestand – die betroffenen benennen ihre Lücke selbst.')
+  );
 }
 
 /** SICHTBARER Text für Rollen ohne normierte Variante (Assurance & Administration World). */

@@ -69,7 +69,12 @@ describe('ROLLENVARIANTEN – die vier normierten Zeilen aus Dok. 06', () => {
     for (const id of VARIANT_IDS) {
       const variante = ROLLENVARIANTEN[id];
       expect(variante.fokusBelegtText).toMatch(/Nach vorn gezogen/);
-      expect(variante.fokusLueckenText).toMatch(/ohne Träger im Datenbestand/);
+      // Jede Variante benennt ihre Fokus-Lücke als fehlenden Träger bzw. fehlende Kachel.
+      // Regel-erhaltend statt Wortlaut: „ISMS Manager" benennt „Reviews" seit dem Domain-Fix
+      // als „ohne eigene Kachel" (der Datenbestand trägt einen Service-Outcome-Review) – eine
+      // falsche Absenz-Behauptung („kein Review erfasst") wäre dieselbe Fehlerklasse wie eine
+      // Erfindung. Geprüft wird deshalb die Lücken-AUSSAGE, nicht die alte feste Phrase.
+      expect(variante.fokusLueckenText).toMatch(/ohne (Träger|eigene Kachel)/);
       expect(variante.ausblendungText).toMatch(/nichts entzogen/);
       expect(variante.ausblendungText).toMatch(/erreichbar/);
       expect(variante.orderRationale.length).toBeGreaterThan(40);

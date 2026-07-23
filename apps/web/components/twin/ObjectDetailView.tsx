@@ -301,7 +301,12 @@ function ContextBar({ model }: { model: ObjectDetailModel }) {
   return (
     /* `role="group"` (Review-Fix A11y): `dl` hat keine verlässliche implizite Rolle, ein
        `aria-label` darauf wird von manchen Screenreadern ignoriert. */
-    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: bewusstes, dokumentiertes Muster (s. Kommentar) – die ARIA-Semantik zu ändern wäre eine Produktänderung außerhalb dieses Tooling-WP.
+    // SUPPRESSION VERIFIZIERT, NICHT TOT (Review-Pass WP-020, Code-Finding geprüft per
+    // `pnpm lint`): Biome behandelt `dl` hier als Ziel von `noInteractiveElementToNoninteractiveRole`
+    // – ohne den Ignore wird die Zeile rot. Die STRUKTUR (dl + role="group") bleibt bewusst
+    // Altbestand für das FINDING-0008-Folge-WP; die Kontextleiste der Hauptseiten
+    // (`PageContextBar`) ist bereits auf Region + native dl umgebaut.
+    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: Altbestand (s. o.) – Strukturänderung ist das FINDING-0008-Folge-WP, nicht dieser Fix-Pass.
     // biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf `dl` ist gültiges ARIA; ein Ersatz durch `fieldset`/`section` würde gerendertes Markup ändern (nicht verhaltensneutral).
     <dl className="od-context" role="group" aria-label="Kontext dieser Objektseite">
       <div>

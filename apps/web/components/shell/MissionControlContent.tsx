@@ -86,6 +86,7 @@ import {
 import {
   KANONISCHE_KACHELORDNUNG,
   KEINE_VARIANTE_TEXT,
+  fokusBelegtTextFuer,
   varianteForRole,
   type TileId,
 } from '../../lib/heute/rollenvarianten';
@@ -149,13 +150,13 @@ export function MissionControlContent({
       {/* Leitfrage des Ortes, wörtlich aus `lib/shell/places.ts` (Dok. 06 §7 S01). */}
       <p className="tw-question">{place.question}</p>
 
+      {/* Lead seit dem Review-Pass (Product-Finding) kürzer und positiv geführt; die
+          Ehrlichkeitsklammer bleibt: beide unbelegten Teile der Leitfrage werden benannt. */}
       <p className="tw-lead">
-        Read-only Startpunkt auf dem synthetischen Demo-Datenbestand des aktiven Mandanten: wo Sie
-        stehen, was im Datenbestand erfasst wurde, was über dessen Lage bekannt ist und wo Sie
-        einsteigen können. Die Leitfrage wird nur so weit beantwortet, wie der Datenbestand sie
-        belegt: Der Teil „seit meinem letzten Besuch" ist nicht belegt – und auch „was verdient
-        Aufmerksamkeit" wird hier nicht beantwortet. Diese Seite zählt und benennt, sie priorisiert
-        nicht. Beides steht am Seitenende als benannte Lücke.
+        Read-only Startpunkt auf dem synthetischen Demo-Datenbestand des aktiven Mandanten:
+        erfasster Stand, Abdeckungen und Einstiege. Nicht belegt und deshalb hier nicht beantwortet:
+        „seit meinem letzten Besuch" und eine Priorisierung – beides steht am Seitenende als
+        benannte Lücke.
       </p>
 
       {model && dashboard ? (
@@ -281,14 +282,16 @@ function ContextBar({
  * Personalisierung); mit gewählter Rolle verschwindet er, die Abwahl bringt ihn zurück.
  */
 function NeutralerEinstiegHinweis() {
+  // Zwei Sätze seit dem Review-Pass (Product-Finding: kürzer); der Verzicht auf einen
+  // erzwungenen Rundgang (Dok. 04 J01) bleibt EIGENSCHAFT des Hinweises (passiv, optional) –
+  // er muss nicht mehr als Satz dabeistehen.
   return (
     <div className="ht-neutral" role="note">
       <p className="ht-neutral-text">
-        <strong>Neutraler strategischer Einstieg:</strong> Sie sehen die verdichtete Ebene 1 ohne
-        Rollen-Personalisierung – alle Zahlen, Wege und Tiefen sind vollständig da. Optional können
-        Sie oben in der Leiste unter „Rolle" eine Produktrolle wählen; sie ändert nur Betonung und
-        Reihenfolge der tieferen Abschnitte, nie die Daten, und lässt sich jederzeit wieder abwählen
-        („neutral"). Es gibt keinen erzwungenen Rundgang.
+        <strong>Neutraler strategischer Einstieg:</strong> Sie sehen den vollständigen Überblick
+        ohne Rollen-Personalisierung. Optional können Sie oben unter „Rolle" eine Produktrolle
+        wählen – sie ändert nur Betonung und Reihenfolge, nie die Daten, und ist jederzeit wieder
+        abwählbar.
       </p>
     </div>
   );
@@ -400,7 +403,7 @@ function DashboardSection({
         <EmptyTenantKachel tile={dashboard.emptyTile} />
       ) : (
         <>
-          {role ? <RollenfokusBlock role={role} /> : null}
+          {role ? <RollenfokusBlock role={role} dashboard={dashboard} /> : null}
           <ul className="db-grid" aria-label="Kacheln aus belegten Daten">
             {sichtbar.map((id) => (
               <li key={id}>{kacheln.get(id)}</li>
@@ -413,13 +416,32 @@ function DashboardSection({
 }
 
 /**
- * Sichtbarer Rollenfokus der Ebene 1 (WP-020 Slice 5): benennt die angewendete Variante samt
- * Herkunft (normiert / Welt-Ableitung / keine), die belegten Fokus-Kacheln, die Fokusinhalte
- * OHNE Träger (Lücke statt Erfindung, DR-0005) und was die normierte „Ausblendung" heute
- * bedeutet – inklusive der Zusage, dass nichts entzogen wird (eine Wahrheit, Dok. 06 P02).
- * Für neutral erscheint stattdessen der Erstbesuchs-Hinweis (Slice 2), kein Fokus.
+ * Kachellage des aktiven Mandanten für den Rollenfokus (Review-Finding Domain F2): je Kachel,
+ * ob sie Bestand trägt – Statuskacheln über ihre Zählwerte, Lebenszyklus-/Abdeckungskacheln
+ * über ihre Grundgesamtheit. Reine Ableitung aus dem Dashboard-Modell, nichts Zweites gezählt.
  */
-function RollenfokusBlock({ role }: { role: DemoRole }) {
+function kachelLage(dashboard: HeuteDashboardModel): ReadonlyMap<TileId, boolean> {
+  const lage = new Map<TileId, boolean>();
+  for (const tile of dashboard.stockTiles) {
+    lage.set(tile.id, tile.values.reduce((summe, value) => summe + value.count, 0) > 0);
+  }
+  if (dashboard.lifecycleSummary) {
+    lage.set('lebenszyklus_zaehlung', dashboard.lifecycleSummary.total > 0);
+  }
+  for (const tile of dashboard.coverage) lage.set(tile.id, tile.total > 0);
+  return lage;
+}
+
+/**
+ * Sichtbarer Rollenfokus der Ebene 1 (WP-020 Slice 5): benennt die angewendete Variante samt
+ * Herkunft (normiert / Welt-Ableitung / keine), die nach vorn gezogenen Fokus-Kacheln – für
+ * den AKTIVEN Mandanten gegen die echte Kachellage geprüft (Review-Finding Domain F2) –, die
+ * Fokusinhalte OHNE Träger (Lücke statt Erfindung, DR-0005) und was die normierte
+ * „Ausblendung" heute bedeutet – inklusive der Zusage, dass nichts entzogen wird (eine
+ * Wahrheit, Dok. 06 P02). Für neutral erscheint stattdessen der Erstbesuchs-Hinweis (Slice 2).
+ * Die Konzept-Quelle steht aufklappbar dabei (Review-Pass: kein Signatur-Jargon im Fließtext).
+ */
+function RollenfokusBlock({ role, dashboard }: { role: DemoRole; dashboard: HeuteDashboardModel }) {
   const { variante, herkunft } = varianteForRole(role.id);
 
   if (!variante) {
@@ -437,16 +459,24 @@ function RollenfokusBlock({ role }: { role: DemoRole }) {
       <p className="rv-fokus-text">
         <strong>{`Rollenfokus „${variante.name}":`}</strong>{' '}
         {herkunft === 'normiert'
-          ? 'Diese Variante ist im Konzept normiert (Dok. 06, Abschnitt „Mission Control & ' +
-            `Morning Mission", Tabelle „Rollenvarianten", Zeile „${variante.name}").`
+          ? 'Diese Variante ist im Konzept normiert.'
           : 'Für diese Rolle ist keine eigene Variante normiert; angewendet wird die Variante ' +
             `„${variante.name}" ihrer Erlebniswelt – eine reversible Anzeigeentscheidung, ` +
             'keine Konzeptvorgabe.'}
       </p>
       <p className="rv-fokus-text">
-        {variante.fokusBelegtText} {variante.fokusLueckenText}
+        {fokusBelegtTextFuer(variante, kachelLage(dashboard))} {variante.fokusLueckenText}
       </p>
       <p className="rv-fokus-text">{variante.ausblendungText}</p>
+      {herkunft === 'normiert' ? (
+        <details className="rv-quelle">
+          <summary>Quelle der Variante</summary>
+          <p>
+            {`${variante.quoteSource}, Zeile „${variante.name}" – Missionsfokus: ` +
+              `„${variante.missionsfokusQuote}"; Ausblendung: „${variante.ausblendungQuote}".`}
+          </p>
+        </details>
+      ) : null}
     </div>
   );
 }
@@ -547,11 +577,13 @@ function StandortSection({
           Eigenschaft dieser Demo.
         </p>
       )}
+      {/* Quelle „eine Wahrheit je Rolle": Dok. 06 06-D05 (Signatur seit dem Review-Pass nur
+          im Kommentar – Konzept-Jargon gehört nicht in den Produkttext). */}
       <p className="tw-muted">
         Die Rolle ist in dieser Demo reine Perspektive: Sie ordnet die Abschnitte dieser Seite, und
         diese Reihenfolge ist keine Rangfolge. Sie entscheidet nicht über Zugriff – alle zwölf
-        Rollen und der neutrale Zustand sehen hier dieselben Daten desselben Mandanten (Dok. 06
-        06-D05). Rechte und Zugriffskontrolle sind in dieser Demo nicht abgebildet.
+        Rollen und der neutrale Zustand sehen hier dieselben Daten desselben Mandanten. Rechte und
+        Zugriffskontrolle sind in dieser Demo nicht abgebildet.
       </p>
 
       <h3>Aktiver Mandant</h3>
@@ -625,10 +657,11 @@ function ErfassungSection({ model }: { model: MissionControlModel }) {
   return (
     <section aria-labelledby={headingId}>
       <h2 id={headingId}>{MISSION_SECTIONS.erfassung.title}</h2>
+      {/* Achsentrennung nach Dok. 07 §11 (Signatur seit dem Review-Pass nur im Kommentar). */}
       <p className="sv-edge-note">
         Gezeigt wird die Systemachse: der Zeitpunkt, zu dem ein Datensatz im System erfasst wurde
         (record_time). Die fachliche Gültigkeit (valid_time) ist eine eigene Zeitachse und wird hier
-        nicht damit vermischt (Dok. 07 §11).
+        nicht damit vermischt.
       </p>
 
       <h3>Erfassungswellen im Datenbestand</h3>
@@ -748,8 +781,9 @@ function EinstiegSection({ model, tenant }: { model: MissionControlModel; tenant
 
       <h3>Orte mit Bestand dieses Mandanten</h3>
       <p className="sv-edge-note">
-        Die Orte der Navigation bleiben stabil (Dok. 06 06-D01): ein Ort ohne Bestand wird benannt,
-        nicht ausgeblendet. Die Bestandsangabe zählt ausschließlich den aktiven Mandanten.
+        {/* Stabile Orte nach Dok. 06 06-D01 (Signatur seit dem Review-Pass nur im Kommentar). */}
+        Die Orte der Navigation bleiben stabil: ein Ort ohne Bestand wird benannt, nicht
+        ausgeblendet. Die Bestandsangabe zählt ausschließlich den aktiven Mandanten.
       </p>
       <ul className="sv-items">
         {model.placeEntryPoints.map((entry) => (
@@ -884,10 +918,10 @@ function HonestySection({ model }: { model: MissionControlModel }) {
         <li>
           <span className="sv-item-name">Wiederaufnahme („seit meinem letzten Besuch")</span>
           <span className="sv-item-note">
-            Ursache in der Datenlage: Die Anmelde-Simulation speichert ausschließlich die gewählte
-            Rolle und den gewählten Mandanten – keinen Besuchszeitpunkt, keinen bestätigten Zustand
-            und keinen Entwurf. Ein Vergleich mit einem früheren Besuch wäre damit nicht belegt,
-            sondern behauptet.
+            Ursache in der Datenlage: Die Anmelde-Simulation speichert ausschließlich den gewählten
+            Mandanten und optional eine gewählte Rolle – keinen Besuchszeitpunkt, keinen bestätigten
+            Zustand und keinen Entwurf. Ein Vergleich mit einem früheren Besuch wäre damit nicht
+            belegt, sondern behauptet.
           </span>
         </li>
       </ul>

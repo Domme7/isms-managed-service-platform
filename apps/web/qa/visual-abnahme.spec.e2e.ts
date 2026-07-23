@@ -120,6 +120,61 @@ function schreibeReport(): void {
   );
 }
 
+/**
+ * Gemeinsame axe-Sammlung je Seite (Code-Finding im Review-Pass: die Sammellogik war
+ * dupliziert). Läuft nur im Desktop-Projekt; schreibt den Report nach jeder Seite neu.
+ */
+async function sammleAxe(
+  page: import('@playwright/test').Page,
+  slug: string,
+  pfad: string,
+): Promise<void> {
+  const ergebnis = await new AxeBuilder({ page }).withTags([...AXE_TAGS]).analyze();
+  axeEngine = { name: ergebnis.testEngine.name, version: ergebnis.testEngine.version };
+  const anzahlVerstoesse: Record<string, number> = {};
+  for (const verstoss of ergebnis.violations) {
+    const impact = verstoss.impact ?? 'unbekannt';
+    anzahlVerstoesse[impact] = (anzahlVerstoesse[impact] ?? 0) + 1;
+  }
+  axeErgebnisse.push({
+    slug,
+    pfad,
+    anzahlVerstoesse,
+    verstoesse: ergebnis.violations.map((verstoss) => ({
+      id: verstoss.id,
+      impact: verstoss.impact ?? 'unbekannt',
+      beschreibung: verstoss.description,
+      hilfe: verstoss.help,
+      hilfeUrl: verstoss.helpUrl,
+      wcagTags: verstoss.tags.filter((tag) => tag.startsWith('wcag')),
+      stellen: verstoss.nodes.map((stelle) => ({
+        ziel: stelle.target.join(' '),
+        html: stelle.html,
+        zusammenfassung: stelle.failureSummary ?? '',
+      })),
+    })),
+  });
+  schreibeReport();
+}
+
+/** Setzt eine abweichende Sitzung VOR dem ersten Seiten-Skript (überschreibt das beforeEach:
+ *  Init-Skripte laufen in Registrierungsreihenfolge, dieses zuletzt). */
+async function setzeSitzung(page: import('@playwright/test').Page, sitzung: string): Promise<void> {
+  await page.addInitScript(
+    ([key, value]) => {
+      window.localStorage.setItem(key, value);
+    },
+    [SESSION_STORAGE_KEY, sitzung] as const,
+  );
+}
+
+/** Bereitschaft pollen statt schlafen (.claude/rules/testing.md). */
+async function warteAufSeite(page: import('@playwright/test').Page): Promise<void> {
+  await expect(page.locator('main h1').first()).toBeVisible();
+  await expect(page.locator('main')).not.toContainText('Lade Kontext');
+  await page.evaluate(() => document.fonts.ready);
+}
+
 test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
   test.beforeEach(async ({ context }) => {
     // Deterministische Demo-Sitzung OHNE UI-Klickpfad (AC 11): der localStorage-Schlüssel
@@ -145,63 +200,19 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
   test('heute-neutral (/heute ohne Rolle – neutraler Einstieg, DR-0009)', async ({
     page,
   }, testInfo) => {
-    // Überschreibt die R01-Sitzung aus dem beforeEach mit einer ROLLENLOSEN Sitzung
-    // (Init-Skripte laufen in Registrierungsreihenfolge – dieses hier zuletzt): so entsteht
-    // der Abnahme-Blick auf den Produkteinstieg nach DR-0009.
-    const neutral = serializeSession({ tenantId: MANDANT_ID });
-    await page.addInitScript(
-      ([key, value]) => {
-        window.localStorage.setItem(key, value);
-      },
-      [SESSION_STORAGE_KEY, neutral] as const,
-    );
+    await setzeSitzung(page, serializeSession({ tenantId: MANDANT_ID }));
     await page.goto('/heute');
-    await expect(page.locator('main h1').first()).toBeVisible();
-    await expect(page.locator('main')).not.toContainText('Lade Kontext');
-    await page.evaluate(() => document.fonts.ready);
+    await warteAufSeite(page);
     await page.screenshot({
       path: path.join(outDir as string, `heute-neutral.${testInfo.project.name}.png`),
     });
-
-    if (testInfo.project.name === 'desktop') {
-      const ergebnis = await new AxeBuilder({ page }).withTags([...AXE_TAGS]).analyze();
-      axeEngine = { name: ergebnis.testEngine.name, version: ergebnis.testEngine.version };
-      const anzahlVerstoesse: Record<string, number> = {};
-      for (const verstoss of ergebnis.violations) {
-        const impact = verstoss.impact ?? 'unbekannt';
-        anzahlVerstoesse[impact] = (anzahlVerstoesse[impact] ?? 0) + 1;
-      }
-      axeErgebnisse.push({
-        slug: 'heute-neutral',
-        pfad: '/heute',
-        anzahlVerstoesse,
-        verstoesse: ergebnis.violations.map((verstoss) => ({
-          id: verstoss.id,
-          impact: verstoss.impact ?? 'unbekannt',
-          beschreibung: verstoss.description,
-          hilfe: verstoss.help,
-          hilfeUrl: verstoss.helpUrl,
-          wcagTags: verstoss.tags.filter((tag) => tag.startsWith('wcag')),
-          stellen: verstoss.nodes.map((stelle) => ({
-            ziel: stelle.target.join(' '),
-            html: stelle.html,
-            zusammenfassung: stelle.failureSummary ?? '',
-          })),
-        })),
-      });
-      schreibeReport();
-    }
+    if (testInfo.project.name === 'desktop') await sammleAxe(page, 'heute-neutral', '/heute');
   });
 
   for (const seite of SEITEN) {
     test(`${seite.slug} (${seite.pfad})`, async ({ page }, testInfo) => {
       await page.goto(seite.pfad);
-
-      // Bereitschaft pollen statt schlafen (.claude/rules/testing.md): Überschrift sichtbar,
-      // Hydrations-Platzhalter „Lade Kontext …" verschwunden, Webfonts geladen.
-      await expect(page.locator('main h1').first()).toBeVisible();
-      await expect(page.locator('main')).not.toContainText('Lade Kontext');
-      await page.evaluate(() => document.fonts.ready);
+      await warteAufSeite(page);
 
       // Größenstrategie (ADR-0004, Stop Condition des WP): exakt der Viewport (1440×900 bzw.
       // 390×844), bewusst KEIN fullPage – der Full-Page-Probelauf ergab 7,4 MB je Lauf mit
@@ -211,34 +222,89 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
         path: path.join(outDir as string, `${seite.slug}.${testInfo.project.name}.png`),
       });
 
-      if (testInfo.project.name === 'desktop') {
-        const ergebnis = await new AxeBuilder({ page }).withTags([...AXE_TAGS]).analyze();
-        axeEngine = { name: ergebnis.testEngine.name, version: ergebnis.testEngine.version };
-        const anzahlVerstoesse: Record<string, number> = {};
-        for (const verstoss of ergebnis.violations) {
-          const impact = verstoss.impact ?? 'unbekannt';
-          anzahlVerstoesse[impact] = (anzahlVerstoesse[impact] ?? 0) + 1;
-        }
-        axeErgebnisse.push({
-          slug: seite.slug,
-          pfad: seite.pfad,
-          anzahlVerstoesse,
-          verstoesse: ergebnis.violations.map((verstoss) => ({
-            id: verstoss.id,
-            impact: verstoss.impact ?? 'unbekannt',
-            beschreibung: verstoss.description,
-            hilfe: verstoss.help,
-            hilfeUrl: verstoss.helpUrl,
-            wcagTags: verstoss.tags.filter((tag) => tag.startsWith('wcag')),
-            stellen: verstoss.nodes.map((stelle) => ({
-              ziel: stelle.target.join(' '),
-              html: stelle.html,
-              zusammenfassung: stelle.failureSummary ?? '',
-            })),
-          })),
+      if (testInfo.project.name === 'desktop') await sammleAxe(page, seite.slug, seite.pfad);
+    });
+  }
+
+  /**
+   * ZUSATZMOTIVE der Dashboard-Schicht (Review-Pass, Product-Finding: die Owner-Abnahme muss
+   * die Kacheln, den Rollenfokus, die /isms-Verdichtung und den leeren Mandanten wirklich
+   * SEHEN). Abschnittsbezogene Element-Screenshots (Locator statt Viewport-Clip), nur Desktop
+   * – die Kernseiten oben bleiben unverändert der Mobil-/Desktop-Bestand.
+   */
+  const ZUSATZMOTIVE: readonly {
+    readonly slug: string;
+    readonly pfad: string;
+    readonly sitzung: string;
+    /** CSS-Selektor des Abschnitts; `null` = ganzer Viewport (z. B. leerer Mandant). */
+    readonly ausschnitt: string | null;
+    /** axe nur für neue SEITEN-Zustände (Element-Shots derselben Seite doppeln nicht). */
+    readonly mitAxe: boolean;
+  }[] = [
+    {
+      slug: 'heute-dashboard-neutral',
+      pfad: '/heute',
+      sitzung: serializeSession({ tenantId: MANDANT_ID }),
+      ausschnitt: 'section[aria-labelledby="heute-stand"]',
+      mitAxe: false, // Seite bereits als heute-neutral vollständig ge-axed
+    },
+    {
+      slug: 'heute-dashboard-r01',
+      pfad: '/heute',
+      sitzung: serializeSession({ roleId: 'R01', tenantId: MANDANT_ID }),
+      ausschnitt: 'section[aria-labelledby="heute-stand"]',
+      mitAxe: false, // Seite bereits als „heute" (R01) vollständig ge-axed
+    },
+    {
+      slug: 'heute-dashboard-r03',
+      pfad: '/heute',
+      sitzung: serializeSession({ roleId: 'R03', tenantId: MANDANT_ID }),
+      ausschnitt: 'section[aria-labelledby="heute-stand"]',
+      mitAxe: true, // neuer Seitenzustand (ISMS-Manager-Variante)
+    },
+    {
+      slug: 'heute-rollenfokus',
+      pfad: '/heute',
+      sitzung: serializeSession({ roleId: 'R03', tenantId: MANDANT_ID }),
+      ausschnitt: '.rv-fokus',
+      mitAxe: false,
+    },
+    {
+      slug: 'isms-verdichtung',
+      pfad: '/isms',
+      sitzung: serializeSession({ roleId: 'R01', tenantId: MANDANT_ID }),
+      ausschnitt: 'section[aria-labelledby="isms-ueberblick"]',
+      mitAxe: false, // Seite bereits als „isms" vollständig ge-axed
+    },
+    {
+      slug: 'heute-leerer-mandant',
+      pfad: '/heute',
+      sitzung: serializeSession({ roleId: 'R01', tenantId: TENANT_ID.FINOVIA }),
+      ausschnitt: null,
+      mitAxe: true, // neuer Seitenzustand (Datenlücken-Kachel)
+    },
+  ];
+
+  for (const motiv of ZUSATZMOTIVE) {
+    test(`${motiv.slug} (${motiv.pfad}, Zusatzmotiv)`, async ({ page }, testInfo) => {
+      test.skip(testInfo.project.name !== 'desktop', 'Zusatzmotiv nur Desktop (Review-Pass).');
+      await setzeSitzung(page, motiv.sitzung);
+      await page.goto(motiv.pfad);
+      await warteAufSeite(page);
+
+      if (motiv.ausschnitt) {
+        const abschnitt = page.locator(motiv.ausschnitt).first();
+        await abschnitt.scrollIntoViewIfNeeded();
+        await abschnitt.screenshot({
+          path: path.join(outDir as string, `${motiv.slug}.${testInfo.project.name}.png`),
         });
-        schreibeReport();
+      } else {
+        await page.screenshot({
+          path: path.join(outDir as string, `${motiv.slug}.${testInfo.project.name}.png`),
+        });
       }
+
+      if (motiv.mitAxe) await sammleAxe(page, motiv.slug, motiv.pfad);
     });
   }
 });

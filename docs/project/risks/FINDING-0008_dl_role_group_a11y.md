@@ -50,3 +50,15 @@ das bestehende `<dl role="group">`-Muster übernommen und damit auf `/twin`, `/i
 Korrektur unter die WP-020-Regel „FINDING-0008 nur dort beheben, wo ohnehin neu gebaut wird"
 → **in den WP-020-Fix-Pass aufgenommen** (Product Gate prüft mit). Die Altbestände
 (WP-014/016/017-Strukturen) bleiben beim Folge-WP.
+
+## Update 2026-07-23 (WP-020 Fix-Pass — Kontextleisten saniert)
+
+Der Fix-Pass hat `PageContextBar` und `TwinContextBar` von `<dl role="group">` auf valide
+Struktur gehoben (sichtbarer Wortlaut und Sechser-Reihenfolge der Kontextelemente unverändert).
+Der erneute `qa:visual WP-020`-Lauf belegt: `dlitem` (serious) ist auf **allen sieben
+umgebauten Seiten** verschwunden (heute, heute-neutral, twin, twin-tenant-nordwerk, isms,
+services, entscheidungen → je serious 0). **Verbleibend:** genau **1 serious (`dlitem`) auf
+Objekt-360** — die `ObjectDetailView`-Kontextzeile ist WP-014-Altbestand und wurde nach der
+WP-020-Regel „nur beheben, wo ohnehin neu gebaut wird" bewusst nicht angetastet. Dieser Rest
+bleibt das **Folge-WP** (Product Gate). Damit ist die WP-020-Verbreiterung des Findings
+zurückgenommen; der ursprüngliche Altbestand (1 Seite statt vormals 3) ist eingegrenzt.

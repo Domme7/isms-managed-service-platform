@@ -83,10 +83,11 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Heute' })).toBeInTheDocument();
     expect(screen.getByText(getPlace('heute').question)).toBeInTheDocument();
     // Der Lead muss BEIDE Hälften der Leitfrage dementieren: „seit meinem letzten Besuch" ist
-    // nicht belegt, und „was verdient Aufmerksamkeit" wird bewusst nicht beantwortet. Ohne
-    // Assertion könnte dieser Satz still verschwinden – er ist die Ehrlichkeitsklammer der Seite.
-    expect(screen.getByText(/ist nicht belegt – und auch/)).toBeInTheDocument();
-    expect(screen.getByText(/priorisiert nicht/)).toBeInTheDocument();
+    // nicht belegt, und eine Priorisierung wird bewusst nicht beantwortet. Ohne Assertion könnte
+    // dieser Satz still verschwinden – er ist die Ehrlichkeitsklammer der Seite. Wortlaut seit
+    // dem Product-Fix (kürzer, positiv geführt), die Ehrlichkeitsklammer bleibt geprüft.
+    expect(screen.getByText(/Nicht belegt und deshalb hier nicht beantwortet/)).toBeInTheDocument();
+    expect(screen.getByText(/seit meinem letzten Besuch.*eine Priorisierung/)).toBeInTheDocument();
 
     // WP-020: die Ebene 1 steht als eigener Abschnitt VOR den WP-016-Abschnitten.
     expect(screen.getByRole('heading', { level: 2, name: EBENE1_TITEL })).toBeInTheDocument();
@@ -142,7 +143,7 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
 
   it('zeigt den querschnittlichen Kontext: Rolle, Welt, Mandant, Scope und Datenstand', () => {
     render(<MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />);
-    const kontext = screen.getByRole('group', { name: 'Kontext dieser Seite' });
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
 
     expect(within(kontext).getByText('R01 · Executive Sponsor')).toBeInTheDocument();
     expect(within(kontext).getByText('Executive World')).toBeInTheDocument();
@@ -201,7 +202,7 @@ describe('MissionControlContent – „Wo stehe ich?"', () => {
     const abschnitt = screen
       .getByRole('heading', { level: 2, name: MISSION_SECTIONS.standort.title })
       .closest('section') as HTMLElement;
-    const kontext = screen.getByRole('group', { name: 'Kontext dieser Seite' });
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
 
     expect(within(kontext).getByText('Assurance & Administration World')).toBeInTheDocument();
     expect(abschnitt.textContent ?? '').not.toContain('Assurance & Administration World');
@@ -755,7 +756,6 @@ describe('MissionControlContent – Rollenvarianten (Dok. 06 Tabelle „Rollenva
     // ist immer vollständig (Betonung, kein Entzug – die umgestellte Invariante).
     for (const perspektive of [...DEMO_ROLES, null]) {
       const { container, unmount } = render(
-        // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (auch `null` = neutral), kein ARIA-Attribut – Fehlalarm der Regel.
         <MissionControlContent role={perspektive} tenant={tenant(TENANT_ID.NORDWERK)} />,
       );
       const erwartet = kachelOrdnungForRole(perspektive?.id ?? null);
@@ -962,13 +962,33 @@ describe('MissionControlContent – kein Score, keine Ampel, keine Empfehlung', 
         // Dieselbe Mechanik: exakter Satz aus `rollenvarianten.ts` wird entfernt UND sein
         // Vorhandensein geprüft (nur wo der Fokus rendert – nicht bei leeren Mandanten,
         // dort gibt es bewusst keinen Rollenfokus).
-        const fokusVariante = demoRole ? varianteForRole(demoRole.id).variante : null;
+        const fokusZuordnung = demoRole ? varianteForRole(demoRole.id) : null;
+        const fokusVariante = fokusZuordnung?.variante ?? null;
         if (fokusVariante && tenantId !== TENANT_ID.FINOVIA) {
           expect(
             datentext,
             `${kennung}/${tenantId}: der Fokus-Lückentext steht nicht mehr im Text`,
           ).toContain(fokusVariante.fokusLueckenText);
           datentext = datentext.split(fokusVariante.fokusLueckenText).join(' ');
+        }
+        // BEGRÜNDETE AUSNAHME (WP-020 Fix-Pass, Product F4): Bei NORMIERTEN Rollen rendert der
+        // aufklappbare „Quelle der Variante"-Block die WÖRTLICHEN PDF-Spaltenzitate
+        // (missionsfokusQuote/ausblendungQuote). Für „Consultant" enthält der Missionsfokus
+        // „Mandantenpriorität" – zitierte Tabellenspalte aus Dok. 06, keine Priorisierung von
+        // Daten durch diese Seite. Dieselbe Mechanik: exakte Zitate entfernen UND Vorhandensein
+        // prüfen (nur wo der Rollenfokus rendert – nicht bei leeren Mandanten).
+        if (
+          fokusVariante &&
+          fokusZuordnung?.herkunft === 'normiert' &&
+          tenantId !== TENANT_ID.FINOVIA
+        ) {
+          for (const zitat of [fokusVariante.missionsfokusQuote, fokusVariante.ausblendungQuote]) {
+            expect(
+              datentext,
+              `${kennung}/${tenantId}: das wörtliche Quellzitat „${zitat}" steht nicht mehr im Text`,
+            ).toContain(zitat);
+            datentext = datentext.split(zitat).join(' ');
+          }
         }
         for (const muster of NUR_IM_LUECKENBLOCK) {
           expect(
@@ -1071,7 +1091,7 @@ describe('HeuteView – Detailtiefe: Standardtiefe, Erreichbarkeit, Persistenz',
     // Ebene 1, Kontextleiste, Ehrlichkeitsblock und Bausteine-Hinweis sind IMMER sichtbar
     // (Invariante: keine Tiefe unterdrückt Kontext oder benannte Grenzen).
     expect(screen.getByRole('heading', { level: 2, name: EBENE1_TITEL })).toBeInTheDocument();
-    expect(screen.getByRole('group', { name: 'Kontext dieser Seite' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Kontext dieser Seite' })).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { level: 2, name: 'Was hier bewusst nicht steht' }),
     ).toBeInTheDocument();
@@ -1176,12 +1196,18 @@ describe('HeuteView – neutraler Einstieg nach Anmeldung ohne Rollenwahl (AC 6)
     // kein erzwungener Rundgang) – Klartext, kein Overlay.
     const hinweis = container.querySelector('.ht-neutral');
     expect(hinweis?.textContent).toContain('Neutraler strategischer Einstieg');
-    expect(hinweis?.textContent).toMatch(/oben in der Leiste/);
+    // Wortlaut seit dem Product-Fix (F4) gekürzt; die inhaltliche Regel bleibt geprüft:
+    // (a) er weist auf den Ort der OPTIONALEN Rollenwahl, (b) sie ist reversibel/jederzeit.
+    // „Kein erzwungener Rundgang" (Dok. 04 J01) ist jetzt EIGENSCHAFT des Hinweises (passiv,
+    // role="note", kein Overlay) – geprüft über Optionalität + Abwählbarkeit statt der Phrase.
+    expect(hinweis?.textContent).toMatch(/oben unter .Rolle./);
+    expect(hinweis?.textContent).toMatch(/Optional/);
     expect(hinweis?.textContent).toMatch(/jederzeit/);
-    expect(hinweis?.textContent).toMatch(/keinen erzwungenen Rundgang/);
+    expect(hinweis?.textContent).toMatch(/abwählbar/);
+    expect(hinweis?.getAttribute('role')).toBe('note');
 
     // Kontextleiste nennt „neutral" statt einer erfundenen Rolle (AC 3).
-    const kontext = screen.getByRole('group', { name: 'Kontext dieser Seite' });
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
     expect(kontext.textContent).toContain('neutral – keine Rolle gewählt');
   });
 

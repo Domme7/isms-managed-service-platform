@@ -1,5 +1,6 @@
 /**
- * Querschnittliche Kontextleiste der Live-Hauptseiten (WP-020 Slice 1).
+ * Querschnittliche Kontextleiste der Live-Hauptseiten (WP-020 Slice 1; Struktur- und
+ * Verdichtungs-Fix im Review-Pass des WP).
  *
  * QUELLE (Regel Null, am PDF gegengelesen): Dok. 06, Abschnitt „Sichtbarer Kontext" nennt sechs
  * Kontextelemente:
@@ -11,7 +12,8 @@
  *   6. Vertrauensgrad bei abgeleiteten Aussagen
  *
  * Diese Komponente rendert alle sechs in genau dieser Reihenfolge – SO WEIT BELEGT:
- *  - Mandant und Produktrolle kommen aus der aktiven Auswahl (Session-Simulation, WP-011).
+ *  - Mandant und Produktrolle kommen aus der aktiven Auswahl (Session-Simulation: der Mandant
+ *    und optional eine gewählte Rolle, DR-0009; `role === null` = neutraler Zustand).
  *    Eine Organisationseinheit unterhalb des Mandanten kennt der Datenbestand nicht; das
  *    PDF sagt „ggf." – sie wird deshalb weggelassen, nicht als Lücke behauptet.
  *  - Scope/Objektkontext und Datenstand liefert jede Seite aus ihrer eigenen, react-freien
@@ -19,8 +21,10 @@
  *    Leerwert-Text sind seitenspezifisch, damit die Leiste dem Seiteninhalt nie widerspricht
  *    (Review-Lektion aus `/entscheidungen`: „Datenstand der Entscheidungen").
  *  - Vertretung, Vertraulichkeitsstufe/Exportrestriktion und Vertrauensgrad haben im heutigen
- *    Datenbestand KEINEN Träger und erscheinen als BENANNTE DATENLÜCKE (Texte unten in
- *    `CONTEXT_GAPS`) statt als erfundener Wert.
+ *    Datenbestand KEINEN Träger: der Wert lautet knapp „nicht erfasst" (`CONTEXT_GAP_WERT`),
+ *    die vollständigen Begründungen (`CONTEXT_GAPS`, weiterhin die EINE Quelle) stehen
+ *    aufklappbar in derselben Leiste (progressive Offenlegung, Dok. 06 P06) – kein erfundener
+ *    Wert, kein Textteppich in der Wertspalte.
  *
  * // OFFENE FRAGE O-WP016-08 (bestehend, hier referenziert statt dupliziert): „Vertrauensgrad"
  * // und „Version" sind im Objektvertrag Felder EINES Objekts bzw. EINER Kante; ein
@@ -30,19 +34,18 @@
  * // in der Leiste; die belegten Einzelwerte bleiben an Objekt-360 (Klassifikation,
  * // Bestätigung) und an den Kanten (Vertrauensgrad) sichtbar.
  *
+ * STRUKTUR (FINDING-0008-Fix): benannte Region (`<section aria-label>`, implizite Rolle
+ * `region`) mit nativer Definitionsliste OHNE ARIA-Rollen-Override – axe-sauber; Screenreader
+ * erhalten den Namen über die Region und die Semantik über die echte `dl`. Sichtbarer Wortlaut
+ * und Sechser-Reihenfolge der Kontextelemente sind unverändert (Product-Auflage).
+ *
  * Präsentational und ohne eigene Datenzugriffe – jede Seite reicht ausschließlich belegte
- * Werte herein. `role="group"` auf `dl` wie in `ObjectDetailView` (dokumentiertes Muster:
- * `dl` hat keine verlässliche implizite Rolle).
+ * Werte herein.
  */
 import type { ReactNode } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
 import type { DemoRole } from '../../lib/shell/roles';
 
-/**
- * Die drei benannten Datenlücken der Kontextleiste – EINE Quelle für alle Live-Hauptseiten,
- * damit die Formulierung nirgends still auseinanderläuft; per Wächtertest je Ort belegt.
- * Jeder Text benennt die Lücke UND ihre Ursache – es wird kein Wert erfunden (DR-0005).
- */
 /**
  * Anzeige der aktiven Produktrolle im NEUTRALEN Zustand (WP-020 Slice 2, DR-0009) – EINE
  * Quelle für alle Live-Hauptseiten, per Wächtertest belegt. Neutral ist ein vollwertiger
@@ -50,10 +53,18 @@ import type { DemoRole } from '../../lib/shell/roles';
  */
 export const CONTEXT_NEUTRAL_ROLE = 'neutral – keine Rolle gewählt';
 
+/** Knapper Leitwert der drei unbelegten Kontextelemente (Begründung steht aufklappbar). */
+export const CONTEXT_GAP_WERT = 'nicht erfasst';
+
+/**
+ * Die drei benannten Datenlücken der Kontextleiste – EINE Quelle für alle Live-Hauptseiten,
+ * damit die Formulierung nirgends still auseinanderläuft; per Wächtertest je Ort belegt.
+ * Jeder Text benennt die Lücke UND ihre Ursache – es wird kein Wert erfunden (DR-0005).
+ */
 export const CONTEXT_GAPS = {
   vertretung:
-    'nicht erfasst – die Anmelde-Simulation speichert nur Rolle und Mandant; eine zeitlich ' +
-    'begrenzte Vertretung kennt der Datenbestand nicht.',
+    'nicht erfasst – die Anmelde-Simulation speichert nur den Mandanten und optional eine ' +
+    'gewählte Rolle; eine zeitlich begrenzte Vertretung kennt der Datenbestand nicht.',
   vertraulichkeit:
     'nicht erfasst – im Datenbestand tragen nur einzelne Objekte eine Vertraulichkeitsstufe ' +
     '(sichtbar auf der jeweiligen Objektseite); für Mandant oder Seite ist keine Stufe und ' +
@@ -89,41 +100,64 @@ export function PageContextBar({
   children?: ReactNode;
 }) {
   return (
-    /* `role="group"` wie in `ObjectDetailView`: `dl` hat keine verlässliche implizite Rolle. */
-    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: bewusstes, dokumentiertes Muster – `dl` hat keine verlässliche implizite Rolle; die ARIA-Semantik zu ändern wäre eine Produktänderung.
-    // biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf `dl` ist gültiges ARIA; ein Ersatz durch `fieldset`/`section` würde gerendertes Markup ändern (nicht verhaltensneutral).
-    <dl className="od-context" role="group" aria-label="Kontext dieser Seite">
-      <div>
-        <dt>Aktiver Mandant</dt>
-        <dd>{tenant.display_name}</dd>
-      </div>
-      <div>
-        <dt>Aktive Produktrolle</dt>
-        {/* AC-3-Formulierung: „Rolle (oder ‚neutral')" – neutral ist ein Zustand, kein Wert-
-            Ausfall, und wird deshalb NICHT als Datenlücke gestylt. */}
-        <dd>{role ? `${role.id} · ${role.name}` : CONTEXT_NEUTRAL_ROLE}</dd>
-      </div>
-      <div>
-        <dt>Vertretung (zeitlich begrenzt)</dt>
-        <dd className="od-context-gap">{CONTEXT_GAPS.vertretung}</dd>
-      </div>
-      <div>
-        <dt>{scopeLabel}</dt>
-        <dd>{scopeValue}</dd>
-      </div>
-      <div>
-        <dt>{datenstandLabel}</dt>
-        <dd>{datenstandValue}</dd>
-      </div>
-      <div>
-        <dt>Vertraulichkeitsstufe und Exportrestriktion</dt>
-        <dd className="od-context-gap">{CONTEXT_GAPS.vertraulichkeit}</dd>
-      </div>
-      <div>
-        <dt>Vertrauensgrad bei abgeleiteten Aussagen</dt>
-        <dd className="od-context-gap">{CONTEXT_GAPS.vertrauensgrad}</dd>
-      </div>
-      {children}
-    </dl>
+    /* Benannte Region + native dl ohne Rollen-Override (FINDING-0008-Fix, s. Kopfnotiz). */
+    <section aria-label="Kontext dieser Seite">
+      <dl className="od-context">
+        <div>
+          <dt>Aktiver Mandant</dt>
+          <dd>{tenant.display_name}</dd>
+        </div>
+        <div>
+          <dt>Aktive Produktrolle</dt>
+          {/* AC-3-Formulierung: „Rolle (oder ‚neutral')" – neutral ist ein Zustand, kein Wert-
+              Ausfall, und wird deshalb NICHT als Datenlücke gestylt. */}
+          <dd>{role ? `${role.id} · ${role.name}` : CONTEXT_NEUTRAL_ROLE}</dd>
+        </div>
+        <div>
+          <dt>Vertretung (zeitlich begrenzt)</dt>
+          <dd className="od-context-gap">{CONTEXT_GAP_WERT}</dd>
+        </div>
+        <div>
+          <dt>{scopeLabel}</dt>
+          <dd>{scopeValue}</dd>
+        </div>
+        <div>
+          <dt>{datenstandLabel}</dt>
+          <dd>{datenstandValue}</dd>
+        </div>
+        <div>
+          <dt>Vertraulichkeitsstufe und Exportrestriktion</dt>
+          <dd className="od-context-gap">{CONTEXT_GAP_WERT}</dd>
+        </div>
+        <div>
+          <dt>Vertrauensgrad bei abgeleiteten Aussagen</dt>
+          <dd className="od-context-gap">{CONTEXT_GAP_WERT}</dd>
+        </div>
+        {children}
+        {/* Begründungen der drei „nicht erfasst"-Werte: aufklappbar (P06); die Texte bleiben
+            die EINE Quelle `CONTEXT_GAPS` und stehen unverändert im DOM (Wächter prüfen sie). */}
+        <div className="od-context-hinweis">
+          <dt>Warum „nicht erfasst"?</dt>
+          <dd>
+            <details className="od-context-details">
+              <summary>Begründung der drei nicht erfassten Angaben</summary>
+              <ul>
+                <li>
+                  <strong>Vertretung (zeitlich begrenzt):</strong> {CONTEXT_GAPS.vertretung}
+                </li>
+                <li>
+                  <strong>Vertraulichkeitsstufe und Exportrestriktion:</strong>{' '}
+                  {CONTEXT_GAPS.vertraulichkeit}
+                </li>
+                <li>
+                  <strong>Vertrauensgrad bei abgeleiteten Aussagen:</strong>{' '}
+                  {CONTEXT_GAPS.vertrauensgrad}
+                </li>
+              </ul>
+            </details>
+          </dd>
+        </div>
+      </dl>
+    </section>
   );
 }

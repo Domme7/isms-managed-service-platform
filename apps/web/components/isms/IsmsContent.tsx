@@ -53,12 +53,15 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
       {/* Leitfrage der Seite (Dok. 06 „Frage vor Navigation", S06). */}
       <p className="tw-question">Wie ist die Risiko- und Control-Lage von {tenant.display_name}?</p>
 
+      {/* Formulierung seit dem Review-Pass (Product-Finding): „ohne Ampeln" widersprach den
+          eigenen regelbasierten Badges des Überblicks – die ehrliche Grenze ist: Status nur
+          aus ERFASSTEN Zuständen, kein Scoring, keine Reifegrade (DR-0008). */}
       <p className="tw-lead">
         Read-only Demo-Sicht auf den synthetischen ISMS-Kerngraphen des aktiven Mandanten: Risiken
         mit Herkunft, Controls mit Umsetzung und Nachweisen, Maßnahmen und Evidence – aus demselben
         Datenmodell wie der digitale Zwilling. Es werden nur belegte Seed-Stände gezeigt;
-        Implementierungs- und Wirksamkeitsaussagen bleiben strikt getrennt, ohne Scoring, Ampeln
-        oder Reifegrade.
+        Implementierungs- und Wirksamkeitsaussagen bleiben strikt getrennt. Status-Anzeigen beruhen
+        ausschließlich auf erfassten Zuständen – ohne Scoring und ohne Reifegrade.
       </p>
       {/* UX-Review MAJOR-1 (seitenweite Rahmung): jede sichtbare OBJEKT-Status-Angabe ist ein
           Lebenszyklus-Stand, kein Prüf-/Auditergebnis – gilt auch für Status in Verweis-Zeilen,
@@ -127,8 +130,8 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
           <section aria-labelledby="isms-risiken">
             <h2 id="isms-risiken">Risiken</h2>
             <p className="tw-muted">
-              Risiko, Szenario-Herkunft und Schwachstellen-Ursprung als Klartext – ohne Score oder
-              Ampel (eine Bewertungslogik entsteht in einer späteren Phase).{' '}
+              Risiko, Szenario-Herkunft und Schwachstellen-Ursprung als Klartext – ohne Score und
+              ohne bewertete Einstufung (eine Bewertungslogik entsteht in einer späteren Phase).{' '}
               <strong>Datenlücke:</strong> Szenario, Schwachstelle und Risiko sind im aktuellen
               Datenmodell nicht direkt miteinander verknüpft – ein Zusammenhang wird hier bewusst
               nicht behauptet.

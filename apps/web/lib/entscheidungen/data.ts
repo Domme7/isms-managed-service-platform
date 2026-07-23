@@ -158,7 +158,9 @@ export interface DecisionEntry {
   readonly question: string;
   /** Kontext/Gegenstand = `description`; `undefined`, wenn nicht erfasst. */
   readonly context?: string;
-  /** Lebenszyklus-Stand (Objektstatus, KEIN Prüfergebnis – Dok. 08 08-D07). */
+  /** Lebenszyklus-Stand (Objektstatus, KEIN Freigabeergebnis – Dok. 08 08-D05: ohne
+   *  Bestätigung durch Owner/Reviewer gilt nichts als fachlich freigegeben; die getrennte
+   *  Prüfergebnis-Grenze 08-D07 bleibt control-bezogen). */
   readonly lifecycle_status: string;
   readonly object_type: string;
   readonly object_type_display: string;
@@ -469,11 +471,19 @@ export const DECISION_CARD_FIELDS: readonly DecisionCardField[] = [
       'erfunden, kein Datenbestand.',
   },
   {
+    // Review-Pass (Domain-Finding): von „kein Träger" auf „teilweise" gehoben – der VERTRAG
+    // kennt die Wirkungsannahme an Beziehungen, und der Datenbestand nutzt sie (an
+    // Service-Beziehungen); damit konsistent zum Trust-Layer-Abgleich („Annahmen": teilweise).
+    // // CCP-004-VORBEHALT: `effectiveness_assumption` ist nicht PDF-gedeckt (Change Proposal
+    // // offen). Fällt die Entscheidung auf „Feld entfernen", fällt dieses Feld auf
+    // // „kein Träger" zurück – dieser Eintrag ist dann mitzupflegen.
     field: 'Wirkung',
-    coverage: 'kein Träger',
+    coverage: 'teilweise',
     carrier:
-      'Kein Feld für erwartete Wirkung auf Risiko, Ziel, Service oder Zeit. Die Beziehung kennt ' +
-      'nur eine Wirkungsannahme („effectiveness_assumption") – und die trägt hier keine Kante.',
+      'Teil-Träger ist die Wirkungsannahme der Beziehung („effectiveness_assumption") – im ' +
+      'Vertrag vorhanden und im Datenbestand an Service-Beziehungen erfasst; die ' +
+      'Entscheidungs-Beziehungen dieses Datenbestands tragen sie nicht. Ein eigenes Feld für ' +
+      'erwartete Wirkung auf Risiko, Ziel, Service oder Zeit gibt es nicht.',
   },
   {
     field: 'Ressourcen',
@@ -621,9 +631,10 @@ export const DECISION_CARD_FIELDS_DOK06: readonly DecisionCardField[] = [
     field: 'Entscheider, Vertretung und Freigabestufe',
     coverage: 'teilweise',
     carrier:
-      'Träger der Verantwortung sind „owner_ids" und die Beziehung „owns". Eine zeitlich ' +
-      'begrenzte Vertretung und eine Freigabestufe kennt das Modell nicht – Verantwortung ' +
-      'wird nicht zu einer Freigabe umgedeutet.',
+      'Träger der Verantwortung sind „owner_ids" und die Beziehung „owns". Für die Vertretung ' +
+      'gibt es keinen typisierten Träger an der Entscheidung: der Objekttyp Vertretung ' +
+      'existiert im Katalog, aber ohne kanonische Kante zur Entscheidung. Eine Freigabestufe ' +
+      'kennt das Modell nicht – Verantwortung wird nicht zu einer Freigabe umgedeutet.',
   },
   {
     field: 'Review-Datum und Erfolgskriterium',

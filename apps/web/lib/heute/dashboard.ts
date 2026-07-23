@@ -69,7 +69,8 @@ export const BADGE_RULES = {
     symbol: '✓',
     basis:
       'Erfasste Kanten-/Feldlage der Kachel: jedes gezählte Objekt der Grundgesamtheit trägt ' +
-      'die gezählte Beziehung bzw. das gezählte Feld (x = y).',
+      'die gezählte Beziehung bzw. das gezählte Feld (x = y). Ob die belegte Lage fachlich ' +
+      'ausreicht, sagt der Datenbestand nicht.',
   },
   luecke_erfasst: {
     text: 'Lücke erfasst',
@@ -263,7 +264,7 @@ export function countRelationshipsWithConfidence(
  */
 export const LIFECYCLE_GLOSSE =
   'Lebenszyklus-Stände sind erfasste Stände aus dem Demo-Datenbestand – kein Prüfergebnis ' +
-  'und keine Wirksamkeitsaussage.';
+  'und keine geprüfte Wirksamkeit.';
 
 /**
  * Baut das Dashboard-Modell des aktiven Mandanten vollständig aus dem Seed.
@@ -314,7 +315,7 @@ export function buildHeuteDashboard(tenantId: string): HeuteDashboardModel | und
       decisionRecordedOn: decisionRegister?.recordedOn,
       decisionRecordedOnDisplay: decisionRegister?.recordedOnDisplay,
     }),
-    lifecycleSummary: buildLifecycleSummaryTile(tenant, objects, tenantFacts),
+    lifecycleSummary: buildLifecycleSummaryTile(tenant, objects, tenantFacts, !ismsCore.isEmpty),
     coverage: [
       buildControlsCoverageTile(tenant, ismsCore, {
         label: 'ISMS: Controls mit Nachweis-Stand',
@@ -478,7 +479,7 @@ function buildStockTiles(
     },
     {
       id: 'services',
-      frage: 'Wie viele Managed Services laufen für diesen Mandanten?',
+      frage: 'Wie viele Managed Services sind für diesen Mandanten erfasst?',
       values: [{ label: 'Managed Services', count: facts.serviceCount }],
       scope: tenantScope,
       datenstand: facts.tenantFacts.recordedOn,
@@ -491,11 +492,20 @@ function buildStockTiles(
   ];
 }
 
-/** Kompakte Stand-Zählung für Ebene 1 (Begründung am `LifecycleSummaryTile`-Kommentar). */
+/**
+ * Kompakte Stand-Zählung für Ebene 1 (Begründung am `LifecycleSummaryTile`-Kommentar).
+ *
+ * DRILL-DOWN MANDANTENABHÄNGIG (Review-Finding Code F1): Die Verteilung der Stände lebt am
+ * Ort „ISMS" NUR für Mandanten mit ISMS-Kernobjekten (`buildIsmsVerdichtung` liefert sonst
+ * `undefined`, die Seite zeigt ihren Leerzustand). Ohne Kernobjekte (z. B. Consulting
+ * Operator) führt der Weg deshalb in die Objektliste des Mandanten – dort steht der Stand je
+ * Objekt; ein Link auf eine nicht existierende Verteilung wäre ein totes Versprechen.
+ */
 function buildLifecycleSummaryTile(
   tenant: DemoTenant,
   objects: readonly ObjectEnvelope[],
   tenantFacts: PageContextFacts,
+  hatIsmsVerdichtung: boolean,
 ): LifecycleSummaryTile {
   const distinctCount = new Set(objects.map((o) => o.lifecycle_status)).size;
   const isms = getPlace('isms');
@@ -510,18 +520,37 @@ function buildLifecycleSummaryTile(
     regel:
       'Gezählt werden die verschiedenen erfassten Feldwerte „lifecycle_status" über alle ' +
       'Objekte des aktiven Mandanten (Dok. 07, Abschnitt „Objektvertrag, Identität und ' +
-      'Metadaten"). Die Verteilung im Einzelnen steht am Ort „ISMS" (ISMS-Kernobjekte) und ' +
-      'als Stand je Objekt in der Objektliste.',
-    drilldown: {
-      label: `${isms.label}: Verteilung der Stände der ISMS-Kernobjekte`,
-      href: isms.href,
-    },
+      `Metadaten"). ${
+        hatIsmsVerdichtung
+          ? 'Die Verteilung im Einzelnen steht am Ort „ISMS" (ISMS-Kernobjekte) und als ' +
+            'Stand je Objekt in der Objektliste.'
+          : 'Der Stand je Objekt steht in der Objektliste dieses Mandanten; eine Verteilung ' +
+            'der ISMS-Kernobjekte gibt es für diesen Mandanten nicht (keine Kernobjekte erfasst).'
+      }`,
+    drilldown: hatIsmsVerdichtung
+      ? {
+          label: `${isms.label}: Verteilung der Stände der ISMS-Kernobjekte`,
+          href: isms.href,
+        }
+      : {
+          label: 'Objektliste dieses Mandanten (Stand je Objekt auf der Objektseite)',
+          href: tenantDetailHref(tenant.tenant_id),
+        },
   };
 }
 
 /* -----------------------------------------------------------------------------
  * Abdeckungs-Kacheln – EINE Zählregel je Abdeckung, mehrfach verortet
  * (auf „Heute" mit Drill-down zum Ort, auf „ISMS" mit Anker auf die Karten)
+ *
+ * DATENSTAND-SCOPING (Review-Finding Code F7, bewusste Entscheidung): Der „Datenstand" jeder
+ * Abdeckungskachel ist der jüngste ERFASSUNGSTAG DER GEZÄHLTEN OBJEKTE (Envelope-Systemachse
+ * der Grundgesamtheit – Controls/Risiken über `ismsCore.context`, Objekte/Beziehungen über
+ * die Mandanten-Fakten). Die KANTEN, die die Zählung tragen (R15/R12), fließen NICHT in den
+ * Datenstand ein: die Kachel beantwortet eine Frage über die Objekte der Grundgesamtheit
+ * („wie viele Controls tragen …"), und ein Kanten-Zeitstempel könnte jünger sein als jedes
+ * gezählte Objekt – der ausgewiesene Stand würde dann eine Aktualität der OBJEKTE behaupten,
+ * die nicht erfasst ist. Die Kantenzeiten bleiben an den Kanten selbst sichtbar (Objekt-360).
  * --------------------------------------------------------------------------- */
 
 type IsmsCoreViewModel = ReturnType<typeof buildIsmsCoreView>;
@@ -548,7 +577,8 @@ function buildControlsCoverageTile(
     datenstandDisplay: ismsCore.context.recordedOnDisplay,
     regel:
       'Gezählt werden Controls mit mindestens einer eingehenden Nachweis-Beziehung ' +
-      '(„evidences", R15; Dok. 07, Abschnitt „Kanonische Beziehungstypen"). Ob ein Nachweis ' +
+      '(„evidences", R15; Dok. 07, Abschnitt „Kanonische Beziehungstypen"). Auch ein ' +
+      'abgelaufener oder abgelehnter Nachweis zählt hier als Beziehung. Ob ein Nachweis ' +
       'fachlich ausreicht, sagt der Datenbestand nicht. Badge-Regel: „vollständig belegt" ' +
       'bei x = y, „Lücke erfasst" bei x < y – eine erfasste Lage, kein Urteil.',
     drilldown,

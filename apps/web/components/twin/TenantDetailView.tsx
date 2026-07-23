@@ -9,9 +9,7 @@
  * Heading-Hierarchie: h1 (Mandant) > h2 (Objekte/Beziehungen bzw. Objektgraph) > h3 (Familie) > h4 (Objekt).
  */
 import Link from 'next/link';
-import type { DemoTenant } from '@isms/demo-seed';
-import { getModeledTenants, type TenantDetailModel } from '../../lib/twin/data';
-import { tenantDetailHref } from '../../lib/twin/routes';
+import type { TenantDetailModel } from '../../lib/twin/data';
 import { Badge } from './Badge';
 import { ObjectCard } from './ObjectCard';
 import { RelationshipList } from './RelationshipList';
@@ -46,7 +44,7 @@ export function TenantDetailView({ model }: { model: TenantDetailModel }) {
           tenantId={tenant.tenant_id}
         />
       ) : (
-        <EmptyGraphState tenantName={tenant.display_name} modeledTenants={getModeledTenants()} />
+        <EmptyGraphState tenantName={tenant.display_name} />
       )}
     </>
   );
@@ -123,44 +121,40 @@ function TenantGraph({
   );
 }
 
-/** Verbindet Namen deutsch: „A", „A und B", „A, B und C". */
-function joinDe(names: readonly string[]): string {
-  if (names.length <= 1) return names[0] ?? '';
-  return `${names.slice(0, -1).join(', ')} und ${names[names.length - 1]}`;
-}
-
-function EmptyGraphState({
-  tenantName,
-  modeledTenants,
-}: {
-  tenantName: string;
-  modeledTenants: readonly DemoTenant[];
-}) {
-  const modeledNames = joinDe(modeledTenants.map((t) => t.display_name));
-
+/**
+ * Ehrlicher, MANDANTENLOKALER Leerzustand (Review-Pass WP-020, Security-Finding).
+ *
+ * Hier stand bis zum Fix: „Ausmodelliert ist bislang <Namen fremder Mandanten>; die übrigen
+ * Mandanten folgen in späteren Ausbaustufen" – samt Links auf fremde Mandanten-Detailseiten.
+ * Das war die VIERTE unabhängige Fundstelle der Leerzustands-Leak-Klasse (nach /isms,
+ * /entscheidungen, /services): eine Existenzaussage über FREMDE Mandanten im Leerzustand
+ * (Dok. 07, Abschnitt „Mandantenfähigkeit, Rechte und Datenschutz" / P09). Der Leerzustand
+ * sagt jetzt ausschließlich etwas über DIESEN Mandanten; der nächste Schritt führt in die
+ * Mandanten-ÜBERSICHT – die ist als Portfolio-Seite BEWUSST mandantenübergreifend
+ * (O-WP020-11) und der legitime Ort für „wer ist modelliert". Der Wächter
+ * `components/__tests__/leerzustand-mandantengrenze.test.tsx` prüft das mechanisch.
+ */
+function EmptyGraphState({ tenantName }: { tenantName: string }) {
   return (
     <>
       <h2 id="objektgraph">Objektgraph</h2>
       <div className="tw-empty" role="note">
-        {/* AC-24-Korrektur (WP-018): „Demo-Slice" → „Demo" (hier und im Fallback-Zweig
-            unten) – „Slice" ist Prozessvokabular; minimale Entfernung, nichts Neues. */}
-        <h3>Kein Objektgraph in dieser Demo</h3>
+        <h3>Kein Objektgraph für {tenantName}</h3>
         <p style={{ marginTop: 0 }}>
-          Für <strong>{tenantName}</strong> ist im aktuellen Demo-Seed noch kein digitaler Zwilling
-          modelliert.{' '}
-          {modeledTenants.length > 0
-            ? `Ausmodelliert ist bislang ${modeledNames}; die übrigen Mandanten folgen in späteren Ausbaustufen.`
-            : 'In dieser Demo ist noch kein Mandant vollständig ausmodelliert.'}
+          Für <strong>{tenantName}</strong> ist im aktuellen Demo-Datenbestand kein digitaler
+          Zwilling modelliert. Die Seite bleibt erreichbar und zeigt ausschließlich, was für diesen
+          Mandanten belegt ist.
         </p>
-        {modeledTenants.length > 0 ? (
-          <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
-            {modeledTenants.map((t) => (
-              <Link key={t.tenant_id} className="tw-cta" href={tenantDetailHref(t.tenant_id)}>
-                {t.display_name} ansehen →
-              </Link>
-            ))}
-          </p>
-        ) : null}
+        <p className="tw-muted">
+          Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Demo-Datenbestand
+          abgeleitete Objekte und Beziehungen – keine erfundenen.
+        </p>
+        {/* Nächster Schritt (Dok. 06 §17): zurück zur Mandantenübersicht (Portfolio-Seite). */}
+        <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
+          <Link className="tw-cta" href="/twin">
+            ← Zur Mandantenübersicht
+          </Link>
+        </p>
       </div>
     </>
   );

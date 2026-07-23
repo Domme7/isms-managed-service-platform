@@ -49,10 +49,12 @@ export function ServicesContent({
         Welche Services laufen für {tenant.display_name} und was liefern sie?
       </p>
 
+      {/* Quellanker der Verkaufslogik-Grenze: Dok. 13 MS15 (Signatur seit dem Review-Pass nur
+          noch hier im Kommentar – Konzept-Jargon gehört nicht in den Produkttext). */}
       <p className="tw-lead">
         Read-only Demo-Sicht auf synthetische Managed-Service-Daten des aktiven Mandanten:
         Leistungsversprechen, SLA, Deliverables und Wirkungsbeitrag – aus demselben Datenmodell wie
-        der digitale Zwilling. Ohne Preise, ohne Buchung, ohne Verkaufslogik (Dok. 13 MS15).
+        der digitale Zwilling. Ohne Preise, ohne Buchung, ohne Verkaufslogik.
       </p>
 
       {/* Kontextleiste (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext"): Scope und Datenstand

@@ -434,12 +434,39 @@ h3 {
   color: var(--tw-ink);
 }
 /* Benannte Datenlücke in der Kontextleiste (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext"):
-   Klartext statt erfundenem Wert – bewusst als Fließtext gesetzt, nicht als Wert-Optik. */
+   Kurzwert „nicht erfasst" statt erfundenem Wert – bewusst nicht als Wert-Optik gesetzt. */
 .od-context dd.od-context-gap {
   font-weight: 400;
   font-size: 0.8rem;
   color: var(--tw-ink-soft);
   max-width: 34rem;
+}
+/* Aufklappbare Begründungen der „nicht erfasst"-Werte (Review-Verdichtung, Dok. 06 P06). */
+.od-context-hinweis {
+  flex-basis: 100%;
+}
+.od-context-details > summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--tw-accent);
+}
+.od-context-details > summary:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.od-context-details ul {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--tw-ink-soft);
+  max-width: 80ch;
 }
 
 @media (max-width: 640px) {
@@ -1013,6 +1040,44 @@ h3 {
   color: var(--tw-muted);
   font-size: 0.82rem;
   max-width: 70ch;
+}
+
+/* Aufklappbare Begründung des Seitenkopfs auf /entscheidungen (Review-Verdichtung, P06). */
+.rahmung-details {
+  margin-top: 0.35rem;
+}
+.rahmung-details > summary {
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--tw-accent);
+}
+.rahmung-details > summary:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.rahmung-details > p {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+}
+
+/* Aufklappbare Quelle des Rollenfokus (Review-Pass: Signatur-Jargon raus aus dem Fließtext). */
+.rv-quelle > summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--shell-teal);
+}
+.rv-quelle > summary:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.rv-quelle > p {
+  margin: 0.3rem 0 0;
+  font-size: 0.78rem;
+  color: var(--tw-muted);
 }
 
 /* Sekundäre Kanten-Notiz: Klartext primär, kanonischer Typ in Klammern. */

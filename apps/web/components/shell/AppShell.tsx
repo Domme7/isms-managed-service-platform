@@ -82,6 +82,8 @@ export function AppShell({
   const confirmRef = useRef<HTMLDivElement | null>(null);
   const announceRef = useRef<HTMLDivElement | null>(null);
   const navId = 'shell-nav';
+  /** ID des Mandanten-Selects – Ziel der Fokus-Rückführung nach „Abbrechen" (Code F5). */
+  const tenantSelectId = 'shell-mandant-select';
 
   const pendingTenant = pendingTenantId
     ? tenants.find((t) => t.tenant_id === pendingTenantId)
@@ -116,6 +118,9 @@ export function AppShell({
 
   function cancelTenantSwitch(): void {
     setPendingTenantId(null);
+    // Fokus-Rückführung (Review-Finding Code F5): der Bestätigungsblock verschwindet aus dem
+    // DOM – ohne Rückführung landete der Fokus am Dokumentanfang. Zurück zum Auslöser.
+    document.getElementById(tenantSelectId)?.focus();
   }
 
   /**
@@ -175,6 +180,7 @@ export function AppShell({
         onToggleNav={() => setNavOpen((open) => !open)}
         navOpen={navOpen}
         navControlsId={navId}
+        tenantSelectId={tenantSelectId}
       />
 
       {/* Bestätigungsschritt des Mandantenwechsels: benennt alten UND neuen Mandanten, bevor
@@ -246,7 +252,12 @@ export function AppShell({
             <button
               type="button"
               className="shell-context-dismiss-btn"
-              onClick={() => setContextChange(null)}
+              onClick={() => {
+                setContextChange(null);
+                // Fokus-Rückführung (Code F5): der Schließen-Button verschwindet mit dem
+                // Hinweis – stabiler Anker ist der Seiteninhalt (main#inhalt, tabIndex -1).
+                document.getElementById('inhalt')?.focus();
+              }}
             >
               Hinweis schließen
             </button>
@@ -267,7 +278,9 @@ export function AppShell({
           id={navId}
           onNavigate={() => setNavOpen(false)}
         />
-        <main id="inhalt" className="shell-main">
+        {/* tabIndex -1: programmatisches Fokusziel (Skip-Link-Ziel und Fokus-Rückführung nach
+            dem Schließen der Wechsel-Rückmeldung, Code F5) – nicht in der Tab-Reihenfolge. */}
+        <main id="inhalt" className="shell-main" tabIndex={-1}>
           <div className="tw-container">{children}</div>
         </main>
       </div>

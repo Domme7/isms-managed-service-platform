@@ -22,14 +22,15 @@
  * Absätze, Listen und Überschriften mit nativer Semantik.
  */
 import Link from 'next/link';
-import type {
-  CoverageTile,
-  DashboardBadge,
-  EmptyTenantTile,
-  LifecycleSummaryTile,
-  LifecycleTile,
-  StockTile,
-  TileExplanation,
+import {
+  BADGE_RULES,
+  type CoverageTile,
+  type DashboardBadge,
+  type EmptyTenantTile,
+  type LifecycleSummaryTile,
+  type LifecycleTile,
+  type StockTile,
+  type TileExplanation,
 } from '../../lib/heute/dashboard';
 
 /** Überschriften-Ebene der Kachel-Frage – je nach umgebender Struktur h3 oder h4. */
@@ -40,10 +41,16 @@ function KachelFrage({ level, children }: { level: KachelHeadingLevel; children:
   return <Tag className="db-frage">{children}</Tag>;
 }
 
-/** Badge: Symbol (Form, dekorativ) + Text – Farbe kommt ausschließlich im CSS dazu. */
+/**
+ * Badge: Symbol (Form, dekorativ) + Text – Farbe kommt ausschließlich im CSS dazu.
+ * `title` trägt die Regel-Basis samt Grenzsatz (Review-Finding Product F8: „vollständig
+ * belegt" darf nicht als fachliches Urteil lesbar sein – die Basis sagt ausdrücklich, dass
+ * der Datenbestand über fachliche Zulänglichkeit nichts aussagt); die vollständige
+ * Ermittlungsregel bleibt zusätzlich in der aufklappbaren Regel der Kachel.
+ */
 export function BadgeAnzeige({ badge }: { badge: DashboardBadge }) {
   return (
-    <p className={`db-badge db-badge--${badge.rule}`}>
+    <p className={`db-badge db-badge--${badge.rule}`} title={BADGE_RULES[badge.rule].basis}>
       <span aria-hidden="true">{badge.symbol}</span> {badge.text}
     </p>
   );

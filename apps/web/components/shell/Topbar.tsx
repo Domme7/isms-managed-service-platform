@@ -44,6 +44,7 @@ export function Topbar({
   onToggleNav,
   navOpen,
   navControlsId = 'shell-nav',
+  tenantSelectId,
 }: {
   session: ResolvedSession | null;
   hydrated: boolean;
@@ -57,6 +58,8 @@ export function Topbar({
   onToggleNav?: () => void;
   navOpen?: boolean;
   navControlsId?: string;
+  /** Optionale DOM-ID des Mandanten-Selects (Fokus-Rückführung nach „Abbrechen", Code F5). */
+  tenantSelectId?: string;
 }) {
   return (
     <header className="shell-topbar">
@@ -117,6 +120,7 @@ export function Topbar({
                     nie einen Mandanten an, der noch nicht aktiv ist (CROSS-TENANT-SCHUTZ). */}
                 <select
                   className="shell-select"
+                  id={tenantSelectId}
                   value={session.tenant.tenant_id}
                   onChange={(e) => onRequestTenantSwitch(e.target.value)}
                   aria-label="Aktiven Mandanten wechseln (Simulation)"

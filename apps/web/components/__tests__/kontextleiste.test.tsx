@@ -10,11 +10,13 @@
  * Leitfrage, sichtbaren Kontext und nachvollziehbare Aktion."
  *
  * Geprüft wird je Live-Hauptseite:
- *  1. Die Kontextleiste existiert (`role="group"`, „Kontext dieser Seite").
+ *  1. Die Kontextleiste existiert (benannte Region „Kontext dieser Seite" mit nativer `dl` –
+ *     FINDING-0008-Fix, kein ARIA-Rollen-Override mehr).
  *  2. BELEGTE Elemente zeigen belegte Werte: Mandant (Anzeigename), Produktrolle
  *     („R0x · Name"), ein Scope-/Objektkontext-Eintrag, ein Datenstand-Eintrag.
- *  3. UNBELEGTE Elemente stehen als BENANNTE DATENLÜCKE mit exakt dem gemeinsamen Text aus
- *     `CONTEXT_GAPS` (kein erfundener Wert, keine still abweichende Zweitformulierung) –
+ *  3. UNBELEGTE Elemente stehen als BENANNTE DATENLÜCKE: Kurzwert `CONTEXT_GAP_WERT` in der
+ *     Wertspalte plus die vollständigen Begründungen aus `CONTEXT_GAPS` aufklappbar in der
+ *     Leiste (kein erfundener Wert, keine still abweichende Zweitformulierung) –
  *     Vertretung, Vertraulichkeitsstufe/Exportrestriktion, Vertrauensgrad (Muster O-WP016-08).
  *
  * META-ASSERTION gegen stilles Veralten (Muster `prozessvokabular.test.tsx`): das Register
@@ -34,7 +36,7 @@ import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
-import { CONTEXT_GAPS, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
+import { CONTEXT_GAPS, CONTEXT_GAP_WERT, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
 import { SessionProvider } from '../shell/SessionProvider';
 import { TwinContextBar } from '../twin/TwinContextBar';
 import { NAV_PLACES, type PlaceId } from '../../lib/shell/places';
@@ -82,9 +84,11 @@ const HAUPTSEITE_JE_LIVE_ORT: Partial<Record<PlaceId, () => RenderResult>> = {
     render(<ServicesContent role={role('R08')} tenant={tenant(TENANT_ID.NORDWERK)} />),
 };
 
-/** Kontextleisten-Eintrag (dt/dd) nach exaktem dt-Label. */
+/** Kontextleisten-Eintrag (dt/dd) nach exaktem dt-Label.
+ *  Seit dem FINDING-0008-Fix ist `kontext` die benannte REGION; die Einträge leben in der
+ *  nativen `dl` (`.od-context`) darin. */
 function eintrag(kontext: HTMLElement, label: string): { dt: string; dd: string } {
-  const treffer = Array.from(kontext.querySelectorAll(':scope > div')).find(
+  const treffer = Array.from(kontext.querySelectorAll('.od-context > div')).find(
     (div) => div.querySelector('dt')?.textContent === label,
   );
   if (!treffer) throw new Error(`Kontextleisten-Eintrag fehlt: „${label}"`);
@@ -105,7 +109,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
   for (const [ort, renderOrt] of Object.entries(HAUPTSEITE_JE_LIVE_ORT)) {
     it(`Ort „${ort}": belegte Elemente belegt, unbelegte als benannte Datenlücke`, () => {
       const ergebnis = renderOrt();
-      const kontext = screen.getByRole('group', { name: 'Kontext dieser Seite' });
+      const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
 
       // (2) Belegte Elemente mit belegten Werten.
       expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
@@ -125,14 +129,22 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
       // Nordwerk trägt einen Datenbestand: der Datenstand ist ein maschinenlesbares Datum.
       expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
 
-      // (3) Unbelegte Elemente: exakt der gemeinsame Lückentext – kein erfundener Wert.
-      expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAPS.vertretung);
+      // (3) Unbelegte Elemente: der gemeinsame Kurzwert „nicht erfasst" – kein erfundener
+      // Wert; die VOLLSTÄNDIGEN Begründungen (weiterhin die eine Quelle CONTEXT_GAPS) stehen
+      // aufklappbar in derselben Leiste im DOM (Review-Verdichtung; Regel unverändert:
+      // benannte Lücke statt Wert, Wortlaut aus einer Quelle).
+      expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
       expect(eintrag(kontext, 'Vertraulichkeitsstufe und Exportrestriktion').dd).toBe(
-        CONTEXT_GAPS.vertraulichkeit,
+        CONTEXT_GAP_WERT,
       );
       expect(eintrag(kontext, 'Vertrauensgrad bei abgeleiteten Aussagen').dd).toBe(
-        CONTEXT_GAPS.vertrauensgrad,
+        CONTEXT_GAP_WERT,
       );
+      for (const begruendung of Object.values(CONTEXT_GAPS)) {
+        expect(kontext.textContent ?? '', `${ort}: Begründung fehlt in der Leiste`).toContain(
+          begruendung,
+        );
+      }
 
       ergebnis.unmount();
     });
@@ -180,7 +192,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
   for (const [ort, renderOrt] of Object.entries(NEUTRAL_JE_LIVE_ORT)) {
     it(`Ort „${ort}": rendert ohne Rolle vollständig, Leiste nennt „neutral" statt eines Werts`, () => {
       const ergebnis = renderOrt();
-      const kontext = screen.getByRole('group', { name: 'Kontext dieser Seite' });
+      const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
 
       // Blindheitsschutz: die Seite hat wirklich Inhalt gerendert (keine Fehl-/Leerseite).
       expect((ergebnis.container.textContent ?? '').length).toBeGreaterThan(200);
@@ -189,7 +201,8 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
       // Negativbeweis: es wird keine Rollen-ID erfunden.
       expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
       // Die drei benannten Datenlücken bleiben unverändert (neutral ändert keine Daten).
-      expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAPS.vertretung);
+      expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
+      expect(kontext.textContent ?? '').toContain(CONTEXT_GAPS.vertretung);
 
       ergebnis.unmount();
     });
@@ -201,7 +214,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     const { unmount } = render(
       <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
     );
-    const kontext = screen.getByRole('group', { name: 'Kontext dieser Seite' });
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
 
     expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Finovia Digital Bank AG');
     expect(kontext.querySelectorAll('time')).toHaveLength(0);
@@ -211,7 +224,8 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     expect(eintrag(kontext, 'Datenstand der ISMS-Kernobjekte (zuletzt im System erfasst)').dd).toBe(
       'kein ISMS-Kernobjekt erfasst',
     );
-    expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAPS.vertretung);
+    expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
+    expect(kontext.textContent ?? '').toContain(CONTEXT_GAPS.vertretung);
     unmount();
   });
 

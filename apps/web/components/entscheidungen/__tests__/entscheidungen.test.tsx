@@ -90,12 +90,14 @@ describe('EntscheidungenContent – Leitfrage und ihre Grenze', () => {
     expect(rahmung).not.toBeNull();
     // Unmittelbarer nächster Knoten – kein Inhalt darf sich dazwischenschieben.
     expect(frage.nextElementSibling).toBe(rahmung);
-    expect(rahmung?.textContent ?? '').toMatch(/Diese Frage beantwortet die Seite nicht/);
+    // Anker seit dem Review-Pass an den Zwei-Satz-Kopf angepasst (Regel unverändert: die
+    // Grenze wird benannt, die belegbare Ersatzfrage steht dabei, die Begründung im DOM).
+    expect(rahmung?.textContent ?? '').toMatch(/Diese Frage beantwortet die Seite heute nicht/);
     expect(rahmung?.textContent ?? '').toMatch(/Dringlichkeit/);
     // Und die engere, tatsächlich belegbare Frage steht mit ihr zusammen.
-    expect(rahmung?.textContent ?? '').toMatch(
-      /Welche Entscheidungen sind im Datenbestand dieses Mandanten erfasst/,
-    );
+    expect(rahmung?.textContent ?? '').toMatch(/Welche Entscheidungen sind erfasst, worauf/);
+    // Der Begründungsapparat bleibt vollständig im DOM (aufklappbar, P06).
+    expect(rahmung?.textContent ?? '').toMatch(/Frist, einen Aufwand/);
 
     // Gegenprobe: die Rahmung steht VOR dem Register, nicht erst im Ehrlichkeitsblock.
     const register = container.querySelector('section[aria-labelledby="entscheidungen-register"]');
@@ -456,7 +458,7 @@ describe('EntscheidungenContent – Leerzustände', () => {
        Datenstand wird AUSSCHLIESSLICH aus den Entscheidungen gebildet. Vorher stand hier
        „keine Erfassung im Datenbestand", während zwei Zeilen darunter ein modellierter
        Datenbestand ausgewiesen wurde (Review-Fix). */
-    const kontext = screen.getByRole('group', { name: 'Kontext dieser Seite' });
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
     expect(
       within(kontext).getByText('Datenstand der Entscheidungen (zuletzt im System erfasst)'),
     ).toBeInTheDocument();
@@ -629,8 +631,15 @@ const QUELLEN_PRIORITAET = /· Priorität: \d+/g;
  * bleiben). Der exakte Name kommt aus der Datenquelle (nie dupliziert), wird vor der Prüfung
  * entfernt und sein Vorhandensein geprüft, damit die Ausnahme nicht still wächst.
  */
-const DOK06_GELDWORT_FELD =
-  DECISION_CARD_FIELDS_DOK06.find((f) => f.field.includes('Kosten'))?.field ?? '';
+const DOK06_GELDWORT_FELD = (() => {
+  const feld = DECISION_CARD_FIELDS_DOK06.find((f) => f.field.includes('Kosten'))?.field;
+  if (!feld) {
+    // Fail-loud (QA-Finding): ohne Anker würde ein leerer String gestrippt und die Ausnahme
+    // liefe still ins Leere – der Wächter wäre an dieser Stelle blind.
+    throw new Error('Ausnahme-Anker fehlt: Dok.-06-Feld mit „Kosten" nicht gefunden');
+  }
+  return feld;
+})();
 
 /**
  * Zusätzlich verboten in den DATENABSCHNITTEN. Im Rahmungsabsatz unter der Leitfrage und im
@@ -649,13 +658,16 @@ const NUR_IN_DER_LUECKE = [
 ];
 
 describe('EntscheidungenContent – kein Score, keine Priorisierung, keine Geldangabe', () => {
-  it('enthält für keine Rolle und keinen Mandanten Bewertungs- oder Geldvokabular', () => {
-    for (const demoRole of [role('R01'), role('R03'), role('R07'), role('R12')]) {
+  it('enthält für keine Rolle, neutral und keinen Mandanten Bewertungs- oder Geldvokabular', () => {
+    // Review-Pass (QA-Finding): der NEUTRALE Zustand steht als fünfte Perspektive mit unter
+    // dem Wächter – auch seine Leisten-/Kopftexte dürfen weder werten noch Geld nennen.
+    for (const demoRole of [role('R01'), role('R03'), role('R07'), role('R12'), null]) {
       for (const tenantId of [
         TENANT_ID.NORDWERK,
         TENANT_ID.CONSULTING_OPERATOR,
         TENANT_ID.FINOVIA,
       ]) {
+        const kennung = demoRole?.id ?? 'neutral';
         const { container, unmount } = render(
           <EntscheidungenContent role={demoRole} tenant={tenant(tenantId)} />,
         );
@@ -664,7 +676,7 @@ describe('EntscheidungenContent – kein Score, keine Priorisierung, keine Gelda
           if (tenantId === TENANT_ID.NORDWERK) {
             expect(
               text,
-              `${demoRole.id}/${tenantId}: die begründete Ausnahme „${negation}" steht nicht mehr im Text`,
+              `${kennung}/${tenantId}: die begründete Ausnahme „${negation}" steht nicht mehr im Text`,
             ).toContain(negation);
           }
           text = text.split(negation).join(' ');
@@ -673,13 +685,13 @@ describe('EntscheidungenContent – kein Score, keine Priorisierung, keine Gelda
         // `DOK06_GELDWORT_FELD`) – der Abgleich rendert für jeden bekannten Mandanten.
         expect(
           text,
-          `${demoRole.id}/${tenantId}: der zitierte Dok.-06-Feldname steht nicht mehr im Text`,
+          `${kennung}/${tenantId}: der zitierte Dok.-06-Feldname steht nicht mehr im Text`,
         ).toContain(DOK06_GELDWORT_FELD);
         text = text.split(DOK06_GELDWORT_FELD).join(' ');
         for (const muster of [...BEWERTUNG_VERBOTEN, ...GELD_VERBOTEN]) {
           expect(
             muster.test(text),
-            `${demoRole.id}/${tenantId}: „${muster}" darf nicht im Text stehen`,
+            `${kennung}/${tenantId}: „${muster}" darf nicht im Text stehen`,
           ).toBe(false);
         }
 
@@ -694,14 +706,14 @@ describe('EntscheidungenContent – kein Score, keine Priorisierung, keine Gelda
         if (tenantId === TENANT_ID.NORDWERK) {
           expect(
             datentext.match(QUELLEN_PRIORITAET),
-            `${demoRole.id}/${tenantId}: die Quellen-Priorität steht nicht mehr im Text`,
+            `${kennung}/${tenantId}: die Quellen-Priorität steht nicht mehr im Text`,
           ).not.toBeNull();
         }
         datentext = datentext.replace(QUELLEN_PRIORITAET, ' ');
         for (const muster of NUR_IN_DER_LUECKE) {
           expect(
             muster.test(datentext),
-            `${demoRole.id}/${tenantId}: „${muster}" darf nicht in den Datenabschnitten stehen`,
+            `${kennung}/${tenantId}: „${muster}" darf nicht in den Datenabschnitten stehen`,
           ).toBe(false);
         }
         unmount();
@@ -713,6 +725,26 @@ describe('EntscheidungenContent – kein Score, keine Priorisierung, keine Gelda
 /* -----------------------------------------------------------------------------
  * 10. Ehrlichkeitsblock
  * --------------------------------------------------------------------------- */
+
+describe('Wächter-Fixture-Negativbeweise (Review-Pass, QA-Finding)', () => {
+  it('jedes BEWERTUNG_VERBOTEN- und GELD_VERBOTEN-Muster greift auf ein Fixture – Produkttext nicht', () => {
+    const bewertungsFixture =
+      'Score Ampel Reifegrad Trend 10 Prozent % Schwellenwert Rang Schweregrad ' +
+      'Serviceangebot Handlungsbedarf kritisch';
+    for (const muster of BEWERTUNG_VERBOTEN) {
+      expect(muster.test(bewertungsFixture), `Fixture löst „${muster}" nicht aus`).toBe(true);
+    }
+    const geldFixture = '€ 5 EUR Euro Preis Kosten Budget Währung Betrag';
+    for (const muster of GELD_VERBOTEN) {
+      expect(muster.test(geldFixture), `Fixture löst „${muster}" nicht aus`).toBe(true);
+    }
+    // Unauffällige Produktsprache schlägt nicht an (Wächter nicht überscharf).
+    const legitim = 'Erfasste Entscheidung mit Nachweisbezug und getrennten Zeitachsen.';
+    for (const muster of [...BEWERTUNG_VERBOTEN, ...GELD_VERBOTEN]) {
+      expect(muster.test(legitim), `„${muster}" schlägt auf legitimen Text an`).toBe(false);
+    }
+  });
+});
 
 describe('EntscheidungenContent – Ehrlichkeitsblock „Was eine Entscheidung hier noch nicht zeigt"', () => {
   function lueckenAbschnitt(): HTMLElement {
@@ -748,16 +780,19 @@ describe('EntscheidungenContent – Ehrlichkeitsblock „Was eine Entscheidung h
     // Deckungsgrad als Text, nie nur als Farbe – gezählt in der Pflichtfeldliste selbst, damit
     // die zweite Liste (Decision Record, Dok. 10 §9.2) die Zahl nicht verfälscht.
     const ohneTraeger = DECISION_CARD_FIELDS.filter((f) => f.coverage === 'kein Träger').length;
-    expect(ohneTraeger).toBe(9);
+    // Review-Pass (Domain-Finding): „Wirkung" ist von „kein Träger" auf „teilweise" gehoben
+    // (Teil-Träger Wirkungsannahme der Beziehung; CCP-004-Vorbehalt in der Datenquelle) –
+    // damit 8 statt 9 ohne Träger.
+    expect(ohneTraeger).toBe(8);
     expect(
       within(pflichtfeldListe()).getAllByText(/im heutigen Datenmodell: kein Träger/),
     ).toHaveLength(ohneTraeger);
     expect(
       within(pflichtfeldListe()).getAllByText(/im heutigen Datenmodell: teilweise/),
-    ).toHaveLength(5);
+    ).toHaveLength(6);
     // Und die Kopfzeile nennt genau diese beiden Zahlen (gezählt, nicht geschrieben).
-    expect(abschnitt.textContent ?? '').toMatch(/9 keinen Träger/);
-    expect(abschnitt.textContent ?? '').toMatch(/5 nur teilweise/);
+    expect(abschnitt.textContent ?? '').toMatch(/8 keinen Träger/);
+    expect(abschnitt.textContent ?? '').toMatch(/6 nur teilweise/);
   });
 
   /**

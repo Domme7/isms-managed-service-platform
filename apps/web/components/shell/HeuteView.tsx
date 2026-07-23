@@ -90,9 +90,12 @@ export function HeuteView() {
           <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>
             Nicht angemeldet (Simulation)
           </h2>
+          {/* DR-0009-Stand (Review-Pass Code-Finding): angemeldet wird nur mit dem Mandanten,
+              der Einstieg ist die neutrale Ebene 1 – keine Rollen-Voraussetzung behaupten. */}
           <p style={{ marginTop: 0 }}>
-            Es ist keine Rolle und kein Mandant gewählt. Melden Sie sich in der Simulation an, um
-            den rollenbezogenen Startpunkt für den aktiven Mandanten zu sehen.
+            Es ist kein Mandant gewählt. Melden Sie sich in der Simulation mit einem Mandanten an,
+            um die neutrale strategische Ebene 1 zu sehen – die Rollenwahl ist danach optional in
+            der Kopfleiste möglich.
           </p>
           <p style={{ marginBottom: 0 }}>
             <Link className="tw-cta" href="/login">

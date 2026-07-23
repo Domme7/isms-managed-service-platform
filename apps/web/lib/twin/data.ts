@@ -35,8 +35,14 @@ export function getTenant(tenantId: string): DemoTenant | undefined {
 
 /**
  * Mandanten, die im aktuellen Demo-Seed bereits einen Objektgraphen tragen.
- * Aus dem Seed abgeleitet (`has_object_graph`) – NICHT hartkodiert, damit der Empty-State
- * automatisch korrekt bleibt, sobald weitere Graphen ergänzt werden.
+ * Aus dem Seed abgeleitet (`has_object_graph`) – NICHT hartkodiert.
+ *
+ * ⚠️ NUR FÜR TESTS/SEED-DIAGNOSE UND MANDANTENÜBERGREIFENDE PORTFOLIO-SICHTEN — **niemals**
+ * in einem mandantenlokalen Leerzustand rendern (Muster `getIsmsCoreTenants`): Bis zum
+ * Review-Pass von WP-020 speiste diese Funktion den Empty-State der Mandanten-Detailseite
+ * („Ausmodelliert ist bislang <fremde Mandanten> …") – die vierte Fundstelle der
+ * Leerzustands-Leak-Klasse (Dok. 07, Abschnitt „Mandantenfähigkeit, Rechte und Datenschutz",
+ * P09). Ein Leerzustand darf ausschließlich etwas über den EIGENEN Mandanten aussagen.
  */
 export function getModeledTenants(): DemoTenant[] {
   return DEMO_SEED.tenants.filter((t) => t.has_object_graph);
