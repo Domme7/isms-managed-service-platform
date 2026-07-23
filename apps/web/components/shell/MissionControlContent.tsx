@@ -104,7 +104,12 @@ export function MissionControlContent({
   tiefe,
   onTiefeChange,
 }: {
-  role: DemoRole;
+  /**
+   * Aktive Produktrolle oder `null` = NEUTRALER Zustand (WP-020 Slice 2, DR-0009): dieselbe
+   * Seite, dieselben Daten, kanonische Abschnittsreihenfolge ohne Welt-Leitfrage; die Rolle
+   * ist nie Datenvoraussetzung, nur Rahmung.
+   */
+  role: DemoRole | null;
   tenant: DemoTenant;
   /** Gewählte Detailtiefe – von `HeuteView` gehalten und persistiert (O-WP020-01). */
   tiefe?: Detailtiefe;
@@ -119,13 +124,15 @@ export function MissionControlContent({
 
   const model = buildMissionControl(tenant.tenant_id);
   const dashboard = buildHeuteDashboard(tenant.tenant_id);
-  const world = worldForRole(role);
+  const world = role ? worldForRole(role) : null;
   const place = getPlace('heute');
-  // NICHT ERREICHBAR, bewusst fail-soft belassen: `parseSession` verwirft unbekannte Rollen-IDs,
-  // die Prop trägt immer eine der zwölf kanonischen Rollen. Fiele die Rahmung dennoch aus (z. B.
-  // verändertes localStorage bei künftig gelockerter Session-Prüfung), zeigt die Seite dieselben
-  // Daten in kanonischer Reihenfolge, statt leer zu bleiben – Muster `getRole`.
-  const sectionOrder = framingForRole(role.id)?.sectionOrder ?? MISSION_SECTION_IDS;
+  // Neutral: kanonische Reihenfolge (DR-0009 – „rollenlos in kanonischer Reihenfolge ohne
+  // Welt-Leitfrage"). Mit Rolle: Welt-Rahmung; der `?? MISSION_SECTION_IDS`-Zweig dahinter ist
+  // NICHT ERREICHBAR, bewusst fail-soft belassen: `parseSession` verwirft unbekannte
+  // Rollen-IDs, die Prop trägt eine der zwölf kanonischen Rollen oder `null`.
+  const sectionOrder = role
+    ? (framingForRole(role.id)?.sectionOrder ?? MISSION_SECTION_IDS)
+    : MISSION_SECTION_IDS;
 
   return (
     <>
@@ -146,6 +153,8 @@ export function MissionControlContent({
 
       {model && dashboard ? (
         <>
+          {role === null ? <NeutralerEinstiegHinweis /> : null}
+
           <ContextBar model={model} role={role} tenant={tenant} world={world} />
 
           <TiefenSchalter tiefe={aktiveTiefe} onChange={wechsleTiefe} />
@@ -204,7 +213,9 @@ export function MissionControlContent({
  * (`record_time.recorded_at`, Dok. 07 §11) und wird nicht mit der fachlichen Gültigkeit
  * vermischt. Als Scope erscheinen die belegten Kennungen aus dem Datenbestand – ein
  * Klartextname existiert dazu nicht (O-WP014-03). Die Erlebniswelt bleibt als seitenspezifische
- * Rahmungszeile erhalten (Zusatzeintrag).
+ * Rahmungszeile erhalten (Zusatzeintrag) – im NEUTRALEN Zustand entfällt sie: ohne Rolle gibt
+ * es keine Welt, und ein erfundener Weltwert wäre eine falsche Rahmung (die Produktrollen-Zeile
+ * der Leiste nennt „neutral", AC-3-Formulierung).
  */
 function ContextBar({
   model,
@@ -213,9 +224,9 @@ function ContextBar({
   world,
 }: {
   model: MissionControlModel;
-  role: DemoRole;
+  role: DemoRole | null;
   tenant: DemoTenant;
-  world: ExperienceWorld;
+  world: ExperienceWorld | null;
 }) {
   const waves = model.recordingWaves;
   const letzte = waves.length > 0 ? waves[waves.length - 1] : undefined;
@@ -241,11 +252,38 @@ function ContextBar({
         )
       }
     >
-      <div>
-        <dt>Erlebniswelt</dt>
-        <dd>{world.name}</dd>
-      </div>
+      {world ? (
+        <div>
+          <dt>Erlebniswelt</dt>
+          <dd>{world.name}</dd>
+        </div>
+      ) : null}
     </PageContextBar>
+  );
+}
+
+/* -----------------------------------------------------------------------------
+ * Neutraler Einstieg (WP-020 Slice 2, DR-0009)
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Erstbesuchs-Hinweis der neutralen Ebene 1 (DR-0009; Dok. 04 J01 „Kein erzwungener
+ * Rundgang"): kennzeichnet den Zustand als neutralen strategischen Einstieg und benennt die
+ * OPTIONALE Rollenwahl in der Topbar – Klartext, kein Zwang, kein Overlay. Er erscheint,
+ * solange keine Rolle gewählt ist (der neutrale Zustand IST der Erstbesuchs-Zustand vor der
+ * Personalisierung); mit gewählter Rolle verschwindet er, die Abwahl bringt ihn zurück.
+ */
+function NeutralerEinstiegHinweis() {
+  return (
+    <div className="ht-neutral" role="note">
+      <p className="ht-neutral-text">
+        <strong>Neutraler strategischer Einstieg:</strong> Sie sehen die verdichtete Ebene 1 ohne
+        Rollen-Personalisierung – alle Zahlen, Wege und Tiefen sind vollständig da. Optional können
+        Sie oben in der Leiste unter „Rolle" eine Produktrolle wählen; sie ändert nur Betonung und
+        Reihenfolge der tieferen Abschnitte, nie die Daten, und lässt sich jederzeit wieder abwählen
+        („neutral"). Es gibt keinen erzwungenen Rundgang.
+      </p>
+    </div>
   );
 }
 
@@ -358,9 +396,9 @@ function MissionSection({
 }: {
   id: MissionSectionId;
   model: MissionControlModel;
-  role: DemoRole;
+  role: DemoRole | null;
   tenant: DemoTenant;
-  world: ExperienceWorld;
+  world: ExperienceWorld | null;
 }) {
   switch (id) {
     case 'standort':
@@ -390,9 +428,9 @@ function StandortSection({
   world,
 }: {
   model: MissionControlModel;
-  role: DemoRole;
+  role: DemoRole | null;
   tenant: DemoTenant;
-  world: ExperienceWorld;
+  world: ExperienceWorld | null;
 }) {
   const headingId = sectionHeadingId('standort');
   const standing = model.tenantStanding;
@@ -402,36 +440,50 @@ function StandortSection({
       <h2 id={headingId}>{MISSION_SECTIONS.standort.title}</h2>
 
       <h3>Aktive Rolle</h3>
-      {/* Rollenangaben vollständig aus `lib/shell/roles.ts` (Dok. 03 §3) – nichts übersetzt.
-          Der NAME der Erlebniswelt steht bereits querschnittlich in der Kontextzeile und wird
-          hier nicht wiederholt; neu ist an dieser Stelle ihre Leitfrage. */}
-      <dl className="tw-meta">
-        <dt>Rollen-ID</dt>
-        <dd>{role.id}</dd>
-        <dt>Produktrolle</dt>
-        <dd>{role.name}</dd>
-        <dt>Sphäre</dt>
-        <dd>{role.sphere}</dd>
-        <dt>Kernverantwortung</dt>
-        <dd>{role.responsibility}</dd>
-        <dt>Leitfrage dieser Erlebniswelt</dt>
-        {/* Die Weltleitfrage darf nicht ungerahmt stehen bleiben: sie fragt je nach Welt nach
-            Entscheidungen, Kurs oder Portfolio – alles Dinge, die genau diese Seite bewusst NICHT
-            beantwortet. Ohne den Zusatz erzeugt sie dieselbe unerfüllte Erwartung, die der Lead
-            für die Ortsleitfrage bereits ausräumt (Review-Fix). */}
-        <dd>
-          {world.leitfrage}
-          <span className="sv-item-note">
-            Diese Leitfrage rahmt die Erlebniswelt, nicht diese Seite: hier wird gezählt und
-            benannt.
-          </span>
-        </dd>
-      </dl>
+      {role && world ? (
+        <>
+          {/* Rollenangaben vollständig aus `lib/shell/roles.ts` (Dok. 03, Abschnitt
+              „Kanonisches Rollenmodell") – nichts übersetzt. Der NAME der Erlebniswelt steht
+              bereits querschnittlich in der Kontextzeile und wird hier nicht wiederholt; neu
+              ist an dieser Stelle ihre Leitfrage. */}
+          <dl className="tw-meta">
+            <dt>Rollen-ID</dt>
+            <dd>{role.id}</dd>
+            <dt>Produktrolle</dt>
+            <dd>{role.name}</dd>
+            <dt>Sphäre</dt>
+            <dd>{role.sphere}</dd>
+            <dt>Kernverantwortung</dt>
+            <dd>{role.responsibility}</dd>
+            <dt>Leitfrage dieser Erlebniswelt</dt>
+            {/* Die Weltleitfrage darf nicht ungerahmt stehen bleiben: sie fragt je nach Welt
+                nach Entscheidungen, Kurs oder Portfolio – alles Dinge, die genau diese Seite
+                bewusst NICHT beantwortet. Ohne den Zusatz erzeugt sie dieselbe unerfüllte
+                Erwartung, die der Lead für die Ortsleitfrage bereits ausräumt (Review-Fix). */}
+            <dd>
+              {world.leitfrage}
+              <span className="sv-item-note">
+                Diese Leitfrage rahmt die Erlebniswelt, nicht diese Seite: hier wird gezählt und
+                benannt.
+              </span>
+            </dd>
+          </dl>
+        </>
+      ) : (
+        /* NEUTRALER Zustand (WP-020 Slice 2, DR-0009): keine Rolle ist ein vollwertiger
+           Zustand – benannt statt leer, ohne erfundene Rollenangaben. */
+        <p className="tw-muted">
+          Keine Rolle gewählt – Sie arbeiten im neutralen Einstieg. Die Rollenwahl oben in der
+          Leiste ist optional; sie ändert nur Betonung und Reihenfolge der Abschnitte, nie die
+          Daten. In einer produktiven Umgebung käme die Rolle aus dem Konto; die freie Wahl ist eine
+          Eigenschaft dieser Demo.
+        </p>
+      )}
       <p className="tw-muted">
         Die Rolle ist in dieser Demo reine Perspektive: Sie ordnet die Abschnitte dieser Seite, und
         diese Reihenfolge ist keine Rangfolge. Sie entscheidet nicht über Zugriff – alle zwölf
-        Rollen sehen hier dieselben Daten desselben Mandanten (Dok. 06 06-D05). Rechte und
-        Zugriffskontrolle sind in dieser Demo nicht abgebildet.
+        Rollen und der neutrale Zustand sehen hier dieselben Daten desselben Mandanten (Dok. 06
+        06-D05). Rechte und Zugriffskontrolle sind in dieser Demo nicht abgebildet.
       </p>
 
       <h3>Aktiver Mandant</h3>

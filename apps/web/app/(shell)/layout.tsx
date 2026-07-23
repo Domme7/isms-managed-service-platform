@@ -31,11 +31,14 @@ export default function ShellLayout({ children }: { children: ReactNode }) {
       roles={DEMO_ROLES}
       tenants={DEMO_TENANTS}
       onSwitchRole={(roleId) => {
-        // Rolle wechseln, aktiven Mandanten beibehalten (Fallback: erster Mandant).
+        // Rolle wechseln oder abwählen (`null` = neutral, DR-0009); aktiver Mandant bleibt
+        // (Fallback: erster Mandant).
         signIn(roleId, session?.tenantId ?? DEMO_TENANTS[0]!.tenant_id);
       }}
       onSwitchTenant={(tenantId) => {
-        signIn(session?.roleId ?? DEMO_ROLES[0]!.id, tenantId);
+        // Mandant wechseln; eine gewählte Rolle bleibt gewählt, neutral bleibt neutral –
+        // der Wechsel erfindet keine Rolle (DR-0009).
+        signIn(session?.roleId ?? null, tenantId);
       }}
       onSignOut={() => {
         signOut();

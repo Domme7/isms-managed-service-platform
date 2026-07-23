@@ -22,12 +22,22 @@ import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 import { PortfolioOverview } from './PortfolioOverview';
 import { ServiceCard } from './ServiceCard';
 
-export function ServicesContent({ role, tenant }: { role: DemoRole; tenant: DemoTenant }) {
+export function ServicesContent({
+  role,
+  tenant,
+}: {
+  /** `null` = neutraler Zustand (DR-0009): Mandanten-Sicht identisch, Portfolio bleibt zu. */
+  role: DemoRole | null;
+  tenant: DemoTenant;
+}) {
   const services = getManagedServicesForTenant(tenant.tenant_id);
   const context = buildServicesPageContext(tenant.tenant_id);
   // Rollen-Gating der Portfolio-Sicht über das bestehende Welt-Mapping (Dok. 06 §5):
   // R08–R11 gehören zur Consulting & Service World. Reine UI-Verdichtung, keine Authz.
-  const isConsultingWorld = role.worldId === 'consulting';
+  // Im NEUTRALEN Zustand bleibt die Portfolio-Sicht zu: sie ist eine bewusst
+  // mandantenübergreifende Verdichtung der Service-Organisation (O-WP012-03) – ohne gewählte
+  // Rolle wird sie nicht angezeigt, der Hinweis darunter benennt den Weg.
+  const isConsultingWorld = role?.worldId === 'consulting';
 
   return (
     <>
@@ -92,9 +102,20 @@ export function ServicesContent({ role, tenant }: { role: DemoRole; tenant: Demo
           <div className="tw-empty" role="note">
             <p style={{ margin: 0 }}>
               Die mandantenübergreifende Portfolio-Sicht ist der Service-Organisation vorbehalten
-              (Consulting &amp; Service World, Rollen R08–R11, Dok. 06 §5). Ihre aktive Rolle{' '}
-              <strong>{role.name}</strong> gehört zur {worldForRole(role).name}. Demo-Hinweis: Das
-              ist eine reine Anzeige-Verdichtung je Rolle – keine Sicherheitsgrenze.
+              (Consulting &amp; Service World, Rollen R08–R11, Dok. 06 §5).{' '}
+              {role ? (
+                <>
+                  Ihre aktive Rolle <strong>{role.name}</strong> gehört zur{' '}
+                  {worldForRole(role).name}.
+                </>
+              ) : (
+                <>
+                  Es ist derzeit <strong>keine Rolle gewählt</strong> (neutraler Einstieg); über die
+                  Rollenwahl oben in der Leiste lässt sich eine dieser Rollen aktivieren.
+                </>
+              )}{' '}
+              Demo-Hinweis: Das ist eine reine Anzeige-Verdichtung je Rolle – keine
+              Sicherheitsgrenze.
             </p>
           </div>
         </section>

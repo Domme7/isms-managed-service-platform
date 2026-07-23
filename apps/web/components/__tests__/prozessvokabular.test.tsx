@@ -100,25 +100,27 @@ function pruefeVarianten(varianten: readonly RenderVariante[]): void {
   }
 }
 
-/** Mandantenmatrix der rollen-/mandantengebundenen Orte: alle Rollen auf Nordwerk (die Rahmung
- * ändert den Text je Erlebniswelt), dazu Kunden- und Betreiberrolle auf dem zweiten
- * ausmodellierten Mandanten und den beiden leeren Mandanten (Leerzustands-Text). */
+/** Mandantenmatrix der rollen-/mandantengebundenen Orte: alle Rollen PLUS der neutrale
+ * Zustand (WP-020 Slice 2, DR-0009 – auch seine Texte stehen unter dem Wächter) auf Nordwerk
+ * (die Rahmung ändert den Text je Erlebniswelt), dazu Kunden- und Betreiberrolle sowie
+ * neutral auf dem zweiten ausmodellierten Mandanten und den beiden leeren Mandanten
+ * (Leerzustands-Text). */
 function rollenMandantenMatrix(
   ort: string,
-  renderOrt: (r: DemoRole, t: DemoTenant) => RenderResult,
+  renderOrt: (r: DemoRole | null, t: DemoTenant) => RenderResult,
 ): RenderVariante[] {
   const varianten: RenderVariante[] = [];
-  for (const demoRole of DEMO_ROLES) {
+  for (const demoRole of [...DEMO_ROLES, null]) {
     varianten.push({
-      kontext: `${ort} · ${demoRole.id} · ${TENANT_ID.NORDWERK}`,
+      kontext: `${ort} · ${demoRole?.id ?? 'neutral'} · ${TENANT_ID.NORDWERK}`,
       render: () => renderOrt(demoRole, tenant(TENANT_ID.NORDWERK)),
     });
   }
   for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
-    for (const roleId of ['R01', 'R08']) {
+    for (const roleId of ['R01', 'R08', null]) {
       varianten.push({
-        kontext: `${ort} · ${roleId} · ${tenantId}`,
-        render: () => renderOrt(role(roleId), tenant(tenantId)),
+        kontext: `${ort} · ${roleId ?? 'neutral'} · ${tenantId}`,
+        render: () => renderOrt(roleId ? role(roleId) : null, tenant(tenantId)),
       });
     }
   }
@@ -161,12 +163,12 @@ const RENDERER_JE_LIVE_ORT = {
     })),
   ],
   // Rolle seit WP-020 Slice 1 (Kontextleiste zeigt die aktive Produktrolle): eine Kunden- und
-  // eine Betreiberrolle je Mandant – die Rolle ändert auf /isms keine Daten (06-D05), wohl aber
-  // den gerenderten Rollennamen in der Leiste.
+  // eine Betreiberrolle sowie der NEUTRALE Zustand (Slice 2) je Mandant – die Rolle ändert auf
+  // /isms keine Daten (06-D05), wohl aber den gerenderten Rollentext in der Leiste.
   isms: DEMO_TENANTS.flatMap((t) =>
-    ['R03', 'R08'].map((roleId) => ({
-      kontext: `/isms · ${roleId} · ${t.tenant_id}`,
-      render: () => render(<IsmsContent role={role(roleId)} tenant={t} />),
+    (['R03', 'R08', null] as const).map((roleId) => ({
+      kontext: `/isms · ${roleId ?? 'neutral'} · ${t.tenant_id}`,
+      render: () => render(<IsmsContent role={roleId ? role(roleId) : null} tenant={t} />),
     })),
   ),
   entscheidungen: rollenMandantenMatrix('/entscheidungen', (r, t) =>

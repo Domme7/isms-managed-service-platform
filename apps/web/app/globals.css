@@ -1250,6 +1250,25 @@ h3 {
 }
 
 /* =============================================================================
+   Neutraler Einstieg auf „Heute" (WP-020 Slice 2, DR-0009): Erstbesuchs-Hinweis
+   auf die optionale Rollenwahl – Teal als aktive Orientierung (Dok. 06
+   „Visuelles Designsystem"), Text + Rahmen, keine Animation.
+   ========================================================================== */
+.ht-neutral {
+  background: var(--shell-teal-soft);
+  border: 1px solid var(--shell-teal);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin: 0 0 1.25rem;
+}
+.ht-neutral-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #08403f;
+  max-width: 78ch;
+}
+
+/* =============================================================================
    Detailtiefe-Schalter auf „Heute" (WP-020 Slice 3, Dok. 06 „Detailtiefe"/P06).
    Auswahlzustand = Radio-Form + Rahmen + Text, nie nur Farbe (06-D11).
    ========================================================================== */

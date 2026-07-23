@@ -116,6 +116,22 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
     const executive = framingForRole('R01');
     const consulting = framingForRole('R08');
     expect(executive?.sectionOrder).not.toEqual(consulting?.sectionOrder);
+
+    // WP-020 Slice 2 (DR-0009): der NEUTRALE Zustand rendert rollenlos in KANONISCHER
+    // Reihenfolge – ohne Welt-Rahmung, mit demselben Ehrlichkeitsblock am Ende.
+    const { unmount } = render(
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
+      <MissionControlContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    expect(abschnittsTitel()).toEqual([
+      EBENE1_TITEL,
+      MISSION_SECTIONS.standort.title,
+      MISSION_SECTIONS.erfassung.title,
+      MISSION_SECTIONS.datenlage.title,
+      MISSION_SECTIONS.einstieg.title,
+      'Was hier bewusst nicht steht',
+    ]);
+    unmount();
   });
 
   it('zeigt den querschnittlichen Kontext: Rolle, Welt, Mandant, Scope und Datenstand', () => {
@@ -669,6 +685,36 @@ describe('MissionControlContent – identische Datenmenge über alle zwölf Roll
       unmount();
     }
   });
+
+  it('neutral zeigt dieselben Daten wie jede Rolle (Erweiterung WP-020 Slice 2, DR-0009)', () => {
+    // ERWEITERT, NICHT ABGESCHWÄCHT: der 12-Rollen-Vergleich oben bleibt unverändert; hier
+    // kommt der neutrale Zustand als dreizehnte Perspektive dazu. Einzige dokumentierte,
+    // selbst geprüfte Differenz: die Welt-Rahmungsnote der Rollen-Sicht (reine Rahmung der
+    // Erlebniswelt-Leitfrage, kein Datum) existiert im neutralen Zustand nicht – ohne Rolle
+    // gibt es keine Welt-Leitfrage, die gerahmt werden müsste.
+    const WELT_RAHMUNGSNOTE =
+      'Diese Leitfrage rahmt die Erlebniswelt, nicht diese Seite: hier wird gezählt und benannt.';
+
+    const rolleRender = render(
+      <MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const rolleProfil = datenprofil(rolleRender.container);
+    rolleRender.unmount();
+
+    const neutralRender = render(
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
+      <MissionControlContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const neutralProfil = datenprofil(neutralRender.container);
+    neutralRender.unmount();
+
+    // Die Ausnahme existiert wirklich (und genau einmal) – sonst verfällt sie still.
+    expect(rolleProfil.werte.filter((w) => w === WELT_RAHMUNGSNOTE)).toHaveLength(1);
+    expect(neutralProfil.werte).not.toContain(WELT_RAHMUNGSNOTE);
+
+    expect(neutralProfil.hrefs).toEqual(rolleProfil.hrefs);
+    expect(neutralProfil.werte).toEqual(rolleProfil.werte.filter((w) => w !== WELT_RAHMUNGSNOTE));
+  });
 });
 
 /* -----------------------------------------------------------------------------
@@ -743,8 +789,11 @@ const ERLAUBTE_NEGATIONEN = [
 const NUR_IM_LUECKENBLOCK = [/\bFrist/i, /fällig/i, /Priorität/i];
 
 describe('MissionControlContent – kein Score, keine Ampel, keine Empfehlung', () => {
-  it('enthält für keine der zwölf Rollen Bewertungsvokabular im sichtbaren Text', () => {
-    for (const demoRole of DEMO_ROLES) {
+  it('enthält für keine der zwölf Rollen und für neutral Bewertungsvokabular im sichtbaren Text', () => {
+    // WP-020 Slice 2: der NEUTRALE Zustand steht als dreizehnte Perspektive mit unter dem
+    // Wächter – seine Texte (Erstbesuchs-Hinweis, Neutral-Zeilen) dürfen genauso wenig werten.
+    for (const demoRole of [...DEMO_ROLES, null]) {
+      const kennung = demoRole?.id ?? 'neutral';
       for (const tenantId of [
         TENANT_ID.NORDWERK,
         TENANT_ID.CONSULTING_OPERATOR,
@@ -757,25 +806,38 @@ describe('MissionControlContent – kein Score, keine Ampel, keine Empfehlung', 
         for (const negation of ERLAUBTE_NEGATIONEN) {
           expect(
             text,
-            `${demoRole.id}/${tenantId}: die begründete Ausnahme „${negation}" steht nicht mehr im Text`,
+            `${kennung}/${tenantId}: die begründete Ausnahme „${negation}" steht nicht mehr im Text`,
           ).toContain(negation);
           text = text.split(negation).join(' ');
         }
         for (const muster of BEWERTUNG_VERBOTEN) {
           expect(
             muster.test(text),
-            `${demoRole.id}/${tenantId}: „${muster}" darf nicht im Text stehen`,
+            `${kennung}/${tenantId}: „${muster}" darf nicht im Text stehen`,
           ).toBe(false);
         }
 
         // Die vier Datenabschnitte ohne den Ehrlichkeitsblock.
         const klon = container.cloneNode(true) as HTMLElement;
         klon.querySelector('section[aria-labelledby="heute-luecke"]')?.remove();
-        const datentext = klon.textContent ?? '';
+        let datentext = klon.textContent ?? '';
+        // BEGRÜNDETE AUSNAHME (WP-020 Slice 2, AC 9): Die Kernverantwortung der aktiven Rolle
+        // ist seit dem Wortlaut-Abgleich das WÖRTLICHE PDF-Zitat aus Dok. 03, Spalte
+        // „Kernverantwortung" – für R02/R04 enthält es „Prioritäten"/„Priorität". Das ist die
+        // zitierte ROLLENBESCHREIBUNG, keine Priorisierung von Daten durch diese Seite. Muster
+        // wie die Quellen-Priorität in `entscheidungen.test.tsx`: die Ausnahme wird entfernt
+        // UND ihr Vorhandensein geprüft, damit sie nicht still verfällt oder verrutscht.
+        if (demoRole) {
+          expect(
+            datentext,
+            `${kennung}/${tenantId}: die zitierte Kernverantwortung steht nicht mehr im Text`,
+          ).toContain(demoRole.responsibility);
+          datentext = datentext.split(demoRole.responsibility).join(' ');
+        }
         for (const muster of NUR_IM_LUECKENBLOCK) {
           expect(
             muster.test(datentext),
-            `${demoRole.id}/${tenantId}: „${muster}" darf nicht in den Datenabschnitten stehen`,
+            `${kennung}/${tenantId}: „${muster}" darf nicht in den Datenabschnitten stehen`,
           ).toBe(false);
         }
         unmount();
@@ -941,6 +1003,70 @@ describe('HeuteView – Detailtiefe: Standardtiefe, Erreichbarkeit, Persistenz',
     for (const section of Object.values(MISSION_SECTIONS)) {
       expect(screen.queryByRole('heading', { level: 2, name: section.title })).toBeNull();
     }
+  });
+});
+
+/* -----------------------------------------------------------------------------
+ * 11b. Neutraler Einstieg (WP-020 Slice 2, DR-0009 – AC 6/7)
+ * --------------------------------------------------------------------------- */
+
+describe('HeuteView – neutraler Einstieg nach Anmeldung ohne Rollenwahl (AC 6)', () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
+  it('rendert ohne Rolle vollständig: gekennzeichnete neutrale Ebene 1 mit Erstbesuchs-Hinweis', () => {
+    // Exakt die Sitzung, die die Anmeldung seit DR-0009 schreibt: nur der Mandant.
+    window.localStorage.setItem(
+      SESSION_STORAGE_KEY,
+      serializeSession({ tenantId: TENANT_ID.NORDWERK }),
+    );
+    const { container } = render(
+      <SessionProvider>
+        <HeuteView />
+      </SessionProvider>,
+    );
+
+    // Keine Fehl-/Leerseite: die Ebene 1 steht komplett (Kacheln, Kontext, Grenzen).
+    expect(screen.getByRole('heading', { level: 1, name: 'Heute' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: EBENE1_TITEL })).toBeInTheDocument();
+    expect(container.querySelectorAll('.db-tile').length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Was hier bewusst nicht steht' }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Nicht angemeldet (Simulation)' })).toBeNull();
+
+    // Kennzeichnung + Erstbesuchs-Hinweis auf die OPTIONALE Rollenwahl (Dok. 04 J01:
+    // kein erzwungener Rundgang) – Klartext, kein Overlay.
+    const hinweis = container.querySelector('.ht-neutral');
+    expect(hinweis?.textContent).toContain('Neutraler strategischer Einstieg');
+    expect(hinweis?.textContent).toMatch(/oben in der Leiste/);
+    expect(hinweis?.textContent).toMatch(/jederzeit/);
+    expect(hinweis?.textContent).toMatch(/keinen erzwungenen Rundgang/);
+
+    // Kontextleiste nennt „neutral" statt einer erfundenen Rolle (AC 3).
+    const kontext = screen.getByRole('group', { name: 'Kontext dieser Seite' });
+    expect(kontext.textContent).toContain('neutral – keine Rolle gewählt');
+  });
+
+  it('mit gewählter Rolle verschwindet der Hinweis; die Abwahl kehrt zur neutralen Ebene 1 zurück (AC 7)', () => {
+    // Inhaltsseite der Reversibilität (der Topbar-Klickpfad liegt in shell.test.tsx):
+    // dieselbe Komponente, einmal mit Rolle, einmal neutral – der Hinweis folgt dem Zustand.
+    const mitRolle = render(
+      <MissionControlContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    expect(mitRolle.container.querySelector('.ht-neutral')).toBeNull();
+    mitRolle.unmount();
+
+    const neutral = render(
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
+      <MissionControlContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    expect(neutral.container.querySelector('.ht-neutral')).not.toBeNull();
+    // Der Standort-Abschnitt benennt den neutralen Zustand, statt Rollenfelder zu erfinden.
+    expect(neutral.container.textContent).toContain('Keine Rolle gewählt');
+    expect(neutral.container.textContent).not.toContain('Rollen-ID');
+    neutral.unmount();
   });
 });
 

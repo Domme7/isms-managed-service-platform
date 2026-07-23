@@ -1,18 +1,23 @@
 'use client';
 
 /**
- * `/login` – Login-Simulation (WP-011).
+ * `/login` – Login-Simulation (WP-011; Umbau WP-020 Slice 2 nach DR-0009).
  *
  * KEIN Passwort, KEINE echte Authentisierung/Autorisierung (`.claude/rules/security.md`, Dok. 19).
- * Der Nutzer wählt "als Rolle X bei Mandant Y anmelden"; die Auswahl wird im Client-Context
- * (localStorage) gespeichert und danach in die Shell (`/heute`) geführt.
+ * Der Nutzer wählt NUR den Mandanten (DR-0009: „Anmelden nur mit Mandant"); die Auswahl wird im
+ * Client-Context (localStorage) gespeichert und danach in die neutrale Ebene 1 (`/heute`)
+ * geführt. Die Rollenwahl lebt in der App (Topbar) und ist optional.
+ *
+ * BEWUSSTE ENTSCHEIDUNG (reversibel, im Fluss von DR-0009 begründet): Die Anmeldung startet
+ * IMMER neutral – auch wenn vorher eine Rolle gewählt war. „Mandant zuerst, Rolle in der App"
+ * gilt für jeden Anmeldevorgang; eine still übernommene Alt-Rolle wäre ein unangekündigter
+ * Modus. Eine BESTEHENDE Sitzung wird davon nicht berührt (nur der Submit schreibt).
  *
  * Eigene, schlichte Seitenstruktur (außerhalb der Shell-Gruppe) mit eigenem `main` + Skip-Link.
  */
 import { useRouter } from 'next/navigation';
 import { LoginForm } from '../../components/shell/LoginForm';
 import { useSession } from '../../components/shell/SessionProvider';
-import { DEMO_ROLES } from '../../lib/shell/roles';
 import { defaultSession } from '../../lib/shell/session';
 import { DEMO_TENANTS } from '@isms/demo-seed';
 
@@ -33,19 +38,18 @@ export default function LoginPage() {
           <h1>Anmelden – Simulation</h1>
 
           <div className="login-demo-notice" role="note">
-            <strong>Demo — simulierte Rolle/Anmeldung, keine echte Sicherheit.</strong> Es gibt kein
+            <strong>Demo — simulierte Anmeldung, keine echte Sicherheit.</strong> Es gibt kein
             Passwort und keine Zugriffskontrolle. Die Auswahl bestimmt nur die Perspektive auf ein
             gemeinsames, synthetisches Datenmodell. Echte Authentisierung und serverseitige
             Mandantentrennung folgen in einem späteren Work Package (Dok. 19).
           </div>
 
           <LoginForm
-            roles={DEMO_ROLES}
             tenants={DEMO_TENANTS}
-            defaultRoleId={initial.roleId}
             defaultTenantId={initial.tenantId}
-            onSubmit={(roleId, tenantId) => {
-              signIn(roleId, tenantId);
+            onSubmit={(tenantId) => {
+              // Neutraler Einstieg (DR-0009): keine Rolle beim Anmelden – Wahl in der App.
+              signIn(null, tenantId);
               router.push('/heute');
             }}
           />

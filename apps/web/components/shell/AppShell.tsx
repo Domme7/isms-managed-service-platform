@@ -39,11 +39,16 @@ import type { ResolvedSession } from '../../lib/shell/session';
 /** Eine vollzogene, anzukündigende Kontextänderung (Mandant oder Rolle/Modus). */
 interface ContextChange {
   readonly kind: 'tenant' | 'role';
-  /** Anzeigename des vorherigen Kontexts (Mandant bzw. „R0x · Rolle"). */
+  /** Kurztitel des Moduswechsels („Rolle gewechselt" / „Rolle gewählt" / „Rolle abgewählt"). */
+  readonly titel?: string;
+  /** Anzeigename des vorherigen Kontexts (Mandant, „R0x · Rolle" oder neutral). */
   readonly from: string;
   /** Anzeigename des neuen Kontexts. */
   readonly to: string;
 }
+
+/** Anzeigename des neutralen Zustands in Wechsel-Rückmeldungen (DR-0009). */
+const NEUTRAL_ANZEIGE = 'neutraler Einstieg (keine Rolle)';
 
 export function AppShell({
   places,
@@ -63,7 +68,8 @@ export function AppShell({
   hydrated: boolean;
   roles: readonly DemoRole[];
   tenants: readonly DemoTenant[];
-  onSwitchRole: (roleId: string) => void;
+  /** `null` = Rolle abwählen (neutraler Zustand, DR-0009). */
+  onSwitchRole: (roleId: string | null) => void;
   onSwitchTenant: (tenantId: string) => void;
   onSignOut: () => void;
   children: ReactNode;
@@ -115,23 +121,34 @@ export function AppShell({
   /**
    * Rollenwechsel = sichtbarer Moduswechsel (Dok. 06, Abschnitt „Rollenwechsel"): er ändert
    * Betonung und Reihenfolge, „nicht rückwirkend Daten, Verantwortlichkeiten oder Decision
-   * Records".
+   * Records". Seit WP-020 Slice 2 (DR-0009) gehören auch die Übergänge neutral→Rolle
+   * („Rolle gewählt") und Rolle→neutral („Rolle abgewählt") dazu – beide werden in der
+   * Rückmeldung sauber benannt. ZUKUNFTSSICHERHEIT: In einer produktiven Umgebung käme die
+   * Rolle aus dem Konto (Dok. 19); die freie Wahl inklusive „neutral" ist Demo-Eigenschaft.
    *
    * // PFLICHT-ANKER O-WP020-04 – „Kritische Aktionen speichern die aktive Rolle mit"
    * // (Dok. 06, Abschnitt „Rollenwechsel", wörtlich). Im heutigen read-only-Produkt existiert
    * // keine kritische Aktion (kein Schreiben, keine Freigabe, kein Export). Jedes KÜNFTIGE
    * // Work Package, das eine schreibende oder freigebende Aktion einführt, MUSS beim Auslösen
-   * // dieser Aktion die dann aktive Rolle (`session.role.id`) in den Aktions-/Audit-Datensatz
-   * // schreiben. Dieser Anker ist die verbindliche Erinnerung daran – er darf nur zusammen mit
-   * // einer Umsetzung entfernt werden.
+   * // dieser Aktion die dann aktive Rolle (`session.role?.id` – im neutralen Zustand:
+   * // „keine Rolle gewählt") in den Aktions-/Audit-Datensatz schreiben; ob eine kritische
+   * // Aktion im NEUTRALEN Zustand überhaupt zulässig ist, MUSS dieses Work Package explizit
+   * // entscheiden. Dieser Anker ist die verbindliche Erinnerung daran – er darf nur zusammen
+   * // mit einer Umsetzung entfernt werden.
    */
-  function switchRole(roleId: string): void {
-    if (!session || roleId === session.role.id) return;
-    const toRole = roles.find((r) => r.id === roleId);
-    if (!toRole) return;
-    const from = `${session.role.id} · ${session.role.name}`;
+  function switchRole(roleId: string | null): void {
+    if (!session) return;
+    const currentId = session.role?.id ?? null;
+    if (roleId === currentId) return;
+    const toRole = roleId !== null ? roles.find((r) => r.id === roleId) : null;
+    if (roleId !== null && !toRole) return;
+
+    const from = session.role ? `${session.role.id} · ${session.role.name}` : NEUTRAL_ANZEIGE;
+    const to = toRole ? `${toRole.id} · ${toRole.name}` : NEUTRAL_ANZEIGE;
+    const titel =
+      session.role === null ? 'Rolle gewählt' : toRole ? 'Rolle gewechselt' : 'Rolle abgewählt';
     onSwitchRole(roleId);
-    setContextChange({ kind: 'role', from, to: `${toRole.id} · ${toRole.name}` });
+    setContextChange({ kind: 'role', titel, from, to });
   }
 
   function signOut(): void {
@@ -219,7 +236,7 @@ export function AppShell({
                 </>
               ) : (
                 <>
-                  <strong>Moduswechsel – Rolle gewechselt:</strong> von{' '}
+                  <strong>Moduswechsel – {contextChange.titel ?? 'Rolle gewechselt'}:</strong> von{' '}
                   <strong>{contextChange.from}</strong> zu <strong>{contextChange.to}</strong>. Die
                   Rolle ändert Blickwinkel und Reihenfolge der Ansichten – Daten und Mandant bleiben
                   unverändert.

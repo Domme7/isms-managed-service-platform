@@ -10,6 +10,7 @@ import { DEMO_TENANTS, TENANT_ID } from '@isms/demo-seed';
 import { NAV_PLACES, activePlaceId, getPlace } from '../places';
 import { DEMO_ROLES, getRole, worldForRole } from '../roles';
 import {
+  SESSION_STORAGE_KEY,
   defaultSession,
   parseSession,
   resolveSession,
@@ -114,6 +115,26 @@ describe('DEMO_ROLES – kanonisches Rollenmodell R01–R12 (Dok. 03 §3)', () =
     ]);
   });
 
+  it('trägt je Rolle den WÖRTLICHEN PDF-Text der Spalte „Kernverantwortung" (WP-020 AC 9)', () => {
+    // Wortlaut aus Dok. 03, Abschnitt „Kanonisches Rollenmodell" (PDF-Extrakt, Regel Null) –
+    // hier festgenagelt, damit die Strings nicht wieder still zu Kurzfassungen driften
+    // (Übergabepunkt 9 aus WP-019: die Alt-Fassungen waren gekürzt).
+    expect(DEMO_ROLES.map((r) => r.responsibility)).toEqual([
+      'Strategische Entscheidungen, Risikoakzeptanz, Budget und Managementkommunikation',
+      'Sicherheitssteuerung, Eskalation, Prioritäten und Managementübersetzung',
+      'Operativer ISMS-Betrieb, Koordination, Reviews, Maßnahmen und Nachweise',
+      'Geschäftsauswirkung, Schutzbedarf, Priorität und Risikoentscheidung',
+      'Umsetzung und Wirksamkeit konkreter Assets oder Controls',
+      'Nachweise, Statusupdates und fachliche Zuarbeit',
+      'Prüfung, Stichprobe, Feststellung und Nachvollziehbarkeit',
+      'Serviceportfolio, Qualität, Kapazität, Profitabilität und Eskalation',
+      'Mandantenbeziehung, Scope, Termine, Entscheidungen und Delivery-Steuerung',
+      'Analyse, Moderation, Maßnahmensteuerung, Reporting und Beratung',
+      'Spezialanalyse etwa Cloud, IAM, BCM, Supplier Risk oder Threats',
+      'Nutzer, Rollen, Konfiguration, Integrationen und Betriebsfähigkeit',
+    ]);
+  });
+
   it('ordnet jede Rolle einer der vier Erlebniswelten zu (Dok. 06 §5)', () => {
     for (const role of DEMO_ROLES) {
       expect(worldForRole(role).name).toMatch(/World/);
@@ -127,27 +148,63 @@ describe('DEMO_ROLES – kanonisches Rollenmodell R01–R12 (Dok. 03 §3)', () =
   });
 });
 
-describe('Session – defensive Auflösung (KEINE Sicherheitsgrenze)', () => {
-  it('serialisiert und parst eine gültige Auswahl verlustfrei', () => {
+describe('Session – defensive Auflösung (KEINE Sicherheitsgrenze; neutral seit WP-020 Slice 2)', () => {
+  it('serialisiert und parst eine gültige Auswahl MIT Rolle verlustfrei', () => {
     const session: DemoSession = { roleId: 'R03', tenantId: TENANT_ID.NORDWERK };
     expect(parseSession(serializeSession(session))).toEqual(session);
+  });
+
+  it('serialisiert und parst die NEUTRALE Auswahl (ohne roleId) verlustfrei', () => {
+    const session: DemoSession = { tenantId: TENANT_ID.NORDWERK };
+    const raw = serializeSession(session);
+    // Im neutralen Zustand wird KEIN roleId-Feld geschrieben (kein `roleId: undefined`).
+    expect(raw).not.toContain('roleId');
+    expect(parseSession(raw)).toEqual(session);
+  });
+
+  it('AC 8: verwirft keine gültige Alt-Sitzung – das v1-Format mit Rolle bleibt lesbar', () => {
+    // Exakt das Alt-Format, wie es VOR WP-020 Slice 2 im localStorage lag (Literal, damit
+    // eine künftige serializeSession-Änderung diesen Beweis nicht still mitzieht).
+    const altWert = `{"roleId":"R03","tenantId":"${TENANT_ID.NORDWERK}"}`;
+    expect(parseSession(altWert)).toEqual({ roleId: 'R03', tenantId: TENANT_ID.NORDWERK });
+    // … und der Schlüssel ist unverändert (Obermengen-Format, Begründung in session.ts).
+    expect(SESSION_STORAGE_KEY).toBe('isms-demo-session-v1');
+  });
+
+  it('AC 8: erfindet keine Rolle – neutral bleibt neutral, unbekannte Rolle wird verworfen', () => {
+    // Neutral wird NICHT zu einer Default-Rolle aufgefüllt …
+    expect(resolveSession({ tenantId: TENANT_ID.NORDWERK })?.role).toBeNull();
+    // … und eine unbekannte Rolle wird NICHT still zu neutral degradiert (unangekündigter
+    // Moduswechsel), sondern die Auswahl wird vollständig verworfen.
+    expect(
+      parseSession(JSON.stringify({ roleId: 'R99', tenantId: TENANT_ID.NORDWERK })),
+    ).toBeNull();
   });
 
   it('verwirft ungültiges/leeres oder unauflösbares JSON', () => {
     expect(parseSession(null)).toBeNull();
     expect(parseSession('nicht-json')).toBeNull();
     expect(parseSession(JSON.stringify({ roleId: 'R99', tenantId: 'tenant-x' }))).toBeNull();
+    expect(parseSession(JSON.stringify({ tenantId: 'tenant-unbekannt' }))).toBeNull();
+    expect(parseSession(JSON.stringify({ roleId: 42, tenantId: TENANT_ID.NORDWERK }))).toBeNull();
   });
 
-  it('löst Rolle und Mandant zu Anzeigeobjekten auf', () => {
+  it('löst Rolle und Mandant zu Anzeigeobjekten auf; neutral löst mit role null auf', () => {
     const resolved = resolveSession({ roleId: 'R01', tenantId: TENANT_ID.NORDWERK });
-    expect(resolved?.role.name).toBe('Executive Sponsor');
+    expect(resolved?.role?.name).toBe('Executive Sponsor');
     expect(resolved?.tenant.display_name).toBe('Nordwerk Manufacturing SE');
+
+    const neutral = resolveSession({ tenantId: TENANT_ID.NORDWERK });
+    expect(neutral).not.toBeNull();
+    expect(neutral?.role).toBeNull();
+    expect(neutral?.tenant.display_name).toBe('Nordwerk Manufacturing SE');
   });
 
-  it('defaultSession verweist auf reale erste Rolle + ersten Mandanten', () => {
+  it('defaultSession ist der NEUTRALE Einstieg beim ersten Mandanten (DR-0009)', () => {
+    // WP-020 Slice 2 (geplanter Umbau): vorher zeigte die Vorauswahl auf die erste Rolle –
+    // seit DR-0009 wird ohne Rolle angemeldet; die Regel „real auflösbar" bleibt geprüft.
     const d = defaultSession();
-    expect(d.roleId).toBe(DEMO_ROLES[0]!.id);
+    expect(d.roleId).toBeUndefined();
     expect(d.tenantId).toBe(DEMO_TENANTS[0]!.tenant_id);
     expect(resolveSession(d)).not.toBeNull();
   });

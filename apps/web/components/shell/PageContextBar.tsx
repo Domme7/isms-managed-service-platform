@@ -43,6 +43,13 @@ import type { DemoRole } from '../../lib/shell/roles';
  * damit die Formulierung nirgends still auseinanderläuft; per Wächtertest je Ort belegt.
  * Jeder Text benennt die Lücke UND ihre Ursache – es wird kein Wert erfunden (DR-0005).
  */
+/**
+ * Anzeige der aktiven Produktrolle im NEUTRALEN Zustand (WP-020 Slice 2, DR-0009) – EINE
+ * Quelle für alle Live-Hauptseiten, per Wächtertest belegt. Neutral ist ein vollwertiger
+ * Zustand, keine Datenlücke: die Rollenwahl ist in der Demo bewusst optional.
+ */
+export const CONTEXT_NEUTRAL_ROLE = 'neutral – keine Rolle gewählt';
+
 export const CONTEXT_GAPS = {
   vertretung:
     'nicht erfasst – die Anmelde-Simulation speichert nur Rolle und Mandant; eine zeitlich ' +
@@ -66,8 +73,8 @@ export function PageContextBar({
   datenstandValue,
   children,
 }: {
-  /** Aktive Produktrolle der Session-Simulation (heute immer gesetzt, WP-011). */
-  role: DemoRole;
+  /** Aktive Produktrolle der Session-Simulation; `null` = neutraler Zustand (DR-0009). */
+  role: DemoRole | null;
   /** Aktiver Mandant der Session-Simulation. */
   tenant: DemoTenant;
   /** Seitenspezifisches Label des Scope-/Objektkontexts (Element 3), z. B. „Scope-Kennungen". */
@@ -92,7 +99,9 @@ export function PageContextBar({
       </div>
       <div>
         <dt>Aktive Produktrolle</dt>
-        <dd>{`${role.id} · ${role.name}`}</dd>
+        {/* AC-3-Formulierung: „Rolle (oder ‚neutral')" – neutral ist ein Zustand, kein Wert-
+            Ausfall, und wird deshalb NICHT als Datenlücke gestylt. */}
+        <dd>{role ? `${role.id} · ${role.name}` : CONTEXT_NEUTRAL_ROLE}</dd>
       </div>
       <div>
         <dt>Vertretung (zeitlich begrenzt)</dt>

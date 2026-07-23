@@ -1,28 +1,51 @@
 /**
- * Render-/Smoke-Tests der App-Shell & Login-Simulation (WP-011, Acceptance).
+ * Render-/Smoke-Tests der App-Shell & Login-Simulation (WP-011, Acceptance; Einstiegsfluss
+ * WP-020 Slice 2 nach DR-0009).
  *
- * Prüft an den präsentationalen Komponenten (ohne Router-Mocks) gegen echte Quellen:
+ * Prüft an den präsentationalen Komponenten gegen echte Quellen:
  *  1. Shell rendert die acht Nav-Orte; aktiver Ort markiert.
  *  2. Aktive Rolle + Mandant erscheinen in der Topbar; Wechsel löst Callback aus.
  *  3. Twin Explorer ist innerhalb der Shell erreichbar (eingebettet unter „Kunden").
- *  4. Login-Simulation: Rolle + Mandant wählbar, Submit liefert die gewählten IDs (kein Passwort).
- *  5. Eine Platzhalterseite zeigt ihre klare Empty-Message.
+ *  4. Login-Simulation (AC 5): NUR der Mandant ist wählbar – keine Rollenauswahl, kein
+ *     Passwort; Submit liefert die Mandanten-ID; die Seite bleibt als Simulation beschriftet.
+ *  5. Rollenwahl in der App (AC 7): Topbar führt „neutral · keine Rolle"; Wahl und Abwahl
+ *     feuern den Callback; die Moduswechsel-Rückmeldung benennt neutral↔Rolle sauber.
+ *  6. Eine Platzhalterseite zeigt ihre klare Empty-Message.
  */
 import type { ReactNode } from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DEMO_TENANTS, TENANT_ID } from '@isms/demo-seed';
 import { AppShell } from '../AppShell';
 import { LoginForm } from '../LoginForm';
 import { PlaceholderPage } from '../PlaceholderPage';
+import { SessionProvider } from '../SessionProvider';
 import { NAV_PLACES, getPlace } from '../../../lib/shell/places';
-import { DEMO_ROLES, getRole } from '../../../lib/shell/roles';
-import { resolveSession, type ResolvedSession } from '../../../lib/shell/session';
+import { DEMO_ROLES } from '../../../lib/shell/roles';
+import {
+  SESSION_STORAGE_KEY,
+  parseSession,
+  resolveSession,
+  type ResolvedSession,
+} from '../../../lib/shell/session';
 import { TenantOverview } from '../../twin/TenantOverview';
+import LoginPage from '../../../app/login/page';
+
+// Router-Mock NUR für den LoginPage-Test (AC 5): die Seite ruft `useRouter().push` nach dem
+// Submit. Kein weiterer Testling dieser Datei nutzt next/navigation.
+const routerPush = vi.fn();
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: routerPush }),
+}));
 
 const EXECUTIVE_NORDWERK = resolveSession({
   roleId: 'R01',
+  tenantId: TENANT_ID.NORDWERK,
+}) as ResolvedSession;
+
+/** Neutrale Sitzung (DR-0009): Mandant ohne Rolle – ein vollwertiger Zustand. */
+const NEUTRAL_NORDWERK = resolveSession({
   tenantId: TENANT_ID.NORDWERK,
 }) as ResolvedSession;
 
@@ -218,6 +241,53 @@ describe('AppShell – Rollenwechsel als sichtbarer Moduswechsel (Dok. 06 „Rol
     // Und sie sagt, was der Wechsel NICHT ändert (keine rückwirkende Datenänderung).
     expect(status.textContent).toMatch(/Daten und Mandant bleiben unverändert/);
   });
+
+  it('AC 7: die Topbar führt „neutral · keine Rolle" – die Abwahl feuert null und wird benannt', () => {
+    const props = renderShell();
+    const roleSelect = screen.getByLabelText<HTMLSelectElement>(
+      'Aktive Rolle wechseln (Simulation)',
+    );
+    // Neutral steht als erste Option im Wechsler (Einstiegszustand, keine dreizehnte Rolle).
+    expect(
+      within(roleSelect).getByRole<HTMLOptionElement>('option', { name: 'neutral · keine Rolle' }),
+    ).toBeInTheDocument();
+
+    fireEvent.change(roleSelect, { target: { value: '' } });
+    expect(props.onSwitchRole).toHaveBeenCalledWith(null);
+
+    // Die Rückmeldung benennt den Übergang Rolle → neutral sauber („Rolle abgewählt").
+    const status = screen.getByRole('status');
+    expect(status.textContent).toContain('Rolle abgewählt');
+    expect(status.textContent).toContain('R01 · Executive Sponsor');
+    expect(status.textContent).toContain('neutraler Einstieg (keine Rolle)');
+    expect(status.textContent).toMatch(/Daten und Mandant bleiben unverändert/);
+  });
+
+  it('AC 7: aus dem neutralen Zustand benennt die Rückmeldung die Wahl („Rolle gewählt")', () => {
+    const props = renderShell({ session: NEUTRAL_NORDWERK });
+    const roleSelect = screen.getByLabelText<HTMLSelectElement>(
+      'Aktive Rolle wechseln (Simulation)',
+    );
+    // Im neutralen Zustand zeigt der Wechsler neutral als aktive Auswahl.
+    expect(roleSelect.value).toBe('');
+
+    fireEvent.change(roleSelect, { target: { value: 'R03' } });
+    expect(props.onSwitchRole).toHaveBeenCalledWith('R03');
+
+    const status = screen.getByRole('status');
+    expect(status.textContent).toContain('Rolle gewählt');
+    expect(status.textContent).toContain('neutraler Einstieg (keine Rolle)');
+    expect(status.textContent).toContain('R03 · ISMS Manager');
+  });
+
+  it('die erneute Auswahl von neutral im neutralen Zustand feuert nichts (kein Schein-Wechsel)', () => {
+    const props = renderShell({ session: NEUTRAL_NORDWERK });
+    fireEvent.change(screen.getByLabelText('Aktive Rolle wechseln (Simulation)'), {
+      target: { value: '' },
+    });
+    expect(props.onSwitchRole).not.toHaveBeenCalled();
+    expect(screen.getByRole('status').textContent).toBe('');
+  });
 });
 
 describe('AppShell – Twin Explorer eingebettet unter „Kunden"', () => {
@@ -236,21 +306,21 @@ describe('AppShell – Twin Explorer eingebettet unter „Kunden"', () => {
   });
 });
 
-describe('LoginForm – Rolle + Mandant wählbar, kein Passwort', () => {
-  it('bietet Rollen (R01–R12) und alle vier Mandanten zur Auswahl', () => {
+describe('LoginForm – NUR der Mandant ist wählbar (WP-020 AC 5, DR-0009)', () => {
+  it('bietet alle vier Mandanten, aber KEINE Rollenauswahl und kein Passwortfeld', () => {
     render(
-      <LoginForm
-        roles={DEMO_ROLES}
-        tenants={DEMO_TENANTS}
-        defaultRoleId="R01"
-        defaultTenantId={TENANT_ID.NORDWERK}
-        onSubmit={vi.fn()}
-      />,
+      <LoginForm tenants={DEMO_TENANTS} defaultTenantId={TENANT_ID.NORDWERK} onSubmit={vi.fn()} />,
     );
-    // Rolle als Radio-Auswahl (kein Passwortfeld).
     expect(screen.queryByLabelText(/passwort/i)).not.toBeInTheDocument();
-    expect(screen.getByRole('radio', { name: /Executive Sponsor/ })).toBeInTheDocument();
-    expect(screen.getByRole('radio', { name: /Auditor/ })).toBeInTheDocument();
+    // Die Rollenwahl ist vom Login verschwunden (DR-0009: „Anmelden nur mit Mandant") –
+    // keine Radios, keine Rollen-IDs, keine Rollennamen im Formular.
+    expect(screen.queryAllByRole('radio')).toHaveLength(0);
+    for (const role of DEMO_ROLES) {
+      expect(screen.queryByText(role.id)).not.toBeInTheDocument();
+      expect(screen.queryByText(role.name)).not.toBeInTheDocument();
+    }
+    // Der Hinweis benennt den neutralen Einstieg und die spätere, optionale Rollenwahl.
+    expect(screen.getByText(/neutralen strategischen Einstieg/)).toBeInTheDocument();
     // Alle vier Mandanten als Optionen.
     for (const tenant of DEMO_TENANTS) {
       expect(
@@ -259,26 +329,72 @@ describe('LoginForm – Rolle + Mandant wählbar, kein Passwort', () => {
     }
   });
 
-  it('meldet beim Submit die gewählte Rolle + Mandant (kein echtes Auth)', () => {
+  it('meldet beim Submit NUR die Mandanten-ID (kein echtes Auth, keine Rolle)', () => {
     const onSubmit = vi.fn();
     render(
-      <LoginForm
-        roles={DEMO_ROLES}
-        tenants={DEMO_TENANTS}
-        defaultRoleId="R01"
-        defaultTenantId={TENANT_ID.NORDWERK}
-        onSubmit={onSubmit}
-      />,
+      <LoginForm tenants={DEMO_TENANTS} defaultTenantId={TENANT_ID.NORDWERK} onSubmit={onSubmit} />,
     );
 
-    fireEvent.click(screen.getByRole('radio', { name: /Auditor/ }));
     fireEvent.change(screen.getByLabelText('Mandant wählen'), {
       target: { value: TENANT_ID.FINOVIA },
     });
-    // Der Submit-Button spiegelt die Auswahl im Klartext.
-    const auditor = getRole('R07')!;
-    fireEvent.click(screen.getByRole('button', { name: new RegExp(`Als ${auditor.name} bei`) }));
-    expect(onSubmit).toHaveBeenCalledWith('R07', TENANT_ID.FINOVIA);
+    // Der Submit-Button spiegelt die Auswahl im Klartext – ohne Rollenbehauptung.
+    fireEvent.click(screen.getByRole('button', { name: 'Bei Finovia Digital Bank AG anmelden' }));
+    expect(onSubmit).toHaveBeenCalledWith(TENANT_ID.FINOVIA);
+  });
+});
+
+describe('LoginPage – Simulation beschriftet, Anmeldung erzeugt die NEUTRALE Sitzung (AC 5/6)', () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+    routerPush.mockClear();
+  });
+
+  it('bleibt als Simulation beschriftet und enthält keine Rollenauswahl', () => {
+    render(
+      <SessionProvider>
+        <LoginPage />
+      </SessionProvider>,
+    );
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Anmelden – Simulation' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/keine echte Sicherheit/i)).toBeInTheDocument();
+    expect(screen.queryAllByRole('radio')).toHaveLength(0);
+  });
+
+  it('schreibt beim Anmelden eine ROLLENLOSE Sitzung und führt nach /heute', () => {
+    render(
+      <SessionProvider>
+        <LoginPage />
+      </SessionProvider>,
+    );
+    fireEvent.change(screen.getByLabelText('Mandant wählen'), {
+      target: { value: TENANT_ID.NORDWERK },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /anmelden$/i }));
+
+    const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
+    expect(gespeichert).toEqual({ tenantId: TENANT_ID.NORDWERK });
+    expect(gespeichert?.roleId).toBeUndefined();
+    expect(routerPush).toHaveBeenCalledWith('/heute');
+  });
+
+  it('startet auch nach einer Alt-Sitzung MIT Rolle neutral (Mandant zuerst, Rolle in der App)', () => {
+    window.localStorage.setItem(
+      SESSION_STORAGE_KEY,
+      `{"roleId":"R03","tenantId":"${TENANT_ID.NORDWERK}"}`,
+    );
+    render(
+      <SessionProvider>
+        <LoginPage />
+      </SessionProvider>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: /anmelden$/i }));
+
+    const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
+    expect(gespeichert?.roleId).toBeUndefined();
+    expect(gespeichert?.tenantId).toBe(TENANT_ID.NORDWERK);
   });
 });
 

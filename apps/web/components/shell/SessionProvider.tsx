@@ -21,14 +21,17 @@ import {
 } from '../../lib/shell/session';
 
 interface SessionContextValue {
-  /** Rohe Auswahl (Rollen-/Mandanten-ID) oder `null`, wenn nicht "angemeldet". */
+  /** Rohe Auswahl (Mandant + optionale Rolle) oder `null`, wenn nicht "angemeldet". */
   readonly session: DemoSession | null;
-  /** Auf Rolle+Mandant aufgelöste Auswahl (oder `null`). */
+  /** Aufgelöste Auswahl (oder `null`); `resolved.role === null` ist der neutrale Zustand. */
   readonly resolved: ResolvedSession | null;
   /** `true`, sobald `localStorage` einmal gelesen wurde (verhindert Flackern/SSR-Mismatch). */
   readonly hydrated: boolean;
-  /** Rolle + Mandant setzen ("anmelden"/wechseln). */
-  readonly signIn: (roleId: string, tenantId: string) => void;
+  /**
+   * Mandant + optionale Rolle setzen ("anmelden"/wechseln). `roleId: null` = neutraler
+   * Zustand (DR-0009: Rollenwahl ist optional und lebt in der App).
+   */
+  readonly signIn: (roleId: string | null, tenantId: string) => void;
   /** Auswahl verwerfen ("abmelden"). */
   readonly signOut: () => void;
 }
@@ -50,9 +53,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setHydrated(true);
   }, []);
 
-  const signIn = useCallback((roleId: string, tenantId: string) => {
-    const next: DemoSession = { roleId, tenantId };
-    // Defensiv (WP-011 Code-Review-Nit): nur setzen, wenn Rolle+Mandant real auflösbar sind.
+  const signIn = useCallback((roleId: string | null, tenantId: string) => {
+    const next: DemoSession = roleId !== null ? { roleId, tenantId } : { tenantId };
+    // Defensiv (WP-011 Code-Review-Nit): nur setzen, wenn die Auswahl real auflösbar ist
+    // (Mandant bekannt; eine GESETZTE Rolle bekannt – neutral ist immer auflösbar).
     if (!resolveSession(next)) return;
     setSession(next);
     try {

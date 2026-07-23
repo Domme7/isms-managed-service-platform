@@ -77,7 +77,14 @@ function ValidRange({ from, to }: { from: string; to?: string | null }) {
  * Seite
  * --------------------------------------------------------------------------- */
 
-export function EntscheidungenContent({ role, tenant }: { role: DemoRole; tenant: DemoTenant }) {
+export function EntscheidungenContent({
+  role,
+  tenant,
+}: {
+  /** `null` = neutraler Zustand (DR-0009) – reine Anzeige in der Kontextleiste, kein Gating. */
+  role: DemoRole | null;
+  tenant: DemoTenant;
+}) {
   const model = buildDecisionRegister(tenant.tenant_id);
   const place = getPlace('entscheidungen');
 
@@ -174,7 +181,7 @@ export function EntscheidungenContent({ role, tenant }: { role: DemoRole; tenant
  * (`record_time.recorded_at`, Dok. 07 §11) und wird nicht mit der fachlichen Gültigkeit
  * vermischt. Die Rolle ist reine Perspektive (WP-011) – sie ändert keine Daten dieser Seite.
  */
-function ContextBar({ model, role }: { model: DecisionRegisterModel; role: DemoRole }) {
+function ContextBar({ model, role }: { model: DecisionRegisterModel; role: DemoRole | null }) {
   return (
     <PageContextBar
       role={role}

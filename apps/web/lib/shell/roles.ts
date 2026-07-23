@@ -1,13 +1,17 @@
 /**
- * Kanonisches Rollenmodell der Login-/Rollensimulation (WP-011).
+ * Kanonisches Rollenmodell der Rollensimulation (WP-011; Wortlaut-Abgleich WP-020 Slice 2).
  *
- * QUELLE (verbindlich, nichts erfunden):
- *  - Rollen R01–R12 wörtlich aus Dok. 03 v1.0 §3 ("Kanonisches Rollenmodell").
- *  - Zuordnung Rolle → Erlebniswelt aus Dok. 06 v1.0 §5 ("Rollenbezogene Erlebniswelten").
+ * QUELLE (Regel Null, am PDF gegengelesen – nichts erfunden):
+ *  - Rollen R01–R12 wörtlich aus Dok. 03, Abschnitt „Kanonisches Rollenmodell" (Tabelle
+ *    ID/Produktrolle/Sphäre/Kernverantwortung). Die `responsibility`-Strings sind seit
+ *    WP-020 Slice 2 der WÖRTLICHE PDF-Text der Spalte „Kernverantwortung" (vorher gekürzte
+ *    Alt-Fassungen – Übergabepunkt 9 aus WP-019).
+ *  - Zuordnung Rolle → Erlebniswelt aus Dok. 06, Abschnitt „Rollenbezogene Erlebniswelten".
  *
  * WICHTIG: Diese Datei bildet ausschließlich Demo-Navigation ab. Sie ist KEINE
  * Autorisierung und KEINE Sicherheitsgrenze (Dok. 19 / `.claude/rules/security.md`).
- * Die aktive Rolle ist reine Perspektive auf ein gemeinsames Datenmodell (Dok. 06 P02/06-D05).
+ * Die aktive Rolle ist reine Perspektive auf ein gemeinsames Datenmodell (Dok. 06 P02/06-D05);
+ * seit DR-0009 ist sie außerdem OPTIONAL (neutraler Einstieg, `lib/shell/session.ts`).
  */
 
 /** Die vier rollenbezogenen Erlebniswelten (Dok. 06 §5). */
@@ -72,84 +76,85 @@ export const DEMO_ROLES: readonly DemoRole[] = [
     id: 'R01',
     name: 'Executive Sponsor',
     sphere: 'Kunde',
-    responsibility: 'Risiko-, Budget- und Zielentscheidungen',
+    responsibility:
+      'Strategische Entscheidungen, Risikoakzeptanz, Budget und Managementkommunikation',
     worldId: 'executive',
   },
   {
     id: 'R02',
     name: 'CISO / Security Lead',
     sphere: 'Kunde',
-    responsibility: 'Sicherheitssteuerung und Eskalation',
+    responsibility: 'Sicherheitssteuerung, Eskalation, Prioritäten und Managementübersetzung',
     worldId: 'executive',
   },
   {
     id: 'R03',
     name: 'ISMS Manager',
     sphere: 'Kunde',
-    responsibility: 'operativer ISMS-Betrieb',
+    responsibility: 'Operativer ISMS-Betrieb, Koordination, Reviews, Maßnahmen und Nachweise',
     worldId: 'operations',
   },
   {
     id: 'R04',
     name: 'Business / Process Owner',
     sphere: 'Kunde',
-    responsibility: 'Business Impact und Risikoentscheidung',
+    responsibility: 'Geschäftsauswirkung, Schutzbedarf, Priorität und Risikoentscheidung',
     worldId: 'operations',
   },
   {
     id: 'R05',
     name: 'Asset / Control Owner',
     sphere: 'Kunde',
-    responsibility: 'Umsetzung und Wirksamkeit',
+    responsibility: 'Umsetzung und Wirksamkeit konkreter Assets oder Controls',
     worldId: 'operations',
   },
   {
     id: 'R06',
     name: 'Evidence Contributor',
     sphere: 'Kunde',
-    responsibility: 'begrenzte Zuarbeit und Nachweise',
+    responsibility: 'Nachweise, Statusupdates und fachliche Zuarbeit',
     worldId: 'operations',
   },
   {
     id: 'R07',
     name: 'Auditor / Assurance Reviewer',
     sphere: 'Unabhängig',
-    responsibility: 'Prüfung und Nachvollziehbarkeit',
+    responsibility: 'Prüfung, Stichprobe, Feststellung und Nachvollziehbarkeit',
     worldId: 'assurance',
   },
   {
     id: 'R08',
     name: 'Managed Service Lead',
     sphere: 'Betreiber',
-    responsibility: 'Serviceportfolio, Qualität und Kapazität',
+    responsibility: 'Serviceportfolio, Qualität, Kapazität, Profitabilität und Eskalation',
     worldId: 'consulting',
   },
   {
     id: 'R09',
     name: 'Engagement Manager',
     sphere: 'Betreiber',
-    responsibility: 'Kundenbeziehung, Scope und Delivery',
+    responsibility: 'Mandantenbeziehung, Scope, Termine, Entscheidungen und Delivery-Steuerung',
     worldId: 'consulting',
   },
   {
     id: 'R10',
     name: 'ISMS Consultant',
     sphere: 'Betreiber',
-    responsibility: 'Analyse, Moderation, Steuerung und Reporting',
+    responsibility: 'Analyse, Moderation, Maßnahmensteuerung, Reporting und Beratung',
     worldId: 'consulting',
   },
   {
     id: 'R11',
     name: 'Specialist Consultant',
     sphere: 'Betreiber',
-    responsibility: 'Spezialanalyse und Review',
+    responsibility: 'Spezialanalyse etwa Cloud, IAM, BCM, Supplier Risk oder Threats',
     worldId: 'consulting',
   },
   {
     id: 'R12',
     name: 'Tenant / Platform Administrator',
     sphere: 'Beide',
-    responsibility: 'Nutzer, Rollen, Konfiguration und Betrieb',
+    responsibility: 'Nutzer, Rollen, Konfiguration, Integrationen und Betriebsfähigkeit',
     worldId: 'assurance',
   },
 ] as const;

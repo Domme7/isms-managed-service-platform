@@ -17,12 +17,21 @@
  * „Rollenwechsel": sichtbarer Moduswechsel), erhält aber in `AppShell` dieselbe benannte
  * Umschalt-Rückmeldung.
  *
+ * ROLLENWAHL IN DER APP (WP-020 Slice 2, DR-0009): Der Rollen-Wechsler führt zusätzlich den
+ * NEUTRALEN Zustand („neutral · keine Rolle") – Wahl UND Abwahl sind jederzeit möglich.
+ * ZUKUNFTSSICHERHEIT: In einer produktiven Umgebung käme die Rolle aus dem Konto (Dok. 19);
+ * die freie Wahl inklusive „neutral" ist eine Demo-Eigenschaft. Der Pflicht-Anker O-WP020-04
+ * („Kritische Aktionen speichern die aktive Rolle mit") lebt unverändert in `AppShell`.
+ *
  * Rein präsentational: alle Zustände/Aktionen kommen als Props herein (leicht testbar).
  */
 import Link from 'next/link';
 import type { DemoRole } from '../../lib/shell/roles';
 import type { DemoTenant } from '@isms/demo-seed';
 import type { ResolvedSession } from '../../lib/shell/session';
+
+/** Select-Wert des neutralen Zustands (kein Rollen-ID-Namensraum: R01–R12 bleiben frei). */
+const NEUTRAL_VALUE = '';
 
 export function Topbar({
   session,
@@ -40,7 +49,8 @@ export function Topbar({
   hydrated: boolean;
   roles: readonly DemoRole[];
   tenants: readonly DemoTenant[];
-  onSwitchRole: (roleId: string) => void;
+  /** `null` = Rolle abwählen (neutraler Zustand, DR-0009). */
+  onSwitchRole: (roleId: string | null) => void;
   /** Meldet einen Wechselwunsch – der eigentliche Wechsel folgt erst nach Bestätigung. */
   onRequestTenantSwitch: (tenantId: string) => void;
   onSignOut: () => void;
@@ -84,10 +94,15 @@ export function Topbar({
                 <span className="shell-switch-label">Rolle</span>
                 <select
                   className="shell-select"
-                  value={session.role.id}
-                  onChange={(e) => onSwitchRole(e.target.value)}
+                  value={session.role?.id ?? NEUTRAL_VALUE}
+                  onChange={(e) =>
+                    onSwitchRole(e.target.value === NEUTRAL_VALUE ? null : e.target.value)
+                  }
                   aria-label="Aktive Rolle wechseln (Simulation)"
                 >
+                  {/* Neutral steht ZUERST: es ist der Einstiegszustand (DR-0009), keine
+                      dreizehnte Rolle. Wahl und Abwahl sind jederzeit möglich. */}
+                  <option value={NEUTRAL_VALUE}>neutral · keine Rolle</option>
                   {roles.map((role) => (
                     <option key={role.id} value={role.id}>
                       {role.id} · {role.name}

@@ -34,7 +34,7 @@ import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
-import { CONTEXT_GAPS } from '../shell/PageContextBar';
+import { CONTEXT_GAPS, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
 import { SessionProvider } from '../shell/SessionProvider';
 import { TwinContextBar } from '../twin/TwinContextBar';
 import { NAV_PLACES, type PlaceId } from '../../lib/shell/places';
@@ -133,6 +133,63 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
       expect(eintrag(kontext, 'Vertrauensgrad bei abgeleiteten Aussagen').dd).toBe(
         CONTEXT_GAPS.vertrauensgrad,
       );
+
+      ergebnis.unmount();
+    });
+  }
+
+  /**
+   * NEUTRALER ZUSTAND (WP-020 Slice 2, DR-0009; AC-3-Formulierung „Rolle (oder ‚neutral')"):
+   * jede Live-Hauptseite rendert auch OHNE Rolle vollständig, und die Leiste nennt exakt den
+   * gemeinsamen Neutral-Text statt einer erfundenen Rolle. Meta-Absicherung wie oben: das
+   * Register deckt die live-Orte ab (dieselbe Registerprüfung greift).
+   */
+  const NEUTRAL_JE_LIVE_ORT: Partial<Record<PlaceId, () => RenderResult>> = {
+    heute: () =>
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
+      render(<MissionControlContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
+    kunden: () => {
+      window.localStorage.setItem(
+        SESSION_STORAGE_KEY,
+        serializeSession({ tenantId: TENANT_ID.NORDWERK }),
+      );
+      return render(
+        <SessionProvider>
+          <TwinContextBar />
+        </SessionProvider>,
+      );
+    },
+    isms: () =>
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
+      render(<IsmsContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
+    entscheidungen: () =>
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
+      render(<EntscheidungenContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
+    services: () =>
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
+      render(<ServicesContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
+  };
+
+  it('Meta: das Neutral-Register deckt exakt die live-Orte ab (neuer echter Ort ⇒ hier eintragen)', () => {
+    const liveOrte = NAV_PLACES.filter((p) => p.live)
+      .map((p) => p.id)
+      .sort();
+    expect(Object.keys(NEUTRAL_JE_LIVE_ORT).sort()).toEqual(liveOrte);
+  });
+
+  for (const [ort, renderOrt] of Object.entries(NEUTRAL_JE_LIVE_ORT)) {
+    it(`Ort „${ort}": rendert ohne Rolle vollständig, Leiste nennt „neutral" statt eines Werts`, () => {
+      const ergebnis = renderOrt();
+      const kontext = screen.getByRole('group', { name: 'Kontext dieser Seite' });
+
+      // Blindheitsschutz: die Seite hat wirklich Inhalt gerendert (keine Fehl-/Leerseite).
+      expect((ergebnis.container.textContent ?? '').length).toBeGreaterThan(200);
+      expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+      expect(eintrag(kontext, 'Aktive Produktrolle').dd).toBe(CONTEXT_NEUTRAL_ROLE);
+      // Negativbeweis: es wird keine Rollen-ID erfunden.
+      expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
+      // Die drei benannten Datenlücken bleiben unverändert (neutral ändert keine Daten).
+      expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAPS.vertretung);
 
       ergebnis.unmount();
     });

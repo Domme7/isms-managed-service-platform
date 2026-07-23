@@ -38,6 +38,13 @@ if (!outDir) {
  * Dokumentierte Default-Perspektive der sichtbaren Abnahme (AC 11, O-WP018-06):
  * Rolle R01 (Executive Sponsor) im Mandanten Nordwerk. Die IDs kommen aus dem Rollenmodell
  * bzw. dem Seed – nicht als lose Literale.
+ *
+ * SESSION-FORMAT SEIT WP-020 SLICE 2 (DR-0009): `roleId` ist OPTIONAL – ohne Rolle ist die
+ * Sitzung der NEUTRALE Einstieg. Das hier gesetzte Format mit Rolle bleibt ein gültiges
+ * neues Format (abwärtskompatibler Schlüssel `isms-demo-session-v1`, Begründung in
+ * `lib/shell/session.ts`). Die gepinnte R01-Perspektive bleibt die dokumentierte
+ * Default-Abnahme; ZUSÄTZLICH wird `/heute` einmal im neutralen Zustand aufgenommen
+ * (`heute-neutral`), weil das seit DR-0009 der Produkteinstieg ist.
  */
 const ROLLEN_ID = 'R01';
 const MANDANT_ID = TENANT_ID.NORDWERK;
@@ -133,6 +140,57 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
     throw new Error(
       'Provozierter Fehler nach Serverstart (AC 9) – der Server muss trotzdem stoppen.',
     );
+  });
+
+  test('heute-neutral (/heute ohne Rolle – neutraler Einstieg, DR-0009)', async ({
+    page,
+  }, testInfo) => {
+    // Überschreibt die R01-Sitzung aus dem beforeEach mit einer ROLLENLOSEN Sitzung
+    // (Init-Skripte laufen in Registrierungsreihenfolge – dieses hier zuletzt): so entsteht
+    // der Abnahme-Blick auf den Produkteinstieg nach DR-0009.
+    const neutral = serializeSession({ tenantId: MANDANT_ID });
+    await page.addInitScript(
+      ([key, value]) => {
+        window.localStorage.setItem(key, value);
+      },
+      [SESSION_STORAGE_KEY, neutral] as const,
+    );
+    await page.goto('/heute');
+    await expect(page.locator('main h1').first()).toBeVisible();
+    await expect(page.locator('main')).not.toContainText('Lade Kontext');
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({
+      path: path.join(outDir as string, `heute-neutral.${testInfo.project.name}.png`),
+    });
+
+    if (testInfo.project.name === 'desktop') {
+      const ergebnis = await new AxeBuilder({ page }).withTags([...AXE_TAGS]).analyze();
+      axeEngine = { name: ergebnis.testEngine.name, version: ergebnis.testEngine.version };
+      const anzahlVerstoesse: Record<string, number> = {};
+      for (const verstoss of ergebnis.violations) {
+        const impact = verstoss.impact ?? 'unbekannt';
+        anzahlVerstoesse[impact] = (anzahlVerstoesse[impact] ?? 0) + 1;
+      }
+      axeErgebnisse.push({
+        slug: 'heute-neutral',
+        pfad: '/heute',
+        anzahlVerstoesse,
+        verstoesse: ergebnis.violations.map((verstoss) => ({
+          id: verstoss.id,
+          impact: verstoss.impact ?? 'unbekannt',
+          beschreibung: verstoss.description,
+          hilfe: verstoss.help,
+          hilfeUrl: verstoss.helpUrl,
+          wcagTags: verstoss.tags.filter((tag) => tag.startsWith('wcag')),
+          stellen: verstoss.nodes.map((stelle) => ({
+            ziel: stelle.target.join(' '),
+            html: stelle.html,
+            zusammenfassung: stelle.failureSummary ?? '',
+          })),
+        })),
+      });
+      schreibeReport();
+    }
   });
 
   for (const seite of SEITEN) {

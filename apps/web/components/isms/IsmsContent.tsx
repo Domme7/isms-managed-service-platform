@@ -31,9 +31,10 @@ import {
 /**
  * `role` ergänzt in WP-020 Slice 1: die Kontextleiste (Dok. 06 „Sichtbarer Kontext") zeigt die
  * aktive Produktrolle auf jeder Live-Hauptseite. Reine Anzeige – KEIN Rollen-Gating, die Sicht
- * bleibt für alle Rollen identisch (Dok. 06 06-D05).
+ * bleibt für alle Rollen identisch (Dok. 06 06-D05). `null` = neutraler Zustand (DR-0009):
+ * dieselbe Seite, dieselben Daten, die Leiste nennt „neutral".
  */
-export function IsmsContent({ role, tenant }: { role: DemoRole; tenant: DemoTenant }) {
+export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: DemoTenant }) {
   const view = buildIsmsCoreView(tenant.tenant_id);
   // Verdichteter Überblick (WP-020 Slice 4, DR-0008): Lebenszyklus-Verteilung + Abdeckungen
   // aus DENSELBEN Ableitungen wie die Karten darunter; `undefined` bei leerer Kernsicht
