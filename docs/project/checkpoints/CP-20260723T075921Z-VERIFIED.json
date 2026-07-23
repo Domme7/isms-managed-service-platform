@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260723T075921Z-VERIFIED",
+  "type": "verified",
+  "work_package": "keins (kein aktives Work Package)",
+  "timestamp_utc": "2026-07-23T07:59:21.439015+00:00",
+  "summary": "WP-017 Entscheidungen im Zwilling abgeschlossen: Seed um 3 Decision Records + 8 Kanten erweitert (R24-Abloesepaar = erste Versionshistorie des Seeds, die Historien-Waechter aus WP-014/016 wurden planmaessig rot), Ort /entscheidungen als Register belegter Entscheidungen ohne Decision-Card-Behauptung (9 von 14 Pflichtfeldern ohne Traeger, feldweiser Abgleich sichtbar). Nebenertrag: Mandantengrenzverletzung in /isms seit WP-013 gefunden, behoben, Waechtertest leerzustand-mandantengrenze schuetzt alle leeren Orte. 2 Reviews + 2 Gegenpruefungen + Browser-QA.",
+  "branch": "main",
+  "commit": "b36086b",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CONTINUATION_BRIEFING.md\n M docs/project/CURRENT_STATE.md\n M docs/project/WORK_QUEUE.md\n?? docs/project/reviews/WP-017_INDEPENDENT_REVIEW.md",
+  "tests": "pnpm test --force: 428 gruen (api 2, contracts 55, demo-seed 45, web 307, db 19); typecheck gruen; build 60 statische Seiten; validate_handoff gruen; Browser-QA dokumentiert in reviews/WP-017_INDEPENDENT_REVIEW.md",
+  "exact_next_step": "WP-018 Werkzeuge vom program-manager erstellen lassen (Linter, Playwright+axe, Screenshots je WP, ADR fuer Abhaengigkeiten), danach WP-019 Konzeptfassungen aus den PDFs"
+}

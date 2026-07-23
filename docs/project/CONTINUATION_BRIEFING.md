@@ -86,9 +86,10 @@ Lauffähige Demo-App (read-only, rein synthetisch). Drei Orte der Shell sind ech
 | Visuelles Design | WP-015 ✅ (minimal, DR-0003) |
 | Objekt-360-Detailseite | WP-014 ✅ (Graph durchgängig begehbar, 40 Objektseiten) |
 | Mission Control „Heute" | WP-016 ✅ (**ohne** Morning Mission — Datenlage trägt sie nicht) |
-| **Nächstes** | **Owner-Entscheidung:** Seed/Contract um Aufgaben+Entscheidungen erweitern (O-WP016-03/-04) **oder** Executive-Welt — beide WPs existieren noch nicht |
+| Entscheidungen im Zwilling | WP-017 ✅ (erste Versionshistorie im Seed; Register statt Decision Card) |
+| **Nächstes** | **WP-018 Werkzeuge** (DR-0007: Linter, Playwright + axe, Screenshots je WP), dann WP-019 Konzeptfassungen → WP-020 verlorene Anforderungen → WP-021 Demo-Welt |
 
-Testlage: **343 Tests grün** (api 2 · contracts 55 · demo-seed 38 · web 229 · db 19). CI grün.
+Testlage: **428 Tests grün** (api 2 · contracts 55 · demo-seed 45 · web 307 · db 19). CI grün.
 Es gibt **keinen Linter** im Stack (FINDING-0005) — „Lint" in Acceptance Criteria läuft ins Leere.
 
 ---
@@ -231,6 +232,16 @@ Darunter, in dieser Reihenfolge und jeweils **wenige Zeilen**:
 8. **Ein zweiter Reviewdurchgang lohnt sich.** In WP-014 und WP-016 hat jeweils erst die Nachprüfung
    eine Regression gefunden, die der Fix-Pass selbst erzeugt hatte.
 9. **Explizit stagen, nie `git add -A`.** Ein Bau ist so versehentlich in einen Docs-Commit gerutscht.
+10. **Nie `pnpm build`, während der Dev-Server läuft.** Beide schreiben in `apps/web/.next`; der
+   Build zerschießt dem laufenden Server die Chunks (Symptom: 404 auf `page.js`, Seite hängt bei
+   „Lade Kontext …"). Zweimal passiert. Erst Server stoppen, dann bauen — oder getrenntes
+   Build-Verzeichnis einführen (Kandidat WP-018).
+11. **Ein Test, der eine Formulierung festschreibt, kann einen Defekt zementieren.** Der
+   `/isms`-Leerzustand leakte eine Existenzaussage über fremde Mandanten — und der Test prüfte
+   wörtlich auf genau diesen Satz. Wächter prüfen die REGEL (verbotene Muster), nicht den Wortlaut.
+12. **Leerzustände sind die Versuchungsstelle für Mandanten-Leaks** („nicht hier, aber woanders").
+   Zweimal unabhängig entstanden (WP-013 `/isms`, WP-017 `/entscheidungen`). Mechanischer Schutz:
+   `components/__tests__/leerzustand-mandantengrenze.test.tsx` — neue leere Orte dort eintragen.
 
 ---
 
