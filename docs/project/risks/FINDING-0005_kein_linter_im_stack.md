@@ -1,7 +1,7 @@
 # FINDING-0005 – Kein Linter im Stack, aber Lint steht in den Acceptance Criteria
 
 - **Severity:** Low (Prozess-/Konsistenzfehler, kein Produktfehler)
-- **Status:** Offen
+- **Status:** **Geschlossen 2026-07-23** — WP-018 hat Biome 2.5.5 eingeführt (ADR-0003); `pnpm lint` läuft über alle fünf Pakete und in CI vor Test/Build. Option 1 wurde gewählt.
 - **Gefunden:** 2026-07-23, im Code-Review zu WP-016
 - **Betroffen:** `package.json` (Root), `apps/web/package.json`, Acceptance Criteria mehrerer Work Packages
 

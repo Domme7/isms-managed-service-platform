@@ -88,10 +88,11 @@ Lauffähige Demo-App (read-only, rein synthetisch). Drei Orte der Shell sind ech
 | Objekt-360-Detailseite | WP-014 ✅ (Graph durchgängig begehbar, 40 Objektseiten) |
 | Mission Control „Heute" | WP-016 ✅ (**ohne** Morning Mission — Datenlage trägt sie nicht) |
 | Entscheidungen im Zwilling | WP-017 ✅ (erste Versionshistorie im Seed; Register statt Decision Card) |
-| **Nächstes** | **WP-018 Werkzeuge** (DR-0007: Linter, Playwright + axe, Screenshots je WP), dann WP-019 Konzeptfassungen → WP-020 verlorene Anforderungen → WP-021 Demo-Welt |
+| Werkzeuge & sichtbare Abnahme | WP-018 ✅ (Linter, `qa:visual` mit Screenshots+axe je WP, drei Wächter) |
+| **Nächstes** | **WP-019 Konzeptfassungen aus den PDFs** (FINDING-0007, Dok. 03–07 zuerst) → WP-020 verlorene Anforderungen → WP-021 Demo-Welt |
 
-Testlage: **428 Tests grün** (api 2 · contracts 55 · demo-seed 45 · web 307 · db 19). CI grün.
-Es gibt **keinen Linter** im Stack (FINDING-0005) — „Lint" in Acceptance Criteria läuft ins Leere.
+Testlage: **448 Tests grün** (api 2 · contracts 55 · demo-seed 54 · web 318 · db 19). CI grün.
+Seit WP-018: `pnpm lint` (Biome), `pnpm qa:visual <WP>` (Screenshots + axe nach `docs/project/visual/`).
 
 ---
 
