@@ -17,6 +17,7 @@
 | P1 | WP-019 | Konzeptfassungen aus den PDFs nachziehen (FINDING-0007), beginnend Dok. 03–07 | quer | Planned | DR-0006, Abgleichbericht | keiner (Reparatur der Übertragung) |
 | P1 | WP-020 | Verlorene Anforderungen nachholen (Cross-Tenant-Schutz, Rolle bei kritischen Aktionen, Trust-Layer-Felder, Seitenbausteine) | 1/2 | Planned | WP-019 | je nach Punkt Security Review |
 | P1 | WP-021 | Demo-Welt konzeptkonform: 5 benannte Unternehmen, 9 Accounts, Mindestgrößen (DR-0007 E-01) | 1 | Planned | WP-019 ✓, WP-018 empfohlen | Owner hat entschieden (E-01) |
+| P2 | WP-022 | Research: Assistenz-Vision (IDEA-003) — Use-Case-Katalog, techn. Konzept, Integrationen, Phasenmodell als Entwürfe unter research/ | quer | Planned (Owner-Auftrag 2026-07-23) | Dok. 20A/20B/21, IDEA-003 | Aktivierung als Konzept nur via CCP + Human Gate |
 | P1 | WP-005 | Lokale Authentisierungssimulation, Rollen- und Tenant-Wechsel | 1 | Planned | WP-002, Security ADR | Security Review |
 | P1 | WP-006 | Customer Workspace – erster vertikaler Pfad | 1–2 | Planned | WP-003–005 | Product + ISMS Review |
 | P2 | WP-007 | Persistenz der Twin-Kernobjekte (PostgreSQL + Drizzle) | 2 | **Done (Code+Security Review, 18 DB-Tests, 112 gesamt)** | WP-003 ✓, ADR-0002 | RLS-Härtung: FINDING-0004 |

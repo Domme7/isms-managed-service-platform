@@ -59,6 +59,7 @@ Zitiere immer den **Abschnittstitel**, nicht nur die Nummer — die Nummerierung
 | `docs/project/OPEN_QUESTIONS.md` | alle benannten Konzeptlücken (O-…) — hier steht, was bewusst **nicht** gebaut wurde |
 | `docs/decisions/`, `docs/architecture/adr/` | getroffene Entscheidungen samt Begründung |
 | `docs/project/reviews/` | was frühere Reviews gefunden haben — vermeidet Wiederholung derselben Fehler |
+| `research/ideas/` | **Feature-Ideen des Owners** (Idea Cards) — legitime Anforderungsquelle, aber nichts davon „nebenbei" bauen; Umsetzung über Queue/CCP |
 
 Lade **nicht** alle Konzeptdokumente pauschal (`CLAUDE.md`, Context-Regel) — nimm das Context Pack
 des aktiven Work Packages und lies gezielt nach.
