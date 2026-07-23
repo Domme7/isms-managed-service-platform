@@ -189,3 +189,15 @@ Vollständige Herleitung: `work-packages/WP-020_VERDICHTUNG_DASHBOARD_EINSTIEG.m
 | O-WP032-16 | Zwei Katalogeinträge sind Betreiber-Sichten über mehrere Unternehmen („Portfolio Review") und stehen auf einer Seite, die auch Kundenrollen öffnen können | Sphären-Frage (DR-0012) | Klarstellungszeile ohne Existenzaussage über weitere Mandanten; sphärenabhängige Filterung ist spätere Produktentscheidung | Product + Security |
 | O-WP032-17 | Preis-Guardrail: Strukturwörter („Kostenband", „Preisannahmen", „Budgetentscheidung") bleiben wörtlich, es erscheint **kein Betrag** — gilt „Wort ≠ Preis"? | Guardrail-Auslegung | wörtlich belassen (Streichen wäre stille Konzeptänderung); preisfrei negativ belegt | Owner + Security |
 | O-WP032-18 | Nach „Wissen" hat `PlaceholderPage` keinen Aufrufer mehr — behalten mit synthetischer Fixture oder entfernen? | Aufräumfrage | neuer Blindheitsschutz-Test erzwingt die Entscheidung sichtbar; Builder entscheidet begründet in Slice 3 | QA |
+
+## WP-028 – Antwort-Modus (aus der Gate-Runde 2026-07-24)
+
+| ID | Frage | Art | Aktueller Umgang | Owner / Gate |
+|---|---|---|---|---|
+| O-WP028-01 | `/heute` trug als einziger Ort weiter die aspirative Leitfrage, während vier Orte umgestellt wurden | Inkonsistenz | im Fix-Pass behoben (sichtbare Frage = beantwortete Frage; Konzeptanker bleibt in `places.ts`) | erledigt, Gate prüft nach |
+| **O-WP028-02** | **DR-0013 Nr. 4 verlangt den Wegfall des „Warum nicht erfasst?"-Disclosures, die DR-0013-Grenze verlangt zugleich den Erhalt der benannten Lücke.** Umgesetzt ist die Mittelform: keine Leerfelder mehr, aber eine ruhige Aufklappzeile „Vollständigkeit des Kontexts" | **Zielkonflikt in der DR selbst** | Aufklappzeile bleibt als ruhigste Form der Beibehaltung; Alternative wäre die Verlagerung in den Seitenfuß | **Owner bestätigt oder streicht** |
+| O-WP028-03 | Familiencodes F01–F09 standen sichtbar im Produkt, ohne Wächter | Lücke in der Jargon-Bereinigung | im Fix-Pass behoben + Wächterregel ergänzt | erledigt |
+| O-WP028-04 | Zwei divergierende Sphären-Regeln (`/twin` über Sphäre, `/services` über Erlebniswelt) | Konsistenz-/Sicherheitsfrage | im Fix-Pass auf **eine** Quelle vereinheitlicht | erledigt |
+| O-WP028-05 | Das rollenabhängig verschwindende Mandanten-Select liest sich als erzwungene Zugriffsgrenze, ist aber nur Perspektive | Ehrlichkeits-Nuance (Security) | ruhige Klarstellung ergänzt; endgültig löst das erst die echte Auth (WP-030) | Security (mit WP-030) |
+| O-WP028-06 | Auditor (R07): Ist der Prüfbereich der **ganze** Mandant oder ein eingeladener Audit-Scope? Und: mehrere gleichzeitige Prüfmandate? | Konzeptlücke | enge Wahl (ein Mandant), am PDF begründet; die zweite Hälfte bleibt offen | Security + Concept (WP-030) |
+| O-WP028-07 | Die `/services`-Servicebeschreibungen tragen internes Vokabular (Muster-Codes, Dokumentverweise) — sie liegen im **Seed**, nicht im UI-Code | Rest der Jargon-Bereinigung | eigener Seed-Textpass (WP-033); der UI-Wächter maskiert Seed-Text bewusst und fängt es deshalb nicht | concept-author (WP-033) |
