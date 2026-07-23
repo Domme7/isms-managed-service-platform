@@ -141,15 +141,43 @@ Es gibt **keinen Linter** im Stack (FINDING-0005) — „Lint" in Acceptance Cri
 
 ---
 
-## 6. Berichtsformat (der Owner steuert damit)
+## 6. Berichtsformat – Fortschrittsbalken (verbindlich)
 
-Nach jedem Meilenstein ein **kurzer** Report mit Balken:
+Der Owner steuert das Projekt **über die Balken**. Sie sind kein Schmuck, sondern sein
+Hauptinstrument, um zu sehen, wo das Produkt steht und wo er eingreifen muss.
+
+**Wann berichten:**
+- nach **jedem abgeschlossenen Work Package** (Pflicht),
+- bei jedem längeren Arbeitsblock zwischendurch, damit er nicht im Dunkeln sitzt,
+- immer wenn er nach dem Stand fragt.
+
+**Format** — genau so, kurz, kein Fließtextberg:
 
 ```
-Gesamtprodukt:  ███████░░░░░░░░░░░░░░  ~34 %
+Gesamtprodukt:  █████████░░░░░░░░░░░░  ~41 %
+Phase 0/1:      █████████████████████  ~98 %   Fundament + Demo-Welt
+Phase 2:        ██████░░░░░░░░░░░░░░░  ~30 %   Persistenz da, nicht am UI
+Phase 6:        ████░░░░░░░░░░░░░░░░░  ~20 %   Managed-Service-Vorgeschmack
+Phase 3/4/5/7-9:░░░░░░░░░░░░░░░░░░░░░    0 %   ISMS-Tiefe, Decisions, Reporting, …
 ```
-plus Phasentabelle (0–9), was fertig wurde, was als Nächstes läuft, und offene Owner-Entscheidungen.
-Keine Wall-of-Text; der Owner nutzt die Balken zum strategischen Steuern.
+
+Darunter, in dieser Reihenfolge und jeweils **wenige Zeilen**:
+
+1. **Was fertig wurde** — in Produktsprache, nicht in Dateinamen.
+2. **Testlage und Commit** — Zahl der grünen Tests, Commit-Hash, gepusht ja/nein.
+3. **Die wertvollsten Review-Funde** — was hätte das Produkt beschädigt, wenn es durchgegangen wäre.
+   Das ist für den Owner oft der lehrreichste Teil.
+4. **Was ehrlich nicht geht** — benannte Lücken, bewusste Abweichungen, nicht Erbrachtes.
+5. **Was ich von dir bräuchte** — offene Owner-Entscheidungen, klar als „blockiert nichts"
+   gekennzeichnet, wenn autonom weitergebaut werden kann.
+
+**Regeln:**
+- Die Balken sind **Schätzungen** und dürfen so benannt werden — aber sie müssen begründbar sein
+  (abgeschlossene Work Packages, Module aus Dok. 05, Phasen aus dem Master-Index).
+- **Nie beschönigen.** Ein Balken, der nach einem Rückschritt kürzer wird, ist wertvoller als einer,
+  der nur wächst. Fehlgeschlagene Tests, nicht erbrachte QA und offene Findings gehören in den Report.
+- Keine Wall-of-Text. Wenn ein Punkt lang wird, gehört er ins Repository (Review-Notiz, Finding,
+  offene Frage) und in den Report nur als ein Satz mit Verweis.
 
 ---
 
