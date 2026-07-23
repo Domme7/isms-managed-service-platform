@@ -34,6 +34,7 @@ import { describe, expect, it } from 'vitest';
 import { DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
+import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { CONTEXT_GAPS, CONTEXT_GAP_WERT, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
@@ -226,6 +227,59 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     );
     expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
     expect(kontext.textContent ?? '').toContain(CONTEXT_GAPS.vertretung);
+    unmount();
+  });
+
+  /**
+   * Zusatzseite „Kunden-Startseite" (`/kunden`, WP-006 Slice 1) UNTER dem Ort „Kunden": eine
+   * eigene Hauptseite mit eigener Kontextleiste (belegter Mandant + neutral). Kein NAV_PLACES-Ort,
+   * deshalb außerhalb des Registers geprüft (die Meta-Assertion oben bleibt intakt).
+   */
+  it('Kunden-Startseite: belegte Elemente belegt (Nordwerk), unbelegte als benannte Datenlücke', () => {
+    const { unmount } = render(
+      <KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
+
+    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+    expect(eintrag(kontext, 'Aktive Produktrolle').dd).toMatch(/^R\d{2} · .+/);
+    expect(eintrag(kontext, 'Scope-Kennungen des Kundenbereichs').dd.length).toBeGreaterThan(0);
+    expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
+
+    expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
+    expect(eintrag(kontext, 'Vertraulichkeitsstufe und Exportrestriktion').dd).toBe(
+      CONTEXT_GAP_WERT,
+    );
+    expect(eintrag(kontext, 'Vertrauensgrad bei abgeleiteten Aussagen').dd).toBe(CONTEXT_GAP_WERT);
+    for (const begruendung of Object.values(CONTEXT_GAPS)) {
+      expect(kontext.textContent ?? '').toContain(begruendung);
+    }
+    unmount();
+  });
+
+  it('Kunden-Startseite: rendert ohne Rolle vollständig, Leiste nennt „neutral"', () => {
+    const { container, unmount } = render(
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut.
+      <KundenStartContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
+    expect((container.textContent ?? '').length).toBeGreaterThan(200);
+    expect(eintrag(kontext, 'Aktive Produktrolle').dd).toBe(CONTEXT_NEUTRAL_ROLE);
+    expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
+    unmount();
+  });
+
+  it('Kunden-Startseite (leerer Mandant): Leiste vollständig, kein erfundener Scope/Datenstand', () => {
+    const { unmount } = render(
+      <KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+    );
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
+    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Finovia Digital Bank AG');
+    expect(kontext.querySelectorAll('time')).toHaveLength(0);
+    expect(eintrag(kontext, 'Scope-Kennungen des Kundenbereichs').dd).toBe(
+      'keine Scope-Zuordnung erfasst',
+    );
+    expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
     unmount();
   });
 

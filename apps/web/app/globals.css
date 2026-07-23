@@ -1333,6 +1333,24 @@ h3 {
   max-width: 78ch;
 }
 
+/* Sichtbarer Einstieg in den Kundenbereich (WP-006 Slice 1): eigener, prominenter
+   Teal-Callout mit linkem Akzent – bewusst NICHT `.ht-neutral` (dessen An-/Abwesenheit
+   markiert den neutralen Erstbesuchs-Hinweis und wird getestet). */
+.ht-kundenbereich {
+  background: var(--shell-teal-soft);
+  border: 1px solid var(--shell-teal);
+  border-left: 4px solid var(--shell-teal);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin: 0 0 1.25rem;
+}
+.ht-kundenbereich-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #08403f;
+  max-width: 78ch;
+}
+
 /* =============================================================================
    Rollenfokus der Ebene 1 (WP-020 Slice 5, Dok. 06 Tabelle „Rollenvarianten"):
    benannte Betonung + Lücken, Teal als aktive Orientierung, Text + Rahmen,

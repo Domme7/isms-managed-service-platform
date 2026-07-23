@@ -20,6 +20,7 @@ import { describe, expect, it } from 'vitest';
 import { DEMO_TENANTS, NORDWERK_OBJECT_ID, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
+import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
@@ -61,6 +62,9 @@ const RENDERER_JE_ORT: Record<BausteinOrt, () => RenderResult> = {
   services: () =>
     render(<ServicesContent role={role('R08')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   objekt360: () => render(<ObjectDetailView model={objektModel()} />),
+  // Zusatzseite UNTER dem Ort „Kunden" (kein NAV_PLACES-Ort, Muster `objekt360`, WP-006 Slice 1).
+  kundenstart: () =>
+    render(<KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
 };
 
 function hinweisElement(container: HTMLElement): HTMLElement {
@@ -72,16 +76,19 @@ function hinweisElement(container: HTMLElement): HTMLElement {
 }
 
 describe('Seitenbausteine-Konvention auf den sechs Live-Orten (Dok. 06)', () => {
-  it('Meta: das Register deckt die live-Orte aus NAV_PLACES plus Objekt-360 ab', () => {
+  it('Meta: das Register deckt die live-Orte aus NAV_PLACES plus die zwei Zusatzseiten ab', () => {
     const liveOrte = NAV_PLACES.filter((p) => p.live)
       .map((p) => String(p.id))
       .sort();
+    // `objekt360` und `kundenstart` sind dokumentierte Zusatzseiten UNTER bestehenden Orten
+    // (kein neuer NAV_PLACES-Ort). Ein künftiger echter live-Ort macht die Gleichheit trotzdem rot.
     expect(
       Object.keys(RENDERER_JE_ORT)
-        .filter((o) => o !== 'objekt360')
+        .filter((o) => o !== 'objekt360' && o !== 'kundenstart')
         .sort(),
     ).toEqual(liveOrte);
     expect(Object.keys(RENDERER_JE_ORT)).toContain('objekt360');
+    expect(Object.keys(RENDERER_JE_ORT)).toContain('kundenstart');
   });
 
   for (const [ort, renderOrt] of Object.entries(RENDERER_JE_ORT) as [

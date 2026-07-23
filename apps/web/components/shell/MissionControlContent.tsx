@@ -166,6 +166,8 @@ export function MissionControlContent({
 
           <ContextBar model={model} role={role} tenant={tenant} world={world} />
 
+          <KundenbereichEinstieg role={role} tenant={tenant} />
+
           <TiefenSchalter tiefe={aktiveTiefe} onChange={wechsleTiefe} />
 
           <DashboardSection dashboard={dashboard} role={role} />
@@ -268,6 +270,34 @@ function ContextBar({
         </div>
       ) : null}
     </PageContextBar>
+  );
+}
+
+/* -----------------------------------------------------------------------------
+ * Sichtbarer Einstieg in den Kundenbereich (WP-006 Slice 1)
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Prominenter, IMMER sichtbarer Einstieg in die Kunden-Startseite „verwalten" (`/kunden`) für
+ * den aktiven Mandanten. Löst 06-D02 („Kundennutzer können … direkt im eigenen Customer
+ * Workspace starten") als sichtbaren Einstieg OHNE erzwungenen Redirect (der neutrale Einstieg
+ * nach DR-0009 bleibt; Rest der Frage offen als O-WP006-03). Für Kundensphäre-Rollen (Dok. 03,
+ * Sphäre „Kunde") betont der Text „Ihr Unternehmen"; sonst neutral „der aktive Mandant".
+ */
+function KundenbereichEinstieg({ role, tenant }: { role: DemoRole | null; tenant: DemoTenant }) {
+  const kundensphaere = role?.sphere === 'Kunde';
+  return (
+    <div className="ht-kundenbereich" role="note">
+      <p className="ht-kundenbereich-text">
+        <strong>Kundenbereich:</strong>{' '}
+        {kundensphaere
+          ? `Scopes, Ziele, Services und Nachweise von ${tenant.display_name} an einem Ort verwalten.`
+          : 'Scopes, Ziele, Services und Nachweise des aktiven Mandanten an einem Ort.'}{' '}
+        <Link className="tw-cta" href="/kunden">
+          Kundenbereich öffnen →
+        </Link>
+      </p>
+    </div>
   );
 }
 

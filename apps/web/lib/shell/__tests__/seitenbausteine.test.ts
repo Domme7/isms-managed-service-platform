@@ -48,12 +48,17 @@ describe('SEITENBAUSTEINE – die neun Bausteine aus Dok. 06', () => {
 describe('BAUSTEIN_ABDECKUNG – Zuordnung je Live-Ort', () => {
   const orte = Object.keys(BAUSTEIN_ABDECKUNG) as BausteinOrt[];
 
-  it('Meta: deckt exakt die fünf live-Orte aus NAV_PLACES plus die Objekt-360-Seite ab', () => {
+  it('Meta: deckt exakt die fünf live-Orte aus NAV_PLACES plus die zwei Zusatzseiten ab', () => {
     const liveOrte = NAV_PLACES.filter((p) => p.live)
       .map((p) => String(p.id))
       .sort();
-    expect([...orte].filter((o) => o !== 'objekt360').sort()).toEqual(liveOrte);
+    // `objekt360` und `kundenstart` sind dokumentierte Zusatzseiten UNTER bestehenden Orten
+    // (kein neuer NAV_PLACES-Ort, 06-D01). Ein neuer echter live-Ort macht die Gleichheit rot.
+    expect([...orte].filter((o) => o !== 'objekt360' && o !== 'kundenstart').sort()).toEqual(
+      liveOrte,
+    );
     expect(orte).toContain('objekt360');
+    expect(orte).toContain('kundenstart');
   });
 
   for (const ort of orte) {

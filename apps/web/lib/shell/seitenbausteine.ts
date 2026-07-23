@@ -119,8 +119,21 @@ export function getBaustein(id: BausteinId): Seitenbaustein {
   return baustein;
 }
 
-/** Die sechs Live-Orte der Konvention (WP-020: fünf Hauptseiten + Objekt-360-Detailseite). */
-export type BausteinOrt = 'heute' | 'kunden' | 'isms' | 'entscheidungen' | 'services' | 'objekt360';
+/**
+ * Orte der Konvention: die fünf Live-Hauptseiten (`heute`/`kunden`/`isms`/`entscheidungen`/
+ * `services`) plus zwei Detailseiten UNTER bestehenden Orten (Muster: eigene Zuordnung, kein
+ * neuer Nav-Ort). `objekt360` liegt unter „Kunden"/„ISMS"/„Services"; `kundenstart` ist die
+ * Kunden-Startseite „verwalten" unter dem Ort „Kunden" (WP-006 Slice 1). Beide sind KEINE
+ * `NAV_PLACES`-Orte – der Wächter behandelt sie wie dokumentierte Zusatzseiten (Meta-Assertion).
+ */
+export type BausteinOrt =
+  | 'heute'
+  | 'kunden'
+  | 'isms'
+  | 'entscheidungen'
+  | 'services'
+  | 'objekt360'
+  | 'kundenstart';
 
 export type BausteinStatus = 'vorhanden' | 'teilweise' | 'verweis' | 'ohne_traeger';
 
@@ -368,6 +381,38 @@ export const BAUSTEIN_ABDECKUNG: Readonly<Record<BausteinOrt, readonly BausteinZ
         'Kanten-Vertrauensgrad) samt Abgleich mit den acht Trust-Layer-Angaben unter ' +
         '„Wie entwickelt es sich?".',
       fehlt: 'Widerspruchs- und Vollständigkeitsangaben über die erfassten Dimensionen hinaus.',
+    },
+  ],
+  kundenstart: [
+    {
+      baustein: 'question_header',
+      status: 'teilweise',
+      wo: 'Leitfrage am Seitenkopf; Lebenszyklus-Stand je Ziel, Nachweis und Service an den Karten.',
+      fehlt: 'Ein Seiten-Status und ein Seiten-Owner (der Kundenbereich ist kein Objekt).',
+    },
+    { baustein: 'context_bar', status: 'vorhanden', wo: 'Kontextleiste unter der Leitfrage.' },
+    { baustein: 'summary_pulse', status: 'ohne_traeger', grund: GRUND_SUMMARY },
+    {
+      baustein: 'relationship_panel',
+      status: 'verweis',
+      wo: 'Beziehungen je Ziel, Nachweis und Service auf der Objektseite (Objekt-360-Drill-down).',
+    },
+    { baustein: 'impact_panel', status: 'ohne_traeger', grund: GRUND_IMPACT },
+    {
+      baustein: 'decision_card',
+      status: 'verweis',
+      wo: 'Erfasste Entscheidungen am Ort „Entscheidungen" (Drill-down des Verweises).',
+    },
+    { baustein: 'action_rail', status: 'ohne_traeger', grund: GRUND_ACTION_RAIL },
+    {
+      baustein: 'history_decision_record',
+      status: 'verweis',
+      wo: 'Version und Ablösung je Objekt auf der Objektseite.',
+    },
+    {
+      baustein: 'trust_layer',
+      status: 'verweis',
+      wo: 'Vertrauensgrad je Beziehung und Datenqualität je Objekt auf den Detailseiten.',
     },
   ],
 } as const;

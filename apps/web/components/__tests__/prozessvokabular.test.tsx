@@ -31,6 +31,7 @@ import { describe, expect, it } from 'vitest';
 import { DEMO_TENANTS, NORDWERK_OBJECT_ID, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
+import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
@@ -161,6 +162,37 @@ const RENDERER_JE_LIVE_ORT = {
       kontext: `/twin/${t.tenant_id} · Detailseite`,
       render: () => render(<TenantDetailView model={buildTenantDetail(t)} />),
     })),
+    // Kunden-Startseite „verwalten" (`/kunden`, WP-006 Slice 1): Kundenrolle, Betreiberrolle und
+    // neutral über volle UND leere Mandanten – Leerzustände sind die Versuchungsstelle (Lektion 12).
+    {
+      kontext: '/kunden · R03 · nordwerk (voll)',
+      render: () =>
+        render(<KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
+    },
+    {
+      kontext: '/kunden · neutral · nordwerk (voll)',
+      render: () =>
+        // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop (null = neutral, DR-0009), kein ARIA-Attribut.
+        render(<KundenStartContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
+    },
+    {
+      kontext: '/kunden · R08 · consulting-operator',
+      render: () =>
+        render(
+          <KundenStartContent role={role('R08')} tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)} />,
+        ),
+    },
+    {
+      kontext: '/kunden · R03 · finovia (leer)',
+      render: () =>
+        render(<KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />),
+    },
+    {
+      kontext: '/kunden · neutral · medicore (leer)',
+      render: () =>
+        // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop (null = neutral, DR-0009), kein ARIA-Attribut.
+        render(<KundenStartContent role={null} tenant={tenant(TENANT_ID.MEDICORE)} />),
+    },
   ],
   // Rolle seit WP-020 Slice 1 (Kontextleiste zeigt die aktive Produktrolle): eine Kunden- und
   // eine Betreiberrolle sowie der NEUTRALE Zustand (Slice 2) je Mandant – die Rolle ändert auf

@@ -32,6 +32,7 @@ import { describe, expect, it } from 'vitest';
 import { DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
 import { IsmsContent } from '../isms/IsmsContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
+import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { AppShell } from '../shell/AppShell';
 import { MissionControlContent } from '../shell/MissionControlContent';
@@ -178,6 +179,75 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
     }
     expect(text).not.toContain('Nordwerk Manufacturing SE');
     expect(text).not.toContain(TENANT_ID.NORDWERK);
+  });
+});
+
+/* -----------------------------------------------------------------------------
+ * Kunden-Startseite „verwalten" (`/kunden`, WP-006 Slice 1): Kundensphäre = Sicherheitsgrenze
+ * -----------------------------------------------------------------------------
+ *
+ * Die Kunden-Startseite ist die dritte Klasse-Fundstelle-Versuchung (FINDING-0009): ein neuer
+ * Ort mit Leerzustand (Finovia/MediCore) und mit einer Einladung, die zum Fremdmandanten-Leak
+ * verführt. Geprüft wird der GERENDERTE Text – voller UND leerer Mandant – gegen dieselben
+ * Muster wie die Live-Orte, plus die konkreten Anzeigenamen/IDs aller anderen Mandanten.
+ */
+describe('Kunden-Startseite spricht nie über fremde Mandanten (Kundensphäre, P09/FINDING-0009)', () => {
+  const KUNDEN_FIXTURES: { tenantId: string; roleId: string | null }[] = [
+    { tenantId: TENANT_ID.NORDWERK, roleId: 'R03' }, // voll, Kundenrolle
+    { tenantId: TENANT_ID.NORDWERK, roleId: null }, // voll, neutral
+    { tenantId: TENANT_ID.CONSULTING_OPERATOR, roleId: 'R08' }, // Services vorhanden, Betreiberrolle
+    { tenantId: TENANT_ID.FINOVIA, roleId: 'R03' }, // leer
+    { tenantId: TENANT_ID.MEDICORE, roleId: null }, // leer, neutral
+  ];
+
+  for (const { tenantId, roleId } of KUNDEN_FIXTURES) {
+    it(`nennt für ${tenantId} (${roleId ?? 'neutral'}) keinen fremden Mandanten`, () => {
+      const { container } = render(
+        <KundenStartContent role={roleId ? role(roleId) : null} tenant={tenant(tenantId)} />,
+      );
+      const text = container.textContent ?? '';
+      expect(text.length).toBeGreaterThan(80);
+
+      for (const muster of FREMDER_MANDANT) {
+        expect(text, `/kunden/${tenantId}: „${muster}"`).not.toMatch(muster);
+      }
+      for (const fremd of DEMO_TENANTS.filter((t) => t.tenant_id !== tenantId)) {
+        expect(text).not.toContain(fremd.display_name);
+        expect(text).not.toContain(fremd.tenant_id);
+      }
+    });
+  }
+
+  it('der leere Mandant zeigt eine mandantenlokale Einladung mit Katalog- und Struktur-Einstieg', () => {
+    const { container } = render(
+      <KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+    );
+    const text = container.textContent ?? '';
+    // Einladung statt leerer Platzhalter (Dok. 03 „Anfängererlebnis"): nennt beide nächsten
+    // Schritte (Servicekatalog + Struktur-Assistent) mandantenlokal, ohne Fremdmandanten.
+    expect(text).toContain('Finovia Digital Bank AG');
+    expect(text).toContain('Servicekatalog');
+    expect(text).toContain('Struktur-Assistent');
+  });
+
+  it('keine Betreiber-Portfolio-Inhalte auf der Kunden-Startseite (Kundensphäre)', () => {
+    // Betreiber-Sphäre-Begriffe (Dok. 03 Steckbrief „Managed Service Lead") gehören nicht auf
+    // Kundenseiten: kein mandantenübergreifendes Portfolio, keine Auslastung/Profitabilität.
+    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR]) {
+      const { container, unmount } = render(
+        <KundenStartContent role={role('R08')} tenant={tenant(tenantId)} />,
+      );
+      const text = container.textContent ?? '';
+      for (const verboten of [
+        /Portfolio/i,
+        /Auslastung/i,
+        /Profitabilit/i,
+        /Mandantenvergleich/i,
+      ]) {
+        expect(text, `/kunden/${tenantId}: „${verboten}"`).not.toMatch(verboten);
+      }
+      unmount();
+    }
   });
 });
 
