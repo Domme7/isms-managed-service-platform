@@ -8,7 +8,7 @@
 | Autor (Rolle) | Concept Author (Prozess nach Dok. 21 §21) |
 | Auslöser | **WP-020 Slice 6**; Befund aus `docs/concept/abgleich/NACHTRAG_WP-019_2026-07-23.md`, Übergabeliste Punkt 8 („Contract-berührend → E-02-Umfeld, Human Gate", vgl. DR-0007); FINDING-0007 / DR-0006 (PDF = Produktwahrheit) |
 | Betroffene Dokumente | Dok. 07 v1.0 (PDF), Abschnitte „Beziehungen als erstklassige Daten" (+ „Kanonischer Beziehungskatalog - Teil 2"), „Grundprinzipien - Teil 1" (P03), „Verbindliche Entscheidungen - Teil 1" (07-D04), „Globale Akzeptanzkriterien", „Herkunft, Datenqualität und Vertrauen" (07-D10), „Objektvertrag - Teil 2" (`tags_custom_fields`) |
-| Betroffene Artefakte | `packages/contracts/src/relationship.ts`, `packages/contracts/PROVENANCE.md`, `packages/contracts/src/relationship.spec.ts`, `packages/db/src/schema.ts` (+ Drizzle-Migration/Snapshot), `packages/db/src/repositories/mappers.ts`, `packages/db/src/roundtrip.spec.ts`, `packages/demo-seed/src/nordwerk-graph.ts`, `packages/demo-seed/src/managed-services.ts`, `packages/demo-seed/src/seed.spec.ts`, `apps/web` (10 Dateien, siehe §3), `docs/project/OPEN_QUESTIONS.md` |
+| Betroffene Artefakte | `packages/contracts/src/relationship.ts`, `packages/contracts/PROVENANCE.md`, `packages/contracts/src/relationship.spec.ts`, `packages/db/src/schema.ts` (+ Drizzle-Migration/Snapshot), `packages/db/src/repositories/mappers.ts`, `packages/db/src/roundtrip.spec.ts`, `packages/demo-seed/src/nordwerk-graph.ts`, `packages/demo-seed/src/managed-services.ts`, `packages/demo-seed/src/seed.spec.ts`, `apps/web` (12 Dateien, siehe §3; Nachtrag 2026-07-23), `docs/project/OPEN_QUESTIONS.md` |
 | Verwandte offene Fragen | **O-D07-05/-06/-07** (Beziehungs-`status`, Vertrauensgrad, Richtung — betreffen *andere* §-„Beziehungen"-Felder, decken `weight`/`effectiveness_assumption` **nicht** ab); **O-WP019-02** (PDF-interne Nummerierungskonflikte Dok. 07), **O-WP019-03** (Zitierdrift alte Markdown-Zählung) |
 
 > **Keine Änderung aktiver Spezifikationen durch dieses Dokument; Umsetzung erst nach
@@ -102,12 +102,15 @@ reißt: 2 Testdateien (je 1 Testfall anzupassen), Schema + Migration, 2 Mapper-S
 | UI-Anzeige | `apps/web/components/twin/ObjectDetailView.tsx:152–155` und `components/isms/IsmsCards.tsx:115–118` (jeweils „Wirkungsannahme (nicht nachgewiesen): …"); `components/services/ServiceCard.tsx:230–231` |
 | UI-Datenmapper | `apps/web/lib/twin/object-detail.ts:119,377`; `lib/isms/data.ts:87,205`; `lib/services/data.ts:66,201` |
 | UI-Tests | `apps/web/lib/twin/__tests__/object-detail.test.ts:191`; `lib/isms/__tests__/data.test.ts:61`; `lib/services/__tests__/data.test.ts:115` |
-| Narrative Referenz | `apps/web/lib/entscheidungen/data.ts:476` (Decision-Card-Abdeckungsanalyse: Feld „Wirkung" hat „kein[en] Träger … kennt nur eine Wirkungsannahme") |
+| Trust-Layer-Abgleich *(Nachtrag 2026-07-23, WP-020 Slice 5)* | `apps/web/lib/twin/trust-layer.ts:86–92`: Die Trust-Layer-Angabe **„Annahmen"** (sichtbar auf der Objekt-360-Seite) ist als „teilweise" ausgewiesen mit der Wirkungsannahme als Teil-Träger („sichtbar als ‚Wirkungsannahme (nicht nachgewiesen)‘ an der jeweiligen Kante"); der Kopfkommentar Z. 17–26 nennt den CCP-004-Vorbehalt ausdrücklich. Test: `apps/web/lib/twin/__tests__/trust-layer.test.ts:54–57` verankert den Teil-Träger am Seed (mind. 1 Kante mit `effectiveness_assumption`) |
+| Feldabgleich „Wirkung" *(Nachtrag 2026-07-23)* | `apps/web/lib/entscheidungen/data.ts:472–477` (Dok.-10-Decision-Card-Abdeckungsanalyse): bisher „kein Träger … kennt nur eine Wirkungsannahme"; Anhebung auf **„teilweise (Vertragsträger `effectiveness_assumption`)"** ist **in Umsetzung (WP-020-Fix-Pass)**, inkl. CCP-004-Vorbehalt als Code-Kommentar |
 
 Eine Entfernung reißt: 3 Anzeige-Komponenten, 3 UI-Datenmapper, 3 UI-Tests, 5 Seed-Kanten
 (verlieren ihren Erklärtext), 2 Guardrail-Tests (verlieren einen Prüf-Input, bleiben grün),
-1 narrativen Analysetext, plus Contract/DB/Mapper/Tests wie bei `weight`. Insgesamt
-**11 Dateien in `packages/` + 10 Dateien in `apps/web`** tragen mindestens eines der Felder.
+das Feldabgleichs-Narrativ in `entscheidungen/data.ts` sowie — Nachtrag 2026-07-23 — den
+Trust-Layer-Abgleich samt Test (Angabe „Annahmen" fällt auf „kein Träger" zurück, 1
+Seed-Verankerung reißt), plus Contract/DB/Mapper/Tests wie bei `weight`. Insgesamt
+**11 Dateien in `packages/` + 12 Dateien in `apps/web`** tragen mindestens eines der Felder.
 Bemerkenswert: Die UI-Formulierung „Wirkungsannahme (nicht nachgewiesen)" leistet genau die
 Ehrlichkeitsarbeit, die P07/07-D05 verlangen — nur eben über ein Feld, das der PDF-Vertrag
 nicht kennt.
@@ -195,14 +198,16 @@ Beziehungstypen oder **globale Semantik benötigen Decision Record und Schema-Ve
 | `db/src/repositories/mappers.ts` | Z. 108–109, 131–134 | 4 Stellen raus | unverändert | umbauen | unverändert |
 | `db/src/roundtrip.spec.ts` | Z. 58–59, 94 | Fixture/Assertion anpassen | unverändert | Fixture umbauen | unverändert |
 | `demo-seed` (2 Builder, 5 Kanten, 2 Guardrail-Tests) | siehe §3.2 | 5 Erklärtexte entfallen/umziehen; Guardrail-Input anpassen | unverändert | Builder + 5 Kanten auf Erweiterungsfeld; Guardrail-Regex nachziehen | unverändert |
-| `apps/web` (3 Komponenten, 3 Mapper, 3 Tests, 1 Narrativ) | siehe §3.2 | Anzeigen + Tests entfernen; Narrativ in `entscheidungen/data.ts:476` umformulieren | unverändert | 3 Datenmapper lesen Erweiterungsfeld; Komponenten unverändert | unverändert |
+| `apps/web` (3 Komponenten, 3 Mapper, 3 Tests) | siehe §3.2 | Anzeigen + Tests entfernen | unverändert | 3 Datenmapper lesen Erweiterungsfeld; Komponenten unverändert | unverändert |
+| `apps/web` Trust-Layer-Abgleich + Feldabgleich „Wirkung" *(Nachtrag 2026-07-23)* | `lib/twin/trust-layer.ts:86–92` (+ Kopfkommentar Z. 17–26, Test `trust-layer.test.ts:54–57`); `lib/entscheidungen/data.ts:472–477` (Anhebung auf „teilweise (Vertragsträger `effectiveness_assumption`)" in Umsetzung, WP-020-Fix-Pass) | Trust-Layer-Angabe „Annahmen" fällt auf „kein Träger" zurück; Feldabgleich „Wirkung" fällt auf „kein Träger" zurück; Seed-Verankerung im Test entfernen (beide Stellen tragen den CCP-004-Vorbehalt als Code-Kommentar) | unverändert | Test liest das Erweiterungsfeld; Trägertexte/Kommentare nachziehen; Aussage „teilweise" bleibt bestehen | unverändert; Vorbehalts-Kommentare werden zu Decision-Record-Belegen aufgelöst |
 | Dok. 07 | Abschnitt „Beziehungen als erstklassige Daten" | unverändert | unverändert | ggf. Verweis auf Erweiterungsmechanik | Fortschreibung + Decision Record + Schema-Version |
 | `docs/project/OPEN_QUESTIONS.md` | O-D07-Block | Befund als erledigt austragen | Kennzeichnung nachführen | dito | neue DR-Referenz |
 
 Aufwandsindikation: `weight`-Entfernung ≈ 6 Dateien + Migrationsartefakte, kein
-Fachinhalt. `effectiveness_assumption` betrifft in Summe **15 Dateien** (5 in `packages/`
-über §3.1 hinaus, 10 in `apps/web`), davon bei (b1) **0** Codeänderungen, bei (b2) ca. 9
-(Mapper/Seed/Tests), bei (a) alle 15.
+Fachinhalt. `effectiveness_assumption` betrifft in Summe **17 Dateien** (5 in `packages/`
+über §3.1 hinaus, 12 in `apps/web`; Nachtrag 2026-07-23), davon bei (b1) **0**
+Codeänderungen, bei (b2) ca. 10 (Mapper/Seed/Tests inkl. `trust-layer.test.ts`), bei (a)
+alle 17.
 
 ## 7. Prüfauftrag „Herkunft als eigenes Konzept" — Befund
 
@@ -266,6 +271,13 @@ Präzisierungspunkte (keine stille Korrektur; Behandlung siehe §8):
 - UI: „Wirkungsannahme (nicht nachgewiesen)"-Anzeigen in Objekt-360, ISMS-Karten und
   Service-Karten unverändert sichtbar (bei b1/b2/c) bzw. sauber entfernt (bei a);
   3 UI-Tests entsprechend.
+- Trust-Layer-Abgleich (Objekt-360, `lib/twin/trust-layer.ts`): Angabe „Annahmen" weist
+  bei (b1/b2/c) weiterhin „teilweise" mit der Wirkungsannahme als Teil-Träger aus (bei b2
+  liest `trust-layer.test.ts:54–57` das Erweiterungsfeld); bei (a) fällt sie sichtbar auf
+  „kein Träger" zurück — Trägertext und Test-Erwartung („kein Träger"-Liste) nachziehen.
+- Feldabgleich „Wirkung" (`lib/entscheidungen/data.ts`, Stand nach WP-020-Fix-Pass):
+  „teilweise (Vertragsträger `effectiveness_assumption`)" bei (b1/b2/c) — bei (b2) mit
+  angepasstem Trägerverweis —, bei (a) zurück auf „kein Träger".
 - Concept Consistency Review über Dok. 07-Bezüge (Beziehungs-Feldliste, 07-D04, Globale
   Akzeptanzkriterien).
 
@@ -289,3 +301,11 @@ Präzisierungspunkte (keine stille Korrektur; Behandlung siehe §8):
 | Concept Consistency Reviewer | ausstehend |
 | Human/Product Gate (**Owner**) — Entscheid je Feld: (a)/(b1)/(b2)/(c) | **offen** |
 | Zusätzliches Gate bei Spalten-Drop (destruktive Migration) | offen (nur bei Option a) |
+
+---
+
+*Nachtrag 2026-07-23: Auswirkungsmatrix um WP-020-Slice-5-Fundstellen ergänzt
+(Konzepttreue-Gate-Auflage) — §3.2, §6 und §9 um den Trust-Layer-Abgleich
+(`apps/web/lib/twin/trust-layer.ts` + Test) und den Feldabgleich „Wirkung"
+(`apps/web/lib/entscheidungen/data.ts`, Anhebung in Umsetzung, WP-020-Fix-Pass) erweitert;
+Dateizählungen nachgeführt. Befund (§1–§2), Optionen (§4) und Empfehlung (§5) unverändert.*
