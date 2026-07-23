@@ -1,34 +1,63 @@
+'use client';
+
 /**
- * Präsentationaler Inhalt des Ortes „Heute" – Mission Control, read-only (WP-016 Slice 2).
+ * Präsentationaler Inhalt des Ortes „Heute" – strategische Ebene 1 mit Detailtiefe
+ * (WP-016 Slice 2, umgebaut in WP-020 Slice 3/4 nach DR-0008/DR-0009/DR-0010).
  *
- * Rendert AUSSCHLIESSLICH das in `lib/heute/data.ts` abgeleitete Modell des AKTIVEN Mandanten
- * und die Rollen-/Weltangaben aus `lib/shell/roles.ts`. Es wird nichts hartkodiert, nichts
- * gerechnet und nichts erfunden: Zahlen entstehen im Helfer, Texte benennen ihre Ermittlungsregel.
+ * Rendert AUSSCHLIESSLICH die in `lib/heute/data.ts` und `lib/heute/dashboard.ts` abgeleiteten
+ * Modelle des AKTIVEN Mandanten und die Rollen-/Weltangaben aus `lib/shell/roles.ts`. Es wird
+ * nichts hartkodiert, nichts gerechnet und nichts erfunden: Zahlen entstehen im Helfer, Texte
+ * benennen ihre Ermittlungsregel.
  *
- * Vier Abschnitte (Dok. 06 §7 S01), Reihenfolge je Erlebniswelt aus `lib/heute/framing.ts`
- * (reversible Anzeigeentscheidung, dort mit Quelle und OFFENE FRAGE O-WP016-01 belegt):
- *   „Wo stehe ich?", „Was ist erfasst worden?", „Was weiß ich über die Datenlage?",
- *   „Wo steige ich ein?" – gefolgt vom Ehrlichkeitsblock „Was hier bewusst nicht steht".
- * Die Daten sind für alle zwölf Rollen IDENTISCH (Dok. 06 06-D05, Dok. 10 ENTSCHEIDUNG 10-02);
- * die Rolle ändert die REIHENFOLGE der Abschnitte und die Leitfrage der Erlebniswelt – sonst
- * weicht kein Wort ab (per Rollen-Gleichheitstest belegt). Kein Rollen-Gating.
+ * DETAILTIEFE (Dok. 06, Abschnitt „Detailtiefe"; Zuordnung in `lib/heute/detailtiefe.ts`):
+ *  - Ebene 1 (immer sichtbar): Klartext-Zustand + Kacheln/Abdeckungen aus belegten Daten
+ *    (DR-0008) – „Klartext, Zustand und Handlung"; Handlung ist im read-only-Produkt die
+ *    Navigation (jeder Drill-down ist ein Link).
+ *  - Ebene 2: die WP-016-Abschnitte „Wo stehe ich?", „Was ist erfasst worden?",
+ *    „Was weiß ich über die Datenlage?" (Ursachen & Datenlage).
+ *  - Ebene 3: „Wo steige ich ein?" (Rohdaten-Einstiege in Objektlisten/Objekt-360).
+ *  Die Ebenen sind KUMULATIV; VERDICHTUNG IST UMORDNUNG, KEIN INFORMATIONSVERLUST: kein
+ *  WP-016-Inhalt wurde gelöscht, alles bleibt über die Tiefenwahl erreichbar (per Test belegt).
+ *  IMMER sichtbar – unabhängig von der Tiefe: Kontextleiste, Tiefenschalter, Ebene 1,
+ *  Ehrlichkeitsblock und Seitenbausteine-Hinweis (Invariante in `lib/heute/detailtiefe.ts`:
+ *  es existiert derzeit keine sicherheitskritische Warnung, die eine Tiefe unterdrücken
+ *  könnte; künftige Warnungen MÜSSEN außerhalb der Tiefensteuerung gerendert werden).
  *
- * NICHT enthalten (WP-016 Nicht-Ziele): Morning Mission, Veränderungsfeed, Wiederaufnahme,
- * Score, Ampel, Reifegrad, Trend, Prozentwert, Schwellenwert, Prioritätsrang, Frist, Empfehlung,
- * Serviceangebot, Sortierung nach Schwere. Gezählt wird – bewertet wird nicht.
+ * Reihenfolge der WP-016-Abschnitte je Erlebniswelt aus `lib/heute/framing.ts` (reversible
+ * Anzeigeentscheidung, dort mit Quelle und OFFENE FRAGE O-WP016-01 belegt). Die Daten sind für
+ * alle zwölf Rollen IDENTISCH (Dok. 06 06-D05, Dok. 10 ENTSCHEIDUNG 10-02); die Rolle ändert
+ * die REIHENFOLGE der Abschnitte und die Leitfrage der Erlebniswelt – sonst weicht kein Wort
+ * ab (per Rollen-Gleichheitstest belegt). Kein Rollen-Gating. Die Ebene 1 ist bewusst
+ * ROLLENNEUTRAL gebaut (DR-0009: sie muss später ohne Umbau rollenlos rendern können – die
+ * Rolle ist hier nie Datenvoraussetzung, nur Rahmung der tieferen Abschnitte).
  *
- * Es werden auf dieser Seite bewusst KEINE Lebenszyklus-Stände angezeigt (die Einstiege nennen
- * Familie, Objekttyp und Anzahl, keinen Stand). Der seitenweite Rahmungssatz aus `IsmsContent` /
- * `ObjectDetailView` entfällt deshalb hier (WP-016 Acceptance 14) – ein „Prüfergebnis" wird an
- * keiner Stelle behauptet.
+ * NICHT enthalten (WP-016 Nicht-Ziele, DR-0008-Grenze): Morning Mission, Veränderungsfeed,
+ * Wiederaufnahme, Score, Reifegrad, Trend, Prozentwert, Schwellenwert, Prioritätsrang, Frist,
+ * Empfehlung, Serviceangebot, Sortierung nach Schwere. Badges beruhen ausschließlich auf der
+ * Positivliste erfasster Lagen (`BADGE_RULES` in `lib/heute/dashboard.ts`).
  *
- * Heading-Hierarchie: h1 (Ort) > h2 (Abschnitt) > h3 (Block) > h4 (Leerzustand im Block).
- * Bestehendes CSS-Vokabular, kein neues Designsystem (DR-0003).
+ * Es werden auf dieser Seite bewusst KEINE Lebenszyklus-Stand-NAMEN angezeigt (Begründung am
+ * `LifecycleSummaryTile` in `lib/heute/dashboard.ts`); die Lebenszyklus-Kachel trägt die
+ * 08-D07-Glosse. Der seitenweite Rahmungssatz aus `IsmsContent` / `ObjectDetailView` entfällt
+ * deshalb weiterhin (WP-016 Acceptance 14) – ein „Prüfergebnis" wird an keiner Stelle
+ * behauptet.
+ *
+ * TIEFEN-ZUSTAND: `tiefe`/`onTiefeChange` kommen von `HeuteView` (dort mit versioniertem
+ * localStorage-Schlüssel persistiert, O-WP020-01). Ohne `onTiefeChange` (Alt-Tests, Wächter)
+ * verwaltet die Komponente die Tiefe selbst und startet bewusst in VOLLER Tiefe 3: die
+ * Wächter (Prozessvokabular, Bewertungsvokabular, Leerzustand-Mandantengrenze) prüfen so den
+ * GESAMTEN gerenderten Text; die echte Seite startet über `HeuteView` in der Standardtiefe 1
+ * (Dok. 06 P06 „Die erste Ebene bleibt ruhig").
+ *
+ * Heading-Hierarchie: h1 (Ort) > h2 (Abschnitt) > h3 (Block/Kachel) > h4 (Leerzustand im
+ * Block). Bestehendes CSS-Vokabular, erweitert um die `db-`/`ht-`-Klassen (DR-0008,
+ * Stilleitplanke „nicht absolut übertrieben").
  *
  * Bundle-Grenze (O-WP014-09): Routen und Datumsanzeige kommen fertig aus dem Modell; diese
  * Datei importiert weder `lib/twin/object-detail.ts` noch bildet sie selbst eine Route.
  */
 import Link from 'next/link';
+import { useId, useState } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
 
 import {
@@ -40,6 +69,13 @@ import {
   type PlaceEntryPoint,
   type RecordingWave,
 } from '../../lib/heute/data';
+import { buildHeuteDashboard, type HeuteDashboardModel } from '../../lib/heute/dashboard';
+import {
+  DETAILTIEFEN,
+  DETAILTIEFE_STANDARD,
+  SECTION_EBENE,
+  type Detailtiefe,
+} from '../../lib/heute/detailtiefe';
 import {
   MISSION_SECTIONS,
   MISSION_SECTION_IDS,
@@ -48,15 +84,41 @@ import {
 } from '../../lib/heute/framing';
 import { getPlace } from '../../lib/shell/places';
 import { worldForRole, type DemoRole, type ExperienceWorld } from '../../lib/shell/roles';
+import {
+  CoverageKachel,
+  EmptyTenantKachel,
+  LifecycleSummaryKachel,
+  StockKachel,
+} from './DashboardKacheln';
 import { PageContextBar } from './PageContextBar';
+import { SeitenbausteineHinweis } from './SeitenbausteineHinweis';
 
 /** Stabile DOM-ID je Abschnitt (für `aria-labelledby`). */
 function sectionHeadingId(id: MissionSectionId): string {
   return `heute-${id}`;
 }
 
-export function MissionControlContent({ role, tenant }: { role: DemoRole; tenant: DemoTenant }) {
+export function MissionControlContent({
+  role,
+  tenant,
+  tiefe,
+  onTiefeChange,
+}: {
+  role: DemoRole;
+  tenant: DemoTenant;
+  /** Gewählte Detailtiefe – von `HeuteView` gehalten und persistiert (O-WP020-01). */
+  tiefe?: Detailtiefe;
+  /** Tiefenwechsel-Handler; ohne ihn verwaltet die Komponente die Tiefe selbst (s. Kopfnotiz). */
+  onTiefeChange?: (tiefe: Detailtiefe) => void;
+}) {
+  // Unkontrollierter Fallback NUR für Alt-Tests/Wächter: volle Tiefe, damit der gesamte Text
+  // unter den Wächtern steht (Begründung in der Kopfnotiz). Die echte Seite ist kontrolliert.
+  const [fallbackTiefe, setFallbackTiefe] = useState<Detailtiefe>(tiefe ?? 3);
+  const aktiveTiefe: Detailtiefe = onTiefeChange ? (tiefe ?? DETAILTIEFE_STANDARD) : fallbackTiefe;
+  const wechsleTiefe = onTiefeChange ?? setFallbackTiefe;
+
   const model = buildMissionControl(tenant.tenant_id);
+  const dashboard = buildHeuteDashboard(tenant.tenant_id);
   const world = worldForRole(role);
   const place = getPlace('heute');
   // NICHT ERREICHBAR, bewusst fail-soft belassen: `parseSession` verwirft unbekannte Rollen-IDs,
@@ -82,22 +144,30 @@ export function MissionControlContent({ role, tenant }: { role: DemoRole; tenant
         nicht. Beides steht am Seitenende als benannte Lücke.
       </p>
 
-      {model ? (
+      {model && dashboard ? (
         <>
           <ContextBar model={model} role={role} tenant={tenant} world={world} />
 
-          {sectionOrder.map((id) => (
-            <MissionSection
-              key={id}
-              id={id}
-              model={model}
-              role={role}
-              tenant={tenant}
-              world={world}
-            />
-          ))}
+          <TiefenSchalter tiefe={aktiveTiefe} onChange={wechsleTiefe} />
+
+          <DashboardSection dashboard={dashboard} />
+
+          {sectionOrder
+            .filter((id) => SECTION_EBENE[id] <= aktiveTiefe)
+            .map((id) => (
+              <MissionSection
+                key={id}
+                id={id}
+                model={model}
+                role={role}
+                tenant={tenant}
+                world={world}
+              />
+            ))}
 
           <HonestySection model={model} />
+
+          <SeitenbausteineHinweis ort="heute" />
         </>
       ) : (
         /* NICHT ERREICHBAR, bewusst fail-loud: die Prop ist ein `DemoTenant` aus dem Seed, und
@@ -176,6 +246,102 @@ function ContextBar({
         <dd>{world.name}</dd>
       </div>
     </PageContextBar>
+  );
+}
+
+/* -----------------------------------------------------------------------------
+ * Detailtiefe-Schalter (Dok. 06 „Detailtiefe" / P06, WP-020 Slice 3)
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Wahl der Detailtiefe als Radiogruppe: Text + Radio-Form (nie nur Farbe, 06-D11). Die drei
+ * Stufen samt Beschreibung kommen aus `DETAILTIEFEN` (eine Quelle). Keine Animation – nichts,
+ * was `prefers-reduced-motion` unterdrücken müsste.
+ */
+function TiefenSchalter({
+  tiefe,
+  onChange,
+}: {
+  tiefe: Detailtiefe;
+  onChange: (tiefe: Detailtiefe) => void;
+}) {
+  // Eindeutiger Gruppenname je Instanz (mehrere Renders im Test dürfen nicht koppeln).
+  const gruppe = useId();
+
+  return (
+    <fieldset className="ht-tiefe">
+      <legend>Detailtiefe dieser Ansicht</legend>
+      <p className="ht-tiefe-hinweis">
+        Jede Ebene enthält die vorherigen – nichts geht verloren, tiefere Inhalte öffnen sich
+        kontrolliert. Die Wahl wird, wenn Ihr Browser lokalen Speicher erlaubt, auf diesem Gerät
+        gespeichert: nur die Stufe, ohne Mandanten- oder Rollenbezug. Kontext, Kacheln und die
+        benannten Grenzen dieser Seite bleiben in jeder Tiefe sichtbar.
+      </p>
+      <div className="ht-tiefe-optionen">
+        {DETAILTIEFEN.map((stufe) => (
+          <label
+            key={stufe.stufe}
+            className={
+              stufe.stufe === tiefe ? 'ht-tiefe-option ht-tiefe-option--aktiv' : 'ht-tiefe-option'
+            }
+          >
+            <input
+              type="radio"
+              name={gruppe}
+              value={stufe.stufe}
+              checked={stufe.stufe === tiefe}
+              onChange={() => onChange(stufe.stufe)}
+            />
+            <span className="ht-tiefe-titel">{`Ebene ${stufe.stufe} · ${stufe.titel}`}</span>
+            <span className="ht-tiefe-beschreibung">{stufe.beschreibung}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+/* -----------------------------------------------------------------------------
+ * Ebene 1 – verdichteter Klartext-Zustand + Kacheln aus belegten Daten
+ * (WP-020 Slice 4, DR-0008; Modelle aus `lib/heute/dashboard.ts`)
+ * --------------------------------------------------------------------------- */
+
+function DashboardSection({ dashboard }: { dashboard: HeuteDashboardModel }) {
+  return (
+    <section aria-labelledby="heute-stand">
+      <h2 id="heute-stand">Wie ist der Stand?</h2>
+
+      {/* Klartext-Zustand (Ebene 1): jeder Satz aus abgeleiteten Zahlen, inkl. der ehrlichen
+          Grenze (kein Delta, keine Entwicklung, keine wichtigste Ursache – kein Träger). */}
+      <ul className="db-klartext">
+        {dashboard.klartext.map((satz) => (
+          <li key={satz}>{satz}</li>
+        ))}
+      </ul>
+
+      {dashboard.isEmpty && dashboard.emptyTile ? (
+        /* Leerer Mandant: EINE ehrliche Datenlücken-Kachel statt einer „0 von 0"-Wand. */
+        <EmptyTenantKachel tile={dashboard.emptyTile} />
+      ) : (
+        <ul className="db-grid" aria-label="Kacheln aus belegten Daten">
+          {dashboard.stockTiles.map((tile) => (
+            <li key={tile.id}>
+              <StockKachel tile={tile} />
+            </li>
+          ))}
+          {dashboard.lifecycleSummary ? (
+            <li>
+              <LifecycleSummaryKachel tile={dashboard.lifecycleSummary} />
+            </li>
+          ) : null}
+          {dashboard.coverage.map((tile) => (
+            <li key={tile.id}>
+              <CoverageKachel tile={tile} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 

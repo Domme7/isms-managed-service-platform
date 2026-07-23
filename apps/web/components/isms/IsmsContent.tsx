@@ -13,9 +13,12 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
+import { buildIsmsVerdichtung } from '../../lib/heute/dashboard';
 import { buildIsmsCoreView, hasManagedServices } from '../../lib/isms/data';
 import type { DemoRole } from '../../lib/shell/roles';
+import { CoverageKachel, LifecycleVerteilungKachel } from '../shell/DashboardKacheln';
 import { PageContextBar } from '../shell/PageContextBar';
+import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 import {
   ControlCard,
   EvidenceCard,
@@ -32,6 +35,10 @@ import {
  */
 export function IsmsContent({ role, tenant }: { role: DemoRole; tenant: DemoTenant }) {
   const view = buildIsmsCoreView(tenant.tenant_id);
+  // Verdichteter Überblick (WP-020 Slice 4, DR-0008): Lebenszyklus-Verteilung + Abdeckungen
+  // aus DENSELBEN Ableitungen wie die Karten darunter; `undefined` bei leerer Kernsicht
+  // (dann zeigt die Seite ihren eigenen ehrlichen Leerzustand, keine „0 von 0"-Wand).
+  const verdichtung = buildIsmsVerdichtung(tenant.tenant_id);
   // Mandant für alle Objekt-Links dieser Ansicht (WP-014 Slice 2): ausschließlich der AKTIVE
   // Mandant der Session-Simulation – derselbe, aus dem die Karten abgeleitet sind. Niemals
   // hartkodiert und niemals ein fremder Mandant (Dok. 07 §17/P09).
@@ -94,6 +101,28 @@ export function IsmsContent({ role, tenant }: { role: DemoRole; tenant: DemoTena
         </section>
       ) : (
         <>
+          {verdichtung ? (
+            <section aria-labelledby="isms-ueberblick">
+              <h2 id="isms-ueberblick">Überblick aus belegten Daten</h2>
+              <p className="tw-muted">
+                Verdichtung der Karten dieser Seite – es wird nichts berechnet, was der Datenbestand
+                nicht trägt: die Verteilung der erfassten Lebenszyklus-Stände und zwei Abdeckungen
+                als „x von y" mit sichtbarer Grundgesamtheit. Jede Kachel nennt Frage, Scope,
+                Datenstand und Ermittlungsregel; der Weg führt zu den Karten dieser Seite.
+              </p>
+              <ul className="db-grid" aria-label="Verdichteter Überblick aus belegten Daten">
+                <li>
+                  <LifecycleVerteilungKachel tile={verdichtung.lifecycle} />
+                </li>
+                {verdichtung.coverage.map((tile) => (
+                  <li key={tile.id}>
+                    <CoverageKachel tile={tile} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
           <section aria-labelledby="isms-risiken">
             <h2 id="isms-risiken">Risiken</h2>
             <p className="tw-muted">
@@ -178,6 +207,11 @@ export function IsmsContent({ role, tenant }: { role: DemoRole; tenant: DemoTena
           </section>
         </>
       )}
+
+      {/* Seitenbausteine-Konvention (WP-020 Slice 3, Dok. 06 „Verbindliche Seitenbausteine"):
+          ehrliche Benennung der Bausteine ohne Träger – auch im Leerzustand sichtbar, denn die
+          Aussage betrifft die Seite, nicht den einzelnen Mandanten. */}
+      <SeitenbausteineHinweis ort="isms" />
     </>
   );
 }

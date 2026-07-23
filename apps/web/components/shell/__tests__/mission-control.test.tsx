@@ -1,24 +1,36 @@
 /**
- * Render-Tests des Ortes „Heute" – Mission Control (WP-016 Slice 2, Acceptance 1–14).
+ * Render-Tests des Ortes „Heute" – Mission Control (WP-016 Slice 2, Acceptance 1–14;
+ * umgebaut in WP-020 Slice 3/4: strategische Ebene 1 + Detailtiefe + Dashboard-Kacheln).
  *
  * Geprüft wird gegen den echten `DEMO_SEED` (keine Mocks):
- *  1. Leitfrage aus `places.ts`, vier Abschnitte + Ehrlichkeitsblock, Reihenfolge je Welt.
+ *  1. Leitfrage aus `places.ts`, Ebene-1-Abschnitt + vier WP-016-Abschnitte + Ehrlichkeitsblock,
+ *     Reihenfolge je Welt.
  *  2. „Wo stehe ich?": Rolle (R-ID, Produktrolle, Sphäre, Kernverantwortung), Mandant, Bestand.
  *  3. „Was ist erfasst worden?": Wellen mit deutschem Datum und Anzahl, abgeleitete Historienaussage.
  *  4. „Was weiß ich über die Datenlage?": vier Beobachtungen mit Zählung, Grundgesamtheit, Regel.
  *  5. „Wo steige ich ein?": Orte mit Bestand, je Familie ein Objekt-Einstieg, mandantentreue Links.
  *  6. Empty-States für Finovia und MediCore (keine Zahlen, keine fremden Namen/IDs).
- *  7. Identische Datenmenge über ALLE ZWÖLF Rollen (Dok. 06 06-D05).
+ *  7. Identische Datenmenge über ALLE ZWÖLF Rollen (Dok. 06 06-D05) – inklusive der Kacheln.
  *  8. Negativbeweis Mandantentrennung: kein fremder Name, keine fremde ID im DOM.
  *  9. Negativbeweis Bewertung: kein Score/Ampel/Reifegrad/Trend/Prozent/Rang/Empfehlung im Text.
  * 10. Sitzungsrahmen `HeuteView`: „nicht angemeldet" und angemeldeter Zustand.
+ * 11. Detailtiefe (WP-020): Standardtiefe 1, kumulative Ebenen, Persistenz über den
+ *     versionierten localStorage-Schlüssel, mandantenfreier Speicherwert, kein
+ *     Informationsverlust (alle WP-016-Abschnitte über die Tiefenwahl erreichbar).
+ * 12. Dashboard-Kacheln (WP-020, DR-0008): Selbsterklärung je Kachel (Struktur), „x von y",
+ *     Badges nur aus der Positivliste, Datenlücken-Kachel leerer Mandanten.
+ *
+ * RENDER-KONVENTION SEIT WP-020: `MissionControlContent` OHNE `onTiefeChange` startet bewusst
+ * in VOLLER Tiefe 3 (unkontrollierter Wächter-/Alt-Test-Modus, Begründung in der Komponente) –
+ * die Alt-Assertions prüfen damit weiterhin den GESAMTEN Inhalt. Die echte Seite (`HeuteView`)
+ * startet kontrolliert in der Standardtiefe 1; das prüft der Detailtiefe-Block.
  *
  * Die im Ehrlichkeitsblock behaupteten Datenlücken werden zusätzlich GEGEN DEN DATENBESTAND
  * festgenagelt (keine `Task`-Objekte) – und die seit WP-017 belegte Lage (`Decision Record` und
  * genau eine `supersedes`-Kante) wird ebenso festgenagelt, damit der Text weder still veraltet
  * noch still zu viel behauptet.
  */
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { DEMO_SEED, DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
@@ -27,10 +39,15 @@ import { MissionControlContent } from '../MissionControlContent';
 import { SessionProvider } from '../SessionProvider';
 import { buildDecisionRegister } from '../../../lib/entscheidungen/data';
 import { buildMissionControl } from '../../../lib/heute/data';
+import { BADGE_RULES, buildHeuteDashboard } from '../../../lib/heute/dashboard';
+import { DETAILTIEFE_STORAGE_KEY } from '../../../lib/heute/detailtiefe';
 import { framingForRole, MISSION_SECTIONS } from '../../../lib/heute/framing';
 import { getPlace } from '../../../lib/shell/places';
 import { DEMO_ROLES, getRole, type DemoRole } from '../../../lib/shell/roles';
 import { SESSION_STORAGE_KEY, serializeSession } from '../../../lib/shell/session';
+
+/** Überschrift des Ebene-1-Abschnitts (WP-020 Slice 3/4). */
+const EBENE1_TITEL = 'Wie ist der Stand?';
 
 function tenant(tenantId: string): DemoTenant {
   const found = DEMO_TENANTS.find((t) => t.tenant_id === tenantId);
@@ -65,6 +82,8 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
     expect(screen.getByText(/ist nicht belegt – und auch/)).toBeInTheDocument();
     expect(screen.getByText(/priorisiert nicht/)).toBeInTheDocument();
 
+    // WP-020: die Ebene 1 steht als eigener Abschnitt VOR den WP-016-Abschnitten.
+    expect(screen.getByRole('heading', { level: 2, name: EBENE1_TITEL })).toBeInTheDocument();
     for (const section of Object.values(MISSION_SECTIONS)) {
       expect(screen.getByRole('heading', { level: 2, name: section.title })).toBeInTheDocument();
     }
@@ -75,6 +94,9 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
 
   it('ordnet die vier Abschnitte je Erlebniswelt und stellt den Ehrlichkeitsblock ans Ende', () => {
     // Alle zwölf Rollen: die gerenderte Reihenfolge entspricht exakt der Rahmung ihrer Welt.
+    // WP-020 (geplanter Umbau, Regel erhalten): NEU steht die rollenNEUTRALE Ebene 1 vorweg;
+    // die Welt-Reihenfolge der WP-016-Abschnitte und der Ehrlichkeitsblock am Ende bleiben
+    // unverändert die geprüfte Regel.
     for (const demoRole of DEMO_ROLES) {
       const framing = framingForRole(demoRole.id);
       if (!framing) throw new Error(`Rahmung fehlt für ${demoRole.id}`);
@@ -83,6 +105,7 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
         <MissionControlContent role={demoRole} tenant={tenant(TENANT_ID.NORDWERK)} />,
       );
       expect(abschnittsTitel()).toEqual([
+        EBENE1_TITEL,
         ...framing.sectionOrder.map((id) => MISSION_SECTIONS[id].title),
         'Was hier bewusst nicht steht',
       ]);
@@ -562,12 +585,20 @@ describe('MissionControlContent – Empty-States für Mandanten ohne Datenbestan
       );
       // Keine Erfassung, keine Objekt-Einstiege – jeweils benannt, nicht versteckt.
       expect(screen.getByText(/es gibt weder Objekte noch Beziehungen/)).toBeInTheDocument();
+      // WP-020: die Aussage steht jetzt ZWEIMAL – in der Ebene-1-Datenlücken-Kachel und im
+      // WP-016-Leerzustand des Standort-Abschnitts. Beide sind gewollt; die Regel (Aussage
+      // vorhanden, mandantenlokal) bleibt unverändert geprüft.
       expect(
-        screen.getByText(new RegExp(`Für ${leer.display_name} sind im Demo-Datenbestand keine`)),
-      ).toBeInTheDocument();
-      // Die vier Abschnitte bleiben stehen; die Zählungen weisen 0 aus.
-      expect(abschnittsTitel()).toHaveLength(5);
+        screen.getAllByText(new RegExp(`Für ${leer.display_name} sind im Demo-Datenbestand keine`))
+          .length,
+      ).toBeGreaterThanOrEqual(1);
+      // Ebene 1 + die vier Abschnitte bleiben stehen; die Zählungen weisen 0 aus.
+      expect(abschnittsTitel()).toHaveLength(6);
       expect(screen.getByText(/0 von 0 Objekten dieses Mandanten/)).toBeInTheDocument();
+      // WP-020: die Ebene 1 zeigt für den leeren Mandanten die ehrliche Datenlücken-Kachel
+      // (Badge „kein Datenbestand" mit Symbol + Text, Details im Kachel-Block unten).
+      const badge = document.querySelector('.db-badge--kein_datenbestand');
+      expect(badge?.textContent).toContain('kein Datenbestand');
     });
 
     it(`nennt für ${leer.display_name} keinen anderen Mandanten`, () => {
@@ -597,7 +628,9 @@ function datenprofil(container: HTMLElement): { hrefs: string[]; werte: string[]
     .sort();
   const werte = Array.from(
     container.querySelectorAll(
-      '.tw-stat-num, .tw-stat-label, .sv-item-name, .sv-item-meta, .sv-item-note',
+      // WP-020: die Ebene-1-Kacheln und der Klartext-Zustand gehören ausdrücklich mit in den
+      // Vergleich – die Ebene 1 ist rollenNEUTRAL, kein Wort darf je Rolle abweichen.
+      '.tw-stat-num, .tw-stat-label, .sv-item-name, .sv-item-meta, .sv-item-note, .db-tile, .db-klartext li',
     ),
   ).map((el) => el.textContent ?? '');
 
@@ -816,7 +849,208 @@ describe('MissionControlContent – Ehrlichkeitsblock „Was hier bewusst nicht 
 });
 
 /* -----------------------------------------------------------------------------
- * 11. Sitzungsrahmen
+ * 11. Detailtiefe (WP-020 Slice 3; Dok. 06 „Detailtiefe" / P06)
+ * --------------------------------------------------------------------------- */
+
+/** Rendert die ECHTE Seite (HeuteView) mit gesetzter Session – der kontrollierte Tiefen-Pfad. */
+function renderHeuteSeite(tenantId: string = TENANT_ID.NORDWERK) {
+  window.localStorage.setItem(SESSION_STORAGE_KEY, serializeSession({ roleId: 'R03', tenantId }));
+  return render(
+    <SessionProvider>
+      <HeuteView />
+    </SessionProvider>,
+  );
+}
+
+describe('HeuteView – Detailtiefe: Standardtiefe, Erreichbarkeit, Persistenz', () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
+  it('startet in Ebene 1 (P06): Kacheln sichtbar, WP-016-Abschnitte erst ab Tiefe 2/3', () => {
+    renderHeuteSeite();
+
+    // Ebene 1, Kontextleiste, Ehrlichkeitsblock und Bausteine-Hinweis sind IMMER sichtbar
+    // (Invariante: keine Tiefe unterdrückt Kontext oder benannte Grenzen).
+    expect(screen.getByRole('heading', { level: 2, name: EBENE1_TITEL })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Kontext dieser Seite' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Was hier bewusst nicht steht' }),
+    ).toBeInTheDocument();
+    expect(
+      document.querySelector('section[aria-label="Seitenbausteine dieser Seite"]'),
+    ).not.toBeNull();
+
+    // Die tieferen Abschnitte sind in Ebene 1 NICHT gerendert – aber über den sichtbaren
+    // Schalter erreichbar (kein Informationsverlust, nur Umordnung).
+    for (const section of Object.values(MISSION_SECTIONS)) {
+      expect(screen.queryByRole('heading', { level: 2, name: section.title })).toBeNull();
+    }
+    expect(screen.getByRole('radio', { name: /Ebene 1/ })).toBeChecked();
+  });
+
+  it('macht ALLE WP-016-Abschnitte über die Tiefenwahl erreichbar (Umordnung, kein Verlust)', () => {
+    renderHeuteSeite();
+
+    // Ebene 2: Standort, Erfassung, Datenlage erscheinen; die Rohdaten-Einstiege noch nicht.
+    fireEvent.click(screen.getByRole('radio', { name: /Ebene 2/ }));
+    expect(
+      screen.getByRole('heading', { level: 2, name: MISSION_SECTIONS.standort.title }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: MISSION_SECTIONS.erfassung.title }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: MISSION_SECTIONS.datenlage.title }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { level: 2, name: MISSION_SECTIONS.einstieg.title }),
+    ).toBeNull();
+
+    // Ebene 3: auch die Einstiege – damit ist der komplette WP-016-Stand erreichbar.
+    fireEvent.click(screen.getByRole('radio', { name: /Ebene 3/ }));
+    for (const section of Object.values(MISSION_SECTIONS)) {
+      expect(screen.getByRole('heading', { level: 2, name: section.title })).toBeInTheDocument();
+    }
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Was hier bewusst nicht steht' }),
+    ).toBeInTheDocument();
+  });
+
+  it('speichert die bevorzugte Tiefe unter dem versionierten Schlüssel und übersteht einen Reload', () => {
+    const erste = renderHeuteSeite();
+    fireEvent.click(screen.getByRole('radio', { name: /Ebene 3/ }));
+
+    // Persistiert wird NUR die Stufe – mandanten- und rollenfrei (Cross-Tenant-Schutz).
+    expect(window.localStorage.getItem(DETAILTIEFE_STORAGE_KEY)).toBe('3');
+    expect(window.localStorage.getItem(DETAILTIEFE_STORAGE_KEY)).toMatch(/^[123]$/);
+    erste.unmount();
+
+    // „Reload": neuer Render liest den gespeicherten Wert – Ebene 3 ist sofort aktiv.
+    renderHeuteSeite();
+    expect(screen.getByRole('radio', { name: /Ebene 3/ })).toBeChecked();
+    expect(
+      screen.getByRole('heading', { level: 2, name: MISSION_SECTIONS.einstieg.title }),
+    ).toBeInTheDocument();
+  });
+
+  it('fällt bei manipuliertem/veraltetem Speicherwert auf die Standardtiefe zurück', () => {
+    window.localStorage.setItem(DETAILTIEFE_STORAGE_KEY, 'zehn');
+    renderHeuteSeite();
+    expect(screen.getByRole('radio', { name: /Ebene 1/ })).toBeChecked();
+    for (const section of Object.values(MISSION_SECTIONS)) {
+      expect(screen.queryByRole('heading', { level: 2, name: section.title })).toBeNull();
+    }
+  });
+});
+
+/* -----------------------------------------------------------------------------
+ * 12. Dashboard-Kacheln der Ebene 1 (WP-020 Slice 4, DR-0008)
+ * --------------------------------------------------------------------------- */
+
+describe('MissionControlContent – Dashboard-Kacheln (Selbsterklärung, Badges, Datenlücken)', () => {
+  it('rendert je Kachel Frage, Scope/Datenstand, Ermittlungsregel und Drill-down (Struktur)', () => {
+    const dashboard = buildHeuteDashboard(TENANT_ID.NORDWERK);
+    if (!dashboard) throw new Error('Testfixture fehlt: Nordwerk-Dashboard');
+    const { container } = render(
+      <MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+
+    const kacheln = Array.from(container.querySelectorAll('.db-tile'));
+    // Vier Statuskacheln + Lebenszyklus-Zählung + drei Abdeckungen (aus dem Modell, nicht
+    // hartkodiert angenommen).
+    expect(kacheln).toHaveLength(
+      dashboard.stockTiles.length +
+        (dashboard.lifecycleSummary ? 1 : 0) +
+        dashboard.coverage.length,
+    );
+
+    for (const kachel of kacheln) {
+      // Struktur, nicht Wortlaut (Lektion 11): Frage-Überschrift, Meta-Zeile mit Scope und
+      // Datenstand, aufklappbare Ermittlungsregel, Drill-down-Link.
+      expect(kachel.querySelector('.db-frage')?.textContent).toMatch(/\?$/);
+      expect(kachel.querySelector('.db-meta')?.textContent).toMatch(/Scope: /);
+      expect(kachel.querySelector('.db-meta')?.textContent).toMatch(/Datenstand/);
+      expect(kachel.querySelector('details.db-regel summary')?.textContent).toBe(
+        'Ermittlungsregel',
+      );
+      expect(
+        (kachel.querySelector('details.db-regel p')?.textContent ?? '').length,
+      ).toBeGreaterThan(20);
+      expect(kachel.querySelector('.db-drill a')?.getAttribute('href')).toBeTruthy();
+    }
+  });
+
+  it('zeigt Abdeckungen als „x von y" mit Balken-FORM und Badge (Symbol + Text, nie nur Farbe)', () => {
+    const dashboard = buildHeuteDashboard(TENANT_ID.NORDWERK);
+    if (!dashboard) throw new Error('Testfixture fehlt: Nordwerk-Dashboard');
+    const { container } = render(
+      <MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+
+    for (const tile of dashboard.coverage) {
+      const kachel = container.querySelector(`.db-tile[data-tile-id="${tile.id}"]`);
+      if (!kachel) throw new Error(`Kachel fehlt: ${tile.id}`);
+      // Die Zahl kommt aus der Ableitung – exakt „x von y" mit sichtbarer Grundgesamtheit.
+      expect(kachel.querySelector('.db-wert-zahl')?.textContent).toBe(
+        `${tile.covered} von ${tile.total}`,
+      );
+      // Balken = zusätzliche Form, dekorativ (die Aussage steht als Text daneben).
+      expect(kachel.querySelector('.db-balken')?.getAttribute('aria-hidden')).toBe('true');
+      // Badge: Symbol (aria-hidden) + Text aus der Positivliste – nie nur Farbe (06-D11).
+      const badge = kachel.querySelector('.db-badge');
+      if (tile.badge) {
+        expect(badge?.querySelector('[aria-hidden="true"]')).not.toBeNull();
+        expect(badge?.textContent).toContain(tile.badge.text);
+        expect(Object.keys(BADGE_RULES)).toContain(tile.badge.rule);
+      } else {
+        expect(badge).toBeNull();
+      }
+    }
+  });
+
+  it('vergibt kein Badge außerhalb der Positivliste und kein Urteil (kein hoch/mittel/gering)', () => {
+    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA]) {
+      const { container, unmount } = render(
+        <MissionControlContent role={role('R01')} tenant={tenant(tenantId)} />,
+      );
+      const badges = Array.from(container.querySelectorAll('.db-badge'));
+      const zulaessigeTexte = Object.values(BADGE_RULES).map((r) => r.text);
+      for (const badge of badges) {
+        const text = (badge.textContent ?? '').replace(/^[^\wÄÖÜäöü]+/u, '').trim();
+        expect(zulaessigeTexte, `${tenantId}: „${text}"`).toContain(text);
+        expect(text).not.toMatch(/hoch|mittel|gering|Reifegrad|Trend|Risiko/i);
+      }
+      unmount();
+    }
+  });
+
+  it('zeigt für leere Mandanten EINE Datenlücken-Kachel statt einer Kachelwand', () => {
+    const { container } = render(
+      <MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+    );
+    const kacheln = Array.from(container.querySelectorAll('.db-tile'));
+    expect(kacheln).toHaveLength(1);
+    expect(kacheln[0].getAttribute('data-tile-id')).toBe('datenluecke');
+    expect(kacheln[0].querySelector('.db-badge--kein_datenbestand')).not.toBeNull();
+    // Auch die Datenlücken-Kachel erklärt sich: Regel + Drill-down in den (leeren) Zwilling.
+    expect(kacheln[0].querySelector('details.db-regel')).not.toBeNull();
+    expect(kacheln[0].querySelector('.db-drill a')?.getAttribute('href')).toBe(
+      `/twin/${TENANT_ID.FINOVIA}`,
+    );
+  });
+
+  it('trägt die 08-D07-Glosse sichtbar an der Lebenszyklus-Kachel', () => {
+    const { container } = render(
+      <MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const kachel = container.querySelector('.db-tile[data-tile-id="lebenszyklus_zaehlung"]');
+    expect(kachel?.querySelector('.db-glosse')?.textContent).toMatch(/kein Prüfergebnis/);
+  });
+});
+
+/* -----------------------------------------------------------------------------
+ * 13. Sitzungsrahmen
  * --------------------------------------------------------------------------- */
 
 describe('HeuteView – Sitzungsrahmen (Simulation)', () => {
@@ -854,9 +1088,10 @@ describe('HeuteView – Sitzungsrahmen (Simulation)', () => {
     );
 
     expect(screen.getByText(getPlace('heute').question)).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 2, name: MISSION_SECTIONS.standort.title }),
-    ).toBeInTheDocument();
+    // WP-020 (geplanter Umbau): die Seite startet in der ruhigen Ebene 1 (P06) – sichtbar sind
+    // der Ebene-1-Abschnitt und der Kontext; die WP-016-Abschnitte sind über den
+    // Tiefenschalter erreichbar (eigener Detailtiefe-Testblock oben).
+    expect(screen.getByRole('heading', { level: 2, name: EBENE1_TITEL })).toBeInTheDocument();
     expect(screen.getByText('R03 · ISMS Manager')).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Nicht angemeldet (Simulation)' })).toBeNull();
   });

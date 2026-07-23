@@ -43,6 +43,7 @@ import {
 import { getPlace } from '../../lib/shell/places';
 import type { DemoRole } from '../../lib/shell/roles';
 import { PageContextBar } from '../shell/PageContextBar';
+import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 import { formatIsoDateDe } from '../../lib/twin/routes';
 
 /* -----------------------------------------------------------------------------
@@ -134,6 +135,9 @@ export function EntscheidungenContent({ role, tenant }: { role: DemoRole; tenant
           <ContextBar model={model} role={role} />
           <RegisterSection model={model} />
           <HonestySection />
+          {/* Seitenbausteine-Konvention (WP-020, Dok. 06 „Verbindliche Seitenbausteine"):
+              ehrliche Benennung der Bausteine, die der Datenbestand hier (noch) nicht trägt. */}
+          <SeitenbausteineHinweis ort="entscheidungen" />
         </>
       ) : (
         /* NICHT ERREICHBAR, bewusst fail-loud: die Prop ist ein `DemoTenant` aus dem Seed, und

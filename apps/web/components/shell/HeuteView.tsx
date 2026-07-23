@@ -1,15 +1,31 @@
 'use client';
 
 /**
- * „Heute" – Standard-Startpunkt / Mission Control (WP-016 Slice 2, Dok. 06 §4/§7 S01, 06-D02).
+ * „Heute" – Standard-Startpunkt / strategische Ebene 1 (WP-016 Slice 2, WP-020 Slice 3/4;
+ * Dok. 06 §4/§7 S01, 06-D02).
  *
  * Sitzungs-/Zustandsrahmen analog `IsmsView`/`ServicesView`: Loading (vor Hydration), „nicht
  * angemeldet" mit Link zur Login-Simulation, sonst der Inhalt für die aktive Rolle und den
  * aktiven Mandanten. Der Inhalt liegt in `MissionControlContent` und ist damit ohne
  * Session-Mock testbar.
  *
- * Die Rollen-/Mandanten-Auswahl ist reine Demo-Perspektive – KEINE Authz, KEINE Sicherheitsgrenze
- * (`.claude/rules/frontend.md`, Dok. 19 folgt in einem späteren WP).
+ * DETAILTIEFE (WP-020 Slice 3, Dok. 06 „Detailtiefe": „Nutzer können eine bevorzugte Tiefe
+ * speichern"): Diese View hält die gewählte Tiefe und persistiert sie unter dem VERSIONIERTEN
+ * Schlüssel `DETAILTIEFE_STORAGE_KEY` (Muster `SESSION_STORAGE_KEY`; O-WP020-01 – Granularität
+ * der Personalisierung ist konzeptseitig offen, hier: EINE Voreinstellung je Gerät).
+ * Gespeichert wird AUSSCHLIESSLICH die Stufe („1" | „2" | „3") – mandanten- und rollenfrei,
+ * damit beim Mandantenwechsel kein Zustand des alten Mandanten weiterlebt (Cross-Tenant-
+ * Schutz; per Wächtertest in `leerzustand-mandantengrenze.test.tsx` belegt).
+ *
+ * INVARIANTE (Dok. 06 „Detailtiefe", letzter Satz: „sicherheitskritische Warnungen bleiben
+ * jedoch immer sichtbar"): Im heutigen read-only-Produkt existiert KEINE sicherheitskritische
+ * Warnung, die eine Tiefe unterdrücken könnte; Kontextleiste, Demo-Hinweis der Shell,
+ * Ehrlichkeitsblock und Seitenbausteine-Hinweis rendern unabhängig von der Tiefe. Jedes
+ * künftige WP, das sicherheitskritische Warnungen einführt, MUSS sie außerhalb der
+ * Tiefensteuerung rendern (vollständige Invariante in `lib/heute/detailtiefe.ts`).
+ *
+ * Die Rollen-/Mandanten-Auswahl ist reine Demo-Perspektive – KEINE Authz, KEINE
+ * Sicherheitsgrenze (`.claude/rules/frontend.md`, Dok. 19 folgt in einem späteren WP).
  *
  * BEWUSSTE DEMO-ENTSCHEIDUNG (übernommen aus WP-012 Code-Review MINOR-1, reversibel):
  * session-abhängig client-gerendert; dadurch landet der synthetische `DEMO_SEED` im
@@ -18,11 +34,42 @@
  * serverseitig ableiten (Muster `/twin`).
  */
 import Link from 'next/link';
+import { useCallback, useEffect, useState } from 'react';
+import {
+  DETAILTIEFE_STANDARD,
+  DETAILTIEFE_STORAGE_KEY,
+  parseDetailtiefe,
+  serializeDetailtiefe,
+  type Detailtiefe,
+} from '../../lib/heute/detailtiefe';
 import { useSession } from './SessionProvider';
 import { MissionControlContent } from './MissionControlContent';
 
 export function HeuteView() {
   const { resolved, hydrated } = useSession();
+
+  // Standardtiefe 1: „Die erste Ebene bleibt ruhig" (Dok. 06 P06). Der gespeicherte Wert wird
+  // nach dem Mount defensiv gelesen (`parseDetailtiefe`): ungültige/veraltete Werte fallen auf
+  // die Standardtiefe, statt einen kaputten Zustand zu übernehmen (Muster `SessionProvider`).
+  const [tiefe, setTiefe] = useState<Detailtiefe>(DETAILTIEFE_STANDARD);
+  useEffect(() => {
+    try {
+      const gespeichert = parseDetailtiefe(window.localStorage.getItem(DETAILTIEFE_STORAGE_KEY));
+      if (gespeichert !== null) setTiefe(gespeichert);
+    } catch {
+      // Speicher nicht verfügbar (z. B. privater Modus) – Standardtiefe bleibt.
+    }
+  }, []);
+
+  const wechsleTiefe = useCallback((next: Detailtiefe) => {
+    setTiefe(next);
+    try {
+      // Persistiert wird NUR die Stufe (mandanten-/rollenfrei, s. Kopfnotiz).
+      window.localStorage.setItem(DETAILTIEFE_STORAGE_KEY, serializeDetailtiefe(next));
+    } catch {
+      // Speicher nicht verfügbar – die Wahl gilt dann nur für diese Sitzung.
+    }
+  }, []);
 
   if (!hydrated) {
     return (
@@ -57,5 +104,12 @@ export function HeuteView() {
     );
   }
 
-  return <MissionControlContent role={resolved.role} tenant={resolved.tenant} />;
+  return (
+    <MissionControlContent
+      role={resolved.role}
+      tenant={resolved.tenant}
+      tiefe={tiefe}
+      onTiefeChange={wechsleTiefe}
+    />
+  );
 }

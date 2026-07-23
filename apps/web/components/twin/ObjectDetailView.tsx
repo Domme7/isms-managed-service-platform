@@ -33,6 +33,7 @@ import type {
 } from '../../lib/twin/object-detail';
 import { formatIsoDateDe, objectDetailHref, tenantDetailHref } from '../../lib/twin/routes';
 import { objectTypeDisplay, relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
+import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
 /* -----------------------------------------------------------------------------
  * Kleine Formathelfer (Klartext vor Fachsprache, Dok. 06 P03/P04)
@@ -271,6 +272,10 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
       <ConnectionsSection connections={connections} tenantId={tenantId} />
       <EvolutionSection evolution={evolution} tenantId={tenantId} />
       <NextSection observations={next_observations} tenantId={tenantId} />
+
+      {/* Seitenbausteine-Konvention (WP-020, Dok. 06 „Verbindliche Seitenbausteine"):
+          ehrliche Benennung der Bausteine, die der Datenbestand hier (noch) nicht trägt. */}
+      <SeitenbausteineHinweis ort="objekt360" />
     </>
   );
 }

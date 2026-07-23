@@ -18,6 +18,7 @@ import {
   getManagedServicesForTenant,
 } from '../../lib/services/data';
 import { PageContextBar } from '../shell/PageContextBar';
+import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 import { PortfolioOverview } from './PortfolioOverview';
 import { ServiceCard } from './ServiceCard';
 
@@ -98,6 +99,10 @@ export function ServicesContent({ role, tenant }: { role: DemoRole; tenant: Demo
           </div>
         </section>
       )}
+
+      {/* Seitenbausteine-Konvention (WP-020, Dok. 06 „Verbindliche Seitenbausteine"):
+          ehrliche Benennung der Bausteine, die der Datenbestand hier (noch) nicht trägt. */}
+      <SeitenbausteineHinweis ort="services" />
     </>
   );
 }

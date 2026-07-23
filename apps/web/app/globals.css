@@ -1045,3 +1045,327 @@ h3 {
 .sv-details[open] > .sv-desc {
   margin-top: 0.35rem;
 }
+
+/* =============================================================================
+   Dashboard-Schicht (WP-020 Slice 4, DR-0008): Klartext-Zustand, Statuskacheln,
+   Lebenszyklus-Verteilung, Abdeckungsbalken, Badges.
+   Dok. 06 „Visuelles Designsystem": Navy = Struktur, Teal = aktive Orientierung,
+   Warnfarben sparsam; Status = Text + Symbol/Form + optional Farbe (06-D11).
+   Keine Animationen – nichts, was `prefers-reduced-motion` unterdrücken müsste.
+   ========================================================================== */
+
+/* Klartext-Zustand der Ebene 1: ruhige, kartenförmige Satzliste (P06). */
+.db-klartext {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--tw-surface);
+  border: 1px solid var(--tw-line);
+  border-left: 4px solid var(--shell-navy);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.db-klartext li {
+  font-size: 0.98rem;
+  color: var(--tw-ink);
+}
+.db-klartext li:last-child {
+  color: var(--tw-muted);
+  font-size: 0.88rem;
+}
+
+.db-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.db-grid > li {
+  min-width: 0;
+  display: flex;
+}
+
+.db-tile {
+  flex: 1;
+  background: var(--tw-surface);
+  border: 1px solid var(--tw-line);
+  border-radius: 10px;
+  padding: 0.95rem 1.05rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.db-tile--breit {
+  grid-column: 1 / -1;
+}
+/* Breite Kachel: das umgebende li muss die volle Zeile einnehmen. */
+.db-grid > li:has(> .db-tile--breit) {
+  grid-column: 1 / -1;
+}
+.db-tile--leer {
+  border-style: dashed;
+}
+
+.db-frage {
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--tw-ink);
+}
+
+.db-wert {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.4rem;
+}
+.db-wert-paar {
+  display: inline-flex;
+  flex-direction: column;
+}
+.db-wert-zahl {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--shell-navy);
+}
+.db-wert-label {
+  font-size: 0.78rem;
+  color: var(--tw-muted);
+  margin-top: 0.1rem;
+}
+
+/* Badges: Text + Symbol (Form) sind Pflicht, Farbe ist Zusatz (06-D11).
+   Farbklassen exakt je Regel der Positivliste (`BADGE_RULES`). */
+.db-badge {
+  align-self: flex-start;
+  display: inline-block;
+  margin: 0;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.32rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.db-badge--vollstaendig_belegt {
+  color: #0b5a34;
+  background: #e3f4ea;
+  border-color: #b7e0c7;
+}
+.db-badge--luecke_erfasst {
+  color: #6b4e00;
+  background: #fbf1d6;
+  border-color: #ecd9a6;
+}
+.db-badge--kein_datenbestand {
+  color: #3f4654;
+  background: #eceef2;
+  border-color: #d9dce3;
+}
+
+/* Abdeckungsbalken: reine Form-Ergänzung zur sichtbaren „x von y"-Zahl (aria-hidden). */
+.db-balken {
+  height: 0.5rem;
+  border: 1px solid var(--tw-line);
+  border-radius: 999px;
+  background: var(--tw-surface-2);
+  overflow: hidden;
+}
+.db-balken-fuellung {
+  height: 100%;
+  background: var(--shell-teal);
+  border-radius: 999px;
+}
+
+.db-glosse {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--tw-muted);
+}
+.db-leer {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--tw-ink-soft);
+}
+.db-meta {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--tw-muted);
+}
+.db-regel {
+  margin: 0;
+}
+.db-regel > summary {
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--shell-teal);
+}
+.db-regel > summary:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.db-regel > p {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--tw-ink-soft);
+}
+.db-drill {
+  margin: 0;
+  margin-top: auto;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+/* Lebenszyklus-Verteilung (Ort „ISMS"): Stand + „x von y" + Balken je Zeile. */
+.db-verteilung {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.db-verteilung > li {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) auto minmax(6rem, 2fr);
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.86rem;
+}
+.db-verteilung-stand {
+  font-weight: 600;
+}
+.db-verteilung-zahl {
+  color: var(--tw-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+/* =============================================================================
+   Detailtiefe-Schalter auf „Heute" (WP-020 Slice 3, Dok. 06 „Detailtiefe"/P06).
+   Auswahlzustand = Radio-Form + Rahmen + Text, nie nur Farbe (06-D11).
+   ========================================================================== */
+.ht-tiefe {
+  border: 1px solid var(--tw-line);
+  border-radius: 10px;
+  padding: 0.8rem 1rem 1rem;
+  margin: 0 0 1.5rem;
+  background: var(--tw-surface);
+}
+.ht-tiefe > legend {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tw-muted);
+  padding: 0 0.35rem;
+}
+.ht-tiefe-hinweis {
+  margin: 0 0 0.7rem;
+  font-size: 0.8rem;
+  color: var(--tw-muted);
+  max-width: 72ch;
+}
+.ht-tiefe-optionen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.6rem;
+}
+.ht-tiefe-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "radio titel"
+    "radio beschreibung";
+  align-items: start;
+  gap: 0.1rem 0.5rem;
+  border: 1px solid var(--tw-line);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+}
+.ht-tiefe-option:hover {
+  border-color: var(--shell-teal);
+}
+.ht-tiefe-option--aktiv {
+  border-color: var(--shell-teal);
+  background: var(--shell-teal-soft);
+  box-shadow: 0 0 0 1px var(--shell-teal) inset;
+}
+.ht-tiefe-option input {
+  grid-area: radio;
+  margin-top: 0.25rem;
+}
+.ht-tiefe-titel {
+  grid-area: titel;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+.ht-tiefe-beschreibung {
+  grid-area: beschreibung;
+  font-size: 0.78rem;
+  color: var(--tw-ink-soft);
+}
+
+/* =============================================================================
+   Seitenbausteine-Hinweis (WP-020 Slice 3, Dok. 06 „Verbindliche Seitenbausteine"):
+   ehrliche Benennung unbelegter Bausteine, aufklappbar (P06) – keine Attrappen.
+   ========================================================================== */
+.pb-hinweis {
+  margin-top: 2.25rem;
+}
+.pb-details {
+  background: var(--tw-surface);
+  border: 1px dashed var(--tw-line);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+.pb-summary {
+  cursor: pointer;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--tw-ink-soft);
+}
+.pb-summary:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.pb-block-titel {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tw-muted);
+  margin: 0.9rem 0 0.35rem;
+}
+.pb-liste {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+}
+.pb-baustein-name {
+  font-weight: 600;
+}
+.pb-baustein-grund,
+.pb-baustein-wo {
+  color: var(--tw-muted);
+}
+.pb-fussnote {
+  margin: 0.9rem 0 0;
+  font-size: 0.78rem;
+  color: var(--tw-muted);
+  max-width: 72ch;
+}

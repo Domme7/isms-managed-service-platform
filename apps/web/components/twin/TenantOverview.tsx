@@ -10,6 +10,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
 import { tenantDetailHref } from '../../lib/twin/routes';
+import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 import { Badge } from './Badge';
 
 /**
@@ -67,6 +68,10 @@ export function TenantOverview({
           ))}
         </ul>
       </nav>
+
+      {/* Seitenbausteine-Konvention (WP-020 Slice 3, Dok. 06 „Verbindliche Seitenbausteine"):
+          ehrliche Benennung der Bausteine, die der Datenbestand hier (noch) nicht trägt. */}
+      <SeitenbausteineHinweis ort="kunden" />
     </>
   );
 }

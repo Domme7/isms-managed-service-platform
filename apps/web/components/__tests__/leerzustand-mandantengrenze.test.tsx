@@ -152,9 +152,16 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
  *
  * WAS READ-ONLY NICHT PRÜFBAR IST (benannt statt behauptet): Entwürfe, Uploads und Freigaben
  * existieren im Produkt nicht – dass sie nicht übernommen werden, ist derzeit gegenstandslos
- * und wird mit dem ersten Schreib-WP testpflichtig (Anker O-WP020-04 in `AppShell`). Ebenen-/
- * Tiefen-Zustände (Detailtiefe) existieren noch nicht; sobald sie entstehen, gehört ihr
- * Zurücksetzen beim Mandantenwechsel in genau diesen Test.
+ * und wird mit dem ersten Schreib-WP testpflichtig (Anker O-WP020-04 in `AppShell`).
+ *
+ * EBENEN-/TIEFEN-ZUSTÄNDE (WP-020 Slice 3, schließt den offenen Punkt aus Slice 1): Die
+ * Detailtiefe von „Heute" existiert jetzt. Sie wird bewusst MANDANTENFREI gehalten statt beim
+ * Wechsel zurückgesetzt (die zweite vom Acceptance-Kriterium zugelassene Variante): der
+ * gespeicherte/gehaltene Wert ist AUSSCHLIESSLICH die Stufe („1"|„2"|„3") ohne Mandanten-,
+ * Rollen- oder Objektbezug (`lib/heute/detailtiefe.ts`, dort begründet; Serialisierung per
+ * Test in `lib/heute/__tests__/detailtiefe.test.ts` festgenagelt). Der Test unten beweist am
+ * echten Wechselfluss: dieselbe Tiefe rendert nach dem Wechsel den NEUEN Mandanten – ohne
+ * dass irgendein Inhalt des alten Mandanten weiterlebt.
  */
 
 /** Gesamter Seitentext OHNE die Wechsler-Selects (siehe Begründung im Blockkommentar). */
@@ -263,6 +270,37 @@ describe('Mandantenwechsel ist eine angekündigte Kontextänderung (Dok. 06 CROS
     expect(text.length).toBeGreaterThan(80);
     expect(text).not.toContain(NORDWERK_NAME);
     expect(text).not.toContain(TENANT_ID.NORDWERK);
+  });
+
+  it('Detailtiefe ist mandantenfrei: gewählte Tiefe überlebt den Wechsel, Inhalte des alten Mandanten nicht', () => {
+    // WP-020 Slice 3: Die Tiefe ist ein reiner ANZEIGE-Zustand ohne Mandantenbezug. Sie wird
+    // hier AKTIV verstellt (Ebene 2 – eine echte Nutzerwahl, nicht der Startwert), dann wird
+    // gewechselt: dieselbe Tiefe muss die FINOVIA-Sicht zeigen – ohne Nordwerk-Reste.
+    render(<WechselHarness startTenantId={TENANT_ID.NORDWERK} />);
+    fireEvent.click(screen.getByRole('radio', { name: /Ebene 2/ }));
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Was ist erfasst worden?' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { level: 2, name: 'Wo steige ich ein?' }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('main').textContent).toContain(NORDWERK_NAME);
+
+    wechselAnfordern();
+    fireEvent.click(screen.getByRole('button', { name: `Zu ${FINOVIA_NAME} wechseln` }));
+    fireEvent.click(screen.getByRole('button', { name: 'Hinweis schließen' }));
+
+    // Die Tiefe blieb (mandantenfreier Anzeigezustand) …
+    expect(screen.getByRole('radio', { name: /Ebene 2/ })).toBeChecked();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Was ist erfasst worden?' }),
+    ).toBeInTheDocument();
+    // … aber KEIN Inhalt des alten Mandanten lebt in irgendeiner Ebene weiter.
+    const text = textOhneWechsler();
+    expect(text.length).toBeGreaterThan(80);
+    expect(text).not.toContain(NORDWERK_NAME);
+    expect(text).not.toContain(TENANT_ID.NORDWERK);
+    expect(screen.getByRole('main').textContent).toContain(FINOVIA_NAME);
   });
 
   it('Negativbeweis der Ankündigung selbst: ohne Wechselwunsch existiert keine Ankündigung', () => {

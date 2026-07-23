@@ -17,6 +17,7 @@ import { IsmsContent } from '../IsmsContent';
 import { MeasureCard } from '../IsmsCards';
 import { IsmsView } from '../IsmsView';
 import { SessionProvider } from '../../shell/SessionProvider';
+import { buildIsmsVerdichtung } from '../../../lib/heute/dashboard';
 import { buildIsmsCoreView, type IsmsLink, type MeasureView } from '../../../lib/isms/data';
 import { getRole, type DemoRole } from '../../../lib/shell/roles';
 import { objectDetailHref } from '../../../lib/twin/object-detail';
@@ -127,6 +128,70 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
       within(evidenceCard).getByText('Nachweis (Evidence) · Lebenszyklus-Stand: akzeptiert'),
     ).toBeInTheDocument();
     expect(within(evidenceCard).getByText('Backup & Recovery Control')).toBeInTheDocument();
+  });
+});
+
+/**
+ * WP-020 Slice 4 (DR-0008): Verdichteter Überblick am Seitenkopf – volle Lebenszyklus-
+ * Verteilung (mit 08-D07-Glosse) und zwei Abdeckungen „x von y", je mit Frage, Scope,
+ * Datenstand, Ermittlungsregel und seiteninternem Drill-down auf die Karten.
+ */
+describe('IsmsContent – verdichteter Überblick (WP-020, DR-0008)', () => {
+  it('zeigt für Nordwerk die Verteilung der Stände mit sichtbarer 08-D07-Glosse', () => {
+    const verdichtung = buildIsmsVerdichtung(TENANT_ID.NORDWERK);
+    if (!verdichtung) throw new Error('Testfixture fehlt: Nordwerk-Verdichtung');
+    const { container } = render(
+      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Überblick aus belegten Daten' }),
+    ).toBeInTheDocument();
+
+    const kachel = container.querySelector('.db-tile[data-tile-id="lebenszyklus_verteilung"]');
+    if (!kachel) throw new Error('Verteilungs-Kachel fehlt');
+    // Jeder erfasste Stand erscheint mit „x von y" – Zahlen aus der Ableitung.
+    for (const slice of verdichtung.lifecycle.slices) {
+      const zeile = Array.from(kachel.querySelectorAll('.db-verteilung > li')).find(
+        (li) => li.querySelector('.db-verteilung-stand')?.textContent === slice.status,
+      );
+      expect(zeile, slice.status).toBeTruthy();
+      expect(zeile?.querySelector('.db-verteilung-zahl')?.textContent).toBe(
+        `${slice.count} von ${verdichtung.lifecycle.total}`,
+      );
+    }
+    // 08-D07-Glosse sichtbar an der Kachel (nicht nur irgendwo auf der Seite).
+    expect(kachel.querySelector('.db-glosse')?.textContent).toMatch(/kein Prüfergebnis/);
+    // Selbsterklärung: Ermittlungsregel + Drill-down auf die Karten dieser Seite.
+    expect(kachel.querySelector('details.db-regel summary')?.textContent).toBe('Ermittlungsregel');
+    expect(kachel.querySelector('.db-drill a')?.getAttribute('href')).toMatch(/^#isms-/);
+  });
+
+  it('zeigt die beiden Abdeckungen mit Anker-Drill-down auf existierende Seitenabschnitte', () => {
+    const verdichtung = buildIsmsVerdichtung(TENANT_ID.NORDWERK);
+    if (!verdichtung) throw new Error('Testfixture fehlt: Nordwerk-Verdichtung');
+    const { container } = render(
+      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+
+    for (const tile of verdichtung.coverage) {
+      const kachel = container.querySelector(`.db-tile[data-tile-id="${tile.id}"]`);
+      if (!kachel) throw new Error(`Kachel fehlt: ${tile.id}`);
+      expect(kachel.querySelector('.db-wert-zahl')?.textContent).toBe(
+        `${tile.covered} von ${tile.total}`,
+      );
+      // Der Anker zeigt auf einen real existierenden Abschnitt dieser Seite (kein toter Link).
+      const anker = kachel.querySelector('.db-drill a')?.getAttribute('href') ?? '';
+      expect(anker.startsWith('#')).toBe(true);
+      expect(container.querySelector(`[id="${anker.slice(1)}"]`)).not.toBeNull();
+    }
+  });
+
+  it('zeigt für Mandanten ohne ISMS-Kernobjekte KEINEN Überblick (eigener Leerzustand)', () => {
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)} />);
+    expect(
+      screen.queryByRole('heading', { level: 2, name: 'Überblick aus belegten Daten' }),
+    ).not.toBeInTheDocument();
   });
 });
 
