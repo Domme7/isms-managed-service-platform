@@ -10,7 +10,7 @@
     Dok. 04 §3/§4, Dok. 06 §17 teilweise) waren maschinell nicht verifizierbar — ein kurzer Blick
     ins Original klärt sie abschließend. Blockiert nichts.
 
-## Nächstes Work Package: WP-020 Verlorene Anforderungen
+## Nächstes Work Package: WP-020 Verdichtungs-Umbau + Dashboard + Einstiegsfluss (DR-0008/0009)
 
 Die 11-Punkte-Übergabeliste steht in `docs/concept/abgleich/NACHTRAG_WP-019_2026-07-23.md`.
 Empfohlene Reihenfolge: **Cross-Tenant-Schutz (Dok. 06 §4.2) zuerst**, dann „aktive Rolle bei

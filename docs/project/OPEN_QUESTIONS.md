@@ -131,3 +131,10 @@ heutigen Datenlage nicht baubar, ohne sie zu erfinden** — sie wird deshalb bew
 | O-WP019-06 | **Dok. 03: 14 Rollensteckbriefe vs. 12 kanonische Rollen** — „Risk / Compliance Leitung" und „Platform Operations / Support" haben Steckbriefe, aber keine R-ID | **Konzeptlücke** | beide Steckbriefe übernommen, Zuordnung offen gelassen | Concept Author |
 | O-WP019-07 | **Dok. 03: „Fünf Rollenfamilien" unbenannt** — die Namensliste der Alt-Fassung war erfunden und steht noch in `PROJECT_UNDERSTANDING.md` | Konzeptlücke + Doku-Altlast | neue Fassung behauptet keine Namen; `PROJECT_UNDERSTANDING.md` wird als historisch markiert | Concept Author |
 | O-WP019-08 | **Dok. 04: Verdacht** auf abbildungsgetragenen Phasenrhythmus-Widerspruch („Bewerten/Umsetzen" vs. verbindlicher 04-D01-Rhythmus) — **unverifiziert**, stammt möglicherweise nur aus der Alt-Fassung | Verdacht, kein Befund | in der Kopfnotiz klar als unverifizierter Verdacht gekennzeichnet | Owner-Sichtprüfung (zusammen mit O-WP019-04) |
+
+## Kundenwelt (aus DR-0009)
+
+| ID | Frage | Art | Aktueller Umgang | Owner / Gate |
+|---|---|---|---|---|
+| O-KUNDE-01 | **Preise-Guardrail vs. Buchung:** Der Seed-Guardrail-Test verbietet jede Währungs-/Preisangabe; Dok. 14 §9 definiert eine Preisverfassung und die Demo-Welt (Dok. 05 §12) nennt „Preise … als Beispiele gekennzeichnet". Für Katalog + Buchung muss der Guardrail auf „nur synthetische, gekennzeichnete Preise; keine realen PwC-Preise" umgestellt werden | Regel-Anpassung | Guardrail bleibt bis zum WP-021/WP-006-Schnitt unverändert streng | Owner + Security beim WP-Schnitt |
+| O-KUNDE-02 | **Echter Kundenlogin** (Konten, Passwörter) braucht echte Authentisierung nach Dok. 19 — die heutige Anmeldung ist Simulation | Auth-Lücke (bekannt) | jeder „Login" bleibt als Simulation beschriftet, bis das Auth-WP kommt | eigenes WP mit Security Review |
