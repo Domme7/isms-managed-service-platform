@@ -66,14 +66,17 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
       {/* UX-Review MAJOR-1 (seitenweite Rahmung): jede sichtbare OBJEKT-Status-Angabe ist ein
           Lebenszyklus-Stand, kein Prüf-/Auditergebnis – gilt auch für Status in Verweis-Zeilen,
           nicht nur an den Kartenköpfen. Der „Status der Beziehung" (Kantenstatus, z. B. „geprüft"
-          am Nachweisbezug) ist davon ausgenommen: er ist ein Feld der Kante und darf laut
-          Dok. 07 §9 R15 einen Prüfstatus tragen (Review-Fix, wortgleich mit `ObjectDetailView`). */}
+          am Nachweisbezug) ist davon ausgenommen: er ist ein Feld der Kante und darf einen
+          Prüfstatus tragen. WP-028 (DR-0013): Quellenbeleg (Dok. 07, „Kanonische Beziehungstypen",
+          Nachweisbezug mit Zeitraum und Prüfstatus) bleibt hier im Kommentar; der gerenderte Satz
+          nennt keine Dokument-/Paragraphenkennung mehr. Wortgleich mit `ObjectDetailView` und
+          `EntscheidungenContent`. */}
       <p className="tw-muted">
         <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
         Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
         keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt für
-        einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
+        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
+        etwa einen Zeitraum und einen Prüfstatus tragen.
       </p>
 
       {/* Kontextleiste (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext"): Scope und Datenstand
@@ -180,8 +183,8 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
           <section aria-labelledby="isms-massnahmen">
             <h2 id="isms-massnahmen">Maßnahmen</h2>
             <p className="tw-muted">
-              Was getan wird und worauf es wirkt: eine Maßnahme behebt eine Schwachstelle
-              (remediates) oder mindert ein Szenario/Risiko (mitigates).
+              Was getan wird und worauf es wirkt: Eine Maßnahme behebt eine Schwachstelle oder
+              mindert ein Szenario bzw. Risiko.
             </p>
             <SectionList
               isEmpty={view.measures.length === 0}

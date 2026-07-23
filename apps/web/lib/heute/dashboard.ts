@@ -377,8 +377,7 @@ export function buildIsmsVerdichtung(tenantId: string): IsmsVerdichtungModel | u
     datenstand: ismsCore.context.recordedOn,
     datenstandDisplay: ismsCore.context.recordedOnDisplay,
     regel:
-      'Gezählt wird der erfasste Feldwert „lifecycle_status" je ISMS-Kernobjekt (Dok. 07, ' +
-      'Abschnitt „Objektvertrag, Identität und Metadaten"). Reihenfolge: kanonische ' +
+      'Gezählt wird der erfasste Lebenszyklus-Stand je ISMS-Kernobjekt. Reihenfolge: kanonische ' +
       'Katalogreihenfolge der Stände – keine Sortierung nach Häufigkeit oder Bedeutung.',
     drilldown: {
       label: 'Zu den Karten dieser Seite (Stand an jeder Karte)',
@@ -526,9 +525,8 @@ function buildLifecycleSummaryTile(
     datenstand: tenantFacts.recordedOn,
     datenstandDisplay: tenantFacts.recordedOnDisplay,
     regel:
-      'Gezählt werden die verschiedenen erfassten Feldwerte „lifecycle_status" über alle ' +
-      'Objekte des aktiven Mandanten (Dok. 07, Abschnitt „Objektvertrag, Identität und ' +
-      `Metadaten"). ${
+      'Gezählt werden die verschiedenen erfassten Lebenszyklus-Stände über alle ' +
+      `Objekte des aktiven Mandanten. ${
         hatIsmsVerdichtung
           ? 'Die Verteilung im Einzelnen steht am Ort „ISMS" (ISMS-Kernobjekte) und als ' +
             'Stand je Objekt in der Objektliste.'
@@ -572,7 +570,7 @@ function buildControlsCoverageTile(
   const covered = ismsCore.controls.filter((c) => c.evidenced_by.length > 0).length;
   return {
     id: 'controls_nachweis',
-    frage: 'Wie viele Controls tragen eine Nachweis-Beziehung?',
+    frage: 'Wie viele Controls haben mindestens einen Nachweis?',
     covered,
     total: ismsCore.controls.length,
     isEmpty: ismsCore.controls.length === 0,
@@ -584,8 +582,7 @@ function buildControlsCoverageTile(
     datenstand: ismsCore.context.recordedOn,
     datenstandDisplay: ismsCore.context.recordedOnDisplay,
     regel:
-      'Gezählt werden Controls mit mindestens einer eingehenden Nachweis-Beziehung ' +
-      '(„evidences", R15; Dok. 07, Abschnitt „Kanonische Beziehungstypen"). Auch ein ' +
+      'Gezählt werden Controls mit mindestens einer eingehenden Nachweis-Beziehung. Auch ein ' +
       'abgelaufener oder abgelehnter Nachweis zählt hier als Beziehung. Ob ein Nachweis ' +
       'fachlich ausreicht, sagt der Datenbestand nicht. Badge-Regel: „vollständig belegt" ' +
       'bei x = y, „Lücke erfasst" bei x < y – eine erfasste Lage, kein Urteil.',
@@ -601,7 +598,7 @@ function buildRisksCoverageTile(
   const covered = ismsCore.risks.filter((r) => r.mitigated_by.length > 0).length;
   return {
     id: 'risiken_minderung',
-    frage: 'Wie viele Risiken tragen eine mindernde Beziehung?',
+    frage: 'Wie viele Risiken sind durch mindestens eine Maßnahme oder ein Control gemindert?',
     covered,
     total: ismsCore.risks.length,
     isEmpty: ismsCore.risks.length === 0,
@@ -614,8 +611,8 @@ function buildRisksCoverageTile(
     datenstandDisplay: ismsCore.context.recordedOnDisplay,
     regel:
       'Gezählt werden Risiken mit mindestens einer eingehenden Minderungs-Beziehung ' +
-      '(„mitigates", R12) von einem Control oder einer Maßnahme. Über die Wirksamkeit der ' +
-      'Minderung sagt die Kante nichts aus. Badge-Regel wie oben (erfasste Lage, kein Urteil).',
+      'von einem Control oder einer Maßnahme. Über die Wirksamkeit der Minderung sagt die ' +
+      'Beziehung nichts aus. Badge-Regel wie oben (erfasste Lage, kein Urteil).',
     drilldown,
   };
 }
@@ -628,7 +625,7 @@ function buildOwnerCoverageTile(
   const covered = countObjectsWithOwner(objects);
   return {
     id: 'objekte_owner',
-    frage: 'Wie viele Objekte tragen einen erfassten Owner?',
+    frage: 'Wie viele Objekte haben einen benannten Owner?',
     covered,
     total: objects.length,
     isEmpty: objects.length === 0,
@@ -640,8 +637,7 @@ function buildOwnerCoverageTile(
     datenstand: tenantFacts.recordedOn,
     datenstandDisplay: tenantFacts.recordedOnDisplay,
     regel:
-      'Gezählt werden Objekte mit mindestens einem Eintrag im Feld „owner_ids" (Dok. 07, ' +
-      'Abschnitt „Objektvertrag, Identität und Metadaten") – dieselbe Regel wie die ' +
+      'Gezählt werden Objekte mit mindestens einem benannten Owner – dieselbe Regel wie die ' +
       'Beobachtung „Objekte ohne erfassten Owner" in Ebene 2, nur positiv gezählt. Ob ein ' +
       'Owner fachlich erforderlich ist, sagt der Datenbestand nicht. Badge-Regel wie oben.',
     drilldown: {
@@ -671,11 +667,10 @@ function buildConfidenceCoverageTile(
     datenstand: tenantFacts.recordedOn,
     datenstandDisplay: tenantFacts.recordedOnDisplay,
     regel:
-      'Gezählt werden Beziehungen dieses Mandanten mit einem Wert im Feld „confidence" ' +
-      '(Dok. 07, Abschnitt „Herkunft, Datenqualität und Vertrauen") – dieselbe Regel wie die ' +
-      'Beobachtung „Beziehungen ohne erfassten Vertrauensgrad" in Ebene 2, nur positiv ' +
-      'gezählt. Ein fehlender Vertrauensgrad wird nicht ersetzt und nicht geschätzt. ' +
-      'Badge-Regel wie oben (erfasste Lage, kein Urteil).',
+      'Gezählt werden Beziehungen dieses Mandanten mit einem erfassten Vertrauensgrad – ' +
+      'dieselbe Regel wie die Beobachtung „Beziehungen ohne erfassten Vertrauensgrad" in ' +
+      'Ebene 2, nur positiv gezählt. Ein fehlender Vertrauensgrad wird nicht ersetzt und nicht ' +
+      'geschätzt. Badge-Regel wie oben (erfasste Lage, kein Urteil).',
     drilldown: {
       label: 'Zwilling dieses Mandanten (Vertrauensgrad je Beziehung)',
       href: tenantDetailHref(tenant.tenant_id),

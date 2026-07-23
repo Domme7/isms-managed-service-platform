@@ -32,23 +32,21 @@ import type {
   ResolvedScope,
 } from '../../lib/twin/object-detail';
 import { formatIsoDateDe, objectDetailHref, tenantDetailHref } from '../../lib/twin/routes';
-import { objectTypeDisplay, relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
-import {
-  TRUST_LAYER_ANGABEN,
-  TRUST_LAYER_QUELLE,
-  countTrustAngaben,
-} from '../../lib/twin/trust-layer';
+import { objectTypeDisplay, relationshipTypeLabel } from '../../lib/twin/data';
+import { TRUST_LAYER_ANGABEN, countTrustAngaben } from '../../lib/twin/trust-layer';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
 /* -----------------------------------------------------------------------------
  * Kleine Formathelfer (Klartext vor Fachsprache, Dok. 06 P03/P04)
  * --------------------------------------------------------------------------- */
 
-/** „R10 · betrifft (affects)" – Klartext primär, kanonischer Typ sekundär (Muster IsmsCards). */
+/**
+ * Beziehungsbezeichnung in Domänensprache (WP-028: kein internes Vokabular im UI, DR-0013).
+ * Nur das deutsche Klartext-Label; R-Kennung und snake_case-Typ bleiben im Datenmodell, nicht im
+ * gerenderten Text (Muster IsmsCards).
+ */
 function edgeNote(type: string): string {
-  const id = relationshipTypeId(type);
-  const label = relationshipTypeLabel(type) ?? type;
-  return `${id ? `${id} · ` : ''}${label} (${type})`;
+  return relationshipTypeLabel(type) ?? type;
 }
 
 /** Datum als `<time>` mit exaktem Zeitstempel im `dateTime`-Attribut. */
@@ -79,8 +77,9 @@ function NeighborNode({ edge, tenantId }: { edge: ObjectEdge; tenantId: string }
  * läse sich auf der Asset-Seite als „Asset bedroht den Angriff", also das Gegenteil der Kante).
  */
 function EdgeLine({ edge, tenantId }: { edge: ObjectEdge; tenantId: string }) {
+  // Nur das deutsche Klartext-Label (WP-028, DR-0013): weder die R-Kennung noch der
+  // snake_case-Typ erscheinen im gerenderten Text. Beide bleiben im Datenmodell erhalten.
   const label = edge.relationship_type_label ?? edge.relationship_type;
-  const primary = edge.relationship_type_id ? `${edge.relationship_type_id} · ${label}` : label;
 
   return (
     <div className="tw-rel-line">
@@ -90,7 +89,7 @@ function EdgeLine({ edge, tenantId }: { edge: ObjectEdge; tenantId: string }) {
           <span className="tw-rel-arrow" aria-hidden="true">
             —
           </span>
-          <span className="tw-rel-type">{primary}</span>
+          <span className="tw-rel-type">{label}</span>
           <span className="tw-rel-arrow" aria-hidden="true">
             →
           </span>
@@ -98,14 +97,13 @@ function EdgeLine({ edge, tenantId }: { edge: ObjectEdge; tenantId: string }) {
         </>
       ) : (
         <>
-          <span className="tw-rel-type">{primary}</span>
+          <span className="tw-rel-type">{label}</span>
           <span className="tw-rel-arrow" aria-hidden="true">
             →
           </span>
           <NeighborNode edge={edge} tenantId={tenantId} />
         </>
       )}
-      <span className="tw-rel-tech">({edge.relationship_type})</span>
     </div>
   );
 }
@@ -258,16 +256,17 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
       {/* Seitenweite Rahmung (UX-Review MAJOR-1 aus WP-013): auch hier erscheinen Status-Werte
           wie „wirksam" – an dieser Stelle sogar ungerahmt in jeder Kanten- und
           Beobachtungszeile. Die Rahmung gilt ausdrücklich nur für den OBJEKT-Status; der Status
-          einer BEZIEHUNG ist ein eigenes Feld der Kante und kann laut Dok. 07 §9 R15
-          („Nachweisbezug mit Zeitraum und Prüfstatus") sehr wohl einen Prüfstatus tragen –
-          diese Unterscheidung würde ein pauschales „keine Prüfergebnisse" verschweigen
-          (Review-Fix). */}
+          einer BEZIEHUNG ist ein eigenes Feld der Kante und kann sehr wohl einen Prüfstatus tragen.
+          WP-028 (DR-0013): Quellenbeleg (Dok. 07, „Kanonische Beziehungstypen", Nachweisbezug mit
+          Zeitraum und Prüfstatus) bleibt hier im Kommentar; der gerenderte Satz nennt keine
+          Dokument-/Paragraphenkennung mehr. Wortgleich mit `IsmsContent` und
+          `EntscheidungenContent`. */}
       <p className="tw-muted">
         <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
         Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
         keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt für
-        einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
+        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
+        etwa einen Zeitraum und einen Prüfstatus tragen.
       </p>
 
       <ContextBar model={model} />
@@ -320,9 +319,7 @@ function ContextBar({ model }: { model: ObjectDetailModel }) {
       <div>
         <dt>Objektfamilie</dt>
         <dd>
-          {identity.family_id
-            ? `${identity.family_id} · ${identity.family_name}`
-            : 'nicht im kanonischen Katalog zugeordnet'}
+          {identity.family_name ? identity.family_name : 'nicht im kanonischen Katalog zugeordnet'}
         </dd>
       </div>
       <div>
@@ -358,9 +355,7 @@ function IdentitySection({ identity }: { identity: ObjectDetailModel['identity']
 
         <dt>Objektfamilie</dt>
         <dd>
-          {identity.family_id
-            ? `${identity.family_id} · ${identity.family_name}`
-            : 'nicht im kanonischen Katalog zugeordnet'}
+          {identity.family_name ? identity.family_name : 'nicht im kanonischen Katalog zugeordnet'}
         </dd>
 
         <dt>Lebenszyklus-Stand</dt>
@@ -508,10 +503,10 @@ function ImportanceSection({
           stünde ein Service unter „Risiken und Ziele" (Review-Fix). */}
       <h3>Belegte Bezüge zu Risiken, Zielen und Voraussetzungen</h3>
       <p className="sv-edge-note">
-        Berücksichtigte Kantentypen: {edgeNote('affects')}, {edgeNote('threatens')},{' '}
+        Berücksichtigte Beziehungen: {edgeNote('affects')}, {edgeNote('threatens')},{' '}
         {edgeNote('exposes')}, {edgeNote('mitigates')}, {edgeNote('contributes_to')},{' '}
-        {edgeNote('requires')}. {edgeNote('requires')} ist dabei kein Risiko-/Zielbezug, sondern
-        eine verbindliche Abhängigkeit im jeweiligen Scope (Dok. 07 §9 R19).
+        {edgeNote('requires')}. „{edgeNote('requires')}" ist dabei kein Risiko-/Zielbezug, sondern
+        eine verbindliche Abhängigkeit im jeweiligen Scope.
       </p>
       <p className="sv-edge-note">
         Verdichtete Darstellung. Alle Beziehungen mit Herkunft, Vertrauensgrad und Gültigkeit stehen
@@ -541,8 +536,8 @@ function ConnectionsSection({
       <h2 id="frage-zusammenhang">Womit hängt es zusammen?</h2>
       <p className="sv-edge-note">
         Ein- und ausgehende Kanten getrennt, jeweils mit Typ, Richtung, Herkunft der Aussage und
-        fachlicher Gültigkeit (Dok. 07 §21). Jeder auflösbare Nachbar ist ein Link auf seine
-        Detailseite – der Mandant bleibt dabei konstant.
+        fachlicher Gültigkeit. Jeder auflösbare Nachbar ist ein Link auf seine Detailseite – der
+        Mandant bleibt dabei konstant.
       </p>
 
       <h3>Ausgehende Beziehungen (dieses Objekt ist Quelle)</h3>
@@ -577,11 +572,11 @@ function EvolutionSection({
     <section aria-labelledby="frage-entwicklung">
       <h2 id="frage-entwicklung">Wie entwickelt es sich?</h2>
       <p className="sv-edge-note">
-        Fachliche Gültigkeit und Systemerfassung sind getrennte Zeitachsen (Dok. 07 §11) – sie
-        werden hier nicht zu einem einzigen „Datum" verschmolzen.
+        Fachliche Gültigkeit und Systemerfassung sind getrennte Zeitachsen – sie werden hier nicht
+        zu einem einzigen „Datum" verschmolzen.
       </p>
 
-      <h3>Fachliche Gültigkeit (valid_time)</h3>
+      <h3>Fachliche Gültigkeit</h3>
       <dl className="tw-meta">
         <dt>fachlich gültig ab</dt>
         <dd>
@@ -597,7 +592,7 @@ function EvolutionSection({
         </dd>
       </dl>
 
-      <h3>Systemerfassung (record_time)</h3>
+      <h3>Systemerfassung</h3>
       <dl className="tw-meta">
         <dt>im System erfasst am</dt>
         <dd>
@@ -645,9 +640,9 @@ function EvolutionSection({
           <h4>Keine Versionshistorie für dieses Objekt</h4>
           <p style={{ marginBottom: 0 }}>
             Abgeleitet aus dem Objekt selbst: Version {history.version}, kein Ersetzungszeitpunkt
-            (record_time.replaced_at) und keine Ablösungskante ({edgeNote('supersedes')}). Frühere
-            Stände dieses Objekts sind damit im Demo-Datenbestand nicht rekonstruierbar; es wird
-            bewusst kein Verlauf konstruiert.
+            und keine Ablösung („{edgeNote('supersedes')}"). Frühere Stände dieses Objekts sind
+            damit im Demo-Datenbestand nicht rekonstruierbar; es wird bewusst kein Verlauf
+            konstruiert.
           </p>
         </div>
       )}
@@ -670,7 +665,7 @@ function EvolutionSection({
         )}
       </div>
 
-      <h3>Herkunft (source_refs)</h3>
+      <h3>Herkunft</h3>
       {evolution.source_refs.length > 0 ? (
         <ul className="sv-items">
           {evolution.source_refs.map((ref, index) => (
@@ -691,13 +686,13 @@ function EvolutionSection({
       {/* WP-020 Slice 5: Abgleich der hier belegten Vertrauensanzeigen gegen die acht
           Trust-Layer-Angaben des Konzepts – dokumentierte Zuordnung, keine Berechnung
           (`lib/twin/trust-layer.ts`; unbelegte Angaben sichtbar benannt statt gefüllt). */}
-      <h3>Trust-Layer-Abgleich</h3>
+      <h3>Vertrauensebene: Abgleich mit dem Datenbestand</h3>
       <p className="sv-edge-note">
-        Das Konzept beschreibt eine Vertrauensebene mit {TRUST_LAYER_ANGABEN.length} Angaben (
-        {TRUST_LAYER_QUELLE}). Diese Seite ordnet zu, was der heutige Datenbestand davon trägt:{' '}
-        {countTrustAngaben('belegt')} Angaben sind belegt, {countTrustAngaben('teilweise')} nur
-        teilweise, {countTrustAngaben('kein Träger')} haben keinen Träger. Es wird nichts berechnet,
-        nichts verdichtet und nichts erfunden – die Lücken stehen ausgeschrieben dabei.
+        Das Konzept beschreibt eine Vertrauensebene mit {TRUST_LAYER_ANGABEN.length} Angaben. Diese
+        Seite ordnet zu, was der heutige Datenbestand davon trägt: {countTrustAngaben('belegt')}{' '}
+        Angaben sind belegt, {countTrustAngaben('teilweise')} nur teilweise,{' '}
+        {countTrustAngaben('kein Träger')} haben keinen Träger. Es wird nichts berechnet, nichts
+        verdichtet und nichts erfunden – die Lücken stehen ausgeschrieben dabei.
       </p>
       <ul className="sv-items" id="objekt-trust-abgleich">
         {TRUST_LAYER_ANGABEN.map((angabe) => (
@@ -772,7 +767,7 @@ function ObservationItem({
       <>
         <span className="sv-item-name">Kein Nachweis verweist auf dieses Objekt.</span>
         <span className="sv-item-meta">
-          {` · Beobachtung: keine eingehende Nachweiskante (${edgeNote('evidences')}) im Demo-Seed.`}
+          {' · Beobachtung: keine eingehende Nachweis-Beziehung im Demo-Seed.'}
         </span>
       </>
     );

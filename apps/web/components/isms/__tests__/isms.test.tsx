@@ -64,13 +64,14 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
     expect(
       within(riskCard).getByText('Risiko (Risk) · Lebenszyklus-Stand: behandelt'),
     ).toBeInTheDocument();
-    // Betroffenheit über die reale affects-Kante mit deutschem Label.
-    expect(within(riskCard).getByText(/betrifft \(affects\)/)).toBeInTheDocument();
+    // Betroffenheit über die reale affects-Kante mit deutschem Label (WP-028/DR-0013: nur
+    // Klartext, ohne R-Kennung und snake_case-Typ).
+    expect(within(riskCard).getByText('Beziehung: betrifft')).toBeInTheDocument();
     expect(within(riskCard).getByText('Auftragsabwicklung')).toBeInTheDocument();
 
-    // Szenario-Karte: Threat-Herkunft (bedroht/threatens) inkl. weiterer Bedrohungsziele.
+    // Szenario-Karte: Threat-Herkunft (bedroht) inkl. weiterer Bedrohungsziele.
     const scenarioCard = cardByHeading('Verschlüsselung der Auftragsdaten durch Ransomware');
-    expect(within(scenarioCard).getByText(/bedroht \(threatens\)/)).toBeInTheDocument();
+    expect(within(scenarioCard).getByText('Beziehung: bedroht')).toBeInTheDocument();
     expect(
       within(scenarioCard).getByText('Ransomware-Angriff auf Produktionsnetz'),
     ).toBeInTheDocument();
@@ -80,7 +81,7 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
 
     // Schwachstellen-Karte: Exposition (exponiert/exposes) auf das Asset.
     const weaknessCard = cardByHeading('Ungepatchte ERP-Integrationsschnittstelle');
-    expect(within(weaknessCard).getByText(/exponiert \(exposes\)/)).toBeInTheDocument();
+    expect(within(weaknessCard).getByText('Beziehung: exponiert')).toBeInTheDocument();
     expect(within(weaknessCard).getByText('Kundenauftragsdaten')).toBeInTheDocument();
   });
 
@@ -121,7 +122,7 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
     expect(
       within(measureCard).getByText('Maßnahme (Measure) · Lebenszyklus-Stand: in Arbeit'),
     ).toBeInTheDocument();
-    expect(within(measureCard).getByText(/behebt \(remediates\)/)).toBeInTheDocument();
+    expect(within(measureCard).getByText('Beziehung: behebt')).toBeInTheDocument();
 
     const evidenceCard = cardByHeading('Restore-Test-Protokoll Q2/2026');
     expect(
@@ -163,7 +164,7 @@ describe('IsmsContent – verdichteter Überblick (WP-020, DR-0008)', () => {
     // 08-D07-Glosse sichtbar an der Kachel (nicht nur irgendwo auf der Seite).
     expect(kachel.querySelector('.db-glosse')?.textContent).toMatch(/kein Prüfergebnis/);
     // Selbsterklärung: Ermittlungsregel + Drill-down auf die Karten dieser Seite.
-    expect(kachel.querySelector('details.db-regel summary')?.textContent).toBe('Ermittlungsregel');
+    expect(kachel.querySelector('details.db-regel summary')?.textContent).toBe('So wird gezählt');
     expect(kachel.querySelector('.db-drill a')?.getAttribute('href')).toMatch(/^#isms-/);
   });
 

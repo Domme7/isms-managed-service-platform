@@ -20,7 +20,7 @@
  * von `IsmsContent` durchgereicht und niemals hartkodiert (Dok. 07 §17/P09).
  */
 import Link from 'next/link';
-import { objectTypeDisplay, relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
+import { objectTypeDisplay, relationshipTypeLabel } from '../../lib/twin/data';
 // `lib/twin/routes.ts` ist seed-frei und wird hier präventiv genutzt: diese Datei landet über
 // `IsmsView` im Client-Bundle. Ein Schutz ist das heute NICHT – der DEMO_SEED liegt über
 // `lib/twin/data.ts` bzw. `lib/isms/data.ts` ohnehin im Client-Graphen (offene Frage
@@ -36,11 +36,14 @@ import type {
   WeaknessView,
 } from '../../lib/isms/data';
 
-/** „R10 · betrifft (affects)" – Klartext primär, technischer Typ sekundär. */
+/**
+ * Beziehungsbezeichnung in Domänensprache (WP-028: kein internes Vokabular im UI, DR-0013).
+ * Nur das deutsche Klartext-Label; die kanonische R-Kennung und der snake_case-Typ bleiben im
+ * Datenmodell/Contract, erscheinen aber nicht mehr im gerenderten Text. Fallback auf den
+ * technischen Namen nur, falls (im Seed nicht vorkommend) kein Label hinterlegt ist.
+ */
 function edgeNote(type: string): string {
-  const id = relationshipTypeId(type);
-  const label = relationshipTypeLabel(type) ?? type;
-  return `${id ? `${id} · ` : ''}${label} (${type})`;
+  return relationshipTypeLabel(type) ?? type;
 }
 
 /**
@@ -150,9 +153,7 @@ function CoveredNote({ names }: { names: readonly string[] }) {
   return (
     <p className="sv-edge-note">
       Im Serviceumfang von: {names.join(', ')}{' '}
-      <span className="sv-tech">
-        ({edgeNote('covered_by')} – Hinweis aus dem Demo-Datenbestand)
-      </span>
+      <span className="sv-tech">(Hinweis aus dem Demo-Datenbestand)</span>
     </p>
   );
 }
@@ -173,7 +174,7 @@ export function RiskCard({ view, tenantId }: { view: RiskView; tenantId: string 
       <LinkItems
         links={view.affects}
         tenantId={tenantId}
-        emptyText="Keine affects-Beziehung im Demo-Datenbestand."
+        emptyText="Keine solche Beziehung im Demo-Datenbestand erfasst."
       />
 
       <h4>Wird gemindert durch</h4>
@@ -181,7 +182,7 @@ export function RiskCard({ view, tenantId }: { view: RiskView; tenantId: string 
       <LinkItems
         links={view.mitigated_by}
         tenantId={tenantId}
-        emptyText="Keine mitigates-Beziehung im Demo-Datenbestand."
+        emptyText="Keine mindernde Beziehung im Demo-Datenbestand erfasst."
       />
 
       <CoveredNote names={view.covered_by_services} />
@@ -213,7 +214,7 @@ export function ScenarioCard({ view, tenantId }: { view: ScenarioView; tenantId:
           ))}
         </ul>
       ) : (
-        <p className="sv-item-meta">Keine threatens-Beziehung im Demo-Datenbestand.</p>
+        <p className="sv-item-meta">Keine Bedrohungs-Beziehung im Demo-Datenbestand erfasst.</p>
       )}
 
       <h4>Wird gemindert durch</h4>
@@ -221,7 +222,7 @@ export function ScenarioCard({ view, tenantId }: { view: ScenarioView; tenantId:
       <LinkItems
         links={view.mitigated_by}
         tenantId={tenantId}
-        emptyText="Keine mitigates-Beziehung im Demo-Datenbestand."
+        emptyText="Keine mindernde Beziehung im Demo-Datenbestand erfasst."
       />
     </li>
   );
@@ -239,7 +240,7 @@ export function WeaknessCard({ view, tenantId }: { view: WeaknessView; tenantId:
       <LinkItems
         links={view.exposes}
         tenantId={tenantId}
-        emptyText="Keine exposes-Beziehung im Demo-Datenbestand."
+        emptyText="Keine Expositions-Beziehung im Demo-Datenbestand erfasst."
       />
 
       <h4>Wird behoben durch</h4>
@@ -247,7 +248,7 @@ export function WeaknessCard({ view, tenantId }: { view: WeaknessView; tenantId:
       <LinkItems
         links={view.remediated_by}
         tenantId={tenantId}
-        emptyText="Keine remediates-Beziehung im Demo-Datenbestand."
+        emptyText="Keine behebende Beziehung im Demo-Datenbestand erfasst."
       />
     </li>
   );
@@ -300,7 +301,7 @@ export function ControlCard({ view, tenantId }: { view: ControlView; tenantId: s
           ))}
         </ul>
       ) : (
-        <p className="sv-item-meta">Keine satisfies-Kante im Demo-Seed.</p>
+        <p className="sv-item-meta">Keine erfüllte Anforderung im Demo-Datenbestand verknüpft.</p>
       )}
 
       <h4>Nachweis-Stand (Evidence)</h4>
@@ -308,7 +309,7 @@ export function ControlCard({ view, tenantId }: { view: ControlView; tenantId: s
       <LinkItems
         links={view.evidenced_by}
         tenantId={tenantId}
-        emptyText="Keine evidences-Beziehung im Demo-Datenbestand."
+        emptyText="Keine Nachweis-Beziehung im Demo-Datenbestand erfasst."
       />
 
       <h4>Mindert (Risikobezug)</h4>
@@ -316,7 +317,7 @@ export function ControlCard({ view, tenantId }: { view: ControlView; tenantId: s
       <LinkItems
         links={view.mitigates}
         tenantId={tenantId}
-        emptyText="Keine mitigates-Beziehung im Demo-Datenbestand."
+        emptyText="Keine mindernde Beziehung im Demo-Datenbestand erfasst."
       />
 
       <CoveredNote names={view.covered_by_services} />
@@ -340,7 +341,7 @@ export function MeasureCard({ view, tenantId }: { view: MeasureView; tenantId: s
       <LinkItems
         links={view.remediates}
         tenantId={tenantId}
-        emptyText="Keine remediates-Beziehung im Demo-Datenbestand."
+        emptyText="Keine behebende Beziehung im Demo-Datenbestand erfasst."
       />
 
       <h4>Mindert (Szenario/Risiko)</h4>
@@ -348,7 +349,7 @@ export function MeasureCard({ view, tenantId }: { view: MeasureView; tenantId: s
       <LinkItems
         links={view.mitigates}
         tenantId={tenantId}
-        emptyText="Keine mitigates-Beziehung im Demo-Datenbestand."
+        emptyText="Keine mindernde Beziehung im Demo-Datenbestand erfasst."
       />
     </li>
   );
@@ -370,7 +371,7 @@ export function EvidenceCard({ view, tenantId }: { view: EvidenceView; tenantId:
       <LinkItems
         links={view.evidences}
         tenantId={tenantId}
-        emptyText="Keine evidences-Beziehung im Demo-Datenbestand."
+        emptyText="Keine Nachweis-Beziehung im Demo-Datenbestand erfasst."
       />
 
       <CoveredNote names={view.covered_by_services} />

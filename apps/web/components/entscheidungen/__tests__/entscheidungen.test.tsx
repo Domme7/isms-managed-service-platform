@@ -132,39 +132,24 @@ describe('EntscheidungenContent – Leitfrage und ihre Grenze', () => {
   });
 
   /**
-   * QUELLENANGABE IM PRODUKTTEXT: Die Abschnittsnummerierung von Dok. 07 weicht zwischen
-   * PDF-Original und Markdown-Arbeitskopie ab (ab §2 um eins verschoben). Eine blanke §-Nummer
-   * im gerenderten Text zeigt damit auf einen anderen Abschnitt als gemeint. Genannt werden
-   * deshalb Abschnittstitel, stabile Entscheidungs-IDs (07-D06/07-D10) oder R-IDs (Review-Fix).
-   *
-   * EINE dokumentierte Ausnahme: der seitenweite Rahmungssatz „Zum Verständnis: …" ist per
-   * Acceptance-Kriterium WORTGLEICH an `/isms` gebunden; eine einseitige Änderung bräche die
-   * Wortgleichheit. Der Test lässt genau diesen Absatz aus – und prüft, dass er noch existiert,
-   * damit die Ausnahme nicht still zur Regel wird.
+   * WP-028 (DR-0013 „kein internes Vokabular im UI"): Der gerenderte Produkttext nennt KEINE
+   * Konzept-Quellenkennung mehr – weder eine Dokumentnummer („Dok. 07"), noch eine blanke
+   * §-Nummer, noch eine stabile Entscheidungs-ID („07-D06"). Die Quellenbelege leben ab jetzt
+   * ausschließlich in Code-Kommentaren und Tests, nicht in der Oberfläche. (Zuvor lautete die
+   * Regel „Abschnittstitel statt Nummer"; DR-0013 verschärft sie zu „gar keine Quellenkennung".)
    */
-  it('nennt im gerenderten Text keine blanke §-Nummer von Dok. 07', () => {
+  it('nennt im gerenderten Text keine Dokument-, Paragraphen- oder Entscheidungskennung', () => {
     for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR]) {
       const { container, unmount } = render(
         <EntscheidungenContent role={role('R01')} tenant={tenant(tenantId)} />,
       );
-      const klon = container.cloneNode(true) as HTMLElement;
-      const ausnahme = Array.from(klon.querySelectorAll('p.tw-muted')).find((p) =>
-        (p.textContent ?? '').startsWith('Zum Verständnis:'),
-      );
-      expect(ausnahme, 'Die dokumentierte Ausnahme steht nicht mehr im Text').toBeDefined();
-      ausnahme?.remove();
+      const text = container.textContent ?? '';
 
-      expect(
-        /Dok\. 07 §/.test(klon.textContent ?? ''),
-        `${tenantId}: blanke §-Nummer von Dok. 07 im Produkttext`,
-      ).toBe(false);
-      // Gegenprobe: Abschnittstitel bzw. stabile Kennungen stehen stattdessen da.
-      if (tenantId === TENANT_ID.NORDWERK) {
-        expect(klon.textContent ?? '').toContain('Objektvertrag, Identität und Metadaten');
-        expect(klon.textContent ?? '').toContain('Beziehungen als erstklassige Daten');
-        expect(klon.textContent ?? '').toContain('07-D06');
-        expect(klon.textContent ?? '').toContain('07-D10');
-      }
+      expect(/Dok\.\s*\d/.test(text), `${tenantId}: Dokumentkennung im Produkttext`).toBe(false);
+      expect(/§\s*\d/.test(text), `${tenantId}: Paragraphenkennung im Produkttext`).toBe(false);
+      expect(/\b\d\d-D\d\d\b/.test(text), `${tenantId}: Entscheidungs-ID im Produkttext`).toBe(
+        false,
+      );
       unmount();
     }
   });
@@ -261,7 +246,7 @@ describe('EntscheidungenContent – Register je Entscheidung (nur Belegtes)', ()
       /werden getrennt geführt und nicht zu einem einzigen/,
       /Verantwortung ist keine Freigabe/,
       /bewusst neutral als Bezug gezeigt/,
-      /Der „Status der Beziehung" ist ein Feld der\s+Kante/,
+      /Der „Status der Beziehung" ist ein Feld der\s+Beziehung/,
       /nicht zu einem Gesamtwert verrechnet/,
     ]) {
       expect(within(abschnitt).getAllByText(regel), String(regel)).toHaveLength(1);
@@ -296,7 +281,10 @@ describe('EntscheidungenContent – Bezug, Nachweis und Ablösekette', () => {
     const bezug = ABGELOEST.references[0];
     expect(bezug).toBeDefined();
 
-    expect(within(karte).getAllByText(/R23 · entschieden in/).length).toBeGreaterThan(0);
+    // WP-028/DR-0013: nur das Klartext-Label „entschieden in" (ohne R-Kennung und snake_case).
+    expect(
+      within(karte).getAllByText('entschieden in', { selector: 'span.tw-rel-type' }).length,
+    ).toBeGreaterThan(0);
     expect(within(karte).getAllByRole('link', { name: bezug.name }).length).toBeGreaterThan(0);
     expect(
       within(karte).getAllByText(new RegExp(`Herkunft der Aussage: ${bezug.assertion_kind}`))
@@ -324,7 +312,10 @@ describe('EntscheidungenContent – Bezug, Nachweis und Ablösekette', () => {
     const mitNachweis = NORDWERK_MODEL.decisions.filter((d) => d.evidence.length > 0);
     for (const decision of mitNachweis) {
       const karte = karteZurFrage(decision.question);
-      expect(within(karte).getAllByText(/R15 · belegt/).length).toBeGreaterThan(0);
+      // WP-028/DR-0013: nur das Klartext-Label „belegt" (ohne R-Kennung und snake_case).
+      expect(
+        within(karte).getAllByText('belegt', { selector: 'span.tw-rel-type' }).length,
+      ).toBeGreaterThan(0);
       for (const edge of decision.evidence) {
         expect(within(karte).getAllByRole('link', { name: edge.name }).length).toBeGreaterThan(0);
       }
@@ -379,10 +370,15 @@ describe('EntscheidungenContent – Bezug, Nachweis und Ablösekette', () => {
       }),
     ).toBeInTheDocument();
 
-    // Klartext primär, kanonische R-ID und technischer Typ bleiben sichtbar (Dok. 06 D08).
-    expect(within(nachfolgerKarte).getAllByText('R24 · löst ab').length).toBeGreaterThan(0);
-    expect(within(nachfolgerKarte).getAllByText('(supersedes)').length).toBeGreaterThan(0);
-    expect(within(vorgaengerKarte).getAllByText('R24 · löst ab').length).toBeGreaterThan(0);
+    // WP-028/DR-0013: nur das Klartext-Label „löst ab"; die R-Kennung und der snake_case-Typ
+    // „(supersedes)" erscheinen NICHT mehr im gerenderten Text.
+    expect(
+      within(nachfolgerKarte).getAllByText('löst ab', { selector: 'span.tw-rel-type' }).length,
+    ).toBeGreaterThan(0);
+    expect(within(nachfolgerKarte).queryByText('(supersedes)')).not.toBeInTheDocument();
+    expect(
+      within(vorgaengerKarte).getAllByText('löst ab', { selector: 'span.tw-rel-type' }).length,
+    ).toBeGreaterThan(0);
   });
 });
 
@@ -762,13 +758,13 @@ describe('EntscheidungenContent – Ehrlichkeitsblock „Was eine Entscheidung h
     return lueckenAbschnitt().querySelector('#entscheidungen-luecke-pflichtfelder') as HTMLElement;
   }
 
-  it('sagt ausdrücklich, dass dies keine Decision Card nach Dok. 10 §9 ist', () => {
+  it('sagt ausdrücklich, dass dies keine Decision Card im Sinne des Konzepts ist', () => {
     const abschnitt = lueckenAbschnitt();
     expect(within(abschnitt).getByText(/keine Decision Card/)).toBeInTheDocument();
-    // Quelle mit ABSCHNITTSTITEL, nicht nur mit Nummer (die Nummerierung weicht zwischen
-    // PDF-Original und Markdown-Arbeitskopie stellenweise ab).
-    expect(abschnitt.textContent ?? '').toMatch(/Dok\. 10, Abschnitt „Decision Cards"/);
-    expect(abschnitt.textContent ?? '').toMatch(/Dok\. 10, Abschnitt „Decision Cards" \(§9\)/);
+    // WP-028/DR-0013: die fachliche Zielvorgabe wird in Domänensprache benannt, ohne
+    // Dokument-/Paragraphenkennung im gerenderten Text.
+    expect(abschnitt.textContent ?? '').toMatch(/im Sinne der fachlichen Zielvorgabe des Konzepts/);
+    expect(abschnitt.textContent ?? '').not.toMatch(/Dok\.\s*10/);
   });
 
   it('nennt jedes der 14 Pflichtfelder feldweise mit seinem Deckungsgrad', () => {
@@ -860,9 +856,10 @@ describe('EntscheidungenContent – Ehrlichkeitsblock „Was eine Entscheidung h
     const abschnitt = lueckenAbschnitt();
     const text = abschnitt.textContent ?? '';
 
-    // Beide Listen mit ihren Zählungen benannt; die Quelle mit ABSCHNITTSTITEL.
-    expect(text).toMatch(/widerspricht der Dok\.-10-Liste/);
-    expect(text).toContain('Collaboration, Entscheidungen & Freigaben');
+    // Beide Listen mit ihren Zählungen benannt (WP-028/DR-0013: ohne Dokument-/Abschnittskennung
+    // im gerenderten Text).
+    expect(text).toMatch(/widerspricht der ersten Liste/);
+    expect(text).not.toContain('Collaboration, Entscheidungen & Freigaben');
     expect(text).toContain(`${DECISION_CARD_FIELDS_DOK06.length} Feldern`);
     expect(text).toContain(`${DECISION_CARD_FIELDS.length} Felder`);
     // Der Widerspruch bleibt OFFEN – keine Liste wird entschieden (O-WP017-11).

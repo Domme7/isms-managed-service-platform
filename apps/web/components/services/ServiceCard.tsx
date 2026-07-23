@@ -19,7 +19,7 @@
  * niemals ein fremder Mandant (Dok. 07 §17/P09). Nicht auflösbare Endpunkte bleiben ohne Link.
  */
 import Link from 'next/link';
-import { objectTypeDisplay, relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
+import { objectTypeDisplay, relationshipTypeLabel } from '../../lib/twin/data';
 // `lib/twin/routes.ts` ist seed-frei und wird hier präventiv genutzt: diese Datei landet über
 // `ServicesView` im Client-Bundle. Ein Schutz ist das heute NICHT – der DEMO_SEED liegt über
 // `lib/twin/data.ts` bzw. `lib/services/data.ts` ohnehin im Client-Graphen (offene Frage
@@ -31,11 +31,14 @@ import type {
   ServiceScopeItem,
 } from '../../lib/services/data';
 
-/** „R22 · abgedeckt durch (covered_by)" – Klartext primär, technischer Typ sekundär. */
+/**
+ * Beziehungsbezeichnung in Domänensprache (WP-028: kein internes Vokabular im UI, DR-0013).
+ * Nur das deutsche Klartext-Label; R-Kennung und snake_case-Typ bleiben im Datenmodell, nicht im
+ * gerenderten Text. Fallback auf den technischen Namen nur bei (im Seed nicht genutztem) fehlendem
+ * Label.
+ */
 function edgeNote(type: string): string {
-  const id = relationshipTypeId(type);
-  const label = relationshipTypeLabel(type) ?? type;
-  return `${id ? `${id} · ` : ''}${label} (${type})`;
+  return relationshipTypeLabel(type) ?? type;
 }
 
 /**
@@ -150,11 +153,7 @@ export function ServiceCard({ view, tenantId }: { view: ManagedServiceView; tena
       <p className="tw-card-sub">
         Managed Service · Lebenszyklus-Stand: {service.lifecycle_status}
         {delivery_team_names.length > 0 ? (
-          <>
-            {' '}
-            · Delivery: {delivery_team_names.join(', ')}{' '}
-            <span className="sv-tech">({edgeNote('delivered_by')})</span>
-          </>
+          <> · Erbracht durch das Managed-Service-Team: {delivery_team_names.join(', ')}</>
         ) : null}
       </p>
 

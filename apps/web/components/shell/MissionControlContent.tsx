@@ -703,9 +703,8 @@ function ErfassungSection({ model }: { model: MissionControlModel }) {
       <h2 id={headingId}>{MISSION_SECTIONS.erfassung.title}</h2>
       {/* Achsentrennung nach Dok. 07 §11 (Signatur seit dem Review-Pass nur im Kommentar). */}
       <p className="sv-edge-note">
-        Gezeigt wird die Systemachse: der Zeitpunkt, zu dem ein Datensatz im System erfasst wurde
-        (record_time). Die fachliche Gültigkeit (valid_time) ist eine eigene Zeitachse und wird hier
-        nicht damit vermischt.
+        Gezeigt wird die Systemachse: der Zeitpunkt, zu dem ein Datensatz im System erfasst wurde.
+        Die fachliche Gültigkeit ist eine eigene Zeitachse und wird hier nicht damit vermischt.
       </p>
 
       <h3>Erfassungswellen im Datenbestand</h3>
@@ -780,9 +779,10 @@ function DatenlageSection({ model }: { model: MissionControlModel }) {
 
       <h3>Gezählte Beobachtungen</h3>
       <p className="sv-edge-note">
-        Jede Beobachtung nennt ihre Zählung, ihre Grundgesamtheit und die Regel, nach der gezählt
-        wurde. Die Reihenfolge ist eine feste Katalogreihenfolge und sagt nichts über Bedeutung aus.
-        Eine Zählung von 0 bleibt sichtbar, weil auch sie eine Aussage über den Datenbestand ist.
+        Jede Beobachtung nennt ihre Zählung, die Menge, auf die sie sich bezieht, und die Regel,
+        nach der gezählt wurde. Die Reihenfolge ist eine feste Katalogreihenfolge und sagt nichts
+        über Bedeutung aus. Eine Zählung von 0 bleibt sichtbar, weil auch sie eine Aussage über den
+        Datenbestand ist.
       </p>
       <ul className="sv-items">
         {model.observations.map((observation) => (
@@ -807,7 +807,7 @@ function ObservationItem({ observation }: { observation: DataObservation }) {
       <span className="sv-item-meta">
         {` · ${observation.count} von ${observation.total} ${observation.totalLabel}`}
       </span>
-      <span className="sv-item-note">{`Ermittlungsregel: ${observation.method}`}</span>
+      <span className="sv-item-note">{`So wird gezählt: ${observation.method}`}</span>
     </li>
   );
 }
@@ -887,7 +887,7 @@ function PlaceEntryItem({ entry }: { entry: PlaceEntryPoint }) {
 function ObjectEntryItem({ entry }: { entry: ObjectEntryPoint }) {
   return (
     <li>
-      <span className="sv-item-name">{`${entry.familyId} · ${entry.familyName}: `}</span>
+      <span className="sv-item-name">{`${entry.familyName}: `}</span>
       {/* Route ausschließlich aus dem Modell (`objectDetailHref` mit dem aktiven Mandanten). */}
       <Link href={entry.href}>{entry.name}</Link>
       <span className="sv-item-meta">
@@ -923,9 +923,9 @@ function HonestySection({ model }: { model: MissionControlModel }) {
       <h2 id="heute-luecke">Was hier bewusst nicht steht</h2>
       <p className="sv-edge-note">
         Drei im Konzept beschriebene Bausteine dieses Ortes fehlen. Die Ursache ist je Baustein eine
-        andere und steht darunter jeweils dabei – Datenbestand, Objektvertrag oder
-        Anmelde-Simulation. Sie werden hier benannt statt verborgen (Dok. 06 §17): ein leerer
-        Platzhalter oder ein erfundener Inhalt wäre die schlechtere Antwort.
+        andere und steht darunter jeweils dabei – Datenbestand, Datenmodell oder Anmelde-Simulation.
+        Sie werden hier benannt statt verborgen: ein leerer Platzhalter oder ein erfundener Inhalt
+        wäre die schlechtere Antwort.
       </p>
       <ul className="sv-items">
         <li>
@@ -940,10 +940,10 @@ function HonestySection({ model }: { model: MissionControlModel }) {
               Vertragsfelder für Fälligkeit, Aufwand, Kapazität und Priorität. */}
           <span className="sv-item-note">
             Ursache in der Datenlage: Der Demo-Datenbestand enthält keine Objekte des Typs „Task" –
-            der Typ steht im kanonischen Katalog (Dok. 07 §6), ist aber in keinem Mandanten
-            angelegt. Der Objektvertrag (Dok. 07 §7) kennt außerdem kein Feld für Fälligkeit,
-            Aufwand, Kapazität oder Priorität. Ohne Aufgaben und ohne diese Angaben wäre jede
-            Tagesmission und jede Reihenfolge erfunden.
+            der Typ steht im kanonischen Katalog, ist aber in keinem Mandanten angelegt. Das
+            Datenmodell kennt außerdem kein Feld für Fälligkeit, Aufwand, Kapazität oder Priorität.
+            Ohne Aufgaben und ohne diese Angaben wäre jede Tagesmission und jede Reihenfolge
+            erfunden.
           </span>
         </li>
         <li>
@@ -953,9 +953,9 @@ function HonestySection({ model }: { model: MissionControlModel }) {
           <span className="sv-item-note">
             Ursache im Datenmodell: Es gibt kein Ereignis- und kein Änderungsobjekt; die einzige
             Zeitangabe, die die Systemachse überhaupt kennt, ist der Erfassungszeitpunkt – und der
-            ist keine Änderung. Eine erfasste fachliche Ablösung (Dok. 07 §9 R24) verbindet zwei
-            eigenständige Objekte und sagt, welcher Stand welchen ersetzt hat; sie ist damit kein
-            Ereignis- und kein Änderungsfeed und ergibt kein „neu seit …". Aus den Daten abgeleitete
+            ist keine Änderung. Eine erfasste fachliche Ablösung verbindet zwei eigenständige
+            Objekte und sagt, welcher Stand welchen ersetzt hat; sie ist damit kein Ereignis- und
+            kein Änderungsfeed und ergibt kein „neu seit …". Aus den Daten abgeleitete
             Historienlage: {model.historyState.statement}
           </span>
         </li>

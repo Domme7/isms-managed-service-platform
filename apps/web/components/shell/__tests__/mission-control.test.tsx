@@ -322,15 +322,16 @@ describe('MissionControlContent – „Was ist erfasst worden?"', () => {
     expect(
       within(abschnitt).getAllByText(model.historyState.statement).length,
     ).toBeGreaterThanOrEqual(1);
+    // WP-028/DR-0013: „supersedes" erscheint im Nutzertext als Klartext „Ablösungs-Beziehung".
     expect(model.historyState.statement).toMatch(
-      /Eine Versionshistorie ist im Datenbestand belegt: 1 „supersedes"-Beziehung ist erfasst/,
+      /Eine Versionshistorie ist im Datenbestand belegt: 1 Ablösungs-Beziehung ist erfasst/,
     );
     expect(model.historyState.statement).not.toMatch(/Beziehungen sind erfasst/);
 
     // Gegenprobe am ECHTEN Seed: ein Mandant ohne Ablösung behält die benannte Lücke.
     const operator = buildMissionControl(TENANT_ID.CONSULTING_OPERATOR);
     if (!operator) throw new Error('Testfixture fehlt: Operator-Modell');
-    expect(operator.historyState.statement).toMatch(/keine „supersedes"-Beziehung/);
+    expect(operator.historyState.statement).toMatch(/keine Ablösungs-Beziehung/);
 
     // Ablösung ist kein Änderungsfeed – das muss der Abschnitt weiterhin aussprechen.
     expect(within(abschnitt).getByText(/kein Änderungsfeed/)).toBeInTheDocument();
@@ -365,7 +366,7 @@ describe('MissionControlContent – „Was weiß ich über die Datenlage?"', () 
         within(eintrag).getByText(new RegExp(`${observation.count} von ${observation.total} `)),
       ).toBeInTheDocument();
       expect(
-        within(eintrag).getByText(`Ermittlungsregel: ${observation.method}`),
+        within(eintrag).getByText(`So wird gezählt: ${observation.method}`),
       ).toBeInTheDocument();
     });
   });
@@ -551,7 +552,8 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
       );
       expect(
         // getByText normalisiert Whitespace: das trennende Leerzeichen am Ende entfällt.
-        within(abschnitt).getByText(new RegExp(`^${entry.familyId} · ${entry.familyName}:$`)),
+        // WP-028/DR-0013: die Objektfamilie erscheint ohne Familien-Code (kein „F0X · " im UI).
+        within(abschnitt).getByText(new RegExp(`^${entry.familyName}:$`)),
       ).toBeInTheDocument();
     }
     expect(model.objectEntryPoints.map((e) => e.familyId)).toEqual([
@@ -1265,9 +1267,7 @@ describe('MissionControlContent – Dashboard-Kacheln (Selbsterklärung, Badges,
       expect(kachel.querySelector('.db-frage')?.textContent).toMatch(/\?$/);
       expect(kachel.querySelector('.db-meta')?.textContent).toMatch(/Scope: /);
       expect(kachel.querySelector('.db-meta')?.textContent).toMatch(/Datenstand/);
-      expect(kachel.querySelector('details.db-regel summary')?.textContent).toBe(
-        'Ermittlungsregel',
-      );
+      expect(kachel.querySelector('details.db-regel summary')?.textContent).toBe('So wird gezählt');
       expect(
         (kachel.querySelector('details.db-regel p')?.textContent ?? '').length,
       ).toBeGreaterThan(20);

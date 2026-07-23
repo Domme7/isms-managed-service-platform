@@ -65,7 +65,8 @@ describe('ObjectDetailView – Seitenanatomie', () => {
 
     expect(within(context).getByText('Nordwerk Manufacturing SE')).toBeInTheDocument();
     expect(within(context).getByText('Geschäftsprozess')).toBeInTheDocument();
-    expect(within(context).getByText('F03 · Geschäft & Information')).toBeInTheDocument();
+    // WP-028/DR-0013: die Objektfamilie erscheint ohne Familien-Code (kein „F03 · " im UI).
+    expect(within(context).getByText('Geschäft & Information')).toBeInTheDocument();
     // Datenstand ist die Systemerfassung – nicht die fachliche Gültigkeit (2026-01-01).
     expect(within(context).getByText('15.01.2026')).toBeInTheDocument();
   });
@@ -110,9 +111,8 @@ describe('ObjectDetailView – Seitenanatomie', () => {
     expect(
       screen.getByRole('heading', { name: 'Keine Versionshistorie für dieses Objekt' }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/keine Ablösungskante \(R24 · löst ab \(supersedes\)\)/),
-    ).toBeInTheDocument();
+    // WP-028/DR-0013: die Beziehung erscheint im Klartext, ohne R-Kennung und snake_case-Typ.
+    expect(screen.getByText(/keine Ablösung \(„löst ab"\)/)).toBeInTheDocument();
   });
 
   it('zeigt für das Ablösepaar BEIDE Richtungen statt der Lücke (WP-017)', () => {
@@ -174,7 +174,7 @@ describe('ObjectDetailView – Kanten als Links auf das Nachbarobjekt', () => {
     const model = detailOrThrow(TENANT_ID.NORDWERK, O.ASSET_KUNDENAUFTRAGSDATEN);
     render(<ObjectDetailView model={model} />);
 
-    expect(screen.getAllByText('R07 · verarbeitet').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('verarbeitet').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/Richtung: eingehend \(gerichtet\)/).length).toBeGreaterThanOrEqual(
       1,
     );
@@ -213,7 +213,7 @@ describe('ObjectDetailView – Leserichtung der Kanten folgt der Seed-Kante', ()
     const model = detailOrThrow(TENANT_ID.NORDWERK, O.ASSET_KUNDENAUFTRAGSDATEN);
     const { container } = render(<ObjectDetailView model={model} />);
 
-    const zeilen = kantenzeilen(container, 'R09 · bedroht');
+    const zeilen = kantenzeilen(container, 'bedroht');
     expect(zeilen.length).toBeGreaterThanOrEqual(1);
     for (const zeile of zeilen) {
       const knoten = Array.from(zeile.querySelectorAll('.tw-rel-node')).map((el) => el.textContent);
@@ -227,12 +227,13 @@ describe('ObjectDetailView – Leserichtung der Kanten folgt der Seed-Kante', ()
     const model = detailOrThrow(TENANT_ID.NORDWERK, O.THREAT_RANSOMWARE);
     const { container } = render(<ObjectDetailView model={model} />);
 
-    const zeilen = kantenzeilen(container, 'R09 · bedroht');
+    // WP-028/DR-0013: die Kantenzeile trägt nur noch das Klartext-Label „bedroht".
+    const zeilen = kantenzeilen(container, 'bedroht');
     expect(zeilen.length).toBeGreaterThanOrEqual(1);
     for (const zeile of zeilen) {
       const knoten = Array.from(zeile.querySelectorAll('.tw-rel-node')).map((el) => el.textContent);
       expect(knoten).not.toContain('dieses Objekt');
-      expect(zeile.textContent?.startsWith('R09 · bedroht')).toBe(true);
+      expect(zeile.textContent?.startsWith('bedroht')).toBe(true);
     }
   });
 });
@@ -296,7 +297,12 @@ describe('ObjectDetailView – Status-Angaben sind gerahmt', () => {
     expect(rahmung.textContent).toMatch(
       /Der „Status der Beziehung" ist dagegen ein Feld der Beziehung selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen/,
     );
-    expect(rahmung.textContent).toMatch(/R15/);
+    // WP-028/DR-0013: keine Dokument-/Paragraphenkennung mehr; der Nachweisbezug wird in
+    // Domänensprache erklärt (kein „§9 R15" im gerenderten Text).
+    expect(rahmung.textContent).toMatch(
+      /Ein Nachweisbezug kann etwa einen Zeitraum und einen Prüfstatus tragen/,
+    );
+    expect(rahmung.textContent).not.toMatch(/R15/);
   });
 
   it('beschriftet Kanten-Metadaten neutral (Lebenszyklus-Stand, Status der Beziehung)', () => {
@@ -376,9 +382,7 @@ describe('ObjectDetailView – Zustände nach Dok. 06 §17', () => {
 
     expect(screen.getByText('Kein Nachweis verweist auf dieses Objekt.')).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /keine eingehende Nachweiskante \(R15 · belegt \(evidences\)\) im Demo-Seed/,
-      ),
+      screen.getByText(/keine eingehende Nachweis-Beziehung im Demo-Seed/),
     ).toBeInTheDocument();
   });
 
@@ -418,9 +422,9 @@ describe('ObjectDetailView – Zustände nach Dok. 06 §17', () => {
     expect(
       within(abschnitt).getByRole('link', { name: 'Backup & Recovery Control' }),
     ).toHaveAttribute('href', `/twin/${TENANT_ID.NORDWERK}/objekt/${O.CTRL_BACKUP}`);
-    expect(
-      within(abschnitt).getAllByText(/Beleg: R22 · abgedeckt durch \(covered_by\)/).length,
-    ).toBeGreaterThanOrEqual(1);
+    expect(within(abschnitt).getAllByText(/Beleg: abgedeckt durch/).length).toBeGreaterThanOrEqual(
+      1,
+    );
     expect(within(abschnitt).getAllByText(/Lebenszyklus-Stand: /).length).toBeGreaterThanOrEqual(1);
 
     // Der Leersatz erscheint nicht mehr.
@@ -435,9 +439,7 @@ describe('ObjectDetailView – Zustände nach Dok. 06 §17', () => {
     // Das Control trägt im Seed zwei Nachweiskanten (Restore-Test-Protokoll und
     // Evidence-Pack-Deliverable) – beide werden als eigene Beobachtung gezeigt.
     expect(screen.getAllByText('Verknüpfter Nachweis:')).toHaveLength(2);
-    expect(
-      screen.getAllByText(/Beleg: R22 · abgedeckt durch \(covered_by\)/).length,
-    ).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Beleg: abgedeckt durch/).length).toBeGreaterThanOrEqual(1);
   });
 });
 
@@ -509,7 +511,7 @@ describe('ObjectDetailView – Trust-Layer-Abgleich (Dok. 06 „Sonder-, Fehler-
     );
 
     const abschnitt = screen
-      .getByRole('heading', { level: 3, name: 'Trust-Layer-Abgleich' })
+      .getByRole('heading', { level: 3, name: 'Vertrauensebene: Abgleich mit dem Datenbestand' })
       .closest('section') as HTMLElement;
     const liste = abschnitt.querySelector('#objekt-trust-abgleich') as HTMLElement;
     expect(liste).not.toBeNull();
@@ -527,10 +529,11 @@ describe('ObjectDetailView – Trust-Layer-Abgleich (Dok. 06 „Sonder-, Fehler-
       countTrustAngaben('teilweise'),
     );
 
-    // Die Kopfzeile nennt Quelle (Abschnittstitel) und die GEZÄHLTEN Anzahlen – und sagt
-    // ausdrücklich, dass nichts berechnet wird (kein verdichteter Vertrauenswert).
+    // Die Kopfzeile nennt die GEZÄHLTEN Anzahlen und sagt ausdrücklich, dass nichts berechnet
+    // wird (kein verdichteter Vertrauenswert). WP-028/DR-0013: die Konzept-Quellenkennung
+    // („Dok. 06, Abschnitt …") erscheint NICHT mehr im gerenderten Text.
     const text = abschnitt.textContent ?? '';
-    expect(text).toContain('Sonder-, Fehler- und Vertrauenszustände');
+    expect(text).not.toContain('Sonder-, Fehler- und Vertrauenszustände');
     expect(text).toContain(`${countTrustAngaben('belegt')} Angaben sind belegt`);
     expect(text).toMatch(/nichts\s+berechnet/);
     expect(text).toMatch(/nichts\s+verdichtet/);

@@ -76,7 +76,7 @@ export function KachelErklaerung({ tile }: { tile: TileExplanation }) {
   return (
     <>
       <details className="db-regel">
-        <summary>Ermittlungsregel</summary>
+        <summary>So wird gezählt</summary>
         <p className="db-meta">
           {'Scope: '}
           {tile.scope}

@@ -1,11 +1,12 @@
 /**
  * Beziehungsliste als lesbare Kette (read-only, WP-004).
  *
- * Rendert je Beziehung: `Quell-display_name —Klartext-Typ→ Ziel-display_name`. Primär steht das
- * deutsche UI-Label mit kanonischer R-ID (z. B. „R07 · verarbeitet"); der technische snake_case-Typ
- * (`processes`) bleibt sekundär sichtbar (Dok. 06 „Klartext vor Fachsprache" – reine UI-Schicht).
- * Assertion-Art (Dok. 07 §9) und – falls vorhanden – der Vertrauensgrad qualitativ (nicht als
- * nackte Zahl). Quell-/Ziel-IDs sind bereits auf `display_name` aufgelöst (siehe lib/twin/data.ts).
+ * Rendert je Beziehung: `Quell-display_name —Klartext-Typ→ Ziel-display_name`. Sichtbar ist
+ * ausschließlich das deutsche Klartext-Label (z. B. „verarbeitet"); die kanonische R-Kennung und
+ * der technische snake_case-Typ bleiben im Datenmodell, erscheinen aber seit WP-028 (DR-0013:
+ * kein internes Vokabular im UI) nicht mehr im gerenderten Text. Dazu die Herkunft der Aussage
+ * und – falls vorhanden – der Vertrauensgrad qualitativ (nicht als nackte Zahl). Quell-/Ziel-IDs
+ * sind bereits auf `display_name` aufgelöst (siehe lib/twin/data.ts).
  *
  * WP-014 Slice 2: BEIDE Endpunkte sind Links auf ihre Objekt-360-Detailseite (navigierbarer
  * Graph, Dok. 07 §10). `tenantId` stammt aus dem Routenparameter der Mandantenseite – dieselbe
@@ -48,8 +49,9 @@ export function RelationshipList({
   return (
     <ul className="tw-rel-list">
       {relationships.map((rel) => {
+        // Nur das deutsche Klartext-Label (WP-028, DR-0013): weder die R-Kennung noch der
+        // snake_case-Typ erscheinen im gerenderten Text; beide bleiben im Datenmodell erhalten.
         const label = rel.relationship_type_label ?? rel.relationship_type;
-        const primary = rel.relationship_type_id ? `${rel.relationship_type_id} · ${label}` : label;
         const confidence =
           typeof rel.confidence === 'number' ? confidenceQualitative(rel.confidence) : null;
 
@@ -69,7 +71,7 @@ export function RelationshipList({
               <span className="tw-rel-arrow" aria-hidden="true">
                 —
               </span>
-              <span className="tw-rel-type">{primary}</span>
+              <span className="tw-rel-type">{label}</span>
               <span className="tw-rel-arrow" aria-hidden="true">
                 →
               </span>
@@ -81,8 +83,7 @@ export function RelationshipList({
               />
             </div>
             <div className="tw-rel-meta">
-              <span className="tw-rel-tech">Typ: {rel.relationship_type}</span> · Assertion-Art:{' '}
-              {rel.assertion_kind}
+              Herkunft der Aussage: {rel.assertion_kind}
               {confidence ? ` · Vertrauensgrad: ${confidence.display}` : ''}
             </div>
           </li>

@@ -411,6 +411,8 @@ describe('PlaceholderPage – ehrliche Empty-Message', () => {
     expect(
       screen.getByRole('heading', { name: /entsteht in einer späteren Phase/i }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/S10 – Reporting Studio/)).toBeInTheDocument();
+    // WP-028/DR-0013: der geplante Screen erscheint als Klartext-Name, ohne Screen-Code „S10".
+    expect(screen.getByText(/Reporting Studio/)).toBeInTheDocument();
+    expect(screen.queryByText(/S10/)).not.toBeInTheDocument();
   });
 });

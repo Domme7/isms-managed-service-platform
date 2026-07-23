@@ -23,8 +23,8 @@ export function PlaceholderPage({ place }: { place: NavPlace }) {
           Diese Ansicht entsteht in einer späteren Phase
         </h2>
         <p style={{ marginTop: 0 }}>
-          „{place.label}" ist einer der acht stabilen Orte der Shell (Dok. 06, 06-D01). Der Ort ist
-          bereits navigierbar, seine volle Erlebniswelt folgt jedoch in einem eigenen Work Package.
+          „{place.label}" ist einer der acht stabilen Orte der Anwendung. Der Ort ist bereits
+          navigierbar, seine volle Erlebniswelt folgt jedoch in einem späteren Ausbauschritt.
           {place.plannedScreen ? (
             <>
               {' '}
@@ -34,7 +34,7 @@ export function PlaceholderPage({ place }: { place: NavPlace }) {
         </p>
         <p className="tw-muted" style={{ marginBottom: 0 }}>
           Bewusst kein Platzhalter-Inhalt: hier erscheinen echte, aus dem gemeinsamen Datenmodell
-          abgeleitete Ansichten, sobald das zugehörige Work Package umgesetzt ist.
+          abgeleitete Ansichten, sobald der zugehörige Ausbauschritt umgesetzt ist.
         </p>
       </div>
     </>

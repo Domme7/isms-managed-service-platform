@@ -39,7 +39,11 @@ export interface TrustLayerAngabe {
   readonly traeger: string;
 }
 
-/** Sichtbare Quellangabe des Abgleichs (Abschnittstitel, nicht nur Nummer – Regel Null). */
+/**
+ * Quellanker des Abgleichs (Abschnittstitel, nicht nur Nummer – Regel Null). Seit WP-028
+ * (DR-0013: kein internes Vokabular im UI) wird diese Kennung NICHT mehr im Produkttext
+ * gerendert – sie bleibt als Code-/Test-Beleg der Herkunft erhalten.
+ */
 export const TRUST_LAYER_QUELLE =
   'Dok. 06, Abschnitt „Sonder-, Fehler- und Vertrauenszustände", Absatz „Trust Layer"';
 
@@ -48,16 +52,15 @@ export const TRUST_LAYER_ANGABEN: readonly TrustLayerAngabe[] = [
     angabe: 'Herkunft',
     abdeckung: 'belegt',
     traeger:
-      'Quellreferenzen („source_refs") je Objekt – oben unter „Herkunft (source_refs)" –, die ' +
-      'Herkunft der Aussage („assertion_kind") an jeder Beziehung und die Qualitätsdimension ' +
-      '„Herkunft".',
+      'Quellreferenzen je Objekt – oben unter „Herkunft" –, die Herkunft der Aussage an jeder ' +
+      'Beziehung und die Qualitätsdimension „Herkunft".',
   },
   {
     angabe: 'Letzter Datenzeitpunkt',
     abdeckung: 'belegt',
     traeger:
-      'Die Systemerfassung („record_time") – sichtbar als „Datenstand (im System erfasst)" in ' +
-      'der Kontextzeile; die fachliche Gültigkeit ist eine eigene, getrennt gezeigte Zeitachse.',
+      'Die Systemerfassung – sichtbar als „Datenstand (im System erfasst)" in der Kontextzeile; ' +
+      'die fachliche Gültigkeit ist eine eigene, getrennt gezeigte Zeitachse.',
   },
   {
     angabe: 'Vollständigkeit',

@@ -104,7 +104,7 @@ export function ServicesContent({
           <div className="tw-empty" role="note">
             <p style={{ margin: 0 }}>
               Die mandantenübergreifende Portfolio-Sicht ist der Service-Organisation vorbehalten
-              (Consulting &amp; Service World, Rollen R08–R11, Dok. 06 §5).{' '}
+              (Consulting &amp; Service World).{' '}
               {role ? (
                 <>
                   Ihre aktive Rolle <strong>{role.name}</strong> gehört zur{' '}

@@ -103,7 +103,8 @@ export const NAV_PLACES: readonly NavPlace[] = [
     hint: 'Briefings, PDF/PPTX, Management Review, Exporte',
     question: 'Welche Geschichte soll aus demselben Datenstand entstehen?',
     match: ['/reports'],
-    plannedScreen: 'S10 – Reporting Studio',
+    // WP-028/DR-0013: kein Screen-Code (S10) im gerenderten Text; Klartext-Name genügt.
+    plannedScreen: 'Reporting Studio',
   },
   {
     id: 'wissen',
@@ -112,7 +113,7 @@ export const NAV_PLACES: readonly NavPlace[] = [
     hint: 'Suche, Glossar, Vorlagen, Best Practices, Lernhinweise',
     question: 'Wo finde ich Erklärung, Vorlage und bewährtes Vorgehen zum aktuellen Kontext?',
     match: ['/wissen'],
-    plannedScreen: 'Wissen (Dok. 06 §4)',
+    plannedScreen: 'Wissens- und Vorlagenbereich',
   },
   {
     id: 'administration',
@@ -121,7 +122,7 @@ export const NAV_PLACES: readonly NavPlace[] = [
     hint: 'Nutzer, Rechte, Integrationen, Konfiguration, Audit Logs, Betrieb',
     question: 'Ist der Tenant sicher, korrekt konfiguriert und verbunden?',
     match: ['/administration'],
-    plannedScreen: 'S11 – Administration & Integration Health',
+    plannedScreen: 'Administration & Integration Health',
   },
 ] as const;
 

@@ -241,7 +241,8 @@ describe('deriveHistoryState – die Aussage folgt den Daten (Fixture-Negativbew
     expect(seedState.supersedesEdgeCount).toBe(supersedesKanten.length);
     expect(seedState.statement).toContain('belegt');
     // Die Zahl im Satz stammt aus den Daten – und der Numerus stimmt bei genau einem Beleg.
-    expect(seedState.statement).toContain('1 „supersedes"-Beziehung ist erfasst');
+    // WP-028/DR-0013: „supersedes" erscheint im Nutzertext als Klartext „Ablösungs-Beziehung".
+    expect(seedState.statement).toContain('1 Ablösungs-Beziehung ist erfasst');
     expect(seedState.statement).not.toContain('Beziehungen sind erfasst');
     // Die beiden anderen Belegarten sind NICHT belegt und stehen deshalb auch nicht im Satz.
     expect(seedState.statement).not.toContain('Version größer 1');
@@ -317,7 +318,8 @@ describe('deriveHistoryState – die Aussage folgt den Daten (Fixture-Negativbew
     // Kontrast gegen die Datenlage OHNE Historie (der Seed trägt seit WP-017 selbst genau eine
     // Ablösekette und taugt hier deshalb nicht mehr als Gegenstück).
     expect(state.statement).not.toBe(fixtureOhneHistorie.statement);
-    expect(state.statement).toContain('supersedes');
+    // WP-028/DR-0013: Klartext statt „supersedes" im Nutzertext.
+    expect(state.statement).toContain('Ablösungs-Beziehung');
     // Umgekehrte Probe: gleiche Datenlage ⇒ gleiche Aussage. Die Fixture bildet exakt die Lage
     // des Seeds nach (eine supersedes-Kante, keine Version > 1, kein Ersetzungszeitpunkt) und
     // muss deshalb denselben Satz erzeugen – die Aussage ist abgeleitet, nicht datenspezifisch.

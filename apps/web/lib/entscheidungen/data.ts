@@ -434,24 +434,23 @@ export const DECISION_CARD_FIELDS: readonly DecisionCardField[] = [
     field: 'Entscheidungsfrage',
     coverage: 'teilweise',
     carrier:
-      'Träger ist der Objektname („display_name"). Ein typisiertes Frageobjekt mit belegter ' +
-      'Wahlmöglichkeit kennt der Objektvertrag nicht.',
+      'Träger ist der Objektname. Ein typisiertes Frageobjekt mit belegter Wahlmöglichkeit kennt ' +
+      'das Datenmodell nicht.',
   },
   {
     field: 'Zielbezug',
     coverage: 'teilweise',
     carrier:
-      'Träger ist die Beziehung „decided_in" (Dok. 07, „Beziehungen als erstklassige Daten", ' +
-      'R23) auf ein Risiko oder einen Managed Service. Ein Bezug auf ein Zielprofil ist damit ' +
-      'nicht belegt.',
+      'Träger ist die Beziehung „entschieden in" auf ein Risiko oder einen Managed Service. Ein ' +
+      'Bezug auf ein Zielprofil ist damit nicht belegt.',
   },
   {
     field: 'Auslöser',
     coverage: 'kein Träger',
     carrier:
-      'Kein Feld und keine eigene Beziehung. Ob „decided_in" den Zielbezug oder den Auslöser ' +
-      'abbildet, ist im Konzept nicht entschieden; die Beziehung wird deshalb neutral als Bezug ' +
-      'gezeigt und nicht als Auslöser ausgegeben.',
+      'Kein Feld und keine eigene Beziehung. Ob die Beziehung „entschieden in" den Zielbezug oder ' +
+      'den Auslöser abbildet, ist im Konzept nicht entschieden; die Beziehung wird deshalb neutral ' +
+      'als Bezug gezeigt und nicht als Auslöser ausgegeben.',
   },
   {
     field: 'Baseline',
@@ -480,11 +479,10 @@ export const DECISION_CARD_FIELDS: readonly DecisionCardField[] = [
     field: 'Wirkung',
     coverage: 'teilweise',
     carrier:
-      'Teil-Träger ist die Wirkungsannahme der Beziehung („effectiveness_assumption") – im ' +
-      'technischen Vertrag vorhanden (die Konzept- und PDF-Deckung ist noch offen) und im ' +
-      'Datenbestand an Service-Beziehungen erfasst; die Entscheidungs-Beziehungen dieses ' +
-      'Datenbestands tragen sie nicht. Ein eigenes Feld für erwartete Wirkung auf Risiko, Ziel, ' +
-      'Service oder Zeit gibt es nicht.',
+      'Teil-Träger ist die Wirkungsannahme der Beziehung – im technischen Vertrag vorhanden (die ' +
+      'Konzept- und PDF-Deckung ist noch offen) und im Datenbestand an Service-Beziehungen ' +
+      'erfasst; die Entscheidungs-Beziehungen dieses Datenbestands tragen sie nicht. Ein eigenes ' +
+      'Feld für erwartete Wirkung auf Risiko, Ziel, Service oder Zeit gibt es nicht.',
   },
   {
     field: 'Ressourcen',
@@ -497,17 +495,15 @@ export const DECISION_CARD_FIELDS: readonly DecisionCardField[] = [
     field: 'Abhängigkeiten',
     coverage: 'kein Träger',
     carrier:
-      'Keine Beziehung zwischen zwei Entscheidungen außer der Ablösung (R24). Eine ' +
-      'Voraussetzung zwischen Entscheidungen ist im kanonischen Beziehungskatalog nicht ' +
-      'vorgesehen.',
+      'Keine Beziehung zwischen zwei Entscheidungen außer der Ablösung. Eine Voraussetzung ' +
+      'zwischen Entscheidungen ist im kanonischen Beziehungskatalog nicht vorgesehen.',
   },
   {
     field: 'Confidence',
     coverage: 'teilweise',
     carrier:
-      'Träger ist der Vertrauensgrad der BEZIEHUNG („confidence", Dok. 07, „Beziehungen als ' +
-      'erstklassige Daten"). Am Objekt selbst gibt es kein solches Feld; die Datenqualität wird ' +
-      'als Dimensionen geführt und hier unverrechnet gezeigt.',
+      'Träger ist der Vertrauensgrad der BEZIEHUNG. Am Objekt selbst gibt es kein solches Feld; ' +
+      'die Datenqualität wird als Dimensionen geführt und hier unverrechnet gezeigt.',
   },
   {
     field: 'Empfehlung',
@@ -520,10 +516,9 @@ export const DECISION_CARD_FIELDS: readonly DecisionCardField[] = [
     field: 'Owner und Approver',
     coverage: 'teilweise',
     carrier:
-      'Träger ist „owner_ids" (fachlich/technisch) zusammen mit der Beziehung „owns" ' +
-      '(Dok. 07, „Beziehungen als erstklassige Daten", R03). Eine freigabeberechtigte Rolle ' +
-      '(Approver) kennt das Modell nicht; Verantwortung wird hier nicht zu einer Freigabe ' +
-      'umgedeutet.',
+      'Träger ist die Owner-Angabe (fachlich/technisch) zusammen mit der Beziehung ' +
+      '„verantwortet". Eine freigabeberechtigte Rolle (Approver) kennt das Modell nicht; ' +
+      'Verantwortung wird hier nicht zu einer Freigabe umgedeutet.',
   },
   {
     field: 'Frist',
@@ -543,9 +538,8 @@ export const DECISION_CARD_FIELDS: readonly DecisionCardField[] = [
     field: 'Provenance',
     coverage: 'teilweise',
     carrier:
-      'Träger sind Quellreferenzen („source_refs"), die Herkunft der Aussage an der Beziehung ' +
-      '(„assertion_kind") und die Datenqualität („quality_state"). Eine Methoden- oder ' +
-      'Szenarioversion ist nicht erfasst.',
+      'Träger sind Quellreferenzen, die Herkunft der Aussage an der Beziehung und die ' +
+      'Datenqualität. Eine Methoden- oder Szenarioversion ist nicht erfasst.',
   },
 ];
 
@@ -588,9 +582,8 @@ export const DECISION_CARD_FIELDS_DOK06: readonly DecisionCardField[] = [
     field: 'Entscheidungsfrage und Frist',
     coverage: 'teilweise',
     carrier:
-      'Träger der Entscheidungsfrage ist der Objektname („display_name"). Für eine Frist gibt ' +
-      'es kein Feld – die beiden erfassten Zeitachsen (fachliche Gültigkeit, Systemerfassung) ' +
-      'sind keine Fälligkeit.',
+      'Träger der Entscheidungsfrage ist der Objektname. Für eine Frist gibt es kein Feld – die ' +
+      'beiden erfassten Zeitachsen (fachliche Gültigkeit, Systemerfassung) sind keine Fälligkeit.',
   },
   {
     field: 'Optionen einschließlich Nichtstun',
@@ -603,7 +596,7 @@ export const DECISION_CARD_FIELDS_DOK06: readonly DecisionCardField[] = [
     field: 'Business-/Zielwirkung und Risiken',
     coverage: 'teilweise',
     carrier:
-      'Träger des Risiko-Bezugs ist die Beziehung „decided_in" auf ein Risiko bzw. einen ' +
+      'Träger des Risiko-Bezugs ist die Beziehung „entschieden in" auf ein Risiko bzw. einen ' +
       'Managed Service. Ein Feld für eine Business- oder Zielwirkung gibt es nicht.',
   },
   {
@@ -617,9 +610,8 @@ export const DECISION_CARD_FIELDS_DOK06: readonly DecisionCardField[] = [
     field: 'Datenquellen, Lücken und Vertrauensgrad',
     coverage: 'teilweise',
     carrier:
-      'Träger sind die Quellreferenzen („source_refs"), die Datenqualitäts-Dimensionen ' +
-      '(„quality_state") und der Vertrauensgrad der Beziehung („confidence"). Eine ' +
-      'Lücken-Aufstellung je Entscheidung gibt es nicht.',
+      'Träger sind die Quellreferenzen, die Datenqualitäts-Dimensionen und der Vertrauensgrad ' +
+      'der Beziehung. Eine Lücken-Aufstellung je Entscheidung gibt es nicht.',
   },
   {
     field: 'Empfehlung und Gegenargument',
@@ -632,8 +624,8 @@ export const DECISION_CARD_FIELDS_DOK06: readonly DecisionCardField[] = [
     field: 'Entscheider, Vertretung und Freigabestufe',
     coverage: 'teilweise',
     carrier:
-      'Träger der Verantwortung sind „owner_ids" und die Beziehung „owns". Für die Vertretung ' +
-      'gibt es keinen typisierten Träger an der Entscheidung: der Objekttyp Vertretung ' +
+      'Träger der Verantwortung sind die Owner-Angabe und die Beziehung „verantwortet". Für die ' +
+      'Vertretung gibt es keinen typisierten Träger an der Entscheidung: der Objekttyp Vertretung ' +
       'existiert im Katalog, aber ohne kanonische Kante zur Entscheidung. Eine Freigabestufe ' +
       'kennt das Modell nicht – Verantwortung wird nicht zu einer Freigabe umgedeutet.',
   },
@@ -642,7 +634,7 @@ export const DECISION_CARD_FIELDS_DOK06: readonly DecisionCardField[] = [
     coverage: 'kein Träger',
     carrier:
       'Kein Feld für einen Zeitpunkt der Überprüfung und keines für ein Erfolgskriterium; ' +
-      'dieselbe Lücke führt Dok. 10 als „Outcome Check" bzw. der Decision Record als ' +
+      'dieselbe Lücke führt die erste Liste als „Outcome Check" bzw. der Decision Record als ' +
       '„Reviewtermin".',
   },
 ];

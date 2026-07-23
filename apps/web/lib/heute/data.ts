@@ -240,8 +240,8 @@ function historyStatement(facts: {
   if (!facts.hasHistory) {
     return (
       `Eine Versionshistorie ist im Datenbestand nicht erfasst: alle ${facts.objectCount} Objekte ` +
-      `tragen Version ${facts.maxVersion}, kein Objekt trägt einen Ersetzungszeitpunkt ` +
-      '(record_time.replaced_at), und es gibt keine „supersedes"-Beziehung (Dok. 07 §9 R24). ' +
+      `tragen Version ${facts.maxVersion}, kein Objekt trägt einen Ersetzungszeitpunkt, ` +
+      'und es gibt keine Ablösungs-Beziehung. ' +
       'Ein Erfassungszeitpunkt ist deshalb keine Änderung und kein Verlauf.'
     );
   }
@@ -258,16 +258,16 @@ function historyStatement(facts: {
   if (facts.objectsWithReplacementRecord > 0) {
     belege.push(
       `${anzahl(facts.objectsWithReplacementRecord, 'Objekt trägt', 'Objekte tragen')} ` +
-        'einen Ersetzungszeitpunkt (record_time.replaced_at)',
+        'einen Ersetzungszeitpunkt',
     );
   }
   if (facts.supersedesEdgeCount > 0) {
     belege.push(
       `${anzahl(
         facts.supersedesEdgeCount,
-        '„supersedes"-Beziehung ist',
-        '„supersedes"-Beziehungen sind',
-      )} erfasst (Dok. 07 §9 R24)`,
+        'Ablösungs-Beziehung ist',
+        'Ablösungs-Beziehungen sind',
+      )} erfasst`,
     );
   }
   return `Eine Versionshistorie ist im Datenbestand belegt: ${belege.join('; ')}.`;
@@ -362,7 +362,7 @@ export function deriveObservations(
       // Dativ: die Labels erscheinen ausschließlich in der Form „<count> von <total> <label>".
       totalLabel: 'Objekten dieses Mandanten',
       method:
-        'Gezählt werden Objekte dieses Mandanten, deren Feld „owner_ids" leer ist (Dok. 07 §7). ' +
+        'Gezählt werden Objekte dieses Mandanten ohne erfassten Owner. ' +
         'Ob ein Owner fachlich erforderlich ist, sagt der Datenbestand nicht – hier steht nur, ' +
         'ob einer erfasst ist.',
     },
@@ -373,7 +373,7 @@ export function deriveObservations(
       total: scopeIds.size,
       totalLabel: 'verschiedenen Scope-Kennungen dieses Mandanten',
       method:
-        'Gezählt werden die verschiedenen Kennungen aus „scope_ids" aller Objekte dieses ' +
+        'Gezählt werden die verschiedenen Scope-Kennungen aller Objekte dieses ' +
         'Mandanten, zu denen es im Datenbestand kein Objekt mit derselben Kennung gibt. ' +
         'Scopes sind im Demo-Datenbestand nicht als eigene Objekte angelegt; die Zuordnung ' +
         'bleibt deshalb als rohe Kennung sichtbar.',
@@ -385,8 +385,8 @@ export function deriveObservations(
       total: relationships.length,
       totalLabel: 'Beziehungen dieses Mandanten',
       method:
-        'Gezählt werden Beziehungen dieses Mandanten ohne Wert im Feld „confidence" ' +
-        '(Dok. 07 §9). Ein fehlender Vertrauensgrad wird nicht ersetzt und nicht geschätzt. ' +
+        'Gezählt werden Beziehungen dieses Mandanten ohne erfassten Vertrauensgrad. ' +
+        'Ein fehlender Vertrauensgrad wird nicht ersetzt und nicht geschätzt. ' +
         'Ob für eine Beziehung fachlich ein Vertrauensgrad erforderlich ist, sagt der ' +
         'Datenbestand nicht – hier steht nur, ob einer erfasst ist.',
     },
@@ -397,8 +397,8 @@ export function deriveObservations(
       total: nachweisfaehige.length,
       totalLabel: `Objekten der Typen ${NACHWEISFAEHIGE_TYPEN}`,
       method:
-        `Gezählt werden Objekte der Typen ${NACHWEISFAEHIGE_TYPEN} – laut ` +
-        'Dok. 07 §9 R15 die möglichen Ziele einer „evidences"-Beziehung –, auf die im ' +
+        `Gezählt werden Objekte der Typen ${NACHWEISFAEHIGE_TYPEN} – die möglichen ` +
+        'Ziele einer Nachweis-Beziehung –, auf die im ' +
         'Datenbestand keine solche Beziehung zeigt. Andere Objekttypen bleiben außen vor, ' +
         'weil für sie kein Nachweisbezug vorgesehen ist. Ob für ein Objekt fachlich ein ' +
         'Nachweis erforderlich ist, sagt der Datenbestand nicht – hier steht nur, ob eine ' +
@@ -456,7 +456,7 @@ export interface ObjectEntryPoint {
  */
 export const OBJECT_ENTRY_RULE =
   'Gezeigt wird je Objektfamilie das erste Objekt in der Reihenfolge des Datenbestands, ' +
-  'Familien in der kanonischen Reihenfolge F01–F09. Das ist eine feste Reihenfolge und keine ' +
+  'Familien in der kanonischen Reihenfolge. Das ist eine feste Reihenfolge und keine ' +
   'Priorisierung: Es wird nichts bewertet, gewichtet oder empfohlen. Die vollständige ' +
   'Objektliste steht im Zwilling des Mandanten.';
 

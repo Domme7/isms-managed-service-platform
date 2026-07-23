@@ -114,7 +114,7 @@ function TenantGraph({
 
       <h2 id="beziehungen">Beziehungen</h2>
       <p className="tw-muted">
-        Gerichtete Kanten (Quelle —Typ→ Ziel) im kanonischen Beziehungsmodell (Dok. 07 §9).
+        Gerichtete Beziehungen (Quelle —Typ→ Ziel) im kanonischen Beziehungsmodell.
       </p>
       <RelationshipList relationships={relationships} tenantId={tenantId} />
     </>

@@ -452,7 +452,10 @@ describe('Ehrlichkeitsblock – Decision-Card-Pflichtfelder gegen den Contract',
     // Ehrlichkeit statt Überzeichnung – der Trägertext benennt die Grenze (CCP-004-vorbehaltlich).
     const wirkung = DECISION_CARD_FIELDS.find((f) => f.field === 'Wirkung');
     expect(wirkung?.coverage).toBe('teilweise');
-    expect(wirkung?.carrier).toMatch(/effectiveness_assumption/);
+    // WP-028/DR-0013: der Trägertext nennt die Wirkungsannahme in Klartext, nicht den
+    // technischen Feldnamen „effectiveness_assumption".
+    expect(wirkung?.carrier).toMatch(/Wirkungsannahme/);
+    expect(wirkung?.carrier).not.toMatch(/effectiveness_assumption/);
     // „Approver" hat keinen eigenen Feldnamen im Contract: Dok. 10 §9.1 führt „Owner und
     // Approver" als EINE Zeile. Sie bleibt „teilweise" – die fehlende Freigaberolle muss
     // deshalb im Trägertext ausgesprochen sein (O-WP017-05).

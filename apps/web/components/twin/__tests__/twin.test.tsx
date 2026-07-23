@@ -71,9 +71,11 @@ describe('TenantDetailView – Nordwerk (mit Graph)', () => {
     // deutschem Klartext-Label erscheinen; die aria-label fasst Quelle/Klartext-Typ/Ziel zusammen.
     const edge = screen.getByLabelText('Auftragsabwicklung verarbeitet Kundenauftragsdaten');
     expect(edge).toBeInTheDocument();
-    // Klartext-Label primär, technischer Typ sekundär weiterhin sichtbar.
+    // WP-028/DR-0013: nur das deutsche Klartext-Label ist sichtbar; die kanonische R-Kennung
+    // und der technische snake_case-Typ erscheinen nicht mehr im gerenderten Text.
     expect(within(edge).getByText(/verarbeitet/)).toBeInTheDocument();
-    expect(within(edge).getByText(/processes/)).toBeInTheDocument();
+    expect(within(edge).queryByText(/processes/)).not.toBeInTheDocument();
+    expect(edge.textContent).not.toContain('R07');
 
     // Generisch: KEINE rohe object_id irgendwo im Detail-Output (alle Endpunkte aufgelöst).
     const nordwerkObjects = DEMO_SEED.objects.filter((o) => o.tenant_id === TENANT_ID.NORDWERK);

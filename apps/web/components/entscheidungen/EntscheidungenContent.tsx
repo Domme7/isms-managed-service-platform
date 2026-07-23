@@ -117,9 +117,8 @@ export function EntscheidungenContent({
           <summary>Begründung im Einzelnen</summary>
           <p style={{ marginBottom: 0 }}>
             „Jetzt erforderlich" setzt eine Frist, einen Aufwand, eine verfügbare Kapazität und eine
-            Priorität voraus. Der kanonische Objektvertrag (Dok. 07, Abschnitt „Objektvertrag,
-            Identität und Metadaten") kennt keines dieser Felder, und der Datenbestand trägt sie
-            nicht – jede Reihung nach Dringlichkeit wäre erfunden.
+            Priorität voraus. Das zugrunde liegende Datenmodell kennt keines dieser Felder, und der
+            Datenbestand trägt sie nicht – jede Reihung nach Dringlichkeit wäre erfunden.
           </p>
         </details>
       </div>
@@ -132,21 +131,20 @@ export function EntscheidungenContent({
         nur, was der Datenbestand belegt.
       </p>
 
-      {/* Seitenweiter Rahmungssatz, WORTGLEICH aus `components/isms/IsmsContent.tsx`
-          (Dok. 08 08-D07): ein Lebenszyklus-Stand ist kein Prüf- oder Freigabeergebnis – das gilt
-          hier besonders, weil ein Stand „genehmigt" oder „zur Freigabe" heißen kann.
-
-          BEWUSST NICHT ANGEFASST: Der Satz enthält als einzige Stelle dieser Seite noch eine
-          blanke §-Nummer von Dok. 07 („§9 R15"), deren Zählung gegenüber der PDF-Fassung um eins
-          verschoben ist. Er ist per Acceptance-Kriterium und per Test WORTGLEICH an `/isms`
-          gebunden; eine einseitige Korrektur bräche die Wortgleichheit, eine beidseitige
-          änderte eine Seite außerhalb dieses Work Packages. Als Befund weitergegeben. */}
+      {/* Seitenweiter Rahmungssatz, WORTGLEICH aus `components/isms/IsmsContent.tsx` und
+          `components/twin/ObjectDetailView.tsx` (Dok. 08 08-D07): ein Lebenszyklus-Stand ist kein
+          Prüf- oder Freigabeergebnis – das gilt hier besonders, weil ein Stand „genehmigt" oder
+          „zur Freigabe" heißen kann. WP-028 (DR-0013): die frühere Dokument-/Paragraphenkennung
+          („Dok. 07 §9 R15") ist aus dem gerenderten Satz entfernt; der Quellenbeleg
+          (Nachweisbezug mit Zeitraum und Prüfstatus, Dok. 07 „Kanonische Beziehungstypen") lebt
+          in diesem Kommentar. Alle drei Seiten wurden gemeinsam auf die neue Fassung gebracht,
+          damit die Wortgleichheit erhalten bleibt. */}
       <p className="tw-muted">
         <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
         Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
         keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt für
-        einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
+        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
+        etwa einen Zeitraum und einen Prüfstatus tragen.
       </p>
 
       {model ? (
@@ -262,34 +260,33 @@ function RegisterReadingNotes() {
       <p className="sv-edge-note">
         <strong>Ablösung:</strong> Ein abgelöster Stand bleibt vollständig sichtbar und verlinkt –
         eine Ablösung ersetzt den früheren Stand fachlich, sie überschreibt und verbirgt ihn nicht
-        (Beziehung „supersedes", R24; Dok. 07, Entscheidung 07-D06). Beide Richtungen stehen
-        getrennt: Quelle der Kante ist immer der Nachfolgestand. Zu jedem genannten Stand steht
-        seine eigene fachliche Gültigkeit dabei.
+        (Beziehung „löst ab"). Beide Richtungen stehen getrennt: Quelle der Beziehung ist immer der
+        Nachfolgestand. Zu jedem genannten Stand steht seine eigene fachliche Gültigkeit dabei.
       </p>
       <p className="sv-edge-note">
-        <strong>Zwei Zeitachsen:</strong> Fachliche Gültigkeit (valid_time) und Systemerfassung
-        (record_time) werden getrennt geführt und nicht zu einem einzigen „Datum" verschmolzen. Ein
-        Erfassungszeitpunkt ist keine fachliche Änderung.
+        <strong>Zwei Zeitachsen:</strong> Fachliche Gültigkeit und Systemerfassung werden getrennt
+        geführt und nicht zu einem einzigen „Datum" verschmolzen. Ein Erfassungszeitpunkt ist keine
+        fachliche Änderung.
       </p>
       <p className="sv-edge-note">
-        <strong>Verantwortung ist keine Freigabe:</strong> „owns" (R03) und „owner_ids" benennen,
-        wer zuständig ist – wer freigabeberechtigt wäre, ist im Modell nicht erfasst.
+        <strong>Verantwortung ist keine Freigabe:</strong> Die Beziehung „verantwortet" und die
+        Owner-Angabe benennen, wer zuständig ist – wer freigabeberechtigt wäre, ist im Modell nicht
+        erfasst.
       </p>
       <p className="sv-edge-note">
-        <strong>Bezug:</strong> belegt über die Beziehung „decided_in" (R23: „Risk/Change/Service →
-        Decision Record"). Sie wird bewusst neutral als Bezug gezeigt: ob sie den Zielbezug oder den
-        Auslöser der Entscheidung abbildet, sagt das Konzept nicht – und es wird hier nicht
-        entschieden.
+        <strong>Bezug:</strong> belegt über die Beziehung „entschieden in" (ein Risiko, ein
+        Änderungssignal oder ein Service verweist auf die Entscheidung). Sie wird bewusst neutral
+        als Bezug gezeigt: ob sie den Zielbezug oder den Auslöser der Entscheidung abbildet, sagt
+        das Konzept nicht – und es wird hier nicht entschieden.
       </p>
       <p className="sv-edge-note">
-        <strong>Nachweise:</strong> belegt über die Beziehung „evidences" (R15:{' '}
-        {'„Evidence → Control/Measure/Decision"'}). Der „Status der Beziehung" ist ein Feld der
-        Kante und kann hier einen Prüfstatus tragen.
+        <strong>Nachweise:</strong> belegt über die Beziehung „ist belegt durch" (ein Nachweis
+        verweist auf die Entscheidung). Der „Status der Beziehung" ist ein Feld der Beziehung und
+        kann hier einen Prüfstatus tragen.
       </p>
       <p className="sv-edge-note">
         <strong>Herkunft und Datenqualität:</strong> Quellen und Qualitätsdimensionen werden
-        unverändert gezeigt und ausdrücklich nicht zu einem Gesamtwert verrechnet (Dok. 07,
-        Entscheidung 07-D10).
+        unverändert gezeigt und ausdrücklich nicht zu einem Gesamtwert verrechnet.
       </p>
     </>
   );
@@ -362,9 +359,7 @@ function DecisionCard({ decision }: { decision: DecisionEntry }) {
         <dd>{decision.object_type_display}</dd>
         <dt>Objektfamilie</dt>
         <dd>
-          {decision.family_id
-            ? `${decision.family_id} · ${decision.family_name}`
-            : 'nicht im kanonischen Katalog zugeordnet'}
+          {decision.family_name ? decision.family_name : 'nicht im kanonischen Katalog zugeordnet'}
         </dd>
         <dt>Scope-Kennungen</dt>
         <dd>
@@ -435,7 +430,7 @@ function DecisionCard({ decision }: { decision: DecisionEntry }) {
       <EdgeList
         edges={decision.references}
         emptyText={
-          'Auf diese Entscheidung zeigt im Datenbestand keine Bezugs-Beziehung („decided_in", R23).'
+          'Auf diese Entscheidung zeigt im Datenbestand keine Bezugs-Beziehung („entschieden in").'
         }
       />
 
@@ -443,9 +438,9 @@ function DecisionCard({ decision }: { decision: DecisionEntry }) {
       <EdgeList
         edges={decision.evidence}
         emptyText={
-          'Auf diese Entscheidung zeigt im Datenbestand keine Nachweis-Beziehung („evidences", ' +
-          'R15). Ob ein Nachweis fachlich erforderlich wäre, sagt der Datenbestand nicht – hier ' +
-          'steht nur, dass keiner erfasst ist.'
+          'Auf diese Entscheidung zeigt im Datenbestand keine Nachweis-Beziehung. Ob ein Nachweis ' +
+          'fachlich erforderlich wäre, sagt der Datenbestand nicht – hier steht nur, dass keiner ' +
+          'erfasst ist.'
         }
       />
 
@@ -565,8 +560,9 @@ function NeighborNode({ edge }: { edge: DecisionEdge }) {
  * Nachweis" statt „Nachweis belegt die Entscheidung").
  */
 function EdgeLine({ edge }: { edge: DecisionEdge }) {
+  // Nur das deutsche Klartext-Label (WP-028, DR-0013): weder die R-Kennung noch der
+  // snake_case-Typ erscheinen im gerenderten Text; beide bleiben im Datenmodell erhalten.
   const label = edge.relationship_type_label ?? edge.relationship_type;
-  const primary = edge.relationship_type_id ? `${edge.relationship_type_id} · ${label}` : label;
 
   return (
     <div className="tw-rel-line">
@@ -576,7 +572,7 @@ function EdgeLine({ edge }: { edge: DecisionEdge }) {
           <span className="tw-rel-arrow" aria-hidden="true">
             —
           </span>
-          <span className="tw-rel-type">{primary}</span>
+          <span className="tw-rel-type">{label}</span>
           <span className="tw-rel-arrow" aria-hidden="true">
             →
           </span>
@@ -588,14 +584,13 @@ function EdgeLine({ edge }: { edge: DecisionEdge }) {
           <span className="tw-rel-arrow" aria-hidden="true">
             —
           </span>
-          <span className="tw-rel-type">{primary}</span>
+          <span className="tw-rel-type">{label}</span>
           <span className="tw-rel-arrow" aria-hidden="true">
             →
           </span>
           <NeighborNode edge={edge} />
         </>
       )}
-      <span className="tw-rel-tech">({edge.relationship_type})</span>
     </div>
   );
 }
@@ -693,13 +688,12 @@ function HonestySection() {
     <section aria-labelledby="entscheidungen-luecke">
       <h2 id="entscheidungen-luecke">Was eine Entscheidung hier noch nicht zeigt</h2>
       <p className="sv-edge-note">
-        Diese Seite zeigt <strong>keine Decision Card</strong> im Sinne von Dok. 10, Abschnitt
-        „Decision Cards" (§9). Die Decision Card ist dort als freigabefähiges Entscheidungsobjekt
-        mit {DECISION_CARD_FIELDS.length} Pflichtfeldern beschrieben. Im kanonischen Objektvertrag
-        (Dok. 07, Abschnitt „Objektvertrag, Identität und Metadaten") haben davon{' '}
-        <strong>{ohneTraeger} keinen Träger</strong> und <strong>{teilweise} nur teilweise</strong>{' '}
-        einen. Gezeigt wird deshalb, was das heutige Datenmodell belegt – und darunter steht
-        feldweise, was es nicht belegt.
+        Diese Seite zeigt <strong>keine Decision Card</strong> im Sinne der fachlichen Zielvorgabe
+        des Konzepts. Die Decision Card ist dort als freigabefähiges Entscheidungsobjekt mit{' '}
+        {DECISION_CARD_FIELDS.length} Pflichtfeldern beschrieben. Im zugrunde liegenden Datenmodell
+        haben davon <strong>{ohneTraeger} keinen Träger</strong> und{' '}
+        <strong>{teilweise} nur teilweise</strong> einen. Gezeigt wird deshalb, was das heutige
+        Datenmodell belegt – und darunter steht feldweise, was es nicht belegt.
       </p>
       <ul className="sv-items" id="entscheidungen-luecke-pflichtfelder">
         {DECISION_CARD_FIELDS.map((field) => (
@@ -707,17 +701,18 @@ function HonestySection() {
         ))}
       </ul>
 
-      {/* Dok. 10 beschreibt den Decision Record im selben Abschnitt EIGENSTÄNDIG – mit einer
+      {/* Das Konzept beschreibt den Decision Record im selben Abschnitt EIGENSTÄNDIG – mit einer
           zweiten, kürzeren Inhaltsliste. Sie wird getrennt geführt und getrennt gezählt: eine
-          Summe über beide Listen gäbe es im Konzept nicht. */}
-      <h3>Was Dok. 10 zusätzlich für den Decision Record selbst verlangt</h3>
+          Summe über beide Listen gäbe es im Konzept nicht. (Quellenbeleg Dok. 10 „Decision Cards"
+          bleibt im Kommentar; WP-028/DR-0013: keine Dokumentkennung im Produkttext.) */}
+      <h3>Was das Konzept zusätzlich für den Decision Record selbst verlangt</h3>
       <p className="sv-edge-note">
-        Dok. 10 beschreibt im Abschnitt „Decision Cards" den <strong>Decision Record</strong>{' '}
-        eigenständig: „Nach Freigabe wird die Karte zum unveränderbaren Decision Record. Korrekturen
-        erfolgen als neue Version oder Nachtrag. Festgehalten werden Option, Begründung, Freigabe,
-        Bedingungen, erwartete Wirkung, Reviewtermin und spätere Ist-Wirkung." Diese{' '}
-        {DECISION_RECORD_CONTENTS.length} Inhalte kommen zu den Pflichtfeldern oben hinzu; im
-        heutigen Objektvertrag hat <strong>keiner von ihnen einen Träger</strong>.
+        Das Konzept beschreibt den <strong>Decision Record</strong> eigenständig: „Nach Freigabe
+        wird die Karte zum unveränderbaren Decision Record. Korrekturen erfolgen als neue Version
+        oder Nachtrag. Festgehalten werden Option, Begründung, Freigabe, Bedingungen, erwartete
+        Wirkung, Reviewtermin und spätere Ist-Wirkung." Diese {DECISION_RECORD_CONTENTS.length}{' '}
+        Inhalte kommen zu den Pflichtfeldern oben hinzu; im heutigen Datenmodell hat{' '}
+        <strong>keiner von ihnen einen Träger</strong>.
       </p>
       <ul className="sv-items" id="entscheidungen-luecke-record">
         {DECISION_RECORD_CONTENTS.map((field) => (
@@ -734,18 +729,17 @@ function HonestySection() {
       {/* WP-020 Slice 5: die ZWEITE Pflichtfeldliste (Dok. 06) samt benanntem Widerspruch
           beider Listen. O-WP017-11 bleibt offen: keine Liste wird zur kanonischen erklärt,
           es wird weiterhin KEINE Decision Card gebaut – nur der Abgleich gezeigt. */}
-      <h3>Die zweite Pflichtfeldliste: Dok. 06 – und der Widerspruch der beiden Listen</h3>
+      <h3>Die zweite Pflichtfeldliste – und der Widerspruch der beiden Listen</h3>
       <p className="sv-edge-note">
-        Dok. 06 führt im Abschnitt „Collaboration, Entscheidungen &amp; Freigaben" eine{' '}
-        <strong>eigene</strong> Liste „Decision Card – Pflichtfelder" mit{' '}
-        {DECISION_CARD_FIELDS_DOK06.length} Feldern. Sie{' '}
-        <strong>widerspricht der Dok.-10-Liste oben</strong> ({DECISION_CARD_FIELDS.length} Felder):
-        Zählung und Zuschnitt decken sich nicht – Dok. 06 bündelt etwa „Entscheidungsfrage und
-        Frist" in einem Feld und verlangt ein Gegenargument und ein Erfolgskriterium, die Dok. 10
-        nicht nennt; Dok. 10 verlangt umgekehrt Auslöser, Baseline und Abhängigkeiten, die Dok. 06
-        nicht führt. Welche Liste kanonisch ist, ist im Konzept nicht entschieden und wird hier
-        nicht entschieden – gezeigt wird der Abgleich gegen beide. Im heutigen Objektvertrag haben
-        von den {DECISION_CARD_FIELDS_DOK06.length} Dok.-06-Feldern{' '}
+        Das Konzept führt an anderer Stelle eine <strong>eigene</strong> Liste „Decision Card –
+        Pflichtfelder" mit {DECISION_CARD_FIELDS_DOK06.length} Feldern. Sie{' '}
+        <strong>widerspricht der ersten Liste oben</strong> ({DECISION_CARD_FIELDS.length} Felder):
+        Zählung und Zuschnitt decken sich nicht – die zweite Liste bündelt etwa „Entscheidungsfrage
+        und Frist" in einem Feld und verlangt ein Gegenargument und ein Erfolgskriterium, die die
+        erste nicht nennt; die erste verlangt umgekehrt Auslöser, Baseline und Abhängigkeiten, die
+        die zweite nicht führt. Welche Liste kanonisch ist, ist im Konzept nicht entschieden und
+        wird hier nicht entschieden – gezeigt wird der Abgleich gegen beide. Im heutigen Datenmodell
+        haben von den {DECISION_CARD_FIELDS_DOK06.length} Feldern dieser zweiten Liste{' '}
         <strong>{countFields(DECISION_CARD_FIELDS_DOK06, 'kein Träger')} keinen Träger</strong> und{' '}
         <strong>{countFields(DECISION_CARD_FIELDS_DOK06, 'teilweise')} nur teilweise</strong> einen.
       </p>
