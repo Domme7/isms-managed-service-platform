@@ -138,3 +138,22 @@ heutigen Datenlage nicht baubar, ohne sie zu erfinden** — sie wird deshalb bew
 |---|---|---|---|---|
 | O-KUNDE-01 | **Preise-Guardrail vs. Buchung:** Der Seed-Guardrail-Test verbietet jede Währungs-/Preisangabe; Dok. 14 §9 definiert eine Preisverfassung und die Demo-Welt (Dok. 05 §12) nennt „Preise … als Beispiele gekennzeichnet". Für Katalog + Buchung muss der Guardrail auf „nur synthetische, gekennzeichnete Preise; keine realen PwC-Preise" umgestellt werden | Regel-Anpassung | Guardrail bleibt bis zum WP-021/WP-006-Schnitt unverändert streng | Owner + Security beim WP-Schnitt |
 | O-KUNDE-02 | **Echter Kundenlogin** (Konten, Passwörter) braucht echte Authentisierung nach Dok. 19 — die heutige Anmeldung ist Simulation | Auth-Lücke (bekannt) | jeder „Login" bleibt als Simulation beschriftet, bis das Auth-WP kommt | eigenes WP mit Security Review |
+
+## WP-020 – Verdichtung, Dashboard, Einstiegsfluss (aus dem WP-Zuschnitt + Slice 1)
+
+Vollständige Herleitung: `work-packages/WP-020_VERDICHTUNG_DASHBOARD_EINSTIEG.md`
+(Abschnitt „Benannte Lücken und offene Fragen").
+
+| ID | Frage | Art | Aktueller Umgang | Owner / Gate |
+|---|---|---|---|---|
+| O-WP020-01 | Granularität der gespeicherten bevorzugten Detailtiefe (je Ort? je Nutzer? — 06-O09 offen) | Konzeptlücke | lokale Voreinstellung, versionierter localStorage-Schlüssel, reversibel | Product / UX |
+| O-WP020-02 | 06-D03 „fünfteilige Seitenanatomie" vs. neun „Verbindliche Seitenbausteine"; §6-Einstiegsabbildung im Textlayer unlesbar | Konzeptspannung | Neuner-Liste als normativ behandelt, Konflikt benannt | Concept Author + Owner-Sichtprüfung |
+| O-WP020-03 | Rollenvarianten nur für 4 von 12 Rollen normiert | Konzeptlücke | Welt-Ableitung (Muster O-WP016-01), reversibel | Product / UX + Concept Author |
+| O-WP020-04 | „Kritische Aktionen speichern die aktive Rolle mit" hat im read-only-Produkt keinen Träger | Anforderungsanker | Code-Anker am Rollenwechsel-Handler (WP-020 Slice 1); Pflicht-AC jedes künftigen Schreib-WP | program-manager je Schreib-WP |
+| O-WP020-05 | Snippet-Leak-Schutz der globalen Suche — es existiert keine Suche (obwohl 06-D09 sie zur Kernnavigation erklärt) | verlorene Anforderung | Pflicht-AC des Such-WP (WP-027) | program-manager, Security |
+| O-WP020-06 | Trust-Layer-Angaben ohne Träger: Modell-/Regelversion, Annahmen, menschliche Reviews, Auswirkung von Datenlücken | Datenlücke | zugeordnet was belegt ist, Rest sichtbar benannt (Slice 5) | Concept Author / Seed (WP-021) |
+| O-WP020-07 | Welche erfassten Zustände tragen welches Ampel-Badge (Zuordnung ohne Konzeptzahl)? | Produktfrage | nur regelbasierte, offengelegte Zuordnungen; Strittiges unmarkiert + hier gesammelt | Product + Owner (qa:visual) |
+| O-WP020-08 | 06-D02 „Kundennutzer starten im Customer Workspace" vs. neutraler Einstieg (DR-0009) | offen bis Kundenwelt | neutraler Einstieg für alle; Sonderfall mit WP-006 entscheiden | Product (WP-006) |
+| O-WP020-09 | Dok. 06 „Onboarding …" fragt Einstieg „nach Rolle, Ziel und aktueller Aufgabe"; DR-0009 verschiebt die Rollenwahl hinter den Einstieg | benannte Spannung (DR-gedeckt) | Owner-Schicht geht vor; Prüfpunkt für Konzeptpflege (WP-023-Umfeld) | Concept Author |
+| O-WP020-10 | Dok.-04-Steuerungsvokabular (Journey-Zustände, Handlungsoptionen, Betroffenheitsgrade) fehlt in `packages/` | verlorene Anforderung | benanntes Folge-WP (WP-026), gekoppelt an E-02/Task-Träger | program-manager + Concept Author |
+| O-WP020-11 | Portfolio-Sichten (`/twin`-Übersicht, `/services`-Portfolio) zeigen bewusst Mandantenübergreifendes, während die Kontextleiste den aktiven Mandanten nennt — brauchen Portfolio-Sichten eine eigene Kontext-Kennzeichnung? | Konzeptlücke | als benannter „Objektkontext dieser Seite: Übersicht …" gelöst, reversibel (Slice 1) | Product / Concept Author |

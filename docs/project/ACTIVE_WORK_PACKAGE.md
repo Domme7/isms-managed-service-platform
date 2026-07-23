@@ -1,32 +1,40 @@
 # Active Work Package
 
 - **ID:** WP-020 – Verdichtungs-Umbau, Dashboard-Schicht aus belegten Daten, neuer Einstiegsfluss (DR-0008/DR-0009)
+- **Modus:** **Produktkorrektur-Sprint (DR-0010)** — Reihenfolge Owner-geändert, Kundenwelt
+  Stufe 1 und Cockpit-Varianten in den Sprint gezogen, danach **STOPP für visuelle Freigabe**
 - **Definition:** `work-packages/WP-020_VERDICHTUNG_DASHBOARD_EINSTIEG.md`
 - **Context Pack:** `context-packs/WP-020_CONTEXT_PACK.md`
-- **Status:** Active — Slice 1 (Cross-Tenant-Schutz & sichtbarer Kontext) in Arbeit
-- **Builder:** `frontend-engineer` (Slices 1–5, strikt sequenziell, committet nie selbst);
-  `concept-author` für Slice 6 (nur `research/change-proposals/`, parallel zulässig)
+- **Status:** Active — Slice 1 fertig + committet (`7971bc6`); als Nächstes Slice 3+4 (Dashboard)
+- **Builder:** `frontend-engineer` (sequenziell, committet nie selbst); `concept-author` für
+  Slice 6 ✓ (CCP-004 liegt vor, `ca9a7bb`)
 - **Gates:** Code + Product + Domain + QA + **Security & Privacy (Pflicht)** + Konzepttreue;
-  zweite Runde nach dem Fix-Pass
-- **Human Gates:** Owner-Stil-Abnahme je Stufe via `pnpm qa:visual WP-020` (DR-0008 Nr. 4);
-  Slice 6 erzeugt ein Human Gate (CCP zu `weight`/`effectiveness_assumption`), wird nie hier umgesetzt
+  zweite Runde nach dem Fix-Pass. FINDING-0009 (behoben in Slice 1) wartet auf Security-Gate.
+- **Human Gates:** Owner-Stil-Abnahme am **Varianten-Stopp** (DR-0010 Nr. 3, DR-0008 Nr. 4);
+  CCP-004 (Human Gate offen, keine Umsetzung)
 
-## Slices
+## Sprint-Reihenfolge (DR-0010)
 
-1. **Cross-Tenant-Schutz & vollständiger sichtbarer Kontext** (Sicherheits-Slice, zuerst)
-2. **Einstiegsfluss DR-0009:** `/login` nur Mandant, rollenlose Session, Rollenwahl in der App; Punkt 9 (`roles.ts`-PDF-Wortlaut)
-3. **Verdichtungs-Gerüst:** Detailtiefe-Ebenen 1–3, neun Pflicht-Seitenbausteine als Konvention
-4. **Dashboard-Schicht aus belegten Daten** (DR-0008): Kacheln/Verteilungen/Abdeckungen/Badges, je mit Drill-down
-5. **Rollenvarianten-Personalisierung + Konzeptabgleiche** (Decision-Card-Zweitliste, Trust-Layer-Felder)
-6. **CCP-Auftrag** `weight`/`effectiveness_assumption` (concept-author, Human Gate)
+1. ~~Slice 1 Cross-Tenant-Schutz & sichtbarer Kontext~~ ✅ (`7971bc6`; FINDING-0009 gefunden + behoben)
+2. **Slice 3+4: strategisches Dashboard mit klarer Informationsverdichtung** (Detailtiefe-Ebenen,
+   Seitenbausteine, Kacheln/Verteilungen/Abdeckungen aus belegten Daten) ← **in Arbeit**
+3. Slice 2: Einstiegsfluss Login → neutrales Dashboard → Rollenwahl in der App (+ Punkt 9 roles.ts)
+4. Slice 5: Rollenvarianten-Personalisierung + Konzeptabgleiche (Decision-Card-Zweitliste, Trust-Layer)
+5. **Sichtbare Kundenwelt Stufe 1** (WP-006 vorgezogen, DR-0010 Nr. 2): read-only aus PDFs
+   Dok. 14/16, fehlende Träger benannt
+6. **2–3 Cockpit-Varianten** (WP-025-Kern) per `qa:visual` → **STOPP, visuelle Owner-Freigabe**
+
+~~Slice 6 CCP-004~~ ✅ (nur Vorlage, Human Gate offen)
+
+## Parallel (DR-0010 Nr. 4)
+
+**WP-023:** Vollableitung der 14 material abweichenden Markdown-Fassungen aus den PDFs
+(Dok. 00, 08–18, 20B, 20C) nach WP-019-Muster; **Dok. 14/16 zuerst** (Kundenwelt-Basis).
 
 ## Verbleib der 11 WP-019-Übergabepunkte
 
-in-scope: 1, 2, 4, 5, 7, 9 · teilweise: 3 (O-WP020-04-Anker) · nur CCP: 8 ·
-deferred benannt: 6 (O-WP020-05, Such-WP) und 10 (Folge-WP-Vorschlag WP-026) ·
-erledigt verifiziert: 11. Details in der WP-Definition.
+in-scope: 1 ✓, 2 ✓ (Slice 1), 4, 5, 7, 9 · teilweise: 3 (O-WP020-04-Anker ✓) · nur CCP: 8 ✓ ·
+deferred benannt: 6 (O-WP020-05, WP-027) und 10 (WP-026) · erledigt verifiziert: 11.
 
-> Zuletzt abgeschlossen: **WP-019 Konzeptfassungen aus den PDFs** (FINDING-0007) —
-> Review-Notiz `docs/project/reviews/WP-019_INDEPENDENT_REVIEW.md`.
-> Danach: WP-021 Demo-Welt (E-01) → WP-006 Kundenwelt Stufe 1; WP-025 Design-Exploration parallel möglich.
-> Offene Human Gates: CCP-001..003, Docker, FINDING-0004, O-WP014-09, FINDING-0008 (Product Gate).
+> Zuletzt abgeschlossen: **WP-019**. Nach dem Sprint: WP-021 Demo-Welt (E-01).
+> Offene Human Gates: CCP-001..004, Docker, FINDING-0004, O-WP014-09, FINDING-0008.

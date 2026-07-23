@@ -2,7 +2,11 @@
 
 **Stand:** WP-019 **fertig** — die fünf schwerwiegend abweichenden Konzeptfassungen (Dok. 03–07) sind **vollständig aus den PDFs neu abgeleitet** und je Dokument unabhängig freigegeben. Das Gate fing dabei eine Erfindung (rekonstruierte Abbildungen in Dok. 04), und der Prozess korrigierte seinen eigenen Fehler: „Kritikalität“ steht doch im PDF — in der **Abbildung**, nicht im Textlayer (O-WP014-01 bestätigt statt gestrichen)  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** keins — als Nächstes **WP-020** verlorene Anforderungen (11-Punkte-Liste im WP-019-Nachtrag, Cross-Tenant-Schutz zuerst)  
+**Aktives Work Package:** **WP-020 als Produktkorrektur-Sprint (DR-0010)** — Slice 1
+(Cross-Tenant-Schutz, `7971bc6`) und Slice 6 (CCP-004, `ca9a7bb`) fertig; Reihenfolge jetzt:
+Dashboard → Einstiegsfluss → Rollenvarianten → Kundenwelt Stufe 1 → Cockpit-Varianten →
+**STOPP für visuelle Owner-Freigabe**. Parallel: **WP-023** (14 Markdown-Fassungen aus den
+PDFs, Dok. 14/16 zuerst). Details: `ACTIVE_WORK_PACKAGE.md`  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Lauffähige Demo-App (Shell + Heute + Zwilling + ISMS + Services + **Entscheidungen** + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
@@ -56,7 +60,8 @@ sichtbare Abnahme). Jede mit Empfehlung und Default — **keine blockiert den We
 
 | ID | Kurz | Schwere | blockiert? |
 |---|---|---|---|
-| **FINDING-0007** | **Markdown-Ableitung der Konzeptdokumente nicht verlustfrei** — es wurde aus einer ungeprüften Interpretation gebaut | **hoch** | blockiert nichts sofort, aber **jedes neue WP muss ab jetzt am PDF gegenlesen** |
+| **FINDING-0009** | **Cross-Tenant-Leak im /services-Leerzustand** (seit WP-012, dritte Instanz der Leak-Klasse) — behoben in WP-020 Slice 1 (`7971bc6`), Wächter erweitert | mittel | nein — **Security-Gate-Verifikation im WP-020-Review ausstehend** |
+| **FINDING-0007** | **Markdown-Ableitung der Konzeptdokumente nicht verlustfrei** — es wurde aus einer ungeprüften Interpretation gebaut | **hoch** | blockiert nichts sofort, aber **jedes neue WP muss ab jetzt am PDF gegenlesen**; **WP-023 läuft parallel (DR-0010)** |
 | FINDING-0008 | `<dl role="group">` entfernt die Listensemantik — 3× serious (axe, WCAG 1.3.1) auf den Kontextzeilen von /heute, /entscheidungen, Objekt-360; der A11y-Fix aus WP-014 hatte eine ungemessene Kehrseite | mittel | nein — Korrektur als Folge-WP mit Product Gate |
 | FINDING-0006 | Domain Gate und QA Gate waren nie besetzt (4 von 9 Gates aus Dok. 20B §36) | mittel | in Behebung ab WP-017 |
 | FINDING-0005 | Kein Linter im Stack | niedrig | **geschlossen 2026-07-23** (WP-018: Biome, ADR-0003) |
