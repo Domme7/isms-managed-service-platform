@@ -37,6 +37,7 @@ import { render, screen, type RenderResult } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
+import { AdministrationContent } from '../administration/AdministrationContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
@@ -88,6 +89,8 @@ const HAUPTSEITE_JE_LIVE_ORT: Partial<Record<PlaceId, () => RenderResult>> = {
     render(<EntscheidungenContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   services: () =>
     render(<ServicesContent role={role('R08')} tenant={tenant(TENANT_ID.NORDWERK)} />),
+  administration: () =>
+    render(<AdministrationContent role={role('R12')} tenant={tenant(TENANT_ID.NORDWERK)} />),
 };
 
 /** Kontextleisten-Eintrag (dt/dd) nach exaktem dt-Label.
@@ -189,6 +192,9 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     services: () =>
       // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
       render(<ServicesContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
+    administration: () =>
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
+      render(<AdministrationContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
   };
 
   it('Meta: das Neutral-Register deckt exakt die live-Orte ab (neuer echter Ort ⇒ hier eintragen)', () => {

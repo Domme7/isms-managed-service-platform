@@ -30,6 +30,7 @@ import { fireEvent, render, screen, within, type RenderResult } from '@testing-l
 import { describe, expect, it } from 'vitest';
 
 import { DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
+import { AdministrationContent } from '../administration/AdministrationContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
@@ -100,6 +101,10 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
     isms: (t) => render(<IsmsContent role={role('R03')} tenant={t} />),
     entscheidungen: (t) => render(<EntscheidungenContent role={role('R03')} tenant={t} />),
     services: (t) => render(<ServicesContent role={role('R03')} tenant={t} />),
+    // Administration (WP-032 Slice 1): sicherheitsnaher Ort – der Leerzustand darf weder eine
+    // Existenzaussage über andere Mandanten machen noch das globale Rollen-/Strukturmodell als
+    // „Konten dieses Mandanten" ausgeben. Bewusst mit der Administrationsrolle geprüft.
+    administration: (t) => render(<AdministrationContent role={role('R12')} tenant={t} />),
   };
 
   it('Meta: das Register deckt exakt die live-Orte aus NAV_PLACES ab (neuer echter Ort ⇒ hier eintragen)', () => {

@@ -120,9 +120,10 @@ export function getBaustein(id: BausteinId): Seitenbaustein {
 }
 
 /**
- * Orte der Konvention: die fünf Live-Hauptseiten (`heute`/`kunden`/`isms`/`entscheidungen`/
- * `services`) plus zwei Detailseiten UNTER bestehenden Orten (Muster: eigene Zuordnung, kein
- * neuer Nav-Ort). `objekt360` liegt unter „Kunden"/„ISMS"/„Services"; `kundenstart` ist die
+ * Orte der Konvention: die Live-Hauptseiten (`heute`/`kunden`/`isms`/`entscheidungen`/
+ * `services`/`administration`) plus zwei Detailseiten UNTER bestehenden Orten (Muster: eigene
+ * Zuordnung, kein neuer Nav-Ort). `objekt360` liegt unter „Kunden"/„ISMS"/„Services";
+ * `kundenstart` ist die
  * Kunden-Startseite „verwalten" unter dem Ort „Kunden" (WP-006 Slice 1). Beide sind KEINE
  * `NAV_PLACES`-Orte – der Wächter behandelt sie wie dokumentierte Zusatzseiten (Meta-Assertion).
  */
@@ -132,6 +133,7 @@ export type BausteinOrt =
   | 'isms'
   | 'entscheidungen'
   | 'services'
+  | 'administration'
   | 'objekt360'
   | 'kundenstart';
 
@@ -340,6 +342,43 @@ export const BAUSTEIN_ABDECKUNG: Readonly<Record<BausteinOrt, readonly BausteinZ
       status: 'teilweise',
       wo: 'Vertrauensgrad des Wirkungsbeitrags an den Karten.',
       fehlt: 'Ein seitenweiter Vertrauenswert (benannte Lücke in der Kontextleiste).',
+    },
+  ],
+  administration: [
+    {
+      baustein: 'question_header',
+      status: 'teilweise',
+      wo: 'Leitfrage am Seitenkopf; Gegenstand der Seite sind die erfassten Scopes des aktiven Mandanten.',
+      fehlt:
+        'Ein Seiten-Status und ein Seiten-Owner (der Konfigurationsstand ist kein Objekt und trägt beides nicht).',
+    },
+    { baustein: 'context_bar', status: 'vorhanden', wo: 'Kontextleiste unter dem Seitenkopf.' },
+    { baustein: 'summary_pulse', status: 'ohne_traeger', grund: GRUND_SUMMARY },
+    {
+      baustein: 'relationship_panel',
+      status: 'ohne_traeger',
+      grund:
+        'Der Konfigurationsstand ist kein Objekt mit Beziehungen; diese Seite zeigt deshalb keine ' +
+        'verknüpften Objekte und keine Richtung.',
+    },
+    { baustein: 'impact_panel', status: 'ohne_traeger', grund: GRUND_IMPACT },
+    { baustein: 'decision_card', status: 'ohne_traeger', grund: GRUND_DECISION_CARD },
+    { baustein: 'action_rail', status: 'ohne_traeger', grund: GRUND_ACTION_RAIL },
+    {
+      baustein: 'history_decision_record',
+      status: 'ohne_traeger',
+      grund:
+        'Änderungen an Konfiguration, Rollen und Rechten würden als nachvollziehbare Ereignisse ' +
+        'entstehen; solche Ereignisse gibt es hier nicht, und erfundene Einträge würden ' +
+        'Nachvollziehbarkeit vortäuschen.',
+    },
+    {
+      baustein: 'trust_layer',
+      status: 'teilweise',
+      wo: 'Herkunft und Aktualität des Konfigurationsstands (nur der aktive Mandant, zuletzt erfasster Stand).',
+      fehlt:
+        'Eine Vollständigkeitsaussage über die Einrichtung und ein seitenweiter Vertrauenswert ' +
+        '(kein Träger im Datenbestand).',
     },
   ],
   objekt360: [

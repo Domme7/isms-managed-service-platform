@@ -2,8 +2,8 @@
  * Wächtertest: **jeder Live-Ort trägt die sichtbare Seitenbausteine-Ehrlichkeit**
  * (WP-020 Slice 3; Dok. 06, Abschnitt „Verbindliche Seitenbausteine").
  *
- * Geprüft wird der GERENDERTE Hinweis (`SeitenbausteineHinweis`) auf den sechs Orten der
- * Konvention (fünf Live-Hauptseiten + Objekt-360-Detailseite):
+ * Geprüft wird der GERENDERTE Hinweis (`SeitenbausteineHinweis`) auf allen Orten der
+ * Konvention (die Live-Hauptseiten + die dokumentierten Zusatzseiten):
  *  1. Der Hinweis existiert (Section „Seitenbausteine dieser Seite").
  *  2. Er benennt EXAKT die Bausteine, die die Zuordnung als 'ohne_traeger'/'teilweise' führt –
  *     je mit Begründung (grund bzw. fehlt) im sichtbaren Text.
@@ -18,6 +18,7 @@ import { render, within, type RenderResult } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { DEMO_TENANTS, NORDWERK_OBJECT_ID, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
+import { AdministrationContent } from '../administration/AdministrationContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
@@ -61,6 +62,8 @@ const RENDERER_JE_ORT: Record<BausteinOrt, () => RenderResult> = {
     render(<EntscheidungenContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   services: () =>
     render(<ServicesContent role={role('R08')} tenant={tenant(TENANT_ID.NORDWERK)} />),
+  administration: () =>
+    render(<AdministrationContent role={role('R12')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   objekt360: () => render(<ObjectDetailView model={objektModel()} />),
   // Zusatzseite UNTER dem Ort „Kunden" (kein NAV_PLACES-Ort, Muster `objekt360`, WP-006 Slice 1).
   kundenstart: () =>
@@ -75,7 +78,7 @@ function hinweisElement(container: HTMLElement): HTMLElement {
   return hinweis;
 }
 
-describe('Seitenbausteine-Konvention auf den sechs Live-Orten (Dok. 06)', () => {
+describe('Seitenbausteine-Konvention auf den Orten der Konvention (Dok. 06)', () => {
   it('Meta: das Register deckt die live-Orte aus NAV_PLACES plus die zwei Zusatzseiten ab', () => {
     const liveOrte = NAV_PLACES.filter((p) => p.live)
       .map((p) => String(p.id))

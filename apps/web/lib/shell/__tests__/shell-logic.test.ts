@@ -64,12 +64,34 @@ describe('NAV_PLACES – acht stabile Orte (Dok. 06 06-D01)', () => {
     expect(entscheidungen.question).toBe('Welche Geschäftsentscheidung ist jetzt erforderlich?');
   });
 
+  it('markiert „Administration" als live und ohne geplanten Screen (WP-032 Slice 1)', () => {
+    const administration = getPlace('administration');
+    expect(administration.live).toBe(true);
+    // Der Ort ist kein Platzhalter mehr: die Ankündigung eines geplanten Screens entfällt.
+    expect(administration.plannedScreen).toBeUndefined();
+    // KONZEPTANKER: Die Leitfrage des Screenkatalogs bleibt unverändert erhalten. Die Seite
+    // rendert sie NICHT als sichtbare Überschrift (sie verlangt ein Sicherheitsurteil, das der
+    // heutige Bau nicht fällen kann) und beantwortet die drei Teilfragen stattdessen einzeln
+    // und ehrlich – ohne Zusage und ohne Fehlalarm (O-WP032-02/03).
+    expect(administration.question).toBe(
+      'Ist der Tenant sicher, korrekt konfiguriert und verbunden?',
+    );
+  });
+
   it('markiert die übrigen Platzhalter-Orte als (noch) nicht live', () => {
     // Live sind bislang „Kunden" (Twin Explorer, WP-004/011), „Services" (WP-012 Slice 2),
-    // „ISMS" (WP-013 Slice 1), „Heute" (WP-016 Slice 2) und „Entscheidungen" (WP-017 Slice 2).
-    const live: readonly string[] = ['kunden', 'services', 'isms', 'heute', 'entscheidungen'];
+    // „ISMS" (WP-013 Slice 1), „Heute" (WP-016 Slice 2), „Entscheidungen" (WP-017 Slice 2)
+    // und „Administration" (WP-032 Slice 1).
+    const live: readonly string[] = [
+      'kunden',
+      'services',
+      'isms',
+      'heute',
+      'entscheidungen',
+      'administration',
+    ];
     const placeholders = NAV_PLACES.filter((p) => !live.includes(p.id));
-    expect(placeholders).toHaveLength(3);
+    expect(placeholders).toHaveLength(2);
     for (const place of placeholders) {
       expect(place.live).not.toBe(true);
       // Ein Platzhalter-Ort behält seine ehrliche Ankündigung (`PlaceholderPage` zeigt sie).

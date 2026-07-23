@@ -48,7 +48,7 @@ describe('SEITENBAUSTEINE – die neun Bausteine aus Dok. 06', () => {
 describe('BAUSTEIN_ABDECKUNG – Zuordnung je Live-Ort', () => {
   const orte = Object.keys(BAUSTEIN_ABDECKUNG) as BausteinOrt[];
 
-  it('Meta: deckt exakt die fünf live-Orte aus NAV_PLACES plus die zwei Zusatzseiten ab', () => {
+  it('Meta: deckt exakt die live-Orte aus NAV_PLACES plus die zwei Zusatzseiten ab', () => {
     const liveOrte = NAV_PLACES.filter((p) => p.live)
       .map((p) => String(p.id))
       .sort();

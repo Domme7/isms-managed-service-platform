@@ -29,6 +29,7 @@ import { render, type RenderResult } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { DEMO_TENANTS, NORDWERK_OBJECT_ID, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
+import { AdministrationContent } from '../administration/AdministrationContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
@@ -208,6 +209,12 @@ const RENDERER_JE_LIVE_ORT = {
   ),
   services: rollenMandantenMatrix('/services', (r, t) =>
     render(<ServicesContent role={r} tenant={t} />),
+  ),
+  // Administration (WP-032 Slice 1): sicherheitsnaher Ort mit langen Struktur- und Lückentexten –
+  // volle Rollen-/Mandantenmatrix inklusive der leeren Mandanten (Leerzustand ist die
+  // Versuchungsstelle, Lektion 12).
+  administration: rollenMandantenMatrix('/administration', (r, t) =>
+    render(<AdministrationContent role={r} tenant={t} />),
   ),
 } satisfies Partial<Record<PlaceId, readonly RenderVariante[]>>;
 

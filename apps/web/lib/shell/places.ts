@@ -120,9 +120,20 @@ export const NAV_PLACES: readonly NavPlace[] = [
     label: 'Administration',
     href: '/administration',
     hint: 'Nutzer, Rechte, Integrationen, Konfiguration, Audit Logs, Betrieb',
+    // KONZEPTANKER (bewusst unverändert): die Leitfrage des Screenkatalogs. Sie verlangt ein
+    // Sicherheits-URTEIL, das der heutige Bau nicht bejahen kann (keine Konten, keine geprüften
+    // Rechte, keine angebundenen Systeme). Die Seite rendert sie deshalb NICHT als sichtbare
+    // Überschrift, die sie im nächsten Satz zurücknehmen müsste (DR-0013 Nr. 1), sondern führt
+    // mit der Frage, die sie heute beantwortet, und beantwortet die drei Teilfragen
+    // (konfiguriert / verbunden / sicher) am Seitenende einzeln und ehrlich – ohne Zusage und
+    // ohne Fehlalarm (offene Frage O-WP032-03). Ob der `question`-Wortlaut selbst überarbeitet
+    // wird, ist eine Produkt-/Owner-Entscheidung (O-WP032-02) und wird hier nicht vorweggenommen.
     question: 'Ist der Tenant sicher, korrekt konfiguriert und verbunden?',
     match: ['/administration'],
-    plannedScreen: 'Administration & Integration Health',
+    // WP-032 Slice 1: der Ort zeigt echten, aus dem Bestand abgeleiteten Inhalt (read-only
+    // Konfigurationsstand des aktiven Mandanten + Rollen-/Rechte-/Integrations-/Betriebsmodell
+    // als Struktur). Damit entfällt die Platzhalter-Ankündigung eines geplanten Screens.
+    live: true,
   },
 ] as const;
 
