@@ -286,7 +286,7 @@ describe('IsmsContent – Antwort-Modus (DR-0013)', () => {
     const text = abgrenzung.textContent ?? '';
 
     // Die drei früheren Kopfabsätze – inhaltlich vollständig, verdichtet.
-    expect(text).toMatch(/synthetischen Demo-Datenbestand/);
+    expect(text).toMatch(/was im Datenbestand erfasst ist/);
     expect(text).toMatch(/keinen Score, keinen Reifegrad und keine bewertete Einstufung/);
     expect(text).toMatch(/Implementierungs- und Wirksamkeitsaussagen bleiben strikt getrennt/);
     expect(text).toMatch(/keine Prüfergebnisse/);
@@ -468,24 +468,19 @@ describe('IsmsContent – Empty-State (Mandanten ohne ISMS-Kernobjekte)', () => 
   });
 });
 
-describe('IsmsView – „nicht angemeldet" (Simulation)', () => {
+describe('IsmsView – „kein Mandant gewählt"', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('zeigt den Hinweis samt Link zur Login-Simulation', () => {
+  it('zeigt den Hinweis samt Link zur Anmeldung', () => {
     render(
       <SessionProvider>
         <IsmsView />
       </SessionProvider>,
     );
 
-    expect(
-      screen.getByRole('heading', { name: 'Nicht angemeldet (Simulation)' }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Zur Anmelde-Simulation/ })).toHaveAttribute(
-      'href',
-      '/login',
-    );
+    expect(screen.getByRole('heading', { name: 'Kein Mandant gewählt' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Zur Anmeldung/ })).toHaveAttribute('href', '/login');
   });
 });

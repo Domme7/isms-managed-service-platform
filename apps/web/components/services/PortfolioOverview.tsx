@@ -2,7 +2,7 @@
  * Mandantenübergreifende Portfolio-Übersicht (WP-012 Slice 2) – read-only Vorstufe des
  * Portfolio Cockpits (Dok. 06 §7 S04: „Welche Mandanten, Services oder Termine kippen?").
  *
- * WICHTIG: reine Aggregation JE Mandant nebeneinander aus demselben Demo-Seed – es gibt
+ * WICHTIG: reine Aggregation JE Mandant nebeneinander aus demselben Datenbestand – es gibt
  * KEINE mandantenübergreifende Kante (OFFENE FRAGE O-WP012-03, Dok. 07 P09). Die Sichtbarkeit
  * nur für die Consulting & Service World ist eine reine Anzeige-Verdichtung (Demo),
  * KEINE Sicherheitsgrenze. Status immer als Text, nie nur Farbe (Dok. 06 06-D11).
@@ -29,7 +29,7 @@ export function PortfolioOverview({ entries }: { entries: readonly PortfolioTena
       <p className="tw-muted">
         Welche Mandanten haben welche Services? Aggregation je Mandant nebeneinander – ohne
         mandantenübergreifende Verknüpfung. Sichtbar für die Service-Organisation (Consulting &amp;
-        Service World); reine Anzeige-Verdichtung in der Demo, keine Sicherheitsgrenze.
+        Service World); die Zuordnung ordnet die Ansicht und entscheidet nicht über Zugriff.
       </p>
       <ul className="tw-grid">
         {entries.map((entry) => (
@@ -58,7 +58,7 @@ export function PortfolioOverview({ entries }: { entries: readonly PortfolioTena
                 ))}
               </ul>
             ) : (
-              <p className="sv-item-meta">Keine Managed Services im aktuellen Demo-Datenbestand.</p>
+              <p className="sv-item-meta">Keine Managed Services im aktuellen Datenbestand.</p>
             )}
           </li>
         ))}

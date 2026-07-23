@@ -3,10 +3,10 @@
  *
  * Fünf klar benannte Abschnitte in der Reihenfolge der fünf Fragen der universellen
  * Seitenanatomie (Dok. 06 §6 / Dok. 07 §10). Gerendert wird ausschließlich, was das View-Modell
- * aus dem Demo-Seed ableitet – nichts ist hartkodiert, nichts erfunden (WP-014 Acceptance 2).
+ * aus dem Datenbestand ableitet – nichts ist hartkodiert, nichts erfunden (WP-014 Acceptance 2).
  *
  * Zustände (Dok. 06 §17): leere Kantenlisten erhalten einen erklärenden Empty-Text
- * („keine Kante dieses Typs im Demo-Seed"); Datenlücken werden als Partial data mit Quelle
+ * („keine Kante dieses Typs im Datenbestand"); Datenlücken werden als Partial data mit Quelle
  * benannt (fehlende Versionshistorie, nicht auflösbare Scope-Referenz, fehlender Nachweis).
  *
  * Heading-Hierarchie: h1 (Objektname) > h2 (je Frage) > h3 (Block innerhalb einer Frage).
@@ -250,7 +250,7 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
       {/* Leitfrage der Seite (Dok. 06 „Frage vor Navigation") */}
       <p className="tw-question">
         Was ist dieses Objekt, warum ist es wichtig, womit hängt es zusammen, wie entwickelt es sich
-        – und was ist dazu im Demo-Datenbestand belegt?
+        – und was ist dazu im Datenbestand belegt?
       </p>
 
       {/* Seitenweite Rahmung (UX-Review MAJOR-1 aus WP-013): auch hier erscheinen Status-Werte
@@ -263,10 +263,10 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
           `EntscheidungenContent`. */}
       <p className="tw-muted">
         <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
-        Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
-        keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
-        etwa einen Zeitraum und einen Prüfstatus tragen.
+        Lebenszyklus-Stände aus dem Datenbestand – <strong>keine Prüfergebnisse</strong> und keine
+        bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung selbst
+        und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann etwa
+        einen Zeitraum und einen Prüfstatus tragen.
       </p>
 
       <ContextBar model={model} />
@@ -370,7 +370,7 @@ function IdentitySection({ identity }: { identity: ObjectDetailModel['identity']
               ]
                 .filter(Boolean)
                 .join(' · ')
-            : 'keine Klassifikation im Demo-Seed erfasst'}
+            : 'keine Klassifikation im Datenbestand erfasst'}
         </dd>
 
         <dt>Objekt-ID</dt>
@@ -380,7 +380,7 @@ function IdentitySection({ identity }: { identity: ObjectDetailModel['identity']
       {identity.description ? (
         <p className="tw-lead">{identity.description}</p>
       ) : (
-        <p className="sv-item-meta">Keine Beschreibung im Demo-Seed erfasst.</p>
+        <p className="sv-item-meta">Keine Beschreibung im Datenbestand erfasst.</p>
       )}
 
       <h3>Scope</h3>
@@ -391,7 +391,7 @@ function IdentitySection({ identity }: { identity: ObjectDetailModel['identity']
           ))}
         </ul>
       ) : (
-        <p className="sv-item-meta">Keine Scope-Zuordnung im Demo-Seed erfasst.</p>
+        <p className="sv-item-meta">Keine Scope-Zuordnung im Datenbestand erfasst.</p>
       )}
 
       <h3>Verantwortung (Owner)</h3>
@@ -402,14 +402,14 @@ function IdentitySection({ identity }: { identity: ObjectDetailModel['identity']
           ))}
         </ul>
       ) : (
-        <p className="sv-item-meta">Keine Owner-Zuordnung im Demo-Seed erfasst.</p>
+        <p className="sv-item-meta">Keine Owner-Zuordnung im Datenbestand erfasst.</p>
       )}
     </section>
   );
 }
 
 /**
- * Scope-Zuordnung. Der Demo-Seed materialisiert Scopes nicht als eigene Objekte
+ * Scope-Zuordnung. Der Datenbestand materialisiert Scopes nicht als eigene Objekte
  * (OFFENE FRAGE O-WP014-03), daher bleibt die Kennung sichtbar roh – als benannte Datenlücke
  * (Partial data, Dok. 06 §17), nicht als erfundener Klartextname.
  */
@@ -433,8 +433,8 @@ function ScopeItem({ scope }: { scope: ResolvedScope }) {
       ) : null}
       {!scope.resolved ? (
         <span className="sv-item-note">
-          Datenlücke: Zu dieser Scope-Kennung existiert im Demo-Seed kein eigenes Objekt; angezeigt
-          wird die rohe Kennung aus dem Objekt-Envelope.
+          Datenlücke: Zu dieser Scope-Kennung existiert im Datenbestand kein eigenes Objekt;
+          angezeigt wird die rohe Kennung aus dem Objekt-Envelope.
         </span>
       ) : null}
     </li>
@@ -491,7 +491,7 @@ function ImportanceSection({
             {importance.confidentiality ?? 'nicht erfasst'} –{' '}
           </>
         ) : (
-          <>Im Demo-Datenbestand ist für dieses Objekt keine Klassifikation erfasst – </>
+          <>Im Datenbestand ist für dieses Objekt keine Klassifikation erfasst – </>
         )}
         ohne Gewichtung, ohne Score und ohne Reifegrad. Eine darüber hinausgehende Kritikalität ist
         im kanonischen Objektvertrag nicht erfasst und wird hier nicht abgeleitet.
@@ -516,7 +516,7 @@ function ImportanceSection({
         variant="kompakt"
         edges={importance.edges}
         tenantId={tenantId}
-        emptyText="Keine Kante dieses Typs im Demo-Seed: Dieses Objekt ist im Demo-Datenbestand mit keinem Risiko, keinem Ziel und keiner Voraussetzung verbunden."
+        emptyText="Keine Kante dieses Typs im Datenbestand: Dieses Objekt ist im Datenbestand mit keinem Risiko, keinem Ziel und keiner Voraussetzung verbunden."
       />
     </section>
   );
@@ -544,14 +544,14 @@ function ConnectionsSection({
       <EdgeList
         edges={connections.outgoing}
         tenantId={tenantId}
-        emptyText="Keine ausgehende Kante dieses Objekts im Demo-Seed: Von diesem Objekt geht im Demo-Datenbestand keine Aussage über ein anderes Objekt aus."
+        emptyText="Keine ausgehende Kante dieses Objekts im Datenbestand: Von diesem Objekt geht im Datenbestand keine Aussage über ein anderes Objekt aus."
       />
 
       <h3>Eingehende Beziehungen (dieses Objekt ist Ziel)</h3>
       <EdgeList
         edges={connections.incoming}
         tenantId={tenantId}
-        emptyText="Keine eingehende Kante auf dieses Objekt im Demo-Seed: Kein anderes Objekt dieses Mandanten verweist im Demo-Datenbestand auf dieses Objekt."
+        emptyText="Keine eingehende Kante auf dieses Objekt im Datenbestand: Kein anderes Objekt dieses Mandanten verweist im Datenbestand auf dieses Objekt."
       />
     </section>
   );
@@ -621,7 +621,7 @@ function EvolutionSection({
             </p>
           ) : null}
           {/* Aussage über GENAU DIESES Objekt: seit WP-017 trägt der Datenbestand sehr wohl eine
-              Ablösekette – ein „im Demo-Seed gibt es keine" wäre hier falsch. Erreichbar bleibt
+              Ablösekette – ein „im Datenbestand gibt es keine" wäre hier falsch. Erreichbar bleibt
               der Leerfall nur, wenn eine Historie allein über Version/Ersetzungszeitpunkt belegt
               ist (im heutigen Seed nicht der Fall). */}
           <EdgeList
@@ -634,15 +634,14 @@ function EvolutionSection({
         /* Partial data (Dok. 06 §17): die Lücke wird benannt und aus den Daten begründet –
            keine erfundene Timeline, kein konstanter Platzhaltertext. */
         <div className="tw-empty" role="note">
-          {/* Überschrift bewusst OBJEKTBEZOGEN (WP-017): „im Demo-Seed" wäre seit der
+          {/* Überschrift bewusst OBJEKTBEZOGEN (WP-017): „im Datenbestand" wäre seit der
               Entscheidungsschicht eine falsche Aussage über den ganzen Datenbestand – dort ist
               eine Ablösung belegt. Die Lücke gilt für dieses Objekt, und genau das steht hier. */}
           <h4>Keine Versionshistorie für dieses Objekt</h4>
           <p style={{ marginBottom: 0 }}>
             Abgeleitet aus dem Objekt selbst: Version {history.version}, kein Ersetzungszeitpunkt
             und keine Ablösung („{edgeNote('supersedes')}"). Frühere Stände dieses Objekts sind
-            damit im Demo-Datenbestand nicht rekonstruierbar; es wird bewusst kein Verlauf
-            konstruiert.
+            damit im Datenbestand nicht rekonstruierbar; es wird bewusst kein Verlauf konstruiert.
           </p>
         </div>
       )}
@@ -680,7 +679,7 @@ function EvolutionSection({
           ))}
         </ul>
       ) : (
-        <p className="sv-item-meta">Keine Quellreferenz im Demo-Seed erfasst.</p>
+        <p className="sv-item-meta">Keine Quellreferenz im Datenbestand erfasst.</p>
       )}
 
       {/* WP-020 Slice 5: Abgleich der hier belegten Vertrauensanzeigen gegen die acht
@@ -726,8 +725,8 @@ function NextSection({
       */}
       <h2 id="frage-naechstes">Was als Nächstes?</h2>
       <p className="sv-edge-note">
-        Nur belegte Verweise aus dem Demo-Datenbestand, jeweils mit Quelle – als Beobachtung, nicht
-        als Empfehlung. Es gibt hier keinen Vorschlag, keine Priorisierung und kein Serviceangebot.
+        Nur belegte Verweise aus dem Datenbestand, jeweils mit Quelle – als Beobachtung, nicht als
+        Empfehlung. Es gibt hier keinen Vorschlag, keine Priorisierung und kein Serviceangebot.
       </p>
 
       {observations.length > 0 ? (
@@ -745,9 +744,9 @@ function NextSection({
            Der NUTZERTEXT sagt das evidenzgebunden – die Ableitung aus der Beispielspalte ist eine
            Anzeigeentscheidung (O-WP014-10), keine Modellaussage (Review-Fix). */
         <p className="sv-item-meta">
-          Kein belegter Verweis im Demo-Seed: Für dieses Objekt ist im Demo-Datenbestand weder eine
+          Kein belegter Verweis im Datenbestand: Für dieses Objekt ist im Datenbestand weder eine
           Maßnahme noch ein Servicebezug erfasst; auch ein Nachweisbezug ist für diesen Objekttyp im
-          Demo-Datenbestand nicht modelliert.
+          Datenbestand nicht modelliert.
           <EmptyNext tenantId={tenantId} />
         </p>
       )}
@@ -767,7 +766,7 @@ function ObservationItem({
       <>
         <span className="sv-item-name">Kein Nachweis verweist auf dieses Objekt.</span>
         <span className="sv-item-meta">
-          {' · Beobachtung: keine eingehende Nachweis-Beziehung im Demo-Seed.'}
+          {' · Beobachtung: keine eingehende Nachweis-Beziehung im Datenbestand.'}
         </span>
       </>
     );

@@ -36,9 +36,8 @@ export function TwinContextBar() {
     // Kontext, und genau das wird gesagt, statt einen zu erfinden.
     return (
       <p className="tw-muted">
-        Kein aktiver Kontext: In der Simulation ist keine Rolle und kein Mandant gewählt. Die
-        Übersicht bleibt sichtbar; für den sichtbaren Kontext{' '}
-        <Link href="/login">zur Anmelde-Simulation</Link>.
+        Kein aktiver Kontext: Es ist kein Mandant gewählt. Die Übersicht bleibt sichtbar; für den
+        sichtbaren Kontext <Link href="/login">einen Mandanten wählen</Link>.
       </p>
     );
   }
@@ -55,7 +54,7 @@ export function TwinContextBar() {
       role={resolved.role}
       tenant={resolved.tenant}
       scopeLabel="Objektkontext dieser Seite"
-      scopeValue={'Übersicht aller Demo-Mandanten (Portfolio des Ortes „Kunden")'}
+      scopeValue={'Mandanten-Portfolio des Ortes „Kunden"'}
       datenstandLabel="Datenstand des aktiven Mandanten (zuletzt im System erfasst)"
       datenstandValue={
         facts.recordedOn && facts.recordedOnDisplay ? (

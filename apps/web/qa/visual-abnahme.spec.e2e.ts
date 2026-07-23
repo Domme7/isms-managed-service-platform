@@ -307,6 +307,21 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
       ausschnitt: null,
       mitAxe: true, // neuer Seitenzustand (Datenlücken-Kachel)
     },
+    /**
+     * WP-028 Slice 4 (DR-0013 Nr. 11): Der Ort „Kunden" hat seit der Sphären-Kopplung ZWEI
+     * Einstiege. Die gepinnte Default-Perspektive der Abnahme ist R01 – eine KUNDENrolle –,
+     * die Seite `twin` oben zeigt deshalb ab jetzt die Ein-Unternehmens-Sicht. Damit die
+     * Owner-Abnahme das Portfolio nicht verliert, wird es hier zusätzlich mit einer
+     * Betreiberrolle aufgenommen. Beide Zustände sind eigenständige Seitenzustände und
+     * werden deshalb beide ge-axed.
+     */
+    {
+      slug: 'kunden-portfolio-r08',
+      pfad: '/twin',
+      sitzung: serializeSession({ roleId: 'R08', tenantId: MANDANT_ID }),
+      ausschnitt: null,
+      mitAxe: true,
+    },
   ];
 
   for (const motiv of ZUSATZMOTIVE) {

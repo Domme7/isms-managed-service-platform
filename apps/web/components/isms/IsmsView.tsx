@@ -36,16 +36,14 @@ export function IsmsView() {
         <p className="tw-eyebrow">ISMS</p>
         <h1>ISMS</h1>
         <div className="tw-empty" role="note">
-          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>
-            Nicht angemeldet (Simulation)
-          </h2>
+          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Kein Mandant gewählt</h2>
           <p style={{ marginTop: 0 }}>
-            Es ist keine Rolle und kein Mandant gewählt. Melden Sie sich in der Simulation an, um
-            die Risiko- und Control-Lage des aktiven Mandanten zu sehen.
+            Es ist kein Mandant gewählt. Wählen Sie einen Mandanten, um die Risiko- und Control-Lage
+            des aktiven Mandanten zu sehen.
           </p>
           <p style={{ marginBottom: 0 }}>
             <Link className="tw-cta" href="/login">
-              Zur Anmelde-Simulation →
+              Zur Anmeldung →
             </Link>
           </p>
         </div>

@@ -7,7 +7,7 @@
  *
  *  1. `/isms` (seit WP-013): „Die Risiko- und Control-Sicht ist derzeit für einen anderen
  *     Demo-Mandanten ausmodelliert; weitere folgen in späteren Ausbaustufen."
- *  2. `/entscheidungen` (WP-017): „Die Entscheidungsschicht ist im Demo-Datenbestand derzeit für
+ *  2. `/entscheidungen` (WP-017): „Die Entscheidungsschicht ist im Datenbestand derzeit für
  *     einen Mandanten ausmodelliert."
  *  3. `/services` (seit WP-012, gefunden erst im Cross-Tenant-Umbau WP-020): „Services laufen
  *     derzeit für <Namen fremder Mandanten>; weitere Mandanten folgen in späteren Ausbaustufen."
@@ -39,6 +39,7 @@ import { WissenContent } from '../wissen/WissenContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { AppShell } from '../shell/AppShell';
 import { MissionControlContent } from '../shell/MissionControlContent';
+import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
 import { TenantDetailView } from '../twin/TenantDetailView';
 import { NAV_PLACES, type PlaceId } from '../../lib/shell/places';
 import { DEMO_ROLES, getRole, type DemoRole } from '../../lib/shell/roles';
@@ -146,6 +147,39 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
     }
   }
 
+  /**
+   * ZUSATZSEITE unter dem Ort „Kunden" (WP-028 Slice 4): der Ein-Unternehmens-Einstieg, den
+   * Kundenrollen und der Auditor sehen. Er ist die neueste Stelle mit genau der Versuchung,
+   * die diese Fehlerklasse erzeugt hat („Sie sehen die anderen Mandanten hier nicht") – auch
+   * eine VERNEINUNG wäre eine Existenzaussage. Kein `NAV_PLACES`-Ort, deshalb außerhalb des
+   * Registers geprüft (die Meta-Assertion oben bleibt intakt).
+   */
+  for (const tenantId of [TENANT_ID.NORDWERK, ...LEERE_MANDANTEN]) {
+    it(`Ein-Unternehmens-Einstieg nennt für ${tenantId} keinen fremden Mandanten`, () => {
+      const t = tenant(tenantId);
+      const { container } = render(
+        <EigenerMandantEinstieg
+          role={role('R01')}
+          tenant={t}
+          objectCount={tenantId === TENANT_ID.NORDWERK ? 34 : 0}
+          relationshipCount={tenantId === TENANT_ID.NORDWERK ? 51 : 0}
+          scopeIds={tenantId === TENANT_ID.NORDWERK ? ['scope-nordwerk-isms-core'] : []}
+          recordedOn={tenantId === TENANT_ID.NORDWERK ? '2026-03-16' : null}
+          recordedOnDisplay={tenantId === TENANT_ID.NORDWERK ? '16.03.2026' : null}
+        />,
+      );
+      const text = container.textContent ?? '';
+      expect(text.length).toBeGreaterThan(80);
+      for (const muster of FREMDER_MANDANT) {
+        expect(text, `Ein-Unternehmens-Einstieg/${tenantId}: „${muster}"`).not.toMatch(muster);
+      }
+      for (const fremd of DEMO_TENANTS.filter((x) => x.tenant_id !== tenantId)) {
+        expect(text).not.toContain(fremd.display_name);
+        expect(container.innerHTML).not.toContain(fremd.tenant_id);
+      }
+    });
+  }
+
   it('Fixture-Negativbeweis: jedes FREMDER_MANDANT-Muster greift – legitime Sätze nicht', () => {
     // Jedes Muster wird von mindestens einer (historisch echten oder konstruierten)
     // Leak-Formulierung ausgelöst – der Wächter ist nicht blind.
@@ -170,7 +204,7 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
     // Legitime, mandantenLOKALE Formulierungen (echte Produkttexte) schlagen NICHT an.
     for (const legitim of [
       '34 Objekte dieses Mandanten',
-      '51 Beziehungen dieses Mandanten im Demo-Datenbestand',
+      '51 Beziehungen dieses Mandanten im Datenbestand',
       'Datenbestand von Nordwerk Manufacturing SE (nur der aktive Mandant)',
       'Gezählt wird ausschließlich der aktive Mandant.',
     ]) {
@@ -314,8 +348,11 @@ function textOhneWechsler(): string {
  */
 function WechselHarness({ startTenantId }: { startTenantId: string }) {
   const [tenantId, setTenantId] = useState(startTenantId);
-  const session = resolveSession({ roleId: 'R03', tenantId });
-  if (!session) throw new Error(`Testfixture nicht auflösbar: R03/${tenantId}`);
+  // BETREIBERROLLE (WP-028 Slice 4): Der Mandantenwechsel ist seit der Sphären-Kopplung
+  // (DR-0013 Nr. 11) Teil der Portfolio-Sicht – eine Kundenrolle wechselt keinen Mandanten.
+  // Der geprüfte Cross-Tenant-Schutz ist davon unberührt: er gilt für JEDEN Wechsel.
+  const session = resolveSession({ roleId: 'R08', tenantId });
+  if (!session) throw new Error(`Testfixture nicht auflösbar: R08/${tenantId}`);
 
   return (
     <AppShell
@@ -339,7 +376,7 @@ describe('Mandantenwechsel ist eine angekündigte Kontextänderung (Dok. 06 CROS
   const FINOVIA_NAME = 'Finovia Digital Bank AG';
 
   function wechselAnfordern(): void {
-    fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {
+    fireEvent.change(screen.getByLabelText('Ansicht: Mandant'), {
       target: { value: TENANT_ID.FINOVIA },
     });
   }
@@ -375,9 +412,9 @@ describe('Mandantenwechsel ist eine angekündigte Kontextänderung (Dok. 06 CROS
     // Kein Wechsel, keine Rückmeldung: der Kontext ist unverändert Nordwerk.
     expect(screen.getByRole('status').textContent).toBe('');
     expect(screen.getByRole('main').textContent).toContain(NORDWERK_NAME);
-    expect(
-      screen.getByLabelText<HTMLSelectElement>('Aktiven Mandanten wechseln (Simulation)').value,
-    ).toBe(TENANT_ID.NORDWERK);
+    expect(screen.getByLabelText<HTMLSelectElement>('Ansicht: Mandant').value).toBe(
+      TENANT_ID.NORDWERK,
+    );
   });
 
   it('nach Bestätigung: sichtbare benannte Rückmeldung, danach lebt kein Zustand des alten Mandanten weiter', () => {

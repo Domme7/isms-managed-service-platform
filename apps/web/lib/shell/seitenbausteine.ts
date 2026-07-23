@@ -260,7 +260,10 @@ export const BAUSTEIN_ABDECKUNG: Readonly<Record<BausteinOrt, readonly BausteinZ
     {
       baustein: 'impact_panel',
       status: 'teilweise',
-      wo: 'Belegter Servicebezug (Serviceumfang) an Karten mit „covered_by"-Kante.',
+      // Domänensprache statt Feldname (O-WP032-19, DR-0013 Nr. 2): der Kantentyp
+      // `covered_by` heißt im Produkt „abgedeckt durch" (`OBJECT`-/Kanten-Glossen in
+      // `lib/twin/data.ts` – eine Quelle). Dieser Text WIRD gerendert (Status 'teilweise').
+      wo: 'Belegter Servicebezug an Karten mit einer erfassten Beziehung „abgedeckt durch".',
       fehlt: 'Ziel-, Zeit- und Wirkungsdaten (kein Träger im Objektvertrag).',
     },
     { baustein: 'decision_card', status: 'ohne_traeger', grund: GRUND_DECISION_CARD },
@@ -329,7 +332,9 @@ export const BAUSTEIN_ABDECKUNG: Readonly<Record<BausteinOrt, readonly BausteinZ
     {
       baustein: 'impact_panel',
       status: 'teilweise',
-      wo: 'Belegter Wirkungsbeitrag („contributes_to") mit Vertrauensgrad je Karte.',
+      // Domänensprache statt Feldname (O-WP032-19, DR-0013 Nr. 2): `contributes_to` heißt im
+      // Produkt „trägt bei zu". Dieser Text WIRD gerendert (Status 'teilweise').
+      wo: 'Belegter Wirkungsbeitrag („trägt bei zu") mit Vertrauensgrad je Karte.',
       fehlt: 'Ziel- und Zeitwirkung als eigene Datenfelder (kein Träger im Objektvertrag).',
     },
     { baustein: 'decision_card', status: 'ohne_traeger', grund: GRUND_DECISION_CARD },

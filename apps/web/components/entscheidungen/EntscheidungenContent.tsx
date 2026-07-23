@@ -4,7 +4,7 @@
  *
  * Rendert AUSSCHLIESSLICH das in `lib/entscheidungen/data.ts` abgeleitete Modell des AKTIVEN
  * Mandanten. Nichts ist hartkodiert, nichts erfunden, nichts berechnet: jeder sichtbare Wert
- * stammt aus dem Demo-Datenbestand oder aus dem kanonischen Vertrag.
+ * stammt aus dem Datenbestand oder aus dem kanonischen Vertrag.
  *
  * WAS DIESE SEITE NICHT IST: keine „Decision Card" nach Dok. 10 §9.1 (die Mehrheit ihrer 14
  * Pflichtfelder hat im Objektvertrag keinen Träger – siehe Abschnitt „Was eine Entscheidung hier
@@ -134,12 +134,12 @@ export function EntscheidungenContent({
             Mandant im Datenbestand nicht auflösbar
           </h2>
           <p style={{ marginTop: 0 }}>
-            Zur aktiven Auswahl existiert im Demo-Datenbestand kein Mandant. Es wird bewusst kein
+            Zur aktiven Auswahl existiert im Datenbestand kein Mandant. Es wird bewusst kein
             Ersatzinhalt gezeigt.
           </p>
           <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
             <Link className="tw-cta" href="/login">
-              Zur Anmelde-Simulation →
+              Zur Anmeldung →
             </Link>
           </p>
         </div>
@@ -166,8 +166,8 @@ function Aufmacher({ model }: { model: DecisionRegisterModel }) {
     <p className="tw-lead">
       {erfasst === 0 ? (
         <>
-          Für <strong>{model.tenant.display_name}</strong> ist im Demo-Datenbestand keine
-          Entscheidung erfasst.
+          Für <strong>{model.tenant.display_name}</strong> ist im Datenbestand keine Entscheidung
+          erfasst.
         </>
       ) : (
         <>
@@ -341,22 +341,20 @@ function EmptyRegister({ model }: { model: DecisionRegisterModel }) {
         </p>
       ) : (
         <p style={{ marginTop: 0 }}>
-          Für <strong>{tenantName}</strong> ist im Demo-Datenbestand überhaupt nichts modelliert:
-          weder Objekte noch Beziehungen – und damit auch keine Entscheidungen. Das ist ein anderer
-          Fall als ein Mandant, der einen Datenbestand trägt, in dem nur die Entscheidungsschicht
-          fehlt.
+          Für <strong>{tenantName}</strong> ist im Datenbestand überhaupt nichts modelliert: weder
+          Objekte noch Beziehungen – und damit auch keine Entscheidungen. Das ist ein anderer Fall
+          als ein Mandant, der einen Datenbestand trägt, in dem nur die Entscheidungsschicht fehlt.
         </p>
       )}
       <p className="tw-muted">
-        Für diesen Mandanten ist im synthetischen Datenbestand keine Entscheidung erfasst. Nutzen
-        dieser Seite: Sie zeigt für den aktiven Mandanten, welche Entscheidungen erfasst sind,
-        worauf sie sich beziehen, wie sie belegt sind und was sie abgelöst hat. Ohne erfasste
-        Entscheidungen bleibt sie sichtbar leer – bewusst kein Platzhalter-Inhalt und keine
-        erfundene Entscheidung.
+        Für diesen Mandanten ist keine Entscheidung erfasst. Nutzen dieser Seite: Sie zeigt für den
+        aktiven Mandanten, welche Entscheidungen erfasst sind, worauf sie sich beziehen, wie sie
+        belegt sind und was sie abgelöst hat. Ohne erfasste Entscheidungen bleibt sie sichtbar leer
+        – bewusst kein Platzhalter-Inhalt und keine erfundene Entscheidung.
       </p>
       <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
         <Link className="tw-cta" href="/login">
-          Mandant wechseln (Anmelde-Simulation) →
+          Mandant wechseln →
         </Link>
       </p>
     </div>
@@ -817,10 +815,10 @@ function OffeneFrageSection() {
           den Wächter nicht aushebeln. */}
       <p className="tw-muted tw-seitenfuss">
         <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
-        Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
-        keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
-        etwa einen Zeitraum und einen Prüfstatus tragen.
+        Lebenszyklus-Stände aus dem Datenbestand – <strong>keine Prüfergebnisse</strong> und keine
+        bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung selbst
+        und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann etwa
+        einen Zeitraum und einen Prüfstatus tragen.
       </p>
     </section>
   );

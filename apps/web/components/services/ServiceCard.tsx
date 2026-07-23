@@ -164,7 +164,7 @@ export function ServiceCard({ view, tenantId }: { view: ManagedServiceView; tena
       {slas.length > 0 ? (
         <ComponentItems items={slas} detailsLabel="SLA-Details anzeigen" tenantId={tenantId} />
       ) : (
-        <p className="sv-item-meta">Kein SLA im Demo-Datenbestand hinterlegt.</p>
+        <p className="sv-item-meta">Kein SLA im Datenbestand hinterlegt.</p>
       )}
 
       <h4>Deliverables (prüfbare Ergebnisse)</h4>
@@ -175,7 +175,7 @@ export function ServiceCard({ view, tenantId }: { view: ManagedServiceView; tena
           tenantId={tenantId}
         />
       ) : (
-        <p className="sv-item-meta">Kein Deliverable im Demo-Datenbestand hinterlegt.</p>
+        <p className="sv-item-meta">Kein Deliverable im Datenbestand hinterlegt.</p>
       )}
 
       {reviews.length > 0 ? (

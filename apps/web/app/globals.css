@@ -573,16 +573,9 @@ summary {
   font-size: 0.95rem;
 }
 
-.shell-demo-badge {
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  color: var(--shell-demo);
-  background: var(--shell-demo-bg);
-  border: 1px solid var(--shell-demo-line);
-  border-radius: 999px;
-  padding: 0.15rem 0.5rem;
-}
+/* ENTFALLEN mit WP-028 Slice 4 (DR-0011): `.shell-demo-badge` (der „DEMO"-Chip neben der
+   Produktmarke) und `.shell-demo-banner` (der permanente Demo-Hinweis unter der Kopfleiste).
+   Beide waren reine Meta-Kennzeichnung; die Datenehrlichkeit lebt unverändert im Inhalt. */
 
 .shell-nav-toggle {
   display: none;
@@ -599,8 +592,19 @@ summary {
 
 .shell-switch {
   display: flex;
+  align-items: flex-end;
   gap: 0.6rem;
   flex-wrap: wrap;
+}
+/* „Ansicht:" als sichtbarer Gruppenkopf (DR-0013 Nr. 12). Für Assistive Tech trägt die
+   Gruppe `aria-label` und jedes Feld ein eigenes „Ansicht: …"-Label – der Kopf ist deshalb
+   `aria-hidden`, damit er nicht zusätzlich vorgelesen wird. */
+.shell-switch-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #e4ebf5;
+  padding-bottom: 0.3rem;
 }
 .shell-switch-field {
   display: flex;
@@ -611,7 +615,25 @@ summary {
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.07em;
+  /* Kontrast auf var(--shell-navy) (#0f2740): #c6d2e6 ≈ 9.6:1 – deutlich über AA. */
   color: #c6d2e6;
+}
+/* Ein-Unternehmens-Sicht: der Mandant ist Kontext, keine Auswahl (WP-028 Slice 4).
+   Als native `dl` ausgezeichnet (keine ARIA-Verdrahtung) – deshalb Randwerte zurücksetzen.
+   Gleiche Zeilenhöhe wie ein `.shell-select`, damit die Leiste nicht springt. */
+.shell-switch-field--fest {
+  margin: 0;
+}
+.shell-switch-field--fest dd {
+  margin: 0;
+}
+.shell-switch-value {
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.25rem 0.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  max-width: 15rem;
 }
 .shell-select {
   background: #ffffff;
@@ -643,16 +665,6 @@ summary {
 }
 .shell-context-loading {
   color: #c6d2e6;
-}
-
-/* --- Demo-Banner ---------------------------------------------------------- */
-.shell-demo-banner {
-  background: var(--shell-demo-bg);
-  color: var(--shell-demo);
-  border-bottom: 1px solid var(--shell-demo-line);
-  padding: 0.5rem 1rem;
-  font-size: 0.83rem;
-  line-height: 1.4;
 }
 
 /* --- Kontextänderung: Mandanten-/Rollenwechsel (WP-020 Slice 1) ------------
@@ -853,7 +865,7 @@ summary {
 }
 
 /* =============================================================================
-   Login-Simulation (WP-011)
+   Anmeldung (WP-011; Sprache WP-028 Slice 4)
    ========================================================================== */
 .login-page {
   max-width: 780px;
@@ -866,7 +878,7 @@ summary {
   border-radius: 12px;
   padding: 1.5rem 1.5rem 1.75rem;
 }
-.login-demo-notice {
+.login-notice {
   background: var(--shell-demo-bg);
   color: var(--shell-demo);
   border: 1px solid var(--shell-demo-line);

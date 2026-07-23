@@ -7,7 +7,7 @@
  *  3. Navigationsvertrag (Dok. 07 §10/§21): vom Geschäftsprozess sind Information Asset,
  *     Risiko, Control, Evidence, Maßnahme und Managed Service ausschließlich über gerenderte
  *     Links erreichbar, ohne dass der Mandant wechselt.
- *  4. Empty-Texte („keine Kante … im Demo-Seed") und die abgeleitete Aussage
+ *  4. Empty-Texte („keine Kante … im Datenbestand") und die abgeleitete Aussage
  *     „Keine Versionshistorie für dieses Objekt" – seit WP-017 in BEIDEN Ausprägungen geprüft
  *     (Objekt ohne Ablösung vs. das belegte Ablösepaar).
  *  5. Datenlücken sichtbar (Partial data): nicht auflösbare Scope-Kennung.
@@ -88,7 +88,7 @@ describe('ObjectDetailView – Seitenanatomie', () => {
 
     expect(screen.getByText('scope-nordwerk-isms-core')).toBeInTheDocument();
     expect(
-      screen.getByText(/Zu dieser Scope-Kennung existiert im Demo-Seed kein eigenes Objekt/),
+      screen.getByText(/Zu dieser Scope-Kennung existiert im Datenbestand kein eigenes Objekt/),
     ).toBeInTheDocument();
   });
 
@@ -350,7 +350,7 @@ describe('ObjectDetailView – „Warum ist es wichtig?" ist verdichtet', () => 
 
     const abschnitt = screen.getByRole('region', { name: 'Warum ist es wichtig?' });
     expect(abschnitt.textContent).toContain(
-      'Im Demo-Datenbestand ist für dieses Objekt keine Klassifikation erfasst',
+      'Im Datenbestand ist für dieses Objekt keine Klassifikation erfasst',
     );
     expect(abschnitt.textContent).not.toContain('Schutzbedarf nicht erfasst');
   });
@@ -361,9 +361,9 @@ describe('ObjectDetailView – Zustände nach Dok. 06 §17', () => {
     const model = detailOrThrow(TENANT_ID.NORDWERK, O.ORG);
     render(<ObjectDetailView model={model} />);
 
-    const leer = screen.getByText(/^Keine ausgehende Kante dieses Objekts im Demo-Seed/);
+    const leer = screen.getByText(/^Keine ausgehende Kante dieses Objekts im Datenbestand/);
     expect(leer).toBeInTheDocument();
-    expect(screen.getByText(/^Keine Kante dieses Typs im Demo-Seed/)).toBeInTheDocument();
+    expect(screen.getByText(/^Keine Kante dieses Typs im Datenbestand/)).toBeInTheDocument();
 
     // Review-Fix: der Weg zur Mandantenseite steht als Kopfzeile der Seite und einmal unter
     // „Was als Nächstes?" – nicht zusätzlich in jedem Kanten-Empty-State.
@@ -382,7 +382,7 @@ describe('ObjectDetailView – Zustände nach Dok. 06 §17', () => {
 
     expect(screen.getByText('Kein Nachweis verweist auf dieses Objekt.')).toBeInTheDocument();
     expect(
-      screen.getByText(/keine eingehende Nachweis-Beziehung im Demo-Seed/),
+      screen.getByText(/keine eingehende Nachweis-Beziehung im Datenbestand/),
     ).toBeInTheDocument();
   });
 
@@ -394,7 +394,7 @@ describe('ObjectDetailView – Zustände nach Dok. 06 §17', () => {
     render(<ObjectDetailView model={model} />);
 
     expect(screen.queryByText('Kein Nachweis verweist auf dieses Objekt.')).not.toBeInTheDocument();
-    const leer = screen.getByText(/^Kein belegter Verweis im Demo-Seed/);
+    const leer = screen.getByText(/^Kein belegter Verweis im Datenbestand/);
     expect(leer).toBeInTheDocument();
     expect(
       within(leer).getByRole('link', {
@@ -428,7 +428,7 @@ describe('ObjectDetailView – Zustände nach Dok. 06 §17', () => {
     expect(within(abschnitt).getAllByText(/Lebenszyklus-Stand: /).length).toBeGreaterThanOrEqual(1);
 
     // Der Leersatz erscheint nicht mehr.
-    expect(abschnitt.textContent).not.toContain('Kein belegter Verweis im Demo-Seed');
+    expect(abschnitt.textContent).not.toContain('Kein belegter Verweis im Datenbestand');
   });
 
   it('zeigt Maßnahme, Managed Service und Nachweis mit Status und Beleg', () => {

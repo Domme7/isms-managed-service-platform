@@ -131,9 +131,9 @@ function RollenRahmung({ role }: { role: DemoRole | null }) {
     return (
       <div className="ht-neutral" role="note">
         <p className="ht-neutral-text">
-          <strong>Kundensphäre – Ihr Unternehmen:</strong> Sie sehen diesen Bereich als {role.id} ·{' '}
-          {role.name} ({role.responsibility}). Angezeigt wird ausschließlich der aktive Mandant –
-          keine Inhalte anderer Mandanten und keine mandantenübergreifende Auswertung.
+          <strong>Kundensphäre – Ihr Unternehmen:</strong> Sie sehen diesen Bereich als {role.name}{' '}
+          ({role.responsibility}). Angezeigt wird ausschließlich der aktive Mandant – keine Inhalte
+          anderer Mandanten und keine mandantenübergreifende Auswertung.
         </p>
       </div>
     );
@@ -143,8 +143,8 @@ function RollenRahmung({ role }: { role: DemoRole | null }) {
     <div className="ht-neutral" role="note">
       <p className="ht-neutral-text">
         <strong>Kundensphäre:</strong> Dieser Bereich zeigt ausschließlich den aktiven Mandanten.
-        Ihre aktive Rolle {role.id} · {role.name} gehört zur Sphäre „{role.sphere}" (
-        {worldForRole(role).name}); die Rolle ist hier Perspektive und keine Zugriffsgrenze.
+        Ihre aktive Rolle {role.name} gehört zur Sphäre „{role.sphere}" ({worldForRole(role).name});
+        die Rolle ist hier Perspektive und keine Zugriffsgrenze.
       </p>
     </div>
   );

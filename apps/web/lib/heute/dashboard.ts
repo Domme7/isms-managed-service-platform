@@ -96,8 +96,7 @@ export const BADGE_RULES = {
     text: 'kein Datenbestand',
     symbol: '–',
     grenze: 'Warum nichts erfasst ist, sagt der Datenbestand nicht.',
-    basis:
-      'Erfasster Bestand des Mandanten: null Objekte und null Beziehungen im Demo-Datenbestand.',
+    basis: 'Erfasster Bestand des Mandanten: null Objekte und null Beziehungen im Datenbestand.',
   },
 } as const;
 
@@ -233,7 +232,7 @@ export interface LifecycleTile extends TileExplanation {
  *
  * WARUM (dokumentierte Spannung, im Abschlussbericht als Klärungspunkt geführt): Der
  * Bewertungsvokabular-Wächter von „Heute" (`mission-control.test.tsx`, WP-016) verbietet dort
- * u. a. das Wort „bewertet" im gerenderten Text – der Demo-Datenbestand trägt aber genau einen
+ * u. a. das Wort „bewertet" im gerenderten Text – der Datenbestand trägt aber genau einen
  * ERFASSTEN Stand `'bewertet'` (Risk-Szenario, kanonisches Risiko-Vokabular). Die volle
  * Verteilung mit Stand-Namen auf „Heute" ließe sich nur grün bekommen, indem dieser Wächter
  * abgeschwächt würde – das ist eine benannte Stop-Bedingung des Work Packages (einzige
@@ -382,7 +381,7 @@ export function countRelationshipsWithConfidence(
  * dessen Vokabular-Wächter das Partizip verbietet (siehe `LifecycleSummaryTile`).
  */
 export const LIFECYCLE_GLOSSE =
-  'Lebenszyklus-Stände sind erfasste Stände aus dem Demo-Datenbestand – kein Prüfergebnis ' +
+  'Lebenszyklus-Stände sind erfasste Stände aus dem Datenbestand – kein Prüfergebnis ' +
   'und keine geprüfte Wirksamkeit.';
 
 /**
@@ -533,7 +532,7 @@ function buildKlartext(tenant: DemoTenant, facts: StockFacts): string[] {
     : '';
   return [
     `${tenant.display_name}: ${anzahl(facts.objectCount, 'Objekt', 'Objekte')} und ` +
-      `${anzahl(facts.relationshipCount, 'Beziehung', 'Beziehungen')} im Demo-Datenbestand` +
+      `${anzahl(facts.relationshipCount, 'Beziehung', 'Beziehungen')} im Datenbestand` +
       `${zuletzt}.`,
     `Belegt sind ${anzahl(facts.ismsCoreCount, 'ISMS-Kernobjekt', 'ISMS-Kernobjekte')}, ` +
       `${anzahl(facts.serviceCount, 'Managed Service', 'Managed Services')} und ` +
@@ -570,7 +569,12 @@ function buildStockTiles(
       regel:
         'Gezählt werden alle Objekte und Beziehungen mit der Mandanten-Kennung des aktiven ' +
         'Mandanten. Es wird nur gezählt – nichts wird gewichtet.',
-      drilldown: { label: 'Zwilling dieses Mandanten', href: tenantDetailHref(tenant.tenant_id) },
+      drilldown: {
+        // Ein Leitbegriff (WP-028 Slice 4, DR-0013 Nr. 9): der Objektgraph heißt sichtbar
+        // durchgehend „digitaler Zwilling", nie nur „Zwilling".
+        label: 'Digitaler Zwilling dieses Mandanten',
+        href: tenantDetailHref(tenant.tenant_id),
+      },
     },
     {
       id: 'isms_kern',
@@ -825,7 +829,7 @@ function buildConfidenceCoverageTile(
       'Ebene 2, nur positiv gezählt. Ein fehlender Vertrauensgrad wird nicht ersetzt und nicht ' +
       `geschätzt. ${BADGE_REGEL_TEXT}`,
     drilldown: {
-      label: 'Zwilling dieses Mandanten (Vertrauensgrad je Beziehung)',
+      label: 'Digitaler Zwilling dieses Mandanten (Vertrauensgrad je Beziehung)',
       href: tenantDetailHref(tenant.tenant_id),
     },
   };
@@ -836,7 +840,7 @@ function buildEmptyTenantModel(tenant: DemoTenant): HeuteDashboardModel {
   return {
     isEmpty: true,
     klartext: [
-      `${tenant.display_name}: 0 Objekte und 0 Beziehungen im Demo-Datenbestand.`,
+      `${tenant.display_name}: 0 Objekte und 0 Beziehungen im Datenbestand.`,
       'Es wird bewusst kein Ersatzinhalt gezeigt – die Datenlücke ist das Ergebnis.',
     ],
     stockTiles: [],
@@ -846,7 +850,7 @@ function buildEmptyTenantModel(tenant: DemoTenant): HeuteDashboardModel {
     emptyTile: {
       frage: 'Welche Datenlage hat dieser Mandant?',
       text:
-        `Für ${tenant.display_name} sind im Demo-Datenbestand keine Objekte und keine ` +
+        `Für ${tenant.display_name} sind im Datenbestand keine Objekte und keine ` +
         'Beziehungen modelliert. Deshalb gibt es hier keine Kacheln, keine Verteilung und ' +
         'keine Abdeckung – und es wird nichts erfunden.',
       badge: badge('kein_datenbestand'),
@@ -858,7 +862,7 @@ function buildEmptyTenantModel(tenant: DemoTenant): HeuteDashboardModel {
         'Mandanten; beide Zählungen ergeben null. Badge-Regel: „kein Datenbestand" – eine ' +
         'erfasste Lage, kein Urteil.',
       drilldown: {
-        label: 'Zwilling dieses Mandanten (zeigt denselben leeren Stand)',
+        label: 'Digitaler Zwilling dieses Mandanten (zeigt denselben leeren Stand)',
         href: tenantDetailHref(tenant.tenant_id),
       },
     },

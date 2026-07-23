@@ -6,7 +6,13 @@
  * Für Mandanten ohne Objektgraphen wird ein klarer, aus dem Seed abgeleiteter Empty-State gezeigt
  * (frontend.md-Zustände). Rendert innerhalb des `main`-Landmarks aus dem Twin-Layout.
  *
- * Heading-Hierarchie: h1 (Mandant) > h2 (Objekte/Beziehungen bzw. Objektgraph) > h3 (Familie) > h4 (Objekt).
+ * Heading-Hierarchie: h1 (Mandant) > h2 (Objekte/Beziehungen bzw. digitaler Zwilling) > h3 (Familie) > h4 (Objekt).
+ *
+ * EIN LEITBEGRIFF JE KONZEPT (WP-028 Slice 4, DR-0013 Nr. 9): sichtbar heißt der Objektgraph
+ * durchgehend „digitaler Zwilling"; „Mandant" bleibt der Organisation vorbehalten. Der
+ * Rückweg führt zum Ort „Kunden" – wohin dieser Ort führt, entscheidet die Sphäre der aktiven
+ * Rolle (`lib/shell/sphaere.ts`), deshalb ist der Link neutral beschriftet und behauptet
+ * keine Mandantenliste.
  */
 import Link from 'next/link';
 import type { TenantDetailModel } from '../../lib/twin/data';
@@ -21,7 +27,7 @@ export function TenantDetailView({ model }: { model: TenantDetailModel }) {
   return (
     <>
       <Link className="tw-back" href="/twin">
-        ← Alle Mandanten
+        ← Zurück zu Kunden
       </Link>
 
       <p className="tw-eyebrow">Digitaler Zwilling · {tenant.industry}</p>
@@ -32,7 +38,7 @@ export function TenantDetailView({ model }: { model: TenantDetailModel }) {
         Was enthält der digitale Zwilling von {tenant.display_name} und wie hängt es zusammen?
       </p>
 
-      {/* "Was / Warum" – ausschließlich synthetischer Seed-Kontext */}
+      {/* „Was / Warum" – Kontext aus den erfassten Feldern des Mandanten */}
       <p className="tw-lead">{tenant.description}</p>
 
       {hasGraph ? (
@@ -74,7 +80,7 @@ function TenantGraph({
           generischem `div` ist laut ARIA nicht zugesichert). Eine Korrektur (Rolle ergänzen oder
           Label entfernen) wäre eine Produktänderung außerhalb von WP-018 – als A11y-Befund für
           die sichtbare Abnahme (Slice 2) vorgemerkt, nicht still behoben. */}
-      <div className="tw-summary" aria-label="Kennzahlen des Objektgraphen">
+      <div className="tw-summary" aria-label="Kennzahlen des digitalen Zwillings">
         <div className="tw-stat">
           <span className="tw-stat-num">{objectCount}</span>
           <span className="tw-stat-label">Objekte</span>
@@ -137,22 +143,24 @@ function TenantGraph({
 function EmptyGraphState({ tenantName }: { tenantName: string }) {
   return (
     <>
-      <h2 id="objektgraph">Objektgraph</h2>
+      <h2 id="objektgraph">Digitaler Zwilling</h2>
       <div className="tw-empty" role="note">
-        <h3>Kein Objektgraph für {tenantName}</h3>
+        <h3>Kein digitaler Zwilling für {tenantName} erfasst</h3>
         <p style={{ marginTop: 0 }}>
-          Für <strong>{tenantName}</strong> ist im aktuellen Demo-Datenbestand kein digitaler
-          Zwilling modelliert. Die Seite bleibt erreichbar und zeigt ausschließlich, was für diesen
-          Mandanten belegt ist.
+          Für <strong>{tenantName}</strong> ist im aktuellen Datenbestand kein digitaler Zwilling
+          modelliert. Die Seite bleibt erreichbar und zeigt ausschließlich, was für diesen Mandanten
+          belegt ist.
         </p>
         <p className="tw-muted">
-          Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Demo-Datenbestand
+          Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Datenbestand
           abgeleitete Objekte und Beziehungen – keine erfundenen.
         </p>
-        {/* Nächster Schritt (Dok. 06 §17): zurück zur Mandantenübersicht (Portfolio-Seite). */}
+        {/* Nächster Schritt (Dok. 06 §17): zurück zum Ort „Kunden". Wohin dieser Ort führt,
+            entscheidet die Sphäre der aktiven Rolle – der Link behauptet deshalb keine
+            Mandantenliste (Mandantengrenze). */}
         <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
           <Link className="tw-cta" href="/twin">
-            ← Zur Mandantenübersicht
+            ← Zurück zu Kunden
           </Link>
         </p>
       </div>

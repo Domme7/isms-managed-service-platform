@@ -106,7 +106,7 @@ export const WORLD_FRAMINGS: Readonly<Record<WorldId, WorldFraming>> = {
     quoteSource: 'Dok. 06 v1.0 §5, „Executive World" (Felder „Erlebnis" / „Bewusst vermeiden")',
     sectionOrder: ['standort', 'datenlage', 'erfassung', 'einstieg'],
     orderRationale:
-      'Von den im Feld „Erlebnis" genannten Punkten ist im Demo-Datenbestand allein ' +
+      'Von den im Feld „Erlebnis" genannten Punkten ist im Datenbestand allein ' +
       '„Unsicherheit" belegt – Entscheidungen, Impact, Optionen und Investitionswirkung sind ' +
       'es nicht. Deshalb steht die Datenlage vorn. „Keine Roh-Control-Listen" rückt die ' +
       'Objektliste des Einstiegs ans Ende.',

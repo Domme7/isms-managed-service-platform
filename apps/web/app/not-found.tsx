@@ -10,8 +10,8 @@ export default function NotFound() {
       <p className="tw-eyebrow">Fehler 404</p>
       <h1>Seite nicht gefunden</h1>
       <p className="tw-lead">
-        Diese Adresse gibt es in der synthetischen Demo-Welt nicht. Möglicherweise ist der Link
-        veraltet oder wurde falsch eingegeben.
+        Diese Adresse gibt es in dieser Anwendung nicht. Möglicherweise ist der Link veraltet oder
+        wurde falsch eingegeben.
       </p>
       <p>
         {/* `tw-back` wie im Twin-404: `tw-card-link` ist für ganze Karten gedacht und

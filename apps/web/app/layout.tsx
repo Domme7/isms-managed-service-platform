@@ -4,7 +4,7 @@ import { SessionProvider } from '../components/shell/SessionProvider';
 
 export const metadata = {
   title: 'ISMS Managed Service Platform',
-  description: 'Phase-1 Demo-Shell mit Rollen-/Mandanten-Simulation und Digital Twin Explorer',
+  description: 'Mandantenfähige Plattform für kontinuierliches Informationssicherheitsmanagement',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

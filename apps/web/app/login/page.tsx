@@ -35,13 +35,21 @@ export default function LoginPage() {
       <main id="inhalt" className="login-page">
         <div className="login-card">
           <p className="tw-eyebrow">ISMS Managed Service Platform</p>
-          <h1>Anmelden – Simulation</h1>
+          <h1>Anmelden</h1>
 
-          <div className="login-demo-notice" role="note">
-            <strong>Demo — simulierte Anmeldung, keine echte Sicherheit.</strong> Es gibt kein
-            Passwort und keine Zugriffskontrolle. Die Auswahl bestimmt nur die Perspektive auf ein
-            gemeinsames, synthetisches Datenmodell. Echte Authentisierung und serverseitige
-            Mandantentrennung folgen in einem späteren Work Package (Dok. 19).
+          {/* DIE EINE STELLE, an der die Reichweite der Auswahl ehrlich benannt wird
+              (WP-028 Slice 4). Vorher stand hier der Demo-Disclaimer („simulierte Anmeldung,
+              keine echte Sicherheit", „synthetisches Datenmodell") und zusätzlich ein
+              Demo-Banner auf JEDER Seite – beides ist mit DR-0011 entfallen.
+              WAS BLEIBT, IST DIE SACHAUSSAGE, nicht die Demo-Kennzeichnung: Rolle und Mandant
+              sind eine Ansicht auf denselben Datenbestand, keine durchgesetzte Zugriffsgrenze.
+              Formuliert als Sach-Lücke („noch nicht angebunden"), nicht als Entschuldigung, und
+              bewusst NUR HIER – nicht auf jeder Seite (DR-0013 Nr. 12). Die geprüfte Anmeldung
+              mit getrennten Identitäten ist ein eigenes Vorhaben (Dok. 19). */}
+          <div className="login-notice" role="note">
+            <strong>Rolle und Mandant sind eine Ansicht, keine Berechtigung.</strong> Die Auswahl
+            steuert Darstellung und Reihenfolge derselben Daten. Ein Passwort und eine geprüfte,
+            serverseitig durchgesetzte Zugriffskontrolle sind hier noch nicht angebunden.
           </div>
 
           <LoginForm

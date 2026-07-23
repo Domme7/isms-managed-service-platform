@@ -31,7 +31,7 @@ export default function Home() {
       </p>
       <p className="tw-empty-actions">
         <Link className="tw-cta" href="/login">
-          Zur Anmelde-Simulation →
+          Zur Anmeldung →
         </Link>
         <Link className="tw-cta" href="/heute">
           Zur App (Heute) →

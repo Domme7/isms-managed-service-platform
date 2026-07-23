@@ -134,7 +134,7 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
             </p>
             <SectionList
               isEmpty={view.risks.length + view.scenarios.length + view.weaknesses.length === 0}
-              emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Risiken, Szenarien oder Schwachstellen modelliert."
+              emptyText="Für diesen Mandanten sind im Datenbestand keine Risiken, Szenarien oder Schwachstellen modelliert."
             >
               {view.risks.map((risk) => (
                 <RiskCard key={risk.risk.object_id} view={risk} tenantId={tenantId} />
@@ -165,7 +165,7 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
             </p>
             <SectionList
               isEmpty={view.controls.length === 0}
-              emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Controls modelliert."
+              emptyText="Für diesen Mandanten sind im Datenbestand keine Controls modelliert."
             >
               {view.controls.map((control) => (
                 <ControlCard key={control.control.object_id} view={control} tenantId={tenantId} />
@@ -181,7 +181,7 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
             </p>
             <SectionList
               isEmpty={view.measures.length === 0}
-              emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Maßnahmen modelliert."
+              emptyText="Für diesen Mandanten sind im Datenbestand keine Maßnahmen modelliert."
             >
               {view.measures.map((measure) => (
                 <MeasureCard key={measure.measure.object_id} view={measure} tenantId={tenantId} />
@@ -198,7 +198,7 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
             </p>
             <SectionList
               isEmpty={view.evidence.length === 0}
-              emptyText="Für diesen Mandanten sind im Demo-Datenbestand keine Nachweise vom Typ Evidence modelliert."
+              emptyText="Für diesen Mandanten sind im Datenbestand keine Nachweise vom Typ Evidence modelliert."
             >
               {view.evidence.map((ev) => (
                 <EvidenceCard key={ev.evidence.object_id} view={ev} tenantId={tenantId} />
@@ -244,8 +244,8 @@ function IsmsAufmacher({
   if (view.isEmpty) {
     return (
       <p className="tw-lead">
-        Für <strong>{tenant.display_name}</strong> ist im Demo-Datenbestand kein ISMS-Kernobjekt
-        erfasst – weder Risiken noch Controls, Maßnahmen oder Nachweise.
+        Für <strong>{tenant.display_name}</strong> ist im Datenbestand kein ISMS-Kernobjekt erfasst
+        – weder Risiken noch Controls, Maßnahmen oder Nachweise.
       </p>
     );
   }
@@ -291,7 +291,7 @@ function IsmsAufmacher({
  *     Prüfstatus) – bleibt Kommentar, keine Kennung im Produkttext (DR-0013 Nr. 2).
  *
  * Die Rahmung geht durch die Verlagerung nicht verloren: jede Karte trägt ihren Stand weiterhin
- * AM WERT gerahmt (ControlCard: „Lebenszyklus-Stand aus dem Demo-Datenbestand – kein
+ * AM WERT gerahmt (ControlCard: „Lebenszyklus-Stand aus dem Datenbestand – kein
  * Prüfergebnis"), und die Verteilungs-Kachel kennzeichnet urteilsklingende Stände am Wort.
  */
 function AbgrenzungSection() {
@@ -299,20 +299,19 @@ function AbgrenzungSection() {
     <section aria-labelledby="isms-abgrenzung">
       <h2 id="isms-abgrenzung">Was diese Seite nicht behauptet</h2>
       <p className="sv-edge-note">
-        Gezeigt wird ausschließlich, was im synthetischen Demo-Datenbestand erfasst ist: Stände,
-        Beziehungen und Nachweise – aus demselben Datenmodell wie der digitale Zwilling. Es gibt
-        hier keinen Score, keinen Reifegrad und keine bewertete Einstufung; Implementierungs- und
-        Wirksamkeitsaussagen bleiben strikt getrennt. Lesen und Schreiben in operativen
-        Quellsystemen findet nicht statt.
+        Gezeigt wird ausschließlich, was im Datenbestand erfasst ist: Stände, Beziehungen und
+        Nachweise – aus demselben Datenmodell wie der digitale Zwilling. Es gibt hier keinen Score,
+        keinen Reifegrad und keine bewertete Einstufung; Implementierungs- und Wirksamkeitsaussagen
+        bleiben strikt getrennt. Lesen und Schreiben in operativen Quellsystemen findet nicht statt.
       </p>
       {/* `tw-muted` bleibt als Klasse erhalten: der Wortgleichheits-Wächter der drei Seiten
           sucht exakt `p.tw-muted` mit „Zum Verständnis:". */}
       <p className="tw-muted tw-seitenfuss">
         <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
-        Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
-        keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
-        etwa einen Zeitraum und einen Prüfstatus tragen.
+        Lebenszyklus-Stände aus dem Datenbestand – <strong>keine Prüfergebnisse</strong> und keine
+        bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung selbst
+        und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann etwa
+        einen Zeitraum und einen Prüfstatus tragen.
       </p>
     </section>
   );
@@ -361,9 +360,9 @@ function EmptyIsms({ tenant }: { tenant: DemoTenant }) {
           auf /entscheidungen behoben wurde — dieser hier bestand seit WP-013 unbemerkt.
           Der Leerzustand sagt jetzt ausschließlich etwas über DIESEN Mandanten. */}
       <p style={{ marginTop: 0 }}>
-        Für <strong>{tenant.display_name}</strong> sind im aktuellen Demo-Datenbestand keine
-        Risiken, Controls, Maßnahmen oder Nachweise modelliert. Der Ort bleibt erreichbar und zeigt
-        hier ausschließlich, was für diesen Mandanten belegt ist.
+        Für <strong>{tenant.display_name}</strong> sind im aktuellen Datenbestand keine Risiken,
+        Controls, Maßnahmen oder Nachweise modelliert. Der Ort bleibt erreichbar und zeigt hier
+        ausschließlich, was für diesen Mandanten belegt ist.
       </p>
       {tenantHasServices ? (
         <p className="tw-muted">
@@ -373,13 +372,13 @@ function EmptyIsms({ tenant }: { tenant: DemoTenant }) {
         </p>
       ) : null}
       <p className="tw-muted">
-        Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Demo-Datenbestand
+        Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Datenbestand
         abgeleitete Objekte – keine erfundenen Risiken, Controls oder Bewertungen.
       </p>
       {/* Nächster Schritt im Empty-State (Dok. 06 §17). */}
       <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
         <Link className="tw-cta" href="/login">
-          Mandant wechseln (Anmelde-Simulation) →
+          Mandant wechseln →
         </Link>
       </p>
     </div>

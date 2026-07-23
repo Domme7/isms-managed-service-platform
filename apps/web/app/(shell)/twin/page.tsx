@@ -1,20 +1,22 @@
 /**
- * Route `/twin` – Mandantenübersicht des Digital Twin Explorers (Server Component, WP-004).
- * Daten kommen als statischer Import aus `@isms/demo-seed` (kein Client-Fetch).
+ * Route `/twin` – Einstieg des Ortes „Kunden" (WP-004; sphärengerecht seit WP-028 Slice 4).
  *
- * WP-020 Slice 1: Die Kontextleiste (Dok. 06 „Sichtbarer Kontext") ist Session-abhängig und
- * damit Client-Zustand – sie wird als `contextSlot` eingebettet, die Übersicht selbst bleibt
- * eine Server Component.
+ * Die Seite entscheidet nicht selbst: `KundenOrtView` liest die aktive Perspektive und zeigt
+ * entweder das Mandanten-Portfolio (Betreiber-/Beraterrollen, Administrator, neutral) oder den
+ * eigenen Mandanten (Kundenrollen, Auditor) – Belege in `lib/shell/sphaere.ts`, Quelle
+ * Dok. 06, Abschnitt „Acht stabile Hauptorte", Zeile „Kunden".
+ *
+ * Daten kommen als statischer Import aus `@isms/demo-seed` (kein Client-Fetch). Weil die
+ * Perspektive Client-Zustand ist, ist der Einstieg client-gerendert (Muster O-WP014-09).
  */
-import { TenantOverview } from '../../../components/twin/TenantOverview';
-import { TwinContextBar } from '../../../components/twin/TwinContextBar';
+import { KundenOrtView } from '../../../components/twin/KundenOrtView';
 import { getTenants } from '../../../lib/twin/data';
 
 export const metadata = {
-  title: 'Digital Twin Explorer',
-  description: 'Read-only Übersicht der Demo-Mandanten des digitalen Zwillings.',
+  title: 'Kunden – ISMS Managed Service Platform',
+  description: 'Einstieg in die Mandanten und ihre digitalen Zwillinge (read-only).',
 };
 
-export default function TwinOverviewPage() {
-  return <TenantOverview tenants={getTenants()} contextSlot={<TwinContextBar />} />;
+export default function KundenOrtPage() {
+  return <KundenOrtView tenants={getTenants()} />;
 }

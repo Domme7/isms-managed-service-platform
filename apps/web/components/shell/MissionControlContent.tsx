@@ -164,9 +164,13 @@ export function MissionControlContent({
 
           <DashboardSection dashboard={dashboard} role={role} />
 
-          {/* Orientierende Notizen (neutraler Einstieg, Kundenbereich) stehen NACH der Antwort,
-              damit sie den Statusblock nicht über der Falz nach unten drücken (Antwort-Modus). */}
-          {role === null ? <NeutralerEinstiegHinweis /> : null}
+          {/* Orientierende Notizen (Ansichtszustand, Kundenbereich) stehen NACH der Antwort,
+              damit sie den Statusblock nicht über der Falz nach unten drücken (Antwort-Modus).
+              WP-028 Slice 4: Der Ein-Satz-Hinweis zur Reichweite der Rollenwahl erscheint jetzt
+              in BEIDEN Zuständen – vorher stand er nur im neutralen Zustand, also genau dort,
+              wo er am wenigsten gebraucht wurde (wer eine Rolle gewählt hat, will wissen, was
+              sie ändert). */}
+          {role === null ? <NeutralerEinstiegHinweis /> : <RollenAnsichtHinweis role={role} />}
 
           <KundenbereichEinstieg role={role} tenant={tenant} />
 
@@ -192,10 +196,10 @@ export function MissionControlContent({
               Besuch", eine Priorisierung) werden benannt – die benannten Lücken selbst stehen
               unmittelbar darüber unter „Was hier bewusst nicht steht". */}
           <p className="ht-seitenfuss">
-            Read-only Startpunkt auf dem synthetischen Demo-Datenbestand des aktiven Mandanten:
-            erfasster Stand, Abdeckungen und Einstiege. Nicht belegt und deshalb hier nicht
-            beantwortet: „seit meinem letzten Besuch" und eine Priorisierung – beide Lücken sind
-            oben unter „Was hier bewusst nicht steht" benannt.
+            Read-only Startpunkt auf dem Datenbestand des aktiven Mandanten: erfasster Stand,
+            Abdeckungen und Einstiege. Nicht belegt und deshalb hier nicht beantwortet: „seit meinem
+            letzten Besuch" und eine Priorisierung – beide Lücken sind oben unter „Was hier bewusst
+            nicht steht" benannt.
           </p>
 
           <SeitenbausteineHinweis ort="heute" />
@@ -209,12 +213,12 @@ export function MissionControlContent({
             Mandant im Datenbestand nicht auflösbar
           </h2>
           <p style={{ marginTop: 0 }}>
-            Zur aktiven Auswahl existiert im Demo-Datenbestand kein Mandant. Es wird bewusst kein
+            Zur aktiven Auswahl existiert im Datenbestand kein Mandant. Es wird bewusst kein
             Ersatzinhalt gezeigt.
           </p>
           <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
             <Link className="tw-cta" href="/login">
-              Zur Anmelde-Simulation →
+              Zur Anmeldung →
             </Link>
           </p>
         </div>
@@ -334,6 +338,26 @@ function NeutralerEinstiegHinweis() {
         ohne Rollen-Personalisierung. Optional können Sie oben unter „Rolle" eine Produktrolle
         wählen – sie ändert nur Betonung und Reihenfolge, nie die Daten, und ist jederzeit wieder
         abwählbar.
+      </p>
+    </div>
+  );
+}
+
+/**
+ * Reichweite der Rollenwahl im ROLLENMODUS – ein Satz (WP-028 Slice 4, DR-0013 Nr. 12).
+ *
+ * Bis hierher stand die Aussage „die Rolle ändert nur Betonung und Reihenfolge, nie die Daten"
+ * ausschließlich im neutralen Zustand. Wer eine Rolle wählte, bekam sie nie zu sehen – dabei
+ * ist genau dann die Frage offen, was sich gerade geändert hat. Bewusst EIN Satz mit dem
+ * Rollennamen (ohne Rollencode) und ohne Design-Theorie; die vollständige Herleitung der
+ * Reihenfolge lebt in `lib/heute/rollenvarianten.ts`.
+ */
+function RollenAnsichtHinweis({ role }: { role: DemoRole }) {
+  return (
+    <div className="ht-neutral" role="note">
+      <p className="ht-neutral-text">
+        <strong>Ansicht {role.name}:</strong> Die Rolle ändert nur Betonung und Reihenfolge, nie die
+        Daten – und ist jederzeit oben wieder abwählbar.
       </p>
     </div>
   );
@@ -581,9 +605,11 @@ function StandortSection({
               „Kanonisches Rollenmodell") – nichts übersetzt. Der NAME der Erlebniswelt steht
               bereits querschnittlich in der Kontextzeile und wird hier nicht wiederholt; neu
               ist an dieser Stelle ihre Leitfrage. */}
+          {/* KEIN Rollencode im UI (WP-028 Slice 4, DR-0013 Nr. 12): Die Zeile „Rollen-ID: R01"
+              war interne Kennung im Produkttext. Die ID bleibt unverändert im Datenmodell
+              (`DemoRole.id`) und trägt weiterhin Auswahl und Zuordnung – sie ist Kennung, kein
+              Anzeigetext. Die Rolle bleibt mit ihrem NAMEN eindeutig benannt. */}
           <dl className="tw-meta">
-            <dt>Rollen-ID</dt>
-            <dd>{role.id}</dd>
             <dt>Produktrolle</dt>
             <dd>{role.name}</dd>
             <dt>Sphäre</dt>
@@ -610,24 +636,23 @@ function StandortSection({
         <p className="tw-muted">
           Keine Rolle gewählt – Sie arbeiten im neutralen Einstieg. Die Rollenwahl oben in der
           Leiste ist optional; sie ändert nur Betonung und Reihenfolge der Abschnitte, nie die
-          Daten. In einer produktiven Umgebung käme die Rolle aus dem Konto; die freie Wahl ist eine
-          Eigenschaft dieser Demo.
+          Daten.
         </p>
       )}
       {/* Quelle „eine Wahrheit je Rolle": Dok. 06 06-D05 (Signatur seit dem Review-Pass nur
           im Kommentar – Konzept-Jargon gehört nicht in den Produkttext). */}
       <p className="tw-muted">
-        Die Rolle ist in dieser Demo reine Perspektive: Sie ordnet die Abschnitte dieser Seite, und
-        diese Reihenfolge ist keine Rangfolge. Sie entscheidet nicht über Zugriff – alle zwölf
-        Rollen und der neutrale Zustand sehen hier dieselben Daten desselben Mandanten. Rechte und
-        Zugriffskontrolle sind in dieser Demo nicht abgebildet.
+        Die Rolle ist eine Perspektive: Sie ordnet die Abschnitte dieser Seite, und diese
+        Reihenfolge ist keine Rangfolge. Sie entscheidet nicht über Zugriff – alle zwölf Rollen und
+        der neutrale Zustand sehen hier dieselben Daten desselben Mandanten. Geprüfte Rechte und
+        eine durchgesetzte Zugriffskontrolle sind hier noch nicht angebunden.
       </p>
 
       <h3>Aktiver Mandant</h3>
       <dl className="tw-meta">
         <dt>Mandant</dt>
         <dd>{tenant.display_name}</dd>
-        <dt>Branche (synthetisch)</dt>
+        <dt>Branche</dt>
         <dd>{tenant.industry}</dd>
       </dl>
 
@@ -664,7 +689,7 @@ function EmptyTenant({ tenant }: { tenant: DemoTenant }) {
     <div className="tw-empty" role="note">
       <h4>Kein Datenbestand für {tenant.display_name}</h4>
       <p style={{ marginTop: 0 }}>
-        Für <strong>{tenant.display_name}</strong> sind im Demo-Datenbestand keine Objekte und keine
+        Für <strong>{tenant.display_name}</strong> sind im Datenbestand keine Objekte und keine
         Beziehungen modelliert. Deshalb stehen hier keine Zahlen – und es werden auch keine
         erfunden.
       </p>
@@ -676,7 +701,7 @@ function EmptyTenant({ tenant }: { tenant: DemoTenant }) {
       </p>
       <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
         <Link className="tw-cta" href="/login">
-          Mandant wechseln (Anmelde-Simulation) →
+          Mandant wechseln →
         </Link>
       </p>
     </div>
@@ -718,7 +743,7 @@ function ErfassungSection({ model }: { model: MissionControlModel }) {
         <p className="tw-empty" role="note">
           Für diesen Mandanten ist im Datenbestand nichts erfasst: es gibt weder Objekte noch
           Beziehungen und damit auch keinen Erfassungszeitpunkt. Weiter geht es über den Wechsel des
-          Mandanten in der Anmelde-Simulation.
+          Mandanten.
         </p>
       )}
 
@@ -838,9 +863,9 @@ function EinstiegSection({ model, tenant }: { model: MissionControlModel; tenant
         </ul>
       ) : (
         <p className="tw-empty" role="note">
-          Für {tenant.display_name} sind im Demo-Datenbestand keine Objekte modelliert, in die
-          eingestiegen werden könnte. Der Zwilling dieses Mandanten bleibt erreichbar und zeigt
-          denselben – leeren – Stand; ein Mandantenwechsel ist über die Anmelde-Simulation möglich.
+          Für {tenant.display_name} sind im Datenbestand keine Objekte modelliert, in die
+          eingestiegen werden könnte. Der digitale Zwilling dieses Mandanten bleibt erreichbar und
+          zeigt denselben – leeren – Stand.
         </p>
       )}
     </section>
@@ -916,9 +941,9 @@ function HonestySection({ model }: { model: MissionControlModel }) {
       <h2 id="heute-luecke">Was hier bewusst nicht steht</h2>
       <p className="sv-edge-note">
         Drei im Konzept beschriebene Bausteine dieses Ortes fehlen. Die Ursache ist je Baustein eine
-        andere und steht darunter jeweils dabei – Datenbestand, Datenmodell oder Anmelde-Simulation.
-        Sie werden hier benannt statt verborgen: ein leerer Platzhalter oder ein erfundener Inhalt
-        wäre die schlechtere Antwort.
+        andere und steht darunter jeweils dabei – Datenbestand, Datenmodell oder Anmeldung. Sie
+        werden hier benannt statt verborgen: ein leerer Platzhalter oder ein erfundener Inhalt wäre
+        die schlechtere Antwort.
       </p>
       <ul className="sv-items">
         <li>
@@ -928,15 +953,14 @@ function HonestySection({ model }: { model: MissionControlModel }) {
               Übersetzung – hier wird keine erfunden (Review-Fix).
 
               WP-017: Der Satz nannte vorher auch „Decision Record" als nicht vorhanden. Seit der
-              Entscheidungsschicht im Demo-Datenbestand wäre das falsch; er ist deshalb auf „Task"
+              Entscheidungsschicht im Datenbestand wäre das falsch; er ist deshalb auf „Task"
               verengt. Die Begründung trägt weiterhin: es fehlen die Aufgabenobjekte UND die
               Vertragsfelder für Fälligkeit, Aufwand, Kapazität und Priorität. */}
           <span className="sv-item-note">
-            Ursache in der Datenlage: Der Demo-Datenbestand enthält keine Objekte des Typs „Task" –
-            der Typ steht im kanonischen Katalog, ist aber in keinem Mandanten angelegt. Das
-            Datenmodell kennt außerdem kein Feld für Fälligkeit, Aufwand, Kapazität oder Priorität.
-            Ohne Aufgaben und ohne diese Angaben wäre jede Tagesmission und jede Reihenfolge
-            erfunden.
+            Ursache in der Datenlage: Der Datenbestand enthält keine Objekte des Typs „Task" – der
+            Typ steht im kanonischen Katalog, ist aber in keinem Mandanten angelegt. Das Datenmodell
+            kennt außerdem kein Feld für Fälligkeit, Aufwand, Kapazität oder Priorität. Ohne
+            Aufgaben und ohne diese Angaben wäre jede Tagesmission und jede Reihenfolge erfunden.
           </span>
         </li>
         <li>
@@ -955,10 +979,10 @@ function HonestySection({ model }: { model: MissionControlModel }) {
         <li>
           <span className="sv-item-name">Wiederaufnahme („seit meinem letzten Besuch")</span>
           <span className="sv-item-note">
-            Ursache in der Datenlage: Die Anmelde-Simulation speichert ausschließlich den gewählten
-            Mandanten und optional eine gewählte Rolle – keinen Besuchszeitpunkt, keinen bestätigten
-            Zustand und keinen Entwurf. Ein Vergleich mit einem früheren Besuch wäre damit nicht
-            belegt, sondern behauptet.
+            Ursache in der Datenlage: Die Anmeldung speichert ausschließlich den gewählten Mandanten
+            und optional eine gewählte Rolle – keinen Besuchszeitpunkt, keinen bestätigten Zustand
+            und keinen Entwurf. Ein Vergleich mit einem früheren Besuch wäre damit nicht belegt,
+            sondern behauptet.
           </span>
         </li>
       </ul>

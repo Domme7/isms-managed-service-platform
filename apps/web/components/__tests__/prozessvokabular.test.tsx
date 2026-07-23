@@ -38,6 +38,7 @@ import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
+import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
 import { TenantDetailView } from '../twin/TenantDetailView';
 import { TenantOverview } from '../twin/TenantOverview';
@@ -165,6 +166,37 @@ const RENDERER_JE_LIVE_ORT = {
       kontext: `/twin/${t.tenant_id} · Detailseite`,
       render: () => render(<TenantDetailView model={buildTenantDetail(t)} />),
     })),
+    // Ein-Unternehmens-Einstieg des Ortes (WP-028 Slice 4): voller UND leerer Mandant.
+    {
+      kontext: '/twin · Ein-Unternehmens-Einstieg (R01 · nordwerk)',
+      render: () =>
+        render(
+          <EigenerMandantEinstieg
+            role={role('R01')}
+            tenant={tenant(TENANT_ID.NORDWERK)}
+            objectCount={34}
+            relationshipCount={51}
+            scopeIds={['scope-nordwerk-isms-core']}
+            recordedOn="2026-03-16"
+            recordedOnDisplay="16.03.2026"
+          />,
+        ),
+    },
+    {
+      kontext: '/twin · Ein-Unternehmens-Einstieg (R07 · finovia, leer)',
+      render: () =>
+        render(
+          <EigenerMandantEinstieg
+            role={role('R07')}
+            tenant={tenant(TENANT_ID.FINOVIA)}
+            objectCount={0}
+            relationshipCount={0}
+            scopeIds={[]}
+            recordedOn={null}
+            recordedOnDisplay={null}
+          />,
+        ),
+    },
     // Kunden-Startseite „verwalten" (`/kunden`, WP-006 Slice 1): Kundenrolle, Betreiberrolle und
     // neutral über volle UND leere Mandanten – Leerzustände sind die Versuchungsstelle (Lektion 12).
     {

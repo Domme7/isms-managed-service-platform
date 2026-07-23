@@ -488,7 +488,7 @@ export const DECISION_CARD_FIELDS: readonly DecisionCardField[] = [
     field: 'Ressourcen',
     coverage: 'kein Träger',
     carrier:
-      'Kein Feld für Aufwand, Kapazität oder Skills. Geldangaben sind im Demo-Datenbestand ' +
+      'Kein Feld für Aufwand, Kapazität oder Skills. Geldangaben sind im Datenbestand ' +
       'ausdrücklich ausgeschlossen und werden hier auch nicht ersatzweise geschätzt.',
   },
   {
@@ -603,7 +603,7 @@ export const DECISION_CARD_FIELDS_DOK06: readonly DecisionCardField[] = [
     field: 'Kosten-, Zeit- und Kapazitätsannahmen',
     coverage: 'kein Träger',
     carrier:
-      'Kein Feld für Zeit- oder Kapazitätsannahmen; Geldangaben sind im Demo-Datenbestand ' +
+      'Kein Feld für Zeit- oder Kapazitätsannahmen; Geldangaben sind im Datenbestand ' +
       'ausdrücklich ausgeschlossen und werden auch nicht ersatzweise geschätzt.',
   },
   {

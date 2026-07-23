@@ -12,7 +12,7 @@
  *     keine hartkodierten IDs).
  *  3. Zusätzlich: Einstieg aus der ISMS- und der Services-Ansicht (session-gebunden).
  *
- * DATENBEFUND (nicht erfunden, aus dem Seed abgeleitet): Der Demo-Seed enthält KEINE direkte
+ * DATENBEFUND (nicht erfunden, aus dem Seed abgeleitet): Der Datenbestand enthält KEINE direkte
  * Kante zwischen Nachweis (Evidence) und Maßnahme (Measure). Die geforderte Reihenfolge ist
  * daher nur mit Zwischenschritten begehbar – der Test sucht je Etappe den kürzesten Weg über
  * echte Links und weist die Zwischenschritte aus, statt eine Kante zu behaupten, die es nicht

@@ -375,7 +375,7 @@ export function deriveObservations(
       method:
         'Gezählt werden die verschiedenen Scope-Kennungen aller Objekte dieses ' +
         'Mandanten, zu denen es im Datenbestand kein Objekt mit derselben Kennung gibt. ' +
-        'Scopes sind im Demo-Datenbestand nicht als eigene Objekte angelegt; die Zuordnung ' +
+        'Scopes sind im Datenbestand nicht als eigene Objekte angelegt; die Zuordnung ' +
         'bleibt deshalb als rohe Kennung sichtbar.',
     },
     {
@@ -458,7 +458,7 @@ export const OBJECT_ENTRY_RULE =
   'Gezeigt wird je Objektfamilie das erste Objekt in der Reihenfolge des Datenbestands, ' +
   'Familien in der kanonischen Reihenfolge. Das ist eine feste Reihenfolge und keine ' +
   'Priorisierung: Es wird nichts bewertet, gewichtet oder empfohlen. Die vollständige ' +
-  'Objektliste steht im Zwilling des Mandanten.';
+  'Objektliste steht im digitalen Zwilling des Mandanten.';
 
 /**
  * Bestandsangaben, die dieses Modul nicht selbst zählen darf, ohne die vorhandene Fachlogik zu
@@ -516,7 +516,7 @@ export function derivePlaceEntryPoints(
       // deshalb WEG: eine Portfolio-Sicht ist auf „Heute" Nicht-Ziel, und die Zielseite dieses
       // Links beantwortet sie nicht (Review-Fix). Label und Bestandsangabe sagen bereits, was
       // dort steht; für /isms und /services bleibt die Leitfrage des Ortes unverändert.
-      label: 'Zwilling dieses Mandanten',
+      label: 'Digitaler Zwilling dieses Mandanten',
       href: tenantDetailHref(tenantId),
       stock: [
         { label: 'Objekte', count: objects.length },

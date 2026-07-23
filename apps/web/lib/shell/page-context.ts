@@ -4,7 +4,7 @@
  * QUELLE (Regel Null, am PDF gegengelesen): Dok. 06, Abschnitt „Sichtbarer Kontext" – die
  * Kontextleiste jeder Hauptseite zeigt u. a. „Scope oder Objektkontext" und „Datenstand /
  * letzter Synchronisationszeitpunkt". Dieses Modul leitet BEIDE ausschließlich aus belegten
- * Feldern des Demo-Datenbestands ab (`scope_ids`, `record_time.recorded_at`); es wird nichts
+ * Feldern des Datenbestands ab (`scope_ids`, `record_time.recorded_at`); es wird nichts
  * hartkodiert, nichts geschätzt und nichts verdichtet, was eine Bewertung wäre.
  *
  * „Datenstand" ist ausdrücklich die SYSTEMACHSE (`record_time.recorded_at`, Dok. 07 §11) und

@@ -166,7 +166,7 @@ describe('EntscheidungenContent – Antwort-Modus (WP-028 Slice 3, DR-0013)', ()
     );
     expect(satzAus(entscheidungen.container)).toBe(referenz);
     // Der Wortlaut selbst bleibt festgenagelt (er trägt die Aussage 08-D07).
-    expect(referenz).toMatch(/Lebenszyklus-Stände aus dem Demo-Datenbestand/);
+    expect(referenz).toMatch(/Lebenszyklus-Stände aus dem Datenbestand/);
     expect(referenz).toMatch(/keine Prüfergebnisse/);
     expect(referenz).toMatch(/Status der Beziehung/);
   });
@@ -524,12 +524,12 @@ describe('EntscheidungenContent – Leerzustände', () => {
         /f(ü|ue)r \d+ Mandanten/i,
         /f(ü|ue)r einen Mandanten/i,
         /anderen? Mandanten/i,
-        /Mandanten im Demo-Datenbestand/i,
+        /Mandanten im Datenbestand/i,
       ]) {
         expect(muster.test(text), `„${muster}" ist eine Aussage über fremde Mandanten`).toBe(false);
       }
       // Und die mandantenlokale Formulierung steht statt ihrer.
-      expect(text).toMatch(/Für diesen Mandanten ist im synthetischen Datenbestand keine/);
+      expect(text).toMatch(/Für diesen Mandanten ist keine Entscheidung erfasst/);
     });
   }
 
@@ -633,7 +633,7 @@ const BEWERTUNG_VERBOTEN = [
   /\bkritisch/i,
 ];
 
-/** Geld ist im gesamten Demo-Datenbestand ausgeschlossen (WP-017 Nicht-Ziele, Guardrail). */
+/** Geld ist im gesamten Datenbestand ausgeschlossen (WP-017 Nicht-Ziele, Guardrail). */
 const GELD_VERBOTEN = [
   /€/,
   /\bEUR\b/,
@@ -999,24 +999,19 @@ describe('EntscheidungenContent – Heading-Hierarchie', () => {
  * 12. Sitzungsrahmen
  * --------------------------------------------------------------------------- */
 
-describe('EntscheidungenView – Sitzungsrahmen (Simulation, keine Authz)', () => {
+describe('EntscheidungenView – Sitzungsrahmen (Perspektive, keine Authz)', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('zeigt ohne Anmeldung einen Hinweis mit Link auf die Login-Simulation', () => {
+  it('zeigt ohne gewählten Mandanten einen Hinweis mit Link zur Anmeldung', () => {
     render(
       <SessionProvider>
         <EntscheidungenView />
       </SessionProvider>,
     );
-    expect(
-      screen.getByRole('heading', { name: /Nicht angemeldet \(Simulation\)/ }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Zur Anmelde-Simulation/ })).toHaveAttribute(
-      'href',
-      '/login',
-    );
+    expect(screen.getByRole('heading', { name: /Kein Mandant gewählt/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Zur Anmeldung/ })).toHaveAttribute('href', '/login');
   });
 
   it('zeigt mit aktiver Session das Register des gewählten Mandanten', () => {

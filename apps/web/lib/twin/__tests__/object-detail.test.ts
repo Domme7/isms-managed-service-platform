@@ -391,7 +391,7 @@ describe('Was als Nächstes? – ausschließlich belegte Beobachtungen', () => {
   });
 
   it('bindet den Leersatz an die Seed-Invariante: jedes evidences-Ziel ist ein R15-Zieltyp', () => {
-    // Der Nutzertext „auch ein Nachweisbezug ist für diesen Objekttyp im Demo-Datenbestand
+    // Der Nutzertext „auch ein Nachweisbezug ist für diesen Objekttyp im Datenbestand
     // nicht modelliert" ist eine Aussage ÜBER den Seed, wird aber aus EVIDENCE_TARGET_TYPES
     // abgeleitet. Beides deckt sich nur, solange keine `evidences`-Kante auf einen Objekttyp
     // AUSSERHALB dieser Liste zeigt. Käme eine hinzu (z. B. auf ein SLA), wäre der Satz auf den

@@ -1,7 +1,7 @@
 /**
  * Unit-Tests der Seitenkontext-Ableitung (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext").
  *
- * Geprüft gegen den ECHTEN Demo-Datenbestand (keine Fixtures für die Kernaussagen – Lektion:
+ * Geprüft gegen den ECHTEN Datenbestand (keine Fixtures für die Kernaussagen – Lektion:
  * Zahlen nachrechnen, nie abschreiben) plus dem leeren Grenzfall:
  *  1. Nordwerk: Scope-Kennungen in Reihenfolge des ersten Auftretens; jüngster Erfassungstag
  *     ist der Kalendertag der letzten Erfassungswelle (identisch zur Ableitung auf „Heute").

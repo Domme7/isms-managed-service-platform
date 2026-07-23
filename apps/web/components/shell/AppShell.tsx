@@ -41,14 +41,14 @@ interface ContextChange {
   readonly kind: 'tenant' | 'role';
   /** Kurztitel des Moduswechsels („Rolle gewechselt" / „Rolle gewählt" / „Rolle abgewählt"). */
   readonly titel?: string;
-  /** Anzeigename des vorherigen Kontexts (Mandant, „R0x · Rolle" oder neutral). */
+  /** Anzeigename des vorherigen Kontexts (Mandantenname, Rollenname oder neutral). */
   readonly from: string;
   /** Anzeigename des neuen Kontexts. */
   readonly to: string;
 }
 
 /** Anzeigename des neutralen Zustands in Wechsel-Rückmeldungen (DR-0009). */
-const NEUTRAL_ANZEIGE = 'neutraler Einstieg (keine Rolle)';
+const NEUTRAL_ANZEIGE = 'Ansicht ohne Rolle';
 
 export function AppShell({
   places,
@@ -148,8 +148,10 @@ export function AppShell({
     const toRole = roleId !== null ? roles.find((r) => r.id === roleId) : null;
     if (roleId !== null && !toRole) return;
 
-    const from = session.role ? `${session.role.id} · ${session.role.name}` : NEUTRAL_ANZEIGE;
-    const to = toRole ? `${toRole.id} · ${toRole.name}` : NEUTRAL_ANZEIGE;
+    // Ohne Rollencode (DR-0013 Nr. 12): der Name benennt die Rolle eindeutig, die ID ist
+    // Kennung im Datenmodell und kein Anzeigetext.
+    const from = session.role ? session.role.name : NEUTRAL_ANZEIGE;
+    const to = toRole ? toRole.name : NEUTRAL_ANZEIGE;
     const titel =
       session.role === null ? 'Rolle gewählt' : toRole ? 'Rolle gewechselt' : 'Rolle abgewählt';
     onSwitchRole(roleId);
@@ -265,11 +267,16 @@ export function AppShell({
         ) : null}
       </div>
 
-      {/* Sichtbarer, permanenter Demo-Hinweis (Dok. 06 §20 „Demo-Kennzeichnung sichtbar"). */}
-      <div className="shell-demo-banner" role="note">
-        <strong>Demo-Simulation.</strong> Rolle und Mandant sind frei wählbar und stellen KEINE
-        echte Anmeldung, Autorisierung oder Sicherheitsgrenze dar. Alle Daten sind synthetisch.
-      </div>
+      {/* ENTFALLEN mit WP-028 Slice 4 (DR-0011): der permanente Demo-Banner unter der Kopfleiste
+          („Demo-Simulation. … Alle Daten sind synthetisch."). Er stand auf jeder Seite über dem
+          Inhalt und war reine Meta-Kennzeichnung.
+          WO DIE SUBSTANZ GEBLIEBEN IST (die Grenze aus DR-0011 „Was bleibt"):
+           - Dass Rolle und Mandant eine ANSICHT sind und keine Berechtigung, sagt jetzt die
+             Kopfleiste selbst („Ansicht: Rolle / Mandant", „Ansicht zurücksetzen") und einmal
+             ruhig der Einstieg (`/login`).
+           - Die Datenehrlichkeit (erfasst ≠ geprüft, „x von y", benannte Lücken) und die
+             Mandantengrenze („nur der aktive Mandant") stehen unverändert im Seiteninhalt und
+             sind weiterhin per Wächtertest belegt. */}
 
       <div className="shell-body" data-nav-open={navOpen ? 'true' : 'false'}>
         <ShellNav

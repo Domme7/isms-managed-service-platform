@@ -1,12 +1,30 @@
 /**
- * Globale Topbar der Shell (WP-011, Dok. 06 §4; Wechsler-Umbau WP-020 Slice 1).
+ * Globale Topbar der Shell (WP-011, Dok. 06 §4; Wechsler-Umbau WP-020 Slice 1;
+ * Ehrlichkeits- und Sphären-Umbau WP-028 Slice 4).
  *
- * Zeigt Betreiber-/Produktidentität, den sichtbaren Kontext (aktive Rolle + Mandant, Dok. 06 P07 /
- * 06-D04) sowie die jederzeit bedienbaren Wechsler und "Abmelden". Der Wechsel erfolgt über
- * native `<select>` (tastatur- und screenreaderfreundlich) – das ist reine Demo-Perspektive,
- * KEINE Autorisierung.
+ * Zeigt Produktidentität, den sichtbaren Kontext (aktive Rolle + Mandant, Dok. 06, Abschnitt
+ * „Sichtbarer Kontext") sowie die jederzeit bedienbaren Ansichts-Umschalter.
  *
- * MANDANTENWECHSEL IST NICHT MEHR STILL (Dok. 06, Abschnitt „Sichtbarer Kontext", Kasten
+ * WP-028 SLICE 4 – DIE KOPFLEISTE SAGT, WAS SIE TUT (DR-0013 Nr. 12):
+ *  1. **„Ansicht: Rolle / Mandant"** statt zweier nackter Auswahlfelder. Die beiden Felder
+ *     steuern Darstellung und Reihenfolge, nicht Berechtigungen – die Beschriftung sagt das
+ *     jetzt selbst, statt es einem Beipackzettel zu überlassen.
+ *  2. **„Ansicht zurücksetzen"** statt „Abmelden". Es gibt keine Anmeldung, die man beenden
+ *     könnte; der Knopf verwirft die gewählte Ansicht. Ein „Abmelden" hätte eine Sicherheit
+ *     behauptet, die hier nicht existiert.
+ *  3. **Keine Rollencodes im sichtbaren Text.** „R01 · Executive Sponsor" → „Executive Sponsor"
+ *     (DR-0013 Nr. 2: kein internes Vokabular im UI). Der Code bleibt unverändert im
+ *     Datenmodell (`DemoRole.id`) und trägt weiterhin `key`/`value` der Auswahl – er ist
+ *     Kennung, kein Anzeigetext.
+ *  4. **Kein Demo-Abzeichen, kein Demo-Titel** (DR-0011): der frühere „DEMO"-Chip mit dem
+ *     Titel „Simulierte Anmeldung – keine echte Sicherheit" ist ersatzlos entfallen.
+ *
+ * SPHÄRE AN ROLLE GEKOPPELT (DR-0013 Nr. 11 / DR-0012, `lib/shell/sphaere.ts`): In der
+ * Ein-Unternehmens-Sicht (Kundenrollen und Auditor) wird der Mandant NICHT als Auswahl
+ * angeboten. Er bleibt trotzdem sichtbar – der aktive Mandant ist Pflichtangabe des sichtbaren
+ * Kontexts (Dok. 06). Es wird dabei keine Aussage über andere Mandanten getroffen.
+ *
+ * MANDANTENWECHSEL IST NICHT STILL (Dok. 06, Abschnitt „Sichtbarer Kontext", Kasten
  * CROSS-TENANT-SCHUTZ: „Ein Wechsel zwischen Mandanten benötigt eine klare visuelle
  * Kontextänderung."): Die Auswahl im Mandanten-Select wechselt NICHT direkt, sondern meldet nur
  * einen Wechselwunsch (`onRequestTenantSwitch`). Bestätigung und sichtbare Rückmeldung liegen in
@@ -18,10 +36,11 @@
  * Umschalt-Rückmeldung.
  *
  * ROLLENWAHL IN DER APP (WP-020 Slice 2, DR-0009): Der Rollen-Wechsler führt zusätzlich den
- * NEUTRALEN Zustand („neutral · keine Rolle") – Wahl UND Abwahl sind jederzeit möglich.
+ * NEUTRALEN Zustand („ohne Rolle") – Wahl UND Abwahl sind jederzeit möglich.
  * ZUKUNFTSSICHERHEIT: In einer produktiven Umgebung käme die Rolle aus dem Konto (Dok. 19);
- * die freie Wahl inklusive „neutral" ist eine Demo-Eigenschaft. Der Pflicht-Anker O-WP020-04
- * („Kritische Aktionen speichern die aktive Rolle mit") lebt unverändert in `AppShell`.
+ * die freie Wahl inklusive „ohne Rolle" ist eine Eigenschaft dieses Aufbaustands. Der
+ * Pflicht-Anker O-WP020-04 („Kritische Aktionen speichern die aktive Rolle mit") lebt
+ * unverändert in `AppShell`.
  *
  * Rein präsentational: alle Zustände/Aktionen kommen als Props herein (leicht testbar).
  */
@@ -29,9 +48,13 @@ import Link from 'next/link';
 import type { DemoRole } from '../../lib/shell/roles';
 import type { DemoTenant } from '@isms/demo-seed';
 import type { ResolvedSession } from '../../lib/shell/session';
+import { mandantenwechselSichtbar } from '../../lib/shell/sphaere';
 
 /** Select-Wert des neutralen Zustands (kein Rollen-ID-Namensraum: R01–R12 bleiben frei). */
 const NEUTRAL_VALUE = '';
+
+/** Sichtbarer Name des neutralen Zustands – ohne Rollencode, wie alle Rollennamen. */
+export const NEUTRAL_ROLLEN_OPTION = 'ohne Rolle';
 
 export function Topbar({
   session,
@@ -54,6 +77,7 @@ export function Topbar({
   onSwitchRole: (roleId: string | null) => void;
   /** Meldet einen Wechselwunsch – der eigentliche Wechsel folgt erst nach Bestätigung. */
   onRequestTenantSwitch: (tenantId: string) => void;
+  /** Verwirft die gewählte Ansicht (Rolle + Mandant) – es gibt keine Anmeldung zu beenden. */
   onSignOut: () => void;
   onToggleNav?: () => void;
   navOpen?: boolean;
@@ -61,6 +85,9 @@ export function Topbar({
   /** Optionale DOM-ID des Mandanten-Selects (Fokus-Rückführung nach „Abbrechen", Code F5). */
   tenantSelectId?: string;
 }) {
+  // Sphärengerecht: in der Ein-Unternehmens-Sicht ist der Mandant Kontext, keine Auswahl.
+  const mandantWaehlbar = session ? mandantenwechselSichtbar(session.role) : true;
+
   return (
     <header className="shell-topbar">
       <div className="shell-topbar-left">
@@ -80,9 +107,6 @@ export function Topbar({
           </span>
           <span className="shell-brand-name">Managed Service Platform</span>
         </Link>
-        <span className="shell-demo-badge" title="Simulierte Anmeldung – keine echte Sicherheit">
-          DEMO
-        </span>
       </div>
 
       <div className="shell-topbar-right">
@@ -92,7 +116,13 @@ export function Topbar({
           </span>
         ) : session ? (
           <>
-            <div className="shell-switch">
+            {/* Eine benannte Gruppe statt zweier zusammenhangloser Felder: die Beschriftung
+                sagt, dass hier die ANSICHT gesteuert wird (DR-0013 Nr. 12). */}
+            {/* biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf einem `div` ist gültiges ARIA für diese Kopfzeilen-Gruppe; `fieldset` verlangt eine `legend` und ist für Formular-Abschnitte gedacht – hier steuern die Felder eine Ansicht, es gibt kein Formular und kein Submit. Dokumentiertes Bestandsmuster (`AppShell`, `od-context`). */}
+            <div className="shell-switch" role="group" aria-label="Ansicht: Rolle und Mandant">
+              <span className="shell-switch-title" aria-hidden="true">
+                Ansicht:
+              </span>
               <label className="shell-switch-field">
                 <span className="shell-switch-label">Rolle</span>
                 <select
@@ -101,45 +131,59 @@ export function Topbar({
                   onChange={(e) =>
                     onSwitchRole(e.target.value === NEUTRAL_VALUE ? null : e.target.value)
                   }
-                  aria-label="Aktive Rolle wechseln (Simulation)"
+                  aria-label="Ansicht: Rolle"
                 >
                   {/* Neutral steht ZUERST: es ist der Einstiegszustand (DR-0009), keine
                       dreizehnte Rolle. Wahl und Abwahl sind jederzeit möglich. */}
-                  <option value={NEUTRAL_VALUE}>neutral · keine Rolle</option>
+                  <option value={NEUTRAL_VALUE}>{NEUTRAL_ROLLEN_OPTION}</option>
                   {roles.map((role) => (
+                    /* `value` trägt die Rollen-ID (Kennung), der sichtbare Text nur den
+                       Namen – kein Rollencode im UI (DR-0013 Nr. 12). */
                     <option key={role.id} value={role.id}>
-                      {role.id} · {role.name}
+                      {role.name}
                     </option>
                   ))}
                 </select>
               </label>
-              <label className="shell-switch-field">
-                <span className="shell-switch-label">Mandant</span>
-                {/* Kontrolliert über den AKTIVEN Mandanten: bis zur Bestätigung in `AppShell`
-                    springt die Anzeige auf den tatsächlichen Kontext zurück – das Select zeigt
-                    nie einen Mandanten an, der noch nicht aktiv ist (CROSS-TENANT-SCHUTZ). */}
-                <select
-                  className="shell-select"
-                  id={tenantSelectId}
-                  value={session.tenant.tenant_id}
-                  onChange={(e) => onRequestTenantSwitch(e.target.value)}
-                  aria-label="Aktiven Mandanten wechseln (Simulation)"
-                >
-                  {tenants.map((tenant) => (
-                    <option key={tenant.tenant_id} value={tenant.tenant_id}>
-                      {tenant.display_name}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              {mandantWaehlbar ? (
+                <label className="shell-switch-field">
+                  <span className="shell-switch-label">Mandant</span>
+                  {/* Kontrolliert über den AKTIVEN Mandanten: bis zur Bestätigung in `AppShell`
+                      springt die Anzeige auf den tatsächlichen Kontext zurück – das Select zeigt
+                      nie einen Mandanten an, der noch nicht aktiv ist (CROSS-TENANT-SCHUTZ). */}
+                  <select
+                    className="shell-select"
+                    id={tenantSelectId}
+                    value={session.tenant.tenant_id}
+                    onChange={(e) => onRequestTenantSwitch(e.target.value)}
+                    aria-label="Ansicht: Mandant"
+                  >
+                    {tenants.map((tenant) => (
+                      <option key={tenant.tenant_id} value={tenant.tenant_id}>
+                        {tenant.display_name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : (
+                /* Ein-Unternehmens-Sicht: der aktive Mandant bleibt sichtbarer Pflichtkontext
+                   (Dok. 06), wird aber nicht zur Auswahl gestellt. Bewusst KEINE Aussage über
+                   andere Mandanten – weder ihre Zahl noch ihre Existenz. */
+                /* Native Definitionsliste statt ARIA-Verdrahtung: Beschriftung und Wert sind
+                   ohne Attribute verbunden (Muster der Kontextleiste `od-context`). */
+                <dl className="shell-switch-field shell-switch-field--fest">
+                  <dt className="shell-switch-label">Mandant</dt>
+                  <dd className="shell-switch-value">{session.tenant.display_name}</dd>
+                </dl>
+              )}
             </div>
             <button type="button" className="shell-signout" onClick={onSignOut}>
-              Abmelden
+              Ansicht zurücksetzen
             </button>
           </>
         ) : (
           <Link href="/login" className="shell-signin-link">
-            Anmelden (Simulation)
+            Mandant wählen
           </Link>
         )}
       </div>

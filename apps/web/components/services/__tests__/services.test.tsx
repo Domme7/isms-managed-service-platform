@@ -89,7 +89,7 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
     expect(within(portfolio).getByText('2 Managed Services')).toBeInTheDocument();
     expect(within(portfolio).getAllByText('0 Managed Services')).toHaveLength(2);
     expect(
-      within(portfolio).getAllByText('Keine Managed Services im aktuellen Demo-Datenbestand.'),
+      within(portfolio).getAllByText('Keine Managed Services im aktuellen Datenbestand.'),
     ).toHaveLength(2);
   });
 });
@@ -228,8 +228,9 @@ describe('ServicesContent – Rollen-Gating der Portfolio-Sicht (Welt-Mapping Do
       screen.queryByRole('heading', { name: 'Portfolio: Alle Mandanten' }),
     ).not.toBeInTheDocument();
     expect(screen.getByText(/der Service-Organisation vorbehalten/)).toBeInTheDocument();
-    // Ehrlicher Demo-Hinweis: UI-Verdichtung, keine Sicherheitsgrenze.
-    expect(screen.getByText(/keine Sicherheitsgrenze/)).toBeInTheDocument();
+    // Ehrliche Reichweite der Zuordnung (WP-028 Slice 4, DR-0011: Sachaussage statt
+    // Demo-Hinweis) – die Aussage „ordnet die Ansicht, nicht den Zugriff" bleibt geprüft.
+    expect(screen.getByText(/entscheidet nicht über Zugriff/)).toBeInTheDocument();
   });
 
   it('zeigt die Portfolio-Sicht auch für R10 (ISMS Consultant, Consulting & Service World)', () => {
@@ -264,7 +265,7 @@ describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/sind im aktuellen Demo-Datenbestand keine\s+Managed Services modelliert/),
+      screen.getByText(/sind im aktuellen Datenbestand keine\s+Managed Services modelliert/),
     ).toBeInTheDocument();
     // Kein fremder Mandant – weder Name noch Kennung (die Kontextleiste und der Leerzustand
     // sprechen ausschließlich über den aktiven Mandanten).
@@ -295,24 +296,19 @@ describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
   });
 });
 
-describe('ServicesView – „nicht angemeldet" (Simulation)', () => {
+describe('ServicesView – „kein Mandant gewählt"', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('zeigt den Hinweis samt Link zur Login-Simulation', () => {
+  it('zeigt den Hinweis samt Link zur Anmeldung', () => {
     render(
       <SessionProvider>
         <ServicesView />
       </SessionProvider>,
     );
 
-    expect(
-      screen.getByRole('heading', { name: 'Nicht angemeldet (Simulation)' }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Zur Anmelde-Simulation/ })).toHaveAttribute(
-      'href',
-      '/login',
-    );
+    expect(screen.getByRole('heading', { name: 'Kein Mandant gewählt' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Zur Anmeldung/ })).toHaveAttribute('href', '/login');
   });
 });

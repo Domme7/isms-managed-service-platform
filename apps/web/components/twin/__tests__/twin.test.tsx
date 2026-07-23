@@ -42,8 +42,12 @@ describe('TenantOverview', () => {
 
     expect(withGraph.length).toBeGreaterThanOrEqual(2);
     expect(withoutGraph.map((t) => t.tenant_id)).toContain(TENANT_ID.FINOVIA);
-    expect(screen.getAllByText(/Objektgraph vorhanden/)).toHaveLength(withGraph.length);
-    expect(screen.getAllByText(/kein Objektgraph/)).toHaveLength(withoutGraph.length);
+    // EIN LEITBEGRIFF (WP-028 Slice 4, DR-0013 Nr. 9): „Objektgraph"/„Zwilling" waren zwei
+    // Namen für dieselbe Sache; sichtbar heißt sie durchgehend „digitaler Zwilling".
+    expect(screen.getAllByText('digitaler Zwilling erfasst')).toHaveLength(withGraph.length);
+    expect(screen.getAllByText('kein digitaler Zwilling erfasst')).toHaveLength(
+      withoutGraph.length,
+    );
   });
 });
 
@@ -183,14 +187,17 @@ describe('TenantDetailView – Empty-State (ohne Graph)', () => {
 
     expect(model.objectCount).toBe(0);
     expect(
-      screen.getByRole('heading', { name: 'Kein Objektgraph für Finovia Digital Bank AG' }),
+      screen.getByRole('heading', {
+        name: 'Kein digitaler Zwilling für Finovia Digital Bank AG erfasst',
+      }),
     ).toBeInTheDocument();
     // Kein Objekt-/Beziehungsbereich, wenn kein Graph vorhanden ist.
     expect(screen.queryByRole('heading', { name: /Objekte nach Familie/ })).not.toBeInTheDocument();
 
-    // Nächster Schritt führt in die Mandanten-ÜBERSICHT (bewusst mandantenübergreifende
-    // Portfolio-Seite) – NICHT auf fremde Detailseiten.
-    expect(screen.getByRole('link', { name: /Zur Mandantenübersicht/ })).toHaveAttribute(
+    // Nächster Schritt führt zurück zum Ort „Kunden" – NICHT auf fremde Detailseiten.
+    // Neutral beschriftet (WP-028 Slice 4): wohin der Ort führt, entscheidet die Sphäre der
+    // aktiven Rolle; der Link behauptet deshalb keine Mandantenliste.
+    expect(screen.getAllByRole('link', { name: /Zurück zu Kunden/ })[0]).toHaveAttribute(
       'href',
       '/twin',
     );

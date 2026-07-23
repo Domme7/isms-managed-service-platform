@@ -87,21 +87,18 @@ export function HeuteView() {
         <p className="tw-eyebrow">Heute</p>
         <h1>Heute</h1>
         <div className="tw-empty" role="note">
-          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>
-            Nicht angemeldet (Simulation)
-          </h2>
+          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Kein Mandant gewählt</h2>
           {/* DR-0009-Stand (Review-Pass): angemeldet wird nur mit dem Mandanten, der Einstieg
               ist der neutrale strategische Überblick – keine Rollen-Voraussetzung behaupten.
               „Ebene 1" wird bewusst NICHT verwendet: der Begriff gehört zum Detailtiefe-Control,
               das auf dieser Login-Gate-Seite gar nicht sichtbar ist (Product-Review F4/N1). */}
           <p style={{ marginTop: 0 }}>
-            Es ist kein Mandant gewählt. Melden Sie sich in der Simulation mit einem Mandanten an,
-            um den neutralen strategischen Überblick zu sehen – die Rollenwahl ist danach optional
-            in der Kopfleiste möglich.
+            Es ist kein Mandant gewählt. Wählen Sie einen Mandanten, um den neutralen strategischen
+            Überblick zu sehen – die Rollenwahl ist danach optional in der Kopfleiste möglich.
           </p>
           <p style={{ marginBottom: 0 }}>
             <Link className="tw-cta" href="/login">
-              Zur Anmelde-Simulation →
+              Zur Anmeldung →
             </Link>
           </p>
         </div>

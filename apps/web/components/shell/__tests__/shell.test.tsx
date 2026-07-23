@@ -6,10 +6,13 @@
  *  1. Shell rendert die acht Nav-Orte; aktiver Ort markiert.
  *  2. Aktive Rolle + Mandant erscheinen in der Topbar; Wechsel löst Callback aus.
  *  3. Twin Explorer ist innerhalb der Shell erreichbar (eingebettet unter „Kunden").
- *  4. Login-Simulation (AC 5): NUR der Mandant ist wählbar – keine Rollenauswahl, kein
- *     Passwort; Submit liefert die Mandanten-ID; die Seite bleibt als Simulation beschriftet.
- *  5. Rollenwahl in der App (AC 7): Topbar führt „neutral · keine Rolle"; Wahl und Abwahl
- *     feuern den Callback; die Moduswechsel-Rückmeldung benennt neutral↔Rolle sauber.
+ *  4. Anmeldung (AC 5): NUR der Mandant ist wählbar – keine Rollenauswahl, kein Passwort;
+ *     Submit liefert die Mandanten-ID.
+ *  5. Rollenwahl in der App (AC 7): Topbar führt „ohne Rolle"; Wahl und Abwahl feuern den
+ *     Callback; die Moduswechsel-Rückmeldung benennt neutral↔Rolle sauber.
+ *  7. WP-028 Slice 4: die Kopfleiste beschriftet die Auswahl als ANSICHT, führt keine
+ *     Rollencodes und kein Demo-Vokabular; der Mandantenwechsler folgt der Sphäre der aktiven
+ *     Rolle (`lib/shell/sphaere.ts`).
  *  6. Eine Platzhalterseite zeigt ihre klare Empty-Message.
  */
 import type { ReactNode } from 'react';
@@ -21,7 +24,8 @@ import { AppShell } from '../AppShell';
 import { LoginForm } from '../LoginForm';
 import { SessionProvider } from '../SessionProvider';
 import { NAV_PLACES } from '../../../lib/shell/places';
-import { DEMO_ROLES } from '../../../lib/shell/roles';
+import { DEMO_ROLES, getRole } from '../../../lib/shell/roles';
+import { orteFuerRolle } from '../../../lib/shell/sphaere';
 import {
   SESSION_STORAGE_KEY,
   parseSession,
@@ -45,6 +49,18 @@ const EXECUTIVE_NORDWERK = resolveSession({
 
 /** Neutrale Sitzung (DR-0009): Mandant ohne Rolle – ein vollwertiger Zustand. */
 const NEUTRAL_NORDWERK = resolveSession({
+  tenantId: TENANT_ID.NORDWERK,
+}) as ResolvedSession;
+
+/**
+ * BETREIBER-Sitzung (WP-028 Slice 4): Seit der Sphären-Kopplung (DR-0013 Nr. 11) ist der
+ * Mandantenwechsler ausschließlich Teil der Portfolio-Sicht – Kundenrollen (R01–R06) und der
+ * Auditor arbeiten in EINEM Unternehmen und bekommen ihn nicht. Die Wechsel-Tests laufen
+ * deshalb mit einer Betreiberrolle; dass die Kundenrolle ihn NICHT bekommt, prüft ein eigener
+ * Test (der wäre sonst die stille Lücke).
+ */
+const SERVICE_LEAD_NORDWERK = resolveSession({
+  roleId: 'R08',
   tenantId: TENANT_ID.NORDWERK,
 }) as ResolvedSession;
 
@@ -121,20 +137,19 @@ describe('AppShell – Navigation der acht Orte', () => {
 
 describe('AppShell – aktive Rolle + Mandant in der Topbar', () => {
   it('zeigt die gewählte Rolle und den gewählten Mandanten als aktive Auswahl', () => {
-    renderShell();
-    const roleSelect = screen.getByLabelText<HTMLSelectElement>(
-      'Aktive Rolle wechseln (Simulation)',
-    );
-    const tenantSelect = screen.getByLabelText<HTMLSelectElement>(
-      'Aktiven Mandanten wechseln (Simulation)',
-    );
-    expect(roleSelect.value).toBe('R01');
+    // Betreibersicht: hier steht der Mandant als AUSWAHL (in der Kundensicht als Kontext).
+    renderShell({ session: SERVICE_LEAD_NORDWERK });
+    const roleSelect = screen.getByLabelText<HTMLSelectElement>('Ansicht: Rolle');
+    const tenantSelect = screen.getByLabelText<HTMLSelectElement>('Ansicht: Mandant');
+    expect(roleSelect.value).toBe('R08');
     expect(tenantSelect.value).toBe(TENANT_ID.NORDWERK);
     // Als sichtbarer Text: die aktive Option trägt Rollennamen bzw. Mandantennamen.
     expect(
-      within(roleSelect).getByRole<HTMLOptionElement>('option', { name: /Executive Sponsor/ })
+      within(roleSelect).getByRole<HTMLOptionElement>('option', { name: /Managed Service Lead/ })
         .selected,
     ).toBe(true);
+    // Kein Rollencode im sichtbaren Optionstext (DR-0013 Nr. 12) – die ID bleibt der `value`.
+    expect(roleSelect.textContent ?? '').not.toMatch(/R\d{2}/);
     expect(
       within(tenantSelect).getByRole<HTMLOptionElement>('option', {
         name: /Nordwerk Manufacturing SE/,
@@ -142,9 +157,22 @@ describe('AppShell – aktive Rolle + Mandant in der Topbar', () => {
     ).toBe(true);
   });
 
-  it('zeigt den permanenten Demo-Hinweis (keine echte Sicherheit)', () => {
+  /**
+   * WP-028 Slice 4 (DR-0011/DR-0013 Nr. 12): Der permanente Demo-Banner und der „DEMO"-Chip
+   * sind entfallen; „Abmelden" (es gab nie eine Anmeldung) heißt jetzt „Ansicht zurücksetzen",
+   * und die beiden Auswahlfelder sind als ANSICHT beschriftet. Die Regel bleibt: die
+   * Kopfleiste sagt ehrlich, was sie tut.
+   */
+  it('benennt die Auswahl als Ansicht und trägt keine Demo-Kennzeichnung mehr', () => {
     renderShell();
-    expect(screen.getByText(/keine echte Anmeldung/i)).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Ansicht: Rolle und Mandant' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Ansicht zurücksetzen' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Abmelden' })).toBeNull();
+    // Negativbeweis: kein Demo-/Simulations-Vokabular mehr im gerenderten Text der Shell.
+    const text = document.body.textContent ?? '';
+    expect(text).not.toMatch(/Demo/i);
+    expect(text).not.toMatch(/Simulation/i);
+    expect(text).not.toMatch(/synthetisch/i);
   });
 });
 
@@ -157,8 +185,8 @@ describe('AppShell – aktive Rolle + Mandant in der Topbar', () => {
  */
 describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUTZ)', () => {
   it('wechselt NICHT still: die Select-Auswahl öffnet erst den Bestätigungsschritt', () => {
-    const props = renderShell();
-    fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {
+    const props = renderShell({ session: SERVICE_LEAD_NORDWERK });
+    fireEvent.change(screen.getByLabelText('Ansicht: Mandant'), {
       target: { value: TENANT_ID.FINOVIA },
     });
 
@@ -192,8 +220,8 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
   });
 
   it('Abbrechen (Button oder Escape) verwirft den Wechselwunsch ohne Callback', () => {
-    const props = renderShell();
-    fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {
+    const props = renderShell({ session: SERVICE_LEAD_NORDWERK });
+    fireEvent.change(screen.getByLabelText('Ansicht: Mandant'), {
       target: { value: TENANT_ID.FINOVIA },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Abbrechen' }));
@@ -203,10 +231,10 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
     ).not.toBeInTheDocument();
     // Fokus-Rückführung (Review Code F5): nach „Abbrechen" kehrt der Fokus auf den
     // Mandanten-Wechsler zurück, statt auf <body> zu fallen.
-    expect(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)')).toHaveFocus();
+    expect(screen.getByLabelText('Ansicht: Mandant')).toHaveFocus();
 
     // Escape bricht ebenfalls ab (Tastaturweg).
-    fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {
+    fireEvent.change(screen.getByLabelText('Ansicht: Mandant'), {
       target: { value: TENANT_ID.FINOVIA },
     });
     fireEvent.keyDown(screen.getByRole('group', { name: 'Mandantenwechsel bestätigen' }), {
@@ -219,8 +247,8 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
   });
 
   it('die erneute Auswahl des AKTIVEN Mandanten öffnet keinen Bestätigungsschritt', () => {
-    renderShell();
-    fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {
+    renderShell({ session: SERVICE_LEAD_NORDWERK });
+    fireEvent.change(screen.getByLabelText('Ansicht: Mandant'), {
       target: { value: TENANT_ID.NORDWERK },
     });
     expect(
@@ -232,7 +260,7 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
 describe('AppShell – Rollenwechsel als sichtbarer Moduswechsel (Dok. 06 „Rollenwechsel")', () => {
   it('wechselt direkt, meldet den Moduswechsel aber benannt zurück (alte und neue Rolle)', () => {
     const props = renderShell();
-    fireEvent.change(screen.getByLabelText('Aktive Rolle wechseln (Simulation)'), {
+    fireEvent.change(screen.getByLabelText('Ansicht: Rolle'), {
       target: { value: 'R07' },
     });
     // Gleicher Mandant, gleiche Daten: der Wechsel selbst bleibt direkt …
@@ -241,20 +269,21 @@ describe('AppShell – Rollenwechsel als sichtbarer Moduswechsel (Dok. 06 „Rol
     // … aber nicht still: die Live-Region nennt beide Modi.
     const status = screen.getByRole('status');
     expect(status.textContent).toContain('Moduswechsel');
-    expect(status.textContent).toContain('R01 · Executive Sponsor');
-    expect(status.textContent).toContain('R07 · Auditor');
+    // Rollen werden mit ihrem NAMEN benannt, nicht mit dem Rollencode (DR-0013 Nr. 12) –
+    // die Aussage „von welcher Rolle zu welcher" bleibt vollständig prüfbar.
+    expect(status.textContent).toContain('Executive Sponsor');
+    expect(status.textContent).toContain('Auditor');
+    expect(status.textContent).not.toMatch(/R\d{2}/);
     // Und sie sagt, was der Wechsel NICHT ändert (keine rückwirkende Datenänderung).
     expect(status.textContent).toMatch(/Daten und Mandant bleiben unverändert/);
   });
 
-  it('AC 7: die Topbar führt „neutral · keine Rolle" – die Abwahl feuert null und wird benannt', () => {
+  it('AC 7: die Topbar führt „ohne Rolle" – die Abwahl feuert null und wird benannt', () => {
     const props = renderShell();
-    const roleSelect = screen.getByLabelText<HTMLSelectElement>(
-      'Aktive Rolle wechseln (Simulation)',
-    );
+    const roleSelect = screen.getByLabelText<HTMLSelectElement>('Ansicht: Rolle');
     // Neutral steht als erste Option im Wechsler (Einstiegszustand, keine dreizehnte Rolle).
     expect(
-      within(roleSelect).getByRole<HTMLOptionElement>('option', { name: 'neutral · keine Rolle' }),
+      within(roleSelect).getByRole<HTMLOptionElement>('option', { name: 'ohne Rolle' }),
     ).toBeInTheDocument();
 
     fireEvent.change(roleSelect, { target: { value: '' } });
@@ -263,16 +292,14 @@ describe('AppShell – Rollenwechsel als sichtbarer Moduswechsel (Dok. 06 „Rol
     // Die Rückmeldung benennt den Übergang Rolle → neutral sauber („Rolle abgewählt").
     const status = screen.getByRole('status');
     expect(status.textContent).toContain('Rolle abgewählt');
-    expect(status.textContent).toContain('R01 · Executive Sponsor');
-    expect(status.textContent).toContain('neutraler Einstieg (keine Rolle)');
+    expect(status.textContent).toContain('Executive Sponsor');
+    expect(status.textContent).toContain('Ansicht ohne Rolle');
     expect(status.textContent).toMatch(/Daten und Mandant bleiben unverändert/);
   });
 
   it('AC 7: aus dem neutralen Zustand benennt die Rückmeldung die Wahl („Rolle gewählt")', () => {
     const props = renderShell({ session: NEUTRAL_NORDWERK });
-    const roleSelect = screen.getByLabelText<HTMLSelectElement>(
-      'Aktive Rolle wechseln (Simulation)',
-    );
+    const roleSelect = screen.getByLabelText<HTMLSelectElement>('Ansicht: Rolle');
     // Im neutralen Zustand zeigt der Wechsler neutral als aktive Auswahl.
     expect(roleSelect.value).toBe('');
 
@@ -281,13 +308,13 @@ describe('AppShell – Rollenwechsel als sichtbarer Moduswechsel (Dok. 06 „Rol
 
     const status = screen.getByRole('status');
     expect(status.textContent).toContain('Rolle gewählt');
-    expect(status.textContent).toContain('neutraler Einstieg (keine Rolle)');
-    expect(status.textContent).toContain('R03 · ISMS Manager');
+    expect(status.textContent).toContain('Ansicht ohne Rolle');
+    expect(status.textContent).toContain('ISMS Manager');
   });
 
   it('die erneute Auswahl von neutral im neutralen Zustand feuert nichts (kein Schein-Wechsel)', () => {
     const props = renderShell({ session: NEUTRAL_NORDWERK });
-    fireEvent.change(screen.getByLabelText('Aktive Rolle wechseln (Simulation)'), {
+    fireEvent.change(screen.getByLabelText('Ansicht: Rolle'), {
       target: { value: '' },
     });
     expect(props.onSwitchRole).not.toHaveBeenCalled();
@@ -295,15 +322,120 @@ describe('AppShell – Rollenwechsel als sichtbarer Moduswechsel (Dok. 06 „Rol
   });
 });
 
-describe('AppShell – Twin Explorer eingebettet unter „Kunden"', () => {
+/**
+ * SPHÄRE AN ROLLE GEKOPPELT (WP-028 Slice 4, DR-0013 Nr. 11 / DR-0012).
+ *
+ * Der Usability-Audit fand eine KUNDENrolle (Executive Sponsor) im mandantenübergreifenden
+ * Portfolio – ein Sphären-Logikfehler. Geprüft wird deshalb an der Kopfleiste, dass die
+ * Ein-Unternehmens-Sicht keinen Mandantenwechsler anbietet, den aktiven Mandanten aber
+ * weiterhin SICHTBAR hält (Dok. 06, Abschnitt „Sichtbarer Kontext": Pflichtangabe).
+ *
+ * KEINE EXISTENZAUSSAGE über andere Mandanten: der Ersatztext nennt ausschließlich den
+ * aktiven Mandanten (Mandantengrenze).
+ */
+describe('AppShell – Mandantenwechsler folgt der Sphäre (DR-0013 Nr. 11)', () => {
+  it('Kundenrolle: kein Mandantenwechsler, aktiver Mandant bleibt sichtbar', () => {
+    renderShell();
+    expect(screen.queryByLabelText('Ansicht: Mandant')).toBeNull();
+    const kopf = screen.getByRole('group', { name: 'Ansicht: Rolle und Mandant' });
+    expect(kopf.textContent).toContain('Nordwerk Manufacturing SE');
+    // Keine Aussage über fremde Mandanten – weder Name noch Zahl.
+    for (const fremd of DEMO_TENANTS.filter((x) => x.tenant_id !== TENANT_ID.NORDWERK)) {
+      expect(kopf.textContent).not.toContain(fremd.display_name);
+    }
+  });
+
+  it('Auditor (unabhängig): ebenfalls kein Mandantenwechsler (kontrollierter Prüfbereich)', () => {
+    renderShell({
+      session: resolveSession({ roleId: 'R07', tenantId: TENANT_ID.NORDWERK }) as ResolvedSession,
+    });
+    expect(screen.queryByLabelText('Ansicht: Mandant')).toBeNull();
+  });
+
+  it('Betreiberrolle und neutral: der Mandantenwechsler steht zur Verfügung', () => {
+    renderShell({ session: SERVICE_LEAD_NORDWERK });
+    expect(screen.getByLabelText('Ansicht: Mandant')).toBeInTheDocument();
+    screen.getByRole('main');
+  });
+
+  it('neutral: der Mandantenwechsler steht zur Verfügung', () => {
+    renderShell({ session: NEUTRAL_NORDWERK });
+    expect(screen.getByLabelText('Ansicht: Mandant')).toBeInTheDocument();
+  });
+});
+
+describe('AppShell – Ort „Kunden" führt sphärengerecht (DR-0013 Nr. 11)', () => {
+  it('Kundenrolle und Auditor: der Ort „Kunden" führt in den eigenen Kundenbereich', () => {
+    for (const roleId of ['R01', 'R03', 'R06', 'R07']) {
+      const { unmount } = render(
+        <AppShell
+          places={orteFuerRolle(NAV_PLACES, getRole(roleId) ?? null)}
+          activeId="kunden"
+          session={resolveSession({ roleId, tenantId: TENANT_ID.NORDWERK }) as ResolvedSession}
+          hydrated
+          roles={DEMO_ROLES}
+          tenants={DEMO_TENANTS}
+          onSwitchRole={vi.fn()}
+          onSwitchTenant={vi.fn()}
+          onSignOut={vi.fn()}
+        >
+          <p>Inhalt</p>
+        </AppShell>,
+      );
+      const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
+      expect(within(nav).getByRole('link', { name: /Kunden/ }), `Rolle ${roleId}`).toHaveAttribute(
+        'href',
+        '/kunden',
+      );
+      // Die Struktur der acht Orte bleibt unverändert (06-D01).
+      expect(within(nav).getAllByRole('link')).toHaveLength(8);
+      unmount();
+    }
+  });
+
+  it('Betreiberrollen, Administrator und neutral: der Ort „Kunden" führt ins Portfolio', () => {
+    for (const roleId of ['R08', 'R09', 'R10', 'R11', 'R12', null]) {
+      const rolle = roleId ? (getRole(roleId) ?? null) : null;
+      const { unmount } = render(
+        <AppShell
+          places={orteFuerRolle(NAV_PLACES, rolle)}
+          activeId="kunden"
+          session={
+            resolveSession(
+              roleId ? { roleId, tenantId: TENANT_ID.NORDWERK } : { tenantId: TENANT_ID.NORDWERK },
+            ) as ResolvedSession
+          }
+          hydrated
+          roles={DEMO_ROLES}
+          tenants={DEMO_TENANTS}
+          onSwitchRole={vi.fn()}
+          onSwitchTenant={vi.fn()}
+          onSignOut={vi.fn()}
+        >
+          <p>Inhalt</p>
+        </AppShell>,
+      );
+      const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
+      expect(
+        within(nav).getByRole('link', { name: /Kunden/ }),
+        `Rolle ${roleId ?? 'neutral'}`,
+      ).toHaveAttribute('href', '/twin');
+      unmount();
+    }
+  });
+});
+
+describe('AppShell – Ort „Kunden" eingebettet', () => {
   it('rendert den Explorer innerhalb der Shell und der Kunden-Ort zeigt auf /twin', () => {
-    renderShell({ activeId: 'kunden' }, <TenantOverview tenants={DEMO_TENANTS} />);
+    renderShell(
+      { activeId: 'kunden', session: NEUTRAL_NORDWERK },
+      <TenantOverview tenants={DEMO_TENANTS} />,
+    );
 
     // Explorer-Inhalt liegt im main-Landmark der Shell.
     const main = screen.getByRole('main');
-    expect(
-      within(main).getByRole('heading', { name: 'Digital Twin Explorer' }),
-    ).toBeInTheDocument();
+    // Nav-Label = Seitentitel (DR-0013 Nr. 9): der Ort „Kunden" heißt auch auf der Seite so.
+    expect(within(main).getByRole('heading', { level: 1, name: 'Kunden' })).toBeInTheDocument();
 
     // Der Nav-Ort „Kunden" verlinkt den Explorer.
     const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
@@ -349,22 +481,35 @@ describe('LoginForm – NUR der Mandant ist wählbar (WP-020 AC 5, DR-0009)', ()
   });
 });
 
-describe('LoginPage – Simulation beschriftet, Anmeldung erzeugt die NEUTRALE Sitzung (AC 5/6)', () => {
+describe('LoginPage – Anmeldung erzeugt die NEUTRALE Sitzung (AC 5/6)', () => {
   beforeEach(() => {
     window.localStorage.clear();
     routerPush.mockClear();
   });
 
-  it('bleibt als Simulation beschriftet und enthält keine Rollenauswahl', () => {
-    render(
+  /**
+   * WP-028 Slice 4 (DR-0011): Der Demo-Disclaimer („simulierte Anmeldung, keine echte
+   * Sicherheit", „synthetisches Datenmodell") ist entfallen. WAS BLEIBT, ist die SACHAUSSAGE
+   * über die Reichweite der Auswahl – und zwar an DIESER einen Stelle (DR-0013 Nr. 12).
+   */
+  it('benennt die Reichweite der Auswahl sachlich, ohne Demo-Kennzeichnung', () => {
+    const { container } = render(
       <SessionProvider>
         <LoginPage />
       </SessionProvider>,
     );
-    expect(
-      screen.getByRole('heading', { level: 1, name: 'Anmelden – Simulation' }),
-    ).toBeInTheDocument();
-    expect(screen.getByText(/keine echte Sicherheit/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Anmelden' })).toBeInTheDocument();
+    // Die Ehrlichkeits-Substanz bleibt: Ansicht ≠ Berechtigung, als benannte Lücke.
+    const hinweis = screen.getByRole('note');
+    expect(hinweis.textContent).toMatch(/Ansicht, keine Berechtigung/);
+    expect(hinweis.textContent).toMatch(/noch nicht angebunden/);
+    // Negativbeweis: keine Demo-/Simulations-Kennzeichnung mehr.
+    const text = container.textContent ?? '';
+    expect(text).not.toMatch(/Simulation/i);
+    expect(text).not.toMatch(/keine echte Sicherheit/i);
+    // BEWUSST NICHT geprüft: „synthetisch" – die Mandantenbeschreibung stammt aus dem
+    // Datenbestand (`packages/demo-seed`) und wird in einem eigenen Textpass nachgezogen
+    // (WP-033). Der app-weite Wächter maskiert Datenbestand-Texte genau deshalb.
     expect(screen.queryAllByRole('radio')).toHaveLength(0);
   });
 

@@ -5,7 +5,9 @@
  * Geprüft wird gegen den echten `DEMO_SEED` (keine Mocks):
  *  1. Leitfrage aus `places.ts`, Ebene-1-Abschnitt + vier WP-016-Abschnitte + Ehrlichkeitsblock,
  *     Reihenfolge je Welt.
- *  2. „Wo stehe ich?": Rolle (R-ID, Produktrolle, Sphäre, Kernverantwortung), Mandant, Bestand.
+ *  2. „Wo stehe ich?": Rolle (Produktrolle, Sphäre, Kernverantwortung), Mandant, Bestand.
+ *     Der Rollencode steht seit WP-028 Slice 4 NICHT mehr im sichtbaren Text (DR-0013 Nr. 12);
+ *     er bleibt Kennung im Datenmodell.
  *  3. „Was ist erfasst worden?": Wellen mit deutschem Datum und Anzahl, abgeleitete Historienaussage.
  *  4. „Was weiß ich über die Datenlage?": vier Beobachtungen mit Zählung, Grundgesamtheit, Regel.
  *  5. „Wo steige ich ein?": Orte mit Bestand, je Familie ein Objekt-Einstieg, mandantentreue Links.
@@ -146,7 +148,9 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
     render(<MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />);
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
 
-    expect(within(kontext).getByText('R01 · Executive Sponsor')).toBeInTheDocument();
+    // Rolle mit NAMEN benannt, ohne Rollencode (DR-0013 Nr. 12).
+    expect(within(kontext).getByText('Executive Sponsor')).toBeInTheDocument();
+    expect(kontext.textContent ?? '').not.toMatch(/R\d{2}/);
     expect(within(kontext).getByText('Executive World')).toBeInTheDocument();
     expect(within(kontext).getByText('Nordwerk Manufacturing SE')).toBeInTheDocument();
     expect(
@@ -167,7 +171,7 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
  * --------------------------------------------------------------------------- */
 
 describe('MissionControlContent – „Wo stehe ich?"', () => {
-  it('nennt Rolle mit R-ID, Produktrolle, Sphäre, Kernverantwortung und Weltleitfrage', () => {
+  it('nennt Produktrolle, Sphäre, Kernverantwortung und Weltleitfrage – ohne Rollencode', () => {
     const auditor = role('R07');
     render(<MissionControlContent role={auditor} tenant={tenant(TENANT_ID.NORDWERK)} />);
 
@@ -175,7 +179,9 @@ describe('MissionControlContent – „Wo stehe ich?"', () => {
       .getByRole('heading', { level: 2, name: MISSION_SECTIONS.standort.title })
       .closest('section') as HTMLElement;
 
-    expect(within(abschnitt).getByText(auditor.id)).toBeInTheDocument();
+    // Der Rollencode ist aus dem sichtbaren Text entfallen (DR-0013 Nr. 12); die Rolle bleibt
+    // über ihren Namen eindeutig benannt – die Aussage des Abschnitts ändert sich nicht.
+    expect(abschnitt.textContent ?? '').not.toMatch(/\bR\d{2}\b/);
     expect(within(abschnitt).getByText(auditor.name)).toBeInTheDocument();
     expect(within(abschnitt).getByText(auditor.sphere)).toBeInTheDocument();
     expect(within(abschnitt).getByText(auditor.responsibility)).toBeInTheDocument();
@@ -193,8 +199,11 @@ describe('MissionControlContent – „Wo stehe ich?"', () => {
     expect(
       within(abschnitt).getByText(/rahmt die Erlebniswelt, nicht diese Seite/),
     ).toBeInTheDocument();
-    // Kein Funktionsversprechen: die Seite sagt, was NICHT abgebildet ist, nicht was kommt.
-    expect(abschnitt.textContent ?? '').toMatch(/nicht abgebildet/);
+    // Kein Funktionsversprechen: die Seite sagt, was NICHT da ist, nicht was kommt.
+    // Wortlaut seit WP-028 Slice 4 als SACH-Lücke statt als Demo-Vorbehalt („in dieser Demo
+    // nicht abgebildet" → „hier noch nicht angebunden", DR-0011); die Aussage bleibt dieselbe.
+    expect(abschnitt.textContent ?? '').toMatch(/noch nicht angebunden/);
+    expect(abschnitt.textContent ?? '').not.toMatch(/Demo|Simulation/i);
     expect(abschnitt.textContent ?? '').not.toMatch(/Work Package|entsteht in einem eigenen/);
   });
 
@@ -421,7 +430,7 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
     const abschnitt = einstiegAbschnitt();
 
     expect(
-      within(abschnitt).getByRole('link', { name: 'Zwilling dieses Mandanten' }),
+      within(abschnitt).getByRole('link', { name: 'Digitaler Zwilling dieses Mandanten' }),
     ).toHaveAttribute('href', `/twin/${TENANT_ID.NORDWERK}`);
     expect(within(abschnitt).getByRole('link', { name: 'ISMS' })).toHaveAttribute('href', '/isms');
     // Seit WP-017 ist auch der Ort „Entscheidungen" belegt – er fehlte hier, obwohl die
@@ -446,7 +455,7 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
     // Der Zwilling-Einstieg führt in den Workspace DIESES Mandanten, nicht ins Portfolio – die
     // Portfolio-Leitfrage des Ortes „Kunden" darf an ihm nicht stehen (Review-Fix).
     const zwilling = within(abschnitt)
-      .getByRole('link', { name: 'Zwilling dieses Mandanten' })
+      .getByRole('link', { name: 'Digitaler Zwilling dieses Mandanten' })
       .closest('li') as HTMLElement;
     expect(zwilling.textContent ?? '').not.toContain(getPlace('kunden').question);
     expect(zwilling.textContent ?? '').not.toMatch(/Portfolio/);
@@ -615,7 +624,7 @@ describe('MissionControlContent – Empty-States für Mandanten ohne Datenbestan
       // WP-016-Leerzustand des Standort-Abschnitts. Beide sind gewollt; die Regel (Aussage
       // vorhanden, mandantenlokal) bleibt unverändert geprüft.
       expect(
-        screen.getAllByText(new RegExp(`Für ${leer.display_name} sind im Demo-Datenbestand keine`))
+        screen.getAllByText(new RegExp(`Für ${leer.display_name} sind im Datenbestand keine`))
           .length,
       ).toBeGreaterThanOrEqual(1);
       // Ebene 1 + die vier Abschnitte bleiben stehen; die Zählungen weisen 0 aus.
@@ -1231,7 +1240,7 @@ describe('HeuteView – neutraler Einstieg nach Anmeldung ohne Rollenwahl (AC 6)
     expect(
       screen.getByRole('heading', { level: 2, name: 'Was hier bewusst nicht steht' }),
     ).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: 'Nicht angemeldet (Simulation)' })).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Kein Mandant gewählt' })).toBeNull();
 
     // Kennzeichnung + Erstbesuchs-Hinweis auf die OPTIONALE Rollenwahl (Dok. 04 J01:
     // kein erzwungener Rundgang) – Klartext, kein Overlay.
@@ -1252,23 +1261,34 @@ describe('HeuteView – neutraler Einstieg nach Anmeldung ohne Rollenwahl (AC 6)
     expect(kontext.textContent).toContain('neutral – keine Rolle gewählt');
   });
 
-  it('mit gewählter Rolle verschwindet der Hinweis; die Abwahl kehrt zur neutralen Ebene 1 zurück (AC 7)', () => {
+  it('mit gewählter Rolle steht der Rollen-Hinweis; die Abwahl kehrt zur neutralen Ebene 1 zurück (AC 7)', () => {
     // Inhaltsseite der Reversibilität (der Topbar-Klickpfad liegt in shell.test.tsx):
     // dieselbe Komponente, einmal mit Rolle, einmal neutral – der Hinweis folgt dem Zustand.
+    //
+    // WP-028 Slice 4 (DR-0013 Nr. 12): Der Ein-Satz-Hinweis zur Reichweite der Rollenwahl
+    // steht jetzt in BEIDEN Zuständen. Vorher verschwand er mit der Rollenwahl – also genau
+    // dann, wenn die Frage „was ändert die Rolle eigentlich?" aufkommt. Geprüft wird deshalb
+    // nicht mehr sein Verschwinden, sondern sein zustandsgerechter Wortlaut.
     const mitRolle = render(
       <MissionControlContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
-    expect(mitRolle.container.querySelector('.ht-neutral')).toBeNull();
+    const rollenHinweis = mitRolle.container.querySelector('.ht-neutral');
+    expect(rollenHinweis).not.toBeNull();
+    expect(rollenHinweis?.textContent).toContain('Ansicht ISMS Manager');
+    expect(rollenHinweis?.textContent).toMatch(/nur Betonung und Reihenfolge, nie die Daten/);
+    expect(rollenHinweis?.textContent).not.toContain('Neutraler strategischer Einstieg');
+    expect(rollenHinweis?.textContent).not.toMatch(/R\d{2}/);
     mitRolle.unmount();
 
     const neutral = render(
       // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
       <MissionControlContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
-    expect(neutral.container.querySelector('.ht-neutral')).not.toBeNull();
+    expect(neutral.container.querySelector('.ht-neutral')?.textContent).toContain(
+      'Neutraler strategischer Einstieg',
+    );
     // Der Standort-Abschnitt benennt den neutralen Zustand, statt Rollenfelder zu erfinden.
     expect(neutral.container.textContent).toContain('Keine Rolle gewählt');
-    expect(neutral.container.textContent).not.toContain('Rollen-ID');
     neutral.unmount();
   });
 });
@@ -1418,12 +1438,12 @@ describe('MissionControlContent – Dashboard-Kacheln (Selbsterklärung, Badges,
  * 13. Sitzungsrahmen
  * --------------------------------------------------------------------------- */
 
-describe('HeuteView – Sitzungsrahmen (Simulation)', () => {
+describe('HeuteView – Sitzungsrahmen (Perspektive, keine Authz)', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('zeigt ohne Anmeldung den Hinweis samt Link zur Login-Simulation', () => {
+  it('zeigt ohne gewählten Mandanten den Hinweis samt Link zur Anmeldung', () => {
     render(
       <SessionProvider>
         <HeuteView />
@@ -1431,13 +1451,8 @@ describe('HeuteView – Sitzungsrahmen (Simulation)', () => {
     );
 
     expect(screen.getByRole('heading', { level: 1, name: 'Heute' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: 'Nicht angemeldet (Simulation)' }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Zur Anmelde-Simulation/ })).toHaveAttribute(
-      'href',
-      '/login',
-    );
+    expect(screen.getByRole('heading', { name: 'Kein Mandant gewählt' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Zur Anmeldung/ })).toHaveAttribute('href', '/login');
   });
 
   it('rendert mit gewählter Rolle und gewähltem Mandanten die Mission-Control-Inhalte', () => {
@@ -1457,7 +1472,7 @@ describe('HeuteView – Sitzungsrahmen (Simulation)', () => {
     // der Ebene-1-Abschnitt und der Kontext; die WP-016-Abschnitte sind über den
     // Tiefenschalter erreichbar (eigener Detailtiefe-Testblock oben).
     expect(screen.getByRole('heading', { level: 2, name: EBENE1_TITEL })).toBeInTheDocument();
-    expect(screen.getByText('R03 · ISMS Manager')).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: 'Nicht angemeldet (Simulation)' })).toBeNull();
+    expect(screen.getByText('ISMS Manager')).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Kein Mandant gewählt' })).toBeNull();
   });
 });

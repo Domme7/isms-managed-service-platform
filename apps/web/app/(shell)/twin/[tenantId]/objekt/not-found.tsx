@@ -21,11 +21,14 @@ export default function ObjectNotFound() {
       <p className="tw-eyebrow">Fehler 404</p>
       <h1>Objekt nicht gefunden</h1>
       <p className="tw-lead">
-        Zu dieser Adresse gibt es in der synthetischen Demo-Welt kein Objekt. Möglicherweise ist der
-        Link veraltet, falsch eingegeben oder er gehört zu einem anderen Mandanten.
+        Zu dieser Adresse gibt es im Datenbestand kein Objekt. Möglicherweise ist der Link veraltet,
+        falsch eingegeben oder er gehört zu einem anderen Mandanten.
       </p>
+      {/* Neutral beschriftet (WP-028 Slice 4): wohin der Ort „Kunden" führt, entscheidet die
+          Sphäre der aktiven Rolle (`lib/shell/sphaere.ts`) – dieser Link behauptet deshalb
+          keine Mandantenliste. */}
       <Link className="tw-back" href="/twin">
-        ← Zur Mandantenübersicht
+        ← Zurück zu Kunden
       </Link>
     </>
   );

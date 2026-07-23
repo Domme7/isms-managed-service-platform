@@ -13,7 +13,23 @@
  *  1. Die Kontextleiste existiert (benannte Region „Kontext dieser Seite" mit nativer `dl` –
  *     FINDING-0008-Fix, kein ARIA-Rollen-Override mehr).
  *  2. BELEGTE Elemente zeigen belegte Werte: Mandant (Anzeigename), Produktrolle
- *     („R0x · Name"), ein Scope-/Objektkontext-Eintrag, ein Datenstand-Eintrag.
+ *     (Rollenname), ein Scope-/Objektkontext-Eintrag, ein Datenstand-Eintrag.
+ *
+ * REGELEVOLUTION WP-028 Slice 4 – REGEL-ERHALTEND, NICHT ABGESCHWÄCHT (DR-0013 Nr. 12,
+ * Regelkonflikt O-WP032-10):
+ * Bis hierher verlangte dieser Wächter für die aktive Rolle wörtlich das Format „R0x · Name"
+ * (`/^R\d{2} · .+/`). Damit erzwang der Test genau das, was DR-0013 Nr. 12 aus dem Produkt
+ * entfernt: den internen ROLLENCODE im nutzersichtbaren Text. Die Regel des Wächters war aber
+ * nie „der Code ist sichtbar", sondern „**die aktive Rolle ist benannt**" (Dok. 06, Abschnitt
+ * „Sichtbarer Kontext": Kontextelement „Aktive Produktrolle …").
+ *
+ * Der Wächter prüft deshalb ab jetzt SCHÄRFER statt schwächer:
+ *   - der Wert ist EXAKT der Name einer der zwölf kanonischen Produktrollen aus Dok. 03
+ *     (vorher genügte irgendein Text nach dem Code – „R01 · irgendwas" wäre durchgegangen),
+ *   - im neutralen Zustand exakt `CONTEXT_NEUTRAL_ROLE`,
+ *   - NEU als Negativbeweis: der Wert enthält KEINEN Rollencode mehr.
+ * Die geprüfte Aussage („welche Rolle ist aktiv?") bleibt vollständig erhalten; der Code lebt
+ * unverändert im Datenmodell (`DemoRole.id`) und trägt weiterhin Auswahl und Zuordnung.
  *  3. UNBELEGTE Elemente werden NICHT mehr als drei prominente „nicht erfasst"-Leerfelder
  *     ausgestellt (DR-0013 „Kontextleiste zeigt Belegtes, nicht Abwesenheit"). Die Substanz
  *     bleibt aber vollständig im DOM: die Begründungen aus `CONTEXT_GAPS` stehen ruhig
@@ -49,7 +65,7 @@ import { CONTEXT_GAPS, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
 import { SessionProvider } from '../shell/SessionProvider';
 import { TwinContextBar } from '../twin/TwinContextBar';
 import { NAV_PLACES, type PlaceId } from '../../lib/shell/places';
-import { getRole, type DemoRole } from '../../lib/shell/roles';
+import { DEMO_ROLES, getRole, type DemoRole } from '../../lib/shell/roles';
 import { SESSION_STORAGE_KEY, serializeSession } from '../../lib/shell/session';
 
 function tenant(tenantId: string): DemoTenant {
@@ -57,6 +73,13 @@ function tenant(tenantId: string): DemoTenant {
   if (!found) throw new Error(`Testfixture fehlt: ${tenantId}`);
   return found;
 }
+
+/**
+ * Die zwölf kanonischen Rollennamen (Dok. 03, Abschnitt „Kanonisches Rollenmodell") – aus der
+ * EINEN Quelle abgeleitet, nicht abgeschrieben: eine künftige Rolle ist automatisch zulässig,
+ * ein erfundener Anzeigename nicht.
+ */
+const ROLLENNAMEN: readonly string[] = DEMO_ROLES.map((r) => r.name);
 
 function role(roleId: string): DemoRole {
   const found = getRole(roleId);
@@ -129,7 +152,11 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
 
       // (2) Belegte Elemente mit belegten Werten.
       expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
-      expect(eintrag(kontext, 'Aktive Produktrolle').dd).toMatch(/^R\d{2} · .+/);
+      // Regel-erhaltend geschärft (s. Kopfnotiz): exakt ein kanonischer Rollenname,
+      // und kein Rollencode.
+      const rolle = eintrag(kontext, 'Aktive Produktrolle').dd;
+      expect(ROLLENNAMEN, `${ort}: Rolle nicht kanonisch benannt`).toContain(rolle);
+      expect(rolle, `${ort}: Rollencode im sichtbaren Text`).not.toMatch(/R\d{2}/);
 
       // Scope-/Objektkontext- und Datenstand-Eintrag existieren mit nicht-leerem Wert; das
       // Label ist seitenspezifisch (z. B. „Scope-Kennungen der Entscheidungen"), der
@@ -271,7 +298,8 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
 
     expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
-    expect(eintrag(kontext, 'Aktive Produktrolle').dd).toMatch(/^R\d{2} · .+/);
+    expect(ROLLENNAMEN).toContain(eintrag(kontext, 'Aktive Produktrolle').dd);
+    expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
     expect(eintrag(kontext, 'Scope-Kennungen des Kundenbereichs').dd.length).toBeGreaterThan(0);
     expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
 

@@ -52,9 +52,9 @@ export function ServicesContent({
       {/* Quellanker der Verkaufslogik-Grenze: Dok. 13 MS15 (Signatur seit dem Review-Pass nur
           noch hier im Kommentar – Konzept-Jargon gehört nicht in den Produkttext). */}
       <p className="tw-lead">
-        Read-only Demo-Sicht auf synthetische Managed-Service-Daten des aktiven Mandanten:
-        Leistungsversprechen, SLA, Deliverables und Wirkungsbeitrag – aus demselben Datenmodell wie
-        der digitale Zwilling. Ohne Preise, ohne Buchung, ohne Verkaufslogik.
+        Read-only Blick auf die Managed-Service-Daten des aktiven Mandanten: Leistungsversprechen,
+        SLA, Deliverables und Wirkungsbeitrag – aus demselben Datenmodell wie der digitale Zwilling.
+        Ohne Preise, ohne Buchung, ohne Verkaufslogik.
       </p>
 
       {/* Kontextleiste (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext"): Scope und Datenstand
@@ -116,8 +116,7 @@ export function ServicesContent({
                   Rollenwahl oben in der Leiste lässt sich eine dieser Rollen aktivieren.
                 </>
               )}{' '}
-              Demo-Hinweis: Das ist eine reine Anzeige-Verdichtung je Rolle – keine
-              Sicherheitsgrenze.
+              Diese Zuordnung ordnet die Ansicht – sie entscheidet nicht über Zugriff.
             </p>
           </div>
         </section>
@@ -149,18 +148,18 @@ function EmptyServices({ tenant }: { tenant: DemoTenant }) {
     <div className="tw-empty" role="note">
       <h3>Keine Managed Services für {tenant.display_name}</h3>
       <p style={{ marginTop: 0 }}>
-        Für <strong>{tenant.display_name}</strong> sind im aktuellen Demo-Datenbestand keine Managed
+        Für <strong>{tenant.display_name}</strong> sind im aktuellen Datenbestand keine Managed
         Services modelliert. Der Ort bleibt erreichbar und zeigt hier ausschließlich, was für diesen
         Mandanten belegt ist.
       </p>
       <p className="tw-muted">
-        Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Demo-Datenbestand
+        Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Datenbestand
         abgeleitete Services – keine erfundenen Angebote und keine Preise.
       </p>
       {/* Nächster Schritt im Empty-State (Dok. 06 §17, UX-Review MINOR-3). */}
       <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
         <Link className="tw-cta" href="/login">
-          Mandant wechseln (Anmelde-Simulation) →
+          Mandant wechseln →
         </Link>
       </p>
     </div>

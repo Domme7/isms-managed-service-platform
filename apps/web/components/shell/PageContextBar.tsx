@@ -68,7 +68,7 @@ export const CONTEXT_NEUTRAL_ROLE = 'neutral – keine Rolle gewählt';
  */
 export const CONTEXT_GAPS = {
   vertretung:
-    'nicht erfasst – die Anmelde-Simulation speichert nur den Mandanten und optional eine ' +
+    'nicht erfasst – die Anmeldung speichert nur den Mandanten und optional eine ' +
     'gewählte Rolle; eine zeitlich begrenzte Vertretung kennt der Datenbestand nicht.',
   vertraulichkeit:
     'nicht erfasst – im Datenbestand tragen nur einzelne Objekte eine Vertraulichkeitsstufe ' +
@@ -116,7 +116,11 @@ export function PageContextBar({
           <dt>Aktive Produktrolle</dt>
           {/* AC-3-Formulierung: „Rolle (oder ‚neutral')" – neutral ist ein Zustand, kein Wert-
               Ausfall, und wird deshalb NICHT als Datenlücke gestylt. */}
-          <dd>{role ? `${role.id} · ${role.name}` : CONTEXT_NEUTRAL_ROLE}</dd>
+          {/* Ohne Rollencode (WP-028 Slice 4, DR-0013 Nr. 12): der NAME benennt die Rolle
+              eindeutig; „R01 · …" war interne Kennung im Produkttext. Der Wächter
+              `kontextleiste.test.tsx` prüft weiterhin, dass die aktive Rolle sichtbar
+              benannt ist – jetzt am Namen statt am Code (regel-erhaltend, dort begründet). */}
+          <dd>{role ? role.name : CONTEXT_NEUTRAL_ROLE}</dd>
         </div>
         <div>
           <dt>{scopeLabel}</dt>

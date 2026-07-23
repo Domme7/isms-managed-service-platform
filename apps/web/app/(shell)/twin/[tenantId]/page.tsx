@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ tenantId:
   const { tenantId } = await params;
   const tenant = getTenant(tenantId);
   return {
-    title: tenant ? `${tenant.display_name} – Digital Twin Explorer` : 'Mandant nicht gefunden',
+    title: tenant ? `${tenant.display_name} – Digitaler Zwilling` : 'Mandant nicht gefunden',
   };
 }
 
