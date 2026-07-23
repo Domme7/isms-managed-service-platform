@@ -20,8 +20,11 @@ export function TenantOverview({ tenants }: { tenants: readonly DemoTenant[] }) 
         Read-only-Blick in die synthetische Demo-Welt: welche Objekte der digitale Zwilling eines
         Mandanten enthält und wie sie zusammenhängen. Alle Werte stammen aus dem Demo-Seed.
       </p>
+      {/* „eines", nicht „dieses": diese Seite listet ALLE Mandanten — die mandantenspezifische
+          Frage gehört auf die Detailseite (`TenantDetailView`). Vom Owner am Screenshot gefunden;
+          der WP-016-Fix-Pass hatte die Detailfrage versehentlich auch hierher gelegt. */}
       <p className="tw-question">
-        Was enthält der digitale Zwilling dieses Mandanten und wie hängt es zusammen?
+        Was enthält der digitale Zwilling eines Mandanten und wie hängt es zusammen?
       </p>
 
       <h2 id="mandanten">Mandanten</h2>

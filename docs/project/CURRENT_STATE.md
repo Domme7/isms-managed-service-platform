@@ -2,7 +2,7 @@
 
 **Stand:** WP-017 **fertig** — der Ort „Entscheidungen" ist echt, und der Seed trägt seine **erste belegte Versionshistorie** (R24-Ablösepaar). Die Historien-Wächter aus WP-014/WP-016 wurden planmäßig rot und bewiesen damit, dass die Ableitung echt war. Nebenertrag: eine seit WP-013 bestehende Mandantengrenzverletzung in `/isms` gefunden, behoben, mit Wächtertest abgesichert  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** keins — als Nächstes **WP-018 Werkzeuge** (DR-0007: Linter, Playwright + axe, Screenshots je WP)  
+**Aktives Work Package:** **WP-018** Werkzeuge & sichtbare Abnahme (DR-0007 E-03: Linter, Playwright + axe, Screenshots je WP)  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Lauffähige Demo-App (Shell + Heute + Zwilling + ISMS + Services + **Entscheidungen** + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
