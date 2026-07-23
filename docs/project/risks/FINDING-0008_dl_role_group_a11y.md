@@ -40,3 +40,13 @@ wäre genau der Scope-Drift, den die Stop Conditions verbieten.
 4. Die drei `biome-ignore`-Kommentare zum dl-Muster (Slice 1) entfallen dann mit.
 
 Moderate/minor-Verstöße des Laufs: **0** — der Report weist das mit aus.
+
+## Update 2026-07-23 (WP-020 qa:visual-Lauf)
+
+Der axe-Lauf `docs/project/visual/WP-020/axe-report.json` zeigt die Regel `dlitem` (serious)
+jetzt auf **6 Seiten** statt 3: Die neue Kontextleiste (`PageContextBar`, WP-020 Slice 1) hat
+das bestehende `<dl role="group">`-Muster übernommen und damit auf `/twin`, `/isms` und
+`/services` verbreitert. Da die Kontextleiste eine **neu gebaute** Struktur ist, fällt ihre
+Korrektur unter die WP-020-Regel „FINDING-0008 nur dort beheben, wo ohnehin neu gebaut wird"
+→ **in den WP-020-Fix-Pass aufgenommen** (Product Gate prüft mit). Die Altbestände
+(WP-014/016/017-Strukturen) bleiben beim Folge-WP.

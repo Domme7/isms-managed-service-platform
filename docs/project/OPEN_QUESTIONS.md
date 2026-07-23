@@ -159,6 +159,8 @@ Vollständige Herleitung: `work-packages/WP-020_VERDICHTUNG_DASHBOARD_EINSTIEG.m
 | O-WP020-11 | Portfolio-Sichten (`/twin`-Übersicht, `/services`-Portfolio) zeigen bewusst Mandantenübergreifendes, während die Kontextleiste den aktiven Mandanten nennt — brauchen Portfolio-Sichten eine eigene Kontext-Kennzeichnung? | Konzeptlücke | als benannter „Objektkontext dieser Seite: Übersicht …" gelöst, reversibel (Slice 1) | Product / Concept Author |
 | O-WP020-12 | Bewertungsvokabular-Wächter von „Heute" verbietet `bewertet` — kollidiert mit dem kanonischen Lebenszyklus-Stand `'bewertet'`; volle Verteilung deshalb nur auf `/isms`. Dokumentierte Ausnahme für erfasste Stand-Namen? | Wächter-Regelfrage | Verteilung bewusst auf `/isms`; „Heute" zählt nur Stände (Slice 3/4); Regelevolution nur per Gate | QA + Product Gate |
 | O-WP020-13 | Baustein-Zuordnung der Mandanten-Detailseite `/twin/[tenantId]` — Drill-down-Ziel der Konvention, aber kein eigener Baustein-Ort | Konventionslücke | sechs Live-Orte tragen die Konvention; Detailseite benannt offen | Product / UX |
+| O-WP020-14 | qa:visual-Default-Perspektive (R01/Nordwerk, O-WP018-06) auf den neutralen Einstieg umstellen, jetzt wo neutral der Produkteinstieg ist? | Prozessfrage | beibehalten + Zusatzmotiv `heute-neutral` (Screenshot + axe); keine stille Umstellung | QA + Owner |
+| O-WP020-15 | Login-Semantik „jede Anmeldung startet neutral, auch bei zuvor gewählter Rolle" — Alternative (Alt-Rolle übernehmen) wäre bequemer, aber ein stiller Modus | Produktfrage (reversibel) | neutral je Anmeldevorgang, im Code begründet, per Test belegt | Owner-Bestätigung (blockiert nichts) |
 
 ## Konzeptbibliothek (aus WP-023)
 
