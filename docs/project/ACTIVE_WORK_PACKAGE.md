@@ -16,9 +16,8 @@
 ## Sprint-Reihenfolge (DR-0010)
 
 1. ~~Slice 1 Cross-Tenant-Schutz & sichtbarer Kontext~~ ✅ (`7971bc6`; FINDING-0009 gefunden + behoben)
-2. **Slice 3+4: strategisches Dashboard mit klarer Informationsverdichtung** (Detailtiefe-Ebenen,
-   Seitenbausteine, Kacheln/Verteilungen/Abdeckungen aus belegten Daten) ← **in Arbeit**
-3. Slice 2: Einstiegsfluss Login → neutrales Dashboard → Rollenwahl in der App (+ Punkt 9 roles.ts)
+2. ~~Slice 3+4: strategisches Dashboard~~ ✅ (`c45f581`; web 403 Tests; O-WP020-12/13 neu)
+3. **Slice 2: Einstiegsfluss Login → neutrales Dashboard → Rollenwahl in der App (+ Punkt 9 roles.ts)** ← **in Arbeit**
 4. Slice 5: Rollenvarianten-Personalisierung + Konzeptabgleiche (Decision-Card-Zweitliste, Trust-Layer)
 5. **Sichtbare Kundenwelt Stufe 1** (WP-006 vorgezogen, DR-0010 Nr. 2): read-only aus PDFs
    Dok. 14/16, fehlende Träger benannt
