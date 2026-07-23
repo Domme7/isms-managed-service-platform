@@ -18,6 +18,7 @@ import {
   NORMIERTE_ROLLEN,
   ROLLENVARIANTEN,
   WELT_VARIANTE,
+  fokusLueckenTextFuer,
   kachelOrdnungForRole,
   varianteForRole,
 } from '../rollenvarianten';
@@ -82,6 +83,25 @@ describe('ROLLENVARIANTEN – die vier normierten Zeilen aus Dok. 06', () => {
       const sichtbar = `${variante.fokusBelegtText} ${variante.fokusLueckenText} ${variante.ausblendungText}`;
       expect(sichtbar, id).not.toMatch(/kommt bald|in Kürze|geplant für|Roadmap/i);
       expect(sichtbar, id).not.toMatch(/\bScore\b|Ampel|Reifegrad|\bTrend|empfohlen|Empfehlung/i);
+    }
+  });
+
+  it('fokusLueckenTextFuer: Review-Existenz nur bei Mandanten MIT Review (Domain-Fix 2. Runde)', () => {
+    const ismsManager = ROLLENVARIANTEN.isms_manager;
+    // Der mandant-invariante Kern behauptet keine Review-Existenz.
+    expect(ismsManager.fokusLueckenText).not.toMatch(/trägt einen/);
+    expect(ismsManager.fokusLueckenText).toMatch(/keine\s+Kachel Reviews/);
+    // Mandant MIT Review: die Existenzaussage wird ergänzt, Basistext bleibt Präfix.
+    const mitReview = fokusLueckenTextFuer(ismsManager, true);
+    expect(mitReview.startsWith(ismsManager.fokusLueckenText)).toBe(true);
+    expect(mitReview).toMatch(/trägt einen Service-Outcome-Review/);
+    // Mandant OHNE Review: KEINE Existenzaussage (der Consulting-Operator-Fehler von vorher).
+    expect(fokusLueckenTextFuer(ismsManager, false)).toBe(ismsManager.fokusLueckenText);
+    // Andere Varianten sind mandanteninvariant (kein Review-Zusatz, egal ob hatReview).
+    for (const id of ['executive', 'consultant', 'service_lead'] as const) {
+      expect(fokusLueckenTextFuer(ROLLENVARIANTEN[id], true)).toBe(
+        ROLLENVARIANTEN[id].fokusLueckenText,
+      );
     }
   });
 });

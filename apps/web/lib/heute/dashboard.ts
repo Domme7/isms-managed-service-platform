@@ -197,6 +197,13 @@ export interface HeuteDashboardModel {
   readonly lifecycleSummary?: LifecycleSummaryTile;
   readonly coverage: readonly CoverageTile[];
   readonly emptyTile?: EmptyTenantTile;
+  /**
+   * Trägt der AKTIVE Mandant mindestens ein Objekt vom Typ `Review` (F09)? Steuert die
+   * mandantenabhängige Review-Aussage des ISMS-Manager-Rollenfokus (Domain-Review 2. Runde:
+   * die Existenzaussage darf nicht statisch für jeden Mandanten gerendert werden – nur Nordwerk
+   * trägt einen Outcome-Review, der Consulting Operator nicht).
+   */
+  readonly hatReview: boolean;
 }
 
 /** Verdichteter Überblick für den Ort „ISMS" (volle Verteilung + zwei Abdeckungen). */
@@ -316,6 +323,7 @@ export function buildHeuteDashboard(tenantId: string): HeuteDashboardModel | und
       decisionRecordedOnDisplay: decisionRegister?.recordedOnDisplay,
     }),
     lifecycleSummary: buildLifecycleSummaryTile(tenant, objects, tenantFacts, !ismsCore.isEmpty),
+    hatReview: objects.some((o) => o.object_type === 'Review'),
     coverage: [
       buildControlsCoverageTile(tenant, ismsCore, {
         label: 'ISMS: Controls mit Nachweis-Stand',
@@ -686,6 +694,7 @@ function buildEmptyTenantModel(tenant: DemoTenant): HeuteDashboardModel {
     stockTiles: [],
     lifecycleSummary: undefined,
     coverage: [],
+    hatReview: false,
     emptyTile: {
       frage: 'Welche Datenlage hat dieser Mandant?',
       text:

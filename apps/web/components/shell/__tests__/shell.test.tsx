@@ -187,6 +187,9 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
     // Die Rückmeldung ist schließbar (kein Timeout, keine Animation).
     fireEvent.click(within(status).getByRole('button', { name: 'Hinweis schließen' }));
     expect(status.textContent).toBe('');
+    // Fokus-Rückführung (Review Code F5): nach dem Schließen darf der Fokus nicht auf <body>
+    // fallen – er wandert auf den Seiteninhalt (Tastatur-/Screenreader-Position bleibt erhalten).
+    expect(document.getElementById('inhalt')).toHaveFocus();
   });
 
   it('Abbrechen (Button oder Escape) verwirft den Wechselwunsch ohne Callback', () => {
@@ -199,6 +202,9 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
     expect(
       screen.queryByRole('group', { name: 'Mandantenwechsel bestätigen' }),
     ).not.toBeInTheDocument();
+    // Fokus-Rückführung (Review Code F5): nach „Abbrechen" kehrt der Fokus auf den
+    // Mandanten-Wechsler zurück, statt auf <body> zu fallen.
+    expect(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)')).toHaveFocus();
 
     // Escape bricht ebenfalls ab (Tastaturweg).
     fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {

@@ -29,6 +29,8 @@ import {
   type CoverageTile,
   type TileExplanation,
 } from '../dashboard';
+import { getPlace } from '../../shell/places';
+import { tenantDetailHref } from '../../twin/routes';
 import { fixtureObject } from './fixtures';
 
 const KATALOG: readonly string[] = [...new Set<string>(ALL_LIFECYCLE_STATUS)];
@@ -223,6 +225,23 @@ describe('Dashboard-Kacheln – jede Kachel erklärt sich selbst', () => {
       }
     });
   }
+
+  // Regressionswache (Review 2. Runde, Code/QA-Finding F1): der Lebenszyklus-Drilldown darf
+  // NICHT statisch auf `/isms` zeigen – für Mandanten ohne ISMS-Kernobjekte existiert dort keine
+  // Verteilung (toter Link auf den Leerzustand). Der alte Bug (immer `/isms`) hätte die
+  // generische „href.length > 0"-Prüfung oben bestanden; hier wird das Ziel je Zweig festgenagelt.
+  it('Lebenszyklus-Drilldown ist mandantenabhängig (F1): mit ISMS-Kern → /isms, sonst Objektliste', () => {
+    // Nordwerk trägt ISMS-Kernobjekte → Verteilung existiert → Drilldown auf /isms.
+    expect(buildHeuteDashboard(TENANT_ID.NORDWERK)?.lifecycleSummary?.drilldown.href).toBe(
+      getPlace('isms').href,
+    );
+    // Consulting Operator hat Objekte, aber keine ISMS-Kernobjekte → kein /isms-Ziel.
+    const operator = buildHeuteDashboard(TENANT_ID.CONSULTING_OPERATOR);
+    expect(operator?.lifecycleSummary?.drilldown.href).toBe(
+      tenantDetailHref(TENANT_ID.CONSULTING_OPERATOR),
+    );
+    expect(operator?.lifecycleSummary?.drilldown.href).not.toBe(getPlace('isms').href);
+  });
 
   it('Mandanten mit Datenbestand tragen einen Datenstand (Systemachse, Kalendertag)', () => {
     for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR]) {

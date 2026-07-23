@@ -181,11 +181,15 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'Nach vorn gezogen: die Kacheln zu Risiko-Minderung, ISMS-Kernobjekten (darunter die ' +
       'Maßnahmen), Nachweis-Stand der Controls und den beiden Datenlücken-Zählungen ' +
       '(Owner je Objekt, Vertrauensgrad je Beziehung).',
+    // MANDANT-INVARIANTER Kern (wahr für JEDEN Mandanten): keine Ebene-1-Kachel zeigt Reviews,
+    // und ein ISMS-Review-Vorgang als eigener Typ ist nicht erfasst. Die mandantenspezifische
+    // Existenzaussage über einen vorhandenen Service-Outcome-Review ergänzt `fokusLueckenTextFuer`
+    // NUR, wenn der aktive Mandant wirklich ein `Review`-Objekt trägt (Domain-Review 2. Runde:
+    // der statische Satz war für den Consulting Operator – ohne Review – eine Fehlbehauptung).
     fokusLueckenText:
-      'Vom Missionsfokus dieser Variante ohne eigene Kachel: Reviews – der Datenbestand ' +
-      'trägt einen Service-Outcome-Review (Ort „Services") und Bestätigungsstufen je ' +
-      'Datensatz, aber keine Kachel der Ebene 1 zeigt Reviews; ein ISMS-Review-Vorgang mit ' +
-      'Person, Zeitpunkt und Ergebnis ist nicht erfasst.',
+      'Vom Missionsfokus dieser Variante ohne eigene Kachel: Reviews – auf Ebene 1 zeigt keine ' +
+      'Kachel Reviews; ein ISMS-Review-Vorgang mit Person, Zeitpunkt und Ergebnis ist nicht als ' +
+      'eigener Typ erfasst.',
     ausblendungText:
       'Die normierte Ausblendung („Portfolio-/Umsatzsicht") ist heute gegenstandslos: diese ' +
       `Seite enthält weder eine Portfolio- noch eine Umsatzdarstellung. ${ERREICHBARKEIT}`,
@@ -326,6 +330,23 @@ export function fokusBelegtTextFuer(
     (alleLeer
       ? ' Für den aktiven Mandanten tragen diese Kacheln derzeit keinen Bestand – sie benennen ihre Lücke selbst.'
       : ' Für den aktiven Mandanten tragen nicht alle diese Kacheln Bestand – die betroffenen benennen ihre Lücke selbst.')
+  );
+}
+
+/**
+ * SICHTBARER Fokus-Lückentext FÜR DEN AKTIVEN MANDANTEN (Domain-Review 2. Runde): der
+ * `fokusLueckenText` ist mandant-invariant. Nur der ISMS-Manager benennt zusätzlich einen
+ * konkret VORHANDENEN Service-Outcome-Review – und das ausschließlich, wenn der aktive Mandant
+ * wirklich ein `Review`-Objekt trägt (`hatReview`). Sonst bliebe es eine Fehlbehauptung
+ * (Consulting Operator hat keinen Review). Der Zusatz hängt hinten an, damit der Basistext
+ * Präfix bleibt (bestehende `toContain`-Prüfungen greifen unverändert).
+ */
+export function fokusLueckenTextFuer(variante: Rollenvariante, hatReview: boolean): string {
+  if (variante.id !== 'isms_manager' || !hatReview) return variante.fokusLueckenText;
+  return (
+    `${variante.fokusLueckenText} Der Datenbestand dieses Mandanten trägt einen ` +
+    'Service-Outcome-Review (Ort „Services") und Bestätigungsstufen je Datensatz – auf Ebene 1 ' +
+    'erscheint er nicht.'
   );
 }
 

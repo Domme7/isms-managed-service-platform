@@ -87,6 +87,7 @@ import {
   KANONISCHE_KACHELORDNUNG,
   KEINE_VARIANTE_TEXT,
   fokusBelegtTextFuer,
+  fokusLueckenTextFuer,
   varianteForRole,
   type TileId,
 } from '../../lib/heute/rollenvarianten';
@@ -465,7 +466,8 @@ function RollenfokusBlock({ role, dashboard }: { role: DemoRole; dashboard: Heut
             'keine Konzeptvorgabe.'}
       </p>
       <p className="rv-fokus-text">
-        {fokusBelegtTextFuer(variante, kachelLage(dashboard))} {variante.fokusLueckenText}
+        {fokusBelegtTextFuer(variante, kachelLage(dashboard))}{' '}
+        {fokusLueckenTextFuer(variante, dashboard.hatReview)}
       </p>
       <p className="rv-fokus-text">{variante.ausblendungText}</p>
       {herkunft === 'normiert' ? (

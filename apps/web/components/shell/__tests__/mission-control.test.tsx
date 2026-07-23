@@ -45,6 +45,7 @@ import { framingForRole, MISSION_SECTIONS } from '../../../lib/heute/framing';
 import {
   KANONISCHE_KACHELORDNUNG,
   NORMIERTE_ROLLEN,
+  fokusLueckenTextFuer,
   kachelOrdnungForRole,
   varianteForRole,
 } from '../../../lib/heute/rollenvarianten';
@@ -965,11 +966,16 @@ describe('MissionControlContent – kein Score, keine Ampel, keine Empfehlung', 
         const fokusZuordnung = demoRole ? varianteForRole(demoRole.id) : null;
         const fokusVariante = fokusZuordnung?.variante ?? null;
         if (fokusVariante && tenantId !== TENANT_ID.FINOVIA) {
+          // Der GERENDERTE Lückentext ist mandantenabhängig (ISMS-Manager ergänzt die
+          // Review-Existenz nur, wenn der Mandant einen Review trägt) – exakt das strippen,
+          // was der Block wirklich zeigt, dieselbe Ableitung wie das Produkt (`hatReview`).
+          const hatReview = buildHeuteDashboard(tenantId)?.hatReview ?? false;
+          const gerendert = fokusLueckenTextFuer(fokusVariante, hatReview);
           expect(
             datentext,
             `${kennung}/${tenantId}: der Fokus-Lückentext steht nicht mehr im Text`,
-          ).toContain(fokusVariante.fokusLueckenText);
-          datentext = datentext.split(fokusVariante.fokusLueckenText).join(' ');
+          ).toContain(gerendert);
+          datentext = datentext.split(gerendert).join(' ');
         }
         // BEGRÜNDETE AUSNAHME (WP-020 Fix-Pass, Product F4): Bei NORMIERTEN Rollen rendert der
         // aufklappbare „Quelle der Variante"-Block die WÖRTLICHEN PDF-Spaltenzitate

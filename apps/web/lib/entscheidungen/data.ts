@@ -481,9 +481,10 @@ export const DECISION_CARD_FIELDS: readonly DecisionCardField[] = [
     coverage: 'teilweise',
     carrier:
       'Teil-Träger ist die Wirkungsannahme der Beziehung („effectiveness_assumption") – im ' +
-      'Vertrag vorhanden und im Datenbestand an Service-Beziehungen erfasst; die ' +
-      'Entscheidungs-Beziehungen dieses Datenbestands tragen sie nicht. Ein eigenes Feld für ' +
-      'erwartete Wirkung auf Risiko, Ziel, Service oder Zeit gibt es nicht.',
+      'technischen Vertrag vorhanden (die Konzept- und PDF-Deckung ist noch offen) und im ' +
+      'Datenbestand an Service-Beziehungen erfasst; die Entscheidungs-Beziehungen dieses ' +
+      'Datenbestands tragen sie nicht. Ein eigenes Feld für erwartete Wirkung auf Risiko, Ziel, ' +
+      'Service oder Zeit gibt es nicht.',
   },
   {
     field: 'Ressourcen',
