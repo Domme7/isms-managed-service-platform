@@ -1,5 +1,33 @@
 # CLAUDE.md – Globale Arbeitsregeln
 
+> ## ⚠️ REGEL NULL: Alles kommt aus den PDFs
+>
+> **Die 24 PDF-Originale unter `docs/concept/pdf/` sind die Produktwahrheit. Punkt.**
+>
+> Jede Anforderung, jedes Pflichtfeld, jede Akzeptanz-Aussage, jedes Vokabular und jede Zahl,
+> die in Code, Datenmodell, Seed, Tests oder Acceptance Criteria einfließt, wird **im PDF
+> nachgelesen** — nicht im Markdown, nicht im Chat, nicht aus dem Gedächtnis.
+>
+> **Warum das keine Formalie ist:** Am 2026-07-23 wurden alle 24 Markdown-Fassungen gegen ihre
+> PDFs geprüft. Ergebnis: **5 schwerwiegend abweichend, 14 material abweichend, nur 1 treu.**
+> Ganze Pflichttabellen fehlten, Verbote wurden zu Empfehlungen abgeschwächt, und Anforderungen
+> standen im Markdown, die im PDF nie existierten. Das Projekt hat monatelang aus einer
+> ungeprüften Interpretation gebaut. Vollständiger Befund:
+> `docs/concept/abgleich/PDF_MARKDOWN_ABGLEICH_2026-07-23.md` · FINDING-0007 · DR-0006.
+>
+> **So liest du ein PDF** (pypdf ist installiert):
+> ```bash
+> python scripts/pdf_text.py 07              # ganzes Dokument als Text
+> python scripts/pdf_text.py 06 --suche "Trust Layer"
+> ```
+>
+> **Zitierregel:** Nenne immer den **Abschnittstitel**, nicht nur die Nummer — die
+> Foliennummerierung im PDF weicht stellenweise von der Navigationsleiste und vom Markdown ab.
+>
+> **Wenn Markdown und PDF sich widersprechen:** das PDF gilt, das Markdown wird korrigiert, und
+> die Korrektur wird als Befund festgehalten. Kein Human Gate nötig — es wird keine
+> Produktentscheidung geändert, sondern eine Übertragung repariert.
+
 ## Produkt
 
 Die ISMS Managed Service Platform ist ein mandantenfähiges, rollenbasiertes Betriebs-, Entscheidungs- und Service-System für kontinuierliches Informationssicherheitsmanagement und skalierbare Managed Services. Sie verbindet digitalen Unternehmenszwilling, ISMS-Kernprozesse, Risiken, Controls, Maßnahmen, Evidence, Decision Center, Reporting, Automatisierung, Beratung und Services. Sie ist kein Dokumentenfriedhof und ersetzt keine operativen Quellsysteme wie SIEM, CMDB, Ticketing oder Schwachstellenscanner.

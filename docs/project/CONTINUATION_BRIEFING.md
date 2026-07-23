@@ -33,6 +33,19 @@ Mandantenwechsels. Vieles, was in Reviews gefunden wurde, war nur dort sichtbar 
 pnpm --filter @isms/web dev      # http://localhost:3000/login
 ```
 
+**⚠️ Regel Null: Alles kommt aus den PDFs.** Jede Anforderung, jedes Pflichtfeld, jedes Vokabular
+und jede Zahl, die in Code, Datenmodell, Seed, Tests oder Acceptance Criteria einfließt, wird **im
+PDF** nachgelesen — nicht im Markdown, nicht aus dem Chat. Grund: Der Abgleich vom 2026-07-23 hat
+**5 schwerwiegend und 14 material abweichende** Markdown-Fassungen gefunden, nur **eine** war treu
+(FINDING-0007, DR-0006, `docs/concept/abgleich/`). Werkzeug:
+
+```bash
+python scripts/pdf_text.py 07                     # Dokument als Text
+python scripts/pdf_text.py 06 --suche "Trust Layer"
+```
+
+Zitiere immer den **Abschnittstitel**, nicht nur die Nummer — die Nummerierung weicht ab.
+
 **Wo die Produktwahrheit liegt:**
 
 | Quelle | Rolle |

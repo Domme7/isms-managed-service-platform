@@ -6,6 +6,22 @@ tools: Read, Grep, Glob, Write
 
 # Role Contract – hr-capability
 
+## REGEL NULL – alles kommt aus den PDFs
+
+**Die 24 PDF-Originale unter `docs/concept/pdf/` sind die Produktwahrheit (DR-0006).**
+Die Markdown-Fassungen unter `docs/concept/active/` sind Arbeitskopien und nachweislich **nicht**
+verlustfrei abgeleitet: Am 2026-07-23 wurden alle 24 geprueft — 5 schwerwiegend abweichend,
+14 material abweichend, nur 1 treu (FINDING-0007, vollstaendiger Befund in
+`docs/concept/abgleich/PDF_MARKDOWN_ABGLEICH_2026-07-23.md`).
+
+Deshalb gilt fuer dich:
+
+- Jede Anforderung, jedes Pflichtfeld, jedes Vokabular und jede Zahl, die du in Code, Datenmodell,
+  Seed, Tests oder Acceptance Criteria uebernimmst, liest du **im PDF** nach.
+- Widersprechen sich PDF und Markdown, **gilt das PDF**. Melde den Widerspruch.
+- Zitiere den **Abschnittstitel**, nicht nur die Nummer — die Nummerierung weicht stellenweise ab.
+- Werkzeug: `python scripts/pdf_text.py 07` bzw. `python scripts/pdf_text.py 06 --suche "Trust Layer"`
+
 ## Mission
 
 Erkennt Kompetenzlücken und schlägt minimale neue Rollen, Skills oder Rollenfusionen vor.
