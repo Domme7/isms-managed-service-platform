@@ -2,11 +2,16 @@
 
 **Stand:** WP-016 **fertig** — `/heute` ist kein Platzhalter mehr; alle vier Orte des Kernwegs sind echt. Die Morning Mission wurde bewusst **nicht** gebaut (Datenlage trägt sie nicht) und die Lücke im Produkt benannt  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** keins — nächster Vorschlag: **Seed-Erweiterung um Aufgaben/Entscheidungen** (O-WP016-03) als Voraussetzung für WP-008, oder Executive-Welt  
+**Aktives Work Package:** **WP-017** Entscheidungen im Zwilling (Seed-Erweiterung + Ort „Entscheidungen")  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Lauffähige Demo-App (Shell + Heute + 3 Erlebnisflächen + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
-**Konzeptstatus:** 24 aktive Markdown-Dokumente vollständig, Manifest-Hashes verifiziert
+**Konzeptstatus:** ⚠️ **Die Markdown-Fassungen sind nicht quellentreu.** Produktwahrheit sind die
+24 **PDF-Originale** unter `docs/concept/pdf/` (DR-0006). Abgleich vom 2026-07-23:
+**5 schwerwiegend, 14 material abweichend, 4 klein, nur 1 treu** — schwerwiegend sind ausgerechnet
+Dok. 03, 04, 05, 06 und 07 (FINDING-0007, Rohbefund in `docs/concept/abgleich/`).
+Die Manifest-Hashes sichern die Markdown-Dateien nur gegen unbemerkte Änderung; sie sagen **nichts**
+über Treue zum PDF.
 
 ## Gesichert
 
@@ -40,7 +45,19 @@
 - Authentisierung/Tenant-Trennung (WP-005), produktive Cloud/CI, reale Daten,
 - Branch-Protection auf `main` (O-GH-002).
 
-## Offene Findings (nicht blockierend)
+## Offene Findings
+
+| ID | Kurz | Schwere | blockiert? |
+|---|---|---|---|
+| **FINDING-0007** | **Markdown-Ableitung der Konzeptdokumente nicht verlustfrei** — es wurde aus einer ungeprüften Interpretation gebaut | **hoch** | blockiert nichts sofort, aber **jedes neue WP muss ab jetzt am PDF gegenlesen** |
+| FINDING-0006 | Domain Gate und QA Gate waren nie besetzt (4 von 9 Gates aus Dok. 20B §36) | mittel | in Behebung ab WP-017 |
+| FINDING-0005 | Kein Linter im Stack, „Lint" stand trotzdem in den Acceptance Criteria | niedrig | nein — Owner-Entscheidung offen |
+| FINDING-0004 | DB-RLS + least-privilege-Rolle fehlen | mittel | **ja** — vor der DB→UI-Anbindung |
+| FINDING-0003 | Twin-Explorer Narrative Chain | niedrig | nein |
+| FINDING-0002 | `validate_handoff.py` prüfte Status-Aktualität nicht | mittel | **teilweise behoben** 2026-07-23: Statuskonsistenz und offene Findings werden jetzt erzwungen |
+| FINDING-0001 | Master-Index-Einstiegspfad weicht von der gebauten Struktur ab | niedrig | nein |
+
+## Frühere Notizen zu Findings
 
 - FINDING-0001: Master-Index-Einstiegspfad weicht von gebauter Struktur ab (Low).
 - FINDING-0002: `validate_handoff.py` prüft keine Status-Aktualität/Branch/Tag (Med); aktive-WP-Prüfung inzwischen WP-agnostisch gemacht.

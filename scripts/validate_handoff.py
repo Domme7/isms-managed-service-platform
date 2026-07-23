@@ -62,12 +62,45 @@ def main() -> None:
         fail(f'LATEST.md target missing: {handover_name}')
 
     active_wp = (ROOT / 'docs/project/ACTIVE_WORK_PACKAGE.md').read_text(encoding='utf-8')
-    m_wp = re.search(r'WP-\d{3}', active_wp)
-    if not m_wp:
-        fail('active work package id (WP-xxx) not found in ACTIVE_WORK_PACKAGE.md')
-    active_wp_id = m_wp.group(0)
-    if not list((ROOT / 'work-packages').glob(f'{active_wp_id}_*.md')):
-        fail(f'active work package file missing for {active_wp_id}')
+    m_wp = re.search(r'^\s*-\s*\*\*ID:\*\*\s*(WP-\d{3})', active_wp, re.M)
+    active_wp_id = m_wp.group(1) if m_wp else None
+    if active_wp_id:
+        if not list((ROOT / 'work-packages').glob(f'{active_wp_id}_*.md')):
+            fail(f'active work package file missing for {active_wp_id}')
+
+    # ECHTE Konsistenzpruefung. Vorher standen hier zwei getrennte Existenzpruefungen, waehrend die
+    # Ausgabe "active WP and latest handover are consistent" behauptete - die beiden Dateien wurden
+    # nie miteinander verglichen. Genau so konnte CURRENT_STATE "kein aktives Work Package" sagen,
+    # waehrend ACTIVE_WORK_PACKAGE.md und LATEST.md WP-017 fuehrten. Die erste Datei, die eine neue
+    # Session liest, war damit falsch (FINDING-0002).
+    m_latest_wp = re.search(r'\*\*Work Package:\*\*\s*(\S+)', latest)
+    latest_wp_id = m_latest_wp.group(1) if m_latest_wp else None
+    if active_wp_id and latest_wp_id and latest_wp_id.startswith('WP-') and latest_wp_id != active_wp_id:
+        fail(f'ACTIVE_WORK_PACKAGE.md fuehrt {active_wp_id}, LATEST.md fuehrt {latest_wp_id}')
+
+    current_state = (ROOT / 'docs/project/CURRENT_STATE.md').read_text(encoding='utf-8')
+    m_cs = re.search(r'\*\*Aktives Work Package:\*\*\s*(.+)', current_state)
+    if m_cs:
+        cs_zeile = m_cs.group(1)
+        m_cs_wp = re.search(r'WP-\d{3}', cs_zeile)
+        cs_sagt_keins = re.search(r'\bkeins?\b', cs_zeile, re.I) is not None
+        if active_wp_id and cs_sagt_keins and not m_cs_wp:
+            fail(f'CURRENT_STATE.md sagt "kein aktives Work Package", ACTIVE_WORK_PACKAGE.md fuehrt {active_wp_id}')
+        if active_wp_id and m_cs_wp and m_cs_wp.group(0) != active_wp_id:
+            fail(f'CURRENT_STATE.md fuehrt {m_cs_wp.group(0)}, ACTIVE_WORK_PACKAGE.md fuehrt {active_wp_id}')
+
+    # Offene Findings muessen in CURRENT_STATE auftauchen - sonst liest eine neue Session einen
+    # Status, der bekannte Risiken verschweigt.
+    offene_findings = []
+    for p in sorted((ROOT / 'docs/project/risks').glob('FINDING-*.md')):
+        text = p.read_text(encoding='utf-8')
+        m_status = re.search(r'\*\*Status:\*\*\s*(.+)', text)
+        if m_status and re.search(r'offen|in behebung', m_status.group(1), re.I):
+            fid = p.name.split('_')[0]
+            if fid not in current_state:
+                offene_findings.append(fid)
+    if offene_findings:
+        fail('offene Findings fehlen in CURRENT_STATE.md: ' + ', '.join(offene_findings))
 
     skip_dirs = {'.git', 'node_modules', 'dist', '.next', '.turbo', 'build', 'coverage'}
     for p in ROOT.rglob('*'):
@@ -83,10 +116,16 @@ def main() -> None:
             if pattern.search(text):
                 fail(f'possible secret pattern in {p.relative_to(ROOT)}')
 
+    # Jede Meldung sagt auch, was sie NICHT abdeckt. Ein "[OK]", das mehr behauptet als es prueft,
+    # ist schlimmer als keine Pruefung - der Owner liest es und glaubt es zu Recht.
     print('[OK] required paths present')
-    print('[OK] 24 active concept documents and hashes verified')
-    print('[OK] active WP and latest handover are consistent')
-    print('[OK] no obvious secret patterns detected')
+    print('[OK] 24 aktive Konzept-Markdowns vorhanden, Hashes stimmen')
+    print('     -> sagt NICHTS ueber Treue zu den PDF-Originalen (DR-0006, FINDING-0007);')
+    print('        dafuer: docs/concept/abgleich/ und scripts/pdf_text.py')
+    print('[OK] Statusdateien konsistent (ACTIVE_WORK_PACKAGE / LATEST / CURRENT_STATE)')
+    print('[OK] offene Findings sind in CURRENT_STATE.md genannt')
+    print('[OK] keine offensichtlichen Secret-Muster')
+    print('     -> Mustersuche, kein vollstaendiger Secret Scan')
 
 
 if __name__ == '__main__':

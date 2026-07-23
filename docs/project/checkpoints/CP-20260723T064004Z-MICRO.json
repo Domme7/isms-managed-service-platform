@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260723T064004Z-MICRO",
+  "type": "micro",
+  "work_package": "WP-017",
+  "timestamp_utc": "2026-07-23T06:40:04.188373+00:00",
+  "summary": "WP-017 laeuft; Prozessbefunde aus unabhaengiger Pruefung behoben: validate_handoff prueft jetzt echte Statuskonsistenz, checkpoint.py liest das WP aus der Statusdatei, CURRENT_STATE korrigiert",
+  "branch": "main",
+  "commit": "f0e3ed3",
+  "git_status": "M apps/web/components/shell/MissionControlContent.tsx\n M apps/web/components/shell/__tests__/mission-control.test.tsx\n M apps/web/components/twin/ObjectDetailView.tsx\n M apps/web/components/twin/__tests__/object-detail.test.tsx\n M apps/web/lib/heute/__tests__/data.test.ts\n M apps/web/lib/heute/data.ts\n M apps/web/lib/isms/__tests__/data.test.ts\n M apps/web/lib/twin/__tests__/object-detail.test.ts\n M apps/web/lib/twin/data.ts\n M apps/web/lib/twin/object-detail.ts\n M docs/project/CURRENT_STATE.md\n M packages/db/src/seed-loader.spec.ts\n M packages/db/src/tenant-isolation.spec.ts\n M packages/demo-seed/README.md\n M packages/demo-seed/seed-manifest.json\n M packages/demo-seed/src/index.ts\n M packages/demo-seed/src/seed.spec.ts\n M packages/demo-seed/src/seed.ts\n M scripts/checkpoint.py\n M scripts/validate_handoff.py\n?? packages/demo-seed/src/decisions.ts\n?? pnpm",
+  "tests": "nicht angegeben (bei micro/handover zulaessig)",
+  "exact_next_step": "Nachhol-Liste aus dem PDF-Abgleich als Work Packages in die Queue eintragen; WP-017 Reviews abwarten"
+}
