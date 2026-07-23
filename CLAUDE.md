@@ -6,14 +6,20 @@ Die ISMS Managed Service Platform ist ein mandantenfähiges, rollenbasiertes Bet
 
 ## Verbindliche Projektwahrheit
 
-1. Aktive Konzeptquellen: `docs/concept/active/`
-2. Master-Index: `docs/concept/active/00_MASTER_INDEX_UND_PROJEKTVERFASSUNG_v1.2.md`
-3. Aktueller Status: `docs/project/CURRENT_STATE.md`
-4. Aktives Work Package: `docs/project/ACTIVE_WORK_PACKAGE.md`
-5. Letzter Wiedereinstieg: `docs/project/handovers/LATEST.md`
-6. Entscheidungen: `docs/architecture/adr/` und `docs/decisions/`
-7. Code, Tests und Migrationen sind Umsetzungswahrheit, nicht Produktwahrheit.
-8. Chat, Transcript und lokales Memory sind nicht autoritativ.
+1. **Konzept-Originale = Produktwahrheit: `docs/concept/pdf/` (24 PDFs) — Pflichtlektüre, kein
+   Archiv.** Bei jeder Abweichung zwischen PDF und Markdown gilt **das PDF** (DR-0006). Alles, was
+   in ein Datenmodell, eine Acceptance Criterion oder eine Produktaussage einfließt, wird im PDF
+   gegengelesen. Textextraktion: Python + `pypdf`.
+2. **Arbeitsfassung: `docs/concept/active/` (24 Markdown-Dokumente)** — durchsuchbar und zitierbar,
+   aber nachweislich **nicht** verlustfrei aus den PDFs abgeleitet (FINDING-0007). Eine Aussage,
+   die **nur** im Markdown steht, ist begründungspflichtig.
+3. Master-Index: `docs/concept/active/00_MASTER_INDEX_UND_PROJEKTVERFASSUNG_v1.2.md`
+4. Aktueller Status: `docs/project/CURRENT_STATE.md`
+5. Aktives Work Package: `docs/project/ACTIVE_WORK_PACKAGE.md`
+6. Letzter Wiedereinstieg: `docs/project/handovers/LATEST.md`
+7. Entscheidungen: `docs/architecture/adr/` und `docs/decisions/`
+8. Code, Tests und Migrationen sind Umsetzungswahrheit, nicht Produktwahrheit.
+9. Chat, Transcript und lokales Memory sind nicht autoritativ.
 
 ## Start jeder Session
 

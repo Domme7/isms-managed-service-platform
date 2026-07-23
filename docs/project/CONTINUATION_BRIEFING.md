@@ -37,8 +37,8 @@ pnpm --filter @isms/web dev      # http://localhost:3000/login
 
 | Quelle | Rolle |
 |---|---|
-| `docs/concept/active/*.md` (24 Dokumente) | **verbindlich** — daraus wird abgeleitet |
-| `docs/concept/pdf/*.pdf` (24 Originale) | die ursprünglich gelieferten Konzeptdokumente; bei Zweifeln am Markdown hier gegenlesen |
+| **`docs/concept/pdf/*.pdf` (24 Originale)** | **Produktwahrheit — Pflichtlektüre (DR-0006).** Bei Abweichung gilt das PDF. Textextraktion mit Python + `pypdf`. |
+| `docs/concept/active/*.md` (24 Dokumente) | Arbeitsfassung: durchsuchbar und zitierbar, aber **nicht verlustfrei** abgeleitet (FINDING-0007). Eine Aussage, die nur hier steht, ist begründungspflichtig. |
 | `docs/concept/MANIFEST.json` | Hashes; `validate_handoff.py` prüft sie |
 | `docs/project/PROJECT_UNDERSTANDING.md` | destilliertes Gesamtverständnis für den schnellen Einstieg — **nicht** autoritativ |
 | `docs/project/OPEN_QUESTIONS.md` | alle benannten Konzeptlücken (O-…) — hier steht, was bewusst **nicht** gebaut wurde |
