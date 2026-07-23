@@ -56,6 +56,7 @@ sichtbare Abnahme). Jede mit Empfehlung und Default — **keine blockiert den We
 | ID | Kurz | Schwere | blockiert? |
 |---|---|---|---|
 | **FINDING-0007** | **Markdown-Ableitung der Konzeptdokumente nicht verlustfrei** — es wurde aus einer ungeprüften Interpretation gebaut | **hoch** | blockiert nichts sofort, aber **jedes neue WP muss ab jetzt am PDF gegenlesen** |
+| FINDING-0008 | `<dl role="group">` entfernt die Listensemantik — 3× serious (axe, WCAG 1.3.1) auf den Kontextzeilen von /heute, /entscheidungen, Objekt-360; der A11y-Fix aus WP-014 hatte eine ungemessene Kehrseite | mittel | nein — Korrektur als Folge-WP mit Product Gate |
 | FINDING-0006 | Domain Gate und QA Gate waren nie besetzt (4 von 9 Gates aus Dok. 20B §36) | mittel | in Behebung ab WP-017 |
 | FINDING-0005 | Kein Linter im Stack, „Lint" stand trotzdem in den Acceptance Criteria | niedrig | nein — Owner-Entscheidung offen |
 | FINDING-0004 | DB-RLS + least-privilege-Rolle fehlen | mittel | **ja** — vor der DB→UI-Anbindung |
