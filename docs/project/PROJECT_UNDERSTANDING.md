@@ -1,3 +1,8 @@
+> ⚠️ **HISTORISCH — NICHT VERWENDEN (seit 2026-07-23).** Diese Destillation entstand aus den
+> Markdown-Arbeitsfassungen, die nachweislich nicht quellentreu waren (FINDING-0007), und trägt
+> u. a. eine erfundene Rollenfamilien-Taxonomie weiter (O-WP019-07). Der schnelle Einstieg läuft
+> heute über `docs/project/CONTINUATION_BRIEFING.md` §0; Produktwahrheit sind die PDFs (DR-0006).
+
 # Projektverständnis – ISMS Managed Service Platform
 
 *Erzeugt am 22.07.2026 durch vollständiges Lesen aller 24 aktiven Konzept-Markdowns. Markante Fachbegriffe wurden stichprobenartig gegen die Quellen verifiziert (F01–F09, R01–R12, S01–S11, J01–J13, P01–P12 existieren real). **Nicht autoritativ** — bei Konflikt gilt `docs/concept/active/`. Dient als schneller, dichter Einstieg für neue Sessions.*

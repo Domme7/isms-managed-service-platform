@@ -2,7 +2,14 @@
 
 - **Severity:** **Hoch** — betrifft die Grundlage, aus der Datenverträge, Seed, Oberflächen und
   Acceptance Criteria abgeleitet wurden
-- **Status:** Offen — systematischer Abgleich aller 24 Dokumente läuft
+- **Status:** **Teilweise behoben (2026-07-23):** Die fünf schwerwiegend abweichenden Dok. 03–07
+  sind per WP-019 vollständig aus den PDFs neu abgeleitet und je Dokument unabhängig gegen den
+  PDF-Text freigegeben (Nachtrag: `docs/concept/abgleich/NACHTRAG_WP-019_2026-07-23.md`).
+  **Offen:** die 14 material abweichenden Dokumente (Folge-WP) und der automatische Treue-Check
+  (O-WP019-01).
+  **Korrektur am eigenen Beispiel:** „Kritikalität" steht doch im PDF von Dok. 07 — in der
+  **Abbildung** der Objekt-360-Folie (visuell verifiziert), nicht im Textlayer. O-WP014-01 bleibt
+  damit eine echte Konzeptlücke. Lehre: Text-Extraktion ist nicht das ganze PDF.
 - **Gefunden:** 2026-07-23, auf Anweisung des Owners, sich an die PDFs zu halten
 - **Betroffen:** `docs/concept/active/*.md`, alle Work Packages seit WP-003, `@isms/contracts`,
   `@isms/demo-seed`, `apps/web`, `docs/project/OPEN_QUESTIONS.md`

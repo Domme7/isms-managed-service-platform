@@ -53,7 +53,7 @@ Zitiere immer den **Abschnittstitel**, nicht nur die Nummer — die Nummerierung
 | Quelle | Rolle |
 |---|---|
 | **`docs/concept/pdf/*.pdf` (24 Originale)** | **Produktwahrheit — Pflichtlektüre (DR-0006).** Bei Abweichung gilt das PDF. Textextraktion mit Python + `pypdf`. |
-| `docs/concept/active/*.md` (24 Dokumente) | Arbeitsfassung: durchsuchbar und zitierbar, aber **nicht verlustfrei** abgeleitet (FINDING-0007). Eine Aussage, die nur hier steht, ist begründungspflichtig. |
+| `docs/concept/active/*.md` (24 Dokumente) | Arbeitsfassung. **Dok. 03–07 seit WP-019 quellentreu** (Kopfnotiz mit Konkordanz beachten); die übrigen weiterhin nicht verlustfrei (FINDING-0007, WP-023). Eine Aussage, die nur hier steht, ist begründungspflichtig. |
 | `docs/concept/MANIFEST.json` | Hashes; `validate_handoff.py` prüft sie |
 | `docs/project/PROJECT_UNDERSTANDING.md` | destilliertes Gesamtverständnis für den schnellen Einstieg — **nicht** autoritativ |
 | `docs/project/OPEN_QUESTIONS.md` | alle benannten Konzeptlücken (O-…) — hier steht, was bewusst **nicht** gebaut wurde |
@@ -89,7 +89,8 @@ Lauffähige Demo-App (read-only, rein synthetisch). Drei Orte der Shell sind ech
 | Mission Control „Heute" | WP-016 ✅ (**ohne** Morning Mission — Datenlage trägt sie nicht) |
 | Entscheidungen im Zwilling | WP-017 ✅ (erste Versionshistorie im Seed; Register statt Decision Card) |
 | Werkzeuge & sichtbare Abnahme | WP-018 ✅ (Linter, `qa:visual` mit Screenshots+axe je WP, drei Wächter) |
-| **Nächstes** | **WP-019 Konzeptfassungen aus den PDFs** (FINDING-0007, Dok. 03–07 zuerst) → WP-020 verlorene Anforderungen → WP-021 Demo-Welt |
+| Konzeptfassungen Dok. 03–07 | WP-019 ✅ (quellentreu aus den PDFs; Kopfnotizen mit Konkordanz; 11 WP-020-Punkte im Nachtrag) |
+| **Nächstes** | **WP-020 verlorene Anforderungen** (11-Punkte-Liste im Nachtrag, Cross-Tenant-Schutz zuerst) → WP-021 Demo-Welt → WP-023 Konzept Teil 2 |
 
 Testlage: **448 Tests grün** (api 2 · contracts 55 · demo-seed 54 · web 318 · db 19). CI grün.
 Seit WP-018: `pnpm lint` (Biome), `pnpm qa:visual <WP>` (Screenshots + axe nach `docs/project/visual/`).

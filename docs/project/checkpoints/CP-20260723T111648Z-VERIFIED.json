@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260723T111648Z-VERIFIED",
+  "type": "verified",
+  "work_package": "keins (kein aktives Work Package)",
+  "timestamp_utc": "2026-07-23T11:16:48.267243+00:00",
+  "summary": "WP-019 abgeschlossen: Dok. 03-07 vollstaendig aus den PDFs neu abgeleitet, je Dokument unabhaengiges Konsistenz-Gate gegen den PDF-Text (Dok. 04 Nacharbeit -> Freigabe Runde 2: das Gate fing rekonstruierte Abbildungstranskriptionen aus der Alt-Fassung). update_manifest.py gebaut und freigegeben. Nachtrag mit Verbleib aller Befunde und 11 WP-020-Uebergabepunkten. O-WP014-01 praezisiert: Kritikalitaet steht in der PDF-Abbildung (visuell verifiziert), nicht im Textlayer - echte Konzeptluecke bestaetigt.",
+  "branch": "main",
+  "commit": "b1b8cfa",
+  "git_status": "M docs/project/ACTIVE_WORK_PACKAGE.md\n M docs/project/CONTINUATION_BRIEFING.md\n M docs/project/CURRENT_STATE.md\n M docs/project/OPEN_QUESTIONS.md\n M docs/project/PROJECT_UNDERSTANDING.md\n M docs/project/WORK_QUEUE.md\n M docs/project/risks/FINDING-0007_markdown_ableitung_nicht_verlustfrei.md\n?? docs/concept/abgleich/NACHTRAG_WP-019_2026-07-23.md\n?? docs/project/reviews/WP-019_INDEPENDENT_REVIEW.md",
+  "tests": "validate_handoff 5/5 OK nach Manifest-Regeneration; pnpm test --force 448 gruen (7/7 Tasks); update_manifest idempotent",
+  "exact_next_step": "WP-020 verlorene Anforderungen (11-Punkte-Liste im WP-019-Nachtrag, Cross-Tenant-Schutz zuerst; Punkt 8 nur als Change Proposal wegen Contract-Beruehrung)"
+}

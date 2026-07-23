@@ -1,17 +1,16 @@
 # Current State
 
-**Stand:** WP-018 **fertig** — der Prozess erzeugt Qualität jetzt auch über **Mechanik**: Linter (FINDING-0005 geschlossen), `pnpm qa:visual` mit committeten Screenshots + axe-Report je WP (E-03 eingelöst), drei Wächtertests. Der erste axe-Lauf fand sofort einen echten A11y-Befund (FINDING-0008), den zwei manuelle Reviewrunden nicht sehen konnten  
+**Stand:** WP-019 **fertig** — die fünf schwerwiegend abweichenden Konzeptfassungen (Dok. 03–07) sind **vollständig aus den PDFs neu abgeleitet** und je Dokument unabhängig freigegeben. Das Gate fing dabei eine Erfindung (rekonstruierte Abbildungen in Dok. 04), und der Prozess korrigierte seinen eigenen Fehler: „Kritikalität“ steht doch im PDF — in der **Abbildung**, nicht im Textlayer (O-WP014-01 bestätigt statt gestrichen)  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** **WP-019** Konzeptfassungen aus den PDFs nachziehen (FINDING-0007, Dok. 03–07)  
+**Aktives Work Package:** keins — als Nächstes **WP-020** verlorene Anforderungen (11-Punkte-Liste im WP-019-Nachtrag, Cross-Tenant-Schutz zuerst)  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Lauffähige Demo-App (Shell + Heute + Zwilling + ISMS + Services + **Entscheidungen** + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
-**Konzeptstatus:** ⚠️ **Die Markdown-Fassungen sind nicht quellentreu.** Produktwahrheit sind die
-24 **PDF-Originale** unter `docs/concept/pdf/` (DR-0006). Abgleich vom 2026-07-23:
-**5 schwerwiegend, 14 material abweichend, 4 klein, nur 1 treu** — schwerwiegend sind ausgerechnet
-Dok. 03, 04, 05, 06 und 07 (FINDING-0007, Rohbefund in `docs/concept/abgleich/`).
-Die Manifest-Hashes sichern die Markdown-Dateien nur gegen unbemerkte Änderung; sie sagen **nichts**
-über Treue zum PDF.
+**Konzeptstatus:** Produktwahrheit sind die 24 **PDF-Originale** (DR-0006). **Dok. 03–07 sind seit
+WP-019 quellentreu nachgezogen** (Vollableitung + Konsistenz-Gate je Dokument, Kopfnotiz mit
+Konkordanz); **14 material abweichende Dokumente stehen noch aus** (WP-023), ebenso der
+automatische Treue-Check (O-WP019-01/WP-024). Rohbefund + Nachtrag: `docs/concept/abgleich/`.
+Manifest per `scripts/update_manifest.py` regenerierbar — Hashes sagen nichts über PDF-Treue.
 
 ## Gesichert
 
@@ -32,6 +31,7 @@ Die Manifest-Hashes sichern die Markdown-Dateien nur gegen unbemerkte Änderung;
 - **Mission Control „Heute"** (WP-016): `/heute` beantwortet seine Leitfrage (Dok. 06 §7 S01) so weit, wie der Datenbestand sie trägt — Standort (Rolle/Mandant/Bestand), belegte **Erfassungswellen** (ausdrücklich kein Änderungsfeed), vier **gezählte, unbewertete** Beobachtungen mit Grundgesamtheit und Ermittlungsregel, Einstiegspunkte. Rollenrahmung ordnet nur die Abschnitte, alle zwölf Rollen sehen dieselben Daten (per Test). **Die Morning Mission (Dok. 10 §5) wurde bewusst nicht gebaut** — der Seed trägt keine `Task`-/`Decision Record`-Objekte, der Objektvertrag keine Frist-/Aufwand-/Kapazitätsfelder, es gibt keine Ereignisse und keine Versionshistorie; die Lücke ist im Produkt benannt statt gefüllt. 2 Reviews + 2 Gegenprüfungen + Browser-QA; O-WP016-01..08, FINDING-0005 (kein Linter im Stack). **Monorepo gesamt: 343 Tests grün.**
 - **Entscheidungen im Zwilling** (WP-017): Seed um 3 `Decision Record`-Objekte + 8 Kanten erweitert (R23 `decided_in`, R15, R03, **R24 `supersedes`-Ablösepaar = erste Versionshistorie des Seeds**, eigene dritte Erfassungswelle 16.03.2026); Ort `/entscheidungen` als read-only Register belegter Entscheidungen mit beidseitiger Ablösekette — ausdrücklich **keine** Decision Card (von 14 Pflichtfeldern aus Dok. 10 haben **9 keinen Träger**, 5 teilweise; feldweiser Abgleich im Produkt sichtbar, inkl. der 7 Decision-Record-Inhalte aus Dok. 10 §9.2). 2 Reviews + 2 Gegenprüfungen + Browser-QA; O-WP017-01..12, O-KONZ-01. **Nebenertrag: Mandantengrenzverletzung in `/isms` (seit WP-013) gefunden und behoben; Wächtertest `leerzustand-mandantengrenze` prüft alle leeren Orte.** Seed jetzt 43 Objekte / 62 Beziehungen (Nordwerk 34/51). **Monorepo gesamt: 428 Tests grün.**
 - **Werkzeuge & sichtbare Abnahme** (WP-018): Biome-Linter über alle Pakete + CI (ADR-0003, FINDING-0005 geschlossen); `pnpm qa:visual <WP>` erzeugt **committete Screenshots + axe-Report** je Work Package (`docs/project/visual/`, ADR-0004) — QA-Build strikt getrennt in `.next-qa`/Port 3100 mit Build-Ziel-Wache (Lektion 10 mechanisch abgesichert); drei Wächter: Prozessvokabular im Produkt (64 Render-Varianten), erschöpfende Glossen-Typen (fehlende deutsche Labels = Compilefehler), `seed_facts` (Zahlen generiert statt abgeschrieben). Erste Umsetzung der Gate-Matrix (Code + DevOps + QA + Produkt-Sondergate für AC-24). Erster axe-Lauf → **FINDING-0008**. **Monorepo gesamt: 448 Tests grün.**
+- **Konzeptfassungen Dok. 03–07 quellentreu** (WP-019): Vollableitung aus den PDF-Originalen nach Folientiteln, Kopfnotiz mit Re-Ableitungsdatum/Quell-PDF/Nummerierungs-Konkordanz, alle Tabellen und verbindlichen Kästen, stabile Kennungen unverändert, Vorgänger archiviert; Konsistenz-Gate je Dokument gegen den PDF-Text (Dok. 04: Nacharbeit → Freigabe Runde 2 — das Gate fing **rekonstruierte Abbildungstranskriptionen aus der Alt-Fassung**); `scripts/update_manifest.py` (Code-Review Freigabe); Nachtrag mit Verbleib aller Befunde und **11 WP-020-Übergabepunkten**; O-WP019-01..08; O-WP014-01 präzisiert; `PROJECT_UNDERSTANDING.md` historisch markiert. **448 Tests grün.**
 - **`@isms/db`** (WP-007): Persistenzschicht PostgreSQL/Drizzle — Schema/Migration/tenant-scoped Repos/Seed-Loader aus den Contracts, getestet gegen **PGlite** (kein Docker), serverseitige Tenant-Isolation mit Negativbeweisen; Code- + Security-Review (SICHER FÜR DEMO-SCOPE); RLS-Härtung → FINDING-0004. **Monorepo gesamt: 112 Tests grün.**
 
 ## Verifikations-Evidence (WP-002)
