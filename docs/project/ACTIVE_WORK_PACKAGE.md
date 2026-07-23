@@ -5,7 +5,9 @@
   Stufe 1 und Cockpit-Varianten in den Sprint gezogen, danach **STOPP für visuelle Freigabe**
 - **Definition:** `work-packages/WP-020_VERDICHTUNG_DASHBOARD_EINSTIEG.md`
 - **Context Pack:** `context-packs/WP-020_CONTEXT_PACK.md`
-- **Status:** Active — Slice 1 fertig + committet (`7971bc6`); als Nächstes Slice 3+4 (Dashboard)
+- **Status:** **WP-020 abgeschlossen** (alle Slices gebaut, 2 Reviewrunden, 2 Fix-Pässe, 450 Tests
+  grün, axe sauber, FINDING-0009 geschlossen). **Nächster Sprint-Schritt: Kundenwelt Stufe 1 (WP-006)**,
+  dann 2–3 Cockpit-Varianten → **STOPP für visuelle Owner-Freigabe** (DR-0010)
 - **Builder:** `frontend-engineer` (sequenziell, committet nie selbst); `concept-author` für
   Slice 6 ✓ (CCP-004 liegt vor, `ca9a7bb`)
 - **Gates:** Code + Product + Domain + QA + **Security & Privacy (Pflicht)** + Konzepttreue;
@@ -18,7 +20,9 @@
 1. ~~Slice 1 Cross-Tenant-Schutz & sichtbarer Kontext~~ ✅ (`7971bc6`; FINDING-0009 gefunden + behoben)
 2. ~~Slice 3+4: strategisches Dashboard~~ ✅ (`c45f581`; web 403 Tests; O-WP020-12/13 neu)
 3. ~~Slice 2: Einstiegsfluss (DR-0009) + Punkt 9~~ ✅ (`03b092c`; web 422; qa:visual-Artefakte `a4d5bf1`)
-4. **Slice 5: Rollenvarianten-Personalisierung + Konzeptabgleiche (Decision-Card-Zweitliste, Trust-Layer)** ← **in Arbeit**
+4. ~~Slice 5: Rollenvarianten-Personalisierung + Konzeptabgleiche~~ ✅ (`91a9270`)
+   → **6 Gates × 2 Runden abgeschlossen** (Review-Notiz `docs/project/reviews/WP-020_INDEPENDENT_REVIEW.md`),
+   Fix-Pass 1 (`4a195a9`) + Fix-Pass 2 (`3df1224`); FINDING-0009 geschlossen. **WP-020 DONE.**
 5. **Sichtbare Kundenwelt Stufe 1** (WP-006 vorgezogen, DR-0010 Nr. 2): read-only aus PDFs
    Dok. 14/16, fehlende Träger benannt
 6. **2–3 Cockpit-Varianten** (WP-025-Kern) per `qa:visual` → **STOPP, visuelle Owner-Freigabe**

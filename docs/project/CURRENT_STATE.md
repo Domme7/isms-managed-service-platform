@@ -2,11 +2,12 @@
 
 **Stand:** WP-019 **fertig** — die fünf schwerwiegend abweichenden Konzeptfassungen (Dok. 03–07) sind **vollständig aus den PDFs neu abgeleitet** und je Dokument unabhängig freigegeben. Das Gate fing dabei eine Erfindung (rekonstruierte Abbildungen in Dok. 04), und der Prozess korrigierte seinen eigenen Fehler: „Kritikalität“ steht doch im PDF — in der **Abbildung**, nicht im Textlayer (O-WP014-01 bestätigt statt gestrichen)  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** **WP-020 als Produktkorrektur-Sprint (DR-0010)** — Slice 1
-(Cross-Tenant-Schutz, `7971bc6`) und Slice 6 (CCP-004, `ca9a7bb`) fertig; Reihenfolge jetzt:
-Dashboard → Einstiegsfluss → Rollenvarianten → Kundenwelt Stufe 1 → Cockpit-Varianten →
-**STOPP für visuelle Owner-Freigabe**. Parallel: **WP-023** (14 Markdown-Fassungen aus den
-PDFs, Dok. 14/16 zuerst). Details: `ACTIVE_WORK_PACKAGE.md`  
+**Aktives Work Package:** **Produktkorrektur-Sprint (DR-0010)** — **WP-020 abgeschlossen**
+(alle Slices, 6 Gates × 2 Reviewrunden, 2 Fix-Pässe, 450 Web-Tests grün, axe sauber,
+FINDING-0009 geschlossen; Review-Notiz `docs/project/reviews/WP-020_INDEPENDENT_REVIEW.md`).
+**Nächster Sprint-Schritt: Kundenwelt Stufe 1 (WP-006, geschnitten)**, dann 2–3 Cockpit-Varianten
+→ **STOPP für visuelle Owner-Freigabe**. **WP-023 fertig** (14 Markdown-Fassungen quellentreu).
+Details: `ACTIVE_WORK_PACKAGE.md`  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Lauffähige Demo-App (Shell + Heute + Zwilling + ISMS + Services + **Entscheidungen** + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
@@ -39,6 +40,17 @@ Treue-Check (O-WP019-01/WP-024) — **Regel Null gilt unverändert**. Rohbefund 
 - **Entscheidungen im Zwilling** (WP-017): Seed um 3 `Decision Record`-Objekte + 8 Kanten erweitert (R23 `decided_in`, R15, R03, **R24 `supersedes`-Ablösepaar = erste Versionshistorie des Seeds**, eigene dritte Erfassungswelle 16.03.2026); Ort `/entscheidungen` als read-only Register belegter Entscheidungen mit beidseitiger Ablösekette — ausdrücklich **keine** Decision Card (von 14 Pflichtfeldern aus Dok. 10 haben **9 keinen Träger**, 5 teilweise; feldweiser Abgleich im Produkt sichtbar, inkl. der 7 Decision-Record-Inhalte aus Dok. 10 §9.2). 2 Reviews + 2 Gegenprüfungen + Browser-QA; O-WP017-01..12, O-KONZ-01. **Nebenertrag: Mandantengrenzverletzung in `/isms` (seit WP-013) gefunden und behoben; Wächtertest `leerzustand-mandantengrenze` prüft alle leeren Orte.** Seed jetzt 43 Objekte / 62 Beziehungen (Nordwerk 34/51). **Monorepo gesamt: 428 Tests grün.**
 - **Werkzeuge & sichtbare Abnahme** (WP-018): Biome-Linter über alle Pakete + CI (ADR-0003, FINDING-0005 geschlossen); `pnpm qa:visual <WP>` erzeugt **committete Screenshots + axe-Report** je Work Package (`docs/project/visual/`, ADR-0004) — QA-Build strikt getrennt in `.next-qa`/Port 3100 mit Build-Ziel-Wache (Lektion 10 mechanisch abgesichert); drei Wächter: Prozessvokabular im Produkt (64 Render-Varianten), erschöpfende Glossen-Typen (fehlende deutsche Labels = Compilefehler), `seed_facts` (Zahlen generiert statt abgeschrieben). Erste Umsetzung der Gate-Matrix (Code + DevOps + QA + Produkt-Sondergate für AC-24). Erster axe-Lauf → **FINDING-0008**. **Monorepo gesamt: 448 Tests grün.**
 - **Konzeptfassungen Dok. 03–07 quellentreu** (WP-019): Vollableitung aus den PDF-Originalen nach Folientiteln, Kopfnotiz mit Re-Ableitungsdatum/Quell-PDF/Nummerierungs-Konkordanz, alle Tabellen und verbindlichen Kästen, stabile Kennungen unverändert, Vorgänger archiviert; Konsistenz-Gate je Dokument gegen den PDF-Text (Dok. 04: Nacharbeit → Freigabe Runde 2 — das Gate fing **rekonstruierte Abbildungstranskriptionen aus der Alt-Fassung**); `scripts/update_manifest.py` (Code-Review Freigabe); Nachtrag mit Verbleib aller Befunde und **11 WP-020-Übergabepunkten**; O-WP019-01..08; O-WP014-01 präzisiert; `PROJECT_UNDERSTANDING.md` historisch markiert und archiviert. **448 Tests grün.**
+- **Verdichtung, Dashboard, Einstiegsfluss** (WP-020, DR-0008/0009/0010): strategische Ebene 1
+  auf `/heute` (Detailtiefe-Ebenen, Statuskacheln/Verteilungen/Abdeckungen **aus belegten Daten**,
+  Ampel-Badges nur auf erfassten Zuständen mit Positivliste, leere Mandanten als ehrliche
+  Datenlücken-Kachel); neuer Einstieg **Login (nur Mandant) → neutrales Dashboard → Rollenwahl in
+  der App**; Cross-Tenant-Schutz (angekündigter Mandantenwechsel, vollständiger sichtbarer Kontext);
+  Rollenvarianten-Personalisierung (normative Tabelle, 4/12 normiert + Welt-Ableitung);
+  Seitenbausteine-Konvention + Decision-Card-Zweitliste + Trust-Layer-Abgleich; neun Pflicht-
+  Seitenbausteine je Ort ehrlich zugeordnet. **6 Gates × 2 Reviewrunden, 2 Fix-Pässe** (die zweite
+  Runde fing eine fix-induzierte Fehlbehauptung); **FINDING-0009 geschlossen** (4. Instanz der
+  Leerzustands-Leak-Klasse + mechanischer Meta-Assertion-Schutz); **FINDING-0008 auf 7 Seiten
+  saniert** (Rest Objekt-360-Altbestand). **Monorepo web: 450 Tests grün.**
 - **`@isms/db`** (WP-007): Persistenzschicht PostgreSQL/Drizzle — Schema/Migration/tenant-scoped Repos/Seed-Loader aus den Contracts, getestet gegen **PGlite** (kein Docker), serverseitige Tenant-Isolation mit Negativbeweisen; Code- + Security-Review (SICHER FÜR DEMO-SCOPE); RLS-Härtung → FINDING-0004. **Monorepo gesamt: 112 Tests grün.**
 
 ## Verifikations-Evidence (WP-002)
