@@ -1,7 +1,9 @@
 # DR-0012 – Cockpit-Einstieg, Personalisierung und getrennte Anmeldewelten (Berater vs. Kunde)
 
 - Typ: Product / UX / Architektur / Roadmap
-- Status: **Accepted (Richtung); zwei Unterentscheidungen offen** — siehe „Owner-Entscheidungen"
+- Status: **Accepted** — beide Unterentscheidungen vom Owner getroffen (2026-07-23):
+  **A → (a) getrennter Einstieg auf einer Plattform**; **B → (a) kuratierte Personalisierung zuerst.**
+  Beide sind die konzepttreuen Optionen. Umsetzung: Stufen B/D unten, in die Queue aufgenommen.
 - Datum: 2026-07-23
 - Decision Owner: **Human Product Owner** („einfacher/intuitiver bedienen; mehr Dashboards und
   Ampeln wo nötig; eine Cockpit-Seite beim Start, selbst gestaltbar je Anmeldeaccount; getrennte
@@ -118,16 +120,17 @@ Artefakt mit Lenses**, keine abgeschottete App. → gehört in die Konzeptpflege
 
 ## Owner-Entscheidungen (die zwei, die die Roadmap wirklich verändern)
 
-**A. Trennung Berater/Kunde — welche Form?**
-- (a) **Getrennter Einstieg auf EINER Plattform** (getrennte Login-Front-Doors + getrennte
-  Identitäten/Sphären/Föderation, gemeinsames Datenmodell). **Konzepttreu, empfohlen.**
-- (b) Vollständig getrennte Systeme/Datenplattformen. **Konzeptbruch** (Dok. 03 „ein gemeinsames
-  Datenmodell", Dok. 06 §5.2). Nur mit Change Proposal + Neubewertung der Architektur.
+**A. Trennung Berater/Kunde — welche Form?** → **Owner-Entscheidung: (a).**
+- (a) ✅ **Getrennter Einstieg auf EINER Plattform** (getrennte Login-Front-Doors + getrennte
+  Identitäten/Sphären/Föderation, gemeinsames Datenmodell). Konzepttreu. **Gewählt.**
+- (b) Vollständig getrennte Systeme/Datenplattformen. Konzeptbruch (Dok. 03 „ein gemeinsames
+  Datenmodell", Dok. 06 §5.2). Verworfen.
 
-**B. „Cockpit selbst designen" — welcher Umfang zuerst?**
-- (a) **Kuratierte Personalisierung** (umsortieren/anheften/Tiefe/gespeicherte Sichten/Modi) —
-  **konzeptgedeckt, sofort baubar. Empfohlen als Stufe B.**
-- (b) **Freier Layout-Builder je Konto** — berührt 06-O09; erst nach Konzeptentscheidung (Stufe C).
+**B. „Cockpit selbst designen" — welcher Umfang zuerst?** → **Owner-Entscheidung: (a).**
+- (a) ✅ **Kuratierte Personalisierung** (umsortieren/anheften/Tiefe/gespeicherte Sichten/Modi) —
+  konzeptgedeckt, sofort baubar. **Gewählt als Stufe B.**
+- (b) Freier Layout-Builder je Konto — berührt 06-O09; **zurückgestellt** (Stufe C, erst nach
+  Konzeptentscheidung 06-O09).
 
 ## Verhältnis zu bestehenden Entscheidungen
 
