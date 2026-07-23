@@ -17,8 +17,8 @@
 
 1. ~~Slice 1 Cross-Tenant-Schutz & sichtbarer Kontext~~ ✅ (`7971bc6`; FINDING-0009 gefunden + behoben)
 2. ~~Slice 3+4: strategisches Dashboard~~ ✅ (`c45f581`; web 403 Tests; O-WP020-12/13 neu)
-3. **Slice 2: Einstiegsfluss Login → neutrales Dashboard → Rollenwahl in der App (+ Punkt 9 roles.ts)** ← **in Arbeit**
-4. Slice 5: Rollenvarianten-Personalisierung + Konzeptabgleiche (Decision-Card-Zweitliste, Trust-Layer)
+3. ~~Slice 2: Einstiegsfluss (DR-0009) + Punkt 9~~ ✅ (`03b092c`; web 422; qa:visual-Artefakte `a4d5bf1`)
+4. **Slice 5: Rollenvarianten-Personalisierung + Konzeptabgleiche (Decision-Card-Zweitliste, Trust-Layer)** ← **in Arbeit**
 5. **Sichtbare Kundenwelt Stufe 1** (WP-006 vorgezogen, DR-0010 Nr. 2): read-only aus PDFs
    Dok. 14/16, fehlende Träger benannt
 6. **2–3 Cockpit-Varianten** (WP-025-Kern) per `qa:visual` → **STOPP, visuelle Owner-Freigabe**
