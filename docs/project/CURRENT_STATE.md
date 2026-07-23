@@ -45,6 +45,11 @@ Die Manifest-Hashes sichern die Markdown-Dateien nur gegen unbemerkte Änderung;
 - Authentisierung/Tenant-Trennung (WP-005), produktive Cloud/CI, reale Daten,
 - Branch-Protection auf `main` (O-GH-002).
 
+## Offene Owner-Entscheidungen
+
+Drei Karten in `docs/project/OWNER_DECISIONS.md` (Demo-Welt, Objektvertrag-Erweiterung,
+sichtbare Abnahme). Jede mit Empfehlung und Default — **keine blockiert den Weiterbau**.
+
 ## Offene Findings
 
 | ID | Kurz | Schwere | blockiert? |

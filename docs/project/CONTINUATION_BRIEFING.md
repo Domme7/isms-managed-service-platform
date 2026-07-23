@@ -17,6 +17,8 @@ Alles Weitere steht im Repository. Reihenfolge:
 3. `docs/project/CURRENT_STATE.md` — wo das Projekt steht
 4. `docs/project/handovers/LATEST.md` — letzter Stand und exakter nächster Schritt
 5. `docs/project/ACTIVE_WORK_PACKAGE.md` — was gerade läuft (oder dass nichts läuft)
+6. `docs/project/OWNER_DECISIONS.md` — die wenigen Fragen, die den Owner wirklich brauchen.
+   Jede Karte hat einen **Default**: ohne Antwort wird weitergebaut, nie gewartet.
 
 Dann verifizieren:
 
