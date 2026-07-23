@@ -2,7 +2,7 @@
 
 | Feld | Inhalt |
 |---|---|
-| Status | **Dokumentiert — nicht zur Umsetzung freigegeben** |
+| Status | **Vom Owner bekräftigt und präzisiert (2026-07-23 abends)** — siehe Nachtrag unten |
 | Quelle | Human Product Owner, 2026-07-23 (wörtliche Anforderung unten) |
 | Art | Produkt-/Design-Idee, mittelfristig |
 | Reifegrad | Idee — braucht Design-Exploration vor jedem Bau |
@@ -73,3 +73,31 @@ umgesetzt, würde die neue Oberfläche vor allem leere Flächen inszenieren.
    (kein Code im Produkt), Owner wählt.
 2. ADR für ggf. neue Abhängigkeiten (Animation, Charts — Chart-Regeln aus Dok. 06 beachten).
 3. Umsetzung in Stufen (Tokens → Layout → Bewegung), je Stufe `qa:visual` + Owner-Blick.
+
+
+## Nachtrag 2026-07-23 (Owner-Steuerung nach Live-Ansicht)
+
+Der Owner hat die Umgebung selbst angesehen und präzisiert:
+
+> „An sich erstmal gut, aber das ist nicht wirklich Cockpit und Dashboard … ich hätte gern mehr
+> auf einen Blick und würde am Anfang gern strategisch sein und dann kann ich mich immer tiefer
+> klicken. Ich glaube, da müssen wir was an der Architektur ändern, am Design auf jeden Fall."
+
+**Einordnung:** Das ist keine neue Anforderung, sondern die Bestätigung des Konzepts — die
+maßgeblichen Abschnitte (Dok. 06 §6.2 Detailtiefe-Ebenenmodell, Mission-Control-Rollenvarianten
+mit Fokus/Ausblendung je Rolle, WOW-MOMENT „30 Sekunden", Executive Experience „drei bis fünf
+entscheidungsreife Themen") fehlten in der alten Markdown-Fassung und sind seit WP-019 wieder da.
+Die flache UI ist eine Folge von FINDING-0007, nicht einer Designentscheidung.
+
+**Architektur-Einschätzung (ehrlich):** Kein Umbau von Framework oder Datenmodell nötig — die
+Änderung liegt in der **Informationsarchitektur der Seiten** (Verdichtung zuerst, Ebenen,
+Drill-down) und im visuellen Design. Was „strategisch auf einen Blick" an *Inhalten* zeigen darf,
+bleibt durch die Ehrlichkeitsregeln und die Datenlage begrenzt (keine erfundenen Scores; KPIs,
+Trends und Zielabweichung brauchen E-02) — aber Struktur, Verdichtung und Drill-down sind mit den
+heutigen belegten Daten baubar.
+
+**Konsequenz für die Planung:** WP-020 wird nicht als Sammlung einzelner nachgeholter Regeln
+geschnitten, sondern als **kohärenter Verdichtungs-Umbau** nach Dok. 06 — Detailtiefe-Ebenen +
+Rollenvarianten der Mission Control + Pflicht-Seitenbausteine zusammen, Cross-Tenant-Schutz als
+Sicherheits-Slice vorweg. Parallel dazu die Design-Exploration aus dieser Idea Card (2–3 statische
+Stilvarianten, Owner wählt; DR-0003: kleinste Variante zeigen, `qa:visual` liefert die Bilder).
