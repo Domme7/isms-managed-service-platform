@@ -6,6 +6,13 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["--filter", "@isms/web", "dev"],
       "port": 3000
+    },
+    {
+      "name": "web-preview",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@isms/web", "exec", "next", "dev"],
+      "port": 3000,
+      "autoPort": true
     }
   ]
 }
