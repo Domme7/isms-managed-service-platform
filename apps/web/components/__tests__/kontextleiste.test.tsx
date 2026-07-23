@@ -274,7 +274,10 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
 
     expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Finovia Digital Bank AG');
     expect(kontext.querySelectorAll('time')).toHaveLength(0);
-    expect(eintrag(kontext, 'Scope-Kennungen der ISMS-Kernobjekte').dd).toBe(
+    // Label seit dem WP-028-Fixpass „Scopes …" statt „Scope-Kennungen …": in der Leiste steht
+    // die ZÄHLUNG, die Kennungen stehen im Aufklappteil (DR-0013 Nr. 2 nennt Scope-IDs unter
+    // „weg"). Der ehrliche LEERWERT ist unverändert – hier gibt es nichts zu zählen.
+    expect(eintrag(kontext, 'Scopes der ISMS-Kernobjekte').dd).toBe(
       'keine Scope-Zuordnung erfasst',
     );
     expect(eintrag(kontext, 'Datenstand der ISMS-Kernobjekte (zuletzt im System erfasst)').dd).toBe(
@@ -300,7 +303,11 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
     expect(ROLLENNAMEN).toContain(eintrag(kontext, 'Aktive Produktrolle').dd);
     expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
-    expect(eintrag(kontext, 'Scope-Kennungen des Kundenbereichs').dd.length).toBeGreaterThan(0);
+    // Zählung in der Leiste, Kennungen im Aufklappteil (WP-028-Fixpass, DR-0013 Nr. 2):
+    // Der Wert FÜHRT mit der Zahl und trägt die Kennungen weiterhin vollständig im DOM.
+    const scopeWert = eintrag(kontext, 'Scopes des Kundenbereichs').dd;
+    expect(scopeWert).toMatch(/^\d+ Scopes? erfasst/);
+    expect(scopeWert).toContain('scope-nordwerk-isms-core');
     expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
 
     // Kein Leerfeld mehr; die drei benannten Lücken stehen aufklappbar in der Leiste (DR-0013).
@@ -331,9 +338,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
     expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Finovia Digital Bank AG');
     expect(kontext.querySelectorAll('time')).toHaveLength(0);
-    expect(eintrag(kontext, 'Scope-Kennungen des Kundenbereichs').dd).toBe(
-      'keine Scope-Zuordnung erfasst',
-    );
+    expect(eintrag(kontext, 'Scopes des Kundenbereichs').dd).toBe('keine Scope-Zuordnung erfasst');
     // Kein Leerfeld mehr; die benannte Lücke steht aufklappbar in der Leiste (DR-0013).
     expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
     expect(kontext.textContent ?? '').toContain(CONTEXT_GAPS.vertretung);

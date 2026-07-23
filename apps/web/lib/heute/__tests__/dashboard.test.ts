@@ -110,7 +110,9 @@ describe('countObjectsWithOwner – positive Lesart der Beobachtungsregel', () =
  */
 const MERKMAL: CoverageMerkmal = {
   alle: 'Prüfobjekte tragen das Merkmal',
-  fehlend: 'Prüfobjekte ohne das Merkmal',
+  // TUPEL SEIT DEM WP-028-FIXPASS (Domain-Auflage): Die Fehlmenge kann 1 sein; vorher stand
+  // hier ein reiner Plural-String und das Produkt zeigte „Datenlücke: 1 Objekte ohne …".
+  fehlend: ['Prüfobjekt ohne das Merkmal', 'Prüfobjekte ohne das Merkmal'],
   einheit: ['Prüfobjekt', 'Prüfobjekte'],
 };
 
@@ -133,6 +135,12 @@ describe('badgeFuerAbdeckung – Positivliste (DR-0008, O-WP020-07)', () => {
     // „Datenlücke: y − x …" – die FEHLMENGE, nicht das schiefe „Lücke erfasst".
     expect(badgeFuerAbdeckung(3, 5, MERKMAL)?.text).toBe(
       'Datenlücke: 2 Prüfobjekte ohne das Merkmal',
+    );
+    // GRAMMATIK-REGRESSION (WP-028-Fixpass, Domain-Auflage): Bei genau EINEM fehlenden Objekt
+    // stand „Datenlücke: 1 Objekte ohne benannten Owner" im Produkt. Der Singular kommt jetzt
+    // aus demselben `anzahl`-Helfer wie überall sonst und wird hier festgenagelt.
+    expect(badgeFuerAbdeckung(4, 5, MERKMAL)?.text).toBe(
+      'Datenlücke: 1 Prüfobjekt ohne das Merkmal',
     );
     // Der Grenzsatz hängt am Badge selbst (sichtbar, nicht nur im `title`).
     expect(badgeFuerAbdeckung(5, 5, MERKMAL)?.grenze).toMatch(/sagt der Datenbestand nicht/);

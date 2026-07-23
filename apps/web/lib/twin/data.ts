@@ -94,8 +94,17 @@ export function familyForType(type: ObjectType): ObjectFamilyId | undefined {
  * der Lesestelle in `objectTypeLabel`.
  */
 const OBJECT_TYPE_LABEL_DE: Readonly<Record<ObjectType, string | null>> = {
-  // F01 Tenant & Unternehmenskontext – keine freigegebene Glosse:
-  Tenant: null,
+  // F01 Tenant & Unternehmenskontext:
+  /**
+   * KEINE ERFUNDENE ÜBERSETZUNG, sondern die festgelegte Produktbezeichnung (WP-028-Fixpass,
+   * Domain-Auflage): DR-0013 Nr. 9 legt „**Mandant**" als Leitbegriff für die Organisation fest
+   * — app-weit sichtbar in Kontextleiste („Aktiver Mandant"), Kopfleiste, Leerzuständen und
+   * Wechsel-Rückmeldung. Bis hierher stand hier `null`, weshalb ausgerechnet der Ort, der die
+   * Begriffe DEFINIERT (das Glossar auf `/wissen`), den Objekttyp als „Tenant" lehrte und damit
+   * dem eigenen Leitbegriff widersprach. Die Anzeige lautet jetzt „Mandant (Tenant)" – der
+   * kanonische Typname bleibt wie bei jeder Glosse sichtbar (Nachvollziehbarkeit zum Modell).
+   */
+  Tenant: 'Mandant',
   Organisation: null,
   Rechtseinheit: null,
   'ISMS-Scope': null,

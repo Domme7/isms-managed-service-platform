@@ -293,50 +293,58 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
  * mit der fachlichen Gültigkeit vermischt (Dok. 07 §11/D07). Als „Vertrauensgrad" erscheint
  * ausschließlich die belegte Dimension „Bestätigung" – es wird KEIN verdichteter Indikator
  * berechnet (Dok. 07 D10; siehe OFFENE FRAGE O-WP014-02).
+ *
+ * STRUKTUR (FINDING-0008 – hier geschlossen): benannte Region + native `dl` ohne
+ * ARIA-Rollen-Override, identisch zur `PageContextBar` der Hauptseiten. Es gibt in dieser Datei
+ * keine A11y-Suppression mehr.
  */
 function ContextBar({ model }: { model: ObjectDetailModel }) {
   const { tenant, identity, evolution } = model;
 
   return (
-    /* `role="group"` (Review-Fix A11y): `dl` hat keine verlässliche implizite Rolle, ein
-       `aria-label` darauf wird von manchen Screenreadern ignoriert. */
-    // SUPPRESSION VERIFIZIERT, NICHT TOT (Review-Pass WP-020, Code-Finding geprüft per
-    // `pnpm lint`): Biome behandelt `dl` hier als Ziel von `noInteractiveElementToNoninteractiveRole`
-    // – ohne den Ignore wird die Zeile rot. Die STRUKTUR (dl + role="group") bleibt bewusst
-    // Altbestand für das FINDING-0008-Folge-WP; die Kontextleiste der Hauptseiten
-    // (`PageContextBar`) ist bereits auf Region + native dl umgebaut.
-    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: Altbestand (s. o.) – Strukturänderung ist das FINDING-0008-Folge-WP, nicht dieser Fix-Pass.
-    // biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf `dl` ist gültiges ARIA; ein Ersatz durch `fieldset`/`section` würde gerendertes Markup ändern (nicht verhaltensneutral).
-    <dl className="od-context" role="group" aria-label="Kontext dieser Objektseite">
-      <div>
-        <dt>Mandant</dt>
-        <dd>{tenant.display_name}</dd>
-      </div>
-      <div>
-        <dt>Objekttyp</dt>
-        <dd>{objectTypeDisplay(identity.object_type)}</dd>
-      </div>
-      <div>
-        <dt>Objektfamilie</dt>
-        <dd>
-          {identity.family_name ? identity.family_name : 'nicht im kanonischen Katalog zugeordnet'}
-        </dd>
-      </div>
-      <div>
-        <dt>Datenstand (im System erfasst)</dt>
-        <dd>
-          <DateValue iso={evolution.recorded_at} />
-        </dd>
-      </div>
-      <div>
-        <dt>Version</dt>
-        <dd>{evolution.version}</dd>
-      </div>
-      <div>
-        <dt>Bestätigung (Datenqualität)</dt>
-        <dd>{evolution.confirmation_level ?? 'nicht erfasst'}</dd>
-      </div>
-    </dl>
+    /* STRUKTUR AUF DAS `PageContextBar`-MUSTER UMGESTELLT (WP-028-Fixpass, Code-Auflage –
+       damit ist der letzte `serious`-axe-Befund behoben und FINDING-0008 geschlossen).
+       Vorher: `<dl role="group" aria-label>` – ein Rollen-Override auf einer Definitionsliste,
+       den axe als `serious` meldete und der zwei biome-Suppressions brauchte. Jetzt: benannte
+       Region (`<section aria-label>`, implizite Rolle `region`) mit NATIVER `dl` darin, ohne
+       jedes ARIA-Override: Screenreader erhalten den Namen über die Region und die
+       Beschriftungs-/Wert-Semantik über die echte Definitionsliste.
+       SICHTBARER TEXT UND REIHENFOLGE SIND UNVERÄNDERT (Product-Auflage); der zugängliche Name
+       „Kontext dieser Objektseite" bleibt identisch, damit bestehende Wächter weiter greifen. */
+    <section aria-label="Kontext dieser Objektseite">
+      <dl className="od-context">
+        <div>
+          <dt>Mandant</dt>
+          <dd>{tenant.display_name}</dd>
+        </div>
+        <div>
+          <dt>Objekttyp</dt>
+          <dd>{objectTypeDisplay(identity.object_type)}</dd>
+        </div>
+        <div>
+          <dt>Objektfamilie</dt>
+          <dd>
+            {identity.family_name
+              ? identity.family_name
+              : 'nicht im kanonischen Katalog zugeordnet'}
+          </dd>
+        </div>
+        <div>
+          <dt>Datenstand (im System erfasst)</dt>
+          <dd>
+            <DateValue iso={evolution.recorded_at} />
+          </dd>
+        </div>
+        <div>
+          <dt>Version</dt>
+          <dd>{evolution.version}</dd>
+        </div>
+        <div>
+          <dt>Bestätigung (Datenqualität)</dt>
+          <dd>{evolution.confirmation_level ?? 'nicht erfasst'}</dd>
+        </div>
+      </dl>
+    </section>
   );
 }
 

@@ -52,12 +52,22 @@ describe('relationshipTypeId / relationshipTypeLabel', () => {
 
 describe('objectTypeLabel / objectTypeDisplay – erschöpfende Label-Map (WP-018 Wächter 3b)', () => {
   /**
-   * Referenz: EXAKT die sieben Glossen, die vor der Umstellung auf
-   * `Record<ObjectType, string | null>` belegt waren (Stand `Record<string, string>`).
-   * Jeder andere kanonische Typ fiel auf den kanonischen Namen zurück – dieses Verhalten
-   * ist das Acceptance-Kriterium („Ausgabe unverändert") und wird hier festgenagelt.
+   * Referenz: EXAKT die belegten Glossen. Jeder andere kanonische Typ fällt auf den kanonischen
+   * Namen zurück – dieses Verhalten ist das Acceptance-Kriterium und wird hier festgenagelt.
+   *
+   * ⚠️ ACHTE GLOSSE IM WP-028-FIXPASS (Domain-Auflage, DR-0013 Nr. 9): `Tenant → 'Mandant'`.
+   * Das ist KEINE erfundene Übersetzung – es ist die per DR-0013 Nr. 9 festgelegte, app-weit
+   * sichtbare Produktbezeichnung („**Mandant**" für die Organisation), die in Kontextleiste,
+   * Kopfleiste, Leerzuständen und Wechsel-Rückmeldung längst steht. Bis hierher stand hier
+   * `null`, und ausgerechnet das Glossar auf `/wissen` – der Ort, der die Begriffe DEFINIERT –
+   * lehrte den Objekttyp als „Tenant" und widersprach damit dem eigenen Leitbegriff.
+   *
+   * Die REGEL des Wächters ist unverändert scharf: Die Liste ist abschließend, und der Test
+   * unten prüft weiterhin, dass es GENAU diese Glossen sind. Eine neunte Glosse ohne
+   * Owner-/Konzeptbeleg macht ihn rot (O-WP014-11 bleibt offen).
    */
-  const GLOSSEN_VOR_DER_UMSTELLUNG: Readonly<Record<string, string>> = {
+  const BELEGTE_GLOSSEN: Readonly<Record<string, string>> = {
+    Tenant: 'Mandant',
     Risk: 'Risiko',
     'Risk Scenario': 'Risikoszenario',
     Weakness: 'Schwachstelle',
@@ -67,18 +77,22 @@ describe('objectTypeLabel / objectTypeDisplay – erschöpfende Label-Map (WP-01
     KPI: 'Kennzahl',
   };
 
-  it('liefert für JEDEN Eintrag aus OBJECT_TYPE dieselbe Ausgabe wie vor der Umstellung', () => {
+  it('liefert für JEDEN Eintrag aus OBJECT_TYPE die belegte Glosse bzw. den kanonischen Namen', () => {
     for (const type of OBJECT_TYPE) {
-      const glosse = GLOSSEN_VOR_DER_UMSTELLUNG[type];
+      const glosse = BELEGTE_GLOSSEN[type];
       // `null`-Glosse ⇒ Fallback auf den kanonischen Namen; belegte Glosse ⇒ „Glosse (Typ)".
       expect(objectTypeDisplay(type), type).toBe(glosse ? `${glosse} (${type})` : type);
       expect(objectTypeLabel(type), type).toBe(glosse);
     }
   });
 
-  it('es sind weiterhin GENAU die sieben belegten Glossen – keine wurde erfunden (O-WP014-11)', () => {
+  it('es sind GENAU die acht belegten Glossen – keine wurde erfunden (O-WP014-11)', () => {
     const belegt = [...new Set(OBJECT_TYPE)].filter((type) => objectTypeLabel(type) !== undefined);
-    expect(belegt.sort()).toEqual(Object.keys(GLOSSEN_VOR_DER_UMSTELLUNG).sort());
+    expect(belegt.sort()).toEqual(Object.keys(BELEGTE_GLOSSEN).sort());
+    // Der kanonische Typname bleibt bei JEDER Glosse sichtbar (Nachvollziehbarkeit zum Modell).
+    for (const [typ, glosse] of Object.entries(BELEGTE_GLOSSEN)) {
+      expect(objectTypeDisplay(typ), typ).toBe(`${glosse} (${typ})`);
+    }
   });
 
   it('nicht-kanonische Typen fallen unverändert auf undefined bzw. den rohen Namen zurück', () => {

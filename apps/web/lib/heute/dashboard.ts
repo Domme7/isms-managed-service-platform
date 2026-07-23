@@ -37,7 +37,7 @@
  */
 
 import { ALL_LIFECYCLE_STATUS } from '@isms/contracts';
-import type { ObjectEnvelope, RelationshipEnvelope } from '@isms/contracts';
+import type { LifecycleStatus, ObjectEnvelope, RelationshipEnvelope } from '@isms/contracts';
 import type { DemoTenant } from '@isms/demo-seed';
 
 import { buildDecisionRegister } from '../entscheidungen/data';
@@ -126,10 +126,21 @@ function badge(rule: BadgeRuleId, text?: string): DashboardBadge {
  * Vertrauensgrad-Kachel schlicht falsch (dort zählt ein FELD, keine Kante).
  */
 export interface CoverageMerkmal {
-  /** Satzteil hinter „alle 34 …" – die vollständig belegte Lage. */
+  /**
+   * Satzteil hinter „alle 34 …" – die vollständig belegte Lage. Bewusst NUR im Plural: Das
+   * Erfolgs-Badge entsteht nie unter einer Grundgesamtheit von 3 (`istKleineGrundgesamtheit`
+   * unterdrückt es bei n≤2), ein Singular kann hier also nicht auftreten.
+   */
   readonly alle: string;
-  /** Satzteil hinter „Datenlücke: 5 …" – die Fehlmenge (y − x). */
-  readonly fehlend: string;
+  /**
+   * Satzteil hinter „Datenlücke: 5 …" – die Fehlmenge (y − x), als [Singular, Plural].
+   *
+   * ⚠️ TUPEL SEIT DEM WP-028-FIXPASS (Domain-Auflage): Vorher stand hier EIN Plural-String, und
+   * die Fehlmenge kann sehr wohl 1 sein – das Produkt zeigte „Datenlücke: 1 Objekte ohne
+   * benannten Owner". Die Ein-/Mehrzahl kommt jetzt aus demselben `anzahl`-Helfer wie überall
+   * sonst; erfunden wird nichts, die Zahl bleibt unverändert.
+   */
+  readonly fehlend: readonly [string, string];
   /** Singular/Plural der Grundgesamtheit für den Kleinheits-Hinweis. */
   readonly einheit: readonly [string, string];
 }
@@ -167,7 +178,10 @@ export function badgeFuerAbdeckung(
     if (istKleineGrundgesamtheit(total)) return undefined;
     return badge('vollstaendig_belegt', `alle ${total} ${merkmal.alle}`);
   }
-  return badge('luecke_erfasst', `Datenlücke: ${total - covered} ${merkmal.fehlend}`);
+  return badge(
+    'luecke_erfasst',
+    `Datenlücke: ${anzahl(total - covered, merkmal.fehlend[0], merkmal.fehlend[1])}`,
+  );
 }
 
 /** Sichtbarer Kleinheits-Hinweis einer Abdeckung mit n≤2 (sonst `undefined`). */
@@ -315,20 +329,117 @@ const LIFECYCLE_KATALOG: readonly string[] = [...new Set<string>(ALL_LIFECYCLE_S
  * einen Stand „wirksam", während der Seitentext „keine bewertete Wirksamkeit" sagt – auf
  * demselben Bildschirm ein Widerspruch).
  *
- * DER STAND WIRD NICHT UMBENANNT: „wirksam", „Geprüft" und „bewertet" sind kanonische
- * Lebenszyklus-Stände des Vertrags (`ALL_LIFECYCLE_STATUS`, Quelle Dok. 05, Abschnitt
- * „Lebenszyklen je Objektklasse") und stammen aus dem Seed. Eine Umbenennung wäre eine
+ * DER STAND WIRD NICHT UMBENANNT: Die Stände sind kanonische Lebenszyklus-Werte des Vertrags
+ * (`ALL_LIFECYCLE_STATUS`, Quellen Dok. 07, Abschnitt „Lebenszyklus und Status", und Dok. 05,
+ * Abschnitt „Kanonische Zustände") und stammen aus dem Seed. Eine Umbenennung wäre eine
  * Contract-/Seed-Änderung und damit eine Owner-Entscheidung (E-02) – hier wird ausschließlich
  * die LESART ergänzt: erfasster Stand, kein Urteil dieser Anwendung.
  *
- * Die Liste ist bewusst kurz und abschließend begründet: markiert wird nur, was ohne Hinweis
- * als Ergebnis einer Prüfung/Bewertung durch diese Anwendung gelesen würde.
+ * ⚠️ ERSCHÖPFEND TYPISIERT SEIT DEM WP-028-FIXPASS (Domain-Auflage; Muster
+ * `OBJECT_TYPE_LABEL_DE` in `lib/twin/data.ts`). Bis hierher war das eine handgepflegte
+ * `Record<string, string>`-Liste mit drei Einträgen – und sie war sichtbar asymmetrisch: auf
+ * `/isms` trugen „Geprüft", „bewertet" und „wirksam" ihren Hinweis, „akzeptiert" (das ERGEBNIS
+ * genau einer Nachweisprüfung) stand daneben ohne. Ein handgepflegter Ausschnitt kann das gar
+ * nicht verhindern: Ein neuer Stand im Vertrag rutschte still durch.
+ *
+ * Deshalb jetzt `Record<LifecycleStatus, string | null>` über die VOLLSTÄNDIGE Vertragsunion:
+ * Jeder Stand steht hier, und `null` ist die ausdrückliche Entscheidung „bewusst ohne Hinweis".
+ * Ein künftig ergänzter Lebenszyklus-Stand erzeugt einen COMPILEFEHLER statt eines
+ * Reviewbefunds – er erzwingt eine Entscheidung.
+ *
+ * KRITERIUM (unverändert in der Sache, jetzt konsequent angewandt): Ein Hinweis steht an
+ * jedem Stand, dessen Wortlaut ohne ihn als **Prüf-, Bewertungs-, Wirksamkeits- oder
+ * Freigabe-URTEIL DIESER ANWENDUNG** gelesen würde. Alles andere – Phasen, Ereignisse,
+ * Bearbeitungsstände – bleibt `null`: dort gibt es nichts richtigzustellen, und ein Hinweis
+ * ohne Anlass wäre wieder eine Wand aus Vorbehalt (DR-0013).
+ *
+ * Vier Lesarten, damit die Formulierung nicht je Stand auseinanderläuft:
+ *  - PRUEFUNG: das Ergebnis einer Prüfung (inkl. Annahme/Ablehnung eines Nachweises),
+ *  - BEWERTUNG: das Ergebnis einer Bewertung (auch ihr ausdrückliches Fehlen),
+ *  - WIRKSAMKEIT: eine Aussage über Wirksamkeit,
+ *  - FREIGABE: eine Freigabe-/Genehmigungsentscheidung.
  */
-export const STAND_HINWEIS: Readonly<Record<string, string>> = {
-  wirksam: 'erfasster Stand des Controls – kein Wirksamkeitsurteil dieser Anwendung',
-  Geprüft: 'erfasster Stand – kein Prüfergebnis dieser Anwendung',
-  bewertet: 'erfasster Stand – kein Ergebnis einer Bewertung durch diese Anwendung',
+const PRUEFUNG = 'erfasster Stand – kein Prüfergebnis dieser Anwendung';
+const BEWERTUNG = 'erfasster Stand – kein Ergebnis einer Bewertung durch diese Anwendung';
+const WIRKSAMKEIT = 'erfasster Stand des Controls – kein Wirksamkeitsurteil dieser Anwendung';
+const FREIGABE = 'erfasster Stand – keine Freigabe und keine Entscheidung dieser Anwendung';
+
+export const STAND_HINWEIS: Readonly<Record<LifecycleStatus, string | null>> = {
+  /* Generischer Objekt-Lebenszyklus (Dok. 07, Abschnitt „Lebenszyklus und Status") */
+  Entwurf: null, // Bearbeitungsstand
+  Beobachtet: null, // Bearbeitungsstand
+  Geprüft: PRUEFUNG,
+  Freigegeben: FREIGABE,
+  'In Änderung': null, // Bearbeitungsstand
+  Überholt: null, // Ablösung, kein Urteil über Qualität
+  Stillgelegt: null, // Betriebsstand
+  Archiviert: null, // Betriebsstand
+
+  /* Information (Dok. 05) – Casing-Variante, dieselbe Lesart */
+  geprüft: PRUEFUNG,
+  freigegeben: FREIGABE,
+  überholt: null,
+
+  /* Risiko */
+  identifiziert: null, // Ereignis der Erfassung
+  bewertet: BEWERTUNG,
+  entschieden: null, // verweist auf eine erfasste Entscheidung, behauptet keine eigene
+  behandelt: null, // Bearbeitungsstand
+  überwacht: null, // Bearbeitungsstand
+  geschlossen: null, // Bearbeitungsstand
+
+  /* Control */
+  'nicht bewertet': BEWERTUNG, // auch die AUSSAGE „nicht bewertet" ist keine dieser Anwendung
+  geplant: null, // Bearbeitungsstand
+  implementiert: null, // Bearbeitungsstand
+  wirksam: WIRKSAMKEIT,
+  eingeschränkt: WIRKSAMKEIT, // „eingeschränkt wirksam" – dieselbe Klasse wie „wirksam"
+  unwirksam: WIRKSAMKEIT, // dito, nur negativ; ohne Hinweis wäre es ein Urteil
+
+  /* Maßnahme */
+  Idee: null,
+  'in Arbeit': null,
+  blockiert: null,
+  Nachweis: null, // Phase „Nachweis wird erbracht", keine Prüfaussage
+  Wirksamkeitsprüfung: WIRKSAMKEIT, // Phasenname mit Prüf-Anmutung
+  abgeschlossen: null, // Bearbeitungsstand
+
+  /* Nachweis (Evidence) */
+  angefordert: null,
+  geliefert: null,
+  akzeptiert: PRUEFUNG, // das Ergebnis der Nachweisprüfung – die Asymmetrie des Altstands
+  abgelehnt: PRUEFUNG, // symmetrisch zu „akzeptiert"; gilt auch im Entscheidungs-Lebenszyklus
+  abgelaufen: null, // Zeitablauf, kein Urteil
+
+  /* Entscheidung */
+  vorbereitet: null,
+  'zur Freigabe': null, // Warteschritt, noch kein Ergebnis
+  genehmigt: FREIGABE,
+  umgesetzt: null, // Bearbeitungsstand
+  überprüft: PRUEFUNG,
+
+  /* Managed Service */
+  vorgeschlagen: null,
+  konfiguriert: null,
+  aktiv: null,
+  Review: null, // Phase, kein Ergebnis
+  geändert: null,
+  pausiert: null,
+  beendet: null,
+
+  /* Audit */
+  Vorbereitung: null,
+  Feldarbeit: null,
+  Findings: null, // Phasenname, keine Aussage über einzelne Feststellungen
+  Nacharbeit: null,
 };
+
+/** Hinweis zu einem Stand (oder `undefined`, wenn bewusst keiner geführt wird). */
+export function standHinweis(status: string): string | undefined {
+  // Cast NUR an der Lesestelle (Muster `objectTypeLabel`): Aufrufer liefern rohe Strings aus
+  // dem Seed; ein nicht-kanonischer Stand ergibt `undefined`, ein `null`-Eintrag ebenso.
+  return STAND_HINWEIS[status as LifecycleStatus] ?? undefined;
+}
 
 /**
  * Verteilung der ERFASSTEN `lifecycle_status`-Werte über die übergebenen Objekte.
@@ -347,7 +458,7 @@ export function deriveLifecycleVerteilung(
   const inKatalog = LIFECYCLE_KATALOG.filter((status) => counts.has(status));
   const ausserhalb = [...counts.keys()].filter((status) => !LIFECYCLE_KATALOG.includes(status));
   return [...inKatalog, ...ausserhalb].map((status) => {
-    const hinweis = STAND_HINWEIS[status];
+    const hinweis = standHinweis(status);
     return {
       status,
       count: counts.get(status) ?? 0,
@@ -708,7 +819,7 @@ function buildControlsCoverageTile(
   const covered = ismsCore.controls.filter((c) => c.evidenced_by.length > 0).length;
   const merkmal: CoverageMerkmal = {
     alle: 'Controls tragen einen Nachweis',
-    fehlend: 'Controls ohne Nachweis',
+    fehlend: ['Control ohne Nachweis', 'Controls ohne Nachweis'],
     einheit: ['Control', 'Controls'],
   };
   return {
@@ -740,7 +851,7 @@ function buildRisksCoverageTile(
   const covered = ismsCore.risks.filter((r) => r.mitigated_by.length > 0).length;
   const merkmal: CoverageMerkmal = {
     alle: 'Risiken tragen eine Minderung',
-    fehlend: 'Risiken ohne Minderung',
+    fehlend: ['Risiko ohne Minderung', 'Risiken ohne Minderung'],
     einheit: ['Risiko', 'Risiken'],
   };
   return {
@@ -772,7 +883,7 @@ function buildOwnerCoverageTile(
   const covered = countObjectsWithOwner(objects);
   const merkmal: CoverageMerkmal = {
     alle: 'Objekte haben einen benannten Owner',
-    fehlend: 'Objekte ohne benannten Owner',
+    fehlend: ['Objekt ohne benannten Owner', 'Objekte ohne benannten Owner'],
     einheit: ['Objekt', 'Objekte'],
   };
   return {
@@ -807,7 +918,7 @@ function buildConfidenceCoverageTile(
   const covered = countRelationshipsWithConfidence(relationships);
   const merkmal: CoverageMerkmal = {
     alle: 'Beziehungen tragen einen Vertrauensgrad',
-    fehlend: 'Beziehungen ohne Vertrauensgrad',
+    fehlend: ['Beziehung ohne Vertrauensgrad', 'Beziehungen ohne Vertrauensgrad'],
     einheit: ['Beziehung', 'Beziehungen'],
   };
   return {

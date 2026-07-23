@@ -55,6 +55,7 @@ import {
 } from '../../lib/administration/modell';
 import { DEMO_ROLES, type DemoRole, type RoleSphere } from '../../lib/shell/roles';
 import { PageContextBar } from '../shell/PageContextBar';
+import { ScopeKontextWert } from '../shell/ScopeKontext';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
 /**
@@ -109,10 +110,8 @@ export function AdministrationContent({
       <PageContextBar
         role={role}
         tenant={tenant}
-        scopeLabel="Erfasste Scope-Kennungen dieses Mandanten"
-        scopeValue={
-          model.scopeIds.length > 0 ? model.scopeIds.join(' · ') : 'keine Scope-Zuordnung erfasst'
-        }
+        scopeLabel="Erfasste Scopes dieses Mandanten"
+        scopeValue={<ScopeKontextWert scopeIds={model.scopeIds} />}
         datenstandLabel="Datenstand der Konfiguration (zuletzt im System erfasst)"
         datenstandValue={
           model.context.recordedOn && model.context.recordedOnDisplay ? (

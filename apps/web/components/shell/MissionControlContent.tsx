@@ -90,8 +90,12 @@ import {
   varianteForRole,
   type TileId,
 } from '../../lib/heute/rollenvarianten';
-import { getPlace } from '../../lib/shell/places';
+// KEIN `getPlace('heute')` mehr (WP-028-Fixpass, DR-0013 Nr. 1): Die Seite rendert die
+// aspirative Leitfrage des Screenkatalogs nicht mehr. Sie bleibt als Konzeptanker in
+// `lib/shell/places.ts` stehen und wird dort begründet – hier wäre sie nur noch ein Satz,
+// den die Seite im nächsten Absatz zurücknehmen müsste.
 import { worldForRole, type DemoRole, type ExperienceWorld } from '../../lib/shell/roles';
+import { ROLLEN_REICHWEITE_SATZ } from '../../lib/shell/sphaere';
 import {
   CoverageKachel,
   EmptyTenantKachel,
@@ -99,6 +103,7 @@ import {
   StockKachel,
 } from './DashboardKacheln';
 import { PageContextBar } from './PageContextBar';
+import { ScopeKontextWert } from './ScopeKontext';
 import { SeitenbausteineHinweis } from './SeitenbausteineHinweis';
 
 /** Stabile DOM-ID je Abschnitt (für `aria-labelledby`). */
@@ -133,7 +138,6 @@ export function MissionControlContent({
   const model = buildMissionControl(tenant.tenant_id);
   const dashboard = buildHeuteDashboard(tenant.tenant_id);
   const world = role ? worldForRole(role) : null;
-  const place = getPlace('heute');
   // Neutral: kanonische Reihenfolge (DR-0009 – „rollenlos in kanonischer Reihenfolge ohne
   // Welt-Leitfrage"). Mit Rolle: Welt-Rahmung; der `?? MISSION_SECTION_IDS`-Zweig dahinter ist
   // NICHT ERREICHBAR, bewusst fail-soft belassen: `parseSession` verwirft unbekannte
@@ -147,11 +151,25 @@ export function MissionControlContent({
       <p className="tw-eyebrow">Heute · Mission Control</p>
       <h1>Heute</h1>
 
-      {/* Leitfrage des Ortes, wörtlich aus `lib/shell/places.ts` (Dok. 06 §7 S01). ANTWORT-MODUS
-          (DR-0013): die Leitfrage wird NICHT mehr im nächsten Satz negiert – direkt darunter
-          folgen Kontext, Tiefenschalter und der Klartext-Stand. Die Ehrlichkeitsklammer der
-          Leitfrage steht als ruhige Zeile am Seitenende (weiter unten). */}
-      <p className="tw-question">{place.question}</p>
+      {/* SICHTBARE LEITFRAGE = DIE FRAGE, DIE DIESE SEITE HEUTE BEANTWORTET (DR-0013 Nr. 1,
+          Muster der WP-032-Orte `/reports`, `/wissen`, `/administration` und `/entscheidungen`).
+
+          BIS HIERHER stand hier die aspirative Leitfrage des Screenkatalogs („Was hat sich seit
+          meinem letzten Besuch verändert und was verdient Aufmerksamkeit?") – und vier Blöcke
+          tiefer dementierte die Seite BEIDE Hälften: „seit meinem letzten Besuch" hat keinen
+          Träger (die Anmeldung speichert keinen Besuchszeitpunkt), und „was verdient
+          Aufmerksamkeit" wäre eine Priorisierung ohne Frist, Aufwand, Kapazität oder Priorität.
+          Genau dieses Muster – Frage stellen, Frage zurücknehmen – nimmt DR-0013 aus der
+          Oberfläche. Der KONZEPTANKER bleibt als `question` in `lib/shell/places.ts` erhalten und
+          ist dort begründet; ob der Wortlaut selbst überarbeitet wird, ist eine Produkt-/
+          Owner-Entscheidung (O-WP032-02) und wird hier nicht vorweggenommen.
+
+          Die Ehrlichkeits-SUBSTANZ ist nicht entfernt, sondern verschoben: die beiden unbelegten
+          Teile stehen als ruhige Schlusszeile am Seitenende und ausführlich unter „Was hier
+          bewusst nicht steht". */}
+      <p className="tw-question">
+        Wie ist der Stand von {tenant.display_name} – was ist erfasst und wo sind die Lücken?
+      </p>
 
       {model && dashboard ? (
         <>
@@ -189,12 +207,13 @@ export function MissionControlContent({
 
           <HonestySection model={model} />
 
-          {/* EHRLICHKEITSKLAMMER DER LEITFRAGE – ruhig ans Seitenende verlagert (DR-0013
-              „Antwort zuerst, Lücke zuletzt"). Der frühere Intro-Absatz und die Negation der
-              Leitfrage stehen jetzt als EINE dezente Zeile hier unten. Die Ehrlichkeits-SUBSTANZ
-              bleibt unverändert: beide unbelegten Teile der Leitfrage („seit meinem letzten
-              Besuch", eine Priorisierung) werden benannt – die benannten Lücken selbst stehen
-              unmittelbar darüber unter „Was hier bewusst nicht steht". */}
+          {/* RUHIGE SCHLUSSZEILE (DR-0013 „Antwort zuerst, Lücke zuletzt"). Der frühere
+              Intro-Absatz steht jetzt als EINE dezente Zeile hier unten. Die
+              Ehrlichkeits-SUBSTANZ bleibt unverändert: die beiden Dinge, die diese Seite NICHT
+              beantwortet („seit meinem letzten Besuch", eine Priorisierung), werden weiterhin
+              ausdrücklich benannt – ausführlich unmittelbar darüber unter „Was hier bewusst
+              nicht steht". Neu ist nur, dass sie keine zuvor gestellte Frage mehr dementieren
+              müssen: die Seite stellt seit dem Fixpass die Frage, die sie beantwortet. */}
           <p className="ht-seitenfuss">
             Read-only Startpunkt auf dem Datenbestand des aktiven Mandanten: erfasster Stand,
             Abdeckungen und Einstiege. Nicht belegt und deshalb hier nicht beantwortet: „seit meinem
@@ -265,8 +284,8 @@ function ContextBar({
     <PageContextBar
       role={role}
       tenant={tenant}
-      scopeLabel="Scope-Kennungen"
-      scopeValue={scopeIds.length > 0 ? scopeIds.join(' · ') : 'keine Scope-Zuordnung erfasst'}
+      scopeLabel="Scopes dieses Mandanten"
+      scopeValue={<ScopeKontextWert scopeIds={scopeIds} />}
       datenstandLabel="Datenstand (zuletzt im System erfasst)"
       datenstandValue={
         /* Kalendertag statt vollständigem Zeitstempel: die Anzeige nennt einen Tag, und eine
@@ -331,13 +350,14 @@ function NeutralerEinstiegHinweis() {
   // Zwei Sätze seit dem Review-Pass (Product-Finding: kürzer); der Verzicht auf einen
   // erzwungenen Rundgang (Dok. 04 J01) bleibt EIGENSCHAFT des Hinweises (passiv, optional) –
   // er muss nicht mehr als Satz dabeistehen.
+  // Reichweitensatz aus EINER Quelle (`ROLLEN_REICHWEITE_SATZ`): seit der Sphärenkopplung wäre
+  // „ändert nur Betonung und Reihenfolge, nie die Daten" schlicht falsch (WP-028-Fixpass).
   return (
     <div className="ht-neutral" role="note">
       <p className="ht-neutral-text">
         <strong>Neutraler strategischer Einstieg:</strong> Sie sehen den vollständigen Überblick
         ohne Rollen-Personalisierung. Optional können Sie oben unter „Rolle" eine Produktrolle
-        wählen – sie ändert nur Betonung und Reihenfolge, nie die Daten, und ist jederzeit wieder
-        abwählbar.
+        wählen; sie ist jederzeit wieder abwählbar. {ROLLEN_REICHWEITE_SATZ}
       </p>
     </div>
   );
@@ -346,18 +366,22 @@ function NeutralerEinstiegHinweis() {
 /**
  * Reichweite der Rollenwahl im ROLLENMODUS – ein Satz (WP-028 Slice 4, DR-0013 Nr. 12).
  *
- * Bis hierher stand die Aussage „die Rolle ändert nur Betonung und Reihenfolge, nie die Daten"
- * ausschließlich im neutralen Zustand. Wer eine Rolle wählte, bekam sie nie zu sehen – dabei
- * ist genau dann die Frage offen, was sich gerade geändert hat. Bewusst EIN Satz mit dem
- * Rollennamen (ohne Rollencode) und ohne Design-Theorie; die vollständige Herleitung der
- * Reihenfolge lebt in `lib/heute/rollenvarianten.ts`.
+ * Bis hierher stand die Aussage über die Reichweite der Rollenwahl ausschließlich im neutralen
+ * Zustand. Wer eine Rolle wählte, bekam sie nie zu sehen – dabei ist genau dann die Frage
+ * offen, was sich gerade geändert hat. Bewusst EIN Satz mit dem Rollennamen (ohne Rollencode)
+ * und ohne Design-Theorie; die vollständige Herleitung der Reihenfolge lebt in
+ * `lib/heute/rollenvarianten.ts`.
+ *
+ * WORTLAUT AUS EINER QUELLE (WP-028-Fixpass, Product-Auflage): `ROLLEN_REICHWEITE_SATZ`. Der
+ * frühere Satz („ändert nur Betonung und Reihenfolge, nie die Daten") war seit der
+ * Sphärenkopplung unrichtig – die Rolle entscheidet über den Einstieg des Ortes „Kunden".
  */
 function RollenAnsichtHinweis({ role }: { role: DemoRole }) {
   return (
     <div className="ht-neutral" role="note">
       <p className="ht-neutral-text">
-        <strong>Ansicht {role.name}:</strong> Die Rolle ändert nur Betonung und Reihenfolge, nie die
-        Daten – und ist jederzeit oben wieder abwählbar.
+        <strong>Ansicht {role.name}:</strong> {ROLLEN_REICHWEITE_SATZ} Die Rolle ist jederzeit oben
+        wieder abwählbar.
       </p>
     </div>
   );
@@ -635,8 +659,7 @@ function StandortSection({
            Zustand – benannt statt leer, ohne erfundene Rollenangaben. */
         <p className="tw-muted">
           Keine Rolle gewählt – Sie arbeiten im neutralen Einstieg. Die Rollenwahl oben in der
-          Leiste ist optional; sie ändert nur Betonung und Reihenfolge der Abschnitte, nie die
-          Daten.
+          Leiste ist optional. {ROLLEN_REICHWEITE_SATZ}
         </p>
       )}
       {/* Quelle „eine Wahrheit je Rolle": Dok. 06 06-D05 (Signatur seit dem Review-Pass nur

@@ -3,8 +3,9 @@
  * umgebaut in WP-020 Slice 3/4: strategische Ebene 1 + Detailtiefe + Dashboard-Kacheln).
  *
  * Geprüft wird gegen den echten `DEMO_SEED` (keine Mocks):
- *  1. Leitfrage aus `places.ts`, Ebene-1-Abschnitt + vier WP-016-Abschnitte + Ehrlichkeitsblock,
- *     Reihenfolge je Welt.
+ *  1. Sichtbare Leitfrage = die BEANTWORTETE Frage (DR-0013 Nr. 1; die aspirative Frage aus
+ *     `places.ts` steht seit dem WP-028-Fixpass nachweislich NICHT mehr im DOM),
+ *     Ebene-1-Abschnitt + vier WP-016-Abschnitte + Ehrlichkeitsblock, Reihenfolge je Welt.
  *  2. „Wo stehe ich?": Rolle (Produktrolle, Sphäre, Kernverantwortung), Mandant, Bestand.
  *     Der Rollencode steht seit WP-028 Slice 4 NICHT mehr im sichtbaren Text (DR-0013 Nr. 12);
  *     er bleibt Kennung im Datenmodell.
@@ -52,6 +53,7 @@ import {
   varianteForRole,
 } from '../../../lib/heute/rollenvarianten';
 import { getPlace } from '../../../lib/shell/places';
+import { ROLLEN_REICHWEITE_SATZ } from '../../../lib/shell/sphaere';
 import { DEMO_ROLES, getRole, type DemoRole } from '../../../lib/shell/roles';
 import { SESSION_STORAGE_KEY, serializeSession } from '../../../lib/shell/session';
 
@@ -80,15 +82,34 @@ function abschnittsTitel(): string[] {
  * --------------------------------------------------------------------------- */
 
 describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
-  it('zeigt Ort, Leitfrage aus places.ts und die vier Abschnitte plus Ehrlichkeitsblock', () => {
-    render(<MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />);
+  /**
+   * REGEL-ERHALTEND UMGESTELLT (WP-028-Fixpass, DR-0013 Nr. 1 – Muster der vier bereits
+   * umgestellten Orte `/reports`, `/wissen`, `/administration`, `/entscheidungen`).
+   *
+   * ALTE ERWARTUNG: Die Seite rendert die aspirative Leitfrage aus `places.ts` und dementiert
+   * sie weiter unten. Damit war der Wächter Mitverursacher des Rechtfertigungs-Modus – er
+   * ERZWANG die Frage, die die Seite nicht beantwortet.
+   * NEUE ERWARTUNG: sichtbar ist die Frage, die die Seite HEUTE beantwortet; die aspirative
+   * Frage steht nachweislich NICHT im DOM (Negativbeweis, neue und strengere Bedingung).
+   *
+   * NICHTS ABGESCHWÄCHT: Die Ehrlichkeits-Substanz („seit meinem letzten Besuch" und eine
+   * Priorisierung sind nicht belegt) wird unverändert wortgleich verlangt.
+   */
+  it('führt mit der Frage, die die Seite beantwortet – nicht mit der aspirativen Leitfrage', () => {
+    const { container } = render(
+      <MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
 
     expect(screen.getByRole('heading', { level: 1, name: 'Heute' })).toBeInTheDocument();
-    expect(screen.getByText(getPlace('heute').question)).toBeInTheDocument();
-    // Der Lead muss BEIDE Hälften der Leitfrage dementieren: „seit meinem letzten Besuch" ist
-    // nicht belegt, und eine Priorisierung wird bewusst nicht beantwortet. Ohne Assertion könnte
-    // dieser Satz still verschwinden – er ist die Ehrlichkeitsklammer der Seite. Wortlaut seit
-    // dem Product-Fix (kürzer, positiv geführt), die Ehrlichkeitsklammer bleibt geprüft.
+    const frage = container.querySelector('p.tw-question')?.textContent ?? '';
+    expect(frage).toBe(
+      'Wie ist der Stand von Nordwerk Manufacturing SE – was ist erfasst und wo sind die Lücken?',
+    );
+    // Negativbeweis: die aspirative Screenkatalog-Frage wird weder gestellt noch verneint
+    // (Konzeptanker bleibt in `lib/shell/places.ts`).
+    expect(container.textContent ?? '').not.toContain(getPlace('heute').question);
+    // Die Ehrlichkeitsklammer bleibt – sie dementiert jetzt nichts mehr, sondern benennt ruhig,
+    // was die Seite nicht beantwortet. Ohne Assertion könnte dieser Satz still verschwinden.
     expect(screen.getByText(/Nicht belegt und deshalb hier nicht beantwortet/)).toBeInTheDocument();
     expect(screen.getByText(/seit meinem letzten Besuch.*eine Priorisierung/)).toBeInTheDocument();
 
@@ -153,9 +174,14 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
     expect(kontext.textContent ?? '').not.toMatch(/R\d{2}/);
     expect(within(kontext).getByText('Executive World')).toBeInTheDocument();
     expect(within(kontext).getByText('Nordwerk Manufacturing SE')).toBeInTheDocument();
-    expect(
-      within(kontext).getByText(/scope-nordwerk-isms-core · scope-nordwerk-managed-service/),
-    ).toBeInTheDocument();
+    // SCOPE-KENNUNGEN VERLAGERT (WP-028-Fixpass, DR-0013 Nr. 2 nennt Scope-IDs unter „weg"):
+    // Über der Falz steht die ZÄHLUNG, die Kennungen stehen im Aufklappteil derselben Zeile.
+    // NICHTS ABGESCHWÄCHT – beides wird geprüft: die Zählung stimmt mit dem Datenbestand
+    // überein, und jede belegte Kennung ist weiterhin im DOM erreichbar.
+    expect(within(kontext).getByText('2 Scopes erfasst')).toBeInTheDocument();
+    for (const scopeId of ['scope-nordwerk-isms-core', 'scope-nordwerk-managed-service']) {
+      expect(within(kontext).getByText(scopeId), scopeId).toBeInTheDocument();
+    }
     // Datenstand = Systemachse (record_time) der zuletzt erfassten Welle, als Kalendertag.
     // Seit WP-017 ist das die dritte Welle (Entscheidungsschicht).
     expect(within(kontext).getByText('16.03.2026')).toBeInTheDocument();
@@ -1275,7 +1301,13 @@ describe('HeuteView – neutraler Einstieg nach Anmeldung ohne Rollenwahl (AC 6)
     const rollenHinweis = mitRolle.container.querySelector('.ht-neutral');
     expect(rollenHinweis).not.toBeNull();
     expect(rollenHinweis?.textContent).toContain('Ansicht ISMS Manager');
-    expect(rollenHinweis?.textContent).toMatch(/nur Betonung und Reihenfolge, nie die Daten/);
+    // WORTLAUT PRÄZISIERT (WP-028-Fixpass, Product-Auflage): „ändert nur Betonung und
+    // Reihenfolge, nie die Daten" war seit der Sphärenkopplung (DR-0012/DR-0013 Nr. 11)
+    // schlicht unrichtig – die Rolle entscheidet über den Einstieg des Ortes „Kunden". Geprüft
+    // wird jetzt der EINE gemeinsame Wortlaut aus `lib/shell/sphaere.ts`; die Zusagen, die
+    // weiterhin gelten (derselbe Datenbestand, keine Berechtigung), sind Teil dieses Satzes
+    // und werden im Wächter `components/__tests__/rollenreichweite.test.tsx` festgenagelt.
+    expect(rollenHinweis?.textContent).toContain(ROLLEN_REICHWEITE_SATZ);
     expect(rollenHinweis?.textContent).not.toContain('Neutraler strategischer Einstieg');
     expect(rollenHinweis?.textContent).not.toMatch(/R\d{2}/);
     mitRolle.unmount();
@@ -1467,7 +1499,12 @@ describe('HeuteView – Sitzungsrahmen (Perspektive, keine Authz)', () => {
       </SessionProvider>,
     );
 
-    expect(screen.getByText(getPlace('heute').question)).toBeInTheDocument();
+    // Die beantwortete Leitfrage (DR-0013 Nr. 1) – nicht die aspirative aus `places.ts`.
+    expect(
+      screen.getByText(
+        'Wie ist der Stand von Nordwerk Manufacturing SE – was ist erfasst und wo sind die Lücken?',
+      ),
+    ).toBeInTheDocument();
     // WP-020 (geplanter Umbau): die Seite startet in der ruhigen Ebene 1 (P06) – sichtbar sind
     // der Ebene-1-Abschnitt und der Kontext; die WP-016-Abschnitte sind über den
     // Tiefenschalter erreichbar (eigener Detailtiefe-Testblock oben).

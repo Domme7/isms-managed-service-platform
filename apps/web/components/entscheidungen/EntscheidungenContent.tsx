@@ -54,6 +54,7 @@ import {
 } from '../../lib/entscheidungen/data';
 import type { DemoRole } from '../../lib/shell/roles';
 import { PageContextBar } from '../shell/PageContextBar';
+import { ScopeKontextWert } from '../shell/ScopeKontext';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 import { formatIsoDateDe } from '../../lib/twin/routes';
 
@@ -207,10 +208,8 @@ function ContextBar({ model, role }: { model: DecisionRegisterModel; role: DemoR
     <PageContextBar
       role={role}
       tenant={model.tenant}
-      scopeLabel="Scope-Kennungen der Entscheidungen"
-      scopeValue={
-        model.scopeIds.length > 0 ? model.scopeIds.join(' · ') : 'keine Scope-Zuordnung erfasst'
-      }
+      scopeLabel="Scopes der Entscheidungen"
+      scopeValue={<ScopeKontextWert scopeIds={model.scopeIds} />}
       /* Der Wert wird AUSSCHLIESSLICH aus den Entscheidungen gebildet. Vorher hieß die Zeile
          „Datenstand" und der Ersatzwert „keine Erfassung im Datenbestand" – bei einem
          Mandanten mit Graph, aber ohne Entscheidungen widersprach das auf demselben Bildschirm

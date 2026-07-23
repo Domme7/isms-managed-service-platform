@@ -32,6 +32,7 @@ import { buildIsmsCoreView, hasManagedServices } from '../../lib/isms/data';
 import type { DemoRole } from '../../lib/shell/roles';
 import { CoverageKachel, LifecycleVerteilungKachel } from '../shell/DashboardKacheln';
 import { PageContextBar } from '../shell/PageContextBar';
+import { ScopeKontextWert } from '../shell/ScopeKontext';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 import {
   ControlCard,
@@ -78,12 +79,8 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
       <PageContextBar
         role={role}
         tenant={tenant}
-        scopeLabel="Scope-Kennungen der ISMS-Kernobjekte"
-        scopeValue={
-          view.context.scopeIds.length > 0
-            ? view.context.scopeIds.join(' · ')
-            : 'keine Scope-Zuordnung erfasst'
-        }
+        scopeLabel="Scopes der ISMS-Kernobjekte"
+        scopeValue={<ScopeKontextWert scopeIds={view.context.scopeIds} />}
         datenstandLabel="Datenstand der ISMS-Kernobjekte (zuletzt im System erfasst)"
         datenstandValue={
           view.context.recordedOn && view.context.recordedOnDisplay ? (

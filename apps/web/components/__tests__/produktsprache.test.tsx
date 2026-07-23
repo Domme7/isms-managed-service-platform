@@ -368,11 +368,25 @@ describe('Produktsprache: keine Demo-/Simulations-Kennzeichnung im Produkttext (
    *
    * AUSNAHME wie oben: Zeichenketten aus dem Datenbestand (Seed-Beschreibungen zitieren
    * Kantennamen) – mechanisch maskiert, Existenzbeweis unten.
+   *
+   * ⚠️ ENG GEZOGEN IM WP-028-FIXPASS (QA-Auflage, der Wächter war blind): Die Maske entstand
+   * bis hierher aus ALLEN Seed-Zeichenketten mit snake_case – darunter die BLANKEN
+   * Beziehungstyp-Werte (`part_of`, `covered_by`, `delivered_by` …), weil `relationship_type`
+   * ein Seed-Feld ist. Damit hätte der Wächter ausgerechnet das wörtliche DR-0013-Beispiel
+   * durchgelassen: ein UI-Text „Beziehung: delivered_by" wäre vor der Prüfung weggeschnitten
+   * worden. Die Ausnahme gilt jetzt nur noch für PROSA – Seed-BESCHREIBUNGEN, die einen
+   * Kantennamen im Satz zitieren. Kriterium mechanisch (kein handgepflegter Freibrief):
+   * snake_case UND mindestens ein Leerzeichen UND länger als ein blanker Enum-Wert. Der blanke
+   * Enum-Wert erfüllt keines der beiden Zusatzkriterien und wird damit wieder geprüft;
+   * der Negativbeweis unten führt das ÜBER DIE PIPELINE, nicht nur an der Regex.
    */
   const SNAKE_CASE = /[a-z]{2,}_[a-z]{2,}/;
 
+  /** Untergrenze der Prosa-Ausnahme; der längste blanke Kantenname liegt deutlich darunter. */
+  const PROSA_MINDESTLAENGE = 25;
+
   const SEED_SNAKE_MASKEN: readonly string[] = [...alleSeedTexte(DEMO_SEED)]
-    .filter((s) => SNAKE_CASE.test(s))
+    .filter((s) => SNAKE_CASE.test(s) && /\s/.test(s) && s.length > PROSA_MINDESTLAENGE)
     .sort((a, b) => b.length - a.length);
 
   function ohneSeedSnake(text: string): string {
@@ -394,12 +408,112 @@ describe('Produktsprache: keine Demo-/Simulations-Kennzeichnung im Produkttext (
     });
   }
 
-  it('Negativbeweis: ein Feldname im Text würde erkannt, Produktsprache nicht', () => {
-    expect(SNAKE_CASE.test('Belegter Wirkungsbeitrag („contributes_to") je Karte.')).toBe(true);
+  /**
+   * NEGATIVBEWEIS ÜBER DIE GESAMTE PIPELINE (WP-028-Fixpass, QA-Auflage).
+   *
+   * Der frühere Beweis prüfte NUR die Regex – und verdeckte damit genau das Loch, das die
+   * Maskierung riss: `SNAKE_CASE.test(...)` schlägt selbstverständlich an, aber der Wächter
+   * prüft nicht die Regex, sondern `ohneSeedSnake(text)`. Deshalb läuft der Beweis jetzt durch
+   * dieselbe Maskierung wie der Produkttext.
+   */
+  it('Negativbeweis: ein Feldname im UI-Text überlebt die Maskierung und wird erkannt', () => {
+    // Das wörtliche DR-0013-Beispiel: ein blanker Kantenname im Produkttext MUSS auffallen.
+    expect(ohneSeedSnake('Beziehung: delivered_by')).toMatch(SNAKE_CASE);
+    // Gegenprobe mit weiteren blanken Enum-Werten aus dem Seed – keiner ist maskiert.
+    for (const kante of ['part_of', 'covered_by', 'contributes_to', 'lifecycle_status']) {
+      expect(ohneSeedSnake(`Vertragsfeld im UI: ${kante}`), kante).toMatch(SNAKE_CASE);
+    }
+    // Produktsprache und Kennungen mit Bindestrich schlagen weiterhin NICHT an.
     expect(SNAKE_CASE.test('erbracht durch das Managed-Service-Team')).toBe(false);
     expect(SNAKE_CASE.test('scope-nordwerk-isms-core')).toBe(false);
-    // Und die Maskierung ist auch hier belegt statt behauptet.
+
+    // Die Prosa-Ausnahme existiert wirklich, ist mechanisch aus dem Seed abgeleitet und
+    // enthält KEINEN blanken Enum-Wert (sonst wäre sie wieder der alte Freibrief).
     expect(SEED_SNAKE_MASKEN.length).toBeGreaterThan(0);
+    const seedTexte = alleSeedTexte(DEMO_SEED);
+    for (const maske of SEED_SNAKE_MASKEN) {
+      expect(seedTexte.has(maske)).toBe(true);
+      expect(maske, `Maske ohne Prosa-Charakter: ${maske}`).toMatch(/\s/);
+      expect(maske.length).toBeGreaterThan(PROSA_MINDESTLAENGE);
+    }
+    // Und der Seed trägt tatsächlich blanke Kantennamen – die Maske schneidet sie NICHT weg.
+    const blankeKanten = [...seedTexte].filter((s) => SNAKE_CASE.test(s) && !/\s/.test(s));
+    expect(
+      blankeKanten.length,
+      'Seed ohne blanke Kantennamen – Beweis wäre trivial',
+    ).toBeGreaterThan(0);
+    for (const kante of blankeKanten) expect(SEED_SNAKE_MASKEN).not.toContain(kante);
+  });
+
+  /* ---------------------------------------------------------------------------
+   * Dritter Wächter derselben Familie: keine Familiencodes F01–F09 im Produkttext
+   * ------------------------------------------------------------------------- */
+
+  /**
+   * DR-0013 Nr. 2 nennt „Muster-/Familiencodes (F01, R12, SO02, MS01)" NAMENTLICH unter „weg".
+   *
+   * WARUM APP-WEIT (WP-028-Fixpass, Code-/Product-Auflage): Die Regel galt mechanisch nur für
+   * `/wissen`, `/reports` und `/administration` – ausgerechnet die Mandantenseite des digitalen
+   * Zwillings, auf der die Codes am häufigsten standen, war ungeprüft. Dort trug jeder
+   * Familienabschnitt ein Badge „F01", der `aria-label` denselben Code und JEDE Objektkarte die
+   * Zeile „F01 · Tenant & Unternehmenskontext". Der Negativbeweis aus `wissen.test.tsx` ist
+   * deshalb hier hochgezogen und gilt jetzt für alle live-Orte, die Objekt-360-Seite und die
+   * globale Shell.
+   *
+   * KEINE AUSNAHME: Familiencodes stehen nirgends im Seed als Anzeigetext – die Kennung lebt
+   * ausschließlich im Vertrag (`OBJECT_FAMILY_ID`) und in `lib/twin/data.ts` als technischer
+   * Schlüssel. Ein Treffer ist also immer ein UI-Fehler, nie eine Datenlage.
+   *
+   * Muster bewusst weiter gefasst als `\bF0[1-9]\b`: auch „F01·" oder „3F012" wären Kennung im
+   * Text, und die Wortgrenze würde die zweite Form durchlassen.
+   */
+  const FAMILIENCODE = /(^|[^A-Za-z])F0[1-9]([^A-Za-z]|$)/;
+
+  for (const [ort, varianten] of Object.entries(RENDERER_JE_LIVE_ORT)) {
+    it(`Ort „${ort}" rendert keinen Familiencode (F01–F09)`, () => {
+      for (const variante of varianten) {
+        const ergebnis = variante.render();
+        const text = ergebnis.container.textContent ?? '';
+        expect(text.length, `${variante.kontext}: leerer Render`).toBeGreaterThan(80);
+        expect(text, `${variante.kontext}: Familiencode im Produkttext`).not.toMatch(FAMILIENCODE);
+        // Auch nicht in Attributen: der `aria-label` der Familienabschnitte trug den Code, war
+        // aber in `textContent` unsichtbar – genau so blieb er zwei Reviewrunden unentdeckt.
+        for (const el of Array.from(ergebnis.container.querySelectorAll('[aria-label]'))) {
+          expect(
+            el.getAttribute('aria-label') ?? '',
+            `${variante.kontext}: Familiencode in aria-label`,
+          ).not.toMatch(FAMILIENCODE);
+        }
+        ergebnis.unmount();
+      }
+    });
+  }
+
+  it('die Objekt-360-Seite rendert keinen Familiencode', () => {
+    const model = buildObjectDetail(
+      TENANT_ID.NORDWERK,
+      NORDWERK_OBJECT_ID.RISK_BETRIEBSUNTERBRECHUNG,
+    );
+    if (!model) throw new Error('Testfixture fehlt: Objekt-360-Modell');
+    const { container, unmount } = render(<ObjectDetailView model={model} />);
+    expect(container.textContent ?? '').not.toMatch(FAMILIENCODE);
+    unmount();
+  });
+
+  it('Negativbeweis: ein Familiencode im Text würde erkannt, der Familienname nicht', () => {
+    // Genau die drei Formen, die im Produkt standen.
+    for (const treffer of ['F01 · Prozesse', 'F01 Tenant & Unternehmenskontext', 'Familie: F09']) {
+      expect(FAMILIENCODE.test(treffer), treffer).toBe(true);
+    }
+    // Und die zulässige Produktsprache schlägt NICHT an (sonst wäre der Wächter unbrauchbar).
+    for (const legitim of [
+      'Tenant & Unternehmenskontext',
+      'Arbeit, Nachweis & Assurance',
+      'Ziele, Entscheidungen & Services',
+      'Objekte nach Familie',
+    ]) {
+      expect(FAMILIENCODE.test(legitim), legitim).toBe(false);
+    }
   });
 
   it('Meta: die Ausnahmen sind belegt und eng – kein Freibrief', () => {

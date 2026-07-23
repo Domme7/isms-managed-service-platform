@@ -26,10 +26,12 @@
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
 import { worldForRole, type DemoRole } from '../../lib/shell/roles';
+import { ROLLEN_REICHWEITE_SATZ } from '../../lib/shell/sphaere';
 import { buildCustomerWorkspace, type WorkspaceObjectRef } from '../../lib/kunden/data';
 import type { ManagedServiceView } from '../../lib/services/data';
 import { objectDetailHref } from '../../lib/twin/routes';
 import { PageContextBar } from '../shell/PageContextBar';
+import { ScopeKontextWert } from '../shell/ScopeKontext';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
 export function KundenStartContent({
@@ -56,10 +58,38 @@ export function KundenStartContent({
         sind erfasst?
       </p>
 
+      {/* ANTWORT ZUERST (WP-028-Fixpass, DR-0013 Nr. 1 – Product-Auflage): Über der Falz stand
+          bis hierher ausschließlich Meta-Text („Alles an einem Ort … Read-only und ohne Preise;
+          Buchung und Aktivierung folgen …") – vier Zeilen Vorbehalt, bevor eine einzige Zahl
+          erschien, obwohl `buildCustomerWorkspace` alle vier Zählwerte längst bereitstellt.
+          Jetzt führt die gezählte Antwort; die Grenze „ohne Preise, keine Buchung" steht
+          unverändert und ausführlicher unter „Noch nicht hinterlegt" am Seitenende, die
+          Mandantengrenze im Satz darunter. Nichts entfernt, nur umgestellt. */}
       <p className="tw-lead">
-        Alles zu {tenant.display_name} an einem Ort: Scopes, Ziele, Services und Nachweise –
-        ausschließlich für den aktiven Mandanten. Read-only und ohne Preise; Buchung und Aktivierung
-        folgen in einer späteren Stufe nach menschlicher Freigabe.
+        {model.isEmpty ? (
+          <>
+            Für <strong>{tenant.display_name}</strong> sind bisher keine Scopes, Ziele, Services
+            oder Nachweise erfasst.
+          </>
+        ) : (
+          <>
+            Für <strong>{tenant.display_name}</strong> sind{' '}
+            <strong>{anzahl(model.scopeIds.length, 'Scope', 'Scopes')}</strong>,{' '}
+            <strong>
+              {anzahl(model.objectives.length, 'Ziel oder Kennzahl', 'Ziele und Kennzahlen')}
+            </strong>
+            ,{' '}
+            <strong>{anzahl(model.services.length, 'Managed Service', 'Managed Services')}</strong>{' '}
+            und <strong>{anzahl(model.evidence.length, 'Nachweis', 'Nachweise')}</strong> erfasst
+            {model.context.recordedOn && model.context.recordedOnDisplay ? (
+              <>
+                , zuletzt im System erfasst am{' '}
+                <time dateTime={model.context.recordedOn}>{model.context.recordedOnDisplay}</time>
+              </>
+            ) : null}
+            . Gezählt wird ausschließlich der aktive Mandant.
+          </>
+        )}
       </p>
 
       <RollenRahmung role={role} />
@@ -69,10 +99,8 @@ export function KundenStartContent({
       <PageContextBar
         role={role}
         tenant={tenant}
-        scopeLabel="Scope-Kennungen des Kundenbereichs"
-        scopeValue={
-          model.scopeIds.length > 0 ? model.scopeIds.join(' · ') : 'keine Scope-Zuordnung erfasst'
-        }
+        scopeLabel="Scopes des Kundenbereichs"
+        scopeValue={<ScopeKontextWert scopeIds={model.scopeIds} />}
         datenstandLabel="Datenstand des Kundenbereichs (zuletzt im System erfasst)"
         datenstandValue={
           model.context.recordedOn && model.context.recordedOnDisplay ? (
@@ -109,7 +137,7 @@ export function KundenStartContent({
  * --------------------------------------------------------------------------- */
 
 /**
- * Rahmt die Seite je nach aktiver Sphäre – Betonung, keine Bedingung (die Seite rendert in
+ * Rahmt die Seite je nach aktiver Sphäre – Hervorhebung, keine Bedingung (die Seite rendert in
  * jedem Fall vollständig). Kundensphäre-Rollen (R01–R06) bekommen die Kundenperspektive; für
  * Betreiber-/Unabhängig-Rollen wird ehrlich gesagt, dass dieser Bereich die Kundensphäre zeigt
  * und die Rolle Perspektive und keine Zugriffsgrenze ist (O-WP006-04). Neutral bleibt neutral.
@@ -120,8 +148,8 @@ function RollenRahmung({ role }: { role: DemoRole | null }) {
       <div className="ht-neutral" role="note">
         <p className="ht-neutral-text">
           <strong>Neutraler Einstieg:</strong> Sie sehen den Kundenbereich ohne Rollen-Rahmung.
-          Optional können Sie oben eine Produktrolle wählen – sie ändert nur die Betonung, nie den
-          Inhalt, und ist jederzeit wieder abwählbar.
+          Optional können Sie oben eine Produktrolle wählen; sie ist jederzeit wieder abwählbar.{' '}
+          {ROLLEN_REICHWEITE_SATZ}
         </p>
       </div>
     );

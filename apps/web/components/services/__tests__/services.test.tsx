@@ -4,8 +4,9 @@
  * Prüft gegen den echten `DEMO_SEED` (keine Mocks):
  *  1. Mandanten-Sicht (R08 + Nordwerk): Leitfrage + drei Services mit aufgelösten Namen,
  *     SLA-Kurzinfo, Deliverable-Status als Text und qualitativem Vertrauensgrad.
- *  2. Portfolio-Sicht: erscheint für R08 (und R10, Consulting & Service World) inkl.
- *     Mandanten ohne Services; für R03 stattdessen der Vorbehaltshinweis (reine
+ *  2. Portfolio-Sicht: erscheint genau dann, wenn `kundenSicht(role) === 'portfolio'` (eine
+ *     Quelle, `lib/shell/sphaere.ts`) – inkl. Mandanten ohne Services. In der
+ *     Ein-Unternehmens-Sicht wird der Abschnitt GAR NICHT gerendert (reine
  *     Anzeige-Verdichtung, keine Sicherheitsgrenze).
  *  3. Empty-State für Finovia (keine Services im Seed).
  *  4. „Nicht angemeldet"-Zustand mit Link zur Login-Simulation.
@@ -18,7 +19,9 @@ import { ServicesContent } from '../ServicesContent';
 import { ServiceCard } from '../ServiceCard';
 import { ServicesView } from '../ServicesView';
 import { SessionProvider } from '../../shell/SessionProvider';
+import { DEMO_ROLES } from '../../../lib/shell/roles';
 import { resolveSession, type ResolvedSession } from '../../../lib/shell/session';
+import { kundenSicht } from '../../../lib/shell/sphaere';
 import {
   buildPortfolioOverview,
   getManagedServicesForTenant,
@@ -219,25 +222,80 @@ describe('ServicesContent – Verlinkung auf die Objekt-360-Seite (WP-014 Slice 
   });
 });
 
-describe('ServicesContent – Rollen-Gating der Portfolio-Sicht (Welt-Mapping Dok. 06 §5)', () => {
-  it('zeigt die Portfolio-Sicht NICHT für R03, sondern den Vorbehaltshinweis', () => {
+/**
+ * REGEL-ERHALTEND UMGESTELLT AUF EINE SPHÄREN-QUELLE (WP-028-Fixpass; Code- und
+ * Security-Auflage, DR-0013 Nr. 11 / DR-0012).
+ *
+ * ALTE REGEL: eigenes Welt-Mapping dieser Seite (`role.worldId === 'consulting'`) plus ein
+ * Vorbehaltstext für alle übrigen Perspektiven.
+ * NEUE REGEL: `kundenSicht(role) === 'portfolio'` – dieselbe Funktion wie am Ort „Kunden".
+ *
+ * WAS DAS BEHEBT (beides war ein echter Befund, keine Kosmetik):
+ *  1. Divergenz: R12 sah das Portfolio auf `/twin`, aber nicht auf `/services`; neutral
+ *     umgekehrt. Zwei Regeln für dieselbe Frage laufen zwangsläufig auseinander.
+ *  2. Mandantengrenze: Jede KUNDENrolle las auf ihrer eigenen Serviceseite „Die
+ *     mandantenübergreifende Portfolio-Sicht ist der Service-Organisation vorbehalten" – eine
+ *     Reichweiten-/Existenzaussage über einen mandantenübergreifenden Bestand in genau der
+ *     Sphäre, die davon frei sein soll.
+ *
+ * NICHT ABGESCHWÄCHT: Die Portfolio-Sicht bleibt für Kundenrollen abwesend – strenger sogar,
+ * denn jetzt fehlt auch der Satz über sie. Der Test prüft beides: Abwesenheit der Liste UND
+ * Abwesenheit jeder mandantenübergreifenden Formulierung.
+ */
+describe('ServicesContent – Sphären-Gating der Portfolio-Sicht (eine Quelle: lib/shell/sphaere)', () => {
+  it('rendert für Kundenrollen GAR KEINEN mandantenübergreifenden Abschnitt (R03)', () => {
     const { role, tenant } = session('R03', TENANT_ID.NORDWERK);
-    render(<ServicesContent role={role} tenant={tenant} />);
+    const { container } = render(<ServicesContent role={role} tenant={tenant} />);
 
     expect(
       screen.queryByRole('heading', { name: 'Portfolio: Alle Mandanten' }),
     ).not.toBeInTheDocument();
-    expect(screen.getByText(/der Service-Organisation vorbehalten/)).toBeInTheDocument();
-    // Ehrliche Reichweite der Zuordnung (WP-028 Slice 4, DR-0011: Sachaussage statt
-    // Demo-Hinweis) – die Aussage „ordnet die Ansicht, nicht den Zugriff" bleibt geprüft.
-    expect(screen.getByText(/entscheidet nicht über Zugriff/)).toBeInTheDocument();
+    // Auch kein Ersatz-Abschnitt und keine Aussage über einen mandantenübergreifenden Bestand.
+    expect(screen.queryByRole('heading', { name: /Portfolio/ })).not.toBeInTheDocument();
+    const text = container.textContent ?? '';
+    expect(text).not.toMatch(/der Service-Organisation vorbehalten/);
+    expect(text).not.toMatch(/mandantenübergreifend/i);
+    expect(text).not.toMatch(/alle Mandanten/i);
   });
 
-  it('zeigt die Portfolio-Sicht auch für R10 (ISMS Consultant, Consulting & Service World)', () => {
-    const { role, tenant } = session('R10', TENANT_ID.NORDWERK);
-    render(<ServicesContent role={role} tenant={tenant} />);
+  it('rendert auch für den Auditor (R07, Ein-Unternehmens-Sicht) keinen Portfolio-Abschnitt', () => {
+    const { role, tenant } = session('R07', TENANT_ID.NORDWERK);
+    const { container } = render(<ServicesContent role={role} tenant={tenant} />);
 
-    expect(screen.getByRole('heading', { name: 'Portfolio: Alle Mandanten' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /Portfolio/ })).not.toBeInTheDocument();
+    expect(container.textContent ?? '').not.toMatch(/mandantenübergreifend/i);
+  });
+
+  it('zeigt die Portfolio-Sicht für R10 und R08 (Betreibersphäre)', () => {
+    for (const roleId of ['R08', 'R10']) {
+      const { role, tenant } = session(roleId, TENANT_ID.NORDWERK);
+      const { unmount } = render(<ServicesContent role={role} tenant={tenant} />);
+      expect(
+        screen.getByRole('heading', { name: 'Portfolio: Alle Mandanten' }),
+        roleId,
+      ).toBeInTheDocument();
+      unmount();
+    }
+  });
+
+  /**
+   * DIE BEHOBENE DIVERGENZ, festgenagelt: `/services` und der Ort „Kunden" beantworten die
+   * Sphärenfrage jetzt identisch – für JEDE der dreizehn Perspektiven.
+   */
+  it('deckt sich für alle dreizehn Perspektiven mit kundenSicht() (keine zweite Regel)', () => {
+    for (const perspektive of [...DEMO_ROLES, null]) {
+      const { container, unmount } = render(
+        <ServicesContent
+          role={perspektive}
+          tenant={
+            session('R08', TENANT_ID.NORDWERK).tenant /* Mandant konstant, Rolle ist die Variable */
+          }
+        />,
+      );
+      const sichtbar = container.querySelector('h2#portfolio') !== null;
+      expect(sichtbar, perspektive?.id ?? 'neutral').toBe(kundenSicht(perspektive) === 'portfolio');
+      unmount();
+    }
   });
 });
 

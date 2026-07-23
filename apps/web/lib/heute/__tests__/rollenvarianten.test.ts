@@ -98,12 +98,22 @@ describe('ROLLENVARIANTEN – die vier normierten Zeilen aus Dok. 06', () => {
     for (const id of VARIANT_IDS) {
       const variante = ROLLENVARIANTEN[id];
       expect(variante.fokusBelegtText).toMatch(/Nach vorn gezogen/);
-      // Jede Variante benennt ihre Fokus-Lücke als fehlenden Träger bzw. fehlende Kachel.
-      // Regel-erhaltend statt Wortlaut: „ISMS Manager" benennt „Reviews" seit dem Domain-Fix
-      // als „ohne eigene Kachel" (der Datenbestand trägt einen Service-Outcome-Review) – eine
-      // falsche Absenz-Behauptung („kein Review erfasst") wäre dieselbe Fehlerklasse wie eine
-      // Erfindung. Geprüft wird deshalb die Lücken-AUSSAGE, nicht die alte feste Phrase.
-      expect(variante.fokusLueckenText).toMatch(/ohne (Träger|eigene Kachel)/);
+      // Jede Variante benennt ihre Fokus-Lücke – als fehlenden Beleg im Datenbestand bzw. als
+      // fehlende eigene Kachel. Regel-erhaltend statt Wortlaut: „ISMS Manager" benennt „Reviews"
+      // seit dem Domain-Fix als „ohne eigene Kachel" (der Datenbestand trägt einen
+      // Service-Outcome-Review) – eine falsche Absenz-Behauptung („kein Review erfasst") wäre
+      // dieselbe Fehlerklasse wie eine Erfindung.
+      //
+      // WORTLAUT IM WP-028-FIXPASS GEÄNDERT (QA-Auflage, DR-0013 Nr. 5): „ohne Träger" ist dort
+      // NAMENTLICH als Design-Theorie gelistet und rendert im Rollenfokus. Ersetzt durch
+      // „im Datenbestand nicht belegt". Die geprüfte REGEL ist unverändert – jede Variante
+      // MUSS ihre Lücke aussprechen; nur das Vokabular ist jetzt Produktsprache. Die
+      // Gegenprobe darunter (kein Design-Theorie-Wort im sichtbaren Text) ist neu und macht
+      // die Prüfung strenger.
+      expect(variante.fokusLueckenText).toMatch(
+        /(im Datenbestand nicht belegt|ohne eigene Kachel)/,
+      );
+      expect(variante.fokusLueckenText, id).not.toMatch(/ohne Träger/);
       // Die Erreichbarkeits-Zusage (eine Wahrheit, Dok. 06 P02) bleibt Pflicht – unverändert.
       expect(variante.ausblendungText).toMatch(/nichts entzogen/);
       expect(variante.ausblendungText).toMatch(/erreichbar/);
@@ -114,6 +124,13 @@ describe('ROLLENVARIANTEN – die vier normierten Zeilen aus Dok. 06', () => {
       expect(variante.orderRationale.length).toBeGreaterThan(40);
       // Keine Versprechen, keine Bewertung in den sichtbaren Texten.
       const sichtbar = `${variante.nutzenSatz} ${variante.fokusBelegtText} ${variante.fokusLueckenText} ${variante.ausblendungText}`;
+      // NEU (WP-028-Fixpass, QA-Auflage): KEIN Design-Theorie-Wort im gesamten sichtbaren Text
+      // der Variante – bisher galt das nur für `nutzenSatz` und `ausblendungText`, und genau
+      // deshalb überlebten „Missionsfokus"/„ohne Träger" in `fokusBelegtText`/`fokusLueckenText`
+      // zwei Reviewrunden.
+      for (const theorie of [/Betonung/i, /ohne Träger/, /Missionsfokus/i, /gegenstandslos/i]) {
+        expect(theorie.test(sichtbar), `${id}: „${theorie}" gehört in die Code-Doku`).toBe(false);
+      }
       expect(sichtbar, id).not.toMatch(/kommt bald|in Kürze|geplant für|Roadmap/i);
       expect(sichtbar, id).not.toMatch(/\bScore\b|Ampel|Reifegrad|\bTrend|empfohlen|Empfehlung/i);
     }

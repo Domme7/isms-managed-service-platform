@@ -3,9 +3,11 @@
  * Portfolio Cockpits (Dok. 06 §7 S04: „Welche Mandanten, Services oder Termine kippen?").
  *
  * WICHTIG: reine Aggregation JE Mandant nebeneinander aus demselben Datenbestand – es gibt
- * KEINE mandantenübergreifende Kante (OFFENE FRAGE O-WP012-03, Dok. 07 P09). Die Sichtbarkeit
- * nur für die Consulting & Service World ist eine reine Anzeige-Verdichtung (Demo),
- * KEINE Sicherheitsgrenze. Status immer als Text, nie nur Farbe (Dok. 06 06-D11).
+ * KEINE mandantenübergreifende Kante (OFFENE FRAGE O-WP012-03, Dok. 07 P09). Wer diesen
+ * Abschnitt überhaupt sieht, entscheidet seit dem WP-028-Fixpass ausschließlich
+ * `kundenSicht(role)` (`lib/shell/sphaere.ts`) – dieselbe Quelle wie am Ort „Kunden", nicht mehr
+ * ein zweites Welt-Mapping dieser Seite. Das bleibt eine reine Anzeige-Verdichtung, KEINE
+ * Sicherheitsgrenze. Status immer als Text, nie nur Farbe (Dok. 06 06-D11).
  *
  * WP-014 Slice 2: Jeder Servicename verlinkt auf seine Objekt-360-Seite. Der Mandant des Links
  * ist IMMER `entry.tenant.tenant_id`, also der Mandant, aus dessen Objekten die Zeile gebildet
@@ -25,11 +27,14 @@ export function PortfolioOverview({ entries }: { entries: readonly PortfolioTena
     <section aria-labelledby="portfolio">
       <h2 id="portfolio">Portfolio: Alle Mandanten</h2>
       {/* Klartext ohne interne Arbeits-IDs (UX-Review MINOR-2); fachlicher Hintergrund der
-          rein mandantenweisen Aggregation: OFFENE FRAGE O-WP012-03, Dok. 07 P09. */}
+          rein mandantenweisen Aggregation: OFFENE FRAGE O-WP012-03, Dok. 07 P09.
+          Der Satz nennt seit dem WP-028-Fixpass keine Welt mehr als Bedingung: die Sichtbarkeit
+          hängt an der Sphäre der Perspektive, und der frühere Wortlaut war nach der
+          Vereinheitlichung schlicht falsch (der neutrale Einstieg sieht diesen Abschnitt). */}
       <p className="tw-muted">
         Welche Mandanten haben welche Services? Aggregation je Mandant nebeneinander – ohne
-        mandantenübergreifende Verknüpfung. Sichtbar für die Service-Organisation (Consulting &amp;
-        Service World); die Zuordnung ordnet die Ansicht und entscheidet nicht über Zugriff.
+        mandantenübergreifende Verknüpfung. Diese Übersicht gehört zur Portfolio-Arbeitswelt; sie
+        ordnet die Ansicht und entscheidet nicht über Zugriff.
       </p>
       <ul className="tw-grid">
         {entries.map((entry) => (

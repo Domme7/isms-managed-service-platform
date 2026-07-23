@@ -97,10 +97,19 @@ function TenantGraph({
 
       <h2 id="objekte">Objekte nach Familie</h2>
       {familyGroups.map((group) => (
-        <section key={group.id} aria-label={`${group.id} ${group.name}`}>
+        /* KEIN FAMILIENCODE IM ANZEIGETEXT (WP-028-Fixpass, DR-0013 Nr. 2 nennt Familiencodes
+           namentlich unter „weg"): Bis hierher trug das Badge „F01" und der `aria-label`
+           „F01 Tenant & Unternehmenskontext" – interne Katalogkennung im Produkttext, auf jedem
+           Familienabschnitt und auf jeder Objektkarte. Sichtbar ist jetzt ausschließlich der
+           deutsche Familienname aus dem Vertrag (`OBJECT_FAMILIES[].name`, Dok. 07, Abschnitt
+           „Objektfamilien und kanonischer Katalog"). Die Kennung `group.id` bleibt unverändert
+           technischer Schlüssel (React-`key`, Zuordnung Objekttyp → Familie) – sie ist Kennung,
+           kein Anzeigetext. Der Wächter `components/__tests__/produktsprache.test.tsx` prüft die
+           Abwesenheit jetzt app-weit. */
+        <section key={group.id} aria-label={group.name}>
           <div className="tw-family-head">
             <h3>
-              <Badge variant="family">{group.id}</Badge> {group.name}
+              <Badge variant="family">{group.name}</Badge>
             </h3>
           </div>
           <p className="tw-family-leitfrage">{group.leitfrage}</p>
@@ -109,7 +118,6 @@ function TenantGraph({
               <ObjectCard
                 key={object.object_id}
                 object={object}
-                familyId={group.id}
                 familyName={group.name}
                 tenantId={tenantId}
               />

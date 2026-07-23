@@ -635,6 +635,17 @@ summary {
   border-bottom: 1px solid rgba(255, 255, 255, 0.35);
   max-width: 15rem;
 }
+/* Ruhige Zeile am festen Mandantenfeld (WP-028-Fixpass, Security-Auflage): das Verschwinden
+   des Wechslers darf nicht als durchgesetzte Grenze gelesen werden. Bewusst klein und
+   nachgeordnet – aber sichtbar, nicht nur im `title`.
+   Kontrast auf var(--shell-navy) (#0f2740): #c6d2e6 ≈ 9.6:1 – deutlich über AA. */
+.shell-switch-note {
+  margin: 0.15rem 0 0;
+  max-width: 15rem;
+  font-size: 0.66rem;
+  line-height: 1.25;
+  color: #c6d2e6;
+}
 .shell-select {
   background: #ffffff;
   color: var(--tw-ink);

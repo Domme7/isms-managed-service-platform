@@ -171,9 +171,20 @@ export function Topbar({
                    andere Mandanten – weder ihre Zahl noch ihre Existenz. */
                 /* Native Definitionsliste statt ARIA-Verdrahtung: Beschriftung und Wert sind
                    ohne Attribute verbunden (Muster der Kontextleiste `od-context`). */
+                /* RUHIGE ZEILE STATT NONVERBALER BEHAUPTUNG (WP-028-Fixpass, Security-Auflage):
+                   Ein Auswahlfeld, das ohne ein Wort verschwindet, liest sich wie eine
+                   DURCHGESETZTE Grenze. Das wäre eine Sicherheitsbehauptung, die dieser
+                   Aufbaustand nicht einlösen kann – serverseitig durchgesetzte Rechte entstehen
+                   erst mit Dok. 19 (`.claude/rules/security.md`, FINDING-0004). Die Zeile sagt
+                   deshalb, was wahr ist: Die gewählte Sicht bestimmt die ANSICHT, nicht die
+                   Berechtigung. Sie sagt bewusst NICHTS über andere Mandanten – weder ihre Zahl
+                   noch ihre Existenz, auch nicht negativ (Mandantengrenze). */
                 <dl className="shell-switch-field shell-switch-field--fest">
                   <dt className="shell-switch-label">Mandant</dt>
                   <dd className="shell-switch-value">{session.tenant.display_name}</dd>
+                  <dd className="shell-switch-note">
+                    Diese Sicht bestimmt die Ansicht, nicht die Berechtigung.
+                  </dd>
                 </dl>
               )}
             </div>

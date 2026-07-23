@@ -33,6 +33,7 @@ import { ShellNav } from './ShellNav';
 import { Topbar } from './Topbar';
 import type { NavPlace, PlaceId } from '../../lib/shell/places';
 import type { DemoRole } from '../../lib/shell/roles';
+import { ROLLEN_REICHWEITE_SATZ } from '../../lib/shell/sphaere';
 import type { DemoTenant } from '@isms/demo-seed';
 import type { ResolvedSession } from '../../lib/shell/session';
 
@@ -125,7 +126,7 @@ export function AppShell({
 
   /**
    * Rollenwechsel = sichtbarer Moduswechsel (Dok. 06, Abschnitt „Rollenwechsel"): er ändert
-   * Betonung und Reihenfolge, „nicht rückwirkend Daten, Verantwortlichkeiten oder Decision
+   * Reihenfolge und Hervorhebung, „nicht rückwirkend Daten, Verantwortlichkeiten oder Decision
    * Records". Seit WP-020 Slice 2 (DR-0009) gehören auch die Übergänge neutral→Rolle
    * („Rolle gewählt") und Rolle→neutral („Rolle abgewählt") dazu – beide werden in der
    * Rückmeldung sauber benannt. ZUKUNFTSSICHERHEIT: In einer produktiven Umgebung käme die
@@ -245,9 +246,12 @@ export function AppShell({
               ) : (
                 <>
                   <strong>Moduswechsel – {contextChange.titel ?? 'Rolle gewechselt'}:</strong> von{' '}
-                  <strong>{contextChange.from}</strong> zu <strong>{contextChange.to}</strong>. Die
-                  Rolle ändert Blickwinkel und Reihenfolge der Ansichten – Daten und Mandant bleiben
-                  unverändert.
+                  <strong>{contextChange.from}</strong> zu <strong>{contextChange.to}</strong>.{' '}
+                  {/* Reichweitensatz aus EINER Quelle (WP-028-Fixpass, Product-Auflage): Seit der
+                      Sphärenkopplung ändert der Rollenwechsel auch den EINSTIEG des Ortes
+                      „Kunden" – „Daten und Mandant bleiben unverändert" allein verschwieg das.
+                      Die zwei Zusagen, die weiterhin gelten, stehen unverändert im Satz. */}
+                  {ROLLEN_REICHWEITE_SATZ}
                 </>
               )}
             </p>

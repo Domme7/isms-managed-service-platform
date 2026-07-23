@@ -18,10 +18,23 @@
  * Die Personalisierung sortiert STILL um. Sichtbar bleibt HÖCHSTENS EIN Nutzen-Satz
  * (`nutzenSatz`, z. B. „Für die Executive-Sicht zuerst: Risiko-Minderung."). Aus der
  * Oberfläche verschwunden sind die Design-Theorie-Sätze („im Konzept normiert", „reversible
- * Anzeigeentscheidung", „gegenstandslos", „Betonung") und der aufklappbare „Quelle der
- * Variante"-Block mit den wörtlichen Spaltenzitaten – beides lebt ab jetzt in dieser
- * Code-Doku, wo es hingehört. Die Zitat-Felder bleiben als QUELLBELEG erhalten (per Test gegen
- * die PDF-Tabelle festgenagelt), werden aber nicht mehr gerendert.
+ * Anzeigeentscheidung", „gegenstandslos") und der aufklappbare „Quelle der Variante"-Block mit
+ * den wörtlichen Spaltenzitaten – beides lebt ab jetzt in dieser Code-Doku, wo es hingehört.
+ * Die Zitat-Felder bleiben als QUELLBELEG erhalten (per Test gegen die PDF-Tabelle
+ * festgenagelt), werden aber nicht mehr gerendert.
+ *
+ * ⚠️ KOPFNOTIZ IM WP-028-FIXPASS KORRIGIERT (QA-Auflage – sie beschrieb einen Stand, der so
+ * nicht galt): Slice 3 hatte hier „‚Betonung' … verschwunden" behauptet. Tatsächlich rendert
+ * das Wort damals noch app-weit (neutraler Einstieg, Rollen-Ansichtshinweis, Anmeldung,
+ * Kundenbereich), und in DIESER Datei stand „ohne Träger" in drei der vier `fokusLueckenText`.
+ * Beides ist jetzt wirklich weg:
+ *  - „Betonung" → „Hervorhebung"; die app-weiten Sätze kommen aus EINER Quelle
+ *    (`ROLLEN_REICHWEITE_SATZ` in `lib/shell/sphaere.ts`).
+ *  - „ohne Träger" / „Missionsfokus" (Konzept-Spaltenname) → „Vom Fokus dieser Ansicht im
+ *    Datenbestand nicht belegt: …".
+ * Die AUSSAGE der Lückentexte ist unverändert – nur ihr Vokabular ist Produktsprache statt
+ * Konzeptsprache. In dieser CODE-DOKU bleiben beide Begriffe bewusst stehen: dort gehören sie
+ * hin (DR-0013 Nr. 5: „Design-Theorie gehört in die Doku").
  *
  * WAS NICHT VERSCHWINDET (Ehrlichkeits-Substanz, DR-0005/DR-0013-Grenze): welche Fokusinhalte
  * KEINEN Träger haben (`fokusLueckenText`, mandantenabhängig über `fokusLueckenTextFuer`), ob
@@ -168,13 +181,16 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
     ],
     fokusKacheln: ['risiken_minderung'],
     nutzenSatz: 'Für die Executive-Sicht zuerst: Risiko-Minderung.',
+    // Wortlaut im WP-028-Fixpass entschlackt (QA-Auflage): „der einzige Punkt des Missionsfokus
+    // mit einem Kachel-Träger" trug gleich zwei Design-Theorie-Begriffe (Spaltenname der
+    // Konzept-Tabelle + „Träger"). Die AUSSAGE ist unverändert.
     fokusBelegtText:
-      'Nach vorn gezogen: die Kachel zum Minderungs-Stand der Risiken – der einzige Punkt ' +
-      'des Missionsfokus mit einem Kachel-Träger.',
+      'Nach vorn gezogen: die Kachel zum Minderungs-Stand der Risiken – als einziger Punkt ' +
+      'dieses Fokus hat sie eine eigene Kachel.',
     fokusLueckenText:
-      'Vom Missionsfokus dieser Variante ohne Träger im Datenbestand und deshalb als Lücke ' +
-      'benannt statt erfunden: Freigaben, Zielabweichung, Investition – und eine „Top"-Auswahl ' +
-      'der Risiken (es gibt keine erfasste Reihung nach Bedeutung).',
+      'Vom Fokus dieser Ansicht im Datenbestand nicht belegt und deshalb benannt statt ' +
+      'erfunden: Freigaben, Zielabweichung, Investition – und eine „Top"-Auswahl der Risiken ' +
+      '(es gibt keine erfasste Reihung nach Bedeutung).',
     ausblendungText: `${ERREICHBARKEIT} Operative Aufgabenobjekte enthält der Datenbestand nicht.`,
     orderRationale:
       'Vom Missionsfokus „Freigaben, Top-Risiken, Zielabweichung, Investition" ist allein der ' +
@@ -217,8 +233,8 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
     // NUR, wenn der aktive Mandant wirklich ein `Review`-Objekt trägt (Domain-Review 2. Runde:
     // der statische Satz war für den Consulting Operator – ohne Review – eine Fehlbehauptung).
     fokusLueckenText:
-      'Vom Missionsfokus dieser Variante ohne eigene Kachel: Reviews – auf Ebene 1 zeigt keine ' +
-      'Kachel Reviews; ein ISMS-Review-Vorgang mit Person, Zeitpunkt und Ergebnis ist nicht als ' +
+      'Vom Fokus dieser Ansicht ohne eigene Kachel: Reviews – auf Ebene 1 zeigt keine Kachel ' +
+      'Reviews; ein ISMS-Review-Vorgang mit Person, Zeitpunkt und Ergebnis ist nicht als ' +
       'eigener Typ erfasst.',
     ausblendungText: `${ERREICHBARKEIT} Eine Portfolio- oder Umsatzdarstellung enthält diese Seite ohnehin nicht.`,
     orderRationale:
@@ -248,8 +264,8 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
     fokusBelegtText:
       'Nach vorn gezogen: die Kachel der Managed Services – an ihnen hängen die Deliverables.',
     fokusLueckenText:
-      'Vom Missionsfokus dieser Variante ohne Träger im Datenbestand: Mandantenpriorität, ' +
-      'Audits, Kapazität und Reise.',
+      'Vom Fokus dieser Ansicht im Datenbestand nicht belegt: Mandantenpriorität, Audits, ' +
+      'Kapazität und Reise.',
     ausblendungText: `${ERREICHBARKEIT} Vertriebsinhalte enthält diese Seite ohnehin nicht.`,
     orderRationale:
       'Vom Missionsfokus ist allein „Deliverables" belegt (an den Managed Services) – die ' +
@@ -279,8 +295,8 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'Nach vorn gezogen: die Kachel der Managed Services – an ihnen stehen die SLA-Angaben ' +
       'je Service.',
     fokusLueckenText:
-      'Vom Missionsfokus dieser Variante ohne Träger im Datenbestand: Eskalationen, ' +
-      'Servicequalität als erfasster Messwert, Auslastung und Profitabilität.',
+      'Vom Fokus dieser Ansicht im Datenbestand nicht belegt: Eskalationen, Servicequalität ' +
+      'als erfasster Messwert, Auslastung und Profitabilität.',
     ausblendungText: `${ERREICHBARKEIT} Ein Eskalationsbezug ist im Datenbestand nicht erfasst.`,
     orderRationale:
       'Vom Missionsfokus ist allein „SLA" belegt (an den Managed Services) – die ' +

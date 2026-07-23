@@ -59,6 +59,7 @@ import {
 } from '../../lib/reports/katalog';
 import type { DemoRole } from '../../lib/shell/roles';
 import { PageContextBar } from '../shell/PageContextBar';
+import { ScopeKontextWert } from '../shell/ScopeKontext';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
 /**
@@ -101,12 +102,8 @@ export function ReportsContent({ role, tenant }: { role: DemoRole | null; tenant
       <PageContextBar
         role={role}
         tenant={tenant}
-        scopeLabel="Scope-Kennungen der Datengrundlage"
-        scopeValue={
-          model.context.scopeIds.length > 0
-            ? model.context.scopeIds.join(' · ')
-            : 'keine Scope-Zuordnung erfasst'
-        }
+        scopeLabel="Scopes der Datengrundlage"
+        scopeValue={<ScopeKontextWert scopeIds={model.context.scopeIds} />}
         datenstandLabel="Datenstand der Datengrundlage (zuletzt im System erfasst)"
         datenstandValue={
           model.context.recordedOn && model.context.recordedOnDisplay ? (

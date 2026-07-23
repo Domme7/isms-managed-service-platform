@@ -55,6 +55,28 @@ export type KundenSicht =
   /** Der eigene Mandant (Customer Workspace, Dok. 06 S02 / Navigationsregel „Kunden"). */
   | 'ein_unternehmen';
 
+/**
+ * DER EINE Satz über die Reichweite der Rollenwahl – Quelle für alle Stellen, die ihn zeigen
+ * (Kopfleisten-Rückmeldung, neutraler Einstieg, Rollen-Ansichtshinweis, Anmeldung,
+ * Kundenbereich). Wächter: `components/__tests__/rollenreichweite.test.tsx`.
+ *
+ * WARUM ER SICH GEÄNDERT HAT (WP-028-Fixpass, Product-Auflage): Bis hierher stand app-weit
+ * „die Rolle ändert nur Betonung und Reihenfolge, nie die Daten". Seit der Sphärenkopplung
+ * (DR-0013 Nr. 11 / DR-0012, `kundenSicht`) stimmt das nicht mehr: Die Rolle entscheidet, ob
+ * der Ort „Kunden" ein Mandanten-Portfolio oder das eigene Unternehmen eröffnet – und
+ * dieselbe Sphäre steuert die Portfolio-Verdichtung auf `/services` und den Mandantenwechsler
+ * in der Kopfleiste. Der Satz wird deshalb PRÄZISIERT, nicht gestrichen: er benennt die
+ * Änderung, die es wirklich gibt, und hält gleichzeitig die zwei Zusagen fest, die weiterhin
+ * gelten (derselbe Datenbestand des aktiven Mandanten; keine Berechtigung).
+ *
+ * WORTWAHL: „Hervorhebung" statt „Betonung" (DR-0013 Nr. 5 nennt „Betonung" ausdrücklich als
+ * Design-Theorie-Wort, das aus der Oberfläche verschwindet). „Reihenfolge" bleibt, weil es
+ * beschreibt, was der Nutzer sieht, und kein Fachbegriff der Gestaltung ist.
+ */
+export const ROLLEN_REICHWEITE_SATZ =
+  'Die Rolle ändert Reihenfolge, Hervorhebung und den Einstieg des Ortes „Kunden" – nicht den ' +
+  'Datenbestand des aktiven Mandanten und keine Berechtigung.';
+
 /** Route des eigenen Kundenbereichs (Ein-Unternehmens-Cockpit, Dok. 06 S02). */
 export const KUNDENBEREICH_HREF = '/kunden';
 

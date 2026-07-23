@@ -19,12 +19,18 @@ import { objectDetailHref } from '../../lib/twin/routes';
 
 export function ObjectCard({
   object,
-  familyId,
   familyName,
   tenantId,
 }: {
   object: ObjectEnvelope;
-  familyId: string;
+  /**
+   * Deutscher Familienname aus dem Vertrag – der einzige Familien-Anzeigetext.
+   *
+   * ENTFALLEN im WP-028-Fixpass (DR-0013 Nr. 2 nennt Familiencodes namentlich unter „weg"):
+   * die frühere Prop `familyId` und die gerenderte Zeile „F01 · Tenant & Unternehmenskontext".
+   * Die Kennung bleibt technischer Schlüssel in `lib/twin/data.ts` (Zuordnung Objekttyp →
+   * Familie, React-`key` der Gruppe) und ist damit Kennung statt Anzeigetext.
+   */
   familyName: string;
   tenantId: string;
 }) {
@@ -41,9 +47,7 @@ export function ObjectCard({
 
       <dl className="tw-meta">
         <dt>Familie</dt>
-        <dd>
-          {familyId} · {familyName}
-        </dd>
+        <dd>{familyName}</dd>
 
         <dt>Lebenszyklus</dt>
         <dd>{object.lifecycle_status}</dd>

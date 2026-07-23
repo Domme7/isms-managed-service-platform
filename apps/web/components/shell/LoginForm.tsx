@@ -15,6 +15,7 @@
  */
 import { useState } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
+import { ROLLEN_REICHWEITE_SATZ } from '../../lib/shell/sphaere';
 
 export function LoginForm({
   tenants,
@@ -38,10 +39,13 @@ export function LoginForm({
     >
       <fieldset className="login-fieldset">
         <legend className="login-legend">Mandant wählen</legend>
+        {/* Reichweitensatz aus EINER Quelle (WP-028-Fixpass): „ändert nur Betonung und
+            Reihenfolge derselben Daten" war seit der Sphärenkopplung unrichtig – die Rolle
+            entscheidet über den Einstieg des Ortes „Kunden". */}
         <p className="login-hint">
           Angemeldet wird nur mit dem Mandanten. Sie starten auf dem neutralen strategischen
           Einstieg; eine Rolle können Sie danach jederzeit oben in der Leiste wählen und wieder
-          abwählen – sie ändert nur Betonung und Reihenfolge derselben Daten, nicht Ihre Rechte.
+          abwählen. {ROLLEN_REICHWEITE_SATZ}
         </p>
         <label className="login-field">
           <span className="login-field-label">Mandant</span>

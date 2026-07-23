@@ -54,6 +54,16 @@ export const NAV_PLACES: readonly NavPlace[] = [
     label: 'Heute',
     href: '/heute',
     hint: 'Mission Control, Wiederaufnahme, persönliche Entscheidungen und Aufgaben',
+    // KONZEPTANKER (bewusst unverändert): die Leitfrage des Screenkatalogs. BEIDE Hälften haben
+    // heute keinen Träger – „seit meinem letzten Besuch" setzt einen gespeicherten
+    // Besuchszeitpunkt voraus (die Anmeldung speichert nur Mandant und optional Rolle), und
+    // „was verdient Aufmerksamkeit" wäre eine Priorisierung ohne Frist, Aufwand, Kapazität oder
+    // Priorität. Bis zum WP-028-Fixpass stand die Frage als sichtbare Überschrift auf `/heute`
+    // und wurde vier Blöcke tiefer in beiden Hälften dementiert; die Seite rendert sie deshalb
+    // NICHT mehr (DR-0013 Nr. 1, Muster der WP-032-Orte) und führt mit der Frage, die sie
+    // beantwortet. Die beiden Lücken stehen ruhig am Seitenende und unter „Was hier bewusst
+    // nicht steht". Ob der `question`-Wortlaut selbst überarbeitet wird, ist eine Produkt-/
+    // Owner-Entscheidung (O-WP032-02).
     question: 'Was hat sich seit meinem letzten Besuch verändert und was verdient Aufmerksamkeit?',
     match: ['/heute'],
     // WP-016 Slice 2: der Ort zeigt echten, aus dem Demo-Seed abgeleiteten Inhalt

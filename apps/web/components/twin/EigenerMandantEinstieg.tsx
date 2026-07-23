@@ -25,6 +25,7 @@ import type { DemoRole } from '../../lib/shell/roles';
 import { KUNDENBEREICH_HREF } from '../../lib/shell/sphaere';
 import { tenantDetailHref } from '../../lib/twin/routes';
 import { PageContextBar } from '../shell/PageContextBar';
+import { ScopeKontextWert } from '../shell/ScopeKontext';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
 export function EigenerMandantEinstieg({
@@ -85,11 +86,7 @@ export function EigenerMandantEinstieg({
         role={role}
         tenant={tenant}
         scopeLabel="Objektkontext dieser Seite"
-        scopeValue={
-          scopeIds.length > 0
-            ? `${tenant.display_name} · ${scopeIds.join(' · ')}`
-            : `${tenant.display_name} · keine Scope-Zuordnung erfasst`
-        }
+        scopeValue={<ScopeKontextWert scopeIds={scopeIds} praefix={tenant.display_name} />}
         datenstandLabel="Datenstand dieses Mandanten (zuletzt im System erfasst)"
         datenstandValue={
           recordedOn && recordedOnDisplay ? (
@@ -125,10 +122,19 @@ export function EigenerMandantEinstieg({
           </li>
         </ul>
         {/* Sagt, WAS diese Ansicht zeigt – nicht, was sie verbirgt. Keine Existenzaussage über
-            andere Mandanten (Mandantengrenze). */}
+            andere Mandanten (Mandantengrenze).
+
+            ZWEITER SATZ NEU IM WP-028-FIXPASS (Security-Auflage): In dieser Rollensicht
+            verschwindet der Mandantenwechsler aus der Kopfleiste (`mandantenwechselSichtbar`).
+            Ein Bedienelement, das ohne Wort verschwindet, liest sich wie eine DURCHGESETZTE
+            Grenze – eine nonverbale Behauptung über Sicherheit, die dieser Aufbaustand nicht
+            einlösen kann (serverseitige Rechte entstehen erst mit Dok. 19). Der Satz stellt das
+            richtig, ohne etwas über andere Mandanten zu sagen: er spricht ausschließlich über
+            DIESE Ansicht und ihre Reichweite. */}
         <p className="tw-muted">
           In dieser Rollensicht zeigt der Ort „Kunden" das eigene Unternehmen: ausschließlich{' '}
-          {tenant.display_name}.
+          {tenant.display_name}. Diese Sicht bestimmt, was hier angezeigt wird – sie ist keine
+          geprüfte Berechtigung; die Ansicht selbst bleibt oben in der Leiste jederzeit umstellbar.
         </p>
       </section>
 
