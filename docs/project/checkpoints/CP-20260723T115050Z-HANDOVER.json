@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "CP-20260723T115050Z-HANDOVER",
+  "type": "handover",
+  "work_package": "keins (kein aktives Work Package)",
+  "timestamp_utc": "2026-07-23T11:50:50.660816+00:00",
+  "summary": "Uebergabe vorbereitet: Doku restrukturiert (Navigator docs/README.md, Schichtenmodell, Archiv), ROADMAP neu, Handover HND-20260723T115023Z geschrieben. Session-Stand vollstaendig im Repo.",
+  "branch": "main",
+  "commit": "4f33c50",
+  "git_status": "M docs/project/handovers/LATEST.md\n?? docs/project/handovers/HND-20260723T115023Z.md",
+  "tests": "6/6 Repo-Tests, 7/7 pnpm-Tasks (191+ Tests), validate_handoff.py alle Checks OK (2026-07-23)",
+  "exact_next_step": "Neuer Chat: docs/README.md lesen, dann CONTINUATION_BRIEFING.md Paragraph 0, dann WP-020 (Verdichtungs-Umbau + Dashboard-Schicht + Einstiegsfluss, DR-0008/0009) schneiden und bauen."
+}

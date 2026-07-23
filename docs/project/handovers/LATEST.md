@@ -1,8 +1,8 @@
 # Latest Handover
 
-- **Aktuell:** `HND-20260723T111648Z.md`
+- **Aktuell:** `HND-20260723T115023Z.md`
 - **Work Package:** keins (kein aktives Work Package)
 - **Status:** Active / Handover created
 - **Branch:** `main`
-- **Commit:** `b1b8cfa`
-- **Exact Next Step:** 1) CONTINUATION_BRIEFING §0 lesen (Regel Null; Dok. 03-07 sind jetzt quellentreu - Kopfnotiz mit Konkordanz beachten). 2) WP-020 vom program-manager erstellen lassen: verlorene Anforderungen nach der 11-Punkte-Liste in docs/concept/abgleich/NACHTRAG_WP-019_2026-07-23.md, Cross-Tenant-Schutz (Dok. 06, Abschnitt Sichtbarer Kontext/CROSS-TENANT-SCHUTZ) zuerst; Punkt 8 (weight im Contract nicht PDF-gedeckt) NUR als Change Proposal (Human Gate, E-02-Umfeld). 3) Bauen nach Gate-Matrix (Briefing §2), zweite Reviewrunde, qa:visual je WP. NICHT autonom: CCP-001..003, Docker/Kosten/Cloud, FINDING-0004, Contract-Aenderungen, FINDING-0008 nur mit Product Gate. Owner-Sichtpruefung O-WP019-04/-08 ausstehend.
+- **Commit:** `4f33c50`
+- **Exact Next Step:** WP-020 vom program-manager schneiden lassen und bauen: Verdichtungs-Umbau nach Dok. 06 (Detailtiefe-Ebenen, Mission-Control-Rollenvarianten, Pflicht-Seitenbausteine) + erste Dashboard-Schicht aus belegten Daten (DR-0008) + neuer Einstiegsfluss Mandant -> neutrales strategisches Dashboard -> Rollenwahl in der App (DR-0009). Cross-Tenant-Schutz als Sicherheits-Slice vorweg. Die 11 Uebertragspunkte stehen in docs/concept/abgleich/NACHTRAG_WP-019_2026-07-23.md. Danach WP-021 Demo-Welt, dann WP-006 Kundenwelt Stufe 1; WP-025 Design-Exploration parallel moeglich. Einstieg fuer den neuen Chat: docs/README.md, dann CONTINUATION_BRIEFING.md Paragraph 0.
