@@ -44,10 +44,11 @@ Idee ist die bewusste, vom Owner selbst formulierte Weiterentwicklung. Es gilt:
 - **Dok. 06 „Datenvisualisierung, Accessibility & Responsive"** (PDF!): Heatmaps optional, Listen
   und Ursachenketten bleiben verfügbar; Reifegrad zeigt Ziel/Ist/Trend/Vertrauensgrad, nie nur eine
   Prozentzahl; Route Planner ohne Scheinpräzision. **Dashboard-Grafiken müssen diesen Regeln folgen.**
-- **Ehrlichkeit vor Wirkung** (Dok. 08, 08-D07): Statusanzeigen und Cockpit-Elemente dürfen
-  **keine erfundenen Ampeln/Scores** zeigen. Ein „Control Center" braucht echte, belegte Werte —
-  heute existieren dafür erst Zählungen; KPIs/Trends sind durch **O-WP016-04** (fehlende
-  Contract-Felder) und Dok.-09/10-Logik (spätere Phasen) begrenzt.
+- **Ehrlichkeit vor Wirkung, präzisiert durch DR-0008:** Ampeln/Dashboards sind **erwünscht** —
+  die UI visualisiert, was die Daten tragen (mit Drill-down in die Begründung), und der Demo-Seed
+  darf synthetische Bewertungen tragen (Dok. 07 „Synthetische Demo-Graphen" fordert das sogar).
+  Verboten bleibt nur UI-seitiges Errechnen/Behaupten ohne Datenbasis und Farbe ohne Text.
+  KPIs/Trends mit Zielwerten brauchen E-02 bzw. den WP-021-Seed.
 - **A11y ist Teil von Done**: `prefers-reduced-motion` wird bereits respektiert (qa:visual testet
   mit reduced motion); jede Animation braucht diesen Fallback.
 
