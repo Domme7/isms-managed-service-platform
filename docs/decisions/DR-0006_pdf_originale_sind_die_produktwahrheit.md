@@ -52,6 +52,41 @@ Alle Paragraphen-Zitate im Code und in den Work Packages beziehen sich auf die *
    Abweichung mit Bauwirkung wird einzeln bewertet und, wo nötig, als eigenes Work Package
    nachgeholt.
 
+## Nachtrag 2026-07-23: Die PDFs selbst sagen etwas anderes
+
+Beim Bau von WP-017 fiel auf — und wurde am PDF verifiziert — dass die Deckblatt-Metadaten der
+Konzeptdokumente **dieser Entscheidung widersprechen**. Dokument 07 sagt wörtlich:
+
+> „Quelle der Wahrheit: **Markdown-Datei 07 im Repository**; PDF/DOCX sind geprüfte Lesefassungen."
+
+Das ist kein Detail: Der Owner hat in den Dokumenten selbst ein Governance-Modell festgelegt, in dem
+das **Markdown** die Wahrheit ist. Es wird hier nicht stillschweigend übergangen.
+
+**Warum DR-0006 trotzdem gilt — und was daran vorläufig ist:**
+
+1. Das Modell im PDF beruht auf einer **Voraussetzung**, die nachweislich nicht erfüllt ist: dass
+   PDF und Markdown denselben Inhalt tragen („geprüfte Lesefassungen"). Der Abgleich vom 2026-07-23
+   widerlegt das für 23 von 24 Dokumenten. **Geprüft wurden die Fassungen nie gegeneinander.**
+2. Damit ist die Frage nicht „welches Format ist autoritativ", sondern „**welche Fassung enthält,
+   was der Owner geschrieben hat**". Das ist die PDF-Fassung — sie ist das Original, das Markdown
+   die verlustbehaftete Ableitung.
+3. Der Owner hat am 2026-07-23 ausdrücklich angewiesen, sich an die PDFs zu halten und das für
+   künftige Sessions zur Pflicht zu machen. Diese Anweisung ist jünger als das Deckblatt und
+   kennt den Befund.
+
+**Der Zielzustand bleibt aber der aus den Dokumenten:** Sobald die Markdown-Fassungen tatsächlich
+quellentreu sind (WP-019), übernimmt das Markdown wieder die Rolle, die ihm die Konzeptdokumente
+zuweisen — es ist versionierbar, diffbar und durchsuchbar, das PDF ist es nicht. Was dann noch
+fehlt, ist der **Treue-Check**, der die Voraussetzung „geprüfte Lesefassung" erstmals einlöst,
+statt sie zu behaupten.
+
+**Bis dahin gilt:** PDF = Autorität für den *Inhalt*. Markdown = Arbeitsfassung. Nach WP-019 +
+Treue-Check: Markdown = Wahrheit wie im Konzept vorgesehen, PDF = Original und Rückfallebene.
+
+Das ist damit **keine Abweichung vom Konzept**, sondern die Wiederherstellung einer Voraussetzung,
+die das Konzept stillschweigend angenommen hat. Festgehalten als **O-KONZ-01** in
+`docs/project/OPEN_QUESTIONS.md`.
+
 ## Verhältnis zu DR-0005
 
 DR-0005 regelt, was gilt, wenn der **Owner** im Konzept einen Fehler gemacht hat: benennen,
