@@ -42,6 +42,12 @@
       "verstoesse": []
     },
     {
+      "slug": "kunden",
+      "pfad": "/kunden",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
       "slug": "isms",
       "pfad": "/isms",
       "anzahlVerstoesse": {},
@@ -56,6 +62,24 @@
     {
       "slug": "entscheidungen",
       "pfad": "/entscheidungen",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "reports",
+      "pfad": "/reports",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "wissen",
+      "pfad": "/wissen",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "administration",
+      "pfad": "/administration",
       "anzahlVerstoesse": {},
       "verstoesse": []
     },
@@ -104,7 +128,7 @@
             },
             {
               "ziel": "div:nth-child(3) > dd",
-              "html": "<dd>F07 · Risiko &amp; Veränderung</dd>",
+              "html": "<dd>Risiko &amp; Veränderung</dd>",
               "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
             },
             {
@@ -150,6 +174,12 @@
     {
       "slug": "heute-leerer-mandant",
       "pfad": "/heute",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "kunden-portfolio-r08",
+      "pfad": "/twin",
       "anzahlVerstoesse": {},
       "verstoesse": []
     }
