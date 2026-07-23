@@ -161,6 +161,8 @@ Vollständige Herleitung: `work-packages/WP-020_VERDICHTUNG_DASHBOARD_EINSTIEG.m
 | O-WP020-13 | Baustein-Zuordnung der Mandanten-Detailseite `/twin/[tenantId]` — Drill-down-Ziel der Konvention, aber kein eigener Baustein-Ort | Konventionslücke | sechs Live-Orte tragen die Konvention; Detailseite benannt offen | Product / UX |
 | O-WP020-14 | qa:visual-Default-Perspektive (R01/Nordwerk, O-WP018-06) auf den neutralen Einstieg umstellen, jetzt wo neutral der Produkteinstieg ist? | Prozessfrage | beibehalten + Zusatzmotiv `heute-neutral` (Screenshot + axe); keine stille Umstellung | QA + Owner |
 | O-WP020-15 | Login-Semantik „jede Anmeldung startet neutral, auch bei zuvor gewählter Rolle" — Alternative (Alt-Rolle übernehmen) wäre bequemer, aber ein stiller Modus | Produktfrage (reversibel) | neutral je Anmeldevorgang, im Code begründet, per Test belegt | Owner-Bestätigung (blockiert nichts) |
+| O-WP020-16 | Deckt die Tabellenzeile „Consultant" (Dok. 06 Rollenvarianten) auch R09 Engagement Manager normativ ab, oder bleibt R09 Welt-Ableitung? | Konzeptfrage | konservativ: nur R10 normiert; R09/R11 Welt-Ableitung, reversibel | Concept Author / Owner |
+| O-WP020-17 | Dok. 06 verortet den Trust Layer „bei Risiko, Reifegrad, Empfehlung, Simulation und Report" — wo lebt die Vertrauensebene, sobald Bewertungs-Träger existieren (WP-021+)? | Konzeptfrage | Abgleich lebt auf Objekt-360 (einziger Ort mit belegten Vertrauensanzeigen) | Concept Author (WP-021-Umfeld) |
 
 ## Konzeptbibliothek (aus WP-023)
 
