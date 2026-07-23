@@ -50,13 +50,19 @@ def finde_pdf(nummer: str) -> Path:
     return treffer[-1]
 
 
-def text_von(pfad: Path) -> str:
+def seiten_von(pfad: Path) -> list[str]:
+    """Textlayer je Seite. Wer Seitengrenzen braucht (z. B. Erkennung laufender Kopfzeilen in
+    scripts/treue_check.py), nutzt diese Funktion statt text_von()."""
     try:
         import pypdf
     except ImportError:
         raise SystemExit('pypdf fehlt. Installieren mit: pip install pypdf')
     leser = pypdf.PdfReader(str(pfad))
-    return '\n'.join((seite.extract_text() or '') for seite in leser.pages)
+    return [(seite.extract_text() or '') for seite in leser.pages]
+
+
+def text_von(pfad: Path) -> str:
+    return '\n'.join(seiten_von(pfad))
 
 
 def abschnitte(text: str) -> list[str]:
