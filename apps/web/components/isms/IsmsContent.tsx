@@ -8,11 +8,25 @@
  * Empty-State für Mandanten ohne ISMS-Kernobjekte (Dok. 06 §17). Kein Rollen-Gating: die
  * Ansicht zeigt nur den aktiven Mandanten (WP-013 Nicht-Ziele).
  *
+ * ANTWORT-MODUS (WP-028 Slice 3, DR-0013 Nr. 1 „Antwort zuerst, Lücke zuletzt"): Über der Falz
+ * stehen Zahlen und Stände. Der Aufmacher nennt in EINEM aus dem Modell abgeleiteten Satz, was
+ * erfasst ist; die drei früheren Rahmungsabsätze (Read-only-Charakter, Abgrenzung gegen
+ * Scoring/Reifegrade, der seitenweite Lebenszyklus-Satz) standen zusammen rund 130 Wörter VOR
+ * der ersten Zahl. Sie sind vollständig erhalten und stehen jetzt verdichtet im
+ * Abschluss-Abschnitt „Was diese Seite nicht behauptet" am Seitenende.
+ *
+ * WIDERSPRUCH „wirksam" (DR-0013 Nr. 8): Die Lebenszyklus-Verteilung führt einen erfassten Stand
+ * „wirksam", während der Seitentext „keine bewertete Wirksamkeit" sagt. Aufgelöst wird das AM
+ * WORT – die Verteilungs-Kachel kennzeichnet solche Stände als erfasste Stände ohne Urteil
+ * (`STAND_HINWEIS` in `lib/heute/dashboard.ts`). Der Stand selbst wird NICHT umbenannt: er kommt
+ * aus Vertrag und Seed, eine Umbenennung wäre eine Owner-Entscheidung (E-02).
+ *
  * Heading-Hierarchie: h1 (Ort) > h2 (Sektion) > h3 (Karte) > h4 (Karteninhalt).
  */
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
+import { anzahl } from '../../lib/heute/data';
 import { buildIsmsVerdichtung } from '../../lib/heute/dashboard';
 import { buildIsmsCoreView, hasManagedServices } from '../../lib/isms/data';
 import type { DemoRole } from '../../lib/shell/roles';
@@ -53,31 +67,10 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
       {/* Leitfrage der Seite (Dok. 06 „Frage vor Navigation", S06). */}
       <p className="tw-question">Wie ist die Risiko- und Control-Lage von {tenant.display_name}?</p>
 
-      {/* Formulierung seit dem Review-Pass (Product-Finding): „ohne Ampeln" widersprach den
-          eigenen regelbasierten Badges des Überblicks – die ehrliche Grenze ist: Status nur
-          aus ERFASSTEN Zuständen, kein Scoring, keine Reifegrade (DR-0008). */}
-      <p className="tw-lead">
-        Read-only Demo-Sicht auf den synthetischen ISMS-Kerngraphen des aktiven Mandanten: Risiken
-        mit Herkunft, Controls mit Umsetzung und Nachweisen, Maßnahmen und Evidence – aus demselben
-        Datenmodell wie der digitale Zwilling. Es werden nur belegte Seed-Stände gezeigt;
-        Implementierungs- und Wirksamkeitsaussagen bleiben strikt getrennt. Status-Anzeigen beruhen
-        ausschließlich auf erfassten Zuständen – ohne Scoring und ohne Reifegrade.
-      </p>
-      {/* UX-Review MAJOR-1 (seitenweite Rahmung): jede sichtbare OBJEKT-Status-Angabe ist ein
-          Lebenszyklus-Stand, kein Prüf-/Auditergebnis – gilt auch für Status in Verweis-Zeilen,
-          nicht nur an den Kartenköpfen. Der „Status der Beziehung" (Kantenstatus, z. B. „geprüft"
-          am Nachweisbezug) ist davon ausgenommen: er ist ein Feld der Kante und darf einen
-          Prüfstatus tragen. WP-028 (DR-0013): Quellenbeleg (Dok. 07, „Kanonische Beziehungstypen",
-          Nachweisbezug mit Zeitraum und Prüfstatus) bleibt hier im Kommentar; der gerenderte Satz
-          nennt keine Dokument-/Paragraphenkennung mehr. Wortgleich mit `ObjectDetailView` und
-          `EntscheidungenContent`. */}
-      <p className="tw-muted">
-        <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
-        Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
-        keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
-        etwa einen Zeitraum und einen Prüfstatus tragen.
-      </p>
+      {/* ANTWORT ZUERST (DR-0013 Nr. 1): der belegte Bestand in einem Satz, aus dem Modell
+          gezählt – nicht geschrieben. Die Abgrenzungssätze („nur belegte Seed-Stände", „ohne
+          Scoring und Reifegrade") stehen unverändert im Abschluss-Abschnitt am Seitenende. */}
+      <IsmsAufmacher view={view} tenant={tenant} />
 
       {/* Kontextleiste (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext"): Scope und Datenstand
           beziehen sich ausdrücklich auf die HIER GEZEIGTEN ISMS-Kernobjekte – die Leiste
@@ -111,12 +104,10 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
           {verdichtung ? (
             <section aria-labelledby="isms-ueberblick">
               <h2 id="isms-ueberblick">Überblick aus belegten Daten</h2>
-              <p className="tw-muted">
-                Verdichtung der Karten dieser Seite – es wird nichts berechnet, was der Datenbestand
-                nicht trägt: die Verteilung der erfassten Lebenszyklus-Stände und zwei Abdeckungen
-                als „x von y" mit sichtbarer Grundgesamtheit. Jede Kachel nennt Frage, Scope,
-                Datenstand und Ermittlungsregel; der Weg führt zu den Karten dieser Seite.
-              </p>
+              {/* Der frühere Erklärabsatz („Verdichtung der Karten dieser Seite – es wird nichts
+                  berechnet …") ist entfallen: jede Kachel nennt Frage, Zahl, Grenze und ihre
+                  Ermittlungsregel bereits selbst (`KachelErklaerung`), der Absatz wiederholte
+                  das nur vor der ersten Zahl (DR-0013 Nr. 3, Kachel-Boilerplate). */}
               <ul className="db-grid" aria-label="Verdichteter Überblick aus belegten Daten">
                 <li>
                   <LifecycleVerteilungKachel tile={verdichtung.lifecycle} />
@@ -132,9 +123,11 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
 
           <section aria-labelledby="isms-risiken">
             <h2 id="isms-risiken">Risiken</h2>
+            {/* Die BENANNTE DATENLÜCKE bleibt hier stehen, wo sie gilt (DR-0013-Grenze:
+                benannte Lücken sind Substanz). Verdichtet ist nur die Rahmung davor – „ohne
+                Score und ohne bewertete Einstufung" gehört zur seitenweiten Abgrenzung am
+                Seitenende, nicht zusätzlich über jede Sektion. */}
             <p className="tw-muted">
-              Risiko, Szenario-Herkunft und Schwachstellen-Ursprung als Klartext – ohne Score und
-              ohne bewertete Einstufung (eine Bewertungslogik entsteht in einer späteren Phase).{' '}
               <strong>Datenlücke:</strong> Szenario, Schwachstelle und Risiko sind im aktuellen
               Datenmodell nicht direkt miteinander verknüpft – ein Zusammenhang wird hier bewusst
               nicht behauptet.
@@ -215,11 +208,113 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
         </>
       )}
 
+      <AbgrenzungSection />
+
       {/* Seitenbausteine-Konvention (WP-020 Slice 3, Dok. 06 „Verbindliche Seitenbausteine"):
           ehrliche Benennung der Bausteine ohne Träger – auch im Leerzustand sichtbar, denn die
           Aussage betrifft die Seite, nicht den einzelnen Mandanten. */}
       <SeitenbausteineHinweis ort="isms" />
     </>
+  );
+}
+
+/* -----------------------------------------------------------------------------
+ * Aufmacher – die Antwort in einem Satz (WP-028 Slice 3, DR-0013 Nr. 1)
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Der belegte Bestand über der Falz. Alle Zahlen kommen aus `buildIsmsCoreView` – derselben
+ * Ableitung wie die Karten darunter und wie der verdichtete Überblick (keine zweite Zählregel).
+ */
+function IsmsAufmacher({
+  view,
+  tenant,
+}: {
+  view: ReturnType<typeof buildIsmsCoreView>;
+  tenant: DemoTenant;
+}) {
+  const gesamt =
+    view.risks.length +
+    view.scenarios.length +
+    view.weaknesses.length +
+    view.controls.length +
+    view.measures.length +
+    view.evidence.length;
+
+  if (view.isEmpty) {
+    return (
+      <p className="tw-lead">
+        Für <strong>{tenant.display_name}</strong> ist im Demo-Datenbestand kein ISMS-Kernobjekt
+        erfasst – weder Risiken noch Controls, Maßnahmen oder Nachweise.
+      </p>
+    );
+  }
+
+  return (
+    <p className="tw-lead">
+      Für <strong>{tenant.display_name}</strong> {gesamt === 1 ? 'ist' : 'sind'}{' '}
+      <strong>
+        {gesamt} {gesamt === 1 ? 'ISMS-Kernobjekt' : 'ISMS-Kernobjekte'}
+      </strong>{' '}
+      erfasst: {anzahl(view.risks.length, 'Risiko', 'Risiken')},{' '}
+      {anzahl(view.scenarios.length, 'Szenario', 'Szenarien')},{' '}
+      {anzahl(view.weaknesses.length, 'Schwachstelle', 'Schwachstellen')},{' '}
+      {anzahl(view.controls.length, 'Control', 'Controls')},{' '}
+      {anzahl(view.measures.length, 'Maßnahme', 'Maßnahmen')} und{' '}
+      {anzahl(view.evidence.length, 'Nachweis', 'Nachweise')}
+      {view.context.recordedOn && view.context.recordedOnDisplay ? (
+        <>
+          , zuletzt im System erfasst am{' '}
+          <time dateTime={view.context.recordedOn}>{view.context.recordedOnDisplay}</time>
+        </>
+      ) : null}
+      .
+    </p>
+  );
+}
+
+/* -----------------------------------------------------------------------------
+ * Ruhiger Abschluss: was diese Seite NICHT behauptet (DR-0013 „Lücke zuletzt")
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Die seitenweite Abgrenzung – verdichtet und nachgeordnet, aber inhaltlich vollständig.
+ *
+ * Hier stehen die drei Aussagen, die bis WP-028 als Absatzwand ÜBER der ersten Zahl standen:
+ *  1. read-only Demo-Sicht aus dem synthetischen Datenbestand (keine operative Quelle),
+ *  2. nur erfasste Stände – kein Scoring, keine Reifegrade, keine bewertete Einstufung
+ *     (Abgrenzung Dok. 09/10; Formulierung seit dem WP-020-Review-Pass: „ohne Ampeln" wäre
+ *     falsch, weil der Überblick regelbasierte Badges auf ERFASSTEN Lagen trägt),
+ *  3. der seitenweite Lebenszyklus-Satz, WORTGLEICH mit `EntscheidungenContent` und
+ *     `ObjectDetailView` (Dok. 08 08-D07, per Test erzwungen). Quellenbeleg zum Kantenstatus:
+ *     Dok. 07, Abschnitt „Kanonische Beziehungstypen" (Nachweisbezug mit Zeitraum und
+ *     Prüfstatus) – bleibt Kommentar, keine Kennung im Produkttext (DR-0013 Nr. 2).
+ *
+ * Die Rahmung geht durch die Verlagerung nicht verloren: jede Karte trägt ihren Stand weiterhin
+ * AM WERT gerahmt (ControlCard: „Lebenszyklus-Stand aus dem Demo-Datenbestand – kein
+ * Prüfergebnis"), und die Verteilungs-Kachel kennzeichnet urteilsklingende Stände am Wort.
+ */
+function AbgrenzungSection() {
+  return (
+    <section aria-labelledby="isms-abgrenzung">
+      <h2 id="isms-abgrenzung">Was diese Seite nicht behauptet</h2>
+      <p className="sv-edge-note">
+        Gezeigt wird ausschließlich, was im synthetischen Demo-Datenbestand erfasst ist: Stände,
+        Beziehungen und Nachweise – aus demselben Datenmodell wie der digitale Zwilling. Es gibt
+        hier keinen Score, keinen Reifegrad und keine bewertete Einstufung; Implementierungs- und
+        Wirksamkeitsaussagen bleiben strikt getrennt. Lesen und Schreiben in operativen
+        Quellsystemen findet nicht statt.
+      </p>
+      {/* `tw-muted` bleibt als Klasse erhalten: der Wortgleichheits-Wächter der drei Seiten
+          sucht exakt `p.tw-muted` mit „Zum Verständnis:". */}
+      <p className="tw-muted tw-seitenfuss">
+        <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
+        Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
+        keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
+        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
+        etwa einen Zeitraum und einen Prüfstatus tragen.
+      </p>
+    </section>
   );
 }
 

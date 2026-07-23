@@ -1082,19 +1082,21 @@ summary {
   font-size: 0.85rem;
 }
 
-/* Aufklappbare Quelle des Rollenfokus (Review-Pass: Signatur-Jargon raus aus dem Fließtext). */
-.rv-quelle > summary {
+/* Ruhiger Aufklappteil des Rollenfokus (WP-028 Slice 3, DR-0013 Nr. 5): trägt die benannten
+   Fokus-Lücken und die Erreichbarkeits-Zusage. Ersetzt den früheren „Quelle der Variante"-Block
+   (`.rv-quelle`) – die Konzept-Quelle lebt jetzt in der Code-Doku. */
+.rv-details > summary {
   cursor: pointer;
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--shell-teal);
 }
-.rv-quelle > summary:focus-visible {
+.rv-details > summary:focus-visible {
   outline: 3px solid var(--tw-focus);
   outline-offset: 2px;
   border-radius: 6px;
 }
-.rv-quelle > p {
+.rv-details > p {
   margin: 0.3rem 0 0;
   font-size: 0.78rem;
   color: var(--tw-muted);
@@ -1253,6 +1255,19 @@ summary {
   background: #eceef2;
   border-color: #d9dce3;
 }
+/* Sichtbarer Grenzsatz unter dem Badge (WP-028 Slice 3, DR-0013 Nr. 7): die Einschränkung
+   stand vorher nur im `title` und war mit Tastatur/Touch nicht erreichbar. */
+.db-badge-grenze {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--tw-muted);
+}
+/* Kleine Grundgesamtheit (n≤2): statt Vollbalken/Erfolgszeichen die absolute Kleinheit. */
+.db-kleinheit {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--tw-ink-soft);
+}
 
 /* Abdeckungsbalken: reine Form-Ergänzung zur sichtbaren „x von y"-Zahl (aria-hidden). */
 .db-balken {
@@ -1328,6 +1343,15 @@ summary {
 .db-verteilung-stand {
   font-weight: 600;
 }
+/* Lesart eines urteilsklingenden Stands, AM WORT (WP-028 Slice 3, DR-0013 Nr. 8):
+   eigene Rasterzeile unter dem Stand, damit die dreispaltige Zeile erhalten bleibt. */
+.db-verteilung-hinweis {
+  grid-column: 1 / -1;
+  font-weight: 400;
+  font-size: 0.76rem;
+  color: var(--tw-muted);
+  margin-top: -0.15rem;
+}
 .db-verteilung-zahl {
   color: var(--tw-muted);
   font-size: 0.8rem;
@@ -1372,7 +1396,9 @@ summary {
 }
 
 /* Ehrlichkeitsklammer der Leitfrage als ruhige Schlusszeile (DR-0013 „Antwort zuerst, Lücke
-   zuletzt"): dezent, nachgeordnet, mit leiser Abtrennung – keine Wand über der Falz. */
+   zuletzt"): dezent, nachgeordnet, mit leiser Abtrennung – keine Wand über der Falz.
+   Seit WP-028 Slice 3 seitenübergreifend genutzt (`tw-`), zusätzlich zum Ort „Heute". */
+.tw-seitenfuss,
 .ht-seitenfuss {
   margin: 1.75rem 0 0;
   padding-top: 0.9rem;
@@ -1397,9 +1423,6 @@ summary {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-}
-.rv-fokus--keine {
-  border-left-color: var(--tw-line);
 }
 .rv-fokus-text {
   margin: 0;

@@ -769,7 +769,19 @@ describe('MissionControlContent – Rollenvarianten (Dok. 06 Tabelle „Rollenva
     }
   });
 
-  it('AC 17: die vier normierten Rollen tragen den Rollenfokus mit benannten Lücken', () => {
+  /**
+   * REGEL-ERHALTEND UMGESTELLT (WP-028 Slice 3, DR-0013 Nr. 5 „Rollenfokus ohne Beipackzettel").
+   *
+   * ALTE ERWARTUNG: der Fokus-Kasten nennt sichtbar die Herkunft der Variante („im Konzept
+   * normiert", „Tabelle „Rollenvarianten"") und trägt drei Absätze Fließtext.
+   * NEUE ERWARTUNG: sichtbar ist EIN Nutzen-Satz; die Herkunfts-/Quellenangabe ist Code-Doku.
+   *
+   * NICHT ABGESCHWÄCHT: Die drei EHRLICHKEITS-Aussagen (Fokus-Lücken, Bestandslage beim
+   * aktiven Mandanten, Erreichbarkeits-Zusage) werden weiterhin WORTGLEICH im DOM verlangt –
+   * nur eben im ruhigen Aufklappteil. Neu hinzugekommen ist die Gegenprobe, dass die
+   * Konzept-Theorie NICHT mehr im Produkttext steht; der Wächter ist damit strenger als vorher.
+   */
+  it('AC 17: die vier normierten Rollen tragen einen Nutzen-Satz und die benannten Lücken', () => {
     for (const roleId of Object.keys(NORMIERTE_ROLLEN)) {
       const { container, unmount } = render(
         <MissionControlContent role={role(roleId)} tenant={tenant(TENANT_ID.NORDWERK)} />,
@@ -779,16 +791,30 @@ describe('MissionControlContent – Rollenvarianten (Dok. 06 Tabelle „Rollenva
       const fokus = container.querySelector('.rv-fokus');
       const text = fokus?.textContent ?? '';
 
-      // Variante + Herkunft „normiert" sind benannt (Quelle mit Abschnittstitel).
-      expect(text, roleId).toContain(`Rollenfokus „${zuordnung.variante.name}"`);
-      expect(text, roleId).toContain('im Konzept normiert');
-      expect(text, roleId).toContain('Tabelle „Rollenvarianten"');
-      // Belegte Betonung + Fokus-Lücken + Ausblendungs-Klartext stehen sichtbar da.
+      // Sichtbar über dem Aufklappteil: genau der eine Nutzen-Satz.
+      expect(fokus?.querySelector('.rv-fokus-text')?.textContent, roleId).toBe(
+        zuordnung.variante.nutzenSatz,
+      );
+      // Ehrlichkeits-Substanz vollständig im DOM (ruhig, nicht entfernt).
       expect(text, roleId).toContain(zuordnung.variante.fokusBelegtText);
       expect(text, roleId).toContain(zuordnung.variante.fokusLueckenText);
       expect(text, roleId).toContain(zuordnung.variante.ausblendungText);
       // Erreichbarkeits-Zusage (keine getrennte Wahrheit, alles über Drill-down/Tiefe).
       expect(text, roleId).toMatch(/nichts entzogen/);
+      // … und sie steht wirklich im Aufklappteil, nicht als Absatzwand über den Kacheln.
+      const details = fokus?.querySelector('details.rv-details');
+      expect(details, roleId).not.toBeNull();
+      expect(details?.textContent, roleId).toContain(zuordnung.variante.fokusLueckenText);
+      // Gegenprobe: keine Konzept-Theorie mehr im Produkttext.
+      for (const jargon of [
+        /im Konzept normiert/,
+        /gegenstandslos/,
+        /reversible Anzeigeentscheidung/,
+        /Tabelle „Rollenvarianten"/,
+        /Quelle der Variante/,
+      ]) {
+        expect(jargon.test(text), `${roleId}: „${jargon}" gehört in die Code-Doku`).toBe(false);
+      }
       unmount();
     }
     // Stichprobe der geforderten Lücken-Benennung (AC 17: „z. B. Freigaben, Investition").
@@ -797,27 +823,35 @@ describe('MissionControlContent – Rollenvarianten (Dok. 06 Tabelle „Rollenva
     expect(executive?.fokusLueckenText).toContain('Investition');
   });
 
-  it('Welt-Ableitung: nicht normierte Rollen benennen die Ableitung als Anzeigeentscheidung', () => {
-    // R02 (Executive World) erhält die Executive-Variante ÜBER DIE WELT – sichtbar benannt.
+  /**
+   * REGEL-ERHALTEND UMGESTELLT (s. o.): Die Welt-Ableitung ist eine Design-Entscheidung, keine
+   * Datenaussage – sie wird nicht mehr im Produkttext erklärt (Begründung: Modul-Kopf von
+   * `lib/heute/rollenvarianten.ts`, O-WP020-03). Die REGEL bleibt hart geprüft: R02 erhält
+   * exakt die Kachel-Reihenfolge der Executive-Variante, nichts wird erfunden.
+   */
+  it('Welt-Ableitung: nicht normierte Rollen erhalten die Reihenfolge ihrer Welt-Variante', () => {
     const { container, unmount } = render(
       <MissionControlContent role={role('R02')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
-    const text = container.querySelector('.rv-fokus')?.textContent ?? '';
-    expect(text).toContain('keine eigene Variante normiert');
-    expect(text).toContain('ihrer Erlebniswelt');
-    expect(text).toContain('reversible Anzeigeentscheidung');
     expect(gerenderteKachelOrdnung(container)).toEqual([...kachelOrdnungForRole('R01')]);
+    const text = container.querySelector('.rv-fokus')?.textContent ?? '';
+    expect(text).toContain(varianteForRole('R02').variante?.nutzenSatz ?? '');
+    expect(text).not.toContain('reversible Anzeigeentscheidung');
     unmount();
   });
 
-  it('Assurance-Rollen erhalten BEWUSST keine Betonung (keine Zeile in der Tabelle)', () => {
+  /**
+   * REGEL-ERHALTEND UMGESTELLT (s. o.): Statt eines Kastens mit dem Satz „es wird keine Betonung
+   * erfunden" zeigt die Seite jetzt GAR KEINEN Rollenfokus – die Abwesenheit IST die Aussage.
+   * Die Regel selbst wird unverändert und weiterhin hart geprüft: kanonische Reihenfolge.
+   */
+  it('Assurance-Rollen erhalten BEWUSST keine Reihenfolge-Betonung (keine Zeile in der Tabelle)', () => {
     for (const roleId of ['R07', 'R12']) {
       const { container, unmount } = render(
         <MissionControlContent role={role(roleId)} tenant={tenant(TENANT_ID.NORDWERK)} />,
       );
-      const fokus = container.querySelector('.rv-fokus');
-      expect(fokus?.textContent, roleId).toContain('keine Betonung erfunden');
       expect(gerenderteKachelOrdnung(container), roleId).toEqual([...KANONISCHE_KACHELORDNUNG]);
+      expect(container.querySelector('.rv-fokus'), roleId).toBeNull();
       unmount();
     }
   });
@@ -979,24 +1013,23 @@ describe('MissionControlContent – kein Score, keine Ampel, keine Empfehlung', 
           ).toContain(gerendert);
           datentext = datentext.split(gerendert).join(' ');
         }
-        // BEGRÜNDETE AUSNAHME (WP-020 Fix-Pass, Product F4): Bei NORMIERTEN Rollen rendert der
-        // aufklappbare „Quelle der Variante"-Block die WÖRTLICHEN PDF-Spaltenzitate
-        // (missionsfokusQuote/ausblendungQuote). Für „Consultant" enthält der Missionsfokus
-        // „Mandantenpriorität" – zitierte Tabellenspalte aus Dok. 06, keine Priorisierung von
-        // Daten durch diese Seite. Dieselbe Mechanik: exakte Zitate entfernen UND Vorhandensein
-        // prüfen (nur wo der Rollenfokus rendert – nicht bei leeren Mandanten).
-        if (
-          fokusVariante &&
-          fokusZuordnung?.herkunft === 'normiert' &&
-          tenantId !== TENANT_ID.FINOVIA
-        ) {
-          for (const zitat of [fokusVariante.missionsfokusQuote, fokusVariante.ausblendungQuote]) {
-            expect(
-              datentext,
-              `${kennung}/${tenantId}: das wörtliche Quellzitat „${zitat}" steht nicht mehr im Text`,
-            ).toContain(zitat);
-            datentext = datentext.split(zitat).join(' ');
-          }
+        // AUSNAHME ENTFALLEN (WP-028 Slice 3, DR-0013 Nr. 5): Bis dahin rendete der Block
+        // „Quelle der Variante" die WÖRTLICHEN PDF-Spaltenzitate; für „Consultant" enthielt der
+        // Missionsfokus „Mandantenpriorität" und musste vor dem Wächter-Scan gestrippt werden.
+        // Der Quellenblock ist aus der Oberfläche entfernt (die Quelle lebt als Code-Doku in
+        // `lib/heute/rollenvarianten.ts` und wird dort per Test gegen die PDF-Tabelle
+        // festgenagelt). Die Ausnahme ist damit gegenstandslos – und ihr Wegfall macht den
+        // Wächter STRENGER: das Wort darf jetzt gar nicht mehr aus dieser Quelle auftauchen.
+        // Gegenprobe, damit die Zitate nicht still zurückkehren:
+        if (fokusVariante) {
+          expect(
+            datentext,
+            `${kennung}/${tenantId}: das wörtliche Spaltenzitat gehört in die Code-Doku`,
+          ).not.toContain(fokusVariante.missionsfokusQuote);
+          expect(
+            datentext,
+            `${kennung}/${tenantId}: das wörtliche Spaltenzitat gehört in die Code-Doku`,
+          ).not.toContain(fokusVariante.ausblendungQuote);
         }
         for (const muster of NUR_IM_LUECKENBLOCK) {
           expect(
@@ -1275,6 +1308,12 @@ describe('MissionControlContent – Dashboard-Kacheln (Selbsterklärung, Badges,
     }
   });
 
+  /**
+   * ERWEITERT (WP-028 Slice 3, DR-0013 Nr. 7): Balken und Badge sind nur noch dort Pflicht, wo
+   * die Grundgesamtheit sie trägt. Bei n≤2 MÜSSEN beide fehlen und der Kleinheits-Hinweis
+   * MUSS stehen – das ist eine zusätzliche Prüfung, keine Lockerung: vorher war „1 von 1" mit
+   * Vollbalken und grünem Häkchen erlaubt und wurde als vollständige Lage gelesen.
+   */
   it('zeigt Abdeckungen als „x von y" mit Balken-FORM und Badge (Symbol + Text, nie nur Farbe)', () => {
     const dashboard = buildHeuteDashboard(TENANT_ID.NORDWERK);
     if (!dashboard) throw new Error('Testfixture fehlt: Nordwerk-Dashboard');
@@ -1289,31 +1328,63 @@ describe('MissionControlContent – Dashboard-Kacheln (Selbsterklärung, Badges,
       expect(kachel.querySelector('.db-wert-zahl')?.textContent).toBe(
         `${tile.covered} von ${tile.total}`,
       );
-      // Balken = zusätzliche Form, dekorativ (die Aussage steht als Text daneben).
-      expect(kachel.querySelector('.db-balken')?.getAttribute('aria-hidden')).toBe('true');
+      if (tile.kleineGrundgesamtheit) {
+        // n≤2: kein Balken, kein Erfolgs-Badge – dafür die absolute Kleinheit als Text.
+        expect(kachel.querySelector('.db-balken'), tile.id).toBeNull();
+        expect(kachel.querySelector('.db-kleinheit')?.textContent, tile.id).toBe(
+          tile.kleinheitText,
+        );
+      } else {
+        // Balken = zusätzliche Form, dekorativ (die Aussage steht als Text daneben).
+        expect(kachel.querySelector('.db-balken')?.getAttribute('aria-hidden')).toBe('true');
+        expect(kachel.querySelector('.db-kleinheit'), tile.id).toBeNull();
+      }
       // Badge: Symbol (aria-hidden) + Text aus der Positivliste – nie nur Farbe (06-D11).
       const badge = kachel.querySelector('.db-badge');
       if (tile.badge) {
         expect(badge?.querySelector('[aria-hidden="true"]')).not.toBeNull();
         expect(badge?.textContent).toContain(tile.badge.text);
         expect(Object.keys(BADGE_RULES)).toContain(tile.badge.rule);
+        // DR-0013 Nr. 7: der Grenzsatz steht SICHTBAR an der Kachel, nicht nur im `title`.
+        expect(kachel.querySelector('.db-badge-grenze')?.textContent, tile.id).toBe(
+          tile.badge.grenze,
+        );
       } else {
         expect(badge).toBeNull();
       }
     }
   });
 
+  /**
+   * REGEL-ERHALTEND UMGESTELLT (WP-028 Slice 3, DR-0013 Nr. 7): Die zulässigen Badge-Texte
+   * waren bis dahin die drei statischen Regel-Texte. Seit der Badge-Sprachpräzisierung ist der
+   * Text ZAHLENGEBUNDEN („alle 34 Objekte haben einen benannten Owner"), also nicht mehr aus
+   * einer festen Liste ableitbar. Geprüft wird deshalb gegen die Texte AUS DEM MODELL – die
+   * eigentliche Regel („kein Badge außerhalb der Positivliste, kein Urteil im Text") bleibt
+   * unverändert scharf und wird zusätzlich um das Formmuster ergänzt.
+   */
   it('vergibt kein Badge außerhalb der Positivliste und kein Urteil (kein hoch/mittel/gering)', () => {
     for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA]) {
+      const model = buildHeuteDashboard(tenantId);
+      if (!model) throw new Error(`Testfixture fehlt: ${tenantId}`);
       const { container, unmount } = render(
         <MissionControlContent role={role('R01')} tenant={tenant(tenantId)} />,
       );
+      const zulaessigeTexte = [
+        ...model.coverage.map((t) => t.badge?.text),
+        model.emptyTile?.badge.text,
+      ].filter((t): t is string => t !== undefined);
       const badges = Array.from(container.querySelectorAll('.db-badge'));
-      const zulaessigeTexte = Object.values(BADGE_RULES).map((r) => r.text);
       for (const badge of badges) {
         const text = (badge.textContent ?? '').replace(/^[^\wÄÖÜäöü]+/u, '').trim();
         expect(zulaessigeTexte, `${tenantId}: „${text}"`).toContain(text);
         expect(text).not.toMatch(/hoch|mittel|gering|Reifegrad|Trend|Risiko/i);
+        // Zahlengebunden oder der merkmalfreie Rückfalltext – nie ein pauschales Urteil.
+        expect(
+          /^(alle \d+ |Datenlücke: \d+ )/.test(text) ||
+            Object.values(BADGE_RULES).some((r) => r.text === text),
+          `${tenantId}: „${text}" ist weder zahlengebunden noch Rückfalltext`,
+        ).toBe(true);
       }
       unmount();
     }

@@ -85,7 +85,6 @@ import {
 } from '../../lib/heute/framing';
 import {
   KANONISCHE_KACHELORDNUNG,
-  KEINE_VARIANTE_TEXT,
   fokusBelegtTextFuer,
   fokusLueckenTextFuer,
   varianteForRole,
@@ -476,51 +475,45 @@ function kachelLage(dashboard: HeuteDashboardModel): ReadonlyMap<TileId, boolean
 }
 
 /**
- * Sichtbarer Rollenfokus der Ebene 1 (WP-020 Slice 5): benennt die angewendete Variante samt
- * Herkunft (normiert / Welt-Ableitung / keine), die nach vorn gezogenen Fokus-Kacheln – für
- * den AKTIVEN Mandanten gegen die echte Kachellage geprüft (Review-Finding Domain F2) –, die
- * Fokusinhalte OHNE Träger (Lücke statt Erfindung, DR-0005) und was die normierte
- * „Ausblendung" heute bedeutet – inklusive der Zusage, dass nichts entzogen wird (eine
- * Wahrheit, Dok. 06 P02). Für neutral erscheint stattdessen der Erstbesuchs-Hinweis (Slice 2).
- * Die Konzept-Quelle steht aufklappbar dabei (Review-Pass: kein Signatur-Jargon im Fließtext).
+ * Rollenfokus der Ebene 1 – ENTSCHLACKT in WP-028 Slice 3 (DR-0013 Nr. 5 „Rollenfokus ohne
+ * Beipackzettel").
+ *
+ * SICHTBAR: genau EIN Nutzen-Satz („Für die Executive-Sicht zuerst: Risiko-Minderung."). Die
+ * Umsortierung spricht für sich; sie muss sich nicht erklären.
+ *
+ * WAS AUS DEM FLIESSTEXT VERSCHWUNDEN IST (nicht aus dem Produkt): die Herkunfts-Sätze („im
+ * Konzept normiert" / „reversible Anzeigeentscheidung"), das Wort „gegenstandslos", der Begriff
+ * „Betonung" und der aufklappbare „Quelle der Variante"-Block mit den wörtlichen
+ * PDF-Spaltenzitaten. Das ist Design- und Konzept-Theorie und lebt jetzt in der Code-Doku von
+ * `lib/heute/rollenvarianten.ts` (Quelle, Zuordnungsbegründung, Zitate – dort weiterhin per
+ * Test gegen die PDF-Tabelle festgenagelt).
+ *
+ * WAS BLEIBT (Ehrlichkeits-Substanz, DR-0005): die Fokusinhalte OHNE Träger, ob die betonten
+ * Kacheln beim AKTIVEN Mandanten überhaupt Bestand tragen (Review-Finding Domain F2) und die
+ * Zusage, dass nichts entzogen wird (eine Wahrheit, Dok. 06 P02) – alle drei vollständig im
+ * DOM, nur ruhig im `<details>` statt als drei Absätze über den Kacheln.
+ *
+ * ROLLEN OHNE VARIANTE (Assurance & Administration World) zeigen GAR KEINEN Fokus mehr: dass
+ * das Konzept für sie keine Zeile führt, ist keine Aussage über die Daten des Mandanten
+ * (Begründung: `KEINE_VARIANTE_BEGRUENDUNG`). Die Regel selbst bleibt scharf – sie erhalten die
+ * kanonische Reihenfolge, und genau das prüft der Wächter weiterhin.
+ * Für neutral erscheint stattdessen der Erstbesuchs-Hinweis (Slice 2).
  */
 function RollenfokusBlock({ role, dashboard }: { role: DemoRole; dashboard: HeuteDashboardModel }) {
-  const { variante, herkunft } = varianteForRole(role.id);
-
-  if (!variante) {
-    return (
-      <div className="rv-fokus rv-fokus--keine" role="note">
-        <p className="rv-fokus-text">
-          <strong>Rollenfokus:</strong> {KEINE_VARIANTE_TEXT}
-        </p>
-      </div>
-    );
-  }
+  const { variante } = varianteForRole(role.id);
+  if (!variante) return null;
 
   return (
     <div className="rv-fokus" role="note">
-      <p className="rv-fokus-text">
-        <strong>{`Rollenfokus „${variante.name}":`}</strong>{' '}
-        {herkunft === 'normiert'
-          ? 'Diese Variante ist im Konzept normiert.'
-          : 'Für diese Rolle ist keine eigene Variante normiert; angewendet wird die Variante ' +
-            `„${variante.name}" ihrer Erlebniswelt – eine reversible Anzeigeentscheidung, ` +
-            'keine Konzeptvorgabe.'}
-      </p>
-      <p className="rv-fokus-text">
-        {fokusBelegtTextFuer(variante, kachelLage(dashboard))}{' '}
-        {fokusLueckenTextFuer(variante, dashboard.hatReview)}
-      </p>
-      <p className="rv-fokus-text">{variante.ausblendungText}</p>
-      {herkunft === 'normiert' ? (
-        <details className="rv-quelle">
-          <summary>Quelle der Variante</summary>
-          <p>
-            {`${variante.quoteSource}, Zeile „${variante.name}" – Missionsfokus: ` +
-              `„${variante.missionsfokusQuote}"; Ausblendung: „${variante.ausblendungQuote}".`}
-          </p>
-        </details>
-      ) : null}
+      <p className="rv-fokus-text">{variante.nutzenSatz}</p>
+      <details className="rv-details">
+        <summary>Was diese Reihenfolge nicht zeigt</summary>
+        <p>
+          {fokusBelegtTextFuer(variante, kachelLage(dashboard))}{' '}
+          {fokusLueckenTextFuer(variante, dashboard.hatReview)}
+        </p>
+        <p>{variante.ausblendungText}</p>
+      </details>
     </div>
   );
 }

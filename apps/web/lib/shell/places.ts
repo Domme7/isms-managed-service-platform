@@ -85,11 +85,19 @@ export const NAV_PLACES: readonly NavPlace[] = [
     label: 'Entscheidungen',
     href: '/entscheidungen',
     hint: 'Decision Records, Freigaben, Risikoakzeptanz, Investitionsoptionen',
+    // KONZEPTANKER (bewusst unverändert): die Leitfrage des Screenkatalogs. „jetzt erforderlich"
+    // ist eine DRINGLICHKEITS-Aussage und setzt Frist, Aufwand, Kapazität und Priorität voraus –
+    // vier Angaben, die das Datenmodell nicht kennt (O-WP017-06). Bis WP-028 stand die Frage als
+    // sichtbare Überschrift auf der Seite und wurde im nächsten Satz zurückgenommen; das machte
+    // die Seite zum schlimmsten Fall des Rechtfertigungs-Modus (rund 250 Wörter Meta-Text vor
+    // der ersten Entscheidung). Seit WP-028 Slice 3 rendert die Seite sie NICHT mehr (DR-0013
+    // Nr. 1, Muster der WP-032-Orte) und führt mit der Frage, die sie beantwortet; die fehlende
+    // Dringlichkeits-Grundlage wird ruhig am Seitenende benannt. Ob der `question`-Wortlaut
+    // selbst überarbeitet wird, ist eine Produkt-/Owner-Entscheidung (O-WP032-02).
     question: 'Welche Geschäftsentscheidung ist jetzt erforderlich?',
     match: ['/entscheidungen'],
     // WP-017 Slice 2: der Ort zeigt echten, aus dem Demo-Seed abgeleiteten Inhalt (read-only
-    // Entscheidungsregister). Die Leitfrage bleibt unverändert stehen – die Seite benennt
-    // sichtbar, dass sie auf dieser Datenlage nicht beantwortbar ist (O-WP017-06).
+    // Entscheidungsregister).
     live: true,
   },
   {

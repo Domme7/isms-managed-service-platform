@@ -14,7 +14,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   KANONISCHE_KACHELORDNUNG,
-  KEINE_VARIANTE_TEXT,
+  KEINE_VARIANTE_BEGRUENDUNG,
   NORMIERTE_ROLLEN,
   ROLLENVARIANTEN,
   WELT_VARIANTE,
@@ -66,6 +66,34 @@ describe('ROLLENVARIANTEN – die vier normierten Zeilen aus Dok. 06', () => {
     }
   });
 
+  /**
+   * WP-028 Slice 3 (DR-0013 Nr. 5 „Rollenfokus ohne Beipackzettel"): NEUE Regel für den EINEN
+   * sichtbaren Satz je Variante – er nennt den Nutzen („Für die … zuerst: …") und KEINE
+   * Design-/Konzept-Theorie. Der Wächter ist damit schärfer geworden, nicht weicher: er
+   * verbietet ausdrücklich das Vokabular, das der Usability-Audit beanstandet hat.
+   */
+  it('der eine sichtbare Nutzen-Satz nennt Nutzen, keine Konzept-Normativität', () => {
+    for (const id of VARIANT_IDS) {
+      const satz = ROLLENVARIANTEN[id].nutzenSatz;
+      expect(satz, id).toMatch(/^Für die .+-Sicht zuerst: /);
+      // Ein Satz, nicht drei Absätze.
+      expect(satz.split('. ').length, id).toBeLessThanOrEqual(2);
+      for (const jargon of [
+        /normiert/i,
+        /gegenstandslos/i,
+        /Betonung/i,
+        /Anzeigeentscheidung/i,
+        /Konzept/i,
+        /Missionsfokus/i,
+        /Ausblendung/i,
+      ]) {
+        expect(jargon.test(satz), `${id}: „${jargon}" gehört in die Code-Doku, nicht ins UI`).toBe(
+          false,
+        );
+      }
+    }
+  });
+
   it('jede Variante benennt belegte Betonung, Lücken und die Erreichbarkeits-Zusage', () => {
     for (const id of VARIANT_IDS) {
       const variante = ROLLENVARIANTEN[id];
@@ -76,11 +104,16 @@ describe('ROLLENVARIANTEN – die vier normierten Zeilen aus Dok. 06', () => {
       // falsche Absenz-Behauptung („kein Review erfasst") wäre dieselbe Fehlerklasse wie eine
       // Erfindung. Geprüft wird deshalb die Lücken-AUSSAGE, nicht die alte feste Phrase.
       expect(variante.fokusLueckenText).toMatch(/ohne (Träger|eigene Kachel)/);
+      // Die Erreichbarkeits-Zusage (eine Wahrheit, Dok. 06 P02) bleibt Pflicht – unverändert.
       expect(variante.ausblendungText).toMatch(/nichts entzogen/);
       expect(variante.ausblendungText).toMatch(/erreichbar/);
+      // NEU (DR-0013 Nr. 5): die Zusage spricht über den DATENBESTAND, nicht über die
+      // Normativität des Konzepts – „gegenstandslos"/„normierte Ausblendung" sind raus.
+      expect(variante.ausblendungText, id).not.toMatch(/gegenstandslos/i);
+      expect(variante.ausblendungText, id).not.toMatch(/normiert/i);
       expect(variante.orderRationale.length).toBeGreaterThan(40);
       // Keine Versprechen, keine Bewertung in den sichtbaren Texten.
-      const sichtbar = `${variante.fokusBelegtText} ${variante.fokusLueckenText} ${variante.ausblendungText}`;
+      const sichtbar = `${variante.nutzenSatz} ${variante.fokusBelegtText} ${variante.fokusLueckenText} ${variante.ausblendungText}`;
       expect(sichtbar, id).not.toMatch(/kommt bald|in Kürze|geplant für|Roadmap/i);
       expect(sichtbar, id).not.toMatch(/\bScore\b|Ampel|Reifegrad|\bTrend|empfohlen|Empfehlung/i);
     }
@@ -144,7 +177,15 @@ describe('varianteForRole – Normierung, Welt-Ableitung und ehrliche Nicht-Zuor
       expect(varianteForRole(roleId)).toEqual({ variante: null, herkunft: 'keine' });
       expect(kachelOrdnungForRole(roleId)).toEqual(KANONISCHE_KACHELORDNUNG);
     }
-    expect(KEINE_VARIANTE_TEXT).toMatch(/keine Betonung erfunden/);
+    /* REGEL-ERHALTEND UMGESTELLT (WP-028 Slice 3, DR-0013 Nr. 5): Bis WP-020 nagelte diese
+       Zeile den SICHTBAREN Kastentext „keine Betonung erfunden" fest. Der Kasten war eine
+       Aussage über die Konzept-Tabelle, nicht über die Daten des Mandanten, und ist aus der
+       Oberfläche verschwunden. Die REGEL – Rollen ohne Tabellenzeile erhalten die kanonische
+       Reihenfolge, es wird keine erfunden – ist unverändert und steht eine Zeile darüber als
+       harte Prüfung (`kachelOrdnungForRole`). Die Begründung lebt als Code-Doku weiter und wird
+       hier festgenagelt, damit sie nicht still verschwindet. */
+    expect(KEINE_VARIANTE_BEGRUENDUNG).toMatch(/kanonische Reihenfolge/);
+    expect(KEINE_VARIANTE_BEGRUENDUNG).toMatch(/kein sichtbarer Rollenfokus/);
   });
 
   it('neutral und Unbekanntes erhalten keine Variante (kanonische Reihenfolge)', () => {

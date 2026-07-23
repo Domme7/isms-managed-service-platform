@@ -49,16 +49,23 @@ function KachelFrage({ level, children }: { level: KachelHeadingLevel; children:
 
 /**
  * Badge: Symbol (Form, dekorativ) + Text – Farbe kommt ausschließlich im CSS dazu.
- * `title` trägt die Regel-Basis samt Grenzsatz (Review-Finding Product F8: „vollständig
- * belegt" darf nicht als fachliches Urteil lesbar sein – die Basis sagt ausdrücklich, dass
- * der Datenbestand über fachliche Zulänglichkeit nichts aussagt); die vollständige
- * Ermittlungsregel bleibt zusätzlich in der aufklappbaren Regel der Kachel.
+ *
+ * GRENZSATZ SICHTBAR (WP-028 Slice 3, DR-0013 Nr. 7): Der Grenzsatz („Ob die belegte Lage
+ * fachlich ausreicht, sagt der Datenbestand nicht.") steht jetzt als eigene Zeile UNTER dem
+ * Badge und nicht mehr nur im `title`. Ein `title` ist mit Tastatur und auf Touch praktisch
+ * unerreichbar – die Einschränkung war damit faktisch unsichtbar, und das Badge las sich wie
+ * ein fachliches Urteil (Review-Finding Product F8, jetzt vom Usability-Audit bestätigt).
+ * `title` bleibt zusätzlich als Kurzbeleg der Ermittlungsbasis; die vollständige
+ * Ermittlungsregel steht weiterhin im Aufklappteil der Kachel.
  */
 export function BadgeAnzeige({ badge }: { badge: DashboardBadge }) {
   return (
-    <p className={`db-badge db-badge--${badge.rule}`} title={BADGE_RULES[badge.rule].basis}>
-      <span aria-hidden="true">{badge.symbol}</span> {badge.text}
-    </p>
+    <>
+      <p className={`db-badge db-badge--${badge.rule}`} title={BADGE_RULES[badge.rule].basis}>
+        <span aria-hidden="true">{badge.symbol}</span> {badge.text}
+      </p>
+      <p className="db-badge-grenze">{badge.grenze}</p>
+    </>
   );
 }
 
@@ -158,11 +165,20 @@ export function LifecycleVerteilungKachel({
       <ul className="db-verteilung">
         {tile.slices.map((slice) => (
           <li key={slice.status}>
+            {/* Der Stand-NAME bleibt allein in seinem Element: er kommt wörtlich aus Vertrag
+                und Seed und wird an mehreren Stellen exakt gegengeprüft. */}
             <span className="db-verteilung-stand">{slice.status}</span>
             <span className="db-verteilung-zahl">
               {slice.count} von {tile.total}
             </span>
             <Balken covered={slice.count} total={tile.total} />
+            {/* KENNZEICHNUNG AM WORT (DR-0013 Nr. 8): Stände wie „wirksam", „Geprüft" oder
+                „bewertet" lesen sich ohne Hinweis als Urteil dieser Anwendung und widersprächen
+                dem Seitensatz „keine Prüfergebnisse und keine bewertete Wirksamkeit". Der Stand
+                selbst bleibt unverändert (Vertrag/Seed) – ergänzt wird nur seine Lesart
+                (`STAND_HINWEIS` in `lib/heute/dashboard.ts`). Eigene Zeile im Raster
+                (`grid-column: 1 / -1`), damit die dreispaltige Zeile erhalten bleibt. */}
+            {slice.hinweis ? <span className="db-verteilung-hinweis">{slice.hinweis}</span> : null}
           </li>
         ))}
       </ul>
@@ -173,7 +189,14 @@ export function LifecycleVerteilungKachel({
   );
 }
 
-/** Abdeckungskachel: „x von y" als Text, Balken als zusätzliche Form, Badge aus Positivliste. */
+/**
+ * Abdeckungskachel: „x von y" als Text, Balken als zusätzliche Form, Badge aus Positivliste.
+ *
+ * KLEINE GRUNDGESAMTHEIT (WP-028 Slice 3, DR-0013 Nr. 7): Bei n≤2 entfallen Balken UND
+ * Erfolgs-Badge; an ihre Stelle tritt der Kleinheits-Hinweis aus dem Modell („nur 1 Control
+ * erfasst"). „1 von 1" mit Vollbalken und grünem Häkchen las sich wie eine vollständige
+ * Control-Landschaft – die Zahl bleibt unverändert sichtbar, nur die Erfolgssymbolik geht.
+ */
 export function CoverageKachel({
   tile,
   headingLevel = 'h3',
@@ -195,9 +218,10 @@ export function CoverageKachel({
               </span>
             </span>
           </p>
-          <Balken covered={tile.covered} total={tile.total} />
+          {tile.kleineGrundgesamtheit ? null : <Balken covered={tile.covered} total={tile.total} />}
         </>
       )}
+      {tile.kleinheitText ? <p className="db-kleinheit">{tile.kleinheitText}</p> : null}
       {tile.badge ? <BadgeAnzeige badge={tile.badge} /> : null}
       <KachelErklaerung tile={tile} />
     </div>

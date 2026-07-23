@@ -62,27 +62,40 @@ import { anzahl } from './data';
  * Dok. 06 06-D11 / Abschnitt „Visuelles Designsystem": Status = Text + Symbol/Form + optional
  * Farbe). Die Positivliste ist per Test erzwungen: jedes erzeugte Badge trägt eine dieser
  * Regel-Kennungen, und es existiert keine vierte.
+ *
+ * BADGE-SPRACHE (WP-028 Slice 3, DR-0013 Nr. 7): Der sichtbare Text ist seit dem
+ * Usability-Audit ZAHLENGEBUNDEN und benennt das Merkmal der Kachel, statt ein pauschales
+ * Urteil zu suggerieren: „vollständig belegt" → „alle 34 Objekte haben einen benannten Owner",
+ * „Lücke erfasst" (schiefes Deutsch) → „Datenlücke: 5 Objekte ohne benannten Owner". Die
+ * REGEL-KENNUNGEN bleiben unverändert (`vollstaendig_belegt`/`luecke_erfasst`) – sie sind
+ * interne Anker für CSS-Klassen und Tests, kein UI-Vokabular. Das `text`-Feld hier ist der
+ * merkmalfreie Rückfalltext (z. B. die Datenlücken-Kachel eines leeren Mandanten).
+ *
+ * GRENZSATZ SICHTBAR (DR-0013 Nr. 7): `grenze` steht als eigene Zeile an der Kachel und nicht
+ * mehr nur im `title` – ein Badge, dessen Einschränkung man nur mit der Maus findet, wird als
+ * fachliches Urteil gelesen.
  */
 export const BADGE_RULES = {
   vollstaendig_belegt: {
-    text: 'vollständig belegt',
+    text: 'ohne Datenlücke',
     symbol: '✓',
+    grenze: 'Ob die belegte Lage fachlich ausreicht, sagt der Datenbestand nicht.',
     basis:
       'Erfasste Kanten-/Feldlage der Kachel: jedes gezählte Objekt der Grundgesamtheit trägt ' +
-      'die gezählte Beziehung bzw. das gezählte Feld (x = y). Ob die belegte Lage fachlich ' +
-      'ausreicht, sagt der Datenbestand nicht.',
+      'die gezählte Beziehung bzw. das gezählte Feld (x = y).',
   },
   luecke_erfasst: {
-    text: 'Lücke erfasst',
+    text: 'Datenlücke erfasst',
     symbol: '○',
+    grenze: 'Ob die Lücke fachlich zulässig ist, sagt der Datenbestand nicht.',
     basis:
       'Erfasste Kanten-/Feldlage der Kachel: mindestens ein Objekt der Grundgesamtheit trägt ' +
-      'die gezählte Beziehung bzw. das gezählte Feld nicht (x < y). Ob die Lücke fachlich ' +
-      'zulässig ist, sagt der Datenbestand nicht – das Badge behauptet es nicht.',
+      'die gezählte Beziehung bzw. das gezählte Feld nicht (x < y).',
   },
   kein_datenbestand: {
     text: 'kein Datenbestand',
     symbol: '–',
+    grenze: 'Warum nichts erfasst ist, sagt der Datenbestand nicht.',
     basis:
       'Erfasster Bestand des Mandanten: null Objekte und null Beziehungen im Demo-Datenbestand.',
   },
@@ -95,16 +108,77 @@ export interface DashboardBadge {
   readonly rule: BadgeRuleId;
   readonly text: string;
   readonly symbol: string;
+  /** Sichtbare Grenze des Badges (nicht nur `title`) – DR-0013 Nr. 7. */
+  readonly grenze: string;
 }
 
-function badge(rule: BadgeRuleId): DashboardBadge {
-  return { rule, text: BADGE_RULES[rule].text, symbol: BADGE_RULES[rule].symbol };
+function badge(rule: BadgeRuleId, text?: string): DashboardBadge {
+  return {
+    rule,
+    text: text ?? BADGE_RULES[rule].text,
+    symbol: BADGE_RULES[rule].symbol,
+    grenze: BADGE_RULES[rule].grenze,
+  };
 }
 
-/** Badge einer Abdeckung – regelbasiert aus der erfassten Lage, nie aus einem Urteil. */
-export function badgeFuerAbdeckung(covered: number, total: number): DashboardBadge | undefined {
+/**
+ * Merkmal einer Abdeckungskachel in Domänensprache – füllt Badge-Text und Kleinheits-Hinweis.
+ * Bewusst je Kachel formuliert: „tragen die Beziehung" wäre für die Owner- und die
+ * Vertrauensgrad-Kachel schlicht falsch (dort zählt ein FELD, keine Kante).
+ */
+export interface CoverageMerkmal {
+  /** Satzteil hinter „alle 34 …" – die vollständig belegte Lage. */
+  readonly alle: string;
+  /** Satzteil hinter „Datenlücke: 5 …" – die Fehlmenge (y − x). */
+  readonly fehlend: string;
+  /** Singular/Plural der Grundgesamtheit für den Kleinheits-Hinweis. */
+  readonly einheit: readonly [string, string];
+}
+
+/**
+ * Ab welcher Grundgesamtheit eine Abdeckung überhaupt als Lage lesbar ist (DR-0013 Nr. 7:
+ * „Bei kleiner Grundgesamtheit (n≤2) kein Erfolgs-Badge/Vollbalken – die absolute Kleinheit
+ * sichtbar machen"). Hintergrund aus dem Usability-Audit: „1 von 1" mit grünem Häkchen und
+ * Vollbalken liest sich wie eine vollständige Control-Landschaft, obwohl genau ein Control
+ * erfasst ist. Die Zahl bleibt sichtbar – nur Erfolgszeichen und Balken entfallen.
+ */
+export const KLEINE_GRUNDGESAMTHEIT = 2;
+
+/** `true`, wenn die Grundgesamtheit so klein ist, dass ein Anteil nichts aussagt. */
+export function istKleineGrundgesamtheit(total: number): boolean {
+  return total > 0 && total <= KLEINE_GRUNDGESAMTHEIT;
+}
+
+/**
+ * Badge einer Abdeckung – regelbasiert aus der erfassten Lage, nie aus einem Urteil.
+ *
+ * Drei Zweige: keine Grundgesamtheit → kein Badge (die Kachel benennt ihre Lücke im Text);
+ * vollständige Lage bei KLEINER Grundgesamtheit → ebenfalls kein Badge (kein Erfolgszeichen
+ * über n≤2, DR-0013 Nr. 7 – der Kleinheits-Hinweis der Kachel tritt an seine Stelle); sonst
+ * das zahlengebundene Badge. Eine erfasste Datenlücke wird auch bei kleiner Grundgesamtheit
+ * benannt: „1 von 2" IST eine Lücke, und sie zu verschweigen wäre eine Ehrlichkeitslücke.
+ */
+export function badgeFuerAbdeckung(
+  covered: number,
+  total: number,
+  merkmal: CoverageMerkmal,
+): DashboardBadge | undefined {
   if (total <= 0) return undefined; // keine Grundgesamtheit -> kein Badge, benannte Lücke
-  return covered >= total ? badge('vollstaendig_belegt') : badge('luecke_erfasst');
+  if (covered >= total) {
+    if (istKleineGrundgesamtheit(total)) return undefined;
+    return badge('vollstaendig_belegt', `alle ${total} ${merkmal.alle}`);
+  }
+  return badge('luecke_erfasst', `Datenlücke: ${total - covered} ${merkmal.fehlend}`);
+}
+
+/** Sichtbarer Kleinheits-Hinweis einer Abdeckung mit n≤2 (sonst `undefined`). */
+export function kleinheitTextFuer(total: number, merkmal: CoverageMerkmal): string | undefined {
+  if (!istKleineGrundgesamtheit(total)) return undefined;
+  return (
+    `Kleine Grundgesamtheit: nur ${anzahl(total, merkmal.einheit[0], merkmal.einheit[1])} ` +
+    'erfasst. Bei so wenigen zählt der Einzelfall – ein Balken und ein Erfolgszeichen würden ' +
+    'hier mehr behaupten, als die Zahl trägt.'
+  );
 }
 
 /* -----------------------------------------------------------------------------
@@ -137,6 +211,12 @@ export interface StockTile extends TileExplanation {
 export interface LifecycleSlice {
   readonly status: string;
   readonly count: number;
+  /**
+   * Kennzeichnung AM WORT für Stände, deren Name wie ein Urteil klingt (DR-0013 Nr. 8).
+   * Nur gesetzt, wo der Wortlaut sonst dem seitenweiten Satz „keine Prüfergebnisse und keine
+   * bewertete Wirksamkeit" widerspräche – sonst `undefined` (nichts wird erfunden).
+   */
+  readonly hinweis?: string;
 }
 
 /** Lebenszyklus-Verteilung mit PFLICHT-Glosse (Dok. 08 08-D07). */
@@ -181,6 +261,12 @@ export interface CoverageTile extends TileExplanation {
   readonly isEmpty: boolean;
   readonly emptyText?: string;
   readonly badge?: DashboardBadge;
+  /**
+   * `true` bei n≤2 (DR-0013 Nr. 7): kein Balken, kein Erfolgs-Badge – stattdessen macht
+   * `kleinheitText` die absolute Kleinheit sichtbar. Die Zahl „x von y" bleibt unverändert.
+   */
+  readonly kleineGrundgesamtheit: boolean;
+  readonly kleinheitText?: string;
 }
 
 /** Ehrliche Datenlücken-Kachel eines leeren Mandanten (Finovia/MediCore). */
@@ -225,6 +311,27 @@ export interface IsmsVerdichtungModel {
 const LIFECYCLE_KATALOG: readonly string[] = [...new Set<string>(ALL_LIFECYCLE_STATUS)];
 
 /**
+ * Stände, deren WORTLAUT wie ein Urteil klingt – und die deshalb am Wort gekennzeichnet werden
+ * (WP-028 Slice 3, DR-0013 Nr. 8; Befund des Usability-Audits: die Verteilung auf „ISMS" führt
+ * einen Stand „wirksam", während der Seitentext „keine bewertete Wirksamkeit" sagt – auf
+ * demselben Bildschirm ein Widerspruch).
+ *
+ * DER STAND WIRD NICHT UMBENANNT: „wirksam", „Geprüft" und „bewertet" sind kanonische
+ * Lebenszyklus-Stände des Vertrags (`ALL_LIFECYCLE_STATUS`, Quelle Dok. 05, Abschnitt
+ * „Lebenszyklen je Objektklasse") und stammen aus dem Seed. Eine Umbenennung wäre eine
+ * Contract-/Seed-Änderung und damit eine Owner-Entscheidung (E-02) – hier wird ausschließlich
+ * die LESART ergänzt: erfasster Stand, kein Urteil dieser Anwendung.
+ *
+ * Die Liste ist bewusst kurz und abschließend begründet: markiert wird nur, was ohne Hinweis
+ * als Ergebnis einer Prüfung/Bewertung durch diese Anwendung gelesen würde.
+ */
+export const STAND_HINWEIS: Readonly<Record<string, string>> = {
+  wirksam: 'erfasster Stand des Controls – kein Wirksamkeitsurteil dieser Anwendung',
+  Geprüft: 'erfasster Stand – kein Prüfergebnis dieser Anwendung',
+  bewertet: 'erfasster Stand – kein Ergebnis einer Bewertung durch diese Anwendung',
+};
+
+/**
  * Verteilung der ERFASSTEN `lifecycle_status`-Werte über die übergebenen Objekte.
  * Stände in Katalogreihenfolge; ein (im Vertrag eigentlich unmöglicher) nicht katalogisierter
  * Stand fiele ans Ende, statt still zu verschwinden (fail-soft, kein Datenverlust).
@@ -240,10 +347,15 @@ export function deriveLifecycleVerteilung(
   }
   const inKatalog = LIFECYCLE_KATALOG.filter((status) => counts.has(status));
   const ausserhalb = [...counts.keys()].filter((status) => !LIFECYCLE_KATALOG.includes(status));
-  return [...inKatalog, ...ausserhalb].map((status) => ({
-    status,
-    count: counts.get(status) ?? 0,
-  }));
+  return [...inKatalog, ...ausserhalb].map((status) => {
+    const hinweis = STAND_HINWEIS[status];
+    return {
+      status,
+      count: counts.get(status) ?? 0,
+      // Nur setzen, wo ein Hinweis existiert – ein leerer Hinweis wäre eine leere Attrappe.
+      ...(hinweis ? { hinweis } : {}),
+    };
+  });
 }
 
 /** Objekte mit mindestens einem erfassten Owner (`owner_ids`) – positive Lesart derselben
@@ -562,12 +674,39 @@ function buildLifecycleSummaryTile(
 type IsmsCoreViewModel = ReturnType<typeof buildIsmsCoreView>;
 type Drilldown = TileExplanation['drilldown'];
 
+/**
+ * Gemeinsamer Badge-/Kleinheits-Teil jeder Abdeckungskachel – EINE Stelle, an der die
+ * DR-0013-Regeln Nr. 7 angewendet werden (zahlengebundener Text, kein Erfolgszeichen bei n≤2).
+ */
+function abdeckungsLage(
+  covered: number,
+  total: number,
+  merkmal: CoverageMerkmal,
+): Pick<CoverageTile, 'badge' | 'kleineGrundgesamtheit' | 'kleinheitText'> {
+  return {
+    badge: badgeFuerAbdeckung(covered, total, merkmal),
+    kleineGrundgesamtheit: istKleineGrundgesamtheit(total),
+    kleinheitText: kleinheitTextFuer(total, merkmal),
+  };
+}
+
+/** Wortlaut der Badge-Regel im Aufklappteil jeder Abdeckungskachel (eine Quelle). */
+const BADGE_REGEL_TEXT =
+  'Badge-Regel: bei x = y „alle x …", bei x < y „Datenlücke: y − x …" – eine erfasste Lage, ' +
+  'kein Urteil. Bei höchstens zwei gezählten Objekten entfallen Balken und Erfolgszeichen: ' +
+  'ein Anteil aus so wenigen Fällen sagt nichts über die Lage.';
+
 function buildControlsCoverageTile(
   tenant: DemoTenant,
   ismsCore: IsmsCoreViewModel,
   drilldown: Drilldown,
 ): CoverageTile {
   const covered = ismsCore.controls.filter((c) => c.evidenced_by.length > 0).length;
+  const merkmal: CoverageMerkmal = {
+    alle: 'Controls tragen einen Nachweis',
+    fehlend: 'Controls ohne Nachweis',
+    einheit: ['Control', 'Controls'],
+  };
   return {
     id: 'controls_nachweis',
     frage: 'Wie viele Controls haben mindestens einen Nachweis?',
@@ -577,15 +716,14 @@ function buildControlsCoverageTile(
     emptyText:
       'Für diesen Mandanten sind keine Controls im Datenbestand erfasst – eine Abdeckung ist ' +
       'nicht berechenbar und wird nicht erfunden.',
-    badge: badgeFuerAbdeckung(covered, ismsCore.controls.length),
+    ...abdeckungsLage(covered, ismsCore.controls.length, merkmal),
     scope: `Controls von ${tenant.display_name}`,
     datenstand: ismsCore.context.recordedOn,
     datenstandDisplay: ismsCore.context.recordedOnDisplay,
     regel:
       'Gezählt werden Controls mit mindestens einer eingehenden Nachweis-Beziehung. Auch ein ' +
       'abgelaufener oder abgelehnter Nachweis zählt hier als Beziehung. Ob ein Nachweis ' +
-      'fachlich ausreicht, sagt der Datenbestand nicht. Badge-Regel: „vollständig belegt" ' +
-      'bei x = y, „Lücke erfasst" bei x < y – eine erfasste Lage, kein Urteil.',
+      `fachlich ausreicht, sagt der Datenbestand nicht. ${BADGE_REGEL_TEXT}`,
     drilldown,
   };
 }
@@ -596,6 +734,11 @@ function buildRisksCoverageTile(
   drilldown: Drilldown,
 ): CoverageTile {
   const covered = ismsCore.risks.filter((r) => r.mitigated_by.length > 0).length;
+  const merkmal: CoverageMerkmal = {
+    alle: 'Risiken tragen eine Minderung',
+    fehlend: 'Risiken ohne Minderung',
+    einheit: ['Risiko', 'Risiken'],
+  };
   return {
     id: 'risiken_minderung',
     frage: 'Wie viele Risiken sind durch mindestens eine Maßnahme oder ein Control gemindert?',
@@ -605,14 +748,14 @@ function buildRisksCoverageTile(
     emptyText:
       'Für diesen Mandanten sind keine Risiken im Datenbestand erfasst – eine Abdeckung ist ' +
       'nicht berechenbar und wird nicht erfunden.',
-    badge: badgeFuerAbdeckung(covered, ismsCore.risks.length),
+    ...abdeckungsLage(covered, ismsCore.risks.length, merkmal),
     scope: `Risiken von ${tenant.display_name}`,
     datenstand: ismsCore.context.recordedOn,
     datenstandDisplay: ismsCore.context.recordedOnDisplay,
     regel:
       'Gezählt werden Risiken mit mindestens einer eingehenden Minderungs-Beziehung ' +
       'von einem Control oder einer Maßnahme. Über die Wirksamkeit der Minderung sagt die ' +
-      'Beziehung nichts aus. Badge-Regel wie oben (erfasste Lage, kein Urteil).',
+      `Beziehung nichts aus. ${BADGE_REGEL_TEXT}`,
     drilldown,
   };
 }
@@ -623,6 +766,11 @@ function buildOwnerCoverageTile(
   tenantFacts: PageContextFacts,
 ): CoverageTile {
   const covered = countObjectsWithOwner(objects);
+  const merkmal: CoverageMerkmal = {
+    alle: 'Objekte haben einen benannten Owner',
+    fehlend: 'Objekte ohne benannten Owner',
+    einheit: ['Objekt', 'Objekte'],
+  };
   return {
     id: 'objekte_owner',
     frage: 'Wie viele Objekte haben einen benannten Owner?',
@@ -632,14 +780,14 @@ function buildOwnerCoverageTile(
     emptyText:
       'Für diesen Mandanten sind keine Objekte im Datenbestand erfasst – eine Abdeckung ist ' +
       'nicht berechenbar und wird nicht erfunden.',
-    badge: badgeFuerAbdeckung(covered, objects.length),
+    ...abdeckungsLage(covered, objects.length, merkmal),
     scope: `Alle Objekte von ${tenant.display_name}`,
     datenstand: tenantFacts.recordedOn,
     datenstandDisplay: tenantFacts.recordedOnDisplay,
     regel:
       'Gezählt werden Objekte mit mindestens einem benannten Owner – dieselbe Regel wie die ' +
       'Beobachtung „Objekte ohne erfassten Owner" in Ebene 2, nur positiv gezählt. Ob ein ' +
-      'Owner fachlich erforderlich ist, sagt der Datenbestand nicht. Badge-Regel wie oben.',
+      `Owner fachlich erforderlich ist, sagt der Datenbestand nicht. ${BADGE_REGEL_TEXT}`,
     drilldown: {
       label: 'Objektliste dieses Mandanten (Owner je Objekt auf der Objektseite)',
       href: tenantDetailHref(tenant.tenant_id),
@@ -653,6 +801,11 @@ function buildConfidenceCoverageTile(
   tenantFacts: PageContextFacts,
 ): CoverageTile {
   const covered = countRelationshipsWithConfidence(relationships);
+  const merkmal: CoverageMerkmal = {
+    alle: 'Beziehungen tragen einen Vertrauensgrad',
+    fehlend: 'Beziehungen ohne Vertrauensgrad',
+    einheit: ['Beziehung', 'Beziehungen'],
+  };
   return {
     id: 'kanten_vertrauensgrad',
     frage: 'Wie viele Beziehungen tragen einen erfassten Vertrauensgrad?',
@@ -662,7 +815,7 @@ function buildConfidenceCoverageTile(
     emptyText:
       'Für diesen Mandanten sind keine Beziehungen im Datenbestand erfasst – eine Abdeckung ' +
       'ist nicht berechenbar und wird nicht erfunden.',
-    badge: badgeFuerAbdeckung(covered, relationships.length),
+    ...abdeckungsLage(covered, relationships.length, merkmal),
     scope: `Alle Beziehungen von ${tenant.display_name}`,
     datenstand: tenantFacts.recordedOn,
     datenstandDisplay: tenantFacts.recordedOnDisplay,
@@ -670,7 +823,7 @@ function buildConfidenceCoverageTile(
       'Gezählt werden Beziehungen dieses Mandanten mit einem erfassten Vertrauensgrad – ' +
       'dieselbe Regel wie die Beobachtung „Beziehungen ohne erfassten Vertrauensgrad" in ' +
       'Ebene 2, nur positiv gezählt. Ein fehlender Vertrauensgrad wird nicht ersetzt und nicht ' +
-      'geschätzt. Badge-Regel wie oben (erfasste Lage, kein Urteil).',
+      `geschätzt. ${BADGE_REGEL_TEXT}`,
     drilldown: {
       label: 'Zwilling dieses Mandanten (Vertrauensgrad je Beziehung)',
       href: tenantDetailHref(tenant.tenant_id),

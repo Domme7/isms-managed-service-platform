@@ -13,10 +13,20 @@
  * Prioritätsrang, keine Frist, keine Geldangabe. Die Reihenfolge ist die Reihenfolge des
  * Datenbestands; die Regel steht sichtbar an der Liste.
  *
- * DIE LEITFRAGE DES ORTES WIRD NICHT BEHAUPTET: „Welche Geschäftsentscheidung ist jetzt
- * erforderlich?" ist eine Dringlichkeitsfrage. Sie steht wörtlich aus `lib/shell/places.ts` oben
- * auf der Seite – und DIREKT DARUNTER steht, dass diese Datenlage sie nicht beantwortet und
- * welche engere Frage die Seite tatsächlich belegt (Dok. 06 §17, Dok. 10 §24.4).
+ * ANTWORT-MODUS (WP-028 Slice 3, DR-0013 Nr. 1 „Antwort zuerst, Lücke zuletzt"): Die Seite
+ * führt mit dem, was sie liefert – dem Entscheidungsregister. Sichtbare Leitfrage ist die Frage,
+ * die sie HEUTE beantwortet: „Welche Entscheidungen sind erfasst, worauf beziehen sie sich, wie
+ * sind sie belegt und was hat sie abgelöst?"
+ *
+ * DIE ASPIRATIVE LEITFRAGE WIRD NICHT MEHR GERENDERT (Muster WP-032): „Welche
+ * Geschäftsentscheidung ist jetzt erforderlich?" ist eine DRINGLICHKEITSFRAGE. Sie stand bis
+ * WP-028 als Überschrift oben – und wurde im nächsten Satz zurückgenommen („Diese Frage
+ * beantwortet die Seite heute nicht"), gefolgt von rund 250 Wörtern Begründung, bevor die erste
+ * Entscheidung sichtbar wurde. Die Frage bleibt als KONZEPTANKER in `lib/shell/places.ts`
+ * stehen (mit Begründung); die Seite negiert sie nicht mehr und rechtfertigt sich nicht mehr.
+ * WAS BLEIBT: die benannte Lücke selbst – ohne Frist, Aufwand, Kapazität und Priorität ist
+ * keine Dringlichkeitsaussage belegbar. Sie steht ruhig im Abschluss-Abschnitt am Seitenende
+ * (`OffeneFrageSection`), nicht mehr über der Falz.
  *
  * Heading-Hierarchie: h1 (Ort) > h2 (Abschnitt) > h3 (Entscheidung) > h4 (Block).
  * Status steht immer als Text, nie nur als Farbe (Dok. 06 06-D11). Bestehendes CSS-Vokabular,
@@ -42,7 +52,6 @@ import {
   type DecisionOwner,
   type DecisionRegisterModel,
 } from '../../lib/entscheidungen/data';
-import { getPlace } from '../../lib/shell/places';
 import type { DemoRole } from '../../lib/shell/roles';
 import { PageContextBar } from '../shell/PageContextBar';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
@@ -88,70 +97,30 @@ export function EntscheidungenContent({
   tenant: DemoTenant;
 }) {
   const model = buildDecisionRegister(tenant.tenant_id);
-  const place = getPlace('entscheidungen');
 
   return (
     <>
       <p className="tw-eyebrow">Entscheidungen · Entscheidungsregister</p>
       <h1>Entscheidungen</h1>
 
-      {/* Leitfrage des Ortes, wörtlich aus `lib/shell/places.ts` (Dok. 06 §7 S03). */}
-      <p className="tw-question">{place.question}</p>
-
-      {/* Die Grenze steht DIREKT unter der Leitfrage, nicht erst am Seitenende: eine
-          Dringlichkeitsfrage darf nicht erst nach dem ganzen Inhalt relativiert werden
-          (Korrektur aus dem WP-016-Review). Seit dem Review-Pass (Product-Finding): zwei
-          Sätze, der Begründungsapparat aufklappbar (P06). Die id umfasst BEIDES – der
-          Vokabular-Wächter der Seite nimmt exakt dieses Element aus dem Datenabschnitts-Scan. */}
-      <div className="tw-muted" id="entscheidungen-rahmung">
-        <p style={{ margin: 0 }}>
-          <strong>Diese Frage beantwortet die Seite heute nicht:</strong> „jetzt erforderlich" wäre
-          eine Aussage über Dringlichkeit, für die der Datenbestand keine Träger hat. Beantwortet
-          wird die belegbare Frage:{' '}
-          <strong>
-            Welche Entscheidungen sind erfasst, worauf beziehen sie sich, wie sind sie belegt und
-            was hat sie abgelöst?
-          </strong>
-        </p>
-        <details className="rahmung-details">
-          <summary>Begründung im Einzelnen</summary>
-          <p style={{ marginBottom: 0 }}>
-            „Jetzt erforderlich" setzt eine Frist, einen Aufwand, eine verfügbare Kapazität und eine
-            Priorität voraus. Das zugrunde liegende Datenmodell kennt keines dieser Felder, und der
-            Datenbestand trägt sie nicht – jede Reihung nach Dringlichkeit wäre erfunden.
-          </p>
-        </details>
-      </div>
-
-      <p className="tw-lead">
-        Read-only Register der Entscheidungen des aktiven Mandanten, abgeleitet aus dem
-        synthetischen Demo-Datenbestand: Entscheidungsfrage, Kontext, Lebenszyklus-Stand,
-        Verantwortung, die fachliche Gültigkeit und die Systemerfassung getrennt, die verknüpften
-        Bezugsobjekte und Nachweise sowie die erfasste Ablösung zwischen zwei Ständen. Gezeigt wird
-        nur, was der Datenbestand belegt.
+      {/* SICHTBARE LEITFRAGE = die Frage, die diese Seite heute beantwortet (DR-0013 Nr. 1).
+          Die aspirative Frage des Screenkatalogs bleibt Konzeptanker in `lib/shell/places.ts`
+          und wird hier bewusst weder gerendert noch negiert (Begründung in der Kopfnotiz). */}
+      <p className="tw-question">
+        Welche Entscheidungen sind erfasst, worauf beziehen sie sich, wie sind sie belegt und was
+        hat sie abgelöst?
       </p>
 
-      {/* Seitenweiter Rahmungssatz, WORTGLEICH aus `components/isms/IsmsContent.tsx` und
-          `components/twin/ObjectDetailView.tsx` (Dok. 08 08-D07): ein Lebenszyklus-Stand ist kein
-          Prüf- oder Freigabeergebnis – das gilt hier besonders, weil ein Stand „genehmigt" oder
-          „zur Freigabe" heißen kann. WP-028 (DR-0013): die frühere Dokument-/Paragraphenkennung
-          („Dok. 07 §9 R15") ist aus dem gerenderten Satz entfernt; der Quellenbeleg
-          (Nachweisbezug mit Zeitraum und Prüfstatus, Dok. 07 „Kanonische Beziehungstypen") lebt
-          in diesem Kommentar. Alle drei Seiten wurden gemeinsam auf die neue Fassung gebracht,
-          damit die Wortgleichheit erhalten bleibt. */}
-      <p className="tw-muted">
-        <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
-        Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
-        keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
-        etwa einen Zeitraum und einen Prüfstatus tragen.
-      </p>
+      {/* ANTWORT ZUERST: der belegte Stand in einem Satz – auch (und gerade) im Leerzustand.
+          Zahlen kommen aus dem Modell, nichts ist geschrieben. */}
+      {model ? <Aufmacher model={model} /> : null}
 
       {model ? (
         <>
           <ContextBar model={model} role={role} />
           <RegisterSection model={model} />
           <HonestySection />
+          <OffeneFrageSection />
           {/* Seitenbausteine-Konvention (WP-020, Dok. 06 „Verbindliche Seitenbausteine"):
               ehrliche Benennung der Bausteine, die der Datenbestand hier (noch) nicht trägt. */}
           <SeitenbausteineHinweis ort="entscheidungen" />
@@ -176,6 +145,48 @@ export function EntscheidungenContent({
         </div>
       )}
     </>
+  );
+}
+
+/* -----------------------------------------------------------------------------
+ * Aufmacher – die Antwort in einem Satz (WP-028 Slice 3, DR-0013 Nr. 1)
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Der belegte Stand über der Falz: wie viele Entscheidungen erfasst sind und wann zuletzt.
+ * Beide Werte kommen aus dem Modell (`decisions.length`, `recordedOnDisplay`) – nichts ist
+ * geschrieben. Der frühere Aufmacher war ein Fünf-Zeilen-Absatz über den Aufbau der Seite;
+ * er beschrieb, was gleich darunter ohnehin steht.
+ */
+function Aufmacher({ model }: { model: DecisionRegisterModel }) {
+  // Bewusst NICHT `anzahl` genannt: so heißt der gemeinsame Singular/Plural-Helfer der
+  // Ebene-1-Texte (`lib/heute/data.ts`) – hier ist es schlicht die Zahl aus dem Modell.
+  const erfasst = model.decisions.length;
+  return (
+    <p className="tw-lead">
+      {erfasst === 0 ? (
+        <>
+          Für <strong>{model.tenant.display_name}</strong> ist im Demo-Datenbestand keine
+          Entscheidung erfasst.
+        </>
+      ) : (
+        <>
+          Für <strong>{model.tenant.display_name}</strong> {erfasst === 1 ? 'ist' : 'sind'}{' '}
+          <strong>
+            {erfasst} {erfasst === 1 ? 'Entscheidung' : 'Entscheidungen'}
+          </strong>{' '}
+          erfasst
+          {model.recordedOn && model.recordedOnDisplay ? (
+            <>
+              , zuletzt im System erfasst am{' '}
+              <time dateTime={model.recordedOn}>{model.recordedOnDisplay}</time>
+            </>
+          ) : null}
+          . Je Entscheidung stehen unten Kontext, Verantwortung, die beiden Zeitachsen getrennt, die
+          Bezüge, die Nachweise und die erfasste Ablösung.
+        </>
+      )}
+    </p>
   );
 }
 
@@ -234,13 +245,16 @@ function RegisterSection({ model }: { model: DecisionRegisterModel }) {
         <EmptyRegister model={model} />
       ) : (
         <>
-          <p className="sv-edge-note">{model.orderRule}</p>
-          <RegisterReadingNotes />
+          {/* ANTWORT ZUERST (DR-0013 Nr. 1): die Liste steht unmittelbar unter der Überschrift.
+              Reihenfolgeregel und die sechs invarianten Leseregeln – zusammen rund 250 Wörter –
+              standen bis WP-028 VOR der ersten Entscheidung; sie sind vollständig erhalten,
+              aber ruhig aufklappbar (P06, progressive Offenlegung). Keine Aussage entfällt. */}
           <ul className="sv-list">
             {model.decisions.map((decision) => (
               <DecisionCard key={decision.object_id} decision={decision} />
             ))}
           </ul>
+          <RegisterReadingNotes orderRule={model.orderRule} />
         </>
       )}
     </section>
@@ -253,10 +267,18 @@ function RegisterSection({ model }: { model: DecisionRegisterModel }) {
  * Vorher trug jede Karte dieselben sechs Erklärabsätze; bei drei Entscheidungen waren das 18
  * wortgleiche Absätze, in denen die eigentlichen Daten untergingen (Review-Fix). In der Karte
  * bleibt nur, was sich je Entscheidung unterscheidet.
+ *
+ * WP-028 Slice 3 (DR-0013 Nr. 1): Der Block steht jetzt NACH der Liste und aufklappbar. Er ist
+ * unverändert vollständig – inklusive der sichtbaren Reihenfolgeregel („feste Reihenfolge, keine
+ * Rangfolge"), die vorher als erster Absatz des Abschnitts stand. Verschoben, nicht gekürzt.
  */
-function RegisterReadingNotes() {
+function RegisterReadingNotes({ orderRule }: { orderRule: string }) {
   return (
-    <>
+    <details className="sv-details" style={{ marginTop: '1rem' }}>
+      <summary>Wie diese Liste zu lesen ist</summary>
+      <p className="sv-edge-note" style={{ marginTop: '0.5rem' }}>
+        {orderRule}
+      </p>
       <p className="sv-edge-note">
         <strong>Ablösung:</strong> Ein abgelöster Stand bleibt vollständig sichtbar und verlinkt –
         eine Ablösung ersetzt den früheren Stand fachlich, sie überschreibt und verbirgt ihn nicht
@@ -288,7 +310,7 @@ function RegisterReadingNotes() {
         <strong>Herkunft und Datenqualität:</strong> Quellen und Qualitätsdimensionen werden
         unverändert gezeigt und ausdrücklich nicht zu einem Gesamtwert verrechnet.
       </p>
-    </>
+    </details>
   );
 }
 
@@ -750,15 +772,55 @@ function HonestySection() {
       </ul>
 
       <p className="tw-muted">
-        Auch die Leitfrage dieses Ortes bleibt damit offen: „{getPlace('entscheidungen').question}"
-        verlangt eine Aussage über Dringlichkeit. Ohne Frist, Aufwand, Kapazität und Priorität ist
-        sie aus diesem Datenbestand nicht zu beantworten – und wird hier deshalb weder behauptet
-        noch durch eine Sortierung angedeutet.
-      </p>
-      <p className="tw-muted">
         Diese Aufzählung ist eine Aussage über den heutigen Datenbestand und den heutigen
         Objektvertrag – kein Zeitplan und keine Zusage darüber, ob und wann die genannten Angaben
         entstehen.
+      </p>
+    </section>
+  );
+}
+
+/* -----------------------------------------------------------------------------
+ * Ruhiger Abschluss: was diese Seite NICHT beantwortet (DR-0013 „Lücke zuletzt")
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Die Dringlichkeitsfrage – benannt, aber nicht mehr als Überschrift gestellt und im nächsten
+ * Satz zurückgenommen (WP-028 Slice 3, DR-0013 Nr. 1; Muster `AdministrationContent`,
+ * Abschnitt „Was ein Sicherheitsurteil zusätzlich braucht").
+ *
+ * SUBSTANZ UNVERÄNDERT: Ohne Frist, Aufwand, Kapazität und Priorität ist keine Aussage über
+ * Dringlichkeit belegbar – das steht weiterhin vollständig da, samt der Zusage, dass auch keine
+ * Sortierung sie andeutet. Was entfällt, ist ausschließlich das WÖRTLICHE ZITAT der aspirativen
+ * Leitfrage: sie wird nicht mehr gestellt, also muss sie nicht mehr verneint werden. Der
+ * Konzeptanker steht unverändert in `lib/shell/places.ts`.
+ *
+ * Hier steht zusätzlich der seitenweite Rahmungssatz zu Lebenszyklus-Ständen, WORTGLEICH aus
+ * `components/isms/IsmsContent.tsx` und `components/twin/ObjectDetailView.tsx` (Dok. 08 08-D07,
+ * per Test erzwungen). Er stand bis WP-028 über der Falz; jede Karte trägt die Rahmung
+ * zusätzlich AM WERT („Lebenszyklus-Stand (kein Prüf- oder Freigabeergebnis)"), die Aussage
+ * geht durch die Verlagerung also nicht verloren – sie wird nur einmal ruhig gesagt.
+ */
+function OffeneFrageSection() {
+  return (
+    <section aria-labelledby="entscheidungen-offen">
+      <h2 id="entscheidungen-offen">Was diese Seite nicht beantwortet</h2>
+      <p className="sv-edge-note">
+        Ob eine dieser Entscheidungen <strong>jetzt</strong> ansteht, sagt diese Seite nicht. Eine
+        Aussage über Dringlichkeit setzt eine Frist, einen Aufwand, eine verfügbare Kapazität und
+        eine Priorität voraus. Das zugrunde liegende Datenmodell kennt keines dieser Felder, und der
+        Datenbestand trägt sie nicht – jede Reihung nach Dringlichkeit wäre erfunden. Sie wird
+        deshalb weder behauptet noch durch die Reihenfolge angedeutet.
+      </p>
+      {/* `tw-muted` bleibt als Klasse erhalten: der Wortgleichheits-Wächter der drei Seiten
+          sucht exakt `p.tw-muted` mit „Zum Verständnis:" – die Verlagerung ans Seitenende darf
+          den Wächter nicht aushebeln. */}
+      <p className="tw-muted tw-seitenfuss">
+        <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
+        Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
+        keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
+        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
+        etwa einen Zeitraum und einen Prüfstatus tragen.
       </p>
     </section>
   );

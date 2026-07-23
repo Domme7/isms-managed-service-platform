@@ -20,12 +20,17 @@ import { DEMO_SEED, TENANT_ID } from '@isms/demo-seed';
 
 import {
   BADGE_RULES,
+  KLEINE_GRUNDGESAMTHEIT,
   LIFECYCLE_GLOSSE,
+  STAND_HINWEIS,
   badgeFuerAbdeckung,
   buildHeuteDashboard,
   buildIsmsVerdichtung,
   countObjectsWithOwner,
   deriveLifecycleVerteilung,
+  istKleineGrundgesamtheit,
+  kleinheitTextFuer,
+  type CoverageMerkmal,
   type CoverageTile,
   type TileExplanation,
 } from '../dashboard';
@@ -99,28 +104,86 @@ describe('countObjectsWithOwner – positive Lesart der Beobachtungsregel', () =
   });
 });
 
+/**
+ * Testmerkmal einer Abdeckung – dieselbe Struktur wie im Produkt, aber bewusst neutral
+ * benannt: geprüft wird die REGEL, nicht der Wortlaut einer konkreten Kachel.
+ */
+const MERKMAL: CoverageMerkmal = {
+  alle: 'Prüfobjekte tragen das Merkmal',
+  fehlend: 'Prüfobjekte ohne das Merkmal',
+  einheit: ['Prüfobjekt', 'Prüfobjekte'],
+};
+
 describe('badgeFuerAbdeckung – Positivliste (DR-0008, O-WP020-07)', () => {
-  it('vergibt „vollständig belegt" nur bei x = y und „Lücke erfasst" nur bei x < y', () => {
-    expect(badgeFuerAbdeckung(5, 5)?.rule).toBe('vollstaendig_belegt');
-    expect(badgeFuerAbdeckung(3, 5)?.rule).toBe('luecke_erfasst');
-    expect(badgeFuerAbdeckung(0, 5)?.rule).toBe('luecke_erfasst');
+  /**
+   * REGEL-ERHALTEND UMGESTELLT (WP-028 Slice 3, DR-0013 Nr. 7): Die Zuordnung Lage → Regel ist
+   * unverändert (x = y → „vollständig belegt"-Regel, x < y → Lücken-Regel). NEU geprüft wird
+   * zusätzlich der ZAHLENGEBUNDENE Text, weil „vollständig belegt"/„Lücke erfasst" als
+   * pauschales Urteil bzw. als schiefes Deutsch gelesen wurden. Nichts wurde abgeschwächt: die
+   * Positivliste bleibt geschlossen und wird unten weiterhin auf genau drei Regeln festgenagelt.
+   */
+  it('vergibt die Regel „vollständig belegt" bei x = y und die Lücken-Regel bei x < y', () => {
+    expect(badgeFuerAbdeckung(5, 5, MERKMAL)?.rule).toBe('vollstaendig_belegt');
+    expect(badgeFuerAbdeckung(3, 5, MERKMAL)?.rule).toBe('luecke_erfasst');
+    expect(badgeFuerAbdeckung(0, 5, MERKMAL)?.rule).toBe('luecke_erfasst');
+  });
+
+  it('formuliert den Badge-Text zahlengebunden statt als pauschales Urteil', () => {
+    expect(badgeFuerAbdeckung(5, 5, MERKMAL)?.text).toBe('alle 5 Prüfobjekte tragen das Merkmal');
+    // „Datenlücke: y − x …" – die FEHLMENGE, nicht das schiefe „Lücke erfasst".
+    expect(badgeFuerAbdeckung(3, 5, MERKMAL)?.text).toBe(
+      'Datenlücke: 2 Prüfobjekte ohne das Merkmal',
+    );
+    // Der Grenzsatz hängt am Badge selbst (sichtbar, nicht nur im `title`).
+    expect(badgeFuerAbdeckung(5, 5, MERKMAL)?.grenze).toMatch(/sagt der Datenbestand nicht/);
+    expect(badgeFuerAbdeckung(3, 5, MERKMAL)?.grenze).toMatch(/sagt der Datenbestand nicht/);
   });
 
   it('vergibt KEIN Badge ohne Grundgesamtheit (benannte Lücke statt Urteil)', () => {
-    expect(badgeFuerAbdeckung(0, 0)).toBeUndefined();
+    expect(badgeFuerAbdeckung(0, 0, MERKMAL)).toBeUndefined();
   });
 
-  it('die Positivliste umfasst exakt drei Regeln, jede mit Text, Symbol und Basis', () => {
+  /**
+   * NEUE REGEL (DR-0013 Nr. 7): Bei n≤2 gibt es kein Erfolgs-Badge und keinen Vollbalken –
+   * „1 von 1" mit grünem Häkchen liest sich wie eine vollständige Landschaft. Eine erfasste
+   * LÜCKE wird auch bei kleiner Grundgesamtheit weiterhin benannt (sie zu verschweigen wäre
+   * eine Ehrlichkeitslücke); an die Stelle des Erfolgszeichens tritt der Kleinheits-Hinweis.
+   */
+  it('kleine Grundgesamtheit (n≤2): kein Erfolgs-Badge, aber weiterhin die benannte Lücke', () => {
+    expect(KLEINE_GRUNDGESAMTHEIT).toBe(2);
+    expect(badgeFuerAbdeckung(1, 1, MERKMAL)).toBeUndefined();
+    expect(badgeFuerAbdeckung(2, 2, MERKMAL)).toBeUndefined();
+    expect(badgeFuerAbdeckung(1, 2, MERKMAL)?.rule).toBe('luecke_erfasst');
+    // Ab n = 3 gilt wieder die vollständige Lage.
+    expect(badgeFuerAbdeckung(3, 3, MERKMAL)?.rule).toBe('vollstaendig_belegt');
+
+    expect(istKleineGrundgesamtheit(0)).toBe(false); // keine Grundgesamtheit ist kein „klein"
+    expect(istKleineGrundgesamtheit(1)).toBe(true);
+    expect(istKleineGrundgesamtheit(3)).toBe(false);
+  });
+
+  it('macht die absolute Kleinheit sichtbar, statt sie in einen Anteil zu verstecken', () => {
+    expect(kleinheitTextFuer(1, MERKMAL)).toContain('nur 1 Prüfobjekt erfasst');
+    expect(kleinheitTextFuer(2, MERKMAL)).toContain('nur 2 Prüfobjekte erfasst');
+    expect(kleinheitTextFuer(3, MERKMAL)).toBeUndefined();
+    expect(kleinheitTextFuer(0, MERKMAL)).toBeUndefined();
+  });
+
+  it('die Positivliste umfasst exakt drei Regeln, jede mit Text, Symbol, Grenze und Basis', () => {
     expect(Object.keys(BADGE_RULES).sort()).toEqual([
       'kein_datenbestand',
       'luecke_erfasst',
       'vollstaendig_belegt',
     ]);
     for (const regel of Object.values(BADGE_RULES)) {
+      // `text` ist seit WP-028 der merkmalfreie Rückfalltext (die Abdeckungs-Badges bilden
+      // ihren Text zahlengebunden); er bleibt Pflicht und bleibt urteilsfrei.
       expect(regel.text.length).toBeGreaterThan(0);
       expect(regel.symbol.length).toBeGreaterThan(0);
       // Jede Basis benennt eine ERFASSTE Lage – kein Urteil, keine Bewertungsskala.
       expect(regel.basis).toMatch(/Erfasste|Erfasster/);
+      // Der Grenzsatz ist Pflicht und sagt, was der Datenbestand NICHT hergibt.
+      expect(regel.grenze).toMatch(/sagt der Datenbestand nicht/);
       expect(regel.text).not.toMatch(/hoch|mittel|gering|Reifegrad|Trend|Risiko/i);
     }
   });
@@ -268,8 +331,19 @@ describe('Dashboard-Badges – nur Regeln der Positivliste, kein Urteil', () => 
       ].filter((b) => b !== undefined);
       for (const badge of badges) {
         expect(zulaessig.has(badge.rule), `${tenantId}: ${badge.rule}`).toBe(true);
-        expect(badge.text).toBe(BADGE_RULES[badge.rule].text);
         expect(badge.symbol).toBe(BADGE_RULES[badge.rule].symbol);
+        expect(badge.grenze).toBe(BADGE_RULES[badge.rule].grenze);
+        /* REGEL-ERHALTEND UMGESTELLT (WP-028 Slice 3, DR-0013 Nr. 7): Der Badge-TEXT war bis
+           dahin identisch mit dem statischen Regel-Text. Seit der Sprachpräzisierung ist er
+           zahlengebunden („alle 34 Objekte haben einen benannten Owner"), also nicht mehr
+           gegen eine feste Konstante prüfbar. Geprüft wird stattdessen die FORM – entweder
+           zahlengebunden oder der merkmalfreie Rückfalltext der Regel. Die eigentliche Regel
+           („kein Badge außerhalb der Positivliste") steht unverändert eine Zeile darüber. */
+        expect(
+          /^(alle \d+ |Datenlücke: \d+ )/.test(badge.text) ||
+            badge.text === BADGE_RULES[badge.rule].text,
+          `${tenantId}: „${badge.text}" ist weder zahlengebunden noch Rückfalltext`,
+        ).toBe(true);
       }
     }
   });
@@ -372,6 +446,66 @@ describe('buildIsmsVerdichtung – Verteilung und Abdeckungen des Ortes „ISMS"
   it('liefert für Mandanten ohne ISMS-Kernobjekte undefined (eigener Leerzustand der Seite)', () => {
     for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
       expect(buildIsmsVerdichtung(tenantId), tenantId).toBeUndefined();
+    }
+  });
+
+  /**
+   * WP-028 Slice 3 (DR-0013 Nr. 8): Der Stand „wirksam" widerspricht auf derselben Seite dem
+   * Satz „keine bewertete Wirksamkeit". Aufgelöst wird das AM WORT – nicht durch Umbenennen
+   * (Vertrag/Seed, Owner-Entscheidung E-02). Der Test nagelt beides fest: der Stand bleibt
+   * wörtlich erhalten UND trägt seine Lesart.
+   */
+  it('kennzeichnet urteilsklingende Stände am Wort, ohne sie umzubenennen', () => {
+    const verdichtung = buildIsmsVerdichtung(TENANT_ID.NORDWERK);
+    if (!verdichtung) throw new Error('Testfixture fehlt: Nordwerk-Verdichtung');
+
+    const wirksam = verdichtung.lifecycle.slices.find((s) => s.status === 'wirksam');
+    expect(wirksam, 'Testfixture fehlt: erfasster Stand „wirksam"').toBeDefined();
+    // Der Stand heißt unverändert „wirksam" (kein stilles Umbenennen des Seed-Vokabulars) …
+    expect(wirksam?.status).toBe('wirksam');
+    // … und trägt die Lesart, die dem Seitensatz nicht widerspricht.
+    expect(wirksam?.hinweis).toBe(STAND_HINWEIS.wirksam);
+    expect(wirksam?.hinweis).toMatch(/kein Wirksamkeitsurteil/);
+
+    // Stände ohne Urteils-Anmutung bleiben unkommentiert – nichts wird erfunden.
+    const behandelt = verdichtung.lifecycle.slices.find((s) => s.status === 'behandelt');
+    expect(behandelt?.hinweis).toBeUndefined();
+  });
+
+  /**
+   * Nordwerk trägt genau ein Control und genau ein Risiko. Vor WP-028 zeigten beide Kacheln
+   * „1 von 1" mit Vollbalken und grünem Häkchen – für einen CISO die Anmutung einer
+   * vollständigen Control-Landschaft (Usability-Audit). Jetzt: Zahl bleibt, Erfolgssymbolik
+   * geht, die absolute Kleinheit steht als Text da.
+   */
+  it('Nordwerk: die beiden ISMS-Abdeckungen sind kleine Grundgesamtheiten (n = 1)', () => {
+    const verdichtung = buildIsmsVerdichtung(TENANT_ID.NORDWERK);
+    if (!verdichtung) throw new Error('Testfixture fehlt: Nordwerk-Verdichtung');
+
+    for (const tile of verdichtung.coverage) {
+      expect(tile.total, tile.id).toBeLessThanOrEqual(KLEINE_GRUNDGESAMTHEIT);
+      expect(tile.kleineGrundgesamtheit, tile.id).toBe(true);
+      expect(tile.badge, `${tile.id}: kein Erfolgs-Badge bei n≤2`).toBeUndefined();
+      expect(tile.kleinheitText, tile.id).toMatch(/^Kleine Grundgesamtheit: nur 1 /);
+    }
+  });
+
+  /**
+   * Gegenprobe zur Regel oben: Wo die Grundgesamtheit groß genug ist, gibt es weiterhin Badge,
+   * Balken und KEINEN Kleinheits-Hinweis – die Regel greift nicht flächendeckend.
+   */
+  it('Nordwerk: Owner- und Vertrauensgrad-Abdeckung tragen Badge statt Kleinheits-Hinweis', () => {
+    const model = buildHeuteDashboard(TENANT_ID.NORDWERK);
+    if (!model) throw new Error('Testfixture fehlt: Nordwerk-Dashboard');
+
+    for (const id of ['objekte_owner', 'kanten_vertrauensgrad'] as const) {
+      const tile = model.coverage.find((t) => t.id === id);
+      expect(tile?.total, id).toBeGreaterThan(KLEINE_GRUNDGESAMTHEIT);
+      expect(tile?.kleineGrundgesamtheit, id).toBe(false);
+      expect(tile?.kleinheitText, id).toBeUndefined();
+      expect(tile?.badge, id).toBeDefined();
+      // Zahlengebundener Text (DR-0013 Nr. 7) – kein pauschales „vollständig belegt".
+      expect(tile?.badge?.text, id).toMatch(/^(alle \d+ |Datenlücke: \d+ )/);
     }
   });
 });

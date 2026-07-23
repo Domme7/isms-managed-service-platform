@@ -194,6 +194,118 @@ describe('IsmsContent – verdichteter Überblick (WP-020, DR-0008)', () => {
       screen.queryByRole('heading', { level: 2, name: 'Überblick aus belegten Daten' }),
     ).not.toBeInTheDocument();
   });
+
+  /**
+   * WP-028 Slice 3 (DR-0013 Nr. 8): Der Usability-Audit fand auf dieser Seite einen
+   * Terminologie-Widerspruch – die Verteilung führt einen Stand „wirksam", während der
+   * Seitentext „keine bewertete Wirksamkeit" sagt. Aufgelöst AM WORT, ohne den Stand
+   * umzubenennen (Vertrag/Seed = Owner-Entscheidung).
+   */
+  it('kennzeichnet den Stand „wirksam" in der Verteilung als erfassten Stand ohne Urteil', () => {
+    const { container } = render(
+      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const kachel = container.querySelector('.db-tile[data-tile-id="lebenszyklus_verteilung"]');
+    if (!kachel) throw new Error('Verteilungs-Kachel fehlt');
+
+    const zeile = Array.from(kachel.querySelectorAll('.db-verteilung > li')).find(
+      (li) => li.querySelector('.db-verteilung-stand')?.textContent === 'wirksam',
+    );
+    expect(zeile, 'Testfixture fehlt: erfasster Stand „wirksam"').toBeTruthy();
+    // Der Stand steht unverändert da …
+    expect(zeile?.querySelector('.db-verteilung-stand')?.textContent).toBe('wirksam');
+    // … und direkt daneben seine Lesart, die dem Seitensatz nicht widerspricht.
+    expect(zeile?.querySelector('.db-verteilung-hinweis')?.textContent).toMatch(
+      /kein Wirksamkeitsurteil/,
+    );
+    // Der Seitensatz, mit dem der Stand vorher kollidierte, steht weiterhin auf der Seite.
+    expect(container.textContent ?? '').toContain('keine bewertete Wirksamkeit');
+  });
+
+  /**
+   * WP-028 Slice 3 (DR-0013 Nr. 7): „1 von 1" mit Vollbalken und grünem Häkchen las sich wie
+   * eine vollständige Control-Landschaft. Nordwerk trägt genau ein Control und ein Risiko.
+   */
+  it('zeigt bei kleiner Grundgesamtheit die Kleinheit statt Vollbalken und Erfolgs-Badge', () => {
+    const verdichtung = buildIsmsVerdichtung(TENANT_ID.NORDWERK);
+    if (!verdichtung) throw new Error('Testfixture fehlt: Nordwerk-Verdichtung');
+    const { container } = render(
+      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+
+    for (const tile of verdichtung.coverage) {
+      const kachel = container.querySelector(`.db-tile[data-tile-id="${tile.id}"]`);
+      if (!kachel) throw new Error(`Kachel fehlt: ${tile.id}`);
+      expect(tile.kleineGrundgesamtheit, tile.id).toBe(true);
+      // Die Zahl bleibt vollständig sichtbar (Ehrlichkeit unverändert) …
+      expect(kachel.querySelector('.db-wert-zahl')?.textContent).toBe(
+        `${tile.covered} von ${tile.total}`,
+      );
+      // … aber ohne Erfolgssymbolik.
+      expect(kachel.querySelector('.db-badge'), tile.id).toBeNull();
+      expect(kachel.querySelector('.db-balken'), tile.id).toBeNull();
+      expect(kachel.querySelector('.db-kleinheit')?.textContent, tile.id).toMatch(
+        /^Kleine Grundgesamtheit: nur 1 /,
+      );
+    }
+  });
+});
+
+/**
+ * ANTWORT-MODUS (WP-028 Slice 3, DR-0013 Nr. 1): Über der Falz stehen Zahlen, nicht Rahmung.
+ * Die Abgrenzungssätze bleiben vollständig erhalten – nachgeordnet am Seitenende.
+ */
+describe('IsmsContent – Antwort-Modus (DR-0013)', () => {
+  it('nennt den belegten Bestand im Aufmacher, vor jedem Erklärtext', () => {
+    const view = buildIsmsCoreView(TENANT_ID.NORDWERK);
+    const gesamt =
+      view.risks.length +
+      view.scenarios.length +
+      view.weaknesses.length +
+      view.controls.length +
+      view.measures.length +
+      view.evidence.length;
+
+    const { container } = render(
+      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const lead = container.querySelector('p.tw-lead');
+    expect(lead?.textContent).toContain(`${gesamt} ISMS-Kernobjekte`);
+    // Singular/Plural aus dem gemeinsamen Helfer – Nordwerk trägt genau ein Control.
+    expect(lead?.textContent).toContain(`${view.controls.length} Control`);
+    expect(lead?.textContent).toContain(view.context.recordedOnDisplay ?? '');
+  });
+
+  it('behält die Abgrenzung vollständig – am Seitenende statt über der Falz', () => {
+    const { container } = render(
+      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const abgrenzung = screen
+      .getByRole('heading', { level: 2, name: 'Was diese Seite nicht behauptet' })
+      .closest('section') as HTMLElement;
+    const text = abgrenzung.textContent ?? '';
+
+    // Die drei früheren Kopfabsätze – inhaltlich vollständig, verdichtet.
+    expect(text).toMatch(/synthetischen Demo-Datenbestand/);
+    expect(text).toMatch(/keinen Score, keinen Reifegrad und keine bewertete Einstufung/);
+    expect(text).toMatch(/Implementierungs- und Wirksamkeitsaussagen bleiben strikt getrennt/);
+    expect(text).toMatch(/keine Prüfergebnisse/);
+
+    // … und sie stehen NACH dem Überblick (Antwort zuerst, Lücke zuletzt).
+    const ueberblick = container.querySelector('section[aria-labelledby="isms-ueberblick"]');
+    expect(ueberblick).not.toBeNull();
+    expect(
+      (ueberblick as Element).compareDocumentPosition(abgrenzung) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
+  it('benennt die Risiko-Datenlücke weiterhin an ihrer Sektion (Substanz bleibt)', () => {
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
+    expect(
+      screen.getByText(/Szenario, Schwachstelle und Risiko sind im aktuellen/),
+    ).toBeInTheDocument();
+  });
 });
 
 /**

@@ -73,39 +73,79 @@ if (!ABGELOEST || !NACHFOLGER) throw new Error('Testfixture fehlt: Ablösepaar i
  * 1./2. Seitenaufbau, Leitfrage und Rahmungssätze
  * --------------------------------------------------------------------------- */
 
-describe('EntscheidungenContent – Leitfrage und ihre Grenze', () => {
-  it('zeigt die Leitfrage des Ortes wörtlich aus places.ts', () => {
-    render(<EntscheidungenContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />);
-    expect(screen.getByRole('heading', { level: 1, name: 'Entscheidungen' })).toBeInTheDocument();
-    expect(screen.getByText(getPlace('entscheidungen').question)).toBeInTheDocument();
-  });
-
-  it('stellt die Grenze der Leitfrage DIREKT darunter, nicht ans Seitenende', () => {
+describe('EntscheidungenContent – Antwort-Modus (WP-028 Slice 3, DR-0013)', () => {
+  /**
+   * REGEL-ERHALTEND UMGESTELLT (DR-0013 Nr. 1 „Antwort zuerst, Lücke zuletzt").
+   *
+   * ALTE ERWARTUNG: die aspirative Leitfrage aus `places.ts` steht als sichtbare Überschrift,
+   * und DIREKT darunter steht ihre Verneinung („Diese Frage beantwortet die Seite heute nicht").
+   * Das war die Korrektur eines WP-016-Fehlers – aber sie hat die Seite in den
+   * Rechtfertigungs-Modus gebracht: rund 250 Wörter Meta-Text vor der ersten Entscheidung.
+   *
+   * NEUE ERWARTUNG (Muster WP-032): Die Seite stellt die Frage, die sie BEANTWORTET. Die
+   * aspirative Frage wird nicht mehr gerendert – wer nichts behauptet, muss nichts verneinen.
+   * Der Konzeptanker bleibt in `places.ts`.
+   *
+   * NICHTS ABGESCHWÄCHT: Die Ehrlichkeits-Substanz („keine Aussage über Dringlichkeit, weil
+   * Frist/Aufwand/Kapazität/Priorität keinen Träger haben") wird weiterhin verlangt – geprüft
+   * im Block „Was diese Seite nicht beantwortet" weiter unten. Zusätzlich wird jetzt geprüft,
+   * dass die aspirative Frage NICHT mehr im DOM steht (neue, strengere Bedingung).
+   */
+  it('führt mit der Frage, die die Seite beantwortet – nicht mit der aspirativen Leitfrage', () => {
     const { container } = render(
       <EntscheidungenContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
-    const frage = screen.getByText(getPlace('entscheidungen').question);
-    const rahmung = container.querySelector('#entscheidungen-rahmung');
+    expect(screen.getByRole('heading', { level: 1, name: 'Entscheidungen' })).toBeInTheDocument();
 
-    expect(rahmung).not.toBeNull();
-    // Unmittelbarer nächster Knoten – kein Inhalt darf sich dazwischenschieben.
-    expect(frage.nextElementSibling).toBe(rahmung);
-    // Anker seit dem Review-Pass an den Zwei-Satz-Kopf angepasst (Regel unverändert: die
-    // Grenze wird benannt, die belegbare Ersatzfrage steht dabei, die Begründung im DOM).
-    expect(rahmung?.textContent ?? '').toMatch(/Diese Frage beantwortet die Seite heute nicht/);
-    expect(rahmung?.textContent ?? '').toMatch(/Dringlichkeit/);
-    // Und die engere, tatsächlich belegbare Frage steht mit ihr zusammen.
-    expect(rahmung?.textContent ?? '').toMatch(/Welche Entscheidungen sind erfasst, worauf/);
-    // Der Begründungsapparat bleibt vollständig im DOM (aufklappbar, P06).
-    expect(rahmung?.textContent ?? '').toMatch(/Frist, einen Aufwand/);
+    const frage = container.querySelector('p.tw-question');
+    expect(frage?.textContent).toBe(
+      'Welche Entscheidungen sind erfasst, worauf beziehen sie sich, wie sind sie belegt und was hat sie abgelöst?',
+    );
+    // Die aspirative Leitfrage wird weder gestellt noch verneint (Konzeptanker in places.ts).
+    expect(container.textContent ?? '').not.toContain(getPlace('entscheidungen').question);
+    expect(container.textContent ?? '').not.toContain(
+      'Diese Frage beantwortet die Seite heute nicht',
+    );
+    expect(container.querySelector('#entscheidungen-rahmung')).toBeNull();
+  });
 
-    // Gegenprobe: die Rahmung steht VOR dem Register, nicht erst im Ehrlichkeitsblock.
+  it('nennt den belegten Stand über der Falz, vor jedem Erklärtext', () => {
+    const { container } = render(
+      <EntscheidungenContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const lead = container.querySelector('p.tw-lead');
+    // Zahl aus dem Modell, nicht geschrieben.
+    expect(lead?.textContent).toContain(`${NORDWERK_MODEL.decisions.length} Entscheidungen`);
+    expect(lead?.textContent).toContain(NORDWERK_MODEL.recordedOnDisplay ?? '');
+
+    // Register vor dem Ehrlichkeitsblock UND vor dem Abschluss (Antwort zuerst, Lücke zuletzt).
     const register = container.querySelector('section[aria-labelledby="entscheidungen-register"]');
-    expect(register).not.toBeNull();
-    expect(
-      (rahmung as Element).compareDocumentPosition(register as Element) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy();
+    const luecke = container.querySelector('section[aria-labelledby="entscheidungen-luecke"]');
+    const offen = container.querySelector('section[aria-labelledby="entscheidungen-offen"]');
+    for (const nachgeordnet of [luecke, offen]) {
+      expect(nachgeordnet).not.toBeNull();
+      expect(
+        (register as Element).compareDocumentPosition(nachgeordnet as Element) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    }
+  });
+
+  it('stellt die erste Entscheidung direkt unter die Abschnittsüberschrift', () => {
+    const { container } = render(
+      <EntscheidungenContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const register = container.querySelector(
+      'section[aria-labelledby="entscheidungen-register"]',
+    ) as HTMLElement;
+    const liste = register.querySelector('ul.sv-list');
+    // Zwischen Überschrift und Liste steht nichts mehr (vorher: Reihenfolgeregel + sechs
+    // Leseregeln = rund 250 Wörter vor der ersten Entscheidung).
+    expect(register.querySelector('h2')?.nextElementSibling).toBe(liste);
+    // … und die Leseregeln stehen vollständig, aber ruhig NACH der Liste.
+    const details = register.querySelector('details.sv-details');
+    expect(details).not.toBeNull();
+    expect(details?.textContent).toContain(NORDWERK_MODEL.orderRule);
   });
 
   it('übernimmt den Rahmungssatz zu Lebenszyklus-Ständen WORTGLEICH aus IsmsContent', () => {
@@ -212,6 +252,8 @@ describe('EntscheidungenContent – Register je Entscheidung (nur Belegtes)', ()
   });
 
   it('macht die Reihenfolgeregel sichtbar und sortiert nicht nach Dringlichkeit', () => {
+    // WP-028 Slice 3: die Regel steht jetzt im aufklappbaren Leseregel-Block NACH der Liste –
+    // vollständig im DOM, nur nicht mehr vor der ersten Entscheidung (DR-0013 Nr. 1).
     expect(screen.getByText(NORDWERK_MODEL.orderRule)).toBeInTheDocument();
     const gerendert = within(registerAbschnitt())
       .getAllByRole('heading', { level: 3 })
@@ -638,9 +680,15 @@ const DOK06_GELDWORT_FELD = (() => {
 })();
 
 /**
- * Zusätzlich verboten in den DATENABSCHNITTEN. Im Rahmungsabsatz unter der Leitfrage und im
- * Ehrlichkeitsblock sind diese Begriffe zulässig und notwendig: dort wird BENANNT, dass es kein
- * Feld für Frist, Priorität oder Empfehlung gibt. Eine benannte Lücke ist keine Bewertung.
+ * Zusätzlich verboten in den DATENABSCHNITTEN. In den beiden LÜCKEN-Abschnitten am Seitenende
+ * („Was eine Entscheidung hier noch nicht zeigt", „Was diese Seite nicht beantwortet") sind
+ * diese Begriffe zulässig und notwendig: dort wird BENANNT, dass es kein Feld für Frist,
+ * Priorität oder Empfehlung gibt. Eine benannte Lücke ist keine Bewertung.
+ *
+ * WP-028 Slice 3: Der frühere Rahmungsabsatz `#entscheidungen-rahmung` unter der Leitfrage ist
+ * entfallen (Antwort-Modus, DR-0013 Nr. 1); seine Aussage steht jetzt im Abschluss-Abschnitt
+ * `#entscheidungen-offen`. Der Ausnahmebereich ist damit VERSCHOBEN, nicht erweitert – die
+ * Datenabschnitte selbst bleiben unverändert vollständig unter dem Wächter.
  */
 const NUR_IN_DER_LUECKE = [
   /\bFrist/i,
@@ -691,10 +739,10 @@ describe('EntscheidungenContent – kein Score, keine Priorisierung, keine Gelda
           ).toBe(false);
         }
 
-        // Datenabschnitte ohne Rahmungsabsatz und ohne Ehrlichkeitsblock.
+        // Datenabschnitte ohne die beiden nachgeordneten Lücken-Abschnitte.
         const klon = container.cloneNode(true) as HTMLElement;
-        klon.querySelector('#entscheidungen-rahmung')?.remove();
         klon.querySelector('section[aria-labelledby="entscheidungen-luecke"]')?.remove();
+        klon.querySelector('section[aria-labelledby="entscheidungen-offen"]')?.remove();
         let datentext = klon.textContent ?? '';
         for (const negation of ERLAUBTE_NEGATIONEN) {
           datentext = datentext.split(negation).join(' ');
@@ -869,10 +917,27 @@ describe('EntscheidungenContent – Ehrlichkeitsblock „Was eine Entscheidung h
     expect(within(abschnitt).getByText(/keine Decision Card/)).toBeInTheDocument();
   });
 
-  it('benennt die Grenze der Leitfrage auch hier – ohne sie zu beantworten', () => {
-    const abschnitt = lueckenAbschnitt();
-    expect(abschnitt.textContent ?? '').toContain(getPlace('entscheidungen').question);
-    expect(within(abschnitt).getByText(/nicht zu beantworten/)).toBeInTheDocument();
+  /**
+   * REGEL-ERHALTEND UMGESTELLT (WP-028 Slice 3, DR-0013 Nr. 1): Bis dahin verlangte der Test,
+   * dass der Ehrlichkeitsblock die aspirative Leitfrage WÖRTLICH zitiert und sie erneut
+   * verneint. Die Frage wird auf der Seite nicht mehr gestellt (Konzeptanker in `places.ts`) –
+   * sie muss also auch nicht mehr zitiert werden. Die AUSSAGE bleibt Pflicht und wandert in den
+   * eigenen Abschluss-Abschnitt: keine Dringlichkeitsaussage, weil vier Träger fehlen. Der Test
+   * nagelt jetzt genau diese vier Träger fest – er ist damit konkreter als vorher.
+   */
+  it('benennt die fehlende Dringlichkeits-Grundlage im Abschluss – ohne sie zu behaupten', () => {
+    const offen = screen
+      .getByRole('heading', { level: 2, name: 'Was diese Seite nicht beantwortet' })
+      .closest('section') as HTMLElement;
+    const text = offen.textContent ?? '';
+
+    for (const traeger of ['Frist', 'Aufwand', 'Kapazität', 'Priorität']) {
+      expect(text, `fehlender Träger „${traeger}" wird nicht benannt`).toContain(traeger);
+    }
+    expect(text).toMatch(/jede Reihung nach Dringlichkeit wäre erfunden/);
+    expect(text).toMatch(/weder behauptet noch durch die Reihenfolge angedeutet/);
+    // Die aspirative Frage wird auch hier nicht zitiert (keine Rechtfertigung, DR-0013 Nr. 1).
+    expect(text).not.toContain(getPlace('entscheidungen').question);
   });
 
   it('gibt kein Roadmap-, Termin- oder Funktionsversprechen und kein internes Prozessvokabular', () => {

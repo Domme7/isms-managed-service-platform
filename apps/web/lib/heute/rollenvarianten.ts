@@ -12,10 +12,23 @@
  *   | Service Lead | SLA, Eskalationen, Qualität, Auslastung, Profitabilität     | Objektdetails ohne Eskalationsbezug |
  *
  * Die Spalten „Missionsfokus"/„Ausblendung" stehen unten WÖRTLICH als Quellbeleg
- * (`missionsfokusQuote`/`ausblendungQuote`, Muster `framing.ts`). Der Fließtext der Ebene 1
- * nutzt die kuratierten Sätze `fokusBelegtText`/`fokusLueckenText`/`ausblendungText`; die
- * wörtlichen Zitate werden ausschließlich im aufklappbaren „Quelle der Variante"-Block der
- * NORMIERTEN Rollen gezeigt (Product-Fix F4: Quellenbeleg statt Konzept-Jargon im Fließtext).
+ * (`missionsfokusQuote`/`ausblendungQuote`, Muster `framing.ts`).
+ *
+ * SICHTBARER TEXT SEIT WP-028 SLICE 3 (DR-0013 Nr. 5 „Rollenfokus ohne Beipackzettel"):
+ * Die Personalisierung sortiert STILL um. Sichtbar bleibt HÖCHSTENS EIN Nutzen-Satz
+ * (`nutzenSatz`, z. B. „Für die Executive-Sicht zuerst: Risiko-Minderung."). Aus der
+ * Oberfläche verschwunden sind die Design-Theorie-Sätze („im Konzept normiert", „reversible
+ * Anzeigeentscheidung", „gegenstandslos", „Betonung") und der aufklappbare „Quelle der
+ * Variante"-Block mit den wörtlichen Spaltenzitaten – beides lebt ab jetzt in dieser
+ * Code-Doku, wo es hingehört. Die Zitat-Felder bleiben als QUELLBELEG erhalten (per Test gegen
+ * die PDF-Tabelle festgenagelt), werden aber nicht mehr gerendert.
+ *
+ * WAS NICHT VERSCHWINDET (Ehrlichkeits-Substanz, DR-0005/DR-0013-Grenze): welche Fokusinhalte
+ * KEINEN Träger haben (`fokusLueckenText`, mandantenabhängig über `fokusLueckenTextFuer`), ob
+ * die betonten Kacheln für den aktiven Mandanten überhaupt Bestand tragen
+ * (`fokusBelegtTextFuer`) und die Zusage, dass nichts entzogen wird (`ausblendungText`).
+ * Diese drei Aussagen stehen weiterhin vollständig im DOM – nur ruhig, in einem
+ * `<details>`-Element statt als dreiabsätziger Beipackzettel über den Kacheln.
  *
  * ZUORDNUNG TABELLENZEILE → ROLLE (Dok. 03, Abschnitt „Kanonisches Rollenmodell";
  * Builder-Entscheidung, reversibel, im Abschlussbericht ausgewiesen):
@@ -40,9 +53,10 @@
  * „AUSBLENDUNG" HEISST NIE ENTZUG (WP-Zuschnitt; Dok. 06, Abschnitt „Rollenwechsel",
  * Designregel: keine getrennten Dashboards; P02 eine Wahrheit): Jede Variante ORDNET alle
  * Kacheln – `tileOrder` enthält jede Kachel-Kennung genau einmal (per Test erzwungen). Die
- * normierten Ausblendungen sind im heutigen read-only-Datenbestand zudem gegenstandslos
- * (keine Taskdetails, keine Umsatzsicht, keine Vertriebsimpulse, kein Eskalationsbezug) –
- * das sagen die sichtbaren Texte, statt etwas zu verstecken.
+ * normierten Ausblendungen haben im heutigen read-only-Datenbestand ohnehin keinen Gegenstand
+ * (keine Taskdetails, keine Umsatzsicht, keine Vertriebsimpulse, kein Eskalationsbezug); der
+ * sichtbare `ausblendungText` sagt das seit WP-028 Slice 3 in Datensprache („der Datenbestand
+ * enthält keine …") statt in Konzeptsprache („die normierte Ausblendung ist gegenstandslos").
  *
  * ABLEITUNGSREGEL DER REIHENFOLGE (einheitlich, Code-Doku je Variante in `orderRationale`):
  * Kacheln, deren Inhalt einen im Missionsfokus genannten Punkt BELEGT trägt, rücken in der
@@ -86,27 +100,37 @@ export interface Rollenvariante {
   readonly id: VariantId;
   /** Zeilenname wörtlich aus der PDF-Tabelle „Rollenvarianten". */
   readonly name: string;
-  /** Spalte „Missionsfokus" wörtlich – Quellbeleg, gerendert nur im „Quelle"-Block (normiert). */
+  /**
+   * Spalte „Missionsfokus" WÖRTLICH – reiner Quellbeleg. Seit WP-028 Slice 3 NICHT mehr
+   * gerendert (DR-0013 Nr. 5); der Wächter von „Heute" prüft ausdrücklich, dass das Zitat nicht
+   * im Produkttext auftaucht. Es bleibt hier, weil ein Test es gegen die PDF-Tabelle festnagelt.
+   */
   readonly missionsfokusQuote: string;
-  /** Spalte „Ausblendung" wörtlich – Quellbeleg, gerendert nur im „Quelle"-Block (normiert). */
+  /** Spalte „Ausblendung" wörtlich – Quellbeleg, nicht gerendert (s. `missionsfokusQuote`). */
   readonly ausblendungQuote: string;
-  /** Quellzeile beider Zitate. */
+  /** Quellzeile beider Zitate – Code-Doku, nicht gerendert. */
   readonly quoteSource: string;
   /** Kachel-Reihenfolge der Ebene 1: JEDE Kachel genau einmal – Betonung, kein Entzug. */
   readonly tileOrder: readonly TileId[];
   /** Die vom Missionsfokus nach vorn gezogenen Kacheln (die Köpfe der `tileOrder`). */
   readonly fokusKacheln: readonly TileId[];
   /**
-   * SICHTBAR: welche Fokus-Kacheln nach vorn rücken. Bewusst TRÄGER-neutral formuliert
-   * („die Kachel zu …"), weil die Kachel je Mandant auch leer sein kann – ob sie für den
-   * AKTIVEN Mandanten Bestand trägt, ergänzt `fokusBelegtTextFuer` aus der echten Kachellage
-   * (Review-Finding: der statische Text behauptete Belegtheit, die z. B. der Consulting
-   * Operator nicht hat).
+   * DER EINE sichtbare Satz der Variante (DR-0013 Nr. 5): Nutzen statt Design-Theorie –
+   * „Für die Executive-Sicht zuerst: Risiko-Minderung." Er beschreibt, WAS oben steht, nicht
+   * WARUM das Konzept es so vorsieht. Nennt keine Konzept-Normativität und keinen Feldnamen.
+   */
+  readonly nutzenSatz: string;
+  /**
+   * RUHIG SICHTBAR (Aufklappteil): welche Fokus-Kacheln nach vorn rücken. Bewusst TRÄGER-neutral
+   * formuliert („die Kachel zu …"), weil die Kachel je Mandant auch leer sein kann – ob sie für
+   * den AKTIVEN Mandanten Bestand trägt, ergänzt `fokusBestandHinweisFuer` aus der echten
+   * Kachellage (Review-Finding: der statische Text behauptete Belegtheit, die z. B. der
+   * Consulting Operator nicht hat).
    */
   readonly fokusBelegtText: string;
-  /** SICHTBAR: welche Fokusinhalte keinen Träger haben (benannte Lücke, DR-0005). */
+  /** RUHIG SICHTBAR: welche Fokusinhalte keinen Träger haben (benannte Lücke, DR-0005). */
   readonly fokusLueckenText: string;
-  /** SICHTBAR: was die normierte Ausblendung heute bedeutet + Erreichbarkeits-Zusage. */
+  /** RUHIG SICHTBAR: was heute an Ausblendbarem erfasst ist + Erreichbarkeits-Zusage. */
   readonly ausblendungText: string;
   /** Ableitung der Reihenfolge im Klartext (nur Code-Doku). */
   readonly orderRationale: string;
@@ -115,9 +139,14 @@ export interface Rollenvariante {
 const QUOTE_SOURCE =
   'Dok. 06, Abschnitt „Mission Control & Morning Mission", Tabelle „Rollenvarianten"';
 
+/**
+ * Erreichbarkeits-Zusage – die EINE Wahrheit je Rolle (Dok. 06 P02): kein Entzug, nur
+ * Reihenfolge. Wortlaut seit WP-028 Slice 3 ohne den Design-Begriff „Betonung" (DR-0013 Nr. 5);
+ * die Aussage selbst bleibt unverändert und weiterhin per Test erzwungen.
+ */
 const ERREICHBARKEIT =
-  'Grundsätzlich wird nichts entzogen – jede Kachel, jede Tiefe und jeder Weg bleibt ' +
-  'erreichbar; die Reihenfolge ist reine Betonung.';
+  'Es wird nichts entzogen – jede Kachel, jede Tiefe und jeder Weg bleibt erreichbar; ' +
+  'unterschiedlich ist allein die Reihenfolge.';
 
 export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
   executive: {
@@ -138,6 +167,7 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'kanten_vertrauensgrad',
     ],
     fokusKacheln: ['risiken_minderung'],
+    nutzenSatz: 'Für die Executive-Sicht zuerst: Risiko-Minderung.',
     fokusBelegtText:
       'Nach vorn gezogen: die Kachel zum Minderungs-Stand der Risiken – der einzige Punkt ' +
       'des Missionsfokus mit einem Kachel-Träger.',
@@ -145,9 +175,7 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'Vom Missionsfokus dieser Variante ohne Träger im Datenbestand und deshalb als Lücke ' +
       'benannt statt erfunden: Freigaben, Zielabweichung, Investition – und eine „Top"-Auswahl ' +
       'der Risiken (es gibt keine erfasste Reihung nach Bedeutung).',
-    ausblendungText:
-      'Die normierte Ausblendung („operative Taskdetails") ist heute gegenstandslos: der ' +
-      `Datenbestand enthält keine Aufgabenobjekte. ${ERREICHBARKEIT}`,
+    ausblendungText: `${ERREICHBARKEIT} Operative Aufgabenobjekte enthält der Datenbestand nicht.`,
     orderRationale:
       'Vom Missionsfokus „Freigaben, Top-Risiken, Zielabweichung, Investition" ist allein der ' +
       'Risiko-Bezug belegt (Minderungs-Abdeckung) – er rückt nach vorn; der Rest bleibt ' +
@@ -177,6 +205,8 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'objekte_owner',
       'kanten_vertrauensgrad',
     ],
+    nutzenSatz:
+      'Für die ISMS-Sicht zuerst: Risiko-Minderung, ISMS-Kernobjekte, Nachweise und Datenlücken.',
     fokusBelegtText:
       'Nach vorn gezogen: die Kacheln zu Risiko-Minderung, ISMS-Kernobjekten (darunter die ' +
       'Maßnahmen), Nachweis-Stand der Controls und den beiden Datenlücken-Zählungen ' +
@@ -190,9 +220,7 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'Vom Missionsfokus dieser Variante ohne eigene Kachel: Reviews – auf Ebene 1 zeigt keine ' +
       'Kachel Reviews; ein ISMS-Review-Vorgang mit Person, Zeitpunkt und Ergebnis ist nicht als ' +
       'eigener Typ erfasst.',
-    ausblendungText:
-      'Die normierte Ausblendung („Portfolio-/Umsatzsicht") ist heute gegenstandslos: diese ' +
-      `Seite enthält weder eine Portfolio- noch eine Umsatzdarstellung. ${ERREICHBARKEIT}`,
+    ausblendungText: `${ERREICHBARKEIT} Eine Portfolio- oder Umsatzdarstellung enthält diese Seite ohnehin nicht.`,
     orderRationale:
       'Fokus-Nennungsreihenfolge: Risiken → Minderungs-Abdeckung; Maßnahmen → ISMS-Kernobjekte; ' +
       'Evidence → Nachweis-Abdeckung; Datenlücken → Owner- und Vertrauensgrad-Abdeckung. ' +
@@ -216,14 +244,13 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'kanten_vertrauensgrad',
     ],
     fokusKacheln: ['services'],
+    nutzenSatz: 'Für die Beratungs-Sicht zuerst: die Managed Services mit ihren Deliverables.',
     fokusBelegtText:
       'Nach vorn gezogen: die Kachel der Managed Services – an ihnen hängen die Deliverables.',
     fokusLueckenText:
       'Vom Missionsfokus dieser Variante ohne Träger im Datenbestand: Mandantenpriorität, ' +
       'Audits, Kapazität und Reise.',
-    ausblendungText:
-      'Die normierte Ausblendung („unbegründete Vertriebsimpulse") ist heute gegenstandslos: ' +
-      `diese Seite enthält keine Vertriebsinhalte. ${ERREICHBARKEIT}`,
+    ausblendungText: `${ERREICHBARKEIT} Vertriebsinhalte enthält diese Seite ohnehin nicht.`,
     orderRationale:
       'Vom Missionsfokus ist allein „Deliverables" belegt (an den Managed Services) – die ' +
       'Service-Kachel rückt nach vorn; der Rest bleibt kanonisch. ' +
@@ -247,15 +274,14 @@ export const ROLLENVARIANTEN: Readonly<Record<VariantId, Rollenvariante>> = {
       'kanten_vertrauensgrad',
     ],
     fokusKacheln: ['services'],
+    nutzenSatz: 'Für die Service-Sicht zuerst: die Managed Services mit ihren SLA-Angaben.',
     fokusBelegtText:
       'Nach vorn gezogen: die Kachel der Managed Services – an ihnen stehen die SLA-Angaben ' +
       'je Service.',
     fokusLueckenText:
       'Vom Missionsfokus dieser Variante ohne Träger im Datenbestand: Eskalationen, ' +
       'Servicequalität als erfasster Messwert, Auslastung und Profitabilität.',
-    ausblendungText:
-      'Die normierte Ausblendung („Objektdetails ohne Eskalationsbezug") ist heute ' +
-      `gegenstandslos: ein Eskalationsbezug ist im Datenbestand nicht erfasst. ${ERREICHBARKEIT}`,
+    ausblendungText: `${ERREICHBARKEIT} Ein Eskalationsbezug ist im Datenbestand nicht erfasst.`,
     orderRationale:
       'Vom Missionsfokus ist allein „SLA" belegt (an den Managed Services) – die ' +
       'Service-Kachel rückt nach vorn; der Rest bleibt kanonisch. ' +
@@ -312,11 +338,14 @@ export function kachelOrdnungForRole(roleId: string | null): readonly TileId[] {
 }
 
 /**
- * SICHTBARER Betonungssatz FÜR DEN AKTIVEN MANDANTEN (Review-Finding Domain F2): der statische
- * Varianten-Text beschreibt, WELCHE Kacheln der Fokus nach vorn zieht; ob sie für den aktiven
- * Mandanten Bestand tragen, entscheidet die echte Kachellage (`hatDaten`, abgeleitet aus dem
- * Dashboard-Modell: Grundgesamtheit bzw. Zählwerte > 0). Tragen Fokus-Kacheln keinen Bestand,
- * wird das gesagt statt behauptet – die Kacheln selbst benennen ihre Lücke zusätzlich.
+ * RUHIG SICHTBARER Reihenfolge-Satz FÜR DEN AKTIVEN MANDANTEN (Review-Finding Domain F2): der
+ * statische Varianten-Text beschreibt, WELCHE Kacheln der Fokus nach vorn zieht; ob sie für den
+ * aktiven Mandanten Bestand tragen, entscheidet die echte Kachellage (`hatDaten`, abgeleitet aus
+ * dem Dashboard-Modell: Grundgesamtheit bzw. Zählwerte > 0). Tragen Fokus-Kacheln keinen
+ * Bestand, wird das gesagt statt behauptet – die Kacheln selbst benennen ihre Lücke zusätzlich.
+ *
+ * Seit WP-028 Slice 3 (DR-0013 Nr. 5) steht dieser Satz im Aufklappteil des Rollenfokus, nicht
+ * mehr als Absatz über den Kacheln. Die AUSSAGE ist unverändert – nur ihre Dosierung.
  */
 export function fokusBelegtTextFuer(
   variante: Rollenvariante,
@@ -350,8 +379,22 @@ export function fokusLueckenTextFuer(variante: Rollenvariante, hatReview: boolea
   );
 }
 
-/** SICHTBARER Text für Rollen ohne normierte Variante (Assurance & Administration World). */
-export const KEINE_VARIANTE_TEXT =
-  'Für diese Rolle ist keine Variante normiert, und ihre Erlebniswelt hat in der ' +
-  'Konzept-Tabelle der Rollenvarianten keine Zeile. Die Kacheln stehen deshalb in der ' +
-  'kanonischen Reihenfolge – es wird keine Betonung erfunden.';
+/**
+ * Warum Rollen ohne normierte Variante GAR KEINEN Rollenfokus zeigen (WP-028 Slice 3,
+ * DR-0013 Nr. 5) – Code-Doku, nicht mehr gerendert.
+ *
+ * Bis WP-020 stand für die Assurance & Administration World ein sichtbarer Kasten auf der
+ * Seite: „Für diese Rolle ist keine Variante normiert, und ihre Erlebniswelt hat in der
+ * Konzept-Tabelle der Rollenvarianten keine Zeile. Die Kacheln stehen deshalb in der
+ * kanonischen Reihenfolge – es wird keine Betonung erfunden."
+ *
+ * Das ist eine Aussage über die KONZEPT-Tabelle und über eine Design-Entscheidung, keine
+ * Aussage über die Daten des Mandanten – genau die Sorte Selbstkommentar, die DR-0013
+ * aus der Oberfläche nimmt. Die REGEL bleibt scharf und ist unverändert testbar: Rollen ohne
+ * Tabellenzeile erhalten die KANONISCHE Reihenfolge, es wird keine Reihenfolge erfunden
+ * (`kachelOrdnungForRole` + Test „Assurance-Rollen erhalten BEWUSST keine Betonung").
+ * Sichtbar ist das Ergebnis: dieselbe Reihenfolge wie im neutralen Zustand, ohne Fokus-Kasten.
+ */
+export const KEINE_VARIANTE_BEGRUENDUNG =
+  'Assurance & Administration World: keine Zeile in der Tabelle „Rollenvarianten" – ' +
+  'kanonische Reihenfolge, keine erfundene Reihenfolge, kein sichtbarer Rollenfokus.';
