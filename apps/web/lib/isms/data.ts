@@ -199,7 +199,9 @@ function toLink(
     edge_status: rel.status,
     assertion_kind: rel.assertion_kind,
     confidence_display:
-      typeof rel.confidence === 'number' ? confidenceQualitative(rel.confidence).display : undefined,
+      typeof rel.confidence === 'number'
+        ? confidenceQualitative(rel.confidence).display
+        : undefined,
     effectiveness_assumption: rel.effectiveness_assumption,
   };
 }

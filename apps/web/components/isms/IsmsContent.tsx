@@ -36,16 +36,14 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
       <h1>ISMS</h1>
 
       {/* Leitfrage der Seite (Dok. 06 „Frage vor Navigation", S06). */}
-      <p className="tw-question">
-        Wie ist die Risiko- und Control-Lage von {tenant.display_name}?
-      </p>
+      <p className="tw-question">Wie ist die Risiko- und Control-Lage von {tenant.display_name}?</p>
 
       <p className="tw-lead">
-        Read-only Demo-Sicht auf den synthetischen ISMS-Kerngraphen des aktiven Mandanten:
-        Risiken mit Herkunft, Controls mit Umsetzung und Nachweisen, Maßnahmen und Evidence –
-        aus demselben Datenmodell wie der digitale Zwilling. Es werden nur belegte Seed-Stände
-        gezeigt; Implementierungs- und Wirksamkeitsaussagen bleiben strikt getrennt, ohne
-        Scoring, Ampeln oder Reifegrade.
+        Read-only Demo-Sicht auf den synthetischen ISMS-Kerngraphen des aktiven Mandanten: Risiken
+        mit Herkunft, Controls mit Umsetzung und Nachweisen, Maßnahmen und Evidence – aus demselben
+        Datenmodell wie der digitale Zwilling. Es werden nur belegte Seed-Stände gezeigt;
+        Implementierungs- und Wirksamkeitsaussagen bleiben strikt getrennt, ohne Scoring, Ampeln
+        oder Reifegrade.
       </p>
       {/* UX-Review MAJOR-1 (seitenweite Rahmung): jede sichtbare OBJEKT-Status-Angabe ist ein
           Lebenszyklus-Stand, kein Prüf-/Auditergebnis – gilt auch für Status in Verweis-Zeilen,
@@ -56,8 +54,8 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
         <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
         Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
         keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt
-        für einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
+        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt für
+        einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
       </p>
 
       {view.isEmpty ? (
@@ -71,9 +69,10 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
             <h2 id="isms-risiken">Risiken</h2>
             <p className="tw-muted">
               Risiko, Szenario-Herkunft und Schwachstellen-Ursprung als Klartext – ohne Score oder
-              Ampel (eine Bewertungslogik entsteht in einer späteren Phase). <strong>Datenlücke:</strong>{' '}
-              Szenario, Schwachstelle und Risiko sind im aktuellen Datenmodell nicht direkt
-              miteinander verknüpft – ein Zusammenhang wird hier bewusst nicht behauptet.
+              Ampel (eine Bewertungslogik entsteht in einer späteren Phase).{' '}
+              <strong>Datenlücke:</strong> Szenario, Schwachstelle und Risiko sind im aktuellen
+              Datenmodell nicht direkt miteinander verknüpft – ein Zusammenhang wird hier bewusst
+              nicht behauptet.
             </p>
             <SectionList
               isEmpty={view.risks.length + view.scenarios.length + view.weaknesses.length === 0}
@@ -158,7 +157,15 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
  * Sektionsinhalt mit ehrlichem Leer-Hinweis (Code-Review MINOR-2, `.claude/rules/frontend.md`).
  * Greift, wenn ein Mandant zwar ISMS-Objekte hat, aber eine einzelne Klasse leer ist.
  */
-function SectionList({ isEmpty, emptyText, children }: { isEmpty: boolean; emptyText: string; children: ReactNode }) {
+function SectionList({
+  isEmpty,
+  emptyText,
+  children,
+}: {
+  isEmpty: boolean;
+  emptyText: string;
+  children: ReactNode;
+}) {
   if (isEmpty) {
     return (
       <p className="tw-empty" role="note">
@@ -189,15 +196,15 @@ function EmptyIsms({ tenant }: { tenant: DemoTenant }) {
           auf /entscheidungen behoben wurde — dieser hier bestand seit WP-013 unbemerkt.
           Der Leerzustand sagt jetzt ausschließlich etwas über DIESEN Mandanten. */}
       <p style={{ marginTop: 0 }}>
-        Für <strong>{tenant.display_name}</strong> sind im aktuellen Demo-Datenbestand keine Risiken,
-        Controls, Maßnahmen oder Nachweise modelliert. Der Ort bleibt erreichbar und zeigt hier
-        ausschließlich, was für diesen Mandanten belegt ist.
+        Für <strong>{tenant.display_name}</strong> sind im aktuellen Demo-Datenbestand keine
+        Risiken, Controls, Maßnahmen oder Nachweise modelliert. Der Ort bleibt erreichbar und zeigt
+        hier ausschließlich, was für diesen Mandanten belegt ist.
       </p>
       {tenantHasServices ? (
         <p className="tw-muted">
           Hinweis: In diesem Mandanten sind Managed-Service-Objekte modelliert (siehe Ort{' '}
-          <Link href="/services">Services</Link>). Eigene Risiken, Controls, Maßnahmen und
-          Nachweise führt er hier nicht.
+          <Link href="/services">Services</Link>). Eigene Risiken, Controls, Maßnahmen und Nachweise
+          führt er hier nicht.
         </p>
       ) : null}
       <p className="tw-muted">

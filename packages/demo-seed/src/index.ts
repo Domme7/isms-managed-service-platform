@@ -12,3 +12,4 @@ export * from './managed-services';
 export * from './decisions';
 export * from './integrity';
 export * from './seed';
+export * from './seed-facts';

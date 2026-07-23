@@ -11,6 +11,8 @@ on:
       - "pnpm-workspace.yaml"
       - "turbo.json"
       - "tsconfig.base.json"
+      - "biome.json"
+      - "scripts/**"
       - ".github/workflows/app-ci.yml"
   pull_request:
     paths:
@@ -21,6 +23,8 @@ on:
       - "pnpm-workspace.yaml"
       - "turbo.json"
       - "tsconfig.base.json"
+      - "biome.json"
+      - "scripts/**"
       - ".github/workflows/app-ci.yml"
 
 jobs:
@@ -36,6 +40,8 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format:check
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build

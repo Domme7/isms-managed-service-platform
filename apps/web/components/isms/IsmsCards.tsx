@@ -150,7 +150,9 @@ function CoveredNote({ names }: { names: readonly string[] }) {
   return (
     <p className="sv-edge-note">
       Im Serviceumfang von: {names.join(', ')}{' '}
-      <span className="sv-tech">({edgeNote('covered_by')} – Hinweis aus dem Demo-Datenbestand)</span>
+      <span className="sv-tech">
+        ({edgeNote('covered_by')} – Hinweis aus dem Demo-Datenbestand)
+      </span>
     </p>
   );
 }
@@ -190,11 +192,7 @@ export function RiskCard({ view, tenantId }: { view: RiskView; tenantId: string 
 export function ScenarioCard({ view, tenantId }: { view: ScenarioView; tenantId: string }) {
   return (
     <li className="sv-card">
-      <CardTitle
-        tenantId={tenantId}
-        objectId={view.scenario.object_id}
-        name={view.scenario.name}
-      />
+      <CardTitle tenantId={tenantId} objectId={view.scenario.object_id} name={view.scenario.name} />
       <p className="tw-card-sub">{`${objectTypeDisplay('Risk Scenario')} · Lebenszyklus-Stand: ${view.scenario.lifecycle_status}`}</p>
       <DescriptionDetails text={view.scenario.description} label={view.scenario.name} />
 
@@ -232,11 +230,7 @@ export function ScenarioCard({ view, tenantId }: { view: ScenarioView; tenantId:
 export function WeaknessCard({ view, tenantId }: { view: WeaknessView; tenantId: string }) {
   return (
     <li className="sv-card">
-      <CardTitle
-        tenantId={tenantId}
-        objectId={view.weakness.object_id}
-        name={view.weakness.name}
-      />
+      <CardTitle tenantId={tenantId} objectId={view.weakness.object_id} name={view.weakness.name} />
       <p className="tw-card-sub">{`${objectTypeDisplay('Weakness')} · Lebenszyklus-Stand: ${view.weakness.lifecycle_status}`}</p>
       <DescriptionDetails text={view.weakness.description} label={view.weakness.name} />
 

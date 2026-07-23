@@ -123,7 +123,9 @@ describe('getManagedServicesForTenant – Auflösung je Mandant', () => {
     const audit = serviceOrThrow(views, P.SERVICE_AUDIT_READINESS);
 
     expect(audit.service.lifecycle_status).toBe('aktiv');
-    expect(audit.slas.map((s) => s.name)).toEqual(['SLA – Audit-Readiness-Betrieb (Band „Priority")']);
+    expect(audit.slas.map((s) => s.name)).toEqual([
+      'SLA – Audit-Readiness-Betrieb (Band „Priority")',
+    ]);
     expect(audit.deliverables.map((d) => d.name)).toEqual([
       'Audit-Readiness-Paket 2026-06 (synthetisch)',
     ]);

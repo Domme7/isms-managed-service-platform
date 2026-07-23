@@ -236,9 +236,7 @@ describe('ServicesContent – Rollen-Gating der Portfolio-Sicht (Welt-Mapping Do
     const { role, tenant } = session('R10', TENANT_ID.NORDWERK);
     render(<ServicesContent role={role} tenant={tenant} />);
 
-    expect(
-      screen.getByRole('heading', { name: 'Portfolio: Alle Mandanten' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Portfolio: Alle Mandanten' })).toBeInTheDocument();
   });
 });
 
@@ -259,9 +257,7 @@ describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
       ),
     ).toBeInTheDocument();
     // R08 sieht trotz Empty-State weiterhin das Portfolio (mandantenübergreifende Verdichtung).
-    expect(
-      screen.getByRole('heading', { name: 'Portfolio: Alle Mandanten' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Portfolio: Alle Mandanten' })).toBeInTheDocument();
   });
 });
 

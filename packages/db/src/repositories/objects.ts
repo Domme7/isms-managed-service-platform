@@ -12,10 +12,7 @@ import { objects } from '../schema';
 import { objectToRow, rowToObject } from './mappers';
 
 /** Alle Objekte genau eines Mandanten. */
-export async function listByTenant(
-  db: IsmsDb,
-  tenantId: string,
-): Promise<ObjectEnvelope[]> {
+export async function listByTenant(db: IsmsDb, tenantId: string): Promise<ObjectEnvelope[]> {
   const rows = await db.select().from(objects).where(eq(objects.tenant_id, tenantId));
   return rows.map(rowToObject);
 }
@@ -39,11 +36,7 @@ export async function getById(
  * Upsert (idempotent) eines Objekts UNTER `tenantId`. Der Mapper weist einen abweichenden
  * Envelope-`tenant_id` ab; der Conflict-Target ist der zusammengesetzte PK (tenant_id, object_id).
  */
-export async function upsert(
-  db: IsmsDb,
-  tenantId: string,
-  obj: ObjectEnvelope,
-): Promise<void> {
+export async function upsert(db: IsmsDb, tenantId: string, obj: ObjectEnvelope): Promise<void> {
   const row = objectToRow(tenantId, obj);
   const { tenant_id: _t, object_id: _o, ...updatable } = row;
   await db

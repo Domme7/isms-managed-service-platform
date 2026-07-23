@@ -16,10 +16,26 @@
     "decision_layer": "Dok. 07 (F09 'Decision Record', Objektvertrag Abschnitt 7, Lebenszyklus Abschnitt 8, Beziehungen R03/R15/R23/R24, Bitemporalitaet Abschnitt 11), Dok. 10 Abschnitt 9.2 (Decision Record, Korrektur als neue Version oder Nachtrag), Dok. 05 Abschnitt 7 (Entscheidungs-Lifecycle); WP-017 Slice 1. KEINE Decision Card nach Dok. 10 Abschnitt 'Decision Cards' / 'Pflichtfelder' (9.1) - neun ihrer 14 Pflichtfelder (Ausloeser, Baseline, Optionen, Wirkung, Ressourcen, Abhaengigkeiten, Empfehlung, Frist, Outcome Check) haben im Objektvertrag keinen Traeger, die uebrigen fuenf (Entscheidungsfrage, Zielbezug, Confidence, 'Owner und Approver', Provenance) nur teilweise."
   },
   "tenants": [
-    { "tenant_id": "tenant-nordwerk", "display_name": "Nordwerk Manufacturing SE", "has_object_graph": true },
-    { "tenant_id": "tenant-finovia", "display_name": "Finovia Digital Bank AG", "has_object_graph": false },
-    { "tenant_id": "tenant-medicore", "display_name": "MediCore Health Services GmbH", "has_object_graph": false },
-    { "tenant_id": "tenant-consulting-operator", "display_name": "Consulting Operator Demo", "has_object_graph": true }
+    {
+      "tenant_id": "tenant-nordwerk",
+      "display_name": "Nordwerk Manufacturing SE",
+      "has_object_graph": true
+    },
+    {
+      "tenant_id": "tenant-finovia",
+      "display_name": "Finovia Digital Bank AG",
+      "has_object_graph": false
+    },
+    {
+      "tenant_id": "tenant-medicore",
+      "display_name": "MediCore Health Services GmbH",
+      "has_object_graph": false
+    },
+    {
+      "tenant_id": "tenant-consulting-operator",
+      "display_name": "Consulting Operator Demo",
+      "has_object_graph": true
+    }
   ],
   "counts": {
     "tenants": 4,
@@ -45,8 +61,18 @@
     }
   },
   "recording_waves": [
-    { "recorded_on": "2026-01-15", "layer": "isms_core_nordwerk", "objects": 17, "relationships": 15 },
-    { "recorded_on": "2026-02-16", "layer": "managed_service (nordwerk + consulting_operator)", "objects": 23, "relationships": 39 },
+    {
+      "recorded_on": "2026-01-15",
+      "layer": "isms_core_nordwerk",
+      "objects": 17,
+      "relationships": 15
+    },
+    {
+      "recorded_on": "2026-02-16",
+      "layer": "managed_service (nordwerk + consulting_operator)",
+      "objects": 23,
+      "relationships": 39
+    },
     { "recorded_on": "2026-03-16", "layer": "decisions_nordwerk", "objects": 3, "relationships": 8 }
   ],
   "object_families_used": ["F01", "F02", "F03", "F06", "F07", "F08", "F09"],

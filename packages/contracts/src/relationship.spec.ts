@@ -68,7 +68,10 @@ describe('RelationshipEnvelope – Positivfälle', () => {
     const closed = {
       ...validRelationship(),
       valid_time: { from: '2024-01-01T00:00:00.000Z', to: '2024-12-31T23:59:59.000Z' },
-      record_time: { recorded_at: '2024-01-05T00:00:00.000Z', replaced_at: '2025-06-01T00:00:00.000Z' },
+      record_time: {
+        recorded_at: '2024-01-05T00:00:00.000Z',
+        replaced_at: '2025-06-01T00:00:00.000Z',
+      },
     };
     const parsed = RelationshipEnvelope.parse(closed);
     expect(parsed.valid_time.to).toBe('2024-12-31T23:59:59.000Z');
@@ -79,11 +82,19 @@ describe('RelationshipEnvelope – Positivfälle', () => {
 
 describe('RelationshipEnvelope – Negativfälle', () => {
   it('lehnt unbekannten relationship_type ab', () => {
-    expect(RelationshipEnvelope.safeParse({ ...validRelationship(), relationship_type: 'befreundet_mit' }).success).toBe(false);
+    expect(
+      RelationshipEnvelope.safeParse({
+        ...validRelationship(),
+        relationship_type: 'befreundet_mit',
+      }).success,
+    ).toBe(false);
   });
 
   it('lehnt unbekannte assertion_kind ab', () => {
-    expect(RelationshipEnvelope.safeParse({ ...validRelationship(), assertion_kind: 'geträumt' }).success).toBe(false);
+    expect(
+      RelationshipEnvelope.safeParse({ ...validRelationship(), assertion_kind: 'geträumt' })
+        .success,
+    ).toBe(false);
   });
 
   it('lehnt fehlendes source_id ab', () => {
@@ -107,22 +118,32 @@ describe('RelationshipEnvelope – Negativfälle', () => {
   });
 
   it('lehnt unbekanntes Top-Level-Feld ab (.strict)', () => {
-    expect(RelationshipEnvelope.safeParse({ ...validRelationship(), rogue: 1 }).success).toBe(false);
+    expect(RelationshipEnvelope.safeParse({ ...validRelationship(), rogue: 1 }).success).toBe(
+      false,
+    );
   });
 
   it('lehnt unbekannte direction ab', () => {
-    expect(RelationshipEnvelope.safeParse({ ...validRelationship(), direction: 'diagonal' }).success).toBe(false);
+    expect(
+      RelationshipEnvelope.safeParse({ ...validRelationship(), direction: 'diagonal' }).success,
+    ).toBe(false);
   });
 
   it('lehnt leeres relationship_id ab (min(1))', () => {
-    expect(RelationshipEnvelope.safeParse({ ...validRelationship(), relationship_id: '' }).success).toBe(false);
+    expect(
+      RelationshipEnvelope.safeParse({ ...validRelationship(), relationship_id: '' }).success,
+    ).toBe(false);
   });
 
   it('lehnt leeres source_id ab (min(1))', () => {
-    expect(RelationshipEnvelope.safeParse({ ...validRelationship(), source_id: '' }).success).toBe(false);
+    expect(RelationshipEnvelope.safeParse({ ...validRelationship(), source_id: '' }).success).toBe(
+      false,
+    );
   });
 
   it('lehnt leeres tenant_id ab (min(1))', () => {
-    expect(RelationshipEnvelope.safeParse({ ...validRelationship(), tenant_id: '' }).success).toBe(false);
+    expect(RelationshipEnvelope.safeParse({ ...validRelationship(), tenant_id: '' }).success).toBe(
+      false,
+    );
   });
 });

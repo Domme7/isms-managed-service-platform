@@ -18,7 +18,12 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { OBJECT_TYPE, ObjectEnvelope, RELATIONSHIP_TYPE, RelationshipEnvelope } from '@isms/contracts';
+import {
+  OBJECT_TYPE,
+  ObjectEnvelope,
+  RELATIONSHIP_TYPE,
+  RelationshipEnvelope,
+} from '@isms/contracts';
 import { DEMO_SEED, DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
 
 import {
@@ -91,9 +96,7 @@ describe('Entscheidungsregister – nur kanonische Typen (Dok. 07 §6/§9)', () 
 describe('Entscheidungsregister – Nordwerk', () => {
   it('führt genau die Entscheidungen des Mandanten in Datenbestandsreihenfolge', () => {
     const erwartet = DEMO_SEED.objects
-      .filter(
-        (o) => o.tenant_id === TENANT_ID.NORDWERK && o.object_type === DECISION_OBJECT_TYPE,
-      )
+      .filter((o) => o.tenant_id === TENANT_ID.NORDWERK && o.object_type === DECISION_OBJECT_TYPE)
       .map((o) => o.object_id);
 
     expect(erwartet.length).toBeGreaterThanOrEqual(1);
@@ -527,9 +530,7 @@ describe('Ehrlichkeitsblock – Decision-Card-Pflichtfelder gegen den Contract',
   });
 
   it('führt an den Entscheidungen keine Erweiterungsfelder mit sich (kein Feld durch die Hintertür)', () => {
-    for (const object of DEMO_SEED.objects.filter(
-      (o) => o.object_type === DECISION_OBJECT_TYPE,
-    )) {
+    for (const object of DEMO_SEED.objects.filter((o) => o.object_type === DECISION_OBJECT_TYPE)) {
       expect(object.tags_custom_fields).toBeUndefined();
     }
   });

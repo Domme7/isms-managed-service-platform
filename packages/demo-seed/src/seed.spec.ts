@@ -138,10 +138,7 @@ describe('Demo-Seed – Tenant-Isolation (P09, D11, Dok. 19)', () => {
       source_id: objects[0].object_id,
       target_id: foreignObject.object_id,
     };
-    const violations = findCrossTenantRelationships(
-      [...objects, foreignObject],
-      [crossTenantEdge],
-    );
+    const violations = findCrossTenantRelationships([...objects, foreignObject], [crossTenantEdge]);
     expect(violations.length).toBeGreaterThan(0);
     expect(violations.some((v) => v.relationship_id === 'cross-tenant-edge')).toBe(true);
   });
@@ -194,7 +191,9 @@ describe('Demo-Seed – Vokabular-Konformität (kanonische Contract-Vokabulare)'
   const relationshipTypes = RELATIONSHIP_TYPE as readonly string[];
 
   it('alle object_type liegen im kanonischen OBJECT_TYPE (F01–F09)', () => {
-    const unknown = objects.filter((o) => !objectTypes.includes(o.object_type)).map((o) => o.object_id);
+    const unknown = objects
+      .filter((o) => !objectTypes.includes(o.object_type))
+      .map((o) => o.object_id);
     expect(unknown).toEqual([]);
   });
 
@@ -255,9 +254,7 @@ describe('Demo-Seed – Managed-Service-Schicht (WP-012 Slice 1)', () => {
 
   it('mehrere Mandanten tragen Managed Services (Voraussetzung der Portfolio-Sicht)', () => {
     const tenantsWithServices = [...new Set(services.map((s) => s.tenant_id))].sort();
-    expect(tenantsWithServices).toEqual(
-      [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.NORDWERK].sort(),
-    );
+    expect(tenantsWithServices).toEqual([TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.NORDWERK].sort());
     expect(services.filter((s) => s.tenant_id === TENANT_ID.NORDWERK)).toHaveLength(3);
     expect(services.filter((s) => s.tenant_id === TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(2);
   });
@@ -270,7 +267,10 @@ describe('Demo-Seed – Managed-Service-Schicht (WP-012 Slice 1)', () => {
       const slas = parts.filter((o) => o.object_type === 'SLA');
       const deliverables = parts.filter((o) => o.object_type === 'Deliverable');
 
-      expect(slas.map((o) => o.object_id), `SLA fehlt für ${service.object_id}`).toHaveLength(1);
+      expect(
+        slas.map((o) => o.object_id),
+        `SLA fehlt für ${service.object_id}`,
+      ).toHaveLength(1);
       expect(
         deliverables.length,
         `Deliverable fehlt für ${service.object_id}`,
@@ -417,9 +417,7 @@ describe('Demo-Seed – Entscheidungsschicht (WP-017 Slice 1)', () => {
         const ownerObject = objectById.get(owner.owner_id);
         expect(ownerObject, `Owner ${owner.owner_id} existiert nicht`).toBeDefined();
         expect(ownerObject?.tenant_id).toBe(decision.tenant_id);
-        expect(ownsSources, `owns-Kante fehlt für ${decision.object_id}`).toContain(
-          owner.owner_id,
-        );
+        expect(ownsSources, `owns-Kante fehlt für ${decision.object_id}`).toContain(owner.owner_id);
       }
     }
   });
@@ -462,8 +460,8 @@ describe('Demo-Seed – Entscheidungsschicht (WP-017 Slice 1)', () => {
     ].sort();
     expect(tage).toEqual(['2026-01-15', '2026-02-16', '2026-03-16']);
 
-    const decisionEdges = relationships.filter(
-      (r) => decisions.some((d) => d.object_id === r.source_id || d.object_id === r.target_id),
+    const decisionEdges = relationships.filter((r) =>
+      decisions.some((d) => d.object_id === r.source_id || d.object_id === r.target_id),
     );
     expect(decisionEdges).toHaveLength(8);
     for (const entry of [...decisions, ...decisionEdges]) {

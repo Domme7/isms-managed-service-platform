@@ -243,7 +243,9 @@ function toEdge(
     assertion_kind: rel.assertion_kind,
     edge_status: rel.status,
     confidence_display:
-      typeof rel.confidence === 'number' ? confidenceQualitative(rel.confidence).display : undefined,
+      typeof rel.confidence === 'number'
+        ? confidenceQualitative(rel.confidence).display
+        : undefined,
     valid_from: rel.valid_time.from,
     valid_to: rel.valid_time.to ?? null,
     neighbor_valid_from: neighbor?.valid_time.from,

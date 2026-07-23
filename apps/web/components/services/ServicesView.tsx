@@ -37,7 +37,9 @@ export function ServicesView() {
         <p className="tw-eyebrow">Services</p>
         <h1>Services</h1>
         <div className="tw-empty" role="note">
-          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Nicht angemeldet (Simulation)</h2>
+          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>
+            Nicht angemeldet (Simulation)
+          </h2>
           <p style={{ marginTop: 0 }}>
             Es ist keine Rolle und kein Mandant gewählt. Melden Sie sich in der Simulation an, um
             die Managed Services des aktiven Mandanten zu sehen.

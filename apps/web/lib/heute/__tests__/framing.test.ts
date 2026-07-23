@@ -87,7 +87,9 @@ describe('Abschnittsreihenfolge – Betonung ohne Datenunterschied', () => {
   it('trägt zu jeder Abschnittskennung eine sichtbare Überschrift (jede ist eine Frage)', () => {
     // Die Reihenfolge einer Welt wird von `MissionControlContent` direkt über `sectionOrder`
     // gerendert; der frühere Helfer `orderedSections` war unbenutzt und ist entfernt.
-    expect(framingForWorld('assurance').sectionOrder.map((id) => MISSION_SECTIONS[id].title)).toEqual([
+    expect(
+      framingForWorld('assurance').sectionOrder.map((id) => MISSION_SECTIONS[id].title),
+    ).toEqual([
       'Wo stehe ich?',
       'Was ist erfasst worden?',
       'Was weiß ich über die Datenlage?',

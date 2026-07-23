@@ -21,7 +21,14 @@ const OBJECT_FIXTURE = ObjectEnvelope.parse({
   description: 'Synthetisches Objekt für den Roundtrip-Test.',
   lifecycle_status: 'freigegeben',
   scope_ids: [{ scope_id: 'scope-rt', valid_time: { from: FROM, to: null } }],
-  owner_ids: [{ owner_id: 'role-rt', owner_kind: 'fachlich', role: 'Owner', valid_time: { from: FROM, to: null } }],
+  owner_ids: [
+    {
+      owner_id: 'role-rt',
+      owner_kind: 'fachlich',
+      role: 'Owner',
+      valid_time: { from: FROM, to: null },
+    },
+  ],
   classification: { confidentiality: 'vertraulich', protection_need: 'hoch' },
   source_refs: [{ source_kind: 'Nutzer', reference: 'rt-workshop', priority: 1 }],
   valid_time: { from: FROM, to: null },

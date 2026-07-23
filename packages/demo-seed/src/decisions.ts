@@ -163,7 +163,10 @@ function makeDecisionObject(input: {
     lifecycle_status: input.lifecycle_status,
     scope_ids: scopes,
     owner_ids: input.owner_ids,
-    classification: input.classification ?? { confidentiality: 'intern', protection_need: 'normal' },
+    classification: input.classification ?? {
+      confidentiality: 'intern',
+      protection_need: 'normal',
+    },
     source_refs: input.source_refs ?? [DECISION_SOURCE],
     valid_time: { from: input.valid_from, to: input.valid_to ?? null },
     record_time: { recorded_at: DECISION_RECORDED_AT },
@@ -171,7 +174,9 @@ function makeDecisionObject(input: {
     // (siehe OFFENE FRAGE O-WP017-07).
     version: 1,
     quality_state: {
-      dimensions: input.quality ?? [{ dimension: 'Bestätigung', confirmation_level: 'freigegeben' }],
+      dimensions: input.quality ?? [
+        { dimension: 'Bestätigung', confirmation_level: 'freigegeben' },
+      ],
     },
   };
 }

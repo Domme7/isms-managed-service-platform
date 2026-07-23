@@ -124,8 +124,8 @@ export function EntscheidungenContent({ role, tenant }: { role: DemoRole; tenant
         <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
         Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
         keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt
-        für einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
+        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt für
+        einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
       </p>
 
       {model ? (
@@ -172,6 +172,8 @@ export function EntscheidungenContent({ role, tenant }: { role: DemoRole; tenant
  */
 function ContextBar({ model, role }: { model: DecisionRegisterModel; role: DemoRole }) {
   return (
+    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: bewusstes, dokumentiertes Muster (s. Kommentar oben) – die ARIA-Semantik zu ändern wäre eine Produktänderung außerhalb dieses Tooling-WP.
+    // biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf `dl` ist gültiges ARIA; ein Ersatz durch `fieldset`/`section` würde gerendertes Markup ändern (nicht verhaltensneutral).
     <dl className="od-context" role="group" aria-label="Kontext dieser Seite">
       <div>
         <dt>Aktive Rolle</dt>
@@ -188,9 +190,7 @@ function ContextBar({ model, role }: { model: DecisionRegisterModel; role: DemoR
       <div>
         <dt>Scope-Kennungen der Entscheidungen</dt>
         <dd>
-          {model.scopeIds.length > 0
-            ? model.scopeIds.join(' · ')
-            : 'keine Scope-Zuordnung erfasst'}
+          {model.scopeIds.length > 0 ? model.scopeIds.join(' · ') : 'keine Scope-Zuordnung erfasst'}
         </dd>
       </div>
       <div>
@@ -464,6 +464,7 @@ function DecisionCard({ decision }: { decision: DecisionEntry }) {
       {decision.source_refs.length > 0 ? (
         <ul className="sv-items">
           {decision.source_refs.map((ref, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: Index nur als Eindeutigkeits-Suffix hinter dem fachlichen Schlüssel; Liste kommt statisch aus dem Seed (read-only, keine Umsortierung).
             <li key={`${ref.source_kind}-${ref.reference}-${index}`}>
               <span className="sv-item-name">{ref.reference}</span>
               <span className="sv-item-meta">
@@ -483,6 +484,7 @@ function DecisionCard({ decision }: { decision: DecisionEntry }) {
         {decision.quality_dimensions.length > 0 ? (
           <ul className="tw-quality-list">
             {decision.quality_dimensions.map((dim, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: Index nur als Eindeutigkeits-Suffix hinter dem fachlichen Schlüssel; Liste kommt statisch aus dem Seed (read-only, keine Umsortierung).
               <li key={`${dim.dimension}-${index}`}>
                 <span className="tw-quality-dim">{dim.dimension}</span>
                 {dim.confirmation_level ? <>: {dim.confirmation_level}</> : null}
@@ -648,6 +650,7 @@ function EdgeList({
     <ul className="tw-rel-list" aria-labelledby={labelledBy}>
       {edges.map((edge, index) => (
         <EdgeItem
+          // biome-ignore lint/suspicious/noArrayIndexKey: Index nur als Eindeutigkeits-Suffix hinter dem fachlichen Schlüssel; Liste kommt statisch aus dem Seed (read-only, keine Umsortierung).
           key={`${edge.relationship_id}-${edge.orientation}-${index}`}
           edge={edge}
           showNeighborValidity={showNeighborValidity}
@@ -680,8 +683,7 @@ function HonestySection() {
       <p className="sv-edge-note">
         Diese Seite zeigt <strong>keine Decision Card</strong> im Sinne von Dok. 10, Abschnitt
         „Decision Cards" (§9). Die Decision Card ist dort als freigabefähiges Entscheidungsobjekt
-        mit{' '}
-        {DECISION_CARD_FIELDS.length} Pflichtfeldern beschrieben. Im kanonischen Objektvertrag
+        mit {DECISION_CARD_FIELDS.length} Pflichtfeldern beschrieben. Im kanonischen Objektvertrag
         (Dok. 07, Abschnitt „Objektvertrag, Identität und Metadaten") haben davon{' '}
         <strong>{ohneTraeger} keinen Träger</strong> und <strong>{teilweise} nur teilweise</strong>{' '}
         einen. Gezeigt wird deshalb, was das heutige Datenmodell belegt – und darunter steht

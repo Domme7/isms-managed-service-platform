@@ -8,6 +8,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
+import { OBJECT_TYPE } from '@isms/contracts';
 import { NORDWERK_OBJECTS, NORDWERK_RELATIONSHIPS, TENANT_ID } from '@isms/demo-seed';
 import {
   confidenceQualitative,
@@ -15,6 +16,8 @@ import {
   getModeledTenants,
   getObjectsForTenant,
   groupObjectsByFamily,
+  objectTypeDisplay,
+  objectTypeLabel,
   relationshipTypeId,
   relationshipTypeLabel,
   resolveRelationships,
@@ -44,6 +47,43 @@ describe('relationshipTypeId / relationshipTypeLabel', () => {
     expect(relationshipTypeLabel('mitigates')).toBe('mindert');
     // Nicht gemappter Typ -> undefined (Aufrufer fällt auf technischen Namen zurück).
     expect(relationshipTypeLabel('related_to')).toBeUndefined();
+  });
+});
+
+describe('objectTypeLabel / objectTypeDisplay – erschöpfende Label-Map (WP-018 Wächter 3b)', () => {
+  /**
+   * Referenz: EXAKT die sieben Glossen, die vor der Umstellung auf
+   * `Record<ObjectType, string | null>` belegt waren (Stand `Record<string, string>`).
+   * Jeder andere kanonische Typ fiel auf den kanonischen Namen zurück – dieses Verhalten
+   * ist das Acceptance-Kriterium („Ausgabe unverändert") und wird hier festgenagelt.
+   */
+  const GLOSSEN_VOR_DER_UMSTELLUNG: Readonly<Record<string, string>> = {
+    Risk: 'Risiko',
+    'Risk Scenario': 'Risikoszenario',
+    Weakness: 'Schwachstelle',
+    Measure: 'Maßnahme',
+    Evidence: 'Nachweis',
+    Objective: 'Ziel',
+    KPI: 'Kennzahl',
+  };
+
+  it('liefert für JEDEN Eintrag aus OBJECT_TYPE dieselbe Ausgabe wie vor der Umstellung', () => {
+    for (const type of OBJECT_TYPE) {
+      const glosse = GLOSSEN_VOR_DER_UMSTELLUNG[type];
+      // `null`-Glosse ⇒ Fallback auf den kanonischen Namen; belegte Glosse ⇒ „Glosse (Typ)".
+      expect(objectTypeDisplay(type), type).toBe(glosse ? `${glosse} (${type})` : type);
+      expect(objectTypeLabel(type), type).toBe(glosse);
+    }
+  });
+
+  it('es sind weiterhin GENAU die sieben belegten Glossen – keine wurde erfunden (O-WP014-11)', () => {
+    const belegt = [...new Set(OBJECT_TYPE)].filter((type) => objectTypeLabel(type) !== undefined);
+    expect(belegt.sort()).toEqual(Object.keys(GLOSSEN_VOR_DER_UMSTELLUNG).sort());
+  });
+
+  it('nicht-kanonische Typen fallen unverändert auf undefined bzw. den rohen Namen zurück', () => {
+    expect(objectTypeLabel('nicht-kanonischer-typ')).toBeUndefined();
+    expect(objectTypeDisplay('nicht-kanonischer-typ')).toBe('nicht-kanonischer-typ');
   });
 });
 
@@ -81,9 +121,7 @@ describe('groupObjectsByFamily', () => {
     expect(operatorObjects.every((o) => o.tenant_id === TENANT_ID.CONSULTING_OPERATOR)).toBe(true);
 
     // Keine Vermischung mit Nordwerk-Objekten (Mandantengrenze in der View-Schicht).
-    const nordwerkIds = new Set(
-      getObjectsForTenant(TENANT_ID.NORDWERK).map((o) => o.object_id),
-    );
+    const nordwerkIds = new Set(getObjectsForTenant(TENANT_ID.NORDWERK).map((o) => o.object_id));
     expect(operatorObjects.filter((o) => nordwerkIds.has(o.object_id))).toEqual([]);
   });
 

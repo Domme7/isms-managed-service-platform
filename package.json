@@ -10,9 +10,13 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "format:check": "biome format .",
+    "qa:visual": "node apps/web/qa/run.mjs",
     "dev": "turbo run dev"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.5",
     "turbo": "^2.0.0",
     "typescript": "^5.6.0"
   }

@@ -295,7 +295,8 @@ describe('EntscheidungenContent – Bezug, Nachweis und Ablösekette', () => {
     expect(within(karte).getAllByText(/R23 · entschieden in/).length).toBeGreaterThan(0);
     expect(within(karte).getAllByRole('link', { name: bezug.name }).length).toBeGreaterThan(0);
     expect(
-      within(karte).getAllByText(new RegExp(`Herkunft der Aussage: ${bezug.assertion_kind}`)).length,
+      within(karte).getAllByText(new RegExp(`Herkunft der Aussage: ${bezug.assertion_kind}`))
+        .length,
     ).toBeGreaterThan(0);
     // Ein fehlender Vertrauensgrad wird ausgeschrieben, nicht weggelassen (Dok. 07 §21).
     expect(within(karte).getAllByText(/Vertrauensgrad: nicht erfasst/).length).toBeGreaterThan(0);
@@ -348,7 +349,9 @@ describe('EntscheidungenContent – Bezug, Nachweis und Ablösekette', () => {
       within(vorgaengerKarte).getByText('Wurde abgelöst durch (späterer Stand):'),
     ).toBeInTheDocument();
     expect(
-      within(vorgaengerKarte).getByText('Dieser Stand löst im Datenbestand keinen früheren Stand ab.'),
+      within(vorgaengerKarte).getByText(
+        'Dieser Stand löst im Datenbestand keinen früheren Stand ab.',
+      ),
     ).toBeInTheDocument();
     const linkAufNachfolger = within(vorgaengerKarte).getByRole('link', {
       name: NACHFOLGER.question,
@@ -404,11 +407,7 @@ describe('EntscheidungenContent – Mandantentrennung (Dok. 07 §17/P09)', () =>
     }
   });
 
-  for (const tenantId of [
-    TENANT_ID.NORDWERK,
-    TENANT_ID.CONSULTING_OPERATOR,
-    TENANT_ID.FINOVIA,
-  ]) {
+  for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA]) {
     it(`zeigt für ${tenantId} keinen Namen und keine ID eines fremden Mandanten`, () => {
       const { container } = render(
         <EntscheidungenContent role={role('R01')} tenant={tenant(tenantId)} />,
@@ -437,13 +436,19 @@ describe('EntscheidungenContent – Leerzustände', () => {
     render(<EntscheidungenContent role={role('R05')} tenant={operator} />);
 
     expect(
-      screen.getByRole('heading', { level: 3, name: `Keine Entscheidungen für ${operator.display_name}` }),
+      screen.getByRole('heading', {
+        level: 3,
+        name: `Keine Entscheidungen für ${operator.display_name}`,
+      }),
     ).toBeInTheDocument();
     expect(screen.getByText(/Dieser Mandant ist also nicht leer/)).toBeInTheDocument();
     expect(screen.getByText(/ist ein Datenbestand modelliert/)).toBeInTheDocument();
     // Klar abgegrenzt gegen den anderen Leerfall.
     expect(screen.queryByText(/überhaupt nichts modelliert/)).not.toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Mandant wechseln/ })).toHaveAttribute('href', '/login');
+    expect(screen.getByRole('link', { name: /Mandant wechseln/ })).toHaveAttribute(
+      'href',
+      '/login',
+    );
 
     /* Die Kontextzeile darf dem Inhalt auf demselben Bildschirm nicht widersprechen: der
        Datenstand wird AUSSCHLIESSLICH aus den Entscheidungen gebildet. Vorher stand hier
@@ -492,7 +497,10 @@ describe('EntscheidungenContent – Leerzustände', () => {
       render(<EntscheidungenContent role={role('R05')} tenant={leer} />);
 
       expect(
-        screen.getByRole('heading', { level: 3, name: `Keine Entscheidungen für ${leer.display_name}` }),
+        screen.getByRole('heading', {
+          level: 3,
+          name: `Keine Entscheidungen für ${leer.display_name}`,
+        }),
       ).toBeInTheDocument();
       expect(screen.getByText(/überhaupt nichts modelliert/)).toBeInTheDocument();
       expect(screen.queryByText(/Dieser Mandant ist also nicht leer/)).not.toBeInTheDocument();
@@ -502,7 +510,10 @@ describe('EntscheidungenContent – Leerzustände', () => {
       );
       // Der Ehrlichkeitsblock bleibt auch im Leerzustand stehen (die Lücke gilt weiterhin).
       expect(
-        screen.getByRole('heading', { level: 2, name: 'Was eine Entscheidung hier noch nicht zeigt' }),
+        screen.getByRole('heading', {
+          level: 2,
+          name: 'Was eine Entscheidung hier noch nicht zeigt',
+        }),
       ).toBeInTheDocument();
     });
   }
@@ -579,16 +590,23 @@ const BEWERTUNG_VERBOTEN = [
 ];
 
 /** Geld ist im gesamten Demo-Datenbestand ausgeschlossen (WP-017 Nicht-Ziele, Guardrail). */
-const GELD_VERBOTEN = [/€/, /\bEUR\b/, /Euro/i, /Preis/i, /Kosten/i, /Budget/i, /Währung/i, /Betrag/i];
+const GELD_VERBOTEN = [
+  /€/,
+  /\bEUR\b/,
+  /Euro/i,
+  /Preis/i,
+  /Kosten/i,
+  /Budget/i,
+  /Währung/i,
+  /Betrag/i,
+];
 
 /**
  * WORTGLEICHE NEGATION aus dem Produkt: der Satz verneint das Vokabular ausdrücklich und ist die
  * ehrliche Rahmung der Liste. Er wird vor der Prüfung entfernt – und sein Vorhandensein wird
  * selbst geprüft, damit die Ausnahme nicht still verfällt (Muster aus WP-016).
  */
-const ERLAUBTE_NEGATIONEN = [
-  'Es wird nichts gewichtet, nichts eingestuft und nichts empfohlen.',
-];
+const ERLAUBTE_NEGATIONEN = ['Es wird nichts gewichtet, nichts eingestuft und nichts empfohlen.'];
 
 /**
  * BEGRÜNDETE AUSNAHME: Das Feld „priority" eines Quellenverweises (Dok. 07 §7 „Mehrere Quellen
@@ -604,7 +622,16 @@ const QUELLEN_PRIORITAET = /· Priorität: \d+/g;
  * Ehrlichkeitsblock sind diese Begriffe zulässig und notwendig: dort wird BENANNT, dass es kein
  * Feld für Frist, Priorität oder Empfehlung gibt. Eine benannte Lücke ist keine Bewertung.
  */
-const NUR_IN_DER_LUECKE = [/\bFrist/i, /f(ä|ae)llig/i, /Priorität/i, /dringend/i, /Dringlichkeit/i, /Empfehlung/i, /empfehl/i, /empfohlen/i];
+const NUR_IN_DER_LUECKE = [
+  /\bFrist/i,
+  /f(ä|ae)llig/i,
+  /Priorität/i,
+  /dringend/i,
+  /Dringlichkeit/i,
+  /Empfehlung/i,
+  /empfehl/i,
+  /empfohlen/i,
+];
 
 describe('EntscheidungenContent – kein Score, keine Priorisierung, keine Geldangabe', () => {
   it('enthält für keine Rolle und keinen Mandanten Bewertungs- oder Geldvokabular', () => {
@@ -678,9 +705,7 @@ describe('EntscheidungenContent – Ehrlichkeitsblock „Was eine Entscheidung h
 
   /** Die Liste der 14 Card-Pflichtfelder – getrennt von der Decision-Record-Liste darunter. */
   function pflichtfeldListe(): HTMLElement {
-    return lueckenAbschnitt().querySelector(
-      '#entscheidungen-luecke-pflichtfelder',
-    ) as HTMLElement;
+    return lueckenAbschnitt().querySelector('#entscheidungen-luecke-pflichtfelder') as HTMLElement;
   }
 
   it('sagt ausdrücklich, dass dies keine Decision Card nach Dok. 10 §9 ist', () => {

@@ -71,27 +71,102 @@ export function familyForType(type: ObjectType): ObjectFamilyId | undefined {
  * Deutsche Klartext-Glossen für Objekttypen – REINE UI-PRÄSENTATIONSSCHICHT (Dok. 06 P03
  * „Klartext vor Fachsprache"), analog zu `REL_TYPE_TO_LABEL_DE` weiter unten.
  *
- * WICHTIG: Hier wird NICHTS neu übersetzt. Die Einträge sind exakt die Glossen, die bereits im
- * Produkt sichtbar sind (`components/isms/IsmsCards.tsx`: „Risiko (Risk)", „Risikoszenario
- * (Risk Scenario)", „Schwachstelle (Weakness)", „Maßnahme (Measure)", „Nachweis (Evidence)";
- * `components/services/ServiceCard.tsx`: „Ziel (Objective)", „Kennzahl (KPI)"). Sie wurden aus
- * den Komponenten hierher gezogen, damit es genau EINE Quelle gibt (Review-Fix). Typen ohne
- * belegte Glosse (z. B. „Control", „Managed Service", „Information Asset") bleiben bewusst
- * beim kanonischen Namen – eine Übersetzung wird nicht erfunden.
+ * WICHTIG: Hier wird NICHTS neu übersetzt. Die belegten Einträge sind exakt die Glossen, die
+ * bereits im Produkt sichtbar sind (`components/isms/IsmsCards.tsx`: „Risiko (Risk)",
+ * „Risikoszenario (Risk Scenario)", „Schwachstelle (Weakness)", „Maßnahme (Measure)",
+ * „Nachweis (Evidence)"; `components/services/ServiceCard.tsx`: „Ziel (Objective)",
+ * „Kennzahl (KPI)"). Sie wurden aus den Komponenten hierher gezogen, damit es genau EINE
+ * Quelle gibt (Review-Fix).
+ *
+ * ERSCHÖPFEND SEIT WP-018 (Wächter 3b): `Record<ObjectType, string | null>` statt
+ * `Record<string, string>`. Jeder Typ ohne freigegebene Glosse steht EXPLIZIT auf `null` –
+ * das ist die ehrliche Antwort, keine Übersetzung wird erfunden (die Glossen-Fragen
+ * O-WP014-11 und O-WP017-09 bleiben offen). Ein künftig im Contract ergänzter Objekttyp
+ * erzeugt hier einen COMPILEFEHLER statt eines Reviewbefunds; `null` ⇒ Fallback auf den
+ * kanonischen Namen (`objectTypeDisplay`), unverändert zum Verhalten vor der Umstellung.
+ * Kein `Partial`, kein Index-Fallback an der Deklarationsstelle; der einzige Cast sitzt an
+ * der Lesestelle in `objectTypeLabel`.
  */
-const OBJECT_TYPE_LABEL_DE: Readonly<Record<string, string>> = {
-  Risk: 'Risiko',
-  'Risk Scenario': 'Risikoszenario',
+const OBJECT_TYPE_LABEL_DE: Readonly<Record<ObjectType, string | null>> = {
+  // F01 Tenant & Unternehmenskontext – keine freigegebene Glosse:
+  Tenant: null,
+  Organisation: null,
+  Rechtseinheit: null,
+  'ISMS-Scope': null,
+  Ausschluss: null,
+  'Strategie-DNA': null,
+  // F02 Organisation & Verantwortung – keine freigegebene Glosse:
+  Organisationseinheit: null,
+  Standort: null,
+  Team: null,
+  Person: null,
+  Produktrolle: null,
+  'fachliche Rolle': null,
+  Vertretung: null,
+  // F03 Geschäft & Information – keine freigegebene Glosse:
+  'Business Capability': null,
+  Geschäftsprozess: null,
+  'Produkt/Service': null,
+  'Information Asset': null,
+  Datenklasse: null,
+  Kritikalität: null,
+  // F04 Technologie & Infrastruktur – keine freigegebene Glosse:
+  Anwendung: null,
+  'IT-Service': null,
+  System: null,
+  Komponente: null,
+  'Cloud-Ressource': null,
+  Endpoint: null,
+  Netzwerkzone: null,
+  Schnittstelle: null,
+  // F05 Dritte & Lieferkette – keine freigegebene Glosse:
+  Lieferant: null,
+  Unterauftragnehmer: null,
+  Vertrag: null,
+  'externe Leistung': null,
+  Datenverarbeitung: null,
+  Abhängigkeit: null,
+  // F06 Governance & Anforderungen – keine freigegebene Glosse:
+  Framework: null,
+  Requirement: null,
+  'Control Objective': null,
+  Control: null,
+  'Control Implementation': null,
+  Policy: null,
+  Ausnahme: null,
+  // F07 Risiko & Veränderung („Finding" liegt kanonisch auch in F08 – EIN Schlüssel):
+  Threat: null,
+  Vulnerability: null,
   Weakness: 'Schwachstelle',
+  'Risk Scenario': 'Risikoszenario',
+  Risk: 'Risiko',
+  Incident: null,
+  Finding: null,
+  'Change Signal': null,
+  // F08 Arbeit, Nachweis & Assurance:
   Measure: 'Maßnahme',
+  Task: null,
   Evidence: 'Nachweis',
+  'Control Test': null,
+  Assessment: null,
+  Audit: null,
+  Remediation: null,
+  // F09 Ziele, Entscheidungen & Services:
+  'Target Profile': null,
   Objective: 'Ziel',
   KPI: 'Kennzahl',
+  'Decision Record': null,
+  'Managed Service': null,
+  SLA: null,
+  Deliverable: null,
+  Review: null,
 };
 
 /** Deutsches UI-Label eines Objekttyps (oder `undefined`, dann kanonischen Namen nutzen). */
 export function objectTypeLabel(objectType: string): string | undefined {
-  return OBJECT_TYPE_LABEL_DE[objectType];
+  // Cast NUR an der Lesestelle (WP-018): Aufrufer liefern rohe Strings aus dem Seed; ein
+  // nicht-kanonischer Typ ergibt wie vor der Umstellung `undefined`, `null`-Glossen ebenso.
+  return OBJECT_TYPE_LABEL_DE[objectType as ObjectType] ?? undefined;
 }
 
 /**

@@ -50,7 +50,9 @@ describe('ObjectDetailView – Seitenanatomie', () => {
   it('rendert h1 = Objektname und die fünf Fragen als h2 in fester Reihenfolge', () => {
     render(<ObjectDetailView model={model} />);
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Auftragsabwicklung' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Auftragsabwicklung' }),
+    ).toBeInTheDocument();
 
     const h2 = screen.getAllByRole('heading', { level: 2 }).map((el) => el.textContent);
     expect(h2).toEqual(DIE_FUENF_FRAGEN);
@@ -72,9 +74,7 @@ describe('ObjectDetailView – Seitenanatomie', () => {
 
     expect(screen.getByText(O.PROC_AUFTRAGSABWICKLUNG)).toBeInTheDocument();
     expect(screen.getAllByText('Freigegeben').length).toBeGreaterThanOrEqual(1);
-    expect(
-      screen.getByText('Vertraulichkeit: intern · Schutzbedarf: hoch'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Vertraulichkeit: intern · Schutzbedarf: hoch')).toBeInTheDocument();
     // Der Name erscheint zusätzlich als Endpunkt der owns-Kante (R03) – daher getAllByText.
     expect(
       screen.getAllByText('Prozessverantwortung Auftragsabwicklung').length,
@@ -174,8 +174,12 @@ describe('ObjectDetailView – Kanten als Links auf das Nachbarobjekt', () => {
     render(<ObjectDetailView model={model} />);
 
     expect(screen.getAllByText('R07 · verarbeitet').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText(/Richtung: eingehend \(gerichtet\)/).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText(/Herkunft der Aussage: assertiert/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Richtung: eingehend \(gerichtet\)/).length).toBeGreaterThanOrEqual(
+      1,
+    );
+    expect(screen.getAllByText(/Herkunft der Aussage: assertiert/).length).toBeGreaterThanOrEqual(
+      1,
+    );
     expect(screen.getAllByText(/Vertrauensgrad: mittel \(0,7\)/).length).toBeGreaterThanOrEqual(1);
   });
 
@@ -268,9 +272,7 @@ describe('ObjectDetailView – nicht auflösbarer Nachbar wird nicht verlinkt', 
     // Kein einziger Objekt-Link – insbesondere keiner auf ein nicht belegtes Objekt.
     expect(container.querySelectorAll('a[href*="/objekt/"]')).toHaveLength(0);
     expect(screen.getByText('geist-ziel')).toBeInTheDocument();
-    expect(
-      screen.getByText(/Nachbarobjekt im Mandanten nicht auflösbar/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Nachbarobjekt im Mandanten nicht auflösbar/)).toBeInTheDocument();
   });
 });
 
@@ -373,7 +375,9 @@ describe('ObjectDetailView – Zustände nach Dok. 06 §17', () => {
 
     expect(screen.getByText('Kein Nachweis verweist auf dieses Objekt.')).toBeInTheDocument();
     expect(
-      screen.getByText(/keine eingehende Nachweiskante \(R15 · belegt \(evidences\)\) im Demo-Seed/),
+      screen.getByText(
+        /keine eingehende Nachweiskante \(R15 · belegt \(evidences\)\) im Demo-Seed/,
+      ),
     ).toBeInTheDocument();
   });
 

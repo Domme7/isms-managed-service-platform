@@ -53,12 +53,7 @@ import {
   objectTypeDisplay,
 } from '../twin/data';
 import { EVIDENCE_TARGET_TYPES } from '../twin/object-detail';
-import {
-  calendarDay,
-  formatIsoDateDe,
-  objectDetailHref,
-  tenantDetailHref,
-} from '../twin/routes';
+import { calendarDay, formatIsoDateDe, objectDetailHref, tenantDetailHref } from '../twin/routes';
 
 /* -----------------------------------------------------------------------------
  * Sprachform
@@ -535,7 +530,8 @@ export function derivePlaceEntryPoints(
       question: isms.question,
       stock: [
         {
-          label: 'ISMS-Kernobjekte (Risiken, Szenarien, Schwachstellen, Controls, Maßnahmen, Nachweise)',
+          label:
+            'ISMS-Kernobjekte (Risiken, Szenarien, Schwachstellen, Controls, Maßnahmen, Nachweise)',
           count: stock.ismsCoreObjectCount,
         },
       ],

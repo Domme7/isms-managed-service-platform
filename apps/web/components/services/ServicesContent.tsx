@@ -38,8 +38,8 @@ export function ServicesContent({ role, tenant }: { role: DemoRole; tenant: Demo
 
       <p className="tw-lead">
         Read-only Demo-Sicht auf synthetische Managed-Service-Daten des aktiven Mandanten:
-        Leistungsversprechen, SLA, Deliverables und Wirkungsbeitrag – aus demselben Datenmodell
-        wie der digitale Zwilling. Ohne Preise, ohne Buchung, ohne Verkaufslogik (Dok. 13 MS15).
+        Leistungsversprechen, SLA, Deliverables und Wirkungsbeitrag – aus demselben Datenmodell wie
+        der digitale Zwilling. Ohne Preise, ohne Buchung, ohne Verkaufslogik (Dok. 13 MS15).
       </p>
 
       <section aria-labelledby="mandanten-services">
@@ -51,11 +51,7 @@ export function ServicesContent({ role, tenant }: { role: DemoRole; tenant: Demo
             {services.map((view) => (
               // Objekt-Links dieser Karte (WP-014 Slice 2) tragen ausschließlich den AKTIVEN
               // Mandanten der Session-Simulation – denselben, aus dem die Services stammen.
-              <ServiceCard
-                key={view.service.object_id}
-                view={view}
-                tenantId={tenant.tenant_id}
-              />
+              <ServiceCard key={view.service.object_id} view={view} tenantId={tenant.tenant_id} />
             ))}
           </ul>
         ) : (

@@ -44,7 +44,12 @@ body {
   );
   background-repeat: no-repeat;
   background-attachment: fixed;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
   line-height: 1.55;
 }
 
@@ -164,7 +169,10 @@ h3 {
   display: block;
   text-decoration: none;
   color: inherit;
-  transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
 }
 .tw-card-link:hover {
   border-color: var(--tw-accent);
@@ -691,7 +699,7 @@ h3 {
     border-bottom: 1px solid var(--tw-line);
     display: none;
   }
-  .shell-body[data-nav-open='true'] .shell-nav {
+  .shell-body[data-nav-open="true"] .shell-nav {
     display: block;
   }
   .shell-nav-list {
@@ -766,9 +774,9 @@ h3 {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-areas:
-    'radio id'
-    'radio name'
-    'radio resp';
+    "radio id"
+    "radio name"
+    "radio resp";
   align-items: center;
   gap: 0.05rem 0.5rem;
   border: 1px solid var(--tw-line);

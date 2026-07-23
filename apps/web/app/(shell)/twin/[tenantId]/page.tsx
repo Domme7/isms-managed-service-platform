@@ -14,11 +14,7 @@ export function generateStaticParams() {
   return getTenants().map((tenant) => ({ tenantId: tenant.tenant_id }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ tenantId: string }>;
-}) {
+export async function generateMetadata({ params }: { params: Promise<{ tenantId: string }> }) {
   const { tenantId } = await params;
   const tenant = getTenant(tenantId);
   return {

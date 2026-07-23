@@ -99,7 +99,10 @@ export interface ManagedServiceView {
  * Seed, `packages/demo-seed/src/seed.spec.ts`). Sollte der Seed je dynamisch werden,
  * unbekannte `part_of`-Quellen sichtbar machen (eigene „Sonstige"-Liste).
  */
-function toComponentItem(obj: ObjectEnvelope | undefined, fallbackId: string): ServiceComponentItem {
+function toComponentItem(
+  obj: ObjectEnvelope | undefined,
+  fallbackId: string,
+): ServiceComponentItem {
   if (!obj) {
     return {
       object_id: fallbackId,
@@ -204,7 +207,16 @@ function buildServiceView(
     }
   }
 
-  return { service, slas, deliverables, reviews, delivery_team_names, covered, required, contributions };
+  return {
+    service,
+    slas,
+    deliverables,
+    reviews,
+    delivery_team_names,
+    covered,
+    required,
+    contributions,
+  };
 }
 
 /**

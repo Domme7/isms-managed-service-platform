@@ -11,13 +11,17 @@ function validObject(): Record<string, unknown> {
     description: 'Synthetischer Demo-Prozess',
     lifecycle_status: 'Freigegeben',
     scope_ids: [{ scope_id: 'scope-isms-core', valid_time: { from: '2026-01-01T00:00:00.000Z' } }],
-    owner_ids: [{ owner_id: 'role-process-owner', owner_kind: 'fachlich', role: 'Prozessverantwortung' }],
+    owner_ids: [
+      { owner_id: 'role-process-owner', owner_kind: 'fachlich', role: 'Prozessverantwortung' },
+    ],
     classification: { confidentiality: 'intern', protection_need: 'hoch' },
     source_refs: [{ source_kind: 'Nutzer', reference: 'user-demo-1', priority: 1 }],
     valid_time: { from: '2026-01-01T00:00:00.000Z', to: null },
     record_time: { recorded_at: '2026-01-01T00:00:00.000Z' },
     version: 1,
-    quality_state: { dimensions: [{ dimension: 'Bestätigung', confirmation_level: 'freigegeben' }] },
+    quality_state: {
+      dimensions: [{ dimension: 'Bestätigung', confirmation_level: 'freigegeben' }],
+    },
   };
 }
 
@@ -31,10 +35,18 @@ describe('ObjectEnvelope – Positivfälle', () => {
     // In Slice 1 wird KEINE Kopplung lifecycle_status<->object_type erzwungen (PROVENANCE #10):
     // jeder object_type akzeptiert jeden kanonischen lifecycle_status. Hier: ein typspezifischer
     // Zustand aus Dok. 05 §7 (z. B. "wirksam") ist ein gültiger kanonischer Zustand.
-    const objectWithTypeSpecificStatus = { ...validObject(), object_type: 'Control', lifecycle_status: 'wirksam' };
+    const objectWithTypeSpecificStatus = {
+      ...validObject(),
+      object_type: 'Control',
+      lifecycle_status: 'wirksam',
+    };
     expect(ObjectEnvelope.safeParse(objectWithTypeSpecificStatus).success).toBe(true);
     // Gegenprobe: derselbe Zustand ist auch für einen anderen object_type gültig.
-    const unrelatedType = { ...validObject(), object_type: 'Lieferant', lifecycle_status: 'wirksam' };
+    const unrelatedType = {
+      ...validObject(),
+      object_type: 'Lieferant',
+      lifecycle_status: 'wirksam',
+    };
     expect(ObjectEnvelope.safeParse(unrelatedType).success).toBe(true);
   });
 
@@ -72,7 +84,10 @@ describe('ObjectEnvelope – Positivfälle', () => {
     const closed = {
       ...validObject(),
       valid_time: { from: '2025-01-01T00:00:00.000Z', to: '2025-12-31T23:59:59.000Z' },
-      record_time: { recorded_at: '2025-01-02T00:00:00.000Z', replaced_at: '2026-02-01T00:00:00.000Z' },
+      record_time: {
+        recorded_at: '2025-01-02T00:00:00.000Z',
+        replaced_at: '2026-02-01T00:00:00.000Z',
+      },
     };
     const parsed = ObjectEnvelope.parse(closed);
     expect(parsed.valid_time.to).toBe('2025-12-31T23:59:59.000Z');
@@ -94,11 +109,15 @@ describe('ObjectEnvelope – Negativfälle', () => {
   });
 
   it('lehnt unbekannten object_type ab', () => {
-    expect(ObjectEnvelope.safeParse({ ...validObject(), object_type: 'Raumschiff' }).success).toBe(false);
+    expect(ObjectEnvelope.safeParse({ ...validObject(), object_type: 'Raumschiff' }).success).toBe(
+      false,
+    );
   });
 
   it('lehnt unbekannten lifecycle_status ab', () => {
-    expect(ObjectEnvelope.safeParse({ ...validObject(), lifecycle_status: 'zerknittert' }).success).toBe(false);
+    expect(
+      ObjectEnvelope.safeParse({ ...validObject(), lifecycle_status: 'zerknittert' }).success,
+    ).toBe(false);
   });
 
   it('lehnt unbekannte Owner-Art ab', () => {
@@ -107,7 +126,9 @@ describe('ObjectEnvelope – Negativfälle', () => {
   });
 
   it('lehnt unbekanntes Top-Level-Feld ab (.strict – keine stille Schema-Erosion)', () => {
-    expect(ObjectEnvelope.safeParse({ ...validObject(), secret_backdoor: true }).success).toBe(false);
+    expect(ObjectEnvelope.safeParse({ ...validObject(), secret_backdoor: true }).success).toBe(
+      false,
+    );
   });
 
   it('lehnt nicht-ISO valid_time ab', () => {
@@ -133,17 +154,26 @@ describe('ObjectEnvelope – Negativfälle', () => {
   });
 
   it('lehnt Fremdfeld in OwnerRef ab (verschachteltes .strict)', () => {
-    const bad = { ...validObject(), owner_ids: [{ owner_id: 'o1', owner_kind: 'fachlich', rogue: 1 }] };
+    const bad = {
+      ...validObject(),
+      owner_ids: [{ owner_id: 'o1', owner_kind: 'fachlich', rogue: 1 }],
+    };
     expect(ObjectEnvelope.safeParse(bad).success).toBe(false);
   });
 
   it('lehnt Fremdfeld in SourceRef ab (verschachteltes .strict)', () => {
-    const bad = { ...validObject(), source_refs: [{ source_kind: 'Nutzer', reference: 'u1', rogue: 'x' }] };
+    const bad = {
+      ...validObject(),
+      source_refs: [{ source_kind: 'Nutzer', reference: 'u1', rogue: 'x' }],
+    };
     expect(ObjectEnvelope.safeParse(bad).success).toBe(false);
   });
 
   it('lehnt unbekannte source_kind ab', () => {
-    const bad = { ...validObject(), source_refs: [{ source_kind: 'Kristallkugel', reference: 'u1' }] };
+    const bad = {
+      ...validObject(),
+      source_refs: [{ source_kind: 'Kristallkugel', reference: 'u1' }],
+    };
     expect(ObjectEnvelope.safeParse(bad).success).toBe(false);
   });
 
@@ -155,7 +185,9 @@ describe('ObjectEnvelope – Negativfälle', () => {
   it('lehnt unbekannte confirmation_level ab', () => {
     const bad = {
       ...validObject(),
-      quality_state: { dimensions: [{ dimension: 'Bestätigung', confirmation_level: 'vielleicht' }] },
+      quality_state: {
+        dimensions: [{ dimension: 'Bestätigung', confirmation_level: 'vielleicht' }],
+      },
     };
     expect(ObjectEnvelope.safeParse(bad).success).toBe(false);
   });

@@ -100,7 +100,9 @@ describe('AppShell – Navigation der acht Orte', () => {
 describe('AppShell – aktive Rolle + Mandant in der Topbar', () => {
   it('zeigt die gewählte Rolle und den gewählten Mandanten als aktive Auswahl', () => {
     renderShell();
-    const roleSelect = screen.getByLabelText<HTMLSelectElement>('Aktive Rolle wechseln (Simulation)');
+    const roleSelect = screen.getByLabelText<HTMLSelectElement>(
+      'Aktive Rolle wechseln (Simulation)',
+    );
     const tenantSelect = screen.getByLabelText<HTMLSelectElement>(
       'Aktiven Mandanten wechseln (Simulation)',
     );
@@ -194,9 +196,7 @@ describe('LoginForm – Rolle + Mandant wählbar, kein Passwort', () => {
     });
     // Der Submit-Button spiegelt die Auswahl im Klartext.
     const auditor = getRole('R07')!;
-    fireEvent.click(
-      screen.getByRole('button', { name: new RegExp(`Als ${auditor.name} bei`) }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: new RegExp(`Als ${auditor.name} bei`) }));
     expect(onSubmit).toHaveBeenCalledWith('R07', TENANT_ID.FINOVIA);
   });
 });

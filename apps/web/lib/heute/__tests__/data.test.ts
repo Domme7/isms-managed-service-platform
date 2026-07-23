@@ -477,7 +477,15 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
     const objects = objectsOf(TENANT_ID.NORDWERK);
     const entries = deriveObjectEntryPoints(TENANT_ID.NORDWERK, objects);
 
-    expect(entries.map((e) => e.familyId)).toEqual(['F01', 'F02', 'F03', 'F06', 'F07', 'F08', 'F09']);
+    expect(entries.map((e) => e.familyId)).toEqual([
+      'F01',
+      'F02',
+      'F03',
+      'F06',
+      'F07',
+      'F08',
+      'F09',
+    ]);
     // Die Reihenfolge ist eine Teilfolge des kanonischen Katalogs F01–F09.
     const canonical = [...OBJECT_FAMILY_ID];
     const positions = entries.map((e) => canonical.indexOf(e.familyId));
@@ -583,9 +591,7 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
         core.measures.length +
         core.evidence.length;
       expect(stockOf(model, 'isms')).toBe(erwartet);
-      expect(stockOf(model, 'services')).toBe(
-        getManagedServicesForTenant(tenant.tenant_id).length,
-      );
+      expect(stockOf(model, 'services')).toBe(getManagedServicesForTenant(tenant.tenant_id).length);
       // Der Entscheidungs-Bestand kommt aus dem Register des Ortes selbst, nicht aus einer
       // zweiten Zählung über die Objekttypen (Review-Fix: /heute kannte den Ort gar nicht).
       expect(stockOf(model, 'entscheidungen')).toBe(
@@ -660,12 +666,7 @@ describe('buildMissionControl – Bestand, Empty-State und Mandantengrenze', () 
       }),
     ];
 
-    const ohneFremde = buildMissionControlModel(
-      FIXTURE_TENANT_META,
-      eigen,
-      eigeneKanten,
-      NO_STOCK,
-    );
+    const ohneFremde = buildMissionControlModel(FIXTURE_TENANT_META, eigen, eigeneKanten, NO_STOCK);
     const mitFremden = buildMissionControlModel(
       FIXTURE_TENANT_META,
       [...fremd, ...eigen, ...fremd],

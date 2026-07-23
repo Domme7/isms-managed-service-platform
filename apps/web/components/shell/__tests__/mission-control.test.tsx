@@ -143,7 +143,9 @@ describe('MissionControlContent – „Wo stehe ich?"', () => {
     // Die Leitfrage der Erlebniswelt fragt je nach Welt nach Entscheidungen, Kurs oder Portfolio –
     // alles Dinge, die diese Seite bewusst NICHT beantwortet. Sie darf deshalb nicht ungerahmt
     // stehen (Review-Fix), sonst erzeugt sie genau die Erwartung, die der Lead ausräumt.
-    expect(within(abschnitt).getByText(/rahmt die Erlebniswelt, nicht diese Seite/)).toBeInTheDocument();
+    expect(
+      within(abschnitt).getByText(/rahmt die Erlebniswelt, nicht diese Seite/),
+    ).toBeInTheDocument();
     // Kein Funktionsversprechen: die Seite sagt, was NICHT abgebildet ist, nicht was kommt.
     expect(abschnitt.textContent ?? '').toMatch(/nicht abgebildet/);
     expect(abschnitt.textContent ?? '').not.toMatch(/Work Package|entsteht in einem eigenen/);
@@ -178,10 +180,7 @@ describe('MissionControlContent – „Wo stehe ich?"', () => {
 
   it('zeigt den Bestand des Consulting Operator (9/11)', () => {
     render(
-      <MissionControlContent
-        role={role('R08')}
-        tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)}
-      />,
+      <MissionControlContent role={role('R08')} tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)} />,
     );
     const abschnitt = screen
       .getByRole('heading', { level: 2, name: MISSION_SECTIONS.standort.title })
@@ -221,7 +220,9 @@ describe('MissionControlContent – „Was ist erfasst worden?"', () => {
       within(wellen[0]).getByText(/17 Objekte · 15 Beziehungen an diesem Tag im System erfasst/),
     ).toBeInTheDocument();
     expect(
-      within(wellen[0]).getByText(/Belegte Scope-Kennungen dieser Welle: scope-nordwerk-isms-core$/),
+      within(wellen[0]).getByText(
+        /Belegte Scope-Kennungen dieser Welle: scope-nordwerk-isms-core$/,
+      ),
     ).toBeInTheDocument();
 
     expect(within(wellen[1]).getByText('16.02.2026')).toBeInTheDocument();
@@ -229,9 +230,7 @@ describe('MissionControlContent – „Was ist erfasst worden?"', () => {
       within(wellen[1]).getByText(/14 Objekte · 28 Beziehungen an diesem Tag im System erfasst/),
     ).toBeInTheDocument();
     expect(
-      within(wellen[1]).getByText(
-        /scope-nordwerk-isms-core, scope-nordwerk-managed-service/,
-      ),
+      within(wellen[1]).getByText(/scope-nordwerk-isms-core, scope-nordwerk-managed-service/),
     ).toBeInTheDocument();
 
     // Dritte Welle (WP-017, Entscheidungsschicht) – ohne neue Scope-Kennung.
@@ -240,18 +239,13 @@ describe('MissionControlContent – „Was ist erfasst worden?"', () => {
       within(wellen[2]).getByText(/3 Objekte · 8 Beziehungen an diesem Tag im System erfasst/),
     ).toBeInTheDocument();
     expect(
-      within(wellen[2]).getByText(
-        /scope-nordwerk-isms-core, scope-nordwerk-managed-service/,
-      ),
+      within(wellen[2]).getByText(/scope-nordwerk-isms-core, scope-nordwerk-managed-service/),
     ).toBeInTheDocument();
   });
 
   it('listet für den Consulting Operator genau eine Welle (16.02.2026, 9 Objekte / 11 Beziehungen)', () => {
     render(
-      <MissionControlContent
-        role={role('R08')}
-        tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)}
-      />,
+      <MissionControlContent role={role('R08')} tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)} />,
     );
     const wellen = within(erfassungsAbschnitt()).getAllByRole('listitem');
 
@@ -278,7 +272,9 @@ describe('MissionControlContent – „Was ist erfasst worden?"', () => {
     // Die Aussage stammt aus der Datenableitung, nicht aus einem konstanten Seitentext.
     // Seit WP-017 ist sie für Nordwerk BELEGT (eine Ablösekette, Dok. 07 §9 R24) – der Wächter
     // prüft deshalb die belegte Aussage samt korrektem Numerus bei genau einem Beleg.
-    expect(within(abschnitt).getAllByText(model.historyState.statement).length).toBeGreaterThanOrEqual(1);
+    expect(
+      within(abschnitt).getAllByText(model.historyState.statement).length,
+    ).toBeGreaterThanOrEqual(1);
     expect(model.historyState.statement).toMatch(
       /Eine Versionshistorie ist im Datenbestand belegt: 1 „supersedes"-Beziehung ist erfasst/,
     );
@@ -319,11 +315,11 @@ describe('MissionControlContent – „Was weiß ich über die Datenlage?"', () 
       const eintrag = eintraege[index];
       expect(within(eintrag).getByText(observation.label)).toBeInTheDocument();
       expect(
-        within(eintrag).getByText(
-          new RegExp(`${observation.count} von ${observation.total} `),
-        ),
+        within(eintrag).getByText(new RegExp(`${observation.count} von ${observation.total} `)),
       ).toBeInTheDocument();
-      expect(within(eintrag).getByText(`Ermittlungsregel: ${observation.method}`)).toBeInTheDocument();
+      expect(
+        within(eintrag).getByText(`Ermittlungsregel: ${observation.method}`),
+      ).toBeInTheDocument();
     });
   });
 
@@ -350,10 +346,7 @@ describe('MissionControlContent – „Was weiß ich über die Datenlage?"', () 
 
   it('weist eine Zählung von 0 sichtbar aus, statt sie zu unterdrücken', () => {
     render(
-      <MissionControlContent
-        role={role('R08')}
-        tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)}
-      />,
+      <MissionControlContent role={role('R08')} tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)} />,
     );
     // Der Consulting Operator trägt keine nachweisfähigen Objekttypen: 0 von 0.
     expect(
@@ -483,10 +476,7 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
 
   it('benennt einen Ort ohne Bestand, statt ihn auszublenden (Consulting Operator: ISMS leer)', () => {
     render(
-      <MissionControlContent
-        role={role('R08')}
-        tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)}
-      />,
+      <MissionControlContent role={role('R08')} tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)} />,
     );
     const abschnitt = einstiegAbschnitt();
 
@@ -561,7 +551,10 @@ describe('MissionControlContent – Empty-States für Mandanten ohne Datenbestan
       render(<MissionControlContent role={role('R01')} tenant={leer} />);
 
       expect(
-        screen.getByRole('heading', { level: 4, name: `Kein Datenbestand für ${leer.display_name}` }),
+        screen.getByRole('heading', {
+          level: 4,
+          name: `Kein Datenbestand für ${leer.display_name}`,
+        }),
       ).toBeInTheDocument();
       expect(screen.getByRole('link', { name: /Mandant wechseln/ })).toHaveAttribute(
         'href',
@@ -716,7 +709,11 @@ const NUR_IM_LUECKENBLOCK = [/\bFrist/i, /fällig/i, /Priorität/i];
 describe('MissionControlContent – kein Score, keine Ampel, keine Empfehlung', () => {
   it('enthält für keine der zwölf Rollen Bewertungsvokabular im sichtbaren Text', () => {
     for (const demoRole of DEMO_ROLES) {
-      for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA]) {
+      for (const tenantId of [
+        TENANT_ID.NORDWERK,
+        TENANT_ID.CONSULTING_OPERATOR,
+        TENANT_ID.FINOVIA,
+      ]) {
         const { container, unmount } = render(
           <MissionControlContent role={demoRole} tenant={tenant(tenantId)} />,
         );
@@ -774,14 +771,14 @@ describe('MissionControlContent – Ehrlichkeitsblock „Was hier bewusst nicht 
 
     // Kanonischer Typname: `OBJECT_TYPE_LABEL_DE` (einzige Quelle deutscher Glossen) führt für
     // „Task" bewusst keine Übersetzung – hier wird keine erfunden.
-    expect(
-      within(abschnitt).getByText(/keine Objekte des Typs\s+„Task"/),
-    ).toBeInTheDocument();
+    expect(within(abschnitt).getByText(/keine Objekte des Typs\s+„Task"/)).toBeInTheDocument();
     expect(abschnitt.textContent ?? '').not.toMatch(/Aufgabe \(Task\)|Entscheidung \(Decision/);
     // WP-017: Der Satz darf NICHT mehr behaupten, es gäbe keine `Decision Record`-Objekte –
     // seit der Entscheidungsschicht wäre das falsch.
     expect(abschnitt.textContent ?? '').not.toMatch(/„Decision Record"/);
-    expect(within(abschnitt).getByText(/kein Ereignis- und kein Änderungsobjekt/)).toBeInTheDocument();
+    expect(
+      within(abschnitt).getByText(/kein Ereignis- und kein Änderungsobjekt/),
+    ).toBeInTheDocument();
     // Ablösung ≠ Änderungsfeed: die belegte Historie darf nicht zum Ereignisstrom umgedeutet werden.
     expect(within(abschnitt).getByText(/ergibt kein „neu seit …"/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/keinen Besuchszeitpunkt/)).toBeInTheDocument();
@@ -805,9 +802,7 @@ describe('MissionControlContent – Ehrlichkeitsblock „Was hier bewusst nicht 
     expect(entscheidungen.length).toBeGreaterThanOrEqual(1);
     expect([...new Set(entscheidungen.map((o) => o.tenant_id))]).toEqual([TENANT_ID.NORDWERK]);
 
-    const ablösungen = DEMO_SEED.relationships.filter(
-      (r) => r.relationship_type === 'supersedes',
-    );
+    const ablösungen = DEMO_SEED.relationships.filter((r) => r.relationship_type === 'supersedes');
     expect(ablösungen).toHaveLength(1);
 
     // Die Ablösung ist FACHLICH modelliert: keine Datensatzversion, kein Ersetzungszeitpunkt

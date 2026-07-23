@@ -68,6 +68,7 @@ export function ObjectCard({
         {dimensions.length > 0 ? (
           <ul className="tw-quality-list">
             {dimensions.map((dim, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: Index nur als Eindeutigkeits-Suffix hinter dem fachlichen Schlüssel; Liste kommt statisch aus dem Seed (read-only, keine Umsortierung).
               <li key={`${dim.dimension}-${index}`}>
                 <span className="tw-quality-dim">{dim.dimension}</span>
                 {dim.confirmation_level ? <>: {dim.confirmation_level}</> : null}

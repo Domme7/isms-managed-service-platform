@@ -114,7 +114,9 @@ function nordwerkObject(input: {
     record_time: { recorded_at: RECORDED_AT },
     version: 1,
     quality_state: {
-      dimensions: input.quality ?? [{ dimension: 'Bestätigung', confirmation_level: 'freigegeben' }],
+      dimensions: input.quality ?? [
+        { dimension: 'Bestätigung', confirmation_level: 'freigegeben' },
+      ],
     },
   };
 }
@@ -213,7 +215,11 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     description: 'Synthetischer Kernprozess: Annahme, Planung und Fertigung von Kundenaufträgen.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [
-      { owner_id: O.ROLE_PROZESSVERANTWORTUNG, owner_kind: 'fachlich', role: 'Prozessverantwortung' },
+      {
+        owner_id: O.ROLE_PROZESSVERANTWORTUNG,
+        owner_kind: 'fachlich',
+        role: 'Prozessverantwortung',
+      },
     ],
     classification: { confidentiality: 'intern', protection_need: 'hoch' },
   }),
@@ -221,7 +227,8 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.ASSET_KUNDENAUFTRAGSDATEN,
     object_type: 'Information Asset',
     display_name: 'Kundenauftragsdaten',
-    description: 'Synthetischer Informationswert: Auftrags-, Stückzahl- und Lieferdaten der Kunden.',
+    description:
+      'Synthetischer Informationswert: Auftrags-, Stückzahl- und Lieferdaten der Kunden.',
     lifecycle_status: 'freigegeben', // Informations-Lifecycle (Dok. 05 §7)
     owner_ids: [
       { owner_id: O.ROLE_PROZESSVERANTWORTUNG, owner_kind: 'fachlich', role: 'Information Owner' },
@@ -236,7 +243,9 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     display_name: 'ISO/IEC 27001:2022 (Demo-Katalog)',
     description: 'Synthetischer Framework-Kontext für die Demo. Kein Abdruck realer Normtexte.',
     lifecycle_status: 'Freigegeben',
-    source_refs: [{ source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 }],
+    source_refs: [
+      { source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 },
+    ],
   }),
   nordwerkObject({
     object_id: O.REQ_BACKUP,
@@ -244,13 +253,16 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     display_name: 'A.8.13 – Informationssicherung (Backup)',
     description: 'Synthetische Anforderung: geprüfte, wiederherstellbare Datensicherung.',
     lifecycle_status: 'Freigegeben',
-    source_refs: [{ source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 }],
+    source_refs: [
+      { source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 },
+    ],
   }),
   nordwerkObject({
     object_id: O.CTRL_BACKUP,
     object_type: 'Control',
     display_name: 'Backup & Recovery Control',
-    description: 'Synthetisches generisches Control zur Sicherung und Wiederherstellung kritischer Daten.',
+    description:
+      'Synthetisches generisches Control zur Sicherung und Wiederherstellung kritischer Daten.',
     lifecycle_status: 'wirksam', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: O.ROLE_CISO, owner_kind: 'fachlich', role: 'Control Owner' }],
   }),
@@ -274,7 +286,9 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
       { dimension: 'Aktualität', note: 'Synthetisches Bedrohungssignal, Demo-Stand 2026-01.' },
     ],
-    source_refs: [{ source_kind: 'Extraktionsregel', reference: 'synthetic-threat-feed', priority: 1 }],
+    source_refs: [
+      { source_kind: 'Extraktionsregel', reference: 'synthetic-threat-feed', priority: 1 },
+    ],
   }),
   nordwerkObject({
     object_id: O.WEAK_ERP_SCHNITTSTELLE,
@@ -314,7 +328,8 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.MEASURE_PATCH,
     object_type: 'Measure',
     display_name: 'Härtung & Patch-Management ERP-Schnittstelle',
-    description: 'Synthetische Maßnahme: Aktualisierung und Härtung der ERP-Integrationsschnittstelle.',
+    description:
+      'Synthetische Maßnahme: Aktualisierung und Härtung der ERP-Integrationsschnittstelle.',
     lifecycle_status: 'in Arbeit', // Maßnahmen-Lifecycle (Dok. 05 §7)
   }),
   nordwerkObject({
@@ -324,7 +339,9 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     description: 'Synthetischer Nachweis: erfolgreicher Wiederherstellungstest der Auftragsdaten.',
     lifecycle_status: 'akzeptiert', // Evidence-Lifecycle (Dok. 05 §7)
     quality: [{ dimension: 'Bestätigung', confirmation_level: 'reviewed' }],
-    source_refs: [{ source_kind: 'Datei', reference: 'synthetic-restore-protokoll-q2-2026', priority: 1 }],
+    source_refs: [
+      { source_kind: 'Datei', reference: 'synthetic-restore-protokoll-q2-2026', priority: 1 },
+    ],
   }),
 ] as const;
 
@@ -348,7 +365,9 @@ export const NORDWERK_RELATIONSHIPS: readonly RelationshipEnvelope[] = [
     source_id: O.REQ_BACKUP,
     target_id: O.FRAMEWORK_ISO27001,
     assertion_kind: 'importiert',
-    source_refs: [{ source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 }],
+    source_refs: [
+      { source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 },
+    ],
   }),
   // R03 owns: fachliche Rolle -> Geschäftsprozess
   nordwerkRelationship({

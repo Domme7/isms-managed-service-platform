@@ -12,14 +12,8 @@ import { relationships } from '../schema';
 import { relationshipToRow, rowToRelationship } from './mappers';
 
 /** Alle Beziehungen genau eines Mandanten. */
-export async function listByTenant(
-  db: IsmsDb,
-  tenantId: string,
-): Promise<RelationshipEnvelope[]> {
-  const rows = await db
-    .select()
-    .from(relationships)
-    .where(eq(relationships.tenant_id, tenantId));
+export async function listByTenant(db: IsmsDb, tenantId: string): Promise<RelationshipEnvelope[]> {
+  const rows = await db.select().from(relationships).where(eq(relationships.tenant_id, tenantId));
   return rows.map(rowToRelationship);
 }
 
@@ -33,10 +27,7 @@ export async function getById(
     .select()
     .from(relationships)
     .where(
-      and(
-        eq(relationships.tenant_id, tenantId),
-        eq(relationships.relationship_id, relationshipId),
-      ),
+      and(eq(relationships.tenant_id, tenantId), eq(relationships.relationship_id, relationshipId)),
     )
     .limit(1);
   const row = rows[0];

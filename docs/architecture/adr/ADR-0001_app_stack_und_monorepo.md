@@ -37,7 +37,7 @@ Container, Monorepo-/Package-Manager und Test-Toolchain für den ersten Build.
 | Container | Docker/OCI (ab WP-003 für lokale Postgres/Redis) |
 | Monorepo | **pnpm Workspaces + Turborepo** |
 | Tests | **Vitest** (Unit), **Playwright** (E2E, ab UI-Flows) |
-| Lint/Format | ESLint + Prettier |
+| Lint/Format | ESLint + Prettier (abgelöst durch ADR-0003: Biome) |
 
 **Reversibel und noch nicht festgelegt:** ORM/Migrationstool (Prisma vs. Drizzle) — entschieden bei
 WP-003, wenn die DB tatsächlich gebraucht wird. Playwright wird erst mit den ersten UI-Flows (WP-004)

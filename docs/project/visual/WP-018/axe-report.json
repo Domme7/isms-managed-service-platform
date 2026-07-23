@@ -1,0 +1,271 @@
+{
+  "hinweis": "axe misst nur den automatisierbaren Teil von Accessibility (O-WP018-03). 0 Verstöße heißt NICHT „vollständig zugänglich\". Verstöße werden Findings, keine Fixes.",
+  "werkzeug": {
+    "name": "axe-core",
+    "version": "4.12.1"
+  },
+  "regelwerk": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "wcag22aa"
+  ],
+  "viewport": "desktop-1440x900",
+  "perspektive": {
+    "rolleId": "R01",
+    "tenantId": "tenant-nordwerk"
+  },
+  "seiten": [
+    {
+      "slug": "heute",
+      "pfad": "/heute",
+      "anzahlVerstoesse": {
+        "serious": 1
+      },
+      "verstoesse": [
+        {
+          "id": "dlitem",
+          "impact": "serious",
+          "beschreibung": "Ensure <dt> and <dd> elements are contained by a <dl>",
+          "hilfe": "<dt> and <dd> elements must be contained by a <dl>",
+          "hilfeUrl": "https://dequeuniversity.com/rules/axe/4.12/dlitem?application=playwright",
+          "wcagTags": [
+            "wcag2a",
+            "wcag131"
+          ],
+          "stellen": [
+            {
+              "ziel": "div:nth-child(1) > dt",
+              "html": "<dt>Aktive Rolle</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(1) > dd",
+              "html": "<dd>R01 · Executive Sponsor</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(2) > dt",
+              "html": "<dt>Erlebniswelt</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(2) > dd",
+              "html": "<dd>Executive World</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(3) > dt",
+              "html": "<dt>Aktiver Mandant</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(3) > dd",
+              "html": "<dd>Nordwerk Manufacturing SE</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(4) > dt",
+              "html": "<dt>Scope-Kennungen</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(4) > dd",
+              "html": "<dd>scope-nordwerk-isms-core · scope-nordwerk-managed-service</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(5) > dt",
+              "html": "<dt>Datenstand (zuletzt im System erfasst)</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(5) > dd",
+              "html": "<dd><time datetime=\"2026-03-16\">16.03.2026</time></dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "twin",
+      "pfad": "/twin",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "twin-tenant-nordwerk",
+      "pfad": "/twin/tenant-nordwerk",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "isms",
+      "pfad": "/isms",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "services",
+      "pfad": "/services",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "entscheidungen",
+      "pfad": "/entscheidungen",
+      "anzahlVerstoesse": {
+        "serious": 1
+      },
+      "verstoesse": [
+        {
+          "id": "dlitem",
+          "impact": "serious",
+          "beschreibung": "Ensure <dt> and <dd> elements are contained by a <dl>",
+          "hilfe": "<dt> and <dd> elements must be contained by a <dl>",
+          "hilfeUrl": "https://dequeuniversity.com/rules/axe/4.12/dlitem?application=playwright",
+          "wcagTags": [
+            "wcag2a",
+            "wcag131"
+          ],
+          "stellen": [
+            {
+              "ziel": "div:nth-child(1) > dt",
+              "html": "<dt>Aktive Rolle</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(1) > dd",
+              "html": "<dd>R01 · Executive Sponsor</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(2) > dt",
+              "html": "<dt>Aktiver Mandant</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(2) > dd",
+              "html": "<dd>Nordwerk Manufacturing SE</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(3) > dt",
+              "html": "<dt>Erfasste Entscheidungen</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(3) > dd",
+              "html": "<dd>3</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(4) > dt",
+              "html": "<dt>Scope-Kennungen der Entscheidungen</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(4) > dd",
+              "html": "<dd>scope-nordwerk-isms-core · scope-nordwerk-managed-service</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(5) > dt",
+              "html": "<dt>Datenstand der Entscheidungen (zuletzt im System erfasst)</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(5) > dd",
+              "html": "<dd><time datetime=\"2026-03-16\">16.03.2026</time></dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "objekt-360-risk-betriebsunterbrechung",
+      "pfad": "/twin/tenant-nordwerk/objekt/nordwerk-risk-betriebsunterbrechung",
+      "anzahlVerstoesse": {
+        "serious": 1
+      },
+      "verstoesse": [
+        {
+          "id": "dlitem",
+          "impact": "serious",
+          "beschreibung": "Ensure <dt> and <dd> elements are contained by a <dl>",
+          "hilfe": "<dt> and <dd> elements must be contained by a <dl>",
+          "hilfeUrl": "https://dequeuniversity.com/rules/axe/4.12/dlitem?application=playwright",
+          "wcagTags": [
+            "wcag2a",
+            "wcag131"
+          ],
+          "stellen": [
+            {
+              "ziel": "div:nth-child(1) > dt",
+              "html": "<dt>Mandant</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(1) > dd",
+              "html": "<dd>Nordwerk Manufacturing SE</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(2) > dt",
+              "html": "<dt>Objekttyp</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(2) > dd",
+              "html": "<dd>Risiko (Risk)</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(3) > dt",
+              "html": "<dt>Objektfamilie</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(3) > dd",
+              "html": "<dd>F07 · Risiko &amp; Veränderung</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(4) > dt",
+              "html": "<dt>Datenstand (im System erfasst)</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(4) > dd",
+              "html": "<dd><time datetime=\"2026-01-15T08:00:00.000Z\">15.01.2026</time></dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(5) > dt",
+              "html": "<dt>Version</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(5) > dd",
+              "html": "<dd>1</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(6) > dt",
+              "html": "<dt>Bestätigung (Datenqualität)</dt>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            },
+            {
+              "ziel": "div:nth-child(6) > dd",
+              "html": "<dd>freigegeben</dd>",
+              "zusammenfassung": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

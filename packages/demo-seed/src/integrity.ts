@@ -26,9 +26,7 @@ export function findDuplicateIds(ids: readonly string[]): string[] {
 }
 
 /** Indexiert Objekte nach `object_id` (letzter Eintrag gewinnt bei Duplikaten). */
-export function indexObjectsById(
-  objects: readonly ObjectEnvelope[],
-): Map<string, ObjectEnvelope> {
+export function indexObjectsById(objects: readonly ObjectEnvelope[]): Map<string, ObjectEnvelope> {
   return new Map(objects.map((o) => [o.object_id, o]));
 }
 
@@ -115,9 +113,7 @@ export interface OwnerRefViolation {
  * Dok. 07 P11/P12) muss als eigenes Seed-Objekt existieren – Owner sind fachliche Beziehungen,
  * keine impliziten Freitextfelder. Gibt die Liste unauflösbarer Owner-Refs zurück (leer = intakt).
  */
-export function findUnresolvedOwnerRefs(
-  objects: readonly ObjectEnvelope[],
-): OwnerRefViolation[] {
+export function findUnresolvedOwnerRefs(objects: readonly ObjectEnvelope[]): OwnerRefViolation[] {
   const index = indexObjectsById(objects);
   const violations: OwnerRefViolation[] = [];
   for (const obj of objects) {

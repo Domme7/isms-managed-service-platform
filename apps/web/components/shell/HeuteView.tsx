@@ -40,7 +40,9 @@ export function HeuteView() {
         <p className="tw-eyebrow">Heute</p>
         <h1>Heute</h1>
         <div className="tw-empty" role="note">
-          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Nicht angemeldet (Simulation)</h2>
+          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>
+            Nicht angemeldet (Simulation)
+          </h2>
           <p style={{ marginTop: 0 }}>
             Es ist keine Rolle und kein Mandant gewählt. Melden Sie sich in der Simulation an, um
             den rollenbezogenen Startpunkt für den aktiven Mandanten zu sehen.

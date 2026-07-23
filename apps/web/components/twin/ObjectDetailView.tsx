@@ -245,8 +245,8 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
 
       {/* Leitfrage der Seite (Dok. 06 „Frage vor Navigation") */}
       <p className="tw-question">
-        Was ist dieses Objekt, warum ist es wichtig, womit hängt es zusammen, wie entwickelt es
-        sich – und was ist dazu im Demo-Datenbestand belegt?
+        Was ist dieses Objekt, warum ist es wichtig, womit hängt es zusammen, wie entwickelt es sich
+        – und was ist dazu im Demo-Datenbestand belegt?
       </p>
 
       {/* Seitenweite Rahmung (UX-Review MAJOR-1 aus WP-013): auch hier erscheinen Status-Werte
@@ -260,8 +260,8 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
         <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
         Lebenszyklus-Stände aus dem Demo-Datenbestand – <strong>keine Prüfergebnisse</strong> und
         keine bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
-        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt
-        für einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
+        selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt für
+        einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
       </p>
 
       <ContextBar model={model} />
@@ -291,6 +291,8 @@ function ContextBar({ model }: { model: ObjectDetailModel }) {
   return (
     /* `role="group"` (Review-Fix A11y): `dl` hat keine verlässliche implizite Rolle, ein
        `aria-label` darauf wird von manchen Screenreadern ignoriert. */
+    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: bewusstes, dokumentiertes Muster (s. Kommentar) – die ARIA-Semantik zu ändern wäre eine Produktänderung außerhalb dieses Tooling-WP.
+    // biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf `dl` ist gültiges ARIA; ein Ersatz durch `fieldset`/`section` würde gerendertes Markup ändern (nicht verhaltensneutral).
     <dl className="od-context" role="group" aria-label="Kontext dieser Objektseite">
       <div>
         <dt>Mandant</dt>
@@ -481,8 +483,8 @@ function ImportanceSection({
         ) : (
           <>Im Demo-Datenbestand ist für dieses Objekt keine Klassifikation erfasst – </>
         )}
-        ohne Gewichtung, ohne Score und ohne Reifegrad. Eine darüber hinausgehende Kritikalität
-        ist im kanonischen Objektvertrag nicht erfasst und wird hier nicht abgeleitet.
+        ohne Gewichtung, ohne Score und ohne Reifegrad. Eine darüber hinausgehende Kritikalität ist
+        im kanonischen Objektvertrag nicht erfasst und wird hier nicht abgeleitet.
       </p>
 
       {/* Die Überschrift nennt genau die Typmenge, die tatsächlich gefiltert wird: `requires`
@@ -497,8 +499,8 @@ function ImportanceSection({
         eine verbindliche Abhängigkeit im jeweiligen Scope (Dok. 07 §9 R19).
       </p>
       <p className="sv-edge-note">
-        Verdichtete Darstellung. Alle Beziehungen mit Herkunft, Vertrauensgrad und Gültigkeit
-        stehen unter „Womit hängt es zusammen?".
+        Verdichtete Darstellung. Alle Beziehungen mit Herkunft, Vertrauensgrad und Gültigkeit stehen
+        unter „Womit hängt es zusammen?".
       </p>
       <EdgeList
         variant="kompakt"
@@ -640,6 +642,7 @@ function EvolutionSection({
         {evolution.quality_dimensions.length > 0 ? (
           <ul className="tw-quality-list">
             {evolution.quality_dimensions.map((dim, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: Index nur als Eindeutigkeits-Suffix hinter dem fachlichen Schlüssel; Liste kommt statisch aus dem Seed (read-only, keine Umsortierung).
               <li key={`${dim.dimension}-${index}`}>
                 <span className="tw-quality-dim">{dim.dimension}</span>
                 {dim.confirmation_level ? <>: {dim.confirmation_level}</> : null}
@@ -656,6 +659,7 @@ function EvolutionSection({
       {evolution.source_refs.length > 0 ? (
         <ul className="sv-items">
           {evolution.source_refs.map((ref, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: Index nur als Eindeutigkeits-Suffix hinter dem fachlichen Schlüssel; Liste kommt statisch aus dem Seed (read-only, keine Umsortierung).
             <li key={`${ref.source_kind}-${ref.reference}-${index}`}>
               <span className="sv-item-name">{ref.reference}</span>
               <span className="sv-item-meta">
@@ -709,9 +713,9 @@ function NextSection({
            Der NUTZERTEXT sagt das evidenzgebunden – die Ableitung aus der Beispielspalte ist eine
            Anzeigeentscheidung (O-WP014-10), keine Modellaussage (Review-Fix). */
         <p className="sv-item-meta">
-          Kein belegter Verweis im Demo-Seed: Für dieses Objekt ist im Demo-Datenbestand weder
-          eine Maßnahme noch ein Servicebezug erfasst; auch ein Nachweisbezug ist für diesen
-          Objekttyp im Demo-Datenbestand nicht modelliert.
+          Kein belegter Verweis im Demo-Seed: Für dieses Objekt ist im Demo-Datenbestand weder eine
+          Maßnahme noch ein Servicebezug erfasst; auch ein Nachweisbezug ist für diesen Objekttyp im
+          Demo-Datenbestand nicht modelliert.
           <EmptyNext tenantId={tenantId} />
         </p>
       )}

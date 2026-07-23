@@ -39,7 +39,9 @@ describe('buildIsmsCoreView – Nordwerk (ISMS-Kerngraph vollständig aufgelöst
   });
 
   it('löst das Risiko mit Wirkung (affects) und Minderung (mitigates) auf', () => {
-    const risk = nordwerkView().risks.find((r) => r.risk.object_id === O.RISK_BETRIEBSUNTERBRECHUNG);
+    const risk = nordwerkView().risks.find(
+      (r) => r.risk.object_id === O.RISK_BETRIEBSUNTERBRECHUNG,
+    );
     expect(risk?.risk.name).toBe('Betriebsunterbrechung Auftragsabwicklung');
     expect(risk?.risk.lifecycle_status).toBe('behandelt');
 
@@ -269,7 +271,10 @@ describe('buildIsmsCoreView – Tenant-Isolation und Empty-Sicht (Acceptance 5/6
         .map((o) => o.display_name),
     );
     const allNordwerkNames = [
-      ...view.controls.flatMap((c) => [...c.evidenced_by.map((e) => e.name), ...c.covered_by_services]),
+      ...view.controls.flatMap((c) => [
+        ...c.evidenced_by.map((e) => e.name),
+        ...c.covered_by_services,
+      ]),
       ...view.risks.flatMap((r) => r.covered_by_services),
       ...view.evidence.flatMap((e) => e.covered_by_services),
     ];

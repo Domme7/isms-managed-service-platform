@@ -43,7 +43,7 @@ export function Topbar({
           type="button"
           className="shell-nav-toggle"
           aria-controls={navControlsId}
-          aria-expanded={navOpen ? true : false}
+          aria-expanded={navOpen}
           onClick={onToggleNav}
         >
           <span aria-hidden="true">☰</span>

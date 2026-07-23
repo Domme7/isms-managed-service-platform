@@ -3,6 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "env": ["NEXT_DIST_DIR"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "test": {
@@ -10,6 +11,9 @@
     },
     "typecheck": {
       "dependsOn": ["^build"]
+    },
+    "lint": {
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/biome.json", "$TURBO_ROOT$/.gitignore"]
     },
     "dev": {
       "cache": false,

@@ -52,7 +52,9 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
 
     // Risiko mit Status als Text (nie nur Farbe, Dok. 06 06-D11).
     const riskCard = cardByHeading('Betriebsunterbrechung Auftragsabwicklung');
-    expect(within(riskCard).getByText('Risiko (Risk) · Lebenszyklus-Stand: behandelt')).toBeInTheDocument();
+    expect(
+      within(riskCard).getByText('Risiko (Risk) · Lebenszyklus-Stand: behandelt'),
+    ).toBeInTheDocument();
     // Betroffenheit über die reale affects-Kante mit deutschem Label.
     expect(within(riskCard).getByText(/betrifft \(affects\)/)).toBeInTheDocument();
     expect(within(riskCard).getByText('Auftragsabwicklung')).toBeInTheDocument();

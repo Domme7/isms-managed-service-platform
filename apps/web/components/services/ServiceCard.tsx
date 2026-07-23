@@ -131,8 +131,16 @@ function ScopeItems({ items, tenantId }: { items: readonly ServiceScopeItem[]; t
 }
 
 export function ServiceCard({ view, tenantId }: { view: ManagedServiceView; tenantId: string }) {
-  const { service, slas, deliverables, reviews, delivery_team_names, covered, required, contributions } =
-    view;
+  const {
+    service,
+    slas,
+    deliverables,
+    reviews,
+    delivery_team_names,
+    covered,
+    required,
+    contributions,
+  } = view;
 
   return (
     <li className="sv-card">
@@ -174,7 +182,11 @@ export function ServiceCard({ view, tenantId }: { view: ManagedServiceView; tena
       {reviews.length > 0 ? (
         <>
           <h4>Outcome Review</h4>
-          <ComponentItems items={reviews} detailsLabel="Review-Details anzeigen" tenantId={tenantId} />
+          <ComponentItems
+            items={reviews}
+            detailsLabel="Review-Details anzeigen"
+            tenantId={tenantId}
+          />
         </>
       ) : null}
 
@@ -211,7 +223,8 @@ export function ServiceCard({ view, tenantId }: { view: ManagedServiceView; tena
                 />
                 <span className="sv-item-meta">
                   {' '}
-                  · {contributionTargetLabel(c.target_type)} · Herkunft der Aussage: {c.assertion_kind}
+                  · {contributionTargetLabel(c.target_type)} · Herkunft der Aussage:{' '}
+                  {c.assertion_kind}
                   {c.confidence_display ? ` · Vertrauensgrad: ${c.confidence_display}` : ''}
                 </span>
                 {c.effectiveness_assumption ? (

@@ -77,8 +77,8 @@ export function MissionControlContent({ role, tenant }: { role: DemoRole; tenant
         stehen, was im Datenbestand erfasst wurde, was über dessen Lage bekannt ist und wo Sie
         einsteigen können. Die Leitfrage wird nur so weit beantwortet, wie der Datenbestand sie
         belegt: Der Teil „seit meinem letzten Besuch" ist nicht belegt – und auch „was verdient
-        Aufmerksamkeit" wird hier nicht beantwortet. Diese Seite zählt und benennt, sie
-        priorisiert nicht. Beides steht am Seitenende als benannte Lücke.
+        Aufmerksamkeit" wird hier nicht beantwortet. Diese Seite zählt und benennt, sie priorisiert
+        nicht. Beides steht am Seitenende als benannte Lücke.
       </p>
 
       {model ? (
@@ -160,6 +160,9 @@ function ContextBar({
   }
 
   return (
+    /* `role="group"` wie in `ObjectDetailView`: `dl` hat keine verlässliche implizite Rolle. */
+    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: bewusstes, dokumentiertes Muster – `dl` hat keine verlässliche implizite Rolle; die ARIA-Semantik zu ändern wäre eine Produktänderung außerhalb dieses Tooling-WP.
+    // biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf `dl` ist gültiges ARIA; ein Ersatz durch `fieldset`/`section` würde gerendertes Markup ändern (nicht verhaltensneutral).
     <dl className="od-context" role="group" aria-label="Kontext dieser Seite">
       <div>
         <dt>Aktive Rolle</dt>
@@ -276,8 +279,8 @@ function StandortSection({
         </dd>
       </dl>
       <p className="tw-muted">
-        Die Rolle ist in dieser Demo reine Perspektive: Sie ordnet die Abschnitte dieser Seite,
-        und diese Reihenfolge ist keine Rangfolge. Sie entscheidet nicht über Zugriff – alle zwölf
+        Die Rolle ist in dieser Demo reine Perspektive: Sie ordnet die Abschnitte dieser Seite, und
+        diese Reihenfolge ist keine Rangfolge. Sie entscheidet nicht über Zugriff – alle zwölf
         Rollen sehen hier dieselben Daten desselben Mandanten (Dok. 06 06-D05). Rechte und
         Zugriffskontrolle sind in dieser Demo nicht abgebildet.
       </p>
@@ -355,8 +358,8 @@ function ErfassungSection({ model }: { model: MissionControlModel }) {
       <h2 id={headingId}>{MISSION_SECTIONS.erfassung.title}</h2>
       <p className="sv-edge-note">
         Gezeigt wird die Systemachse: der Zeitpunkt, zu dem ein Datensatz im System erfasst wurde
-        (record_time). Die fachliche Gültigkeit (valid_time) ist eine eigene Zeitachse und wird
-        hier nicht damit vermischt (Dok. 07 §11).
+        (record_time). Die fachliche Gültigkeit (valid_time) ist eine eigene Zeitachse und wird hier
+        nicht damit vermischt (Dok. 07 §11).
       </p>
 
       <h3>Erfassungswellen im Datenbestand</h3>
@@ -376,8 +379,8 @@ function ErfassungSection({ model }: { model: MissionControlModel }) {
       ) : (
         <p className="tw-empty" role="note">
           Für diesen Mandanten ist im Datenbestand nichts erfasst: es gibt weder Objekte noch
-          Beziehungen und damit auch keinen Erfassungszeitpunkt. Weiter geht es über den Wechsel
-          des Mandanten in der Anmelde-Simulation.
+          Beziehungen und damit auch keinen Erfassungszeitpunkt. Weiter geht es über den Wechsel des
+          Mandanten in der Anmelde-Simulation.
         </p>
       )}
 
@@ -432,9 +435,8 @@ function DatenlageSection({ model }: { model: MissionControlModel }) {
       <h3>Gezählte Beobachtungen</h3>
       <p className="sv-edge-note">
         Jede Beobachtung nennt ihre Zählung, ihre Grundgesamtheit und die Regel, nach der gezählt
-        wurde. Die Reihenfolge ist eine feste Katalogreihenfolge und sagt nichts über Bedeutung
-        aus. Eine Zählung von 0 bleibt sichtbar, weil auch sie eine Aussage über den Datenbestand
-        ist.
+        wurde. Die Reihenfolge ist eine feste Katalogreihenfolge und sagt nichts über Bedeutung aus.
+        Eine Zählung von 0 bleibt sichtbar, weil auch sie eine Aussage über den Datenbestand ist.
       </p>
       <ul className="sv-items">
         {model.observations.map((observation) => (
@@ -573,8 +575,8 @@ function HonestySection({ model }: { model: MissionControlModel }) {
     <section aria-labelledby="heute-luecke">
       <h2 id="heute-luecke">Was hier bewusst nicht steht</h2>
       <p className="sv-edge-note">
-        Drei im Konzept beschriebene Bausteine dieses Ortes fehlen. Die Ursache ist je Baustein
-        eine andere und steht darunter jeweils dabei – Datenbestand, Objektvertrag oder
+        Drei im Konzept beschriebene Bausteine dieses Ortes fehlen. Die Ursache ist je Baustein eine
+        andere und steht darunter jeweils dabei – Datenbestand, Objektvertrag oder
         Anmelde-Simulation. Sie werden hier benannt statt verborgen (Dok. 06 §17): ein leerer
         Platzhalter oder ein erfundener Inhalt wäre die schlechtere Antwort.
       </p>
@@ -606,9 +608,8 @@ function HonestySection({ model }: { model: MissionControlModel }) {
             Zeitangabe, die die Systemachse überhaupt kennt, ist der Erfassungszeitpunkt – und der
             ist keine Änderung. Eine erfasste fachliche Ablösung (Dok. 07 §9 R24) verbindet zwei
             eigenständige Objekte und sagt, welcher Stand welchen ersetzt hat; sie ist damit kein
-            Ereignis- und kein Änderungsfeed und ergibt kein „neu seit …". Aus den Daten
-            abgeleitete Historienlage:{' '}
-            {model.historyState.statement}
+            Ereignis- und kein Änderungsfeed und ergibt kein „neu seit …". Aus den Daten abgeleitete
+            Historienlage: {model.historyState.statement}
           </span>
         </li>
         <li>

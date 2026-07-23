@@ -17,12 +17,7 @@ import {
   type OwnerRef,
   type SourceRef,
 } from '@isms/contracts';
-import type {
-  NewObjectRow,
-  NewRelationshipRow,
-  ObjectRow,
-  RelationshipRow,
-} from '../schema';
+import type { NewObjectRow, NewRelationshipRow, ObjectRow, RelationshipRow } from '../schema';
 
 /* -------------------------------------------------------------------------- */
 /* Objekt                                                                      */
@@ -86,10 +81,7 @@ export function rowToObject(row: ObjectRow): ObjectEnvelope {
 /* Beziehung                                                                   */
 /* -------------------------------------------------------------------------- */
 
-export function relationshipToRow(
-  tenantId: string,
-  rel: RelationshipEnvelope,
-): NewRelationshipRow {
+export function relationshipToRow(tenantId: string, rel: RelationshipEnvelope): NewRelationshipRow {
   if (rel.tenant_id !== tenantId) {
     throw new Error(
       `Tenant-Mismatch beim Schreiben von Beziehung "${rel.relationship_id}": ` +

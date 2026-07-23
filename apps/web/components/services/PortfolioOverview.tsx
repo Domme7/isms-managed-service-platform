@@ -28,9 +28,8 @@ export function PortfolioOverview({ entries }: { entries: readonly PortfolioTena
           rein mandantenweisen Aggregation: OFFENE FRAGE O-WP012-03, Dok. 07 P09. */}
       <p className="tw-muted">
         Welche Mandanten haben welche Services? Aggregation je Mandant nebeneinander – ohne
-        mandantenübergreifende Verknüpfung. Sichtbar für die Service-Organisation
-        (Consulting &amp; Service World); reine Anzeige-Verdichtung in der Demo, keine
-        Sicherheitsgrenze.
+        mandantenübergreifende Verknüpfung. Sichtbar für die Service-Organisation (Consulting &amp;
+        Service World); reine Anzeige-Verdichtung in der Demo, keine Sicherheitsgrenze.
       </p>
       <ul className="tw-grid">
         {entries.map((entry) => (
@@ -51,7 +50,10 @@ export function PortfolioOverview({ entries }: { entries: readonly PortfolioTena
                     >
                       {service.name}
                     </Link>
-                    <span className="sv-item-meta"> · Lebenszyklus-Stand: {service.lifecycle_status}</span>
+                    <span className="sv-item-meta">
+                      {' '}
+                      · Lebenszyklus-Stand: {service.lifecycle_status}
+                    </span>
                   </li>
                 ))}
               </ul>

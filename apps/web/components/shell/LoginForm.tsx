@@ -105,9 +105,7 @@ export function LoginForm({
             ))}
           </select>
         </label>
-        {selectedTenant ? (
-          <p className="login-tenant-desc">{selectedTenant.description}</p>
-        ) : null}
+        {selectedTenant ? <p className="login-tenant-desc">{selectedTenant.description}</p> : null}
       </fieldset>
 
       <button type="submit" className="login-submit">
