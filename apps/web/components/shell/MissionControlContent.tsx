@@ -148,29 +148,28 @@ export function MissionControlContent({
       <p className="tw-eyebrow">Heute · Mission Control</p>
       <h1>Heute</h1>
 
-      {/* Leitfrage des Ortes, wörtlich aus `lib/shell/places.ts` (Dok. 06 §7 S01). */}
+      {/* Leitfrage des Ortes, wörtlich aus `lib/shell/places.ts` (Dok. 06 §7 S01). ANTWORT-MODUS
+          (DR-0013): die Leitfrage wird NICHT mehr im nächsten Satz negiert – direkt darunter
+          folgen Kontext, Tiefenschalter und der Klartext-Stand. Die Ehrlichkeitsklammer der
+          Leitfrage steht als ruhige Zeile am Seitenende (weiter unten). */}
       <p className="tw-question">{place.question}</p>
-
-      {/* Lead seit dem Review-Pass (Product-Finding) kürzer und positiv geführt; die
-          Ehrlichkeitsklammer bleibt: beide unbelegten Teile der Leitfrage werden benannt. */}
-      <p className="tw-lead">
-        Read-only Startpunkt auf dem synthetischen Demo-Datenbestand des aktiven Mandanten:
-        erfasster Stand, Abdeckungen und Einstiege. Nicht belegt und deshalb hier nicht beantwortet:
-        „seit meinem letzten Besuch" und eine Priorisierung – beides steht am Seitenende als
-        benannte Lücke.
-      </p>
 
       {model && dashboard ? (
         <>
-          {role === null ? <NeutralerEinstiegHinweis /> : null}
-
+          {/* ANTWORT ZUERST, LÜCKE ZULETZT (DR-0013): erst die belegte, orientierende
+              Kontextleiste und der kompakte Tiefenschalter, dann SOFORT der Klartext-Stand +
+              die Statuskacheln. Über der Falz stehen Zahlen und Stände, nicht Meta-Text. */}
           <ContextBar model={model} role={role} tenant={tenant} world={world} />
-
-          <KundenbereichEinstieg role={role} tenant={tenant} />
 
           <TiefenSchalter tiefe={aktiveTiefe} onChange={wechsleTiefe} />
 
           <DashboardSection dashboard={dashboard} role={role} />
+
+          {/* Orientierende Notizen (neutraler Einstieg, Kundenbereich) stehen NACH der Antwort,
+              damit sie den Statusblock nicht über der Falz nach unten drücken (Antwort-Modus). */}
+          {role === null ? <NeutralerEinstiegHinweis /> : null}
+
+          <KundenbereichEinstieg role={role} tenant={tenant} />
 
           {sectionOrder
             .filter((id) => SECTION_EBENE[id] <= aktiveTiefe)
@@ -186,6 +185,19 @@ export function MissionControlContent({
             ))}
 
           <HonestySection model={model} />
+
+          {/* EHRLICHKEITSKLAMMER DER LEITFRAGE – ruhig ans Seitenende verlagert (DR-0013
+              „Antwort zuerst, Lücke zuletzt"). Der frühere Intro-Absatz und die Negation der
+              Leitfrage stehen jetzt als EINE dezente Zeile hier unten. Die Ehrlichkeits-SUBSTANZ
+              bleibt unverändert: beide unbelegten Teile der Leitfrage („seit meinem letzten
+              Besuch", eine Priorisierung) werden benannt – die benannten Lücken selbst stehen
+              unmittelbar darüber unter „Was hier bewusst nicht steht". */}
+          <p className="ht-seitenfuss">
+            Read-only Startpunkt auf dem synthetischen Demo-Datenbestand des aktiven Mandanten:
+            erfasster Stand, Abdeckungen und Einstiege. Nicht belegt und deshalb hier nicht
+            beantwortet: „seit meinem letzten Besuch" und eine Priorisierung – beide Lücken sind
+            oben unter „Was hier bewusst nicht steht" benannt.
+          </p>
 
           <SeitenbausteineHinweis ort="heute" />
         </>
@@ -334,8 +346,14 @@ function NeutralerEinstiegHinweis() {
 
 /**
  * Wahl der Detailtiefe als Radiogruppe: Text + Radio-Form (nie nur Farbe, 06-D11). Die drei
- * Stufen samt Beschreibung kommen aus `DETAILTIEFEN` (eine Quelle). Keine Animation – nichts,
+ * Stufen samt Kurzbeschreibung kommen aus `DETAILTIEFEN` (eine Quelle). Keine Animation – nichts,
  * was `prefers-reduced-motion` unterdrücken müsste.
+ *
+ * KOMPAKT (DR-0013 „Detailtiefe als kompakter Umschalter … ohne Erklärabsatz und ohne
+ * localStorage-/Datenschutz-Prosa"): Der frühere Erklärabsatz ist entfernt, damit der Schalter
+ * den Klartext-Stand nicht nach unten drückt. Gespeichert wird weiterhin STILL (nur die Stufe,
+ * mandanten-/rollenfrei – `HeuteView`/`lib/heute/detailtiefe.ts`); dass die Ebenen kumulativ
+ * sind, trägt die Kurzbeschreibung jeder Stufe.
  */
 function TiefenSchalter({
   tiefe,
@@ -348,14 +366,8 @@ function TiefenSchalter({
   const gruppe = useId();
 
   return (
-    <fieldset className="ht-tiefe">
+    <fieldset className="ht-tiefe ht-tiefe--kompakt">
       <legend>Detailtiefe dieser Ansicht</legend>
-      <p className="ht-tiefe-hinweis">
-        Jede Ebene enthält die vorherigen – nichts geht verloren, tiefere Inhalte öffnen sich
-        kontrolliert. Die Wahl wird, wenn Ihr Browser lokalen Speicher erlaubt, auf diesem Gerät
-        gespeichert: nur die Stufe, ohne Mandanten- oder Rollenbezug. Kontext, Kacheln und die
-        benannten Grenzen dieser Seite bleiben in jeder Tiefe sichtbar.
-      </p>
       <div className="ht-tiefe-optionen">
         {DETAILTIEFEN.map((stufe) => (
           <label

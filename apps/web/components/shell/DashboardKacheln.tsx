@@ -7,11 +7,17 @@
  *
  * SELBSTERKLÄRUNG JEDER KACHEL (Dok. 06, Abschnitt „Datenvisualisierung, Accessibility &
  * Responsive Design": „Jedes Diagramm beantwortet eine benannte Frage und nennt Scope sowie
- * Datenstand"): Frage als Überschrift, Scope und Datenstand sichtbar, Ermittlungsregel als
- * aufklappbare `<details>` (progressive Offenlegung, Dok. 06 P06 – die Regel ist immer einen
- * Klick entfernt, nie versteckt), Drill-down als sichtbarer Link (DR-0008: keine Ampel ohne
- * Weg in die Begründung; Dok. 06 „Bewusst vermiedene Muster": keine Dashboard-Wand ohne
- * erkennbare nächste Entscheidung).
+ * Datenstand"): Frage als Überschrift, Zahl/Balken groß, Badge, Drill-down als sichtbarer Link
+ * (DR-0008: keine Ampel ohne Weg in die Begründung; Dok. 06 „Bewusst vermiedene Muster": keine
+ * Dashboard-Wand ohne erkennbare nächste Entscheidung).
+ *
+ * KACHEL-DEDUP (DR-0013 „Kachel-Boilerplate raus"): Der seitenweite Scope und Datenstand stehen
+ * EINMAL in der Kontextleiste der Seite (`PageContextBar`), nicht wiederholt auf jeder Kachel.
+ * Die kachelSPEZIFISCHE Grundgesamtheit und ihr Datenstand bleiben Pflichtangabe (DR-0008: jede
+ * Kachel nennt Scope + Datenstand), stehen aber – zusammen mit der Ermittlungsregel – hinter dem
+ * dezenten `<details>`-Element „Ermittlungsregel" (progressive Offenlegung, Dok. 06 P06 – immer
+ * einen Klick entfernt, nie versteckt), statt die Kachelfläche zu füllen. „Zahl groß, Kontext
+ * klein" (DR-0013): die Kachelfläche trägt Frage + Zahl/Balken + Badge + Drill-down.
  *
  * NIE NUR FARBE (Dok. 06 06-D11 / „Visuelles Designsystem"): Badges tragen Symbol (Form,
  * `aria-hidden`) + Text; der Abdeckungsbalken ist eine zusätzliche Form zur sichtbaren
@@ -57,25 +63,30 @@ export function BadgeAnzeige({ badge }: { badge: DashboardBadge }) {
 }
 
 /**
- * Gemeinsamer Erklärteil jeder Kachel: Scope, Datenstand (Systemachse, ehrlicher Leerwert),
- * Ermittlungsregel, Drill-down. Struktur-, nicht Wortlaut-Vertrag (Lektion 11) – per Test
- * über die Klassen `db-meta`, `db-regel`, `db-drill` geprüft.
+ * Gemeinsamer Erklärteil jeder Kachel: der dezente Aufklappteil (kachelspezifischer Scope +
+ * Datenstand + Ermittlungsregel) und der sichtbare Drill-down. Struktur-, nicht Wortlaut-Vertrag
+ * (Lektion 11) – per Test über die Klassen `db-meta`, `db-regel`, `db-drill` geprüft.
+ *
+ * KACHEL-DEDUP (DR-0013, s. Kopfnotiz): Scope und Datenstand füllen NICHT mehr die Kachelfläche,
+ * sondern stehen mit der Ermittlungsregel hinter dem `<details>` – der seitenweite Scope +
+ * Datenstand steht einmal in der Kontextleiste. DR-0008-Pflicht (Kachel nennt Scope +
+ * Datenstand) bleibt erfüllt: beides ist einen Klick entfernt, nie versteckt.
  */
 export function KachelErklaerung({ tile }: { tile: TileExplanation }) {
   return (
     <>
-      <p className="db-meta">
-        {'Scope: '}
-        {tile.scope}
-        {' · Datenstand (zuletzt im System erfasst): '}
-        {tile.datenstand && tile.datenstandDisplay ? (
-          <time dateTime={tile.datenstand}>{tile.datenstandDisplay}</time>
-        ) : (
-          'keine Erfassung im Datenbestand'
-        )}
-      </p>
       <details className="db-regel">
         <summary>Ermittlungsregel</summary>
+        <p className="db-meta">
+          {'Scope: '}
+          {tile.scope}
+          {' · Datenstand (zuletzt im System erfasst): '}
+          {tile.datenstand && tile.datenstandDisplay ? (
+            <time dateTime={tile.datenstand}>{tile.datenstandDisplay}</time>
+          ) : (
+            'keine Erfassung im Datenbestand'
+          )}
+        </p>
         <p>{tile.regel}</p>
       </details>
       <p className="db-drill">

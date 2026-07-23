@@ -809,6 +809,14 @@ h3 {
   padding-top: 1.75rem;
 }
 
+/* Sticky-Topbar-Occlusion (DR-0013): beim Ankersprung/Scrollen darf die sticky Kopfleiste den
+   Zielblock (z. B. den Klartext-Stand „Wie ist der Stand?") nicht verdecken. Ziel-Überschriften
+   mit id und jedes :target-Ziel erhalten Scroll-Abstand in Höhe der Topbar plus etwas Luft. */
+.shell-main :where(h1, h2, h3)[id],
+.shell-main [id]:target {
+  scroll-margin-top: calc(var(--shell-topbar-h) + 1rem);
+}
+
 /* --- Responsive: Nav einklappbar ------------------------------------------ */
 @media (max-width: 860px) {
   .shell-nav-toggle {
@@ -1351,6 +1359,17 @@ h3 {
   max-width: 78ch;
 }
 
+/* Ehrlichkeitsklammer der Leitfrage als ruhige Schlusszeile (DR-0013 „Antwort zuerst, Lücke
+   zuletzt"): dezent, nachgeordnet, mit leiser Abtrennung – keine Wand über der Falz. */
+.ht-seitenfuss {
+  margin: 1.75rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--tw-line);
+  font-size: 0.85rem;
+  color: var(--tw-muted);
+  max-width: 72ch;
+}
+
 /* =============================================================================
    Rollenfokus der Ebene 1 (WP-020 Slice 5, Dok. 06 Tabelle „Rollenvarianten"):
    benannte Betonung + Lücken, Teal als aktive Orientierung, Text + Rahmen,
@@ -1388,6 +1407,13 @@ h3 {
   margin: 0 0 1.5rem;
   background: var(--tw-surface);
 }
+/* Kompakter Umschalter (DR-0013 „Detailtiefe als kompakter Umschalter … Kein Erklärabsatz"):
+   ohne Erklärabsatz kleinerer Fußabdruck, damit der Klartext-Stand nicht nach unten gedrückt
+   wird. */
+.ht-tiefe--kompakt {
+  padding: 0.55rem 0.8rem 0.7rem;
+  margin: 0 0 1.25rem;
+}
 .ht-tiefe > legend {
   font-size: 0.78rem;
   font-weight: 700;
@@ -1395,12 +1421,6 @@ h3 {
   letter-spacing: 0.05em;
   color: var(--tw-muted);
   padding: 0 0.35rem;
-}
-.ht-tiefe-hinweis {
-  margin: 0 0 0.7rem;
-  font-size: 0.8rem;
-  color: var(--tw-muted);
-  max-width: 72ch;
 }
 .ht-tiefe-optionen {
   display: grid;

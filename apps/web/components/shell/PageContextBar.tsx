@@ -11,7 +11,20 @@
  *   5. Vertraulichkeitsstufe und Exportrestriktion
  *   6. Vertrauensgrad bei abgeleiteten Aussagen
  *
- * Diese Komponente rendert alle sechs in genau dieser Reihenfolge – SO WEIT BELEGT:
+ * ANTWORT-MODUS (DR-0013 „Kontextleiste zeigt Belegtes, nicht Abwesenheit"): Die Leiste führt
+ * mit den BELEGTEN, orientierenden Feldern (Mandant · Produktrolle · Scope · Datenstand). Die
+ * drei Angaben OHNE Datenträger (Vertretung, Vertraulichkeit/Exportrestriktion, Vertrauensgrad)
+ * werden NICHT mehr als drei prominente „nicht erfasst"-Leerfelder ausgestellt; das frühere
+ * „Warum nicht erfasst?"-Disclosure entfällt. Alle sechs Kontextelemente aus Dok. 06 bleiben
+ * damit KONZEPTIONELL erfüllt – die drei unbelegten stehen ruhig aufklappbar in EINER
+ * Vollständigkeitszeile am Ende der Leiste.
+ *
+ * GRENZE (DR-0013, „was BLEIBT"): Die Aussage, dass diese Angaben keinen Träger haben, darf
+ * nicht verloren gehen. Ihre vollständigen Begründungen (`CONTEXT_GAPS`, weiterhin die EINE
+ * Quelle) bleiben deshalb unverändert im DOM – nur ruhiger platziert (progressive Offenlegung,
+ * Dok. 06 P06). Es wird kein Wert erfunden.
+ *
+ * So weit BELEGT gerendert:
  *  - Mandant und Produktrolle kommen aus der aktiven Auswahl (Session-Simulation: der Mandant
  *    und optional eine gewählte Rolle, DR-0009; `role === null` = neutraler Zustand).
  *    Eine Organisationseinheit unterhalb des Mandanten kennt der Datenbestand nicht; das
@@ -20,11 +33,6 @@
  *    Ableitung (`lib/shell/page-context.ts` bzw. bestehende Seitenmodelle) – Label und
  *    Leerwert-Text sind seitenspezifisch, damit die Leiste dem Seiteninhalt nie widerspricht
  *    (Review-Lektion aus `/entscheidungen`: „Datenstand der Entscheidungen").
- *  - Vertretung, Vertraulichkeitsstufe/Exportrestriktion und Vertrauensgrad haben im heutigen
- *    Datenbestand KEINEN Träger: der Wert lautet knapp „nicht erfasst" (`CONTEXT_GAP_WERT`),
- *    die vollständigen Begründungen (`CONTEXT_GAPS`, weiterhin die EINE Quelle) stehen
- *    aufklappbar in derselben Leiste (progressive Offenlegung, Dok. 06 P06) – kein erfundener
- *    Wert, kein Textteppich in der Wertspalte.
  *
  * // OFFENE FRAGE O-WP016-08 (bestehend, hier referenziert statt dupliziert): „Vertrauensgrad"
  * // und „Version" sind im Objektvertrag Felder EINES Objekts bzw. EINER Kante; ein
@@ -52,9 +60,6 @@ import type { DemoRole } from '../../lib/shell/roles';
  * Zustand, keine Datenlücke: die Rollenwahl ist in der Demo bewusst optional.
  */
 export const CONTEXT_NEUTRAL_ROLE = 'neutral – keine Rolle gewählt';
-
-/** Knapper Leitwert der drei unbelegten Kontextelemente (Begründung steht aufklappbar). */
-export const CONTEXT_GAP_WERT = 'nicht erfasst';
 
 /**
  * Die drei benannten Datenlücken der Kontextleiste – EINE Quelle für alle Live-Hauptseiten,
@@ -114,10 +119,6 @@ export function PageContextBar({
           <dd>{role ? `${role.id} · ${role.name}` : CONTEXT_NEUTRAL_ROLE}</dd>
         </div>
         <div>
-          <dt>Vertretung (zeitlich begrenzt)</dt>
-          <dd className="od-context-gap">{CONTEXT_GAP_WERT}</dd>
-        </div>
-        <div>
           <dt>{scopeLabel}</dt>
           <dd>{scopeValue}</dd>
         </div>
@@ -125,22 +126,16 @@ export function PageContextBar({
           <dt>{datenstandLabel}</dt>
           <dd>{datenstandValue}</dd>
         </div>
-        <div>
-          <dt>Vertraulichkeitsstufe und Exportrestriktion</dt>
-          <dd className="od-context-gap">{CONTEXT_GAP_WERT}</dd>
-        </div>
-        <div>
-          <dt>Vertrauensgrad bei abgeleiteten Aussagen</dt>
-          <dd className="od-context-gap">{CONTEXT_GAP_WERT}</dd>
-        </div>
         {children}
-        {/* Begründungen der drei „nicht erfasst"-Werte: aufklappbar (P06); die Texte bleiben
-            die EINE Quelle `CONTEXT_GAPS` und stehen unverändert im DOM (Wächter prüfen sie). */}
+        {/* Vollständigkeit des Kontexts (DR-0013): die drei Angaben ohne Datenträger stehen
+            NICHT mehr als drei prominente Leerfelder, sondern ruhig aufklappbar in EINER Zeile
+            am Ende der Leiste. Die Texte bleiben die EINE Quelle `CONTEXT_GAPS` und stehen
+            unverändert im DOM (die Aussage geht nicht verloren; Wächter prüfen sie). */}
         <div className="od-context-hinweis">
-          <dt>Warum „nicht erfasst"?</dt>
+          <dt>Vollständigkeit des Kontexts</dt>
           <dd>
             <details className="od-context-details">
-              <summary>Begründung der drei nicht erfassten Angaben</summary>
+              <summary>Drei Kontextangaben ohne Datenträger (Details)</summary>
               <ul>
                 <li>
                   <strong>Vertretung (zeitlich begrenzt):</strong> {CONTEXT_GAPS.vertretung}

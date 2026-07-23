@@ -14,10 +14,15 @@
  *     FINDING-0008-Fix, kein ARIA-Rollen-Override mehr).
  *  2. BELEGTE Elemente zeigen belegte Werte: Mandant (Anzeigename), Produktrolle
  *     („R0x · Name"), ein Scope-/Objektkontext-Eintrag, ein Datenstand-Eintrag.
- *  3. UNBELEGTE Elemente stehen als BENANNTE DATENLÜCKE: Kurzwert `CONTEXT_GAP_WERT` in der
- *     Wertspalte plus die vollständigen Begründungen aus `CONTEXT_GAPS` aufklappbar in der
- *     Leiste (kein erfundener Wert, keine still abweichende Zweitformulierung) –
+ *  3. UNBELEGTE Elemente werden NICHT mehr als drei prominente „nicht erfasst"-Leerfelder
+ *     ausgestellt (DR-0013 „Kontextleiste zeigt Belegtes, nicht Abwesenheit"). Die Substanz
+ *     bleibt aber vollständig im DOM: die Begründungen aus `CONTEXT_GAPS` stehen ruhig
+ *     aufklappbar in EINER Vollständigkeitszeile am Ende der Leiste (`.od-context-details`) –
  *     Vertretung, Vertraulichkeitsstufe/Exportrestriktion, Vertrauensgrad (Muster O-WP016-08).
+ *     REGEL-ERHALTEND (DR-0013 „Wächter regel-erhaltend, nie abgeschwächt"): geprüft wird
+ *     weiterhin, dass die Aussage vorhanden ist – jetzt EINMAL je Leiste statt als Leerfeld-
+ *     Wand; zusätzlich als Negativbeweis, dass kein prominentes „nicht erfasst"-Leerfeld
+ *     (`.od-context-gap`) mehr in der Leiste steht.
  *
  * META-ASSERTION gegen stilles Veralten (Muster `prozessvokabular.test.tsx`): das Register
  * unten wird gegen die `live: true`-Orte aus `NAV_PLACES` abgeglichen – ein künftiger echter
@@ -37,7 +42,7 @@ import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
-import { CONTEXT_GAPS, CONTEXT_GAP_WERT, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
+import { CONTEXT_GAPS, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
 import { SessionProvider } from '../shell/SessionProvider';
 import { TwinContextBar } from '../twin/TwinContextBar';
 import { NAV_PLACES, type PlaceId } from '../../lib/shell/places';
@@ -130,17 +135,20 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
       // Nordwerk trägt einen Datenbestand: der Datenstand ist ein maschinenlesbares Datum.
       expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
 
-      // (3) Unbelegte Elemente: der gemeinsame Kurzwert „nicht erfasst" – kein erfundener
-      // Wert; die VOLLSTÄNDIGEN Begründungen (weiterhin die eine Quelle CONTEXT_GAPS) stehen
-      // aufklappbar in derselben Leiste im DOM (Review-Verdichtung; Regel unverändert:
-      // benannte Lücke statt Wert, Wortlaut aus einer Quelle).
-      expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
-      expect(eintrag(kontext, 'Vertraulichkeitsstufe und Exportrestriktion').dd).toBe(
-        CONTEXT_GAP_WERT,
-      );
-      expect(eintrag(kontext, 'Vertrauensgrad bei abgeleiteten Aussagen').dd).toBe(
-        CONTEXT_GAP_WERT,
-      );
+      // (3) Unbelegte Elemente: KEINE prominenten „nicht erfasst"-Leerfelder mehr (DR-0013
+      // „Kontextleiste zeigt Belegtes, nicht Abwesenheit"). Regel-erhaltend geprüft wird
+      // stattdessen: (a) es bleibt kein Leerfeld (`.od-context-gap`) in der Leiste; (b) die
+      // Aussage geht nicht verloren – die VOLLSTÄNDIGEN Begründungen (weiterhin die eine Quelle
+      // CONTEXT_GAPS) stehen aufklappbar in EINER Vollständigkeitszeile (`.od-context-details`)
+      // unverändert im DOM (DR-0013-Grenze: benannte Lücke bleibt, nur ruhiger platziert).
+      expect(
+        kontext.querySelectorAll('.od-context-gap'),
+        `${ort}: Leerfeld-Wand geblieben`,
+      ).toHaveLength(0);
+      expect(
+        kontext.querySelector('.od-context-details'),
+        `${ort}: Vollständigkeitszeile fehlt`,
+      ).not.toBeNull();
       for (const begruendung of Object.values(CONTEXT_GAPS)) {
         expect(kontext.textContent ?? '', `${ort}: Begründung fehlt in der Leiste`).toContain(
           begruendung,
@@ -201,8 +209,9 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
       expect(eintrag(kontext, 'Aktive Produktrolle').dd).toBe(CONTEXT_NEUTRAL_ROLE);
       // Negativbeweis: es wird keine Rollen-ID erfunden.
       expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
-      // Die drei benannten Datenlücken bleiben unverändert (neutral ändert keine Daten).
-      expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
+      // Die drei benannten Datenlücken bleiben unverändert im DOM (neutral ändert keine Daten);
+      // ihre Begründung steht aufklappbar in der Leiste, kein Leerfeld (DR-0013).
+      expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
       expect(kontext.textContent ?? '').toContain(CONTEXT_GAPS.vertretung);
 
       ergebnis.unmount();
@@ -225,7 +234,8 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     expect(eintrag(kontext, 'Datenstand der ISMS-Kernobjekte (zuletzt im System erfasst)').dd).toBe(
       'kein ISMS-Kernobjekt erfasst',
     );
-    expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
+    // Kein Leerfeld mehr; die benannte Lücke steht aufklappbar in der Leiste (DR-0013).
+    expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
     expect(kontext.textContent ?? '').toContain(CONTEXT_GAPS.vertretung);
     unmount();
   });
@@ -246,11 +256,9 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     expect(eintrag(kontext, 'Scope-Kennungen des Kundenbereichs').dd.length).toBeGreaterThan(0);
     expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
 
-    expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
-    expect(eintrag(kontext, 'Vertraulichkeitsstufe und Exportrestriktion').dd).toBe(
-      CONTEXT_GAP_WERT,
-    );
-    expect(eintrag(kontext, 'Vertrauensgrad bei abgeleiteten Aussagen').dd).toBe(CONTEXT_GAP_WERT);
+    // Kein Leerfeld mehr; die drei benannten Lücken stehen aufklappbar in der Leiste (DR-0013).
+    expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
+    expect(kontext.querySelector('.od-context-details')).not.toBeNull();
     for (const begruendung of Object.values(CONTEXT_GAPS)) {
       expect(kontext.textContent ?? '').toContain(begruendung);
     }
@@ -279,7 +287,9 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     expect(eintrag(kontext, 'Scope-Kennungen des Kundenbereichs').dd).toBe(
       'keine Scope-Zuordnung erfasst',
     );
-    expect(eintrag(kontext, 'Vertretung (zeitlich begrenzt)').dd).toBe(CONTEXT_GAP_WERT);
+    // Kein Leerfeld mehr; die benannte Lücke steht aufklappbar in der Leiste (DR-0013).
+    expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
+    expect(kontext.textContent ?? '').toContain(CONTEXT_GAPS.vertretung);
     unmount();
   });
 
