@@ -47,67 +47,53 @@ describe('NAV_PLACES – acht stabile Orte (Dok. 06 06-D01)', () => {
     expect(getPlace('isms').live).toBe(true);
   });
 
-  it('markiert „Heute" als live und ohne geplanten Screen (WP-016 Slice 2)', () => {
-    const heute = getPlace('heute');
-    expect(heute.live).toBe(true);
-    // Der Ort ist kein Platzhalter mehr: die Ankündigung eines geplanten Screens entfällt.
-    expect(heute.plannedScreen).toBeUndefined();
+  it('markiert „Heute" als live (WP-016 Slice 2)', () => {
+    expect(getPlace('heute').live).toBe(true);
   });
 
-  it('markiert „Entscheidungen" als live und ohne geplanten Screen (WP-017 Slice 2)', () => {
+  it('markiert „Entscheidungen" als live und behält die Leitfrage (WP-017 Slice 2)', () => {
     const entscheidungen = getPlace('entscheidungen');
     expect(entscheidungen.live).toBe(true);
-    // Der Ort ist kein Platzhalter mehr: die Ankündigung eines geplanten Screens entfällt.
-    expect(entscheidungen.plannedScreen).toBeUndefined();
     // Die Leitfrage bleibt unverändert erhalten – die Seite beantwortet sie nicht, sondern
     // benennt sichtbar, warum sie auf dieser Datenlage nicht beantwortbar ist (O-WP017-06).
     expect(entscheidungen.question).toBe('Welche Geschäftsentscheidung ist jetzt erforderlich?');
   });
 
-  it('markiert „Administration" als live und ohne geplanten Screen (WP-032 Slice 1)', () => {
-    const administration = getPlace('administration');
-    expect(administration.live).toBe(true);
-    // Der Ort ist kein Platzhalter mehr: die Ankündigung eines geplanten Screens entfällt.
-    expect(administration.plannedScreen).toBeUndefined();
-    // KONZEPTANKER: Die Leitfrage des Screenkatalogs bleibt unverändert erhalten. Die Seite
-    // rendert sie NICHT als sichtbare Überschrift (sie verlangt ein Sicherheitsurteil, das der
-    // heutige Bau nicht fällen kann) und beantwortet die drei Teilfragen stattdessen einzeln
-    // und ehrlich – ohne Zusage und ohne Fehlalarm (O-WP032-02/03).
-    expect(administration.question).toBe(
+  /**
+   * KONZEPTANKER DER DREI ZULETZT AUSGEBAUTEN ORTE (WP-032): Ihre Leitfragen aus dem
+   * Screenkatalog bleiben unverändert im Ortsregister stehen, obwohl keine der drei Seiten sie
+   * als sichtbare Überschrift rendert – sie wären dort eine Zusage, die im nächsten Satz
+   * zurückgenommen werden müsste (DR-0013 Nr. 1). Jede Seite führt stattdessen mit der Frage,
+   * die sie heute beantwortet, und benennt die Lücke ruhig am Seitenende. Ob der Wortlaut der
+   * hinterlegten Fragen selbst überarbeitet wird, ist Produkt-/Owner-Entscheidung
+   * (offene Frage O-WP032-02) und wird hier NICHT vorweggenommen.
+   */
+  it('behält die hinterlegten Leitfragen der zuletzt ausgebauten Orte unverändert (O-WP032-02)', () => {
+    expect(getPlace('administration').question).toBe(
       'Ist der Tenant sicher, korrekt konfiguriert und verbunden?',
+    );
+    expect(getPlace('reports').question).toBe(
+      'Welche Geschichte soll aus demselben Datenstand entstehen?',
+    );
+    expect(getPlace('wissen').question).toBe(
+      'Wo finde ich Erklärung, Vorlage und bewährtes Vorgehen zum aktuellen Kontext?',
     );
   });
 
-  it('markiert „Reports" als live und ohne geplanten Screen (WP-032 Slice 2)', () => {
-    const reports = getPlace('reports');
-    expect(reports.live).toBe(true);
-    // Der Ort ist kein Platzhalter mehr: die Ankündigung eines geplanten Screens entfällt.
-    expect(reports.plannedScreen).toBeUndefined();
-    // KONZEPTANKER: Die Leitfrage des Screenkatalogs bleibt unverändert erhalten. Die Seite
-    // rendert sie NICHT als sichtbare Überschrift (sie setzt einen Generator voraus, den es
-    // nicht gibt) und führt stattdessen mit Struktur und gezählter Grundlage (O-WP032-02).
-    expect(reports.question).toBe('Welche Geschichte soll aus demselben Datenstand entstehen?');
-  });
-
-  it('markiert die übrigen Platzhalter-Orte als (noch) nicht live', () => {
-    // Live sind bislang „Kunden" (Twin Explorer, WP-004/011), „Services" (WP-012 Slice 2),
-    // „ISMS" (WP-013 Slice 1), „Heute" (WP-016 Slice 2), „Entscheidungen" (WP-017 Slice 2),
-    // „Administration" (WP-032 Slice 1) und „Reports" (WP-032 Slice 2).
-    const live: readonly string[] = [
-      'kunden',
-      'services',
-      'isms',
-      'heute',
-      'entscheidungen',
-      'administration',
-      'reports',
-    ];
-    const placeholders = NAV_PLACES.filter((p) => !live.includes(p.id));
-    expect(placeholders).toHaveLength(1);
-    for (const place of placeholders) {
-      expect(place.live).not.toBe(true);
-      // Ein Platzhalter-Ort behält seine ehrliche Ankündigung (`PlaceholderPage` zeigt sie).
-      expect(place.plannedScreen).toBeTruthy();
+  /**
+   * MEILENSTEIN WP-032: Alle acht stabilen Orte zeigen echten Inhalt. Damit gibt es keinen
+   * Platzhalter-Ort mehr – und deshalb auch keine Platzhalterseite und kein Feld für einen
+   * „geplanten Screen" (beides mit Slice 3 entfernt, siehe `lib/shell/places.ts`).
+   *
+   * Diese Assertion ist bewusst eine POSITIVE Aussage über alle acht Orte statt einer Zählung
+   * verbliebener Platzhalter: Sie bleibt aussagekräftig, wenn später ein Ort (etwa für einen
+   * Umbau) vorübergehend zurückgestuft würde – dann wird sie rot und erzwingt eine bewusste
+   * Entscheidung samt Navigations-Kennzeichnung.
+   */
+  it('alle acht Orte sind live – es gibt keinen Platzhalter-Ort mehr (WP-032)', () => {
+    expect(NAV_PLACES).toHaveLength(8);
+    for (const place of NAV_PLACES) {
+      expect(place.live, `Ort „${place.label}" ist nicht live`).toBe(true);
     }
   });
 });

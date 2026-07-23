@@ -120,8 +120,8 @@ export function getBaustein(id: BausteinId): Seitenbaustein {
 }
 
 /**
- * Orte der Konvention: die Live-Hauptseiten (`heute`/`kunden`/`isms`/`entscheidungen`/
- * `services`/`reports`/`administration`) plus zwei Detailseiten UNTER bestehenden Orten (Muster: eigene
+ * Orte der Konvention: alle acht Live-Hauptseiten (`heute`/`kunden`/`isms`/`entscheidungen`/
+ * `services`/`reports`/`wissen`/`administration`) plus zwei Detailseiten UNTER bestehenden Orten (Muster: eigene
  * Zuordnung, kein neuer Nav-Ort). `objekt360` liegt unter „Kunden"/„ISMS"/„Services";
  * `kundenstart` ist die
  * Kunden-Startseite „verwalten" unter dem Ort „Kunden" (WP-006 Slice 1). Beide sind KEINE
@@ -134,6 +134,7 @@ export type BausteinOrt =
   | 'entscheidungen'
   | 'services'
   | 'reports'
+  | 'wissen'
   | 'administration'
   | 'objekt360'
   | 'kundenstart';
@@ -382,6 +383,49 @@ export const BAUSTEIN_ABDECKUNG: Readonly<Record<BausteinOrt, readonly BausteinZ
       fehlt:
         'Quellen-, Vertrauens- und Freigabeangaben je Aussage; sie entstehen erst mit einem ' +
         'erzeugten Bericht.',
+    },
+  ],
+  wissen: [
+    {
+      baustein: 'question_header',
+      status: 'teilweise',
+      wo: 'Leitfrage am Seitenkopf; Gegenstand ist das gemeinsame Vokabular der Plattform.',
+      fehlt:
+        'Ein Seiten-Status und ein Seiten-Owner (der Glossar ist kein Objekt und trägt beides nicht).',
+    },
+    { baustein: 'context_bar', status: 'vorhanden', wo: 'Kontextleiste unter dem Seitenkopf.' },
+    {
+      baustein: 'summary_pulse',
+      status: 'ohne_traeger',
+      grund:
+        'Ein Glossar hat keinen Zustand, der sich verändern könnte; ein verdichteter Puls hätte ' +
+        'hier nichts zu verdichten.',
+    },
+    {
+      baustein: 'relationship_panel',
+      status: 'teilweise',
+      wo: 'Die Beziehungsarten mit ihrer Bedeutung und ihrer Leserichtung.',
+      fehlt:
+        'Konkret verknüpfte Objekte und ihre Herkunft; der Glossar erklärt die Arten, nicht ' +
+        'einzelne Verbindungen.',
+    },
+    { baustein: 'impact_panel', status: 'ohne_traeger', grund: GRUND_IMPACT },
+    { baustein: 'decision_card', status: 'ohne_traeger', grund: GRUND_DECISION_CARD },
+    { baustein: 'action_rail', status: 'ohne_traeger', grund: GRUND_ACTION_RAIL },
+    {
+      baustein: 'history_decision_record',
+      status: 'ohne_traeger',
+      grund:
+        'Das Vokabular ist ein versionierter Vertrag, sein Änderungsverlauf ist im Produkt aber ' +
+        'nicht hinterlegt; eine Versionsangabe wäre hier erfunden.',
+    },
+    {
+      baustein: 'trust_layer',
+      status: 'teilweise',
+      wo: 'Die gezählte Sprachabdeckung: wie viele Objekt- und Beziehungsarten eine deutsche Bezeichnung tragen.',
+      fehlt:
+        'Quelle, Aktualität und Konflikte des Vokabulars selbst (es trägt im Produkt keinen ' +
+        'Stand und keine Herkunftsangabe).',
     },
   ],
   administration: [

@@ -35,6 +35,7 @@ import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { ReportsContent } from '../reports/ReportsContent';
+import { WissenContent } from '../wissen/WissenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
@@ -216,6 +217,9 @@ const RENDERER_JE_LIVE_ORT = {
   reports: rollenMandantenMatrix('/reports', (r, t) =>
     render(<ReportsContent role={r} tenant={t} />),
   ),
+  // Wissen (WP-032 Slice 3): der Glossar ist mandantenunabhängig, die Kontextleiste jedoch
+  // nicht – deshalb steht auch dieser Ort mit der vollen Matrix unter dem Wächter.
+  wissen: rollenMandantenMatrix('/wissen', (r, t) => render(<WissenContent role={r} tenant={t} />)),
   // Administration (WP-032 Slice 1): sicherheitsnaher Ort mit langen Struktur- und Lückentexten –
   // volle Rollen-/Mandantenmatrix inklusive der leeren Mandanten (Leerzustand ist die
   // Versuchungsstelle, Lektion 12).

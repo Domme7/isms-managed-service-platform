@@ -43,6 +43,7 @@ import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { ReportsContent } from '../reports/ReportsContent';
+import { WissenContent } from '../wissen/WissenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { CONTEXT_GAPS, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
 import { SessionProvider } from '../shell/SessionProvider';
@@ -91,6 +92,10 @@ const HAUPTSEITE_JE_LIVE_ORT: Partial<Record<PlaceId, () => RenderResult>> = {
   services: () =>
     render(<ServicesContent role={role('R08')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   reports: () => render(<ReportsContent role={role('R02')} tenant={tenant(TENANT_ID.NORDWERK)} />),
+  // Der Glossar ist mandantenunabhängig – die Kontextleiste bleibt trotzdem Pflicht, damit der
+  // aktive Mandant nie aus dem Blick gerät. Ihr Objektkontext-Eintrag sagt die Unabhängigkeit
+  // ausdrücklich, ihr Datenstand ist ausdrücklich der des Mandantenbestands.
+  wissen: () => render(<WissenContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   administration: () =>
     render(<AdministrationContent role={role('R12')} tenant={tenant(TENANT_ID.NORDWERK)} />),
 };
@@ -197,6 +202,9 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     reports: () =>
       // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
       render(<ReportsContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
+    wissen: () =>
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
+      render(<WissenContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),
     administration: () =>
       // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral, DR-0009), kein ARIA-Attribut – Fehlalarm der Regel.
       render(<AdministrationContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />),

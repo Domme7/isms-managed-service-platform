@@ -34,11 +34,17 @@ export interface NavPlace {
   /** Pfad-Präfixe, die diesen Ort als "aktiv" markieren. */
   readonly match: readonly string[];
   /**
-   * Geplanter Screen aus Dok. 06 §7 (nur für Platzhalter, ehrliche Empty-Message).
-   * Bei `live: true` entfällt dies, weil bereits echter Inhalt vorhanden ist.
+   * `true`, wenn dieser Ort echten, aus dem Bestand abgeleiteten Inhalt zeigt.
+   *
+   * Seit WP-032 trifft das auf ALLE acht Orte zu. Das Feld bleibt bestehen, weil die
+   * Navigation daraus weiterhin ihre Regel ableitet (ein Ort ohne echten Inhalt wird nie
+   * still als fertig dargestellt) und weil alle vier Wächter ihre Register gegen die
+   * `live: true`-Orte abgleichen.
+   *
+   * ENTFALLEN mit WP-032 Slice 3: das frühere Feld `plannedScreen`. Es war ausschließlich
+   * Eingabe der Platzhalterseite; nachdem alle acht Orte echten Inhalt zeigen, hatte es weder
+   * Träger noch Leser (siehe gelöschte `components/shell/PlaceholderPage.tsx`).
    */
-  readonly plannedScreen?: string;
-  /** `true`, wenn dieser Ort bereits echten (nicht simulierten) Inhalt zeigt. */
   readonly live?: boolean;
 }
 
@@ -119,9 +125,16 @@ export const NAV_PLACES: readonly NavPlace[] = [
     label: 'Wissen',
     href: '/wissen',
     hint: 'Suche, Glossar, Vorlagen, Best Practices, Lernhinweise',
+    // KONZEPTANKER (bewusst unverändert): die Leitfrage des Screenkatalogs. Von ihren drei
+    // Teilen kann die Seite heute nur „Erklärung" beantworten – Vorlagen und bewährte Vorgehen
+    // haben keinen Träger, und kontextsensitiv ist die Seite gar nicht. Sie rendert die Frage
+    // deshalb NICHT als sichtbare Überschrift, die sie im nächsten Satz zurücknehmen müsste
+    // (DR-0013 Nr. 1), sondern führt mit der Begriffsfrage und benennt die drei Lücken am
+    // Seitenende. `question`-Wortlaut = Produkt-/Owner-Entscheidung (O-WP032-02).
     question: 'Wo finde ich Erklärung, Vorlage und bewährtes Vorgehen zum aktuellen Kontext?',
     match: ['/wissen'],
-    plannedScreen: 'Wissens- und Vorlagenbereich',
+    // WP-032 Slice 3: der Ort zeigt echten Inhalt (Glossar des kanonischen Vokabulars).
+    live: true,
   },
   {
     id: 'administration',

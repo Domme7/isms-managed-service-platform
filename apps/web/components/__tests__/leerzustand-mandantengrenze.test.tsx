@@ -35,6 +35,7 @@ import { IsmsContent } from '../isms/IsmsContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ReportsContent } from '../reports/ReportsContent';
+import { WissenContent } from '../wissen/WissenContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { AppShell } from '../shell/AppShell';
 import { MissionControlContent } from '../shell/MissionControlContent';
@@ -106,6 +107,10 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
     // mandantenneutrale Berichtsstruktur bleibt sichtbar, darf aber keine Existenzaussage über
     // weitere Mandanten erzeugen (der Fallkatalog nennt Betreiber-Sichten).
     reports: (t) => render(<ReportsContent role={role('R02')} tenant={t} />),
+    // Wissen (WP-032 Slice 3): der Glossar ist mandantenunabhängig und hat deshalb keinen
+    // eigenen Leerzustand – genau darin liegt die Versuchung, die Leere mit einer Aussage über
+    // andernorts vorhandene Daten zu erklären. Steht deshalb ebenfalls unter dem Wächter.
+    wissen: (t) => render(<WissenContent role={role('R03')} tenant={t} />),
     // Administration (WP-032 Slice 1): sicherheitsnaher Ort – der Leerzustand darf weder eine
     // Existenzaussage über andere Mandanten machen noch das globale Rollen-/Strukturmodell als
     // „Konten dieses Mandanten" ausgeben. Bewusst mit der Administrationsrolle geprüft.

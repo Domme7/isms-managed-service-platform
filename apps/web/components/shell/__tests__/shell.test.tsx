@@ -19,7 +19,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEMO_TENANTS, TENANT_ID } from '@isms/demo-seed';
 import { AppShell } from '../AppShell';
 import { LoginForm } from '../LoginForm';
-import { PlaceholderPage } from '../PlaceholderPage';
 import { SessionProvider } from '../SessionProvider';
 import { NAV_PLACES } from '../../../lib/shell/places';
 import { DEMO_ROLES } from '../../../lib/shell/roles';
@@ -404,33 +403,19 @@ describe('LoginPage – Simulation beschriftet, Anmeldung erzeugt die NEUTRALE S
   });
 });
 
-describe('PlaceholderPage – ehrliche Empty-Message', () => {
-  /**
-   * FIXTURE-WECHSEL (WP-032 Slice 2): Bis hierher lief dieser Test auf dem Ort „Reports". Der
-   * ist seit Slice 2 live und trägt deshalb keinen `plannedScreen` mehr. Geprüft wird jetzt der
-   * verbliebene Platzhalter-Ort. Die REGEL bleibt unverändert (Ort, Leitfrage, ehrliche
-   * Empty-Message, Klartext-Screenname ohne Screen-Code) – gewechselt hat nur das Testobjekt.
-   * Der Testling wird bewusst aus `NAV_PLACES` gezogen, damit er nicht auf einen Ort zeigt, der
-   * inzwischen live ist.
-   */
-  const platzhalter = NAV_PLACES.find((p) => p.live !== true);
-
-  it('es gibt (noch) einen Platzhalter-Ort, auf dem diese Message greift', () => {
-    // Blindheitsschutz: ohne Platzhalter-Ort wäre der Test unten leer statt grün. Fällt der
-    // letzte Ort weg, muss hier bewusst auf eine synthetische Fixture umgestellt werden.
-    expect(platzhalter, 'kein Platzhalter-Ort mehr in NAV_PLACES').toBeDefined();
-    expect(platzhalter?.plannedScreen).toBeTruthy();
-  });
-
-  it('zeigt Ort, Leitfrage und die „entsteht in einer späteren Phase"-Message', () => {
-    if (!platzhalter) throw new Error('Testfixture fehlt: Platzhalter-Ort');
-    render(<PlaceholderPage place={platzhalter} />);
-    expect(screen.getByRole('heading', { level: 1, name: platzhalter.label })).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: /entsteht in einer späteren Phase/i }),
-    ).toBeInTheDocument();
-    // WP-028/DR-0013: der geplante Screen erscheint als Klartext-Name, ohne Screen-Code („S…").
-    expect(screen.getByText(new RegExp(platzhalter.plannedScreen as string))).toBeInTheDocument();
-    expect(screen.queryByText(/\bS\d{2}\b/)).not.toBeInTheDocument();
-  });
-});
+/*
+ * ENTFALLEN mit WP-032 Slice 3: `describe('PlaceholderPage – ehrliche Empty-Message')`.
+ *
+ * Der Blindheitsschutz dieses Blocks (eingebaut in Slice 2) hat planmäßig ausgelöst: Mit dem
+ * Ausbau des letzten Ortes gibt es keinen nicht-liven Ort mehr, also keine gültige Eingabe für
+ * die Platzhalterseite – ihre Prop war ein `NavPlace`, und kein `NavPlace` kann sie noch
+ * sinnvoll füllen. Statt den Test auf eine synthetische Fixture umzustellen (und damit eine
+ * Komponente ohne Aufrufer weiter zu prüfen), wurden Komponente und Test entfernt; die
+ * Begründung steht in `lib/shell/places.ts` beim Feld `live`.
+ *
+ * An ihre Stelle tritt die positive Meilenstein-Assertion in
+ * `lib/shell/__tests__/shell-logic.test.ts` („alle acht Orte sind live"), die rot wird, sobald
+ * ein Ort je zurückgestuft würde. Die Navigations-Kennzeichnung für nicht-live Orte bleibt in
+ * `ShellNav` erhalten und wird oben weiterhin gegen `NAV_PLACES` geprüft – die REGEL ist also
+ * unverändert in Kraft, nur ihre Platzhalterseite ist gegenstandslos geworden.
+ */

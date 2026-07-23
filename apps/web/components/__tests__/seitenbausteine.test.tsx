@@ -23,6 +23,7 @@ import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
 import { ReportsContent } from '../reports/ReportsContent';
+import { WissenContent } from '../wissen/WissenContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
@@ -64,6 +65,7 @@ const RENDERER_JE_ORT: Record<BausteinOrt, () => RenderResult> = {
   services: () =>
     render(<ServicesContent role={role('R08')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   reports: () => render(<ReportsContent role={role('R02')} tenant={tenant(TENANT_ID.NORDWERK)} />),
+  wissen: () => render(<WissenContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   administration: () =>
     render(<AdministrationContent role={role('R12')} tenant={tenant(TENANT_ID.NORDWERK)} />),
   objekt360: () => render(<ObjectDetailView model={objektModel()} />),
