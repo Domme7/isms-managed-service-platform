@@ -1,55 +1,13 @@
 # Dokument 17 – Integrationen, Automatisierung & Workflow-Designer
 
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_17_Integrationen_Automatisierung_Workflow_Designer_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (alte Arbeitsfassung → diese Fassung nach PDF-Folientiteln): Die Hauptnummerierung 1–48 inklusive aller Unterabschnitte (3.1, 5.1–5.14, 23.1–23.3, 46.1–46.3 usw.) ist unverändert und deckungsgleich mit dem PDF. Unterschiede dieser Fassung gegenüber der alten Arbeitsfassung:
->
-> | Alt (Arbeitsfassung) | Neu (PDF-Inhalt) |
-> |---|---|
-> | – (fehlte vollständig) | Unnummerierter Frontmatter-Block „Dokumentauftrag & Verbindlichkeit" mit Steuerungsfeld-Tabelle (Dokument-ID, Status, Owner, Gültigkeit, Datenstatus, Änderungskontrolle) vor §1 |
-> | – (fehlte) | Navigationszeile „Inhalt" von PDF-Seite 2 |
-> | `[[FIGURE:FIG1]]` bis `[[FIGURE:FIG4]]` ohne Text | Abbildungsunterschriften 1–4 wörtlich transkribiert |
-> | Kopfzeile „Primäre Nachfolger: Dokument 18 bis 20C" | ersatzlos entfallen (steht so nicht auf dem PDF-Deckblatt; dort nur „ABHÄNGIGKEITEN Dokument 00 bis 16") |
->
-> **PDF-interne Nummerierungskonflikte:** keine festgestellt. Folientitel und die „Inhalt"-Navigationszeile auf Seite 2 verwenden dieselbe Zählung 1–48; der Frontmatter-Block „Dokumentauftrag & Verbindlichkeit" ist die einzige unnummerierte Einheit und verschiebt keine Nummern.
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Die Executive Summary (§2) nennt „sechs Integrationsmuster" und 17-D04 zählt sechs Muster auf; die Tabelle in §6 „Integrationsmuster und Auswahlregeln" enthält sieben Muster (zusätzlich „Bidirektionale Synchronisation"). Beide Aussagen sind wörtlich übernommen; der Widerspruch ist nicht aufgelöst.
-> - Die Steuerungsfeld-Zeile „Änderungskontrolle" (Frontmatter) verlangt „Version, Impactanalyse, Tests und Freigabe"; die Änderungsregel in §46.3 verlangt nur „eine versionierte Impactanalyse gegen Dokument 07 bis 20C". Beide Fassungen stehen so im PDF und sind beide transkribiert.
-> - §13.3 „Zustellung und Verarbeitung" lautet im Textlayer wörtlich „Die interne Zielsemantik ist mindestens once delivery mit idempotenter Verarbeitung" (deutsch-englische Mischformulierung, gemeint offenkundig At-least-once); wörtlich übernommen, nicht geglättet.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Abbildungen 1–4 (§2, §7.7, §23.3, §31.3): Der Textlayer trägt nur die Bildunterschriften; der grafische Inhalt ist nicht extrahierbar. Die Unterschriften sind wörtlich transkribiert, der Bildinhalt ist eine benannte Lücke: [Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04].
-> - Tabellen §6, §9.1, §14, §25, §38.1 und §48: Die Spaltengrenzen wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellen über Zeilenumbrüche verschmilzt; Zeilenzahl und Wortlaut folgen dem Extrakt.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-**PRODUKTKONZEPT 17 – Integrationen, Automatisierung & Workflow-Designer**
-
-Das sichere Nervensystem der Plattform: externe Signale verstehen, kanonisch verbinden, zuverlässig automatisieren und in nachvollziehbare ISMS-Entscheidungen übersetzen.
-
-Integrationsarchitektur: von Quellsystemen über Reconciliation und Events bis zu Workflows und Entscheidungen
-
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
 **Version:** 1.0  
 **Status:** Erstellt  
 **Stand:** 22.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 16
+**Abhängigkeiten:** Dokument 00 bis 16  
+**Primäre Nachfolger:** Dokument 18 bis 20C
 
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 17 ist die kanonische Quelle für Connectoren, Connection Instances, Data Contracts, Mappings, Synchronisation, Eventverarbeitung, Reconciliation, Workflow-Definitionen, Automatisierungs-Blueprints, Human Gates und den operativen Connector-Betrieb. Nachfolgende Dokumente konkretisieren Technologie, Sicherheit, KI und Umsetzung, dürfen diese Semantik aber nicht still verändern.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 17 |
-| Status | Erstellt – Version 1.0 |
-| Owner | Product Architecture / Integration & Automation Owner |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Datenstatus | Alle Connector-Payloads, Unternehmen, Personen, Incidents, Tickets und Preise der Demo sind synthetisch. |
-| Änderungskontrolle | Änderungen an Data Contracts, Events, Reconciliation, Workflow-Semantik, Human Gates oder externen Schreibaktionen benötigen Version, Impactanalyse, Tests und Freigabe. |
-
-**Inhalt:** 1 Auftrag · 2 Summary · 3 Verfassung · 4 Zielbild · 5 Objekte · 6 Muster · 7 Lifecycle · 8 Auth · 9 Contracts · 10 Mapping · 11 Reconciliation · 12 Sync · 13 Events · 14 Connector-Katalog · 15–20 Connector-Familien · 21 Generic REST · 22 Import/Export · 23 Designer · 24 Regeln · 25 Aktionen · 26 Human Gates · 27 Bibliothek · 28 Managed Services · 29 Checkpoints · 30 Recovery · 31 Operations · 32 Limits · 33 Versionierung · 34 Security · 35 Tests · 36 Demo Hub · 37 UI · 38 KPIs · 39–40 Szenarien · 41–48 Governance, Entscheidungen, Quellen und Abhängigkeiten
+---
 
 ## 1. Auftrag und Abgrenzung
 
@@ -71,19 +29,19 @@ Nicht Gegenstand dieses Dokuments sind die endgültige Cloud-, Datenbank-, Queue
 
 ## 2. Executive Summary
 
-Die Plattform soll externe Systeme nicht nachbauen, sondern deren Signale in belastbare Sicherheitsentscheidungen übersetzen. Ein SIEM erkennt Vorfälle, ein Schwachstellenscanner findet technische Schwächen, eine CMDB kennt Konfigurationselemente, ein Ticketing-System organisiert operative Arbeit und ein Dokumentensystem verwaltet Dateien. Die ISMS Managed Service Platform verbindet diese Informationen mit Geschäftskontext, Scope, Risiken, Controls, Verantwortungen, Zielprofilen und Services. So entsteht aus verteilten Daten ein handlungsfähiges Gesamtbild.
+Die Plattform soll externe Systeme nicht nachbauen, sondern **deren Signale in belastbare Sicherheitsentscheidungen übersetzen**. Ein SIEM erkennt Vorfälle, ein Schwachstellenscanner findet technische Schwächen, eine CMDB kennt Konfigurationselemente, ein Ticketing-System organisiert operative Arbeit und ein Dokumentensystem verwaltet Dateien. Die ISMS Managed Service Platform verbindet diese Informationen mit Geschäftskontext, Scope, Risiken, Controls, Verantwortungen, Zielprofilen und Services. So entsteht aus verteilten Daten ein handlungsfähiges Gesamtbild.
 
 Die Integrationsarchitektur folgt fünf Schritten:
 
-1. Verbinden: Eine Connection Instance authentifiziert sich minimal berechtigt am Quellsystem.
-2. Verstehen: Ein Connector erfasst Schema, Fähigkeiten, Grenzen, Datenherkunft und zulässige Operationen.
-3. Übersetzen: Rohdaten werden gestaged, validiert, normalisiert und auf kanonische Objekte sowie Beziehungen gemappt.
-4. Abgleichen: Matching, Reconciliation, Confidence und menschliche Freigaben verhindern stille Fehlzuordnungen.
-5. Aktivieren: Freigegebene Änderungen erzeugen Graph-Updates, Events, Workflows, Entscheidungen, Evidenzen oder Reports.
+1. **Verbinden:** Eine Connection Instance authentifiziert sich minimal berechtigt am Quellsystem.
+2. **Verstehen:** Ein Connector erfasst Schema, Fähigkeiten, Grenzen, Datenherkunft und zulässige Operationen.
+3. **Übersetzen:** Rohdaten werden gestaged, validiert, normalisiert und auf kanonische Objekte sowie Beziehungen gemappt.
+4. **Abgleichen:** Matching, Reconciliation, Confidence und menschliche Freigaben verhindern stille Fehlzuordnungen.
+5. **Aktivieren:** Freigegebene Änderungen erzeugen Graph-Updates, Events, Workflows, Entscheidungen, Evidenzen oder Reports.
 
 Die Plattform unterstützt sechs Integrationsmuster: manuelle Eingabe, strukturierter Dateiimport, geplante Synchronisation, Delta-Synchronisation, Webhooks sowie Ereignis- oder Datenstreams. Jede Integration besitzt einen sichtbaren Gesundheitszustand, eine Datenfrische, ein Berechtigungsprofil, eine Fehlerhistorie, eine Reconciliation Queue und einen kontrollierten Abschaltpfad.
 
-Automatisierung wird nicht als verstecktes Skripting verstanden, sondern als versioniertes, testbares und erklärbares Produktobjekt. Ein Workflow besteht aus Trigger, Scope, Bedingungen, Kontextanreicherung, Aktionen, menschlichen Gates, Fehlerpfaden, Evidenz, Erfolgskriterien und Rollback-Regeln. Die Plattform unterscheidet strikt zwischen:
+Automatisierung wird nicht als verstecktes Skripting verstanden, sondern als **versioniertes, testbares und erklärbares Produktobjekt**. Ein Workflow besteht aus Trigger, Scope, Bedingungen, Kontextanreicherung, Aktionen, menschlichen Gates, Fehlerpfaden, Evidenz, Erfolgskriterien und Rollback-Regeln. Die Plattform unterscheidet strikt zwischen:
 
 - deterministischer Automatisierung,
 - regelbasierter Empfehlung,
@@ -92,7 +50,7 @@ Automatisierung wird nicht als verstecktes Skripting verstanden, sondern als ver
 
 Beratungen können geprüfte Workflow Blueprints erstellen und mandantenübergreifend wiederverwenden. Kunden können diese erben, konfigurieren, pausieren oder ablehnen. Keine Automatisierung darf kostenpflichtige Services buchen, Risiken akzeptieren, kritische Findings schließen, externe Systeme destruktiv verändern oder Managemententscheidungen vortäuschen, ohne die in Dokument 08, 11, 13 und 19 definierten Freigaben.
 
-*Abbildung 1: Externe Systeme werden über Connector Gateway, Reconciliation, Graph und Workflows in belastbare Entscheidungen übersetzt.* [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG1]]
 
 ## 3. Integrations- und Automatisierungsverfassung
 
@@ -126,7 +84,7 @@ Beratungen können geprüfte Workflow Blueprints erstellen und mandantenübergre
 - Workflows ohne Owner, Version, Test und Abschaltmöglichkeit,
 - versteckte KI-Entscheidungen innerhalb deterministischer Regeln,
 - Polling in kurzen Intervallen ohne Rate-Limit- und Kostenkontrolle,
-- Speicherung kompletter Fremdsystemdaten „für später",
+- Speicherung kompletter Fremdsystemdaten „für später“,
 - Trigger, die sich gegenseitig in Endlosschleifen auslösen,
 - ein No-Code-Designer, der sicherheitskritische Komplexität hinter bunten Kästen versteckt,
 - produktive Credentials, Tokens oder Kundendaten im Repository oder in Demo-Dateien,
@@ -150,59 +108,59 @@ Zwischen den Ebenen bestehen stabile Verträge. Ein Connector kennt beispielswei
 
 ### 5.1 Connector Definition
 
-Die Connector Definition beschreibt einen unterstützten Systemtyp und seine technischen Fähigkeiten. Sie enthält Hersteller, Produktfamilie, unterstützte Versionen, Protokolle, Authentifizierungsarten, Datenobjekte, Events, zulässige Lese- und Schreibaktionen, Rate-Limit-Muster, bekannte Einschränkungen, Teststatus und Owner.
+Die **Connector Definition** beschreibt einen unterstützten Systemtyp und seine technischen Fähigkeiten. Sie enthält Hersteller, Produktfamilie, unterstützte Versionen, Protokolle, Authentifizierungsarten, Datenobjekte, Events, zulässige Lese- und Schreibaktionen, Rate-Limit-Muster, bekannte Einschränkungen, Teststatus und Owner.
 
 ### 5.2 Connection Instance
 
-Eine Connection Instance ist die mandantenspezifische, konfigurierte Verbindung zu einem konkreten Quellsystem. Sie enthält Endpoint, Region, Tenant- oder Account-ID, Credential Reference, aktivierte Capabilities, Scope, Zeitplan, Status, Health, Datenresidenz, Owner und letzte Tests.
+Eine **Connection Instance** ist die mandantenspezifische, konfigurierte Verbindung zu einem konkreten Quellsystem. Sie enthält Endpoint, Region, Tenant- oder Account-ID, Credential Reference, aktivierte Capabilities, Scope, Zeitplan, Status, Health, Datenresidenz, Owner und letzte Tests.
 
 ### 5.3 Credential Reference
 
-Die Credential Reference verweist auf ein Geheimnis in einem geeigneten Secret Store. Die Plattform speichert in fachlichen Objekten niemals Klartext-Credentials. Referenzen enthalten Typ, Owner, Scopes, Ablaufdatum, letzte Rotation, Status und erlaubte Connection Instances.
+Die **Credential Reference** verweist auf ein Geheimnis in einem geeigneten Secret Store. Die Plattform speichert in fachlichen Objekten niemals Klartext-Credentials. Referenzen enthalten Typ, Owner, Scopes, Ablaufdatum, letzte Rotation, Status und erlaubte Connection Instances.
 
 ### 5.4 Data Contract
 
-Ein Data Contract beschreibt, welche externen Felder in welchem Format erwartet werden, welche semantische Bedeutung sie haben, welche Pflichtfelder gelten, welche Sensitivität vorliegt und auf welche kanonischen Attribute sie abgebildet werden dürfen. Der Vertrag ist versioniert und testbar.
+Ein **Data Contract** beschreibt, welche externen Felder in welchem Format erwartet werden, welche semantische Bedeutung sie haben, welche Pflichtfelder gelten, welche Sensitivität vorliegt und auf welche kanonischen Attribute sie abgebildet werden dürfen. Der Vertrag ist versioniert und testbar.
 
 ### 5.5 Mapping Profile
 
-Das Mapping Profile enthält Transformations-, Matching- und Prioritätsregeln für eine konkrete Datenquelle und einen Scope. Standardprofile können geerbt werden; kundenspezifische Abweichungen sind versioniert und begründet.
+Das **Mapping Profile** enthält Transformations-, Matching- und Prioritätsregeln für eine konkrete Datenquelle und einen Scope. Standardprofile können geerbt werden; kundenspezifische Abweichungen sind versioniert und begründet.
 
 ### 5.6 Sync Job
 
-Ein Sync Job ist eine geplante oder ad hoc ausgeführte Datenabholung. Er kennt Modus, Cursor oder Delta Token, Start, Ende, Datensätze, Seiten, Fehler, Rate Limits, Checkpoint, Retry und Reconciliation-Ergebnis.
+Ein **Sync Job** ist eine geplante oder ad hoc ausgeführte Datenabholung. Er kennt Modus, Cursor oder Delta Token, Start, Ende, Datensätze, Seiten, Fehler, Rate Limits, Checkpoint, Retry und Reconciliation-Ergebnis.
 
 ### 5.7 Event Subscription
 
-Eine Event Subscription beschreibt abonnierte Ereignisse, Endpoint, Secret oder Zertifikat, Filter, Laufzeit, Renewal, erwartete Frequenz, letzte Zustellung, Health und Fallback-Synchronisation.
+Eine **Event Subscription** beschreibt abonnierte Ereignisse, Endpoint, Secret oder Zertifikat, Filter, Laufzeit, Renewal, erwartete Frequenz, letzte Zustellung, Health und Fallback-Synchronisation.
 
 ### 5.8 Event Envelope
 
-Der Event Envelope vereinheitlicht externe und interne Events. Mindestattribute sind Event-ID, Typ, Quelle, Mandant, Zeitpunkt, Empfangszeit, Subject, Correlation ID, Causation ID, Schema-Version, Sensitivität, Replay-Status und Payload Reference.
+Der **Event Envelope** vereinheitlicht externe und interne Events. Mindestattribute sind Event-ID, Typ, Quelle, Mandant, Zeitpunkt, Empfangszeit, Subject, Correlation ID, Causation ID, Schema-Version, Sensitivität, Replay-Status und Payload Reference.
 
 ### 5.9 Import Batch
 
-Ein Import Batch bündelt Datei- oder API-Datensätze, Validierung, Mapping-Vorschau, Konflikte, Freigabe, Übernahme, Reconciliation und Rollback-Status. Er folgt dem in Dokument 16 definierten Importprozess.
+Ein **Import Batch** bündelt Datei- oder API-Datensätze, Validierung, Mapping-Vorschau, Konflikte, Freigabe, Übernahme, Reconciliation und Rollback-Status. Er folgt dem in Dokument 16 definierten Importprozess.
 
 ### 5.10 Reconciliation Case
 
-Ein Reconciliation Case entsteht, wenn ein Wert, Objekt oder Relationship nicht sicher übernommen werden kann. Er enthält Konflikt, Quellen, Vorschlag, Confidence, Auswirkung, Owner, Entscheidung und Historie.
+Ein **Reconciliation Case** entsteht, wenn ein Wert, Objekt oder Relationship nicht sicher übernommen werden kann. Er enthält Konflikt, Quellen, Vorschlag, Confidence, Auswirkung, Owner, Entscheidung und Historie.
 
 ### 5.11 Automation Blueprint
 
-Ein Automation Blueprint ist eine wiederverwendbare, versionierte Vorlage mit Zweck, Triggern, Voraussetzungen, Regeln, Aktionen, Human Gates, Fehlerpfaden, KPIs, Testfällen und erlaubten Konfigurationspunkten.
+Ein **Automation Blueprint** ist eine wiederverwendbare, versionierte Vorlage mit Zweck, Triggern, Voraussetzungen, Regeln, Aktionen, Human Gates, Fehlerpfaden, KPIs, Testfällen und erlaubten Konfigurationspunkten.
 
 ### 5.12 Workflow Definition und Workflow Instance
 
-Die Workflow Definition ist das freigegebene Design. Eine Workflow Instance ist eine konkrete Ausführung für einen Mandanten, Scope oder Fall. Sie enthält Regelversion, Inputs, Schritte, Status, Entscheidungen, Outputs, Evidenz, Fehler und Laufzeit.
+Die **Workflow Definition** ist das freigegebene Design. Eine **Workflow Instance** ist eine konkrete Ausführung für einen Mandanten, Scope oder Fall. Sie enthält Regelversion, Inputs, Schritte, Status, Entscheidungen, Outputs, Evidenz, Fehler und Laufzeit.
 
 ### 5.13 Connector Health Record
 
-Der Connector Health Record verdichtet Authentifizierung, Erreichbarkeit, Datenfrische, Fehlerquote, Rate-Limit-Nähe, Subscription-Status, Schemaabweichungen, Backlog und Reconciliation Queue zu einem nachvollziehbaren Zustand.
+Der **Connector Health Record** verdichtet Authentifizierung, Erreichbarkeit, Datenfrische, Fehlerquote, Rate-Limit-Nähe, Subscription-Status, Schemaabweichungen, Backlog und Reconciliation Queue zu einem nachvollziehbaren Zustand.
 
 ### 5.14 Dead-Letter Item
 
-Ein Dead-Letter Item ist ein dauerhaft oder wiederholt fehlgeschlagenes Event oder Kommando, das nicht automatisch weiterverarbeitet wird. Es benötigt Ursache, Payload Reference, Retry-Historie, Sensitivität, Owner, Entscheidung und Abschlussnachweis.
+Ein **Dead-Letter Item** ist ein dauerhaft oder wiederholt fehlgeschlagenes Event oder Kommando, das nicht automatisch weiterverarbeitet wird. Es benötigt Ursache, Payload Reference, Retry-Historie, Sensitivität, Owner, Entscheidung und Abschlussnachweis.
 
 ## 6. Integrationsmuster und Auswahlregeln
 
@@ -216,7 +174,7 @@ Ein Dead-Letter Item ist ein dauerhaft oder wiederholt fehlgeschlagenes Event od
 | Streaming | hohes Volumen, Security Events | skalierbar, near real time | Kosten, Reihenfolge, Backpressure; Partitionierung und Retention |
 | Bidirektionale Synchronisation | wenige klar definierte Objekte | reduziert Doppelpflege | Konflikte, Schleifen; System-of-Record-Regel und Idempotenz |
 
-Die Wahl folgt dem Use Case, nicht dem Wunsch nach maximaler Echtzeit. Für Management- und Reifegradinformationen genügt häufig tägliche oder stündliche Aktualisierung. Kritische Incidents oder Identity-Änderungen können eventgetrieben verarbeitet werden. Der UI zeigt die tatsächliche Datenfrische, statt jede Information als „live" darzustellen.
+Die Wahl folgt dem Use Case, nicht dem Wunsch nach maximaler Echtzeit. Für Management- und Reifegradinformationen genügt häufig tägliche oder stündliche Aktualisierung. Kritische Incidents oder Identity-Änderungen können eventgetrieben verarbeitet werden. Der UI zeigt die tatsächliche Datenfrische, statt jede Information als „live“ darzustellen.
 
 ## 7. Connector-Lifecycle
 
@@ -248,7 +206,7 @@ API-Versionen, Schemaänderungen, neue Scopes oder Herstellerupdates erzeugen ei
 
 Pausieren stoppt neue Verarbeitung, ohne Historie zu löschen. Revoke entzieht Credentials und Subscriptions. Retire archiviert Konfiguration, führt letzte Reconciliation aus, löscht oder minimiert Staging-Daten nach Regel und dokumentiert offene Abhängigkeiten.
 
-*Abbildung 2: Der Connector-Lifecycle trennt Qualifizierung, Autorisierung, Staging, Validierung, Mapping, Reconciliation, Veröffentlichung und Betrieb.* [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG2]]
 
 ## 8. Authentifizierung, Autorisierung und Secrets
 
@@ -277,7 +235,7 @@ Credentials besitzen Owner, Zweck, Scope, Erstellungsdatum, Ablauf, Rotation, le
 
 ## 9. Data Contracts und kanonische Semantik
 
-Ein Connector darf externe Werte nicht nur syntaktisch, sondern muss sie semantisch übersetzen. Beispielsweise ist „critical" in einem Scanner nicht automatisch identisch mit einem kritischen Business-Risiko. Der Data Contract trennt deshalb:
+Ein Connector darf externe Werte nicht nur syntaktisch, sondern muss sie semantisch übersetzen. Beispielsweise ist „critical“ in einem Scanner nicht automatisch identisch mit einem kritischen Business-Risiko. Der Data Contract trennt deshalb:
 
 - externen Rohwert,
 - normalisierte technische Bedeutung,
@@ -345,7 +303,7 @@ Für jedes Attribut kann eine Prioritätsregel gelten: autoritatives System, man
 
 - zwei Quellen melden unterschiedliche Owner,
 - Quellsystem löscht ein Objekt, das weiterhin Beziehungen besitzt,
-- Ticketstatus „geschlossen", aber Evidence fehlt,
+- Ticketstatus „geschlossen“, aber Evidence fehlt,
 - Asset-ID wird wiederverwendet,
 - Person verlässt das Unternehmen, bleibt aber Control Owner,
 - Severity sinkt, Business Impact bleibt hoch,
@@ -496,7 +454,7 @@ Ticketing-Systeme können operatives System of Record für Tasks bleiben. Die Pl
 - Konfliktregeln bestimmen, welches System Owner, Due Date oder Status führen darf,
 - Kommentare werden nicht ungefiltert dupliziert,
 - vertrauliche Inhalte bleiben im jeweils zulässigen System,
-- „Done" im Ticket bedeutet nicht automatisch „wirksam" im ISMS.
+- „Done“ im Ticket bedeutet nicht automatisch „wirksam“ im ISMS.
 
 ### 18.2 Jira und ServiceNow als Referenzmuster
 
@@ -554,7 +512,7 @@ Finanzdaten werden minimiert und nur für definierte Portfolio- und Serviceentsc
 
 ## 21. Generic REST Connector und Connector SDK
 
-Der Generic REST Connector erlaubt kontrollierte Integration nicht priorisierter Systeme. Er unterstützt:
+Der **Generic REST Connector** erlaubt kontrollierte Integration nicht priorisierter Systeme. Er unterstützt:
 
 - OpenAPI-Import oder manuelle Endpoint-Definition,
 - OAuth, API Key, mTLS und Secret References,
@@ -567,7 +525,7 @@ Der Generic REST Connector erlaubt kontrollierte Integration nicht priorisierter
 - synthetische Samples,
 - Read-only als Default.
 
-Ein späteres Connector SDK stellt Templates, Contract Tests, Mock Server, Security Linting, Versionierung, Packaging und Marketplace-Freigabe bereit. Eigene Connectoren dürfen keine direkte Datenbank- oder Modulkopplung erhalten.
+Ein späteres **Connector SDK** stellt Templates, Contract Tests, Mock Server, Security Linting, Versionierung, Packaging und Marketplace-Freigabe bereit. Eigene Connectoren dürfen keine direkte Datenbank- oder Modulkopplung erhalten.
 
 ## 22. Dateiimport und Export als kontrollierter Fallback
 
@@ -635,7 +593,7 @@ Draft → Validated → Tested → Reviewed → Approved → Active → Deprecat
 
 Jede Aktivierung benötigt Owner, Scope, Testnachweis, Berechtigungsprüfung und Rollback-Plan. Kritische Blueprints benötigen unabhängiges Review.
 
-*Abbildung 3: Workflows verbinden Trigger, Kontext, Regeln, Aktionen, Human Gates, Wirkung, Recovery und Auditnachweis.* [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG3]]
 
 ## 24. Trigger, Bedingungen und Regeln
 
@@ -659,7 +617,7 @@ Regeln sind deterministisch, versioniert und mit verständlicher Sprache beschre
 
 ### 24.3 Beispiel
 
-Wenn ein High- oder Critical-Finding auf einem Asset im freigegebenen Scope eingeht, und das Asset einen kritischen Geschäftsprozess unterstützt, und kein aktives Duplikat existiert, dann erstelle einen Review Case, ermittle betroffene Controls, aktualisiere die Morning Mission und fordere einen Owner zur Bestätigung auf. Nicht automatisch: Risiko akzeptieren, Service buchen oder Finding im Scanner schließen.
+**Wenn** ein High- oder Critical-Finding auf einem Asset im freigegebenen Scope eingeht, **und** das Asset einen kritischen Geschäftsprozess unterstützt, **und** kein aktives Duplikat existiert, **dann** erstelle einen Review Case, ermittle betroffene Controls, aktualisiere die Morning Mission und fordere einen Owner zur Bestätigung auf. **Nicht automatisch:** Risiko akzeptieren, Service buchen oder Finding im Scanner schließen.
 
 ## 25. Aktionen und externe Schreibzugriffe
 
@@ -693,7 +651,7 @@ Human Gates sind keine pauschalen Bestätigungsdialoge, sondern folgen Rolle, Ri
 
 ### 26.2 Gate-Inhalt
 
-Ein Gate zeigt Auslöser, Datenbasis, Empfehlung, Alternativen, Wirkung, Confidence, Kosten, externe Aktion, Rollback und Frist. Ein Nutzer darf nicht nur „Approve" sehen, ohne zu verstehen, was freigegeben wird.
+Ein Gate zeigt Auslöser, Datenbasis, Empfehlung, Alternativen, Wirkung, Confidence, Kosten, externe Aktion, Rollback und Frist. Ein Nutzer darf nicht nur „Approve“ sehen, ohne zu verstehen, was freigegeben wird.
 
 ## 27. Workflow-Bibliothek
 
@@ -798,7 +756,7 @@ Healthy, Warning, Degraded, Failed, Quarantined, Paused, Retired.
 
 Betreiber sehen Connections nach Mandant, Service, Risiko und Auswirkung. Eine ausgefallene Identity-Synchronisation wird höher priorisiert, wenn dadurch Owner- und Zugriffsentscheidungen unzuverlässig werden. Der Status zeigt nicht nur technische Fehler, sondern betroffene Produktfunktionen und Kundenentscheidungen.
 
-*Abbildung 4: Connector Health wird als geschlossener Beobachtungs-, Erkennungs-, Eindämmungs-, Recovery- und Verifikationskreislauf betrieben.* [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG4]]
 
 ## 32. Rate Limits, Pagination und Kostenkontrolle
 
@@ -907,7 +865,7 @@ Mock-Endpunkte erzeugen reproduzierbare Szenarien, Signaturen, Pagination und Re
 
 ### 36.2 Demo-Umschaltung
 
-Der Nutzer kann einen „Normalbetrieb", „Audit in 30 Tagen", „kritischer Incident", „Identity-Ausfall", „M&A Scope Change" oder „Connector Degradation" aktivieren. Die Plattform zeigt danach Events, Graph-Änderungen, Workflows, Morning Mission und Reports konsistent.
+Der Nutzer kann einen „Normalbetrieb“, „Audit in 30 Tagen“, „kritischer Incident“, „Identity-Ausfall“, „M&A Scope Change“ oder „Connector Degradation“ aktivieren. Die Plattform zeigt danach Events, Graph-Änderungen, Workflows, Morning Mission und Reports konsistent.
 
 ## 37. Benutzeroberflächen
 
@@ -979,7 +937,7 @@ Nicht allein optimieren:
 - Quote automatisch geschlossener Findings,
 - Zahl verschickter Notifications,
 - Workflow-Komplexität,
-- „100 Prozent straight-through processing" bei kritischen Entscheidungen.
+- „100 Prozent straight-through processing“ bei kritischen Entscheidungen.
 
 ## 39. End-to-End-Szenarien
 
@@ -989,11 +947,11 @@ Entra meldet den Austritt eines Control Owners. Der Connector validiert Event un
 
 ### 39.2 Defender Incident bis Management-Entscheidung
 
-Ein synthetischer Defender Incident betrifft zwei Assets. Die Plattform mappt sie auf den Geschäftsprozess „Kundenportal", erkennt hohe Kritikalität, prüft bestehende Controls und erzeugt eine Decision Card. Ein Berater sieht Ursache, Evidence, Option A interne Behandlung und Option B Managed Incident Support. Keine Option wird automatisch gebucht.
+Ein synthetischer Defender Incident betrifft zwei Assets. Die Plattform mappt sie auf den Geschäftsprozess „Kundenportal“, erkennt hohe Kritikalität, prüft bestehende Controls und erzeugt eine Decision Card. Ein Berater sieht Ursache, Evidence, Option A interne Behandlung und Option B Managed Incident Support. Keine Option wird automatisch gebucht.
 
 ### 39.3 Jira Ticket bis Control Assurance
 
-Eine Maßnahme erzeugt ein Jira Ticket. Jira meldet „Done". Die Plattform aktualisiert den Work-Item-Status, fordert jedoch Evidence und Control Test an. Erst nach Review verbessert sich die Control Effectiveness.
+Eine Maßnahme erzeugt ein Jira Ticket. Jira meldet „Done“. Die Plattform aktualisiert den Work-Item-Status, fordert jedoch Evidence und Control Test an. Erst nach Review verbessert sich die Control Effectiveness.
 
 ### 39.4 ServiceNow Change bis Scope Impact
 
@@ -1009,7 +967,7 @@ Ein Jira Webhook wird simuliert verworfen. Der geplante Delta- oder Statusabglei
 
 ### 39.7 API-Rate-Limit
 
-Eine Quelle liefert 429 und Retry-After. Der Connector reduziert Parallelität, priorisiert kritische Events und zeigt verzögerte Datenfrische. Keine falsche „aktuell"-Anzeige bleibt bestehen.
+Eine Quelle liefert 429 und Retry-After. Der Connector reduziert Parallelität, priorisiert kritische Events und zeigt verzögerte Datenfrische. Keine falsche „aktuell“-Anzeige bleibt bestehen.
 
 ### 39.8 Schema Drift
 
@@ -1027,7 +985,7 @@ Ein Hersteller ändert ein Enum. Contract Test und Runtime Validation erkennen d
 8. Doppelte Eventzustellung ohne doppelten Task demonstrieren.
 9. Verlorenen Webhook durch Reconciliation erkennen.
 10. Schema Drift und Quarantäne im Operations Center zeigen.
-11. Workflow Blueprint „Audit 90/60/30" für zwei Kunden konfigurieren.
+11. Workflow Blueprint „Audit 90/60/30“ für zwei Kunden konfigurieren.
 12. Test Mode mit synthetischer Payload und Branch Coverage ausführen.
 13. Workflow-Version vergleichen und gestaffelt ausrollen.
 14. Connector-Ausfall mit sichtbarer Datenfrische und Business Impact simulieren.
@@ -1047,7 +1005,7 @@ Ein Hersteller ändert ein Enum. Contract Test und Runtime Validation erkennen d
 - **17-AC09:** Unsichere Matches erzeugen Reconciliation Cases statt automatische Merges.
 - **17-AC10:** Jede Automation ist versioniert, testbar, pausierbar und einem Owner zugeordnet.
 - **17-AC11:** Kritische oder irreversible Aktionen benötigen konfiguriertes Human Gate.
-- **17-AC12:** „Done" in einem Fremdsystem schließt kein Risiko oder Control ohne fachliche Prüfung.
+- **17-AC12:** „Done“ in einem Fremdsystem schließt kein Risiko oder Control ohne fachliche Prüfung.
 - **17-AC13:** Connector Health zeigt Frische, Fehler, Rate Limits, Subscription, Drift und Backlog.
 - **17-AC14:** Fehlerhafte Payloads können quarantänisiert, korrigiert und kontrolliert replayed werden.
 - **17-AC15:** Workflows setzen nach System- oder Worker-Ausfall am letzten sicheren Checkpoint fort.
@@ -1076,7 +1034,7 @@ Ein Hersteller ändert ein Enum. Contract Test und Runtime Validation erkennen d
 - **17-D11:** Der Prototyp implementiert einen Mock Integration Hub mit reproduzierbaren Ereignissen und Fehlerfällen.
 - **17-D12:** Dateiimport und Generic REST Connector sind strategische Kernfunktionen, nicht nur Notlösungen.
 - **17-D13:** Identity-, Ticketing- und Security-Connectoren erhalten höchste Prototyp-Priorität.
-- **17-D14:** „Done" oder „Resolved" in einem Fremdsystem ist nur ein Signal und keine automatische Wirksamkeitsbestätigung.
+- **17-D14:** „Done“ oder „Resolved“ in einem Fremdsystem ist nur ein Signal und keine automatische Wirksamkeitsbestätigung.
 - **17-D15:** Connector Health wird nach technischer und fachlicher Auswirkung priorisiert.
 - **17-D16:** OpenAPI-orientierte HTTP-Verträge, AsyncAPI-orientierte Eventverträge und ein CloudEvents-orientiertes Envelope dienen als Standardrichtung.
 - **17-D17:** OAuth- und SCIM-Integrationen berücksichtigen aktuelle Sicherheits- und Protokollstandards.
@@ -1145,31 +1103,31 @@ Ein Hersteller ändert ein Enum. Contract Test und Runtime Validation erkennen d
 
 ### 46.1 Eingehende Abhängigkeiten
 
-- Dokument 00: Projektverfassung, Status, zentrale Wahrheit und Änderungsregeln.
-- Dokument 01: Produktvision, Skalierung und messbarer Managed-Service-Nutzen.
-- Dokument 02: Wettbewerbs- und Integrationslandschaft.
-- Dokument 03: Rollen, Administratoren, Berater, Kunden und Auditoren.
-- Dokument 04: End-to-End-Journeys und Lifecycle-Ereignisse.
-- Dokument 05: Module, Integrations- und Automatisierungsumfang.
-- Dokument 06: UI-Prinzipien, Integration Catalog, Operations Center und progressive Bedienung.
-- Dokument 07: kanonische Objekte, Graph, Provenance, Identity und Historie.
-- Dokument 08: ISMS-Kernprozesse, Freigaben und fachliche Statuslogik.
-- Dokument 09: Risiko-, Threat-, Reife-, Control- und Confidence-Logik.
-- Dokument 10: Decision Center, KPI, Route und Simulation.
-- Dokument 11: Work Items, Human Gates, Collaboration und Handover.
-- Dokument 12: Report- und Evidence-Ausgaben.
-- Dokument 13: Managed-Service-Lifecycle, Quality Gates und Operations.
-- Dokument 14: Servicekatalog, SLA, Kosten und Fair Use.
-- Dokument 15: Kapazität, Reise, PSA und Portfolio.
-- Dokument 16: Onboarding, Import Batches, Strategy DNA, Baseline und Lifecycle Events.
+- **Dokument 00:** Projektverfassung, Status, zentrale Wahrheit und Änderungsregeln.
+- **Dokument 01:** Produktvision, Skalierung und messbarer Managed-Service-Nutzen.
+- **Dokument 02:** Wettbewerbs- und Integrationslandschaft.
+- **Dokument 03:** Rollen, Administratoren, Berater, Kunden und Auditoren.
+- **Dokument 04:** End-to-End-Journeys und Lifecycle-Ereignisse.
+- **Dokument 05:** Module, Integrations- und Automatisierungsumfang.
+- **Dokument 06:** UI-Prinzipien, Integration Catalog, Operations Center und progressive Bedienung.
+- **Dokument 07:** kanonische Objekte, Graph, Provenance, Identity und Historie.
+- **Dokument 08:** ISMS-Kernprozesse, Freigaben und fachliche Statuslogik.
+- **Dokument 09:** Risiko-, Threat-, Reife-, Control- und Confidence-Logik.
+- **Dokument 10:** Decision Center, KPI, Route und Simulation.
+- **Dokument 11:** Work Items, Human Gates, Collaboration und Handover.
+- **Dokument 12:** Report- und Evidence-Ausgaben.
+- **Dokument 13:** Managed-Service-Lifecycle, Quality Gates und Operations.
+- **Dokument 14:** Servicekatalog, SLA, Kosten und Fair Use.
+- **Dokument 15:** Kapazität, Reise, PSA und Portfolio.
+- **Dokument 16:** Onboarding, Import Batches, Strategy DNA, Baseline und Lifecycle Events.
 
 ### 46.2 Ausgehende Abhängigkeiten
 
-- Dokument 18: legt Laufzeitarchitektur, Queue/Event Bus, Workflow Engine, Connector Worker, Datenbanken, Deployment, Observability und Skalierung fest.
-- Dokument 19: konkretisiert Secret Management, Mandantentrennung, Rechte, Datenklassifikation, Audit Logs, Egress, Retention und Incident Response.
-- Dokument 20A: definiert KI-Unterstützung für Mapping, Zusammenfassung, Anomalieerkennung, Workflow-Vorschläge und Guardrails.
-- Dokument 20B: weist Agentenrollen für Connector Engineering, Data Contracts, Security, QA, Operations und Documentation zu.
-- Dokument 20C: implementiert Connectoren und Workflows modular, checkpointfähig, contract-tested und mit synthetischen Mock-Systemen.
+- **Dokument 18:** legt Laufzeitarchitektur, Queue/Event Bus, Workflow Engine, Connector Worker, Datenbanken, Deployment, Observability und Skalierung fest.
+- **Dokument 19:** konkretisiert Secret Management, Mandantentrennung, Rechte, Datenklassifikation, Audit Logs, Egress, Retention und Incident Response.
+- **Dokument 20A:** definiert KI-Unterstützung für Mapping, Zusammenfassung, Anomalieerkennung, Workflow-Vorschläge und Guardrails.
+- **Dokument 20B:** weist Agentenrollen für Connector Engineering, Data Contracts, Security, QA, Operations und Documentation zu.
+- **Dokument 20C:** implementiert Connectoren und Workflows modular, checkpointfähig, contract-tested und mit synthetischen Mock-Systemen.
 
 ### 46.3 Änderungsregel
 
@@ -1179,18 +1137,18 @@ Ein Hersteller ändert ein Enum. Contract Test und Runtime Validation erkennen d
 
 Die folgenden offiziellen Quellen dienen als technische Plausibilitäts- und Standardanker. Sie definieren nicht automatisch den finalen Produktstack und ersetzen keine Lizenz-, Datenschutz- oder Architekturprüfung.
 
-- **S1 – Microsoft Graph Change Notifications:** Webhook-basierte Change Notifications und Subscription-Renewal. <https://learn.microsoft.com/en-us/graph/change-notifications-delivery-webhooks>
-- **S2 – Microsoft Graph Delta Query:** inkrementelle Synchronisation von Ressourcen. <https://learn.microsoft.com/en-us/graph/delta-query-overview>
-- **S3 – Microsoft Defender XDR APIs:** Incident-, Advanced-Hunting- und Streaming-Funktionen. <https://learn.microsoft.com/en-us/defender-xdr/api-overview>
-- **S4 – Jira Cloud Webhooks:** dynamische Webhooks und REST-Verwaltung. <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-webhooks/>
-- **S5 – ServiceNow REST APIs:** Table API, REST API Explorer und Scripted REST APIs. <https://www.servicenow.com/docs/r/api-reference/rest-api-explorer/c_RESTAPI.html>
-- **S6 – AWS Security Hub:** Findings-Import und EventBridge-Ereignisse. <https://docs.aws.amazon.com/securityhub/latest/userguide/finding-update-batchimportfindings.html>
-- **S7 – GitHub Webhooks:** signierte Ereigniszustellung, Delivery-Status und Redelivery. <https://docs.github.com/en/webhooks/about-webhooks>
-- **S8 – SCIM Protocol:** standardisierte HTTP-basierte Verwaltung von Usern und Gruppen. <https://www.rfc-editor.org/info/rfc7644/>
-- **S9 – OAuth 2.0 Security BCP:** aktuelle Sicherheitsempfehlungen für OAuth 2.0. <https://www.rfc-editor.org/info/rfc9700/>
-- **S10 – OpenAPI Specification:** maschinenlesbare Beschreibung von HTTP-APIs. <https://spec.openapis.org/oas/latest.html>
-- **S11 – AsyncAPI Specification:** Beschreibung asynchroner und eventgetriebener APIs. <https://www.asyncapi.com/docs/reference/specification/v3.1.0>
-- **S12 – CloudEvents:** standardisiertes, protokollunabhängiges Event-Metadatenmodell. <https://www.cncf.io/projects/cloudevents/>
+- **S1 – Microsoft Graph Change Notifications:** Webhook-basierte Change Notifications und Subscription-Renewal. https://learn.microsoft.com/en-us/graph/change-notifications-delivery-webhooks
+- **S2 – Microsoft Graph Delta Query:** inkrementelle Synchronisation von Ressourcen. https://learn.microsoft.com/en-us/graph/delta-query-overview
+- **S3 – Microsoft Defender XDR APIs:** Incident-, Advanced-Hunting- und Streaming-Funktionen. https://learn.microsoft.com/en-us/defender-xdr/api-overview
+- **S4 – Jira Cloud Webhooks:** dynamische Webhooks und REST-Verwaltung. https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-webhooks/
+- **S5 – ServiceNow REST APIs:** Table API, REST API Explorer und Scripted REST APIs. https://www.servicenow.com/docs/r/api-reference/rest-api-explorer/c_RESTAPI.html
+- **S6 – AWS Security Hub:** Findings-Import und EventBridge-Ereignisse. https://docs.aws.amazon.com/securityhub/latest/userguide/finding-update-batchimportfindings.html
+- **S7 – GitHub Webhooks:** signierte Ereigniszustellung, Delivery-Status und Redelivery. https://docs.github.com/en/webhooks/about-webhooks
+- **S8 – SCIM Protocol:** standardisierte HTTP-basierte Verwaltung von Usern und Gruppen. https://www.rfc-editor.org/info/rfc7644/
+- **S9 – OAuth 2.0 Security BCP:** aktuelle Sicherheitsempfehlungen für OAuth 2.0. https://www.rfc-editor.org/info/rfc9700/
+- **S10 – OpenAPI Specification:** maschinenlesbare Beschreibung von HTTP-APIs. https://spec.openapis.org/oas/latest.html
+- **S11 – AsyncAPI Specification:** Beschreibung asynchroner und eventgetriebener APIs. https://www.asyncapi.com/docs/reference/specification/v3.1.0
+- **S12 – CloudEvents:** standardisiertes, protokollunabhängiges Event-Metadatenmodell. https://www.cncf.io/projects/cloudevents/
 
 ## 48. Änderungsprotokoll
 

@@ -1,46 +1,13 @@
-# Dokument 14 - Servicekatalog, Pakete, SLAs & Preislogik
-
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_14_Servicekatalog_Pakete_SLAs_Preislogik_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (abgelöste Arbeitsfassung, Stand vor 2026-07-23 → diese Fassung nach PDF-Folientiteln): Die Hauptnummern 1-33 und alle Unternummern sind unverändert; die alte Fassung folgte bereits exakt der Foliennummerierung. Abweichungen betreffen nur die unnummerierten Kopfbereiche:
->
-> | Alt (Arbeitsfassung) | Neu (PDF) |
-> |---|---|
-> | - (ohne Entsprechung) | unnummerierte Governance-Folie „Dokumentauftrag & Verbindlichkeit" (PDF Seite 2, zwischen Titelfolie und §1) mit Steuerungsfeld inkl. Owner, Gültigkeit, Preisstatus, Änderungskontrolle, Zentrale Nachfolger |
-> | Kopfzeile „Zweck" (freie Formulierung des Ableiters) | ersatzlos entfallen; das PDF trägt stattdessen den Untertitel der Titelfolie und die Kanonizitätsaussage der Verbindlichkeitsfolie |
-> | Blockquote „Zentrale Festlegung" | ersatzlos entfallen (im PDF nicht existent; war eine Verdichtung des Ableiters, vgl. Abgleichbericht 2026-07-23) |
-> | H1 „... SLAs und Preislogik" | H1 „... SLAs & Preislogik" (PDF-Wortlaut) |
->
-> **PDF-interne Nummerierungskonflikte:** keine festgestellt. Die Navigationszeile „Inhalt" der Verbindlichkeitsfolie verwendet dieselben Nummern 1-33 wie die Folientitel, nur mit Kurzlabels (z. B. „12/13 Preisbänder", „24 bis 33 Szenarien und Governance"). Verweise wie „Dok 14, 9.2" oder „D14-07" sind verwechslungsfrei.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Vier Abbildungen (in §2, §6, §8.4 und §9.1) sind im Textlayer des PDFs nicht enthalten; Position gemäß den Grafikplatzhaltern des Abgleichberichts vom 2026-07-23. Benannte Lücke, siehe Marker im Text — visuelle Verifikation offen (vgl. O-WP019-04).
-> - Die Spaltengrenzen der Tabellen in §5.1, §5.2, §6, §7.2, §8.4, §11.2 und §15.1 wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellen verschmilzt und Kopfzeilen bei Seitenumbrüchen wiederholt. Wortlaut unverändert.
-> - In §8.4 trägt die Zelle „Betriebszeit" der Zeile Critical Governance im Textlayer den Wortlaut „24/7 Acknowledgement für definierte P1-Ereignisse"; so übernommen.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-Eine modulare, transparente und wirtschaftlich steuerbare Angebotsarchitektur für Plattform, Transition und wiederkehrende Managed Services.
+# Dokument 14 - Servicekatalog, Pakete, SLAs und Preislogik
 
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
-**Version:** 1.0 | **Status:** Erstellt | **Stand:** 21.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 13
+**Version:** 1.0  
+**Status:** Erstellt  
+**Stand:** 21.07.2026  
+**Abhängigkeiten:** Dokument 00 bis 13  
+**Zweck:** Verbindliches Produkt- und Kommerzialisierungskonzept dafür, wie Plattformfunktionen und Managed Services verständlich katalogisiert, modular paketiert, mit belastbaren Leistungsversprechen versehen, transparent kalkuliert, angeboten, verändert und wirtschaftlich gesteuert werden.
 
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 14 ist die kanonische Quelle für Servicefamilien, kaufbare Offers, Service-Tiefen, Paketarchitektur, Leistungsversprechen, Price Book, Commercial Baseline, Preisbänder, Mengentreiber, Rabatte, Mehrmengen, Reise- und Drittanbieterlogik. Nachfolgende Dokumente dürfen technische und operative Details konkretisieren, aber diese kommerzielle Semantik nicht still verändern.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 14 |
-| Status | Erstellt - Version 1.0 |
-| Owner | Product Architecture / Service Portfolio & Commercial Model Owner |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Preisstatus | Alle Preisbänder sind synthetische Designannahmen und keine realen Angebote. |
-| Änderungskontrolle | Änderungen an Service Offers, Preisformeln, SLA-Bändern, Paketgrenzen oder Commercial Baseline benötigen Version, Impactanalyse, Tests und Freigabe. |
-| Zentrale Nachfolger | Dokument 15 bis 20C |
-
-**Inhalt:** 1 Auftrag · 2 Summary · 3 Verfassung · 4 Preisobjekte · 5 Katalog · 6 Tiefen · 7 Pakete · 8 SLA · 9 Preisformel · 10 Treiber · 11 Lizenz · 12/13 Preisbänder · 14 Add-ons · 15 Marktanker · 16 Business Case · 17 Unit Economics · 18 Rabatte · 19 Usage/Change · 20 Reise · 21 Angebots-UX · 22 Lifecycle · 23 Governance · 24 bis 33 Szenarien und Governance
+> **Zentrale Festlegung:** Die Plattform verkauft weder undurchsichtige Beraterstunden noch eine starre Einheitslizenz. Sie kombiniert eine klar abgegrenzte Plattformlizenz mit modularen Service Offers, kundenspezifischen Service Instances, messbaren Leistungsversprechen und einer nachvollziehbaren Preisformel. Preise dürfen konfigurierbar sein, aber nie willkürlich, rückwirkend oder fachlich unbegründet.
 
 ## 1. Dokumentauftrag und Abgrenzung
 
@@ -72,7 +39,7 @@ Die kommerzielle Architektur besitzt vier getrennte Ebenen:
 3. **Service Instance:** kundenspezifisch konfigurierte und freigegebene Leistung mit Charter, Rollen, Kalender, Mengengerüst und kommerziellem Baselinewert.
 4. **Change und Usage:** genehmigte Mehrmengen, Zusatzleistungen, Vor-Ort-Tage, Spezialisten, Drittanbieter und Scope-Änderungen.
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG1]]
 
 Der Katalog ist modular, aber nicht beliebig. Kunden sollen Services hinzufügen, reduzieren oder intern übernehmen können, ohne dass das Betriebsmodell zerfällt. Gleichzeitig muss der Provider vor unkontrolliertem Scope, nicht kalkulierbaren Serviceversprechen und unsichtbarer Zusatzarbeit geschützt werden.
 
@@ -88,7 +55,7 @@ Die Preislogik wird deshalb nicht ausschließlich an Mitarbeitendenzahl, User Se
 - Vor-Ort-Anteil, Reise und Sprach-/Regionsbedarf,
 - erwartete Schwankung und Risikoreserve.
 
-Die Plattform zeigt dem Kunden nicht nur den Preis, sondern auch welches Ergebnis, welches Leistungsband, welche Annahmen und welche Grenzen damit verbunden sind. Das verhindert, dass ein günstiges Paket später durch versteckte Zusatzkosten oder permanente Change Requests entwertet wird.
+Die Plattform zeigt dem Kunden nicht nur den Preis, sondern auch **welches Ergebnis, welches Leistungsband, welche Annahmen und welche Grenzen** damit verbunden sind. Das verhindert, dass ein günstiges Paket später durch versteckte Zusatzkosten oder permanente Change Requests entwertet wird.
 
 ## 3. Kommerzielle Verfassung
 
@@ -98,7 +65,7 @@ Die Plattform zeigt dem Kunden nicht nur den Preis, sondern auch welches Ergebni
 - **CP02 - Plattform und Service sind getrennt:** Softwarelizenz, Transition, Managed Service, Projekt und Drittanbieter-Kosten werden separat ausgewiesen.
 - **CP03 - Modular, aber kohärent:** Services können einzeln gebucht werden, besitzen jedoch definierte Voraussetzungen, Abhängigkeiten und gemeinsame Governance.
 - **CP04 - Transparenter Mengentreiber:** Jede wiederkehrende Gebühr besitzt mindestens eine verständliche Mengeneinheit oder ein klar beschriebenes Leistungsband.
-- **CP05 - Kein unlimitiertes Versprechen ohne Guardrail:** „Unlimited" ist nur zulässig, wenn Fair-Use-Grenzen, Priorisierungsregeln und Kapazitätsannahmen explizit sind.
+- **CP05 - Kein unlimitiertes Versprechen ohne Guardrail:** „Unlimited“ ist nur zulässig, wenn Fair-Use-Grenzen, Priorisierungsregeln und Kapazitätsannahmen explizit sind.
 - **CP06 - SLA misst das Beherrschbare:** Reaktions-, Bearbeitungs- und Lieferziele werden getrennt. Ein Provider garantiert keine Ergebnisse, die von Kundenmitwirkung oder externen Dritten abhängen.
 - **CP07 - Keine Zertifizierungsgarantie:** Audit- oder Zertifizierungserfolg kann vorbereitet und unterstützt, aber nicht garantiert werden.
 - **CP08 - Preisänderungen sind versioniert:** Neue Preise gelten nur für neue Offers, Verlängerungen oder freigegebene Änderungen; keine stille rückwirkende Anpassung.
@@ -112,7 +79,7 @@ Die Plattform zeigt dem Kunden nicht nur den Preis, sondern auch welches Ergebni
 
 ### 3.2 Was ausdrücklich vermieden wird
 
-- ein undurchsichtiger „Contact Sales"-Preis ohne erkennbare Logik,
+- ein undurchsichtiger „Contact Sales“-Preis ohne erkennbare Logik,
 - ein Sitzplatzmodell, das fachliche Nutzung künstlich einschränkt,
 - ein Paket, das nur durch dauerhafte Zusatzverkäufe funktionsfähig wird,
 - versteckte Onboarding-, Export- oder Offboarding-Gebühren,
@@ -127,7 +94,7 @@ Die Plattform zeigt dem Kunden nicht nur den Preis, sondern auch welches Ergebni
 
 ### 4.1 Service Family
 
-Eine Service Family gruppiert fachlich verwandte Services. Sie dient Navigation, Portfolio-Governance, Reporting und Skill-Zuordnung. Eine Familie ist noch nicht kaufbar.
+Eine **Service Family** gruppiert fachlich verwandte Services. Sie dient Navigation, Portfolio-Governance, Reporting und Skill-Zuordnung. Eine Familie ist noch nicht kaufbar.
 
 ### 4.2 Service Definition
 
@@ -135,7 +102,7 @@ Die Service Definition beschreibt Methode, Outcome, Standardumfang, Voraussetzun
 
 ### 4.3 Service Offer
 
-Ein Service Offer ist eine kaufbare, versionierte Kombination aus:
+Ein **Service Offer** ist eine kaufbare, versionierte Kombination aus:
 
 - Service Definition und Version,
 - Zielgruppe und geeigneten Zielprofilen,
@@ -151,11 +118,11 @@ Ein Service Offer ist eine kaufbare, versionierte Kombination aus:
 
 ### 4.4 Package
 
-Ein Package bündelt mehrere kompatible Service Offers für einen typischen Bedarf. Ein Paket ist ein Startpunkt, kein Zwang. Jedes Paket wird vor Aktivierung in einzelne Service Instances aufgelöst, damit Scope, Verantwortung und Preis je Service nachvollziehbar bleiben.
+Ein **Package** bündelt mehrere kompatible Service Offers für einen typischen Bedarf. Ein Paket ist ein Startpunkt, kein Zwang. Jedes Paket wird vor Aktivierung in einzelne Service Instances aufgelöst, damit Scope, Verantwortung und Preis je Service nachvollziehbar bleiben.
 
 ### 4.5 Price Book
 
-Das Price Book ist ein versionierter Satz freigegebener Preisregeln. Es enthält:
+Das **Price Book** ist ein versionierter Satz freigegebener Preisregeln. Es enthält:
 
 - Währung, Region, Steuerlogik und Gültigkeit,
 - Plattform- und Servicegrundpreise,
@@ -169,7 +136,7 @@ Das Price Book ist ein versionierter Satz freigegebener Preisregeln. Es enthält
 
 ### 4.6 Quote und Commercial Baseline
 
-Ein Quote ist ein zeitlich begrenzter Angebotsstand. Nach Annahme entsteht eine Commercial Baseline, die mit Service Charter und Service Instance verknüpft ist. Jede Änderung erzeugt eine neue Version mit Delta zu Preis, Scope, Verantwortung, SLA und erwarteter Wirkung.
+Ein **Quote** ist ein zeitlich begrenzter Angebotsstand. Nach Annahme entsteht eine **Commercial Baseline**, die mit Service Charter und Service Instance verknüpft ist. Jede Änderung erzeugt eine neue Version mit Delta zu Preis, Scope, Verantwortung, SLA und erwarteter Wirkung.
 
 ## 5. Servicefamilien und vollständiger Katalog
 
@@ -214,22 +181,22 @@ Ein Quote ist ein zeitlich begrenzter Angebotsstand. Nach Annahme entsteht eine 
 
 Jeder Service wird im Katalog mit derselben Struktur dargestellt:
 
-1. Welches Problem löst der Service?
-2. Welches Ergebnis kauft der Kunde?
-3. Was ist konkret enthalten?
-4. Was bleibt beim Kunden?
-5. Welche Daten und Voraussetzungen werden benötigt?
-6. Wie häufig und in welchem Service-Level wird gearbeitet?
-7. Wie wird Qualität und Wirkung gemessen?
-8. Wie wird der Preis gebildet?
-9. Welche internen und externen Alternativen bestehen?
-10. Wie kann der Service reduziert, erweitert oder beendet werden?
+1. **Welches Problem löst der Service?**
+2. **Welches Ergebnis kauft der Kunde?**
+3. **Was ist konkret enthalten?**
+4. **Was bleibt beim Kunden?**
+5. **Welche Daten und Voraussetzungen werden benötigt?**
+6. **Wie häufig und in welchem Service-Level wird gearbeitet?**
+7. **Wie wird Qualität und Wirkung gemessen?**
+8. **Wie wird der Preis gebildet?**
+9. **Welche internen und externen Alternativen bestehen?**
+10. **Wie kann der Service reduziert, erweitert oder beendet werden?**
 
 ## 6. Service-Tiefen statt starrer Goldpakete
 
 Die Plattform verwendet vier Service-Tiefen. Sie beschreiben Verantwortung und Delivery-Intensität, nicht Prestige.
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG2]]
 
 | Tiefe | Kurzbeschreibung | Kunde | Provider | Geeignet für |
 |---|---|---|---|---|
@@ -259,12 +226,12 @@ Pakete beschleunigen die Auswahl, ersetzen aber keine Charter. Jedes Paket enth�
 
 | Paket | Zielbild | Enthaltene Kern-Offers | Typische Tiefe |
 |---|---|---|---|
-| Navigate | Ein internes Team erhält Struktur, Priorität und seniorige Führung. | SO01, SO02, SO12, Plattform | L1 Guide |
-| Co-Managed ISMS | Kunde und Provider betreiben das ISMS gemeinsam. | SO01-05, SO09, SO12, Plattform | L2 Co-Manage |
-| Managed ISMS Office | Der laufende ISMS-Betrieb wird weitgehend übernommen. | SO01-05, SO07, SO09-12, SO14 | L3 Operate |
-| Embedded Security Office | Führung, Delivery und Spezialisten werden als integrierte Funktion bereitgestellt. | SO01-14 nach Scope | L4 Embedded Office |
-| Audit Route | Ein konkretes Audit- oder Zertifizierungsziel wird kontrolliert vorbereitet. | SO05, SO06, SO09, SO12, optional SO15 | Projekt + Retainer |
-| Regulatory Route | NIS2-, DORA-, TISAX-, BSI- oder andere Zielroute wird operationalisiert. | SO01, SO02, SO03, SO11, SO12, optional Branchenpack | L1-L3 |
+| **Navigate** | Ein internes Team erhält Struktur, Priorität und seniorige Führung. | SO01, SO02, SO12, Plattform | L1 Guide |
+| **Co-Managed ISMS** | Kunde und Provider betreiben das ISMS gemeinsam. | SO01-05, SO09, SO12, Plattform | L2 Co-Manage |
+| **Managed ISMS Office** | Der laufende ISMS-Betrieb wird weitgehend übernommen. | SO01-05, SO07, SO09-12, SO14 | L3 Operate |
+| **Embedded Security Office** | Führung, Delivery und Spezialisten werden als integrierte Funktion bereitgestellt. | SO01-14 nach Scope | L4 Embedded Office |
+| **Audit Route** | Ein konkretes Audit- oder Zertifizierungsziel wird kontrolliert vorbereitet. | SO05, SO06, SO09, SO12, optional SO15 | Projekt + Retainer |
+| **Regulatory Route** | NIS2-, DORA-, TISAX-, BSI- oder andere Zielroute wird operationalisiert. | SO01, SO02, SO03, SO11, SO12, optional Branchenpack | L1-L3 |
 
 ### 7.3 Paketmodularität
 
@@ -316,7 +283,7 @@ Ein Paket darf nicht aktiv werden, wenn eine entfernte Leistung eine zwingende V
 
 ### 8.4 Illustrative Service-Level-Bänder
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG3]]
 
 | Service-Level | Betriebszeit | P1 Acknowledgement | P2 Acknowledgement | P3 Acknowledgement | Standardkommunikation |
 |---|---|---|---|---|---|
@@ -325,7 +292,7 @@ Ein Paket darf nicht aktiv werden, wenn eine entfernte Leistung eine zwingende V
 | Critical Governance | 24/7 Acknowledgement für definierte P1-Ereignisse | 60 Minuten | 4 Stunden | 1 Geschäftstag | definierter Notfallkanal |
 | Embedded | kundenspezifisch, ggf. Follow-the-Sun | 30-60 Minuten | 2-4 Stunden | gleicher Geschäftstag | integrierte Teamkanäle |
 
-Diese Werte sind Designannahmen, keine finalen Vertragszusagen. Für fachliche Deliverables werden gesonderte Lieferziele definiert. Die Uhr pausiert nur bei dokumentierter Kundenabhängigkeit, höherer Gewalt oder explizit freigegebener Ausnahme; sie darf nicht willkürlich angehalten werden.
+Diese Werte sind **Designannahmen**, keine finalen Vertragszusagen. Für fachliche Deliverables werden gesonderte Lieferziele definiert. Die Uhr pausiert nur bei dokumentierter Kundenabhängigkeit, höherer Gewalt oder explizit freigegebener Ausnahme; sie darf nicht willkürlich angehalten werden.
 
 ### 8.5 Service Credits und Remedies
 
@@ -336,7 +303,7 @@ Service Credits sind nur für klar kontrollierbare, wiederholte und messbare Ver
 3. definierter Service Credit bei wiederholter Verletzung,
 4. Sonderkündigungs- oder Reduktionsrecht bei systematischem Versagen.
 
-Credits dürfen kein Ersatz für Problembehebung sein und keine sicherheitskritische Abweichung „abkaufen".
+Credits dürfen kein Ersatz für Problembehebung sein und keine sicherheitskritische Abweichung „abkaufen“.
 
 ## 9. Preisverfassung und Preisformel
 
@@ -346,7 +313,7 @@ Der Gesamtpreis eines Kunden setzt sich zusammen aus:
 
 `Gesamtpreis = Plattform + Transition + wiederkehrende Services + Add-ons + Usage/Mehrmenge + Reise/Drittanbieter - genehmigte Rabatte`
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG4]]
 
 ### 9.2 Wiederkehrende Preisformel
 
@@ -443,11 +410,11 @@ Diese Bänder sind Produktannahmen. Öffentliche Marktangebote reichen von niedr
 
 ## 12. Illustrative Managed-Service-Pakete
 
-Die folgenden Preise sind keine realen Angebote und keine internen Preise einer bestimmten Beratung. Sie sind synthetische Demo-Bänder, abgeleitet aus öffentlich sichtbaren Software- und vCISO-Marktankern sowie dem deutlich breiteren Scope dieser Plattform.
+Die folgenden Preise sind **keine realen Angebote** und keine internen Preise einer bestimmten Beratung. Sie sind synthetische Demo-Bänder, abgeleitet aus öffentlich sichtbaren Software- und vCISO-Marktankern sowie dem deutlich breiteren Scope dieser Plattform.
 
 ### 12.1 Navigate
 
-Ziel: Seniorige Orientierung und verlässliche Governance bei starker interner Ausführung.
+**Ziel:** Seniorige Orientierung und verlässliche Governance bei starker interner Ausführung.
 
 - Plattform Professional,
 - monatlicher Governance- und Risk Review,
@@ -461,7 +428,7 @@ Ziel: Seniorige Orientierung und verlässliche Governance bei starker interner A
 
 ### 12.2 Co-Managed ISMS
 
-Ziel: Gemeinsamer Betrieb mit klar geteilter operativer Verantwortung.
+**Ziel:** Gemeinsamer Betrieb mit klar geteilter operativer Verantwortung.
 
 - Plattform Professional oder Enterprise,
 - Managed Governance, Risk, Policy, Evidence und Findings,
@@ -475,7 +442,7 @@ Ziel: Gemeinsamer Betrieb mit klar geteilter operativer Verantwortung.
 
 ### 12.3 Managed ISMS Office
 
-Ziel: Weitgehende operative Übernahme des ISMS-Regelbetriebs.
+**Ziel:** Weitgehende operative Übernahme des ISMS-Regelbetriebs.
 
 - Plattform Enterprise,
 - Governance, Risk, Control Assurance, Policy, Evidence, Supplier Risk, Findings und Reporting,
@@ -489,7 +456,7 @@ Ziel: Weitgehende operative Übernahme des ISMS-Regelbetriebs.
 
 ### 12.4 Embedded Security Office
 
-Ziel: Integrierte virtuelle Sicherheitsführungs- und Delivery-Funktion für komplexe Organisationen.
+**Ziel:** Integrierte virtuelle Sicherheitsführungs- und Delivery-Funktion für komplexe Organisationen.
 
 - benannter vCISO / Engagement Lead,
 - operatives ISMS-Team und Specialist Pool,
@@ -503,7 +470,7 @@ Ziel: Integrierte virtuelle Sicherheitsführungs- und Delivery-Funktion für kom
 
 ### 12.5 Audit Route
 
-Ziel: Kontrollierte Vorbereitung auf Zertifizierung, Überwachungsaudit oder regulatorische Prüfung.
+**Ziel:** Kontrollierte Vorbereitung auf Zertifizierung, Überwachungsaudit oder regulatorische Prüfung.
 
 - Baseline und Readiness Route,
 - Evidence Operations,
@@ -511,7 +478,8 @@ Ziel: Kontrollierte Vorbereitung auf Zertifizierung, Überwachungsaudit oder reg
 - Audit Pack, Management Brief und Präsentation,
 - optional Vor-Ort-Unterstützung.
 
-**Illustratives Projektband:** EUR 15.000-60.000 je nach Scope; komplexe Multi-Entity-Programme darüber. **Optionaler laufender Retainer:** EUR 3.000-12.000 pro Monat.
+**Illustratives Projektband:** EUR 15.000-60.000 je nach Scope; komplexe Multi-Entity-Programme darüber.  
+**Optionaler laufender Retainer:** EUR 3.000-12.000 pro Monat.
 
 ## 13. Illustrative Einzelservice-Bänder
 
@@ -584,7 +552,7 @@ Spezialisten dürfen nur dann als wiederkehrender Bestandteil kalkuliert werden,
 
 ### 15.3 Grenzen der Marktanker
 
-Öffentliche Preise unterscheiden sich erheblich nach Region, Branche, Unternehmensgröße, Seniorität, Haftung, Reaktionszeit, enthaltenen Stunden, Toolkosten und Auditumfang. Viele Enterprise-Anbieter veröffentlichen keine Preise. Deshalb werden die Bänder in diesem Dokument als begründete Annahmen für Produktdesign und Demo verwendet, nicht als belastbare Marktpreisstudie oder verbindliche Angebotsgrundlage.
+Öffentliche Preise unterscheiden sich erheblich nach Region, Branche, Unternehmensgröße, Seniorität, Haftung, Reaktionszeit, enthaltenen Stunden, Toolkosten und Auditumfang. Viele Enterprise-Anbieter veröffentlichen keine Preise. Deshalb werden die Bänder in diesem Dokument als **begründete Annahmen für Produktdesign und Demo** verwendet, nicht als belastbare Marktpreisstudie oder verbindliche Angebotsgrundlage.
 
 ## 16. Kunden-Business-Case
 
@@ -975,18 +943,18 @@ Alle Namen, Preise, Rabatte, Service-Level, Kosten und Unternehmensdaten im Demo
 
 ## 32. Quellen- und Marktankerregister
 
-- **S1 - isopilot Pricing.** Öffentliche Preisbänder für ISO-27001-Software und Advisory. https://www.isopilot.app/pricing
-- **S2 - Qontrol Pricing.** Öffentliche GRC-Plattformpreise. https://www.qontrol.io/en/enduser/pricing
-- **S3 - vCISO Lite Pricing.** Öffentliche Software-/Servicepakete von USD 299 bis USD 1.499 pro Monat. https://vcisolite.com/pricing
-- **S4 - vCISO.com Pricing.** Öffentliche Retainer- und Projektpreise. https://www.vciso.com/pricing
-- **S5 - vCISO.com Cost Guide.** Veröffentlichte Marktspanne für vCISO-Retainer und Projekte. https://www.vciso.com/vciso-cost
-- **S6 - Cybervize vCISO Kosten 2026.** DACH-orientierte Marktspanne und Preisfaktoren. https://www.cybervize.de/de/blog/virtual-ciso-kosten-preismodelle
-- **S7 - Cybervize vCISO Service.** Öffentlicher Einstiegspreis für externen CISO. https://www.cybervize.de/de/leistungen/vciso
-- **S8 - vCISO-EU.** Öffentliche europäische Paketpreise. https://vciso-eu.com/
-- **S9 - AWS Marketplace Axipro vCISO Assurance Plan.** Beispiel eines laufenden Compliance- und Surveillance-Service mit individueller Preisbildung. https://aws.amazon.com/marketplace/pp/prodview-ddpumppf5mo4e
-- **S10 - AWS Marketplace Rhymetec vCISO.** Beispiel eines mehrstufigen, individuell kalkulierten vCISO-Angebots. https://aws.amazon.com/marketplace/pp/prodview-xzgm36fe2ilbw
+**S1 - isopilot Pricing.** Öffentliche Preisbänder für ISO-27001-Software und Advisory. https://www.isopilot.app/pricing  
+**S2 - Qontrol Pricing.** Öffentliche GRC-Plattformpreise. https://www.qontrol.io/en/enduser/pricing  
+**S3 - vCISO Lite Pricing.** Öffentliche Software-/Servicepakete von USD 299 bis USD 1.499 pro Monat. https://vcisolite.com/pricing  
+**S4 - vCISO.com Pricing.** Öffentliche Retainer- und Projektpreise. https://www.vciso.com/pricing  
+**S5 - vCISO.com Cost Guide.** Veröffentlichte Marktspanne für vCISO-Retainer und Projekte. https://www.vciso.com/vciso-cost  
+**S6 - Cybervize vCISO Kosten 2026.** DACH-orientierte Marktspanne und Preisfaktoren. https://www.cybervize.de/de/blog/virtual-ciso-kosten-preismodelle  
+**S7 - Cybervize vCISO Service.** Öffentlicher Einstiegspreis für externen CISO. https://www.cybervize.de/de/leistungen/vciso  
+**S8 - vCISO-EU.** Öffentliche europäische Paketpreise. https://vciso-eu.com/  
+**S9 - AWS Marketplace Axipro vCISO Assurance Plan.** Beispiel eines laufenden Compliance- und Surveillance-Service mit individueller Preisbildung. https://aws.amazon.com/marketplace/pp/prodview-ddpumppf5mo4e  
+**S10 - AWS Marketplace Rhymetec vCISO.** Beispiel eines mehrstufigen, individuell kalkulierten vCISO-Angebots. https://aws.amazon.com/marketplace/pp/prodview-xzgm36fe2ilbw
 
-Hinweis: Alle Quellen wurden am 21.07.2026 geprüft. Preise können sich ändern und unterscheiden sich in Inhalt, Region, Steuer, Laufzeit und Leistungsumfang. Das Register begründet Designannahmen, ersetzt aber keine professionelle Preisstudie.
+**Hinweis:** Alle Quellen wurden am 21.07.2026 geprüft. Preise können sich ändern und unterscheiden sich in Inhalt, Region, Steuer, Laufzeit und Leistungsumfang. Das Register begründet Designannahmen, ersetzt aber keine professionelle Preisstudie.
 
 ## 33. Änderungsprotokoll
 

@@ -1,67 +1,17 @@
-# Dokument 20B – Virtuelle KI-Firma & Agentenorganisation
-
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_20B_Virtuelle_KI_Firma_Agentenorganisation_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (alte Arbeitsfassung, ersetzt durch diese Fassung; der Vorstand liegt in der Git-Historie → diese Fassung nach PDF-Folientiteln). Die Hauptnummern 1–47 und alle Untergliederungen (8.1–39.5) sind unverändert. Abweichungen betreffen ausschließlich Titel und Vorblatt:
->
-> | Alt (Arbeitsfassung) | Neu (PDF) |
-> |---|---|
-> | Dokumenttitel „Virtuelle KI-Firma **und** Agentenorganisation" | „Virtuelle KI-Firma **&** Agentenorganisation" (PDF-Deckblatt) |
-> | – (ohne Entsprechung) | Deckblatt-Untertitel und Leitsatz („Spezialisiert. Prüfbar. Fortsetzbar. Menschlich gesteuert.") |
-> | – (ohne Entsprechung) | Vorblatt „Dokumentauftrag & Verbindlichkeit" mit Verbindlichkeitserklärung |
-> | – (ohne Entsprechung) | Steuerungsfeld-Tabelle (Dokument-ID, Status, Owner, Gültigkeit, Organisationsstatus, Änderungskontrolle) |
-> | – (ohne Entsprechung) | Inhaltsübersicht („1 Auftrag · 2 Summary · 3 Verfassung · …") |
-> | Kopffeld „Primärer Nachfolger: Dokument 20C – Claude Code, GitHub, Checkpoints und Bauplan" | – (im PDF nicht vorhanden; ersatzlos entfallen, vgl. Abgleichbericht 2026-07-23) |
-> | Platzhalter `[[FIGURE:FIG1]]` bis `[[FIGURE:FIG4]]` | Bildunterschriften der Abbildungen 1–4 wörtlich übertragen |
->
-> **PDF-interne Nummerierungskonflikte:** keine festgestellt. Die Folientitel-Zählung 1–47 ist durchgängig und deckt sich mit der Inhaltsübersicht auf Seite 2; eine abweichende Navigationsleisten-Zählung existiert in diesem PDF nicht.
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Das Steuerungsfeld nennt drei Owner („Human Product Owner / CEO-Orchestrator / Quality & Governance Lead"), während §2 „Executive Summary" als Grundregel „Ein Accountable Owner pro Ergebnis" festlegt. Ob die Dreifach-Ownerschaft des Dokuments dazu in Spannung steht, erläutert das PDF nicht.
-> - §4 „Zielbild der virtuellen Firma" verwendet die Lead-Bezeichnungen „Product & Domain Lead", „Quality & Governance Lead" und „Knowledge & Continuity Lead"; keine dieser drei Bezeichnungen erscheint als eigener Rollenabschnitt in §8–§28 (dort z. B. „Product & User Lead", „ISMS Domain Lead", „Documentation & Project Memory Agent"). Die Zuordnung Zielbild-Leads → Rollenabschnitte ist im PDF nicht definiert.
-> - Die Skills-Tabelle in §29 „Agent Skills und Werkzeugprofile" nennt als mögliche Rolle einen „Reporting Specialist", der in §8–§28 keinen eigenen Rollenabschnitt besitzt (§39.2 kennt nur einen temporären „Presentation Rendering & QA Specialist").
-> - Das Änderungsprotokoll (§47) zählt „21 Rollenverantwortungen"; das entspricht den Abschnitten §8–§28 einschließlich des menschlichen Human Product Owners (§8), der kein Agent ist.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Abbildungen 1 (§4), 2 (§11.4), 3 (§26.3) und 4 (§30): Nur die Bildunterschriften sind textlich extrahierbar und wörtlich übertragen; der grafische Inhalt ist im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04.
-> - Tabellen (Steuerungsfeld, §5, §6, §33.1, §36, §38, §47): Zeilenumbrüche innerhalb von Zellen wurden anhand der Spaltenköpfe zusammengeführt, weil die Textextraktion mehrzeilige Zellen aufspaltet; Wortlaut unverändert.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-**PRODUKTKONZEPT 20B – Virtuelle KI-Firma & Agentenorganisation**
-
-Spezialisierte Agentenrollen, klare Entscheidungsrechte, unabhängige Reviews, artifact-first Zusammenarbeit, Projektgedächtnis und kontrollierte Organisationsentwicklung.
-
-*Spezialisiert. Prüfbar. Fortsetzbar. Menschlich gesteuert.*
+# Dokument 20B – Virtuelle KI-Firma und Agentenorganisation
 
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
 **Version:** 1.0  
 **Status:** Erstellt  
 **Stand:** 22.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 20A
-
----
-
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 20B ist die verbindliche Organisations-, Rollen-, Governance- und Zusammenarbeitsquelle für die virtuelle KI-Firma. Es definiert, welche Agentenrollen benötigt werden, welche Artefakte sie liefern, wie sie sich gegenseitig prüfen, wann menschliche Autorität erforderlich ist und wie das Projekt über Sessions und Kontextgrenzen hinweg fortsetzbar bleibt.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 20B |
-| Status | Erstellt - Version 1.0 |
-| Owner | Human Product Owner / CEO-Orchestrator / Quality & Governance Lead |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Organisationsstatus | Die Rollen sind ein Zielmodell. Konkrete Claude-Code-Subagents, Skills, Toolrechte und Repository-Mechanismen werden in Dokument 20C umgesetzt. |
-| Änderungskontrolle | Änderungen an Rollenrechten, Human Gates, Agentenpopulation, Review-Unabhängigkeit, Project Memory oder Security-Freigaben benötigen Organisations-, Product-, Security- und Delivery-Impactanalyse. |
-
-**Inhalt:** 1 Auftrag · 2 Summary · 3 Verfassung · 4-7 Zielbild, Ebenen, Kern und Role Contracts · 8-28 menschliche Steuerung, Orchestrierung und spezialisierte Rollen · 29 Skills · 30-32 Intake, Zusammenarbeit und Artefakte · 33-36 Autorität, Human Gates, Sicherheit und Quality Gates · 37-38 Scorecards und Fehlermuster · 39-40 Szenarien und Demo · 41-47 Akzeptanz, Entscheidungen, Annahmen, offene Fragen, Ideen, Abhängigkeiten und Änderungen.
+**Abhängigkeiten:** Dokument 00 bis 20A  
+**Primärer Nachfolger:** Dokument 20C – Claude Code, GitHub, Checkpoints und Bauplan
 
 ---
 
 ## 1. Auftrag und Abgrenzung
 
-Dokument 20B ist die kanonische Quelle für die virtuelle KI-Firma, mit der die ISMS Managed Service Platform geplant, entwickelt, geprüft, dokumentiert und später weiterbetrieben werden soll. Es beschreibt keine dekorative Sammlung von Agentennamen, sondern ein belastbares Organisations- und Zusammenarbeitsmodell mit klaren Verantwortlichkeiten, Inputs, Outputs, Entscheidungsrechten, Übergaben und Qualitätskontrollen.
+Dokument 20B ist die kanonische Quelle für die **virtuelle KI-Firma**, mit der die ISMS Managed Service Platform geplant, entwickelt, geprüft, dokumentiert und später weiterbetrieben werden soll. Es beschreibt keine dekorative Sammlung von Agentennamen, sondern ein belastbares Organisations- und Zusammenarbeitsmodell mit klaren Verantwortlichkeiten, Inputs, Outputs, Entscheidungsrechten, Übergaben und Qualitätskontrollen.
 
 Das Dokument beantwortet insbesondere:
 
@@ -74,28 +24,28 @@ Das Dokument beantwortet insbesondere:
 - Wie arbeitet die Agentenfirma mit den KI-Guardrails aus Dokument 20A und dem Repository-Betriebssystem aus Dokument 20C zusammen?
 - Wie werden Agentenleistung, Qualität, Kosten, Geschwindigkeit, Sicherheitswirkung und organisatorische Komplexität gemessen?
 
-Abgrenzung: Dokument 20B definiert die Organisation und ihre Arbeitsverfassung. Die konkrete Repository-Struktur, Branches, Commitregeln, Checkpointdateien, Session-Wiederaufnahme und Claude-Code-Startprompts werden in Dokument 20C verbindlich festgelegt.
+**Abgrenzung:** Dokument 20B definiert die Organisation und ihre Arbeitsverfassung. Die konkrete Repository-Struktur, Branches, Commitregeln, Checkpointdateien, Session-Wiederaufnahme und Claude-Code-Startprompts werden in Dokument 20C verbindlich festgelegt.
 
 ## 2. Executive Summary
 
-Die virtuelle KI-Firma wird als kleines, kontrolliertes, artifact-first arbeitendes Softwareunternehmen aufgebaut. Ein Human Product Owner behält Ziel, Priorität, sensible Freigaben und irreversible Entscheidungen. Ein CEO-/Orchestrator-Agent übersetzt diese Richtung in prüfbare Arbeitspakete, stellt ein passendes Agententeam zusammen und schützt den roten Faden. Spezialisten liefern klar definierte Ergebnisse, nicht bloß Chatbeiträge.
+Die virtuelle KI-Firma wird als **kleines, kontrolliertes, artifact-first arbeitendes Softwareunternehmen** aufgebaut. Ein Human Product Owner behält Ziel, Priorität, sensible Freigaben und irreversible Entscheidungen. Ein CEO-/Orchestrator-Agent übersetzt diese Richtung in prüfbare Arbeitspakete, stellt ein passendes Agententeam zusammen und schützt den roten Faden. Spezialisten liefern klar definierte Ergebnisse, nicht bloß Chatbeiträge.
 
 Die Organisation besteht aus vier dauerhaften Säulen:
 
-1. Produkt und Fachlichkeit – Nutzerwert, ISMS-Logik, Cybersecurity, Design und Priorisierung.
-2. Engineering und Architektur – technische Struktur, Frontend, Backend, Daten, Integrationen und Plattformbetrieb.
-3. Assurance und Governance – Security, Privacy, QA, Test, Code Review und Release-Entscheidungen.
-4. Wissen und Kontinuität – Projektgedächtnis, Dokumentation, GitHub-Hygiene, Übergaben und Betriebswissen.
+1. **Produkt und Fachlichkeit** – Nutzerwert, ISMS-Logik, Cybersecurity, Design und Priorisierung.
+2. **Engineering und Architektur** – technische Struktur, Frontend, Backend, Daten, Integrationen und Plattformbetrieb.
+3. **Assurance und Governance** – Security, Privacy, QA, Test, Code Review und Release-Entscheidungen.
+4. **Wissen und Kontinuität** – Projektgedächtnis, Dokumentation, GitHub-Hygiene, Übergaben und Betriebswissen.
 
 Ein HR-/Capability-Agent beobachtet Kompetenzlücken und schlägt neue Rollen oder temporäre Spezialisten vor. Er darf jedoch nicht unkontrolliert immer neue Agenten erzeugen. Jede neue Rolle benötigt einen belegten Bedarf, einen begrenzten Auftrag, ein Budget, eine Owner-Rolle und ein Abschaltkriterium.
 
 Die Agentenfirma arbeitet nach fünf Grundregeln:
 
-- Repository statt Chat als Gedächtnis.
-- Ein Accountable Owner pro Ergebnis.
-- Bauen und Prüfen sind getrennte Verantwortungen.
-- Parallelität nur bei sauber getrennten Grenzen.
-- Menschen behalten materiale, irreversible und verantwortungsrelevante Entscheidungen.
+- **Repository statt Chat als Gedächtnis.**
+- **Ein Accountable Owner pro Ergebnis.**
+- **Bauen und Prüfen sind getrennte Verantwortungen.**
+- **Parallelität nur bei sauber getrennten Grenzen.**
+- **Menschen behalten materiale, irreversible und verantwortungsrelevante Entscheidungen.**
 
 Das Ziel ist nicht maximale Agentenzahl, sondern eine Organisation, die mit weniger Kontextverlust, weniger Rework und höherer fachlicher Qualität arbeitet als ein einzelner unstrukturierter Claude-Chat.
 
@@ -103,36 +53,34 @@ Das Ziel ist nicht maximale Agentenzahl, sondern eine Organisation, die mit weni
 
 Die Agentenfirma folgt einer verbindlichen Verfassung.
 
-1. Der Mensch ist Auftraggeber und letzte Produktinstanz. Agenten optimieren die Umsetzung, ersetzen aber nicht Eigentümerschaft, Haftung oder strategische Verantwortung.
-2. Jede Rolle besitzt einen schriftlichen Role Contract. Mission, Input, Output, Werkzeuge, Grenzen, Entscheidungsrechte, Reviewpflicht und Eskalationsweg müssen definiert sein.
-3. Kein Agent arbeitet ohne Work Item. Ein klarer Auftrag, Akzeptanzkriterien und relevante Quellen gehen der Umsetzung voraus.
-4. Kein Agent erfindet Produktentscheidungen. Fehlende Richtungsentscheidungen werden als Annahme oder offene Frage sichtbar gemacht.
-5. Kein Agent prüft ausschließlich seine eigene Arbeit. Für materiale Änderungen sind unabhängige Review- oder Quality Gates erforderlich.
-6. Artefakte sind die Kommunikationsschnittstelle. Code, ADR, Testreport, Wireframe, Decision Record oder Handover Packet sind verbindlicher als informelle Chatabsprachen.
-7. Parallelität ist eine bewusste Ausnahme. Agenten arbeiten nur parallel, wenn Dateien, Domänen, Schnittstellen und Integrationsreihenfolge klar getrennt sind.
-8. Autonomie ist risikobasiert. Je höher Materialität, Sicherheitswirkung, Kosten oder Irreversibilität, desto stärker menschliche Freigabe und unabhängige Prüfung.
-9. Agenten dürfen stoppen. Ein Agent muss abbrechen oder eskalieren, wenn Scope, Autorität, Datenzugriff, Sicherheitsgrenze oder Akzeptanzkriterium unklar ist.
-10. Die Organisation lernt kontrolliert. Retrospektiven verändern Rollen, Prompts oder Prozesse nur versioniert und mit nachvollziehbarer Begründung.
-11. Spezialisierung muss Nutzen bringen. Eine neue Rolle wird nur geschaffen, wenn sie messbar bessere Qualität, Geschwindigkeit, Sicherheit oder Kontinuität erzeugt.
-12. Die Organisation bleibt verständlich. Ein Mensch muss jederzeit erkennen können, wer warum arbeitet, was entschieden wurde und welcher nächste Schritt folgt.
+1. **Der Mensch ist Auftraggeber und letzte Produktinstanz.** Agenten optimieren die Umsetzung, ersetzen aber nicht Eigentümerschaft, Haftung oder strategische Verantwortung.
+2. **Jede Rolle besitzt einen schriftlichen Role Contract.** Mission, Input, Output, Werkzeuge, Grenzen, Entscheidungsrechte, Reviewpflicht und Eskalationsweg müssen definiert sein.
+3. **Kein Agent arbeitet ohne Work Item.** Ein klarer Auftrag, Akzeptanzkriterien und relevante Quellen gehen der Umsetzung voraus.
+4. **Kein Agent erfindet Produktentscheidungen.** Fehlende Richtungsentscheidungen werden als Annahme oder offene Frage sichtbar gemacht.
+5. **Kein Agent prüft ausschließlich seine eigene Arbeit.** Für materiale Änderungen sind unabhängige Review- oder Quality Gates erforderlich.
+6. **Artefakte sind die Kommunikationsschnittstelle.** Code, ADR, Testreport, Wireframe, Decision Record oder Handover Packet sind verbindlicher als informelle Chatabsprachen.
+7. **Parallelität ist eine bewusste Ausnahme.** Agenten arbeiten nur parallel, wenn Dateien, Domänen, Schnittstellen und Integrationsreihenfolge klar getrennt sind.
+8. **Autonomie ist risikobasiert.** Je höher Materialität, Sicherheitswirkung, Kosten oder Irreversibilität, desto stärker menschliche Freigabe und unabhängige Prüfung.
+9. **Agenten dürfen stoppen.** Ein Agent muss abbrechen oder eskalieren, wenn Scope, Autorität, Datenzugriff, Sicherheitsgrenze oder Akzeptanzkriterium unklar ist.
+10. **Die Organisation lernt kontrolliert.** Retrospektiven verändern Rollen, Prompts oder Prozesse nur versioniert und mit nachvollziehbarer Begründung.
+11. **Spezialisierung muss Nutzen bringen.** Eine neue Rolle wird nur geschaffen, wenn sie messbar bessere Qualität, Geschwindigkeit, Sicherheit oder Kontinuität erzeugt.
+12. **Die Organisation bleibt verständlich.** Ein Mensch muss jederzeit erkennen können, wer warum arbeitet, was entschieden wurde und welcher nächste Schritt folgt.
 
 ## 4. Zielbild der virtuellen Firma
 
-*Abbildung 1: Die virtuelle KI-Firma verbindet menschliche Produktverantwortung, zentrale Orchestrierung, vier fachliche Säulen und einen kontrollierten HR-/Capability-Agenten.*
+[[FIGURE:FIG1]]
 
-[Abbildung 1: grafischer Inhalt im Textlayer nicht lesbar — nur die Bildunterschrift ist übertragen; visuelle Verifikation offen, vgl. O-WP019-04]
+Das Zielbild ist keine starre Hierarchie. Es ist eine **verantwortungsorientierte Matrixorganisation**:
 
-Das Zielbild ist keine starre Hierarchie. Es ist eine verantwortungsorientierte Matrixorganisation:
+- Der **Human Product Owner** setzt Vision, Prioritäten und Freigabegrenzen.
+- Der **CEO-/Orchestrator-Agent** hält Produkt, Plan, Ressourcen und Abhängigkeiten zusammen.
+- Ein **Product & Domain Lead** verantwortet Nutzerwert und fachliche Konsistenz.
+- Ein **CTO-/Architecture Lead** verantwortet technische Kohärenz.
+- Ein **Quality & Governance Lead** verantwortet unabhängige Assurance.
+- Ein **Knowledge & Continuity Lead** stellt sicher, dass Wissen nicht im Kontextfenster verschwindet.
+- Der **HR-/Capability-Agent** prüft, ob vorhandene Rollen genügen oder temporäre Spezialisten benötigt werden.
 
-- Der Human Product Owner setzt Vision, Prioritäten und Freigabegrenzen.
-- Der CEO-/Orchestrator-Agent hält Produkt, Plan, Ressourcen und Abhängigkeiten zusammen.
-- Ein Product & Domain Lead verantwortet Nutzerwert und fachliche Konsistenz.
-- Ein CTO-/Architecture Lead verantwortet technische Kohärenz.
-- Ein Quality & Governance Lead verantwortet unabhängige Assurance.
-- Ein Knowledge & Continuity Lead stellt sicher, dass Wissen nicht im Kontextfenster verschwindet.
-- Der HR-/Capability-Agent prüft, ob vorhandene Rollen genügen oder temporäre Spezialisten benötigt werden.
-
-Die Bezeichnung „Firma" beschreibt Arbeitsweise, nicht Rechtsform oder autonome Rechtspersönlichkeit. Agenten erhalten keine reale Personal-, Vertrags-, Finanz- oder Produktionsvollmacht.
+Die Bezeichnung „Firma“ beschreibt Arbeitsweise, nicht Rechtsform oder autonome Rechtspersönlichkeit. Agenten erhalten keine reale Personal-, Vertrags-, Finanz- oder Produktionsvollmacht.
 
 ## 5. Organisationsebenen
 
@@ -225,7 +173,7 @@ Der Mensch muss nicht jede technische Detailentscheidung treffen. Kleine reversi
 
 ### 9.1 Mission
 
-Der CEO-/Orchestrator-Agent hält Vision, Arbeitsplan, Rollen, Abhängigkeiten, Risiko und Fortschritt zusammen. Er ist kein allwissender Entwickler und soll möglichst wenig selbst implementieren.
+Der CEO-/Orchestrator-Agent hält **Vision, Arbeitsplan, Rollen, Abhängigkeiten, Risiko und Fortschritt** zusammen. Er ist kein allwissender Entwickler und soll möglichst wenig selbst implementieren.
 
 ### 9.2 Eingaben
 
@@ -313,9 +261,7 @@ Jeder Vorschlag enthält:
 
 Der HR-Agent darf keine unbegrenzte Agentenpopulation erzeugen. Er kann Role Contracts entwerfen und eine Aktivierung empfehlen. Aktivierung, Rechte und Budget werden durch Orchestrator sowie bei materialer Wirkung durch den Menschen bestätigt.
 
-*Abbildung 2: Neue Agentenrollen entstehen nur über einen Capability Request mit belegter Lücke, begrenzten Rechten, Laufzeit, Messung und Abschaltentscheidung.*
-
-[Abbildung 2: grafischer Inhalt im Textlayer nicht lesbar — nur die Bildunterschrift ist übertragen; visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG2]]
 
 ## 12. Product & User Lead
 
@@ -390,7 +336,7 @@ Der UX/UI Lead macht die Plattform für Anfänger verständlich und für Experte
 - End-to-End-Prototypen und Demo-Dramaturgie,
 - Design QA gegen implementierte Screens.
 
-UX darf nicht nur am Ende „schön machen". Der Agent wird vor Architektur- und Implementierungsentscheidungen einbezogen, wenn Nutzerfluss, Datenverdichtung oder Interaktion betroffen sind.
+UX darf nicht nur am Ende „schön machen“. Der Agent wird vor Architektur- und Implementierungsentscheidungen einbezogen, wenn Nutzerfluss, Datenverdichtung oder Interaktion betroffen sind.
 
 ## 16. Product Critic / Challenger
 
@@ -516,7 +462,7 @@ Produktive Deployments, kostenpflichtige Infrastruktur oder externe Secrets ben�
 
 ## 23. Product Security & Privacy Agent
 
-Diese Rolle prüft die Sicherheit der entwickelten Plattform und unterscheidet sich vom Cybersecurity Domain Agent.
+Diese Rolle prüft die **Sicherheit der entwickelten Plattform** und unterscheidet sich vom Cybersecurity Domain Agent.
 
 Verantwortungen:
 
@@ -570,13 +516,13 @@ Prüfkriterien:
 - Dokumentations- und Decision-Log-Updates,
 - Auswirkungen auf andere Module.
 
-Der Reviewer kann „approve", „approve with conditions" oder „changes required" empfehlen. Finaler Merge wird gemäß Dokument 20C durch definierte Gates gesteuert.
+Der Reviewer kann „approve“, „approve with conditions“ oder „changes required“ empfehlen. Finaler Merge wird gemäß Dokument 20C durch definierte Gates gesteuert.
 
 ## 26. Documentation & Project Memory Agent
 
 ### 26.1 Mission
 
-Der Project Memory Agent schützt die Organisation vor Kontextverlust. Er entwickelt möglichst keinen Produktcode, sondern hält die verbindliche Projektgeschichte aktuell.
+Der Project Memory Agent schützt die Organisation vor Kontextverlust. Er entwickelt möglichst keinen Produktcode, sondern hält die **verbindliche Projektgeschichte** aktuell.
 
 ### 26.2 Zu pflegende Artefakte
 
@@ -594,9 +540,7 @@ Der Project Memory Agent schützt die Organisation vor Kontextverlust. Er entwic
 
 Eine Entscheidung gilt nicht als organisationsweit bekannt, nur weil sie in einem Chat erwähnt wurde. Sie muss in der zuständigen Repository-Datei dokumentiert und verlinkt sein.
 
-*Abbildung 3: Agenten kommunizieren über strukturierte Repository-Artefakte; Chats verweisen auf die Single Source of Truth und ersetzen sie nicht.*
-
-[Abbildung 3: grafischer Inhalt im Textlayer nicht lesbar — nur die Bildunterschrift ist übertragen; visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG3]]
 
 ## 27. GitHub, Release & Configuration Steward
 
@@ -653,24 +597,22 @@ Skills werden nicht allein durch einen langen Prompt definiert. Sie benötigen B
 
 ## 30. Work Intake, Zerlegung und Staffing
 
-*Abbildung 4: Der Agenten-Delivery-Loop führt von Intake und Staffing über Bau, Review und Integration zu einem fortsetzbaren Checkpoint und kontrolliertem Lernen.*
-
-[Abbildung 4: grafischer Inhalt im Textlayer nicht lesbar — nur die Bildunterschrift ist übertragen; visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG4]]
 
 Jede größere Anforderung durchläuft folgenden Ablauf:
 
-1. Intake: Ziel, Problem, Nutzer, erwarteter Outcome und Dringlichkeit erfassen.
-2. Klassifikation: Fachdomäne, Risiko, Datenklasse, Abhängigkeiten und Irreversibilität bestimmen.
-3. Klärung: fehlende Entscheidungen, Annahmen und Akzeptanzkriterien sichtbar machen.
-4. Zerlegung: kleine, demonstrierbare Work Packages mit klaren Schnittstellen schneiden.
-5. Staffing: Accountable Owner, Implementer, Reviewer und Approver bestimmen.
-6. Plan: Reihenfolge, Budget, Teststrategie und Checkpoints festlegen.
-7. Execution: Änderungen in begrenztem Scope umsetzen.
-8. Review: fachliche, technische, Security- und QA-Prüfung nach Materialität.
-9. Integration: Konflikte lösen, Verträge prüfen und Ergebnis integrieren.
-10. Checkpoint: Code, Tests, Doku, Entscheidungen, Status und nächsten Einstieg sichern.
-11. Outcome Review: prüfen, ob der Nutzerwert erreicht wurde.
-12. Learning: Rolle, Skill, Prompt, Template oder Prozess kontrolliert verbessern.
+1. **Intake:** Ziel, Problem, Nutzer, erwarteter Outcome und Dringlichkeit erfassen.
+2. **Klassifikation:** Fachdomäne, Risiko, Datenklasse, Abhängigkeiten und Irreversibilität bestimmen.
+3. **Klärung:** fehlende Entscheidungen, Annahmen und Akzeptanzkriterien sichtbar machen.
+4. **Zerlegung:** kleine, demonstrierbare Work Packages mit klaren Schnittstellen schneiden.
+5. **Staffing:** Accountable Owner, Implementer, Reviewer und Approver bestimmen.
+6. **Plan:** Reihenfolge, Budget, Teststrategie und Checkpoints festlegen.
+7. **Execution:** Änderungen in begrenztem Scope umsetzen.
+8. **Review:** fachliche, technische, Security- und QA-Prüfung nach Materialität.
+9. **Integration:** Konflikte lösen, Verträge prüfen und Ergebnis integrieren.
+10. **Checkpoint:** Code, Tests, Doku, Entscheidungen, Status und nächsten Einstieg sichern.
+11. **Outcome Review:** prüfen, ob der Nutzerwert erreicht wurde.
+12. **Learning:** Rolle, Skill, Prompt, Template oder Prozess kontrolliert verbessern.
 
 ## 31. Zusammenarbeitsmuster
 
@@ -966,52 +908,52 @@ Alle Demo-Informationen sind synthetisch. Die Firma darf nicht vortäuschen, rea
 
 ## 42. Festgelegte Entscheidungen
 
-- D20B-001: Die Entwicklungsorganisation wird als virtuelle KI-Firma mit klaren Rollen und nicht als unstrukturierter Agentenschwarm aufgebaut.
-- D20B-002: Der Human Product Owner behält Vision, materiale Freigaben und irreversible Entscheidungen.
-- D20B-003: Ein CEO-/Orchestrator-Agent steuert Plan, Staffing und Abhängigkeiten, implementiert aber nicht standardmäßig selbst.
-- D20B-004: Die Organisation besitzt vier Säulen: Produkt/Fachlichkeit, Engineering/Architektur, Assurance/Governance sowie Wissen/Kontinuität.
-- D20B-005: Jede Rolle benötigt einen versionierten Role Contract.
-- D20B-006: Kein Agent arbeitet ohne Work Item und Definition of Done.
-- D20B-007: Builder und unabhängiger Reviewer werden bei materialer Arbeit getrennt.
-- D20B-008: Repository-Artefakte sind die verbindliche Kommunikations- und Gedächtnisschicht.
-- D20B-009: Der HR-/Capability-Agent darf Rollen vorschlagen, aber nicht unkontrolliert aktivieren.
-- D20B-010: Neue Rollen sind befristet oder benötigen einen belegten dauerhaften Nutzen.
-- D20B-011: Parallelität ist nur bei stabilen Verträgen und getrennten Änderungsgrenzen erlaubt.
-- D20B-012: Product Security und Cybersecurity-Fachlichkeit sind getrennte Verantwortungen.
-- D20B-013: Project Memory ist eine eigene Kernverantwortung und keine freiwillige Nacharbeit.
-- D20B-014: Agentenleistung wird nach Outcome, Qualität, Rework, Kosten und Kontinuität gemessen.
-- D20B-015: Kritische Sicherheits-, Rechts-, Kosten- und Außenwirkungsentscheidungen bleiben menschlich.
-- D20B-016: Alle Agenten unterliegen den KI-, Sicherheits- und Datenschutzregeln aus Dokument 19 und 20A.
+- **D20B-001:** Die Entwicklungsorganisation wird als virtuelle KI-Firma mit klaren Rollen und nicht als unstrukturierter Agentenschwarm aufgebaut.
+- **D20B-002:** Der Human Product Owner behält Vision, materiale Freigaben und irreversible Entscheidungen.
+- **D20B-003:** Ein CEO-/Orchestrator-Agent steuert Plan, Staffing und Abhängigkeiten, implementiert aber nicht standardmäßig selbst.
+- **D20B-004:** Die Organisation besitzt vier Säulen: Produkt/Fachlichkeit, Engineering/Architektur, Assurance/Governance sowie Wissen/Kontinuität.
+- **D20B-005:** Jede Rolle benötigt einen versionierten Role Contract.
+- **D20B-006:** Kein Agent arbeitet ohne Work Item und Definition of Done.
+- **D20B-007:** Builder und unabhängiger Reviewer werden bei materialer Arbeit getrennt.
+- **D20B-008:** Repository-Artefakte sind die verbindliche Kommunikations- und Gedächtnisschicht.
+- **D20B-009:** Der HR-/Capability-Agent darf Rollen vorschlagen, aber nicht unkontrolliert aktivieren.
+- **D20B-010:** Neue Rollen sind befristet oder benötigen einen belegten dauerhaften Nutzen.
+- **D20B-011:** Parallelität ist nur bei stabilen Verträgen und getrennten Änderungsgrenzen erlaubt.
+- **D20B-012:** Product Security und Cybersecurity-Fachlichkeit sind getrennte Verantwortungen.
+- **D20B-013:** Project Memory ist eine eigene Kernverantwortung und keine freiwillige Nacharbeit.
+- **D20B-014:** Agentenleistung wird nach Outcome, Qualität, Rework, Kosten und Kontinuität gemessen.
+- **D20B-015:** Kritische Sicherheits-, Rechts-, Kosten- und Außenwirkungsentscheidungen bleiben menschlich.
+- **D20B-016:** Alle Agenten unterliegen den KI-, Sicherheits- und Datenschutzregeln aus Dokument 19 und 20A.
 
 ## 43. Begründete Annahmen
 
-- A20B-001: Claude Code oder vergleichbare Coding-Agenten können Rollen durch getrennte Prompts, Subagents, Skills und Work Items abbilden.
-- A20B-002: Nicht jede organisatorische Rolle benötigt einen dauerhaft laufenden separaten Agentenprozess.
-- A20B-003: Ein artifact-first Ansatz reduziert Context-Verlust und widersprüchliche Entscheidungen.
-- A20B-004: Spezialisierte Reviewrollen verbessern Qualität gegenüber reiner Selbstprüfung.
-- A20B-005: Ein HR-Agent ist nützlich, wenn er Kompetenzlücken reduziert statt Agentenzahl zu maximieren.
-- A20B-006: Die meisten technischen Entscheidungen können innerhalb klarer Architekturgrenzen autonom und reversibel getroffen werden.
-- A20B-007: Ein Teil der Firmenstruktur wird zunächst als Arbeitsprotokoll und nicht als dauerhaft parallel laufendes Multi-Agent-System implementiert.
-- A20B-008: Synthetische Work Items und Agentenreports genügen, um die Organisationsidee im Prototyp glaubwürdig zu demonstrieren.
-- A20B-009: Rollen- und Skillmetriken können aus Repository-, Review-, Test- und Checkpointdaten abgeleitet werden.
-- A20B-010: Die konkrete technische Umsetzung hängt von den zu diesem Zeitpunkt verfügbaren Claude-Code-Agenten- und Toolfunktionen ab und wird in 20C festgelegt.
+- **A20B-001:** Claude Code oder vergleichbare Coding-Agenten können Rollen durch getrennte Prompts, Subagents, Skills und Work Items abbilden.
+- **A20B-002:** Nicht jede organisatorische Rolle benötigt einen dauerhaft laufenden separaten Agentenprozess.
+- **A20B-003:** Ein artifact-first Ansatz reduziert Context-Verlust und widersprüchliche Entscheidungen.
+- **A20B-004:** Spezialisierte Reviewrollen verbessern Qualität gegenüber reiner Selbstprüfung.
+- **A20B-005:** Ein HR-Agent ist nützlich, wenn er Kompetenzlücken reduziert statt Agentenzahl zu maximieren.
+- **A20B-006:** Die meisten technischen Entscheidungen können innerhalb klarer Architekturgrenzen autonom und reversibel getroffen werden.
+- **A20B-007:** Ein Teil der Firmenstruktur wird zunächst als Arbeitsprotokoll und nicht als dauerhaft parallel laufendes Multi-Agent-System implementiert.
+- **A20B-008:** Synthetische Work Items und Agentenreports genügen, um die Organisationsidee im Prototyp glaubwürdig zu demonstrieren.
+- **A20B-009:** Rollen- und Skillmetriken können aus Repository-, Review-, Test- und Checkpointdaten abgeleitet werden.
+- **A20B-010:** Die konkrete technische Umsetzung hängt von den zu diesem Zeitpunkt verfügbaren Claude-Code-Agenten- und Toolfunktionen ab und wird in 20C festgelegt.
 
 ## 44. Offene Fragen
 
-- O20B-001: Welche Agentenfunktionen unterstützt die gewählte Claude-Code-Version nativ und welche müssen durch Dateien, Commands oder externe Orchestrierung simuliert werden?
-- O20B-002: Wie viele Rollen können in einer Phase sinnvoll gleichzeitig aktiv sein, ohne Kontext- und Integrationskosten zu erhöhen?
-- O20B-003: Soll der CEO-/Orchestrator-Agent dauerhaft dieselbe Instanz sein oder je Phase neu aus Repository-Status initialisiert werden?
-- O20B-004: Welche Role Contracts werden direkt als Claude Skills, Subagent-Definitionen oder Templates umgesetzt?
-- O20B-005: Welches Berechtigungsmodell ist für lokale Entwicklung, GitHub und spätere Cloudumgebungen praktikabel?
-- O20B-006: Wie werden Token-, Zeit- und Kostenbudgets pro Agent technisch gemessen?
-- O20B-007: Welche Quality Gates können automatisiert werden und welche benötigen menschliche Sichtprüfung?
-- O20B-008: Wie werden Agenten-Scorecards genutzt, ohne Fehlanreize oder unnötigen Prozessdruck zu erzeugen?
-- O20B-009: Welche Rollen dürfen in frühen Prototypphasen kombiniert werden?
-- O20B-010: Wie wird verhindert, dass der Project Memory Agent veraltete oder falsche Zusammenfassungen als Wahrheit festschreibt?
-- O20B-011: Soll der Product Critic nur auf Anfrage oder automatisch an definierten Gates arbeiten?
-- O20B-012: Welche menschlichen Freigaben sind bei einer rein lokalen, synthetischen Demo noch erforderlich?
-- O20B-013: Wie werden vertrauliche spätere Unternehmensdaten aus Agentenprompts und Logs herausgehalten?
-- O20B-014: Welche Lizenz-, IP- und Nutzungsregeln gelten bei einer späteren Übergabe an PwC oder andere Unternehmen?
+- **O20B-001:** Welche Agentenfunktionen unterstützt die gewählte Claude-Code-Version nativ und welche müssen durch Dateien, Commands oder externe Orchestrierung simuliert werden?
+- **O20B-002:** Wie viele Rollen können in einer Phase sinnvoll gleichzeitig aktiv sein, ohne Kontext- und Integrationskosten zu erhöhen?
+- **O20B-003:** Soll der CEO-/Orchestrator-Agent dauerhaft dieselbe Instanz sein oder je Phase neu aus Repository-Status initialisiert werden?
+- **O20B-004:** Welche Role Contracts werden direkt als Claude Skills, Subagent-Definitionen oder Templates umgesetzt?
+- **O20B-005:** Welches Berechtigungsmodell ist für lokale Entwicklung, GitHub und spätere Cloudumgebungen praktikabel?
+- **O20B-006:** Wie werden Token-, Zeit- und Kostenbudgets pro Agent technisch gemessen?
+- **O20B-007:** Welche Quality Gates können automatisiert werden und welche benötigen menschliche Sichtprüfung?
+- **O20B-008:** Wie werden Agenten-Scorecards genutzt, ohne Fehlanreize oder unnötigen Prozessdruck zu erzeugen?
+- **O20B-009:** Welche Rollen dürfen in frühen Prototypphasen kombiniert werden?
+- **O20B-010:** Wie wird verhindert, dass der Project Memory Agent veraltete oder falsche Zusammenfassungen als Wahrheit festschreibt?
+- **O20B-011:** Soll der Product Critic nur auf Anfrage oder automatisch an definierten Gates arbeiten?
+- **O20B-012:** Welche menschlichen Freigaben sind bei einer rein lokalen, synthetischen Demo noch erforderlich?
+- **O20B-013:** Wie werden vertrauliche spätere Unternehmensdaten aus Agentenprompts und Logs herausgehalten?
+- **O20B-014:** Welche Lizenz-, IP- und Nutzungsregeln gelten bei einer späteren Übergabe an PwC oder andere Unternehmen?
 
 ## 45. Ideen für später
 
@@ -1023,7 +965,7 @@ Alle Demo-Informationen sind synthetisch. Die Firma darf nicht vortäuschen, rea
 - autonome Low-Risk-Maintenance-Zelle für Dependency Updates und Dokumentationspflege,
 - Agenten-Pairing auf Basis komplementärer Stärken,
 - selbstprüfende Handover- und Checkpoint-Qualität,
-- digitale „Board Meetings" zwischen Agenten mit standardisiertem Decision Pack,
+- digitale „Board Meetings“ zwischen Agenten mit standardisiertem Decision Pack,
 - lernende Prompt- und Skillbibliothek mit kontrollierter Promotion,
 - temporäre Red-Team-Agenten für Produkt, Security, Privacy und Missbrauchsszenarien,
 - Agenten-HR, der auch Rollen abbaut und überlappende Verantwortungen zusammenführt,
@@ -1044,7 +986,7 @@ Dokument 20B baut insbesondere auf folgenden Quellen auf:
 Dokument 20C muss aus diesem Organisationsmodell konkret ableiten:
 
 - Repository- und Ordnerstruktur,
-- CLAUDE.md und projektweite Arbeitsregeln,
+- `CLAUDE.md` und projektweite Arbeitsregeln,
 - Role- und Skill-Dateien,
 - Agenten-/Subagent-Konfiguration,
 - Work-Item- und Handover-Templates,

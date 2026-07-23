@@ -1,55 +1,16 @@
-# Dokument 11 - Zusammenarbeit, Aufgaben & Kommunikation
-
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_11_Zusammenarbeit_Aufgaben_Kommunikation_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (alte Arbeitsfassung, Stand vor 2026-07-23 → diese Fassung nach PDF-Folientiteln). Die Kapitelnummerierung 1-33 einschließlich aller Unterabschnitte ist deckungsgleich; Abweichungen betreffen ausschließlich Titel und Vorspann:
->
-> | Alt (Arbeitsfassung) | Neu (PDF-Folientitel) |
-> |---|---|
-> | Titel „Zusammenarbeit, Aufgaben und Kommunikation" | „Zusammenarbeit, Aufgaben & Kommunikation" (Titeländerung gemäß PDF-Deckblatt) |
-> | Kopfzeile „Zweck: Verbindliches Konzept für ..." | - (im PDF nicht vorhanden, ersatzlos entfallen; vgl. Abgleichbefund 2026-07-23) |
-> | Blockquote „Zentrale Festlegung" | - (im PDF an keiner Stelle vorhanden, ersatzlos entfallen; vgl. Abgleichbefund 2026-07-23) |
-> | - (ohne Entsprechung) | Deckblatt-Leitsatz „Vom isolierten To-do zur kontextreichen, prüfbaren Teamarbeit ..." und Deckblattfeld „Abhängigkeiten: Dokument 00 bis 10" |
-> | - (ohne Entsprechung) | „Dokumentauftrag & Verbindlichkeit" (Verbindlichkeitsklausel, Steuerungsfeld-Tabelle mit Owner, Gültigkeit, Änderungskontrolle und Zentralen Nachfolgern, Inhalt-Navigationszeile) |
-> | §§1-33 | §§1-33 (unverändert, inkl. Unterabschnitte 3.1-24.2) |
->
-> **PDF-interne Nummerierungskonflikte:** Die Abschnittszählung 1-33 ist durchgängig und konfliktfrei. Im Textlayer laufen jedoch die nummerierten Aufzählungen dokumentweit durch: §2 Kreislauf trägt 1-6, die Szenarioschritte in §23 tragen 7-46, die Demo-Szenen in §24.1 tragen 47-56. Der Abgleichbericht vom 2026-07-23 stuft dies als reines Extraktionsartefakt der Aufzählungen ein (nicht der Abschnittsnummerierung). In dieser Fassung beginnt jede Liste bei 1; die visuelle Verifikation der im PDF gedruckten Listennummern ist offen.
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Das Pflichtfeld „Beteiligte" (§4.1) zählt „Reviewer, Approver, Contributor, Informed und externe Beteiligte" auf; das Beteiligungsmodell in §5.1 kennt zusätzlich Consulted und Observer, die in der Feldaufzählung nicht genannt sind (Owner und Bearbeitung besitzen eigene Pflichtfelder).
-> - Die Inhalt-Navigationszeile fasst §16-20 als „externe Zusammenarbeit, Wissen, KI und Integrationen" zusammen; §17 „Berater- und Multi-Mandanten-Zusammenarbeit" ist in dieser Gruppenbezeichnung nicht ausdrücklich benannt.
-> - Die Entscheidungs-Kennungen lauten ENTSCHEIDUNG 11-01 bis 11-15 (ohne Buchstabenpräfix), während Annahmen (11-A1 bis 11-A10) und offene Fragen (11-Q1 bis 11-Q15) ein Buchstabenpräfix tragen.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Die alte Arbeitsfassung enthielt vier Abbildungs-Platzhalter (in §2, §4, §12.3 und §14). Der Textlayer des PDF-Extrakts trägt an diesen Stellen keinerlei Abbildungstext oder Bildunterschrift; Existenz und Inhalt der Abbildungen sind aus dem Extrakt nicht belegbar. Die Positionen sind unten als benannte Lücke markiert (Position gemäß Platzhalter der Vorfassung, Inhalt nicht rekonstruiert); visuelle Verifikation offen, vgl. O-WP019-04.
-> - §23/§24.1: Listennummern je Szenario bzw. Szenenliste bei 1 neu beginnend gesetzt (siehe Nummerierungskonflikte oben).
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-Vom isolierten To-do zur kontextreichen, prüfbaren Teamarbeit über Kunde, Beratung, Management und Audit.
+# Dokument 11 - Zusammenarbeit, Aufgaben und Kommunikation
 
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
-**Version:** 1.0 | **Status:** Erstellt | **Stand:** 21.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 10
+**Version:** 1.0  
+**Status:** Erstellt  
+**Stand:** 21.07.2026  
+**Zweck:** Verbindliches Konzept für kontextgebundene Zusammenarbeit, Aufgaben, Anfragen, Freigaben, Übergaben, Benachrichtigungen und prüfbare Kommunikation zwischen Kunde, Beratung, Management, Audit und Plattformbetrieb.
 
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 11 ist die kanonische fachliche Quelle für Work Items, Aufgaben, Requests, Threads, Beteiligungsrollen, Freigabearbeit, SLA, Eskalation, Übergaben, Meetings und Attention Management. Nachfolgende Dokumente dürfen diese Logik technisch implementieren, integrieren oder profilspezifisch konfigurieren, aber nicht still semantisch verändern.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 11 |
-| Status | Erstellt - Version 1.0 |
-| Owner | Product Architecture / Collaboration & Workflow Owner |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Änderungskontrolle | Änderungen an Work-Item-Semantik, Freigaben, Status, SLA oder Eskalationsregeln benötigen Version, Tests und Impactanalyse. |
-| Zentrale Nachfolger | Dokument 12 bis 20C |
-
-**Inhalt:** 1 Auftrag · 2 Summary · 3 Verfassung · 4 Work-Item-Modell · 5 Verantwortung · 6 Team Workspace · 7 Lebenszyklus · 8 Arbeitspakete · 9 Freigaben · 10 Kommunikation · 11 Evidence Requests · 12 SLA/Eskalation · 13 Attention · 14 Übergabe · 15 Meetings · 16 bis 20 externe Zusammenarbeit, Wissen, KI und Integrationen · 21 bis 33 Governance, Szenarien und Entscheidungen
+> **Zentrale Festlegung:** Zusammenarbeit findet nicht in isolierten Chats, E-Mail-Ketten oder losen To-do-Listen statt. Jede relevante Aufgabe, Frage, Entscheidung, Freigabe, Datei und Nachricht bleibt mit ihrem fachlichen Kontext, Ziel, Owner, Datenstand, Definition of Done und Audit Trail verbunden. Die Plattform koordiniert Arbeit - sie ersetzt nicht die fachliche Verantwortung der Menschen.
 
 ## 1. Dokumentauftrag und Abgrenzung
 
-Dieses Dokument definiert die operative Zusammenarbeitsschicht der Plattform. Es konkretisiert insbesondere die Module M21 Team Workspace & Decision Records, M22 Workflow, SLA & Escalation Engine sowie die kollaborativen Teile von M14 Evidence & Assurance, M15 Audits, M23 Reporting und M24 Briefings, Notifications & Knowledge aus Dokument 05.
+Dieses Dokument definiert die operative Zusammenarbeitsschicht der Plattform. Es konkretisiert insbesondere die Module **M21 Team Workspace & Decision Records**, **M22 Workflow, SLA & Escalation Engine** sowie die kollaborativen Teile von **M14 Evidence & Assurance**, **M15 Audits**, **M23 Reporting** und **M24 Briefings, Notifications & Knowledge** aus Dokument 05.
 
 Es beschreibt:
 
@@ -78,9 +39,9 @@ Die Plattform behandelt Zusammenarbeit als kontrollierten Kreislauf:
 5. Die Entscheidung wird in Aufgaben und Arbeitspakete übersetzt.
 6. Ergebnis, Evidence und tatsächliche Wirkung werden verifiziert.
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04; Position gemäß Platzhalter der Vorfassung]
+[[FIGURE:FIG1]]
 
-Der Kern ist ein einheitliches Work-Item-Modell. Task, Evidence Request, Approval, Meeting Action oder Eskalation sind keine voneinander isolierten Mini-Anwendungen. Sie verwenden dieselbe Grundhülle für Kontext, Verantwortung, Zeit, Kommunikation, Ergebnis, Nachweise und Historie. Dadurch kann ein Nutzer von einer Executive-Entscheidung bis zum konkreten Evidence-Nachweis navigieren, ohne den roten Faden zu verlieren.
+Der Kern ist ein einheitliches **Work-Item-Modell**. Task, Evidence Request, Approval, Meeting Action oder Eskalation sind keine voneinander isolierten Mini-Anwendungen. Sie verwenden dieselbe Grundhülle für Kontext, Verantwortung, Zeit, Kommunikation, Ergebnis, Nachweise und Historie. Dadurch kann ein Nutzer von einer Executive-Entscheidung bis zum konkreten Evidence-Nachweis navigieren, ohne den roten Faden zu verlieren.
 
 Die Plattform soll die Zahl der Nachrichten nicht maximieren, sondern Abstimmungsaufwand reduzieren. Eine gute Zusammenarbeit ist erreicht, wenn:
 
@@ -128,9 +89,9 @@ Die Plattform soll die Zahl der Nachrichten nicht maximieren, sondern Abstimmung
 
 ## 4. Kanonisches Arbeitsobjekt
 
-Alle koordinierten Tätigkeiten werden auf einem gemeinsamen Work Item aufgebaut. Spezifische Typen erweitern dieses Basismodell, verändern aber nicht seine Kernsemantik.
+Alle koordinierten Tätigkeiten werden auf einem gemeinsamen **Work Item** aufgebaut. Spezifische Typen erweitern dieses Basismodell, verändern aber nicht seine Kernsemantik.
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04; Position gemäß Platzhalter der Vorfassung]
+[[FIGURE:FIG2]]
 
 ### 4.1 Pflichtfelder jedes Work Items
 
@@ -260,7 +221,7 @@ Ein Nutzer kann ein Work Item in einen Fokusmodus öffnen. Dort sind nur Kontext
 
 `Entwurf -> vorgeschlagen -> zugewiesen -> angenommen -> in Arbeit -> wartet/blockiert -> zur Prüfung -> abgeschlossen -> verifiziert -> geschlossen`
 
-Alternative Endzustände sind abgelehnt, storniert, ersetzt und archiviert.
+Alternative Endzustände sind `abgelehnt`, `storniert`, `ersetzt` und `archiviert`.
 
 ### 7.2 Bedeutung der wichtigsten Zustände
 
@@ -281,9 +242,9 @@ Alternative Endzustände sind abgelehnt, storniert, ersetzt und archiviert.
 ### 7.3 Statuswechselregeln
 
 - Statuswechsel können Pflichtfelder, Evidence oder Freigaben voraussetzen.
-- Abgeschlossen darf nicht automatisch Verifiziert bedeuten.
+- `Abgeschlossen` darf nicht automatisch `Verifiziert` bedeuten.
 - Ein blockiertes Work Item benötigt Blockertyp, Auswirkung, Owner des Blockers und vorgeschlagene Lösung.
-- Eine materielle Änderung an Scope oder DoD kann das Work Item in vorgeschlagen oder zur Prüfung zurücksetzen.
+- Eine materielle Änderung an Scope oder DoD kann das Work Item in `vorgeschlagen` oder `zur Prüfung` zurücksetzen.
 - Wiedereröffnung erzeugt eine neue Version oder einen nachvollziehbaren Reopen-Event.
 - Automationen dürfen Status ändern, wenn Regel, Berechtigung und Ergebnis nachvollziehbar sind; kritische Freigaben bleiben menschlich.
 
@@ -304,8 +265,8 @@ Eine gute Task beantwortet:
 
 Beispiel:
 
-> **Schwach:** „MFA prüfen."  
-> **Gut:** „Für alle privilegierten Entra-ID-Konten des Produktionsscopes MFA-Coverage erfassen, Ausnahmen begründen und einen freigabefähigen Maßnahmenplan erstellen. Fertig, wenn Coverage, Ausnahmeliste, Owner, Zieltermine und Datenquelle geprüft vorliegen."
+> **Schwach:** „MFA prüfen.“  
+> **Gut:** „Für alle privilegierten Entra-ID-Konten des Produktionsscopes MFA-Coverage erfassen, Ausnahmen begründen und einen freigabefähigen Maßnahmenplan erstellen. Fertig, wenn Coverage, Ausnahmeliste, Owner, Zieltermine und Datenquelle geprüft vorliegen.“
 
 ### 8.2 Arbeitspakete
 
@@ -385,7 +346,7 @@ Unterstützte Muster:
 
 - eine Freigabe aus einer Rolle,
 - alle benannten Approver,
-- mindestens n aus m,
+- mindestens `n` aus `m`,
 - sequenzielle Freigabe,
 - parallele Freigabe,
 - Freigabe mit Veto-Rolle,
@@ -433,7 +394,7 @@ E-Mail, Teams und Slack können Zustellungen, Replies oder Deep Links unterstüt
 
 - Kein Reply-all als Eskalationsstrategie.
 - Kein Pflicht-CC für Personen ohne erwartete Aktion.
-- Keine Freigabe nur durch Emoji oder informelles „passt" bei materialem Inhalt.
+- Keine Freigabe nur durch Emoji oder informelles „passt“ bei materialem Inhalt.
 - Keine sensible Information in Push-Vorschau oder Betreff, wenn die Datenklasse dies verbietet.
 - Automatische Zusammenfassungen müssen Originalbeiträge verlinken und Unsicherheit kennzeichnen.
 
@@ -519,7 +480,7 @@ Ein Blocker benötigt Auswirkung, Blocker-Owner, nächsten Lösungsversuch und E
 
 ### 12.3 Eskalationsleiter
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04; Position gemäß Platzhalter der Vorfassung]
+[[FIGURE:FIG3]]
 
 Eine Eskalation enthält:
 
@@ -592,7 +553,7 @@ Er enthält keine ungefilterte Aktivitätschronik.
 
 Übergaben sind besonders relevant bei Urlaub, Rollenwechsel, Schichtwechsel, Anbieterwechsel, Auditphasen, Reisen, Agentenwechsel und Context-Limits in Entwicklungs- oder Supportprozessen.
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04; Position gemäß Platzhalter der Vorfassung]
+[[FIGURE:FIG4]]
 
 ### 14.1 Handover Packet
 
@@ -1003,7 +964,7 @@ Der Demonstrator muss Zusammenarbeit über mehrere Rollen und Unternehmen glaubw
 - **Vertraulicher Kommentar versehentlich geteilt:** Rechteprüfung vor Versand; nachträgliche Korrektur bleibt im Audit Trail.
 - **KI-Zusammenfassung lässt Einwand aus:** Nutzer sieht Quellen und kann Zusammenfassung ablehnen; Originalthread bleibt maßgeblich.
 - **Auditorzugriff abgelaufen:** Zugriff endet automatisch; Audit Trail und zulässige Exporte bleiben erhalten.
-- **Task erledigt ohne Evidence:** Status höchstens abgeschlossen, nicht verifiziert.
+- **Task erledigt ohne Evidence:** Status höchstens `abgeschlossen`, nicht `verifiziert`.
 - **Eskalation ohne zuständige Autorität:** System zeigt Governance-Lücke als eigenes Work Item.
 - **Massenupload unsicherer Dateien:** Quarantäne, Scan, Klassifikation und manuelle Klärung.
 - **Offline-/Reisesituation:** sichere Zwischennotiz kann als Entwurf gespeichert werden; produktive Entscheidung erfordert synchronisierten Kontext.
@@ -1104,7 +1065,7 @@ Die Zusammenarbeitsschicht ist nicht:
 - Konfliktmoderations-Assistent mit sichtbaren Positionen und offenen Einwänden,
 - automatische Prüfung von SoD-Konflikten vor Zuweisung,
 - persönlicher Fokusmodus mit Kalender- und Reiseoptimierung,
-- „Warum wurde ich benachrichtigt?"-Erklärung für jedes Attention Item,
+- „Warum wurde ich benachrichtigt?“-Erklärung für jedes Attention Item,
 - organisationsübergreifende Handover-Standards für Anbieterwechsel,
 - automatische Generierung von Lessons Learned aus verifizierten Outcomes,
 - Digital-Signature-Unterstützung für besonders formale Freigaben,

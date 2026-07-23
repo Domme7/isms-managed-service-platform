@@ -28,8 +28,10 @@
 
 ## Parallel (DR-0010 Nr. 4)
 
-**WP-023:** Vollableitung der 14 material abweichenden Markdown-Fassungen aus den PDFs
-(Dok. 00, 08–18, 20B, 20C) nach WP-019-Muster; **Dok. 14/16 zuerst** (Kundenwelt-Basis).
+**WP-023 ✅ abgeschlossen** (2026-07-23): alle 14 Fassungen quellentreu (13× FREIGABE Runde 1;
+Dok. 10 inhaltlich bestanden, einziger Gate-Befund war die fehlende Archivkopie — für alle 14
+mechanisch nachgezogen). Nachtrag: `docs/concept/abgleich/NACHTRAG_WP-023_2026-07-23.md`.
+Damit ist die fachliche Basis der Kundenwelt (Dok. 14/16) **geprüft** — DR-0010-Bauregel erfüllbar.
 
 ## Verbleib der 11 WP-019-Übergabepunkte
 

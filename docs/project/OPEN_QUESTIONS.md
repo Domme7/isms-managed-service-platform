@@ -157,3 +157,9 @@ Vollständige Herleitung: `work-packages/WP-020_VERDICHTUNG_DASHBOARD_EINSTIEG.m
 | O-WP020-09 | Dok. 06 „Onboarding …" fragt Einstieg „nach Rolle, Ziel und aktueller Aufgabe"; DR-0009 verschiebt die Rollenwahl hinter den Einstieg | benannte Spannung (DR-gedeckt) | Owner-Schicht geht vor; Prüfpunkt für Konzeptpflege (WP-023-Umfeld) | Concept Author |
 | O-WP020-10 | Dok.-04-Steuerungsvokabular (Journey-Zustände, Handlungsoptionen, Betroffenheitsgrade) fehlt in `packages/` | verlorene Anforderung | benanntes Folge-WP (WP-026), gekoppelt an E-02/Task-Träger | program-manager + Concept Author |
 | O-WP020-11 | Portfolio-Sichten (`/twin`-Übersicht, `/services`-Portfolio) zeigen bewusst Mandantenübergreifendes, während die Kontextleiste den aktiven Mandanten nennt — brauchen Portfolio-Sichten eine eigene Kontext-Kennzeichnung? | Konzeptlücke | als benannter „Objektkontext dieser Seite: Übersicht …" gelöst, reversibel (Slice 1) | Product / Concept Author |
+
+## Konzeptbibliothek (aus WP-023)
+
+| ID | Frage | Art | Aktueller Umgang | Owner / Gate |
+|---|---|---|---|---|
+| O-KONZ-02 | Dok. 20C (D20C-002, „Entwicklungsverfassung" Regel 2) verlangt „Markdown vor PDF" — Widerspruch zu DR-0006 (PDF-Originale sind Produktwahrheit) | Konzeptkonflikt (PDF vs. Owner-Schicht) | DR-0006 ist die spätere, bewusste Owner-Entscheidung nach FINDING-0007 und geht vor; Konflikt in der 20C-Kopfnotiz und im WP-023-Nachtrag benannt, nicht still aufgelöst | Concept Author / Owner (CCP oder PDF-Revision) |

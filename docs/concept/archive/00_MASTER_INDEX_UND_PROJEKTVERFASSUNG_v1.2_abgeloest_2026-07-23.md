@@ -1,78 +1,18 @@
 # Dokument 00 - Master-Index & Projektverfassung
 
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_00_Master_Index_Projektverfassung_v1.2.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (bisherige Arbeitsfassung → diese Fassung nach PDF-Folientiteln). Die Hauptabschnitte 1-13 samt aller Unterabschnitte (1.1, 1.2, 2.1-2.3, 3.1, 3.2, 4.1, 4.2, 11.1-11.3) sind unverändert deckungsgleich; die Änderungen liegen ausschließlich im Vorspann:
->
-> | Alt (Arbeitsfassung) | Neu (PDF) |
-> |---|---|
-> | Kopfblock „Arbeitsbezeichnung / Version / Status / Stand / Zweck" | Titelseiten-Felder des PDFs (unnummeriert): Konzeptbibliothek, Aktive Version, Arbeitsbezeichnung, Version, Status, Stand, Nächste Phase |
-> | Blockquote „Zentrale Wahrheit" (mit GitHub-Repository und Einstiegspfad `docs/00_master-index/...`) | Abschnitt „Projektverfassung & zentrale Wahrheit" (unnummeriert, PDF Seite 2) mit Einleitungsabsatz, Inhaltszeile und Kasten „ZENTRALE WAHRHEIT" — ohne Pfad- und ohne GitHub-Festlegung |
-> | - (ohne Entsprechung) | Tabelle „Steuerungsfeld / Festlegung" (7 Zeilen, einschließlich der Owner-Festlegung für Dokument 00) |
-> | Kopfzeile „Status: Aktiv - Konzeptbaseline vollständig und Weiterentwicklungsbetrieb ergänzt" | Titelseiten-Feld „STATUS Aktiv - Konzeptbaseline vollständig" (der Zusatz war nicht vom PDF getragen und entfällt) |
-> | §§ 1-13 samt Unterabschnitten | unverändert (Titel und Nummern identisch mit den PDF-Folientiteln) |
->
-> **PDF-interne Nummerierungskonflikte:** Das PDF führt zwei Beschriftungen für dieselben Abschnitte: die Folientitel und die gekürzte Inhaltszeile auf Seite 2. Die Nummern 1-13 sind identisch, nur die Titel sind in der Inhaltszeile verkürzt. Diese Fassung folgt den Folientiteln. Konkordanz der abweichenden Titel:
->
-> | Inhaltszeile (PDF Seite 2) | Folientitel (maßgeblich) |
-> |---|---|
-> | 2 Produktdefinition | 2. Zentrale Produktdefinition |
-> | 3 Dokumentenstatus | 3. Übersicht der Konzeptdokumente |
-> | 4 Lesereihenfolge und Context Packs | 4. Empfohlene Lesereihenfolge |
-> | 5 Abhängigkeiten und Vorrang | 5. Dokumentenabhängigkeiten und Vorrang |
-> | 6 Begriffe | 6. Zentrale Begriffe |
-> | 7 Entscheidungen | 7. Globale Entscheidungen |
-> | 8 Annahmen | 8. Globale Annahmen |
-> | 9 offene Fragen | 9. Globale offene Fragen |
-> | 11 Governance und Archivierung | 11. Dokumenten-Governance und Aktualisierung |
-> | 13 nächster Schritt | 13. Nächster verbindlicher Schritt |
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Auf PDF Seite 2 stehen zwei unterschiedlich weite Fassungen der zentralen Wahrheit nebeneinander: Die Steuerungsfeld-Zeile „Zentrale Wahrheit" nennt „Aktive Markdown-Dateien, ADRs, Decision Records, Tests und Status im Repository"; der Kasten „ZENTRALE WAHRHEIT" nennt nur „die aktive Markdown-Dokumentation im Repository". Beide Fassungen sind hier unverändert übernommen.
-> - Die Titelseite nennt als „NÄCHSTE PHASE" nur „Claude-Code-Übergabepaket und Phase 0"; die Steuerungsfeld-Zeile „Nächster Schritt" nennt zusätzlich „Capability Check" und „erster vertikaler Produktpfad". Unterschiedliche Granularität derselben Festlegung; nicht aufgelöst.
-> - §11.1 legt fest: „Links im Master-Index zeigen immer auf die aktive Markdown-Datei ohne Versionsnummer" und empfiehlt die Struktur `docs/00_master-index/...`. Die tatsächliche Repository-Ablage (`docs/concept/active/00_MASTER_INDEX_UND_PROJEKTVERFASSUNG_v1.2.md`) weicht in Pfad und Versionsnummer davon ab. Repository-Konvention; wird hier benannt, nicht aufgelöst.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Das PDF enthält keine Abbildungen; der Textlayer trägt den vollständigen Inhalt. Keine benannten Abbildungslücken.
-> - Titelseite und Steuerungsfeld-Tabelle sind Layout-Blöcke; sie wurden als Feldliste bzw. Tabelle transkribiert, durch die Extraktion umbrochene Zeilen wurden zusammengeführt. Wortlaut unverändert.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-Aktualisiertes Navigationssystem der vollständigen Konzeptbibliothek für eine KI-gestützte Managed-ISMS-Plattform
-
-**Konzeptbibliothek:** 24 von 24 Dokumenten erstellt  
-**Aktive Version:** Dokument 00 - Version 1.2  
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
 **Version:** 1.2  
-**Status:** Aktiv - Konzeptbaseline vollständig  
+**Status:** Aktiv - Konzeptbaseline vollständig und Weiterentwicklungsbetrieb ergänzt  
 **Stand:** 22.07.2026  
-**Nächste Phase:** Claude-Code-Übergabepaket und Phase 0
+**Zweck:** Navigationssystem, Projektverfassung und Statusquelle der vollständigen Konzeptbibliothek.
 
-Frühere Versionen werden archiviert - nicht gelöscht.
-
-## Projektverfassung & zentrale Wahrheit
-
-Dokument 00 ist der Einstiegspunkt für Menschen, Claude Code und die virtuelle KI-Firma. Es erklärt, welche Quellen verbindlich sind, wie die 24 Konzeptdokumente zusammenhängen und wie neue Versionen ohne Wissensverlust aktiviert werden.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 00 |
-| Aktive Version | 1.2 |
-| Bibliotheksstatus | 24/24 Konzeptdokumente erstellt |
-| Owner | Human Product Owner / Project Memory / Documentation / GitHub Steward |
-| Zentrale Wahrheit | Aktive Markdown-Dateien, ADRs, Decision Records, Tests und Status im Repository |
-| Nicht autoritativ | Chats, Auto-Memory, lokale Notizen, archivierte Versionen und unversionierte Exporte |
-| Nächster Schritt | Claude-Code-Übergabepaket, Capability Check, Phase 0 und erster vertikaler Produktpfad |
-
-**Inhalt:** 1 Zweck und Geltungsbereich · 2 Produktdefinition · 3 Dokumentenstatus · 4 Lesereihenfolge und Context Packs · 5 Abhängigkeiten und Vorrang · 6 Begriffe · 7 Entscheidungen · 8 Annahmen · 9 offene Fragen · 10 Ideenparkplatz · 11 Governance und Archivierung · 12 Änderungsprotokoll · 13 nächster Schritt.
-
-> **ZENTRALE WAHRHEIT** Die aktive Markdown-Dokumentation im Repository ist verbindlich. DOCX und PDF sind geprüfte Lesefassungen. Frühere Versionen bleiben im Archiv erhalten.
+> **Zentrale Wahrheit:** Die versionierte Markdown-Dokumentation im GitHub-Repository ist verbindlich. Einstiegspunkt ist `docs/00_master-index/00_MASTER_INDEX_UND_PROJEKTVERFASSUNG.md`. PDFs und DOCX-Dateien sind geprüfte Lesefassungen. Chats, lokale Notizen oder ältere Dateiversionen sind keine aktuelle Projektwahrheit.
 
 ## 1. Zweck und Geltungsbereich
 
 Dokument 00 verbindet alle Einzelkonzepte zu einem konsistenten Gesamtsystem. Es hält Struktur, Lesereihenfolge, Status, globale Entscheidungen, Annahmen, offene Fragen, Abhängigkeiten, Versionierungsregeln und den nächsten verbindlichen Projektschritt fest.
 
-Die aktive Konzeptbibliothek umfasst 24 Dokumente. Mit Version 1.2 liegen alle geplanten Kernkonzepte sowie das ergänzende Research-, Innovations- und Weiterentwicklungsmodell geprüft vor. Dokument 12 wurde auf Version 1.1 erweitert. Die Konzeptbaseline ist damit vollständig; das Projekt wechselt verbindlich in die Repository-, Übergabe- und Umsetzungsphase.
+Die aktive Konzeptbibliothek umfasst **24 Dokumente**. Mit Version 1.2 liegen alle geplanten Kernkonzepte sowie das ergänzende Research-, Innovations- und Weiterentwicklungsmodell geprüft vor. Dokument 12 wurde auf Version 1.1 erweitert. Die Konzeptbaseline ist damit vollständig; das Projekt wechselt verbindlich in die Repository-, Übergabe- und Umsetzungsphase.
 
 ### 1.1 Verbindliche Dokumentenlogik
 
@@ -130,7 +70,7 @@ Die Plattform verbindet Unternehmensmodell, ISMS-Fachlogik, aktuelle Bedrohungen
 
 | Nr. | Dokument | Hauptzweck | Aktiver Stand |
 |---|---|---|---|
-| 00 | Master-Index & Projektverfassung | Navigation, globale Regeln, Status, Entscheidungen, Abhängigkeiten | Aktiv v1.2 |
+| 00 | Master-Index & Projektverfassung | Navigation, globale Regeln, Status, Entscheidungen, Abhängigkeiten | **Aktiv v1.2** |
 | 01 | Produktvision, Problem und Business Case | Vision, Nutzen, Positionierung, Skalierung, Nicht-Ziele | Erstellt v1.0 |
 | 02 | Markt, Wettbewerber und Differenzierung | Marktfakten, Wettbewerber, Lücken, Differenzierung | Erstellt v1.0 |
 | 03 | Zielgruppen, Rollen und Arbeitssituationen | Rollen, Jobs-to-be-done, reale Nutzungskontexte | Erstellt v1.0 |
@@ -142,7 +82,7 @@ Die Plattform verbindet Unternehmensmodell, ISMS-Fachlogik, aktuelle Bedrohungen
 | 09 | Reifegrad, Bedrohungen und Control Intelligence | Zielprofile, dynamische Risiken, Wirksamkeit, Benchmarks | Erstellt v1.0 |
 | 10 | Decision Center, KPIs und Simulationen | Morning Mission, Routen, Investitions- und Wirkungssimulation | Erstellt v1.0 |
 | 11 | Zusammenarbeit, Aufgaben und Kommunikation | Workspaces, Freigaben, Eskalationen, Übergaben | Erstellt v1.0 |
-| 12 | Reporting-, PDF- und Präsentations-Engine | Reports, PPTX/PDF, Presentation Repository, Case-Manifeste und Update-Logik | Aktiv v1.1 |
+| 12 | Reporting-, PDF- und Präsentations-Engine | Reports, PPTX/PDF, Presentation Repository, Case-Manifeste und Update-Logik | **Aktiv v1.1** |
 | 13 | Managed-Service-Betriebsmodell | Servicebetrieb, Shared Responsibility, Governance, Skalierung | Erstellt v1.0 |
 | 14 | Servicekatalog, SLAs und Preislogik | Pakete, Service-Level, Preis- und Business-Case-Logik | Erstellt v1.0 |
 | 15 | Berater-Operations und Ressourcenplanung | Portfolio, Kapazität, Termine, Reisen, Profitabilität | Erstellt v1.0 |
@@ -157,12 +97,12 @@ Die Plattform verbindet Unternehmensmodell, ISMS-Fachlogik, aktuelle Bedrohungen
 
 ### 3.1 Bibliotheksstatus
 
-- 24 von 24 Dokumenten erstellt.
-- Alle aktiven Markdown-Quellen, DOCX-Lesefassungen und PDFs liegen vor.
-- Dokument 00 v1.2 ist die aktive Bibliotheksnavigation.
-- Dokument 12 v1.1 ist die aktive Reporting- und Präsentationsspezifikation; v1.0 ist zu archivieren.
-- Dokument 21 v1.0 ergänzt den dauerhaften Research-, Innovations- und Konzeptpflegebetrieb.
-- Nächste Phase: Repository-Paketierung, Claude-Code-Übergabepaket, Capability Check, Phase-0-Setup und erster vertikaler Produktpfad.
+- **24 von 24 Dokumenten erstellt.**
+- **Alle aktiven Markdown-Quellen, DOCX-Lesefassungen und PDFs liegen vor.**
+- **Dokument 00 v1.2 ist die aktive Bibliotheksnavigation.**
+- **Dokument 12 v1.1 ist die aktive Reporting- und Präsentationsspezifikation; v1.0 ist zu archivieren.**
+- **Dokument 21 v1.0 ergänzt den dauerhaften Research-, Innovations- und Konzeptpflegebetrieb.**
+- **Nächste Phase:** Repository-Paketierung, Claude-Code-Übergabepaket, Capability Check, Phase-0-Setup und erster vertikaler Produktpfad.
 
 ### 3.2 Statusdefinitionen
 
@@ -176,26 +116,26 @@ Die Plattform verbindet Unternehmensmodell, ISMS-Fachlogik, aktuelle Bedrohungen
 
 ### 4.1 Vollständiges Produktverständnis
 
-1. 00 -> 01 -> 02 - Projektverfassung, Vision, Business Case, Markt und Differenzierung.
-2. 03 -> 04 -> 05 -> 06 - Nutzer, Journeys, Produktlandkarte und Erlebniswelten.
-3. 07 -> 08 -> 09 -> 10 -> 11 -> 12 - Datenmodell, ISMS-Fachlogik, Intelligence, Entscheidungen, Zusammenarbeit und Reporting.
-4. 13 -> 14 -> 15 -> 16 - Managed-Service-Betrieb, Servicekatalog, Berater-Operations und Kunden-Lifecycle.
-5. 17 -> 18 -> 19 -> 20A - Integrationen, Architektur, Sicherheit und KI-Guardrails.
-6. 20B -> 20C - virtuelle KI-Firma, Claude Code, GitHub, Checkpoints und Bauplan.
-7. 21 - kontinuierlicher Research-, Innovations-, Konzept- und Präsentationspflegebetrieb.
+1. `00 -> 01 -> 02` - Projektverfassung, Vision, Business Case, Markt und Differenzierung.
+2. `03 -> 04 -> 05 -> 06` - Nutzer, Journeys, Produktlandkarte und Erlebniswelten.
+3. `07 -> 08 -> 09 -> 10 -> 11 -> 12` - Datenmodell, ISMS-Fachlogik, Intelligence, Entscheidungen, Zusammenarbeit und Reporting.
+4. `13 -> 14 -> 15 -> 16` - Managed-Service-Betrieb, Servicekatalog, Berater-Operations und Kunden-Lifecycle.
+5. `17 -> 18 -> 19 -> 20A` - Integrationen, Architektur, Sicherheit und KI-Guardrails.
+6. `20B -> 20C` - virtuelle KI-Firma, Claude Code, GitHub, Checkpoints und Bauplan.
+7. `21` - kontinuierlicher Research-, Innovations-, Konzept- und Präsentationspflegebetrieb.
 
 ### 4.2 Context-Packs für Claude Code
 
-Claude Code soll nicht automatisch alle Dokumente vollständig in einen Chat laden. Pro Work Package wird ein kleines Context Pack aus Dokument 00, dem fachlich zuständigen Dokument, den notwendigen Abhängigkeiten, relevanten ADRs, aktuellem Status und offenen Tasks zusammengestellt.
+Claude Code soll **nicht automatisch alle Dokumente vollständig in einen Chat laden**. Pro Work Package wird ein kleines Context Pack aus Dokument 00, dem fachlich zuständigen Dokument, den notwendigen Abhängigkeiten, relevanten ADRs, aktuellem Status und offenen Tasks zusammengestellt.
 
 Beispiele:
 
-- Decision Center: 00 + 05 + 06 + 07 + 09 + 10 + 18 + 19 + 20C
-- ISMS-Risikopfad: 00 + 07 + 08 + 09 + 11 + 18 + 19 + 20C
-- Managed-Service-Konfiguration: 00 + 13 + 14 + 15 + 16 + 18 + 19 + 20C
-- Reporting und Präsentations-Cases: 00 + 06 + 07 + 10 + 12 + 18 + 19 + 20C + 21
-- Agenten- und Repository-Setup: 00 + 18 + 19 + 20A + 20B + 20C
-- Research und Produktweiterentwicklung: 00 + 01 + 02 + 05 + 12 + 20B + 20C + 21
+- Decision Center: `00 + 05 + 06 + 07 + 09 + 10 + 18 + 19 + 20C`
+- ISMS-Risikopfad: `00 + 07 + 08 + 09 + 11 + 18 + 19 + 20C`
+- Managed-Service-Konfiguration: `00 + 13 + 14 + 15 + 16 + 18 + 19 + 20C`
+- Reporting und Präsentations-Cases: `00 + 06 + 07 + 10 + 12 + 18 + 19 + 20C + 21`
+- Agenten- und Repository-Setup: `00 + 18 + 19 + 20A + 20B + 20C`
+- Research und Produktweiterentwicklung: `00 + 01 + 02 + 05 + 12 + 20B + 20C + 21`
 
 ## 5. Dokumentenabhängigkeiten und Vorrang
 
@@ -213,7 +153,7 @@ Beispiele:
 - 20A begrenzt KI-Funktionen; 20B organisiert Agenten; 20C übersetzt alles in einen fortsetzbaren Bauprozess.
 - 21 betreibt Research, Wettbewerbsbeobachtung, Innovation, Konzeptänderungen und die kontrollierte Aktualisierung von Präsentations-Cases. Es darf Fachdokumente nicht stillschweigend überschreiben, sondern erzeugt prüfbare Change Proposals.
 
-Vorrangregel bei Konflikten:
+**Vorrangregel bei Konflikten:**
 
 1. aktuelle, ausdrücklich freigegebene Entscheidung im zuständigen Fachdokument;
 2. Dokument 00 für projektweite Regeln;
@@ -331,7 +271,7 @@ Vorrangregel bei Konflikten:
 
 ### 11.1 Aktive und archivierte Versionen
 
-- Pro Dokument gibt es genau eine aktive Version.
+- Pro Dokument gibt es genau **eine aktive Version**.
 - Eine neue Version wird zunächst als Entwurf erstellt und geprüft.
 - Nach Freigabe ersetzt sie die bisher aktive Version.
 - Die vorherige Version wird nach `docs/<dokument>/archive/` verschoben.
@@ -378,12 +318,12 @@ docs/
 |---|---|---|---|
 | 1.0 | 21.07.2026 | Erstellt | Erstfassung der Projektverfassung und geplanten Dokumentenarchitektur. |
 | 1.1 | 22.07.2026 | Archiviert | Alle damals geplanten 23 Konzeptdokumente als erstellt markiert; Produktdefinition, Context-Packs sowie Versionierungs- und Archivierungsregeln aktualisiert. |
-| 1.2 | 22.07.2026 | Aktiv | Dokument 21 aufgenommen; Dokument 12 v1.1 als aktive Fassung gesetzt; Bibliotheksumfang auf 24 Dokumente erweitert; Research-, Innovations-, Presentation-as-Code- und Change-Proposal-Regeln ergänzt; nächster Schritt auf das Claude-Code-Übergabepaket gesetzt. |
+| 1.2 | 22.07.2026 | **Aktiv** | Dokument 21 aufgenommen; Dokument 12 v1.1 als aktive Fassung gesetzt; Bibliotheksumfang auf 24 Dokumente erweitert; Research-, Innovations-, Presentation-as-Code- und Change-Proposal-Regeln ergänzt; nächster Schritt auf das Claude-Code-Übergabepaket gesetzt. |
 
 ## 13. Nächster verbindlicher Schritt
 
 1. Dokument 00 v1.2, Dokument 12 v1.1 und Dokument 21 v1.0 als aktive Quellen in das Repository übernehmen; abgelöste Versionen archivieren.
 2. Alle aktiven Markdown-Dateien in die Zielstruktur aus Dokument 20C überführen und maschinenlesbare Status-, Decision- und Context-Pack-Dateien anlegen.
-3. Das vollständige Claude-Code-Übergabepaket erstellen: Startprompt, CLAUDE.md, Agentenverträge, Capability Check, initiales Backlog, Phase-0-Setup und erstes vertikales Work Package.
+3. Das vollständige Claude-Code-Übergabepaket erstellen: Startprompt, `CLAUDE.md`, Agentenverträge, Capability Check, initiales Backlog, Phase-0-Setup und erstes vertikales Work Package.
 4. Repository, synthetische Demo-Daten, Demo-Accounts und Presentation Repository initialisieren.
 5. Den Context-Loss-, Session-Resume- und Presentation-Rebuild-Drill als frühe Abnahmebedingungen ausführen.

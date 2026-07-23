@@ -1,62 +1,12 @@
 # Dokument 08 - ISMS-Kernprozesse
 
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_08_ISMS_Kernprozesse_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (alte Arbeitsfassung, ersetzt durch diese Vollableitung; die Vorfassung ist über die Git-Historie rekonstruierbar → diese Fassung nach PDF-Folientiteln). Die Hauptnummern 1-34 und alle Unternummern sind unverändert; neu bzw. entfallen ist ausschließlich der Vorspann vor Abschnitt 1:
->
-> | Alt (Arbeitsfassung) | Neu (PDF-Folientitel) |
-> |---|---|
-> | Frontmatter-Feld „Zweck" (verschmolzene Formulierung „Verbindliches fachliches Betriebsmodell ...") | Titelfolie: Untertitel „Das fachliche Betriebsmodell" + Leitsatz „Verbindliche Prozesslogik für Aufbau, Betrieb, Überwachung ..." (getrennt, wortgetreu) |
-> | Frontmatter ohne Abhängigkeitsangabe | Titelfolie: „ABHÄNGIGKEITEN Dokument 00 bis 07" übernommen |
-> | Blockquote „Zentrale Festlegung" (nach dem Frontmatter) | - entfällt ersatzlos; die Aussage existiert im PDF an keiner Stelle (Abgleichsbefund 2026-07-23) |
-> | - (ohne Entsprechung) | „Dokumentauftrag & Verbindlichkeit" (unnummeriert, vor §1) mit Verbindlichkeitsklausel und „Zentraler Produktregel" |
-> | - (ohne Entsprechung) | „Dokumentensteuerung" (Tabelle, unnummeriert) |
-> | - (ohne Entsprechung) | „Inhalt" (unnummeriert, Orientierungsüberblick) |
-> | §§1-34 samt Unternummern (3.1/3.2, 9.1/9.2, 10.1-10.4, 11.1-11.4, 12.1-12.3, 13.1-13.4, 14.1-14.4, 16.1-16.3, 19.1-19.3, 20.1-20.3, 21.1/21.2, 23.1-23.4) | unverändert |
->
-> **PDF-interne Nummerierungskonflikte:** keine. Folientitel-Zählung 1-34 und die Inhalt-Zeile der Seite 2 verwenden dieselbe Zählung; Zitate wie „08 Abschnitt 27" oder „08-D14" sind eindeutig.
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Die Dokumentensteuerung legt fest: „Source of Truth 08_ISMS_KERNPROZESSE_v1.0.md im Repository; PDF und DOCX sind Veröffentlichungsfassungen". Das steht in Spannung zur Projektregel DR-0006 (PDF = Produktwahrheit, weil die Markdown-Ableitungen nachweislich nicht verlustfrei waren). Hier nur transkribiert, nicht aufgelöst.
-> - Die Dokumentensteuerung nennt als Zentrale Nachfolger „09, 10, 11, 13 bis 20C" — Dokument 12 fehlt dort, wird aber in §33 („Dokument 12 definiert Reporting, PDF und PowerPoint aus den Prozessdaten") ausdrücklich als nächstes Dokument geführt.
-> - Prozesstitel-Varianten zwischen Katalog (§6) und Detailabschnitt: ISMS-12 „Awareness, Kompetenz und Verhalten" (§6) vs. „Awareness, Kompetenz und Sicherheitsverhalten" (§17); ISMS-06 „Anforderungs-, Control- und SoA-Management" (§6) vs. „Anforderungen, Controls und Statement of Applicability" (§11).
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Der Textlayer des PDFs trägt keine Abbildungs- oder Diagrammbeschriftungen; ob das PDF rein grafische Elemente ohne Textlayer enthält, konnte nicht visuell verifiziert werden — visuelle Verifikation offen, vgl. O-WP019-04.
-> - Tabellen (Dokumentensteuerung, §4, §6, §22, §24, §34): Die Zellgrenzen wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellen verschmilzt und über Seitenumbrüche bricht (u. a. Zeile ISMS-13 in §6); Stichproben gegen die wörtlichen Zitate des Abgleichberichts vom 2026-07-23 sind deckungsgleich.
-> - Nummerierte Listen: Die Textextraktion zeigt fortlaufende Listenzähler über das gesamte Dokument (Kernablauf ISMS-01 als „8.-14.", Risikoablauf als „15.-24.", Automatisierungsstufen als „25.-30.", Szenario als „31.-42.", Quellenregister als „43.-50."). Das ist ein Extraktionsartefakt; jede Liste ist hier ab 1 gezählt, Reihenfolge und Anzahl der Punkte sind unverändert.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-**PRODUKTKONZEPT 08 — ISMS-Kernprozesse**  
-*Das fachliche Betriebsmodell*
-
-Verbindliche Prozesslogik für Aufbau, Betrieb, Überwachung und kontinuierliche Verbesserung kundenindividueller Informationssicherheits-Managementsysteme.
-
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
-**Version:** 1.0 | **Status:** Erstellt | **Stand:** 21.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 07
+**Version:** 1.0  
+**Status:** Erstellt  
+**Stand:** 21.07.2026  
+**Zweck:** Verbindliches fachliches Betriebsmodell für Aufbau, Betrieb, Überwachung und kontinuierliche Verbesserung kundenindividueller Informationssicherheits-Managementsysteme.
 
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 08 ist die kanonische fachliche Prozessquelle für das ISMS-Kernprodukt. Nachfolgende Dokumente dürfen Prozesse technisch oder visuell konkretisieren, aber weder Verantwortlichkeiten noch Freigaben, Zustände oder Nachweisanforderungen stillschweigend verändern.
-
-> **Zentrale Produktregel:** Die Plattform führt unterschiedliche Kunden nicht zu demselben maximalen Reifegrad. Sie führt jeden Kunden nachvollziehbar zu seinem freigegebenen Zielprofil - mit angemessener Tiefe, klaren Verantwortungen und belastbarer Evidence.
-
-### Dokumentensteuerung
-
-| Merkmal | Festlegung |
-|---|---|
-| Dokument-ID | 08 |
-| Status | Erstellt - Version 1.0 |
-| Zentrale Vorgänger | 00 bis 07 |
-| Zentrale Nachfolger | 09, 10, 11, 13 bis 20C |
-| Source of Truth | 08_ISMS_KERNPROZESSE_v1.0.md im Repository; PDF und DOCX sind Veröffentlichungsfassungen |
-| Änderungsrecht | Nur über versionierten Decision Record und Abhängigkeitsprüfung |
-
-### Inhalt
-
-1 Auftrag · 2 Executive Summary · 3 Bezugsrahmen · 4 Betriebsmodell · 5 Prinzipien · 6 Prozesskatalog · 7 bis 21 Prozessdetails · 22 Managed-Service-Grenzen · 23 Workflow-Architektur · 24 Rhythmen · 25 Szenario · 26 Datenanforderungen · 27 Akzeptanz · 28 bis 31 Governance · 32 Quellen · 33 Abhängigkeiten · 34 Änderungslog
+> **Zentrale Festlegung:** Die Plattform bildet kein starres Normen-Checklistenprodukt ab. Sie orchestriert ein lebendes, zielorientiertes ISMS, in dem Scope, Geschäftsbezug, Risiken, Controls, Maßnahmen, Nachweise, Entscheidungen und Managed Services als durchgängige, versionierte Prozessketten zusammenarbeiten.
 
 ## 1. Dokumentauftrag und Abgrenzung
 
@@ -171,7 +121,6 @@ Die Plattform unterscheidet 18 kanonische Kernprozesse. Kunden können Prozesse 
 **Eingaben:** Unternehmensziele, Stakeholder, regulatorischer Kontext, Risikobereitschaft, Organisationsmodell, bestehende Richtlinien, Serviceverträge.
 
 **Kernablauf:**
-
 1. relevante interne und externe Themen erfassen;
 2. interessierte Parteien und Erwartungen bewerten;
 3. Executive Sponsor, CISO/ISMS-Verantwortung und Stellvertretung benennen;
@@ -193,7 +142,6 @@ Die Plattform unterscheidet 18 kanonische Kernprozesse. Kunden können Prozesse 
 **Scope-Objekte:** Rechtseinheiten, Standorte, Produkte, Services, Prozesse, Informationen, Systeme, Lieferanten, organisatorische Grenzen und begründete Ausschlüsse.
 
 **Zielprofile können kombinieren:**
-
 - pragmatisches Basisniveau,
 - definierter Reifegrad,
 - ISO/IEC-27001-Zertifizierungsbereitschaft,
@@ -216,7 +164,7 @@ Die Plattform bildet zuerst den Geschäftskontext, dann die technischen und orga
 
 **Erfassungswege:** geführte Workshops, Dateiimport, CMDB-/Cloud-/Identity-Konnektoren, bestehende Verzeichnisse, automatische Vorschläge und manuelle Ergänzung.
 
-**Qualitätsregeln:** Jedes kritische Objekt benötigt Owner, Scope, Quelle, Aktualität und mindestens eine relevante Beziehung. Massenimporte bleiben als „beobachtet" markiert, bis Matching und fachliche Bestätigung erfolgen.
+**Qualitätsregeln:** Jedes kritische Objekt benötigt Owner, Scope, Quelle, Aktualität und mindestens eine relevante Beziehung. Massenimporte bleiben als „beobachtet“ markiert, bis Matching und fachliche Bestätigung erfolgen.
 
 ### 9.2 Schutzbedarf und Business Impact
 
@@ -282,7 +230,7 @@ Für ISO-orientierte Zielprofile verwaltet die Plattform eine versionierte Anwen
 
 `Proposed -> Applicable / Not Applicable -> Designed -> Implemented -> Operating -> Tested -> Effective / Partially Effective / Ineffective -> Remediation -> Retested -> Retired`.
 
-**Kontrollregel:** „Implemented" ist kein Synonym für „effective". Managementberichte müssen Implementierung, Betrieb und Wirksamkeit unterscheiden.
+**Kontrollregel:** „Implemented“ ist kein Synonym für „effective“. Managementberichte müssen Implementierung, Betrieb und Wirksamkeit unterscheiden.
 
 ## 12. ISMS-07 und ISMS-15 - Maßnahmen, Findings, Abweichungen und Ausnahmen
 
@@ -503,7 +451,7 @@ Kritische Prozesse müssen bei Ausfall externer KI weiterhin auf Stufe 1 bis 4 f
 | Jährlich | Management Review, Auditprogramm, Governance, Zielprofil, umfassende Risikobewertung |
 | Mehrjährig / nach Anlass | Zertifizierung, Strategieänderung, großes Resilience Testing, Re-Design des ISMS |
 
-Frequenzen sind pro Zielprofil und Kritikalität konfigurierbar. „Jährlich" ist kein Freibrief, relevante Veränderungen bis zum Termin zu ignorieren.
+Frequenzen sind pro Zielprofil und Kritikalität konfigurierbar. „Jährlich“ ist kein Freibrief, relevante Veränderungen bis zum Termin zu ignorieren.
 
 ## 25. Durchgängiges End-to-End-Szenario
 
@@ -543,7 +491,7 @@ Dieses Szenario demonstriert, dass die Plattform keine isolierten Checklisten be
 - Audit-Readiness ist konfigurierbar und kein erzwungenes Universalziel.
 - Scope-Änderungen propagieren nachvollziehbar auf Risiken, Controls, Evidence, Audits, Services und Reporting.
 - Risk, Control, Measure, Finding, Policy, Evidence, Exception und Audit besitzen klar getrennte Lebenszyklen.
-- „Implementiert" und „wirksam" sind in Datenmodell, UI und Reporting getrennt.
+- „Implementiert“ und „wirksam“ sind in Datenmodell, UI und Reporting getrennt.
 - Risiken können nicht ohne Owner, Begründung und Gültigkeit akzeptiert werden.
 - Ausnahmen besitzen Ablaufdatum, kompensierende Controls und Exit-Plan.
 - Evidence enthält Quelle, Gültigkeit, Scope, Integrität und Reviewstatus.
@@ -656,3 +604,4 @@ Die folgenden Primärquellen begründen den methodischen Bezugsrahmen; verbindli
 | Version | Datum | Änderung | Autor/Verantwortung |
 |---|---|---|---|
 | 1.0 | 21.07.2026 | Erstfassung des kanonischen ISMS-Prozessmodells mit 18 Kernprozessen, Zuständen, Managed-Service-Grenzen und Akzeptanzkriterien. | Produktkonzeption |
+

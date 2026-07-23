@@ -72,3 +72,15 @@ und welche gebauten Artefakte hängen daran.
    (Kandidat: rollenabhängige Verdichtung der Objektseite).
 4. Prüfen, ob ein automatisierter Treue-Check sinnvoll ist (z. B. Abschnittstitel-Abgleich in
    `validate_handoff.py`), damit dieser Fehler nicht erneut unbemerkt entsteht.
+
+## Update 2026-07-23 (WP-023, DR-0010)
+
+Alle 14 material abweichenden Fassungen (Dok. 00, 08–18, 20B, 20C) sind quellentreu aus den
+PDFs neu abgeleitet — 13× Gate-FREIGABE in Runde 1; Dok. 10 bestand inhaltlich alle sieben
+Prüfschritte, der einzige Gate-Befund (fehlende Archivkopie) wurde für alle 14 mechanisch
+behoben. Nachtrag: `docs/concept/abgleich/NACHTRAG_WP-023_2026-07-23.md`.
+
+**Reststatus:** Dok. 01, 19, 20A, 21 (kleine Abweichungen) bewusst unkorrigiert; automatischer
+Treue-Check (O-WP019-01/WP-024) offen. **Regel Null bleibt bis dahin unverändert in Kraft.**
+Das Finding bleibt als Historie offen sichtbar, blockiert aber nichts mehr; endgültige
+Schließung mit WP-024.

@@ -1,42 +1,13 @@
-# Dokument 15 - Berater-Operations, Portfolio & Ressourcenplanung
-
-> **Re-Ableitung:** 2026-07-23 (WP-023 / DR-0010) | Quell-PDF: `Dokument_15_Berater_Operations_Portfolio_Ressourcenplanung_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz:** Die Hauptabschnitte 1-37 sind zwischen PDF-Folientiteln, PDF-Inhaltszeile (Vorspann-Folie „Dokumentauftrag & Verbindlichkeit") und dieser Fassung identisch; ebenso alle Unterabschnitte (3.1, 6.2, 9.3, 28.7 usw.). Gegenüber der bisherigen Arbeitsfassung (Git-Historie dieser Datei) ist **neu aufgenommen**: der ungezählte Vorspann **„Dokumentauftrag & Verbindlichkeit"** mit Steuerungsfeld (Owner, Gültigkeit, Datenstatus, Änderungskontrolle, Zentrale Nachfolger) und Inhaltszeile - er stand vor §1 im PDF und fehlte im Markdown vollständig (Rohbefund Dokument 15 im Abgleich 2026-07-23).
->
-> **PDF-interne Nummerierungskonflikte:** keine festgestellt. Die Inhaltszeile des Vorspanns fasst Abschnitte zusammen („14/15 Vor-Ort und Reise", „19/20 Wirtschaft", „23/24 Sichten und Notifications", „25 bis 37 Integrationen, KI, Sicherheit, Demo und Governance"), verwendet aber dieselbe Zählung wie die Folientitel.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Der Textlayer des Extrakts trägt keine Abbildungsinhalte und keine Bildunterschriften. An zwei Stellen (Ende §2 „Executive Summary", Ende §15.2 „Reisecluster") endet die Folie im Extrakt mit einer Leerzeile, die auf grafischen Inhalt hindeuten kann: [Abbildung: im Textlayer nicht lesbar - visuelle Verifikation offen, vgl. O-WP019-04]. Keine Rekonstruktion aus der Alt-Fassung.
-> - Tabellen-Spaltengrenzen wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellen verschmilzt; über Folienumbrüche wiederholte Tabellenkopfzeilen (§5, §29.1) sind zusammengeführt. PDF-Zeilenumbruch-Silbentrennungen (z. B. „Standard-Work- Packages", „Board- Reporting-Last", „Skill- Lücke") sind aufgehoben.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-Ein Operations Center für Skills, Kapazität, Kundenprioritäten, Vor-Ort-Termine, Reise, Qualität und wirtschaftlich skalierbare Managed-Service-Delivery.
+# Dokument 15 – Berater-Operations, Portfolio & Ressourcenplanung
 
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
 **Version:** 1.0  
 **Status:** Erstellt  
 **Stand:** 21.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 14
+**Abhängigkeiten:** Dokument 00 bis 14  
+**Primäre Nachfolger:** Dokument 16 bis 20C
 
 ---
-
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 15 ist die kanonische Quelle für Beraterportfolio, Demand- und Work-Package-Planung, Skill- und Kapazitätsmodell, Staffing, Kalender, Vor-Ort, Reise, Coverage, Delivery-Qualität, Cost-to-Serve und Portfolio-Profitabilität. Nachfolgende Dokumente dürfen technische Integrationen und Implementierungsdetails konkretisieren, aber diese operative Semantik nicht still verändern.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 15 |
-| Status | Erstellt - Version 1.0 |
-| Owner | Product Architecture / Consultant Operations & Resource Planning Owner |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Datenstatus | Alle Personen, Unternehmen, Termine, Preise und Reisen der Demo sind synthetisch. |
-| Änderungskontrolle | Änderungen an Capacity Ledger, Staffing, Coverage, Reise-, Cost-to-Serve- oder Fairnesslogik benötigen Version, Impactanalyse, Tests und Freigabe. |
-| Zentrale Nachfolger | Dokument 16 bis 20C |
-
-**Inhalt:** 1 Auftrag · 2 Summary · 3 Operations-Verfassung · 4 Objekte · 5 Rollen · 6 Portfolio · 7 Demand · 8 Work Packages · 9 Kapazität · 10 Skills · 11 Staffing · 12 Kalender · 13 Morning Mission · 14/15 Vor-Ort und Reise · 16 Gesundheit · 17 Coverage · 18 Qualität · 19/20 Wirtschaft · 21 Opportunities · 22 Szenarien · 23/24 Sichten und Notifications · 25 bis 37 Integrationen, KI, Sicherheit, Demo und Governance
 
 ## 1. Auftrag und Abgrenzung
 
@@ -55,7 +26,7 @@ Nicht Gegenstand dieses Dokuments sind die vollständige technische Integrations
 
 ## 2. Executive Summary
 
-Die Beraterwelt der Plattform ist kein persönlicher Aufgabenplaner und keine klassische Professional-Services-Automation. Sie ist ein Operations Center für sicherheitsrelevante Kundenarbeit. Im Zentrum steht nicht maximale Auslastung, sondern die bestmögliche Wirkung unter realen Grenzen: fachliche Eignung, verfügbare Zeit, Kundenpriorität, SLA, Reise, Abhängigkeiten, Qualität, Gesundheit und Wirtschaftlichkeit.
+Die Beraterwelt der Plattform ist kein persönlicher Aufgabenplaner und keine klassische Professional-Services-Automation. Sie ist ein **Operations Center für sicherheitsrelevante Kundenarbeit**. Im Zentrum steht nicht maximale Auslastung, sondern die bestmögliche Wirkung unter realen Grenzen: fachliche Eignung, verfügbare Zeit, Kundenpriorität, SLA, Reise, Abhängigkeiten, Qualität, Gesundheit und Wirtschaftlichkeit.
 
 Ein Berater öffnet morgens nicht mehrere Postfächer, Tabellen und Projektpläne. Er sieht eine begründete Mission:
 
@@ -66,11 +37,11 @@ Ein Berater öffnet morgens nicht mehrere Postfächer, Tabellen und Projektplän
 - welche Arbeit automatisiert, delegiert, gebündelt oder verschoben werden kann,
 - wo ein Engagement Manager eingreifen muss.
 
-Ein Engagement Manager sieht sein Portfolio als steuerbares System. Die Plattform verbindet Service Instances, Work Packages, Skills, Kapazität, Kalender, Standort, Reise, Qualität und kommerzielle Baselines. Sie erlaubt Szenarien wie: „Was passiert, wenn der Audit Lead ausfällt?", „Können wir drei Vor-Ort-Termine in einer Reise bündeln?", „Welcher Senior besitzt den passenden Branchenkontext?", „Welche Services sind strukturell unprofitabel, weil zu viel Rework entsteht?"
+Ein Engagement Manager sieht sein Portfolio als steuerbares System. Die Plattform verbindet Service Instances, Work Packages, Skills, Kapazität, Kalender, Standort, Reise, Qualität und kommerzielle Baselines. Sie erlaubt Szenarien wie: „Was passiert, wenn der Audit Lead ausfällt?“, „Können wir drei Vor-Ort-Termine in einer Reise bündeln?“, „Welcher Senior besitzt den passenden Branchenkontext?“, „Welche Services sind strukturell unprofitabel, weil zu viel Rework entsteht?“
 
 Das Zielbild ist eine Delivery-Organisation, die skalieren kann, weil sie Arbeit standardisiert, wiederverwendet und intelligent verteilt - nicht weil Menschen dauerhaft mehr Mandanten oder mehr Stunden übernehmen.
 
-[Abbildung: im Textlayer nicht lesbar - visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG1]]
 
 ## 3. Operations-Verfassung
 
@@ -223,7 +194,9 @@ Kunden werden nicht auf einen einzigen Health Score reduziert. Das Portfolio zei
 | Commercial Health | Wo weicht Cost-to-Serve von der Baseline ab? | Scope Drift, hohe Reise, Custom Work, Rework |
 | Relationship | Wo braucht es Kommunikation? | Sponsorwechsel, ungeklärte Entscheidung, niedrige Mitwirkung |
 
-Die Startseite erklärt immer, warum ein Mandant Aufmerksamkeit benötigt und welche Handlung das Signal verändern würde.
+Die Startseite erklärt immer, **warum** ein Mandant Aufmerksamkeit benötigt und welche Handlung das Signal verändern würde.
+
+[[FIGURE:FIG2]]
 
 ### 6.3 Portfolio-Cluster
 
@@ -346,6 +319,8 @@ Die Plattform verwendet keine allgemeingültige Auslastungsquote. Betreiber defi
 - **At Risk:** SLA, Qualität, Reise oder Gesundheit kann gefährdet sein.
 - **Overcommitted:** zugesagte Arbeit übersteigt belastbare Kapazität; Managemententscheidung erforderlich.
 
+[[FIGURE:FIG3]]
+
 ### 9.4 Forecast Confidence
 
 Kapazitätsforecast zeigt zusätzlich:
@@ -426,10 +401,10 @@ Ein Staffing-Vorschlag berücksichtigt:
 
 Die Plattform darf einen Score anzeigen, muss aber die Gründe sichtbar machen, etwa:
 
-- „passt fachlich, besitzt Kundenkontext, aber nur geringe Kapazitätsreserve",
-- „günstigste Reiseoption, benötigt jedoch Senior Review",
-- „hohe Kontinuität, aber Interessenkonflikt für unabhängige Assurance",
-- „geeignet als Shadow Assignment zur Kompetenzentwicklung".
+- „passt fachlich, besitzt Kundenkontext, aber nur geringe Kapazitätsreserve“,
+- „günstigste Reiseoption, benötigt jedoch Senior Review“,
+- „hohe Kontinuität, aber Interessenkonflikt für unabhängige Assurance“,
+- „geeignet als Shadow Assignment zur Kompetenzentwicklung“.
 
 ### 11.3 Staffing-Modi
 
@@ -558,7 +533,7 @@ Die Plattform kann Vorschläge erzeugen, wenn mehrere bestätigte Vor-Ort-Termin
 - Stornorisiko,
 - Konflikte und Datenschutzgrenzen.
 
-[Abbildung: im Textlayer nicht lesbar - visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG4]]
 
 ### 15.3 Reiseausnahmen
 
@@ -591,7 +566,7 @@ Viele kleine Assignments können belastender sein als ein großes Work Package. 
 
 ### 16.3 Eskalation ohne Stigma
 
-Berater können „Kapazität nicht belastbar", „Skill-Unterstützung nötig" oder „Kundenabhängigkeit blockiert" melden, ohne dies als persönliches Versagen darzustellen. Die Eskalation löst Optionen und Managementverantwortung aus.
+Berater können „Kapazität nicht belastbar“, „Skill-Unterstützung nötig“ oder „Kundenabhängigkeit blockiert“ melden, ohne dies als persönliches Versagen darzustellen. Die Eskalation löst Optionen und Managementverantwortung aus.
 
 ## 17. Coverage, Vertretung und Handover
 
@@ -979,12 +954,12 @@ Die Demonstration enthält ausschließlich synthetische Unternehmen und Personen
 
 ### 30.2 Demo-Rollen
 
-- Engagement Manager „Mara Klein" mit fünf Mandanten,
-- Consultant „Jonas Weber" mit Morning Mission und Reiseblock,
-- Audit Lead „Leila Haddad" mit Skill- und Unabhängigkeitsanforderung,
-- Quality Reviewer „Dr. Eva Sommer",
-- Practice Manager „Daniel Ortiz",
-- Customer CISO „Nina Hartmann".
+- Engagement Manager „Mara Klein“ mit fünf Mandanten,
+- Consultant „Jonas Weber“ mit Morning Mission und Reiseblock,
+- Audit Lead „Leila Haddad“ mit Skill- und Unabhängigkeitsanforderung,
+- Quality Reviewer „Dr. Eva Sommer“,
+- Practice Manager „Daniel Ortiz“,
+- Customer CISO „Nina Hartmann“.
 
 Alle Namen, Unternehmen, Preise, Reisen und Termine sind synthetisch.
 

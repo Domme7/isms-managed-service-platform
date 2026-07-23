@@ -1,54 +1,17 @@
 # Dokument 13 - Managed-Service-Betriebsmodell
 
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_13_Managed_Service_Betriebsmodell_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (alte Arbeitsfassung → diese Fassung nach PDF-Folientiteln): Die Hauptnummerierung 1-38 und alle Unterabschnitte (3.1, 4.3, 12.3, 28.7 usw.) sind unverändert deckungsgleich. Änderungen gegenüber der Alt-Fassung betreffen ausschließlich den unnummerierten Kopfbereich:
->
-> | Alt (Arbeitsfassung) | Neu (PDF) |
-> |---|---|
-> | - (ohne Entsprechung) | Untertitel der Titelfolie („Vom fachlich begründeten Bedarf …") |
-> | Kopfzeile „Zweck" (frei formuliert) | ersatzlos entfallen (vom PDF nicht getragen) |
-> | Blockquote „Zentrale Festlegung" (frei formuliert, mit abweichender Pflichtbestandteil-Liste) | ersatzlos entfallen (vom PDF nicht getragen) |
-> | - (ohne Entsprechung) | unnummerierte Folie „Dokumentauftrag & Verbindlichkeit" mit Vorrangregel, Steuerungsfeld-Tabelle und Inhaltszeile (vor §1) |
->
-> **PDF-interne Nummerierungskonflikte:** Die Inhalts-/Navigationszeile auf der Folie „Dokumentauftrag & Verbindlichkeit" fasst zusammen „18/19 Responsibility" und „28 bis 38 Szenarien und Governance", während die Folientitel §18 (Customer Responsibilities) und §19 (Provider Responsibilities) sowie §28-§38 getrennt führen. Diese Fassung folgt den Folientiteln; Verwechslungsgefahr für Paragraphen-Zitate besteht nicht.
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Das PDF enthält drei unterschiedlich geschnittene Pflichtbestandteil-Listen für Service Instances: §4.3 „Service Instance" (Feldgruppen-Tabelle mit 12 Feldgruppen), §32 „Globale Akzeptanzkriterien" („Outcome, Scope, Charter, Owner, RACI+, Rhythmus, Quality Gates, Messmodell und Exit-Regel") und ENTSCHEIDUNG 13-03 („Outcome, Scope, Shared Responsibility, Quality, Wert und Exit"). Die Listen widersprechen sich nicht zwingend, sind aber nicht deckungsgleich; welche für ein Datenmodell maßgeblich ist, legt das PDF nicht fest.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Der Textlayer des PDF trägt keinerlei Abbildungsinhalt. Laut Abgleichbefund vom 2026-07-23 enthalten die Folien zu §2, §4, §5.3 und §8.2 Grafiken (u. a. zur Shared Responsibility und zu den vier Standard/Konfiguration/Customization-Ebenen). An diesen vier Stellen steht eine benannte Lücke; die Positionierung innerhalb des Abschnitts folgt dem Abgleichbefund, da der Textlayer keinen Anker liefert. Visuelle Verifikation offen, vgl. O-WP019-04.
-> - Die Spaltengrenzen der Tabellen (§4.3, §5.1, §10.1, §11.1, §13.1, §15.1, §16.2, §20.3, §38 sowie Steuerungsfeld) wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellen über Zeilenumbrüche verteilt; Stichproben gegen die wörtlichen Zitate des Abgleichberichts vom 2026-07-23 sind deckungsgleich.
-> - Die Phasen- und Statusketten in §6.1 und §13.2 sind wie im Textextrakt mit „->" wiedergegeben.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-Vom fachlich begründeten Bedarf über Transition und wiederholbare Delivery bis zu messbarer Wirkung, Skalierung und geordnetem Exit.
-
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
 **Version:** 1.0  
 **Status:** Erstellt  
 **Stand:** 21.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 12
+**Abhängigkeiten:** Dokument 00 bis 12  
+**Zweck:** Verbindliches Fach- und Betriebsmodell dafür, wie wiederkehrende ISMS-Leistungen ausgewählt, kundenspezifisch konfiguriert, überführt, erbracht, geprüft, gesteuert, verbessert, skaliert und geordnet beendet werden.
 
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 13 ist die kanonische fachliche Quelle für Service Definition, Service Instance, Service Charter, Shared Responsibility, Transition, Service Runs, Governance, Quality, Value, Improvement, Skalierung und Exit. Nachfolgende Dokumente dürfen Preise, Ressourcen, Technik und KI konkretisieren, aber diese Betriebssemantik nicht still verändern.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 13 |
-| Status | Erstellt - Version 1.0 |
-| Owner | Product Architecture / Managed Service Operating Model Owner |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Änderungskontrolle | Änderungen an Serviceobjekten, Charter, Responsibility, Lifecycle, Quality, Value, Change oder Exit benötigen Version, Tests und Impactanalyse. |
-| Zentrale Nachfolger | Dokument 14 bis 20C |
-
-**Inhalt:** 1 Auftrag · 2 Summary · 3 Verfassung · 4 Serviceobjekte · 5 Rollen · 6 Lifecycle · 7 Qualifizierung · 8 Design · 9 Transition · 10 Delivery · 11 Rhythmus · 12 SLA/OLA · 13 Health · 14 Quality · 15 Governance · 16 Eskalation · 17 Change · 18/19 Responsibility · 20 Value · 21 Improvement · 22 Skalierung · 23 Wissen · 24 Automation/KI · 25 Security · 26 Wirtschaftlichkeit · 27 Exit · 28 bis 38 Szenarien und Governance
+> **Zentrale Festlegung:** Ein Managed Service ist keine lose Sammlung von Berateraufgaben und kein automatisch verlängertes Projekt. Er ist eine versionierte, kundenspezifische Service Instance mit eindeutigem Outcome, Scope, Verantwortungen, Betriebsrhythmus, Qualitätsregeln, Leistungsversprechen, Datenbasis, Governance, Wertnachweis und Exit-Fähigkeit.
 
 ## 1. Dokumentauftrag und Abgrenzung
 
-Dieses Dokument definiert das Betriebsmodell der Produktdomäne Managed-Service- und Beratungsbetrieb. Es konkretisiert vor allem M25 Service Catalog & Configuration, M26 Service Delivery & Value Management und die servicebezogenen Teile von M07, M21 bis M24, M27, M28 und M30.
+Dieses Dokument definiert das Betriebsmodell der Produktdomäne **Managed-Service- und Beratungsbetrieb**. Es konkretisiert vor allem **M25 Service Catalog & Configuration**, **M26 Service Delivery & Value Management** und die servicebezogenen Teile von M07, M21 bis M24, M27, M28 und M30.
 
 Es beschreibt:
 
@@ -65,13 +28,13 @@ Es beschreibt:
 - Sicherheits-, Datenschutz- und Nachvollziehbarkeitsanforderungen,
 - realistische Demo- und End-to-End-Szenarien.
 
-Dokument 13 legt keine konkreten Marktpreise, Paketpreise oder finalen SLA-Zahlen fest. Diese werden in Dokument 14 definiert. Detaillierte Personal-, Skill-, Kalender-, Reise- und Kapazitätsplanung folgt in Dokument 15. Dokument 16 konkretisiert Kunden-Onboarding und Lifecycle. Dokument 17 bis 20C konkretisieren Integrationen, Technik, Sicherheit, KI und Umsetzung.
+Dokument 13 legt **keine konkreten Marktpreise, Paketpreise oder finalen SLA-Zahlen** fest. Diese werden in Dokument 14 definiert. Detaillierte Personal-, Skill-, Kalender-, Reise- und Kapazitätsplanung folgt in Dokument 15. Dokument 16 konkretisiert Kunden-Onboarding und Lifecycle. Dokument 17 bis 20C konkretisieren Integrationen, Technik, Sicherheit, KI und Umsetzung.
 
 ## 2. Executive Summary
 
 Die Plattform macht Managed Services zu einem systematisch betreibbaren Produkt. Sie verbindet den individuellen Zielzustand des Kunden mit einem klaren Serviceversprechen, wiederholbaren Arbeitsabläufen, prüfbaren Deliverables, gemeinsamer Governance und messbarer Wirkung.
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG1]]
 
 Der Betrieb folgt einem geschlossenen Kreislauf:
 
@@ -83,7 +46,7 @@ Der Betrieb folgt einem geschlossenen Kreislauf:
 6. Service Reviews führen zu Entscheidungen, Verbesserungen und gegebenenfalls Scope-Anpassungen.
 7. Erkenntnisse werden in Methoden, Templates, Workflows und den nächsten Servicezyklus zurückgeführt.
 
-Der wirtschaftliche Hebel entsteht nicht durch maximale Automatisierung allein. Er entsteht aus wiederverwendbarer Methode, klarer Verantwortungsverteilung, geringer Koordinationsreibung, hoher Datenqualität, kontrollierter Automatisierung, portfoliofähiger Steuerung und sichtbarem Kundennutzen. Ein guter Managed Service reduziert nicht nur interne Kosten; er erhöht die Verlässlichkeit und macht den Wert der Zusammenarbeit für den Kunden verständlich.
+Der wirtschaftliche Hebel entsteht nicht durch maximale Automatisierung allein. Er entsteht aus **wiederverwendbarer Methode, klarer Verantwortungsverteilung, geringer Koordinationsreibung, hoher Datenqualität, kontrollierter Automatisierung, portfoliofähiger Steuerung und sichtbarem Kundennutzen**. Ein guter Managed Service reduziert nicht nur interne Kosten; er erhöht die Verlässlichkeit und macht den Wert der Zusammenarbeit für den Kunden verständlich.
 
 ## 3. Managed-Service-Verfassung
 
@@ -122,11 +85,11 @@ Der wirtschaftliche Hebel entsteht nicht durch maximale Automatisierung allein. 
 
 Das Betriebsmodell trennt wiederverwendbare Definition, kundenspezifische Aktivierung und konkrete Leistungserbringung. Dadurch bleiben Produkt, Vertrag, Delivery und Historie nachvollziehbar.
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG2]]
 
 ### 4.1 Service Definition
 
-Die Service Definition ist ein versioniertes, mandantenunabhängiges Muster. Sie enthält:
+Die **Service Definition** ist ein versioniertes, mandantenunabhängiges Muster. Sie enthält:
 
 - Service-ID, Name, Kategorie und Zweck,
 - standardisierten Outcome-Satz,
@@ -145,11 +108,11 @@ Die Service Definition ist ein versioniertes, mandantenunabhängiges Muster. Sie
 
 ### 4.2 Service Offer
 
-Ein Service Offer ist die kommerzielle und vertriebliche Ausprägung einer Service Definition. Es kann Paketstufe, Mengeneinheit, Leistungsband, optionale Add-ons, Preislogik und Vertragsbedingungen enthalten. Die genaue Ausgestaltung ist Gegenstand von Dokument 14.
+Ein **Service Offer** ist die kommerzielle und vertriebliche Ausprägung einer Service Definition. Es kann Paketstufe, Mengeneinheit, Leistungsband, optionale Add-ons, Preislogik und Vertragsbedingungen enthalten. Die genaue Ausgestaltung ist Gegenstand von Dokument 14.
 
 ### 4.3 Service Instance
 
-Die Service Instance ist die aktivierte kundenspezifische Leistung. Pflichtbestandteile:
+Die **Service Instance** ist die aktivierte kundenspezifische Leistung. Pflichtbestandteile:
 
 | Feldgruppe | Inhalt |
 |---|---|
@@ -183,9 +146,9 @@ Die Service Charter ist die verständliche, freigabefähige Betriebsvereinbarung
 
 ### 4.5 Service Run, Deliverable und Outcome Review
 
-Ein Service Run repräsentiert eine konkrete Periode oder einen Trigger, etwa Monatszyklus, Quartalsreview, neuer kritischer Threat, Policy Review oder Audit-Vorbereitung. Er bündelt Work Packages, Entscheidungen, Evidence, Deliverables, Quality Gates und Abweichungen.
+Ein **Service Run** repräsentiert eine konkrete Periode oder einen Trigger, etwa Monatszyklus, Quartalsreview, neuer kritischer Threat, Policy Review oder Audit-Vorbereitung. Er bündelt Work Packages, Entscheidungen, Evidence, Deliverables, Quality Gates und Abweichungen.
 
-Ein Deliverable ist das prüfbare Ergebnis eines Runs, zum Beispiel:
+Ein **Deliverable** ist das prüfbare Ergebnis eines Runs, zum Beispiel:
 
 - freigegebener Risiko-Review,
 - Control-Assurance-Paket,
@@ -196,7 +159,7 @@ Ein Deliverable ist das prüfbare Ergebnis eines Runs, zum Beispiel:
 - Decision Card,
 - Maßnahmen- und Verbesserungsplan.
 
-Der Outcome Review prüft später, ob das erwartete Ergebnis tatsächlich eingetreten ist. Ein abgeschlossener Run ohne Outcome Review ist vollständig dokumentiert, aber noch nicht als wirksam bestätigt.
+Der **Outcome Review** prüft später, ob das erwartete Ergebnis tatsächlich eingetreten ist. Ein abgeschlossener Run ohne Outcome Review ist vollständig dokumentiert, aber noch nicht als wirksam bestätigt.
 
 ## 5. Rollen und Verantwortungsarchitektur
 
@@ -225,9 +188,9 @@ Der Outcome Review prüft später, ob das erwartete Ergebnis tatsächlich einget
 
 ### 5.3 Shared Responsibility
 
-Festlegung: Eine Service Instance darf erst aktiviert werden, wenn für jede materiale Aktivität und Entscheidung ein verantwortlicher Owner, eine Mitwirkungspflicht und eine Eskalation definiert sind. „Provider übernimmt" ist ohne konkreten Scope und Entscheidungsrecht keine gültige Verantwortungsbeschreibung.
+[[FIGURE:FIG3]]
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+**Festlegung:** Eine Service Instance darf erst aktiviert werden, wenn für jede materiale Aktivität und Entscheidung ein verantwortlicher Owner, eine Mitwirkungspflicht und eine Eskalation definiert sind. „Provider übernimmt“ ist ohne konkreten Scope und Entscheidungsrecht keine gültige Verantwortungsbeschreibung.
 
 ### 5.4 RACI+ Modell
 
@@ -242,19 +205,19 @@ Die Matrix ist objekt-, mandanten-, service- und schwellenwertbezogen. Ein CISO 
 
 ### 6.1 Kanonische Phasen
 
-Bedarf erkannt -> qualifiziert -> entworfen -> angeboten -> beauftragt -> Transition geplant -> in Transition -> operational ready -> aktiv -> unter Review -> geändert/pausiert -> beendet -> übergeben/archiviert
+`Bedarf erkannt -> qualifiziert -> entworfen -> angeboten -> beauftragt -> Transition geplant -> in Transition -> operational ready -> aktiv -> unter Review -> geändert/pausiert -> beendet -> übergeben/archiviert`
 
 Zusatzstatus:
 
-- **blockiert:** notwendige Daten, Zugang, Mitwirkung oder Freigabe fehlt,
-- **at risk:** Leistungsziel oder Servicequalität droht zu kippen,
-- **suspended:** Service ist kontrolliert pausiert,
-- **exit in progress:** Übergabe und Restarbeiten laufen,
-- **terminated for cause:** außerordentliche Beendigung mit gesondertem Governancepfad.
+- `blockiert`: notwendige Daten, Zugang, Mitwirkung oder Freigabe fehlt,
+- `at risk`: Leistungsziel oder Servicequalität droht zu kippen,
+- `suspended`: Service ist kontrolliert pausiert,
+- `exit in progress`: Übergabe und Restarbeiten laufen,
+- `terminated for cause`: außerordentliche Beendigung mit gesondertem Governancepfad.
 
 ### 6.2 Gate-Prinzip
 
-Jeder Phasenwechsel besitzt ein klares Exit-Kriterium. Beispielsweise wird aus „in Transition" erst „operational ready", wenn:
+Jeder Phasenwechsel besitzt ein klares Exit-Kriterium. Beispielsweise wird aus „in Transition“ erst „operational ready“, wenn:
 
 - Scope und Charter freigegeben sind,
 - Rollen, Zugänge und Kommunikationswege funktionieren,
@@ -327,6 +290,8 @@ Sie darf keine Verkaufsentscheidung automatisch auslösen.
 
 ### 8.2 Standard, Konfiguration und Customization
 
+[[FIGURE:FIG4]]
+
 Die Plattform unterscheidet vier Ebenen:
 
 1. **Standardkern:** wiederverwendbare Methode, Datenobjekte, Quality Gates, Rollen und Basisworkflows.
@@ -334,20 +299,18 @@ Die Plattform unterscheidet vier Ebenen:
 3. **Kundenspezifische Erweiterung:** begründete, versionierte Ergänzung innerhalb Produktarchitektur.
 4. **Custom Build / Ausnahme:** gesondert bewertete Entwicklung oder Leistung außerhalb Standardbetriebs.
 
-[Abbildung: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
-
 Eine Ausnahme wird nicht still zum neuen Standard. Erst nach wiederholtem Nutzen, Quality Review und Product-Governance-Entscheidung kann sie als wiederverwendbare Fähigkeit aufgenommen werden.
 
 ### 8.3 Service Blueprint
 
 Jede Service Definition besitzt einen Blueprint mit:
 
-- **Frontstage:** sichtbare Kundenerlebnisse, Meetings, Reports und Entscheidungen,
-- **Backstage:** Analysen, Prüfungen, Workflows und Quality Gates,
-- **Plattformautomation:** Trigger, Datenvalidierung, Aufgaben und Reportentwürfe,
-- **Kundenmitwirkung:** Daten, Freigaben, Maßnahmen und Fachkontext,
-- **Failover:** manuelle Ersatzprozesse bei Integrations- oder KI-Ausfall,
-- **Messpunkte:** Flow, Qualität, Vertrauen, Outcome und Wert.
+- Frontstage: sichtbare Kundenerlebnisse, Meetings, Reports und Entscheidungen,
+- Backstage: Analysen, Prüfungen, Workflows und Quality Gates,
+- Plattformautomation: Trigger, Datenvalidierung, Aufgaben und Reportentwürfe,
+- Kundenmitwirkung: Daten, Freigaben, Maßnahmen und Fachkontext,
+- Failover: manuelle Ersatzprozesse bei Integrations- oder KI-Ausfall,
+- Messpunkte: Flow, Qualität, Vertrauen, Outcome und Wert.
 
 ## 9. Transition und Operational Readiness
 
@@ -526,9 +489,9 @@ Der Provider darf fehlende interne Kapazität nicht als Kundenabhängigkeit klas
 
 ### 13.2 Health States
 
-stabil -> beobachten -> at risk -> kritisch -> recovery -> stabilisiert
+`stabil -> beobachten -> at risk -> kritisch -> recovery -> stabilisiert`
 
-Ein Status ist immer mit Ursache, Datenvertrauen, Owner, Handlung und nächstem Review verbunden. „Rot" ohne Erklärung ist kein gültiger Servicezustand.
+Ein Status ist immer mit Ursache, Datenvertrauen, Owner, Handlung und nächstem Review verbunden. „Rot“ ohne Erklärung ist kein gültiger Servicezustand.
 
 ### 13.3 Service Recovery Plan
 
@@ -654,7 +617,7 @@ Das Quartalsreview verbindet Service und Kundenstrategie:
 
 ### 16.3 Blameless Problem Review
 
-Nach materialem Fehler wird nicht nur gefragt „Wer hat es verursacht?", sondern:
+Nach materialem Fehler wird nicht nur gefragt „Wer hat es verursacht?“, sondern:
 
 - Welche Bedingungen machten den Fehler möglich?
 - Welche Guardrails oder Signale fehlten?
@@ -696,7 +659,7 @@ Ein Change Request enthält:
 Wiederkehrende Zusatzarbeit wird automatisch sichtbar, wenn sie:
 
 - außerhalb des Charter-Scopes liegt,
-- wiederholt als „kleine Ausnahme" auftritt,
+- wiederholt als „kleine Ausnahme“ auftritt,
 - Kapazitätsband überschreitet,
 - neue Skills oder Integrationen erfordert,
 - zugesagte Deliverables gefährdet.
@@ -1057,35 +1020,43 @@ Ein Service kann auch reduziert oder teilweise internalisiert werden. Die Plattf
 
 ### 28.1 Unvollständige Transition
 
-Problem: Service soll starten, aber Zugänge und Baseline fehlen. Verhalten: Operational Readiness bleibt blockiert; erlaubte Teilservices werden klar gekennzeichnet; keine scheinbare Vollaktivierung.
+Problem: Service soll starten, aber Zugänge und Baseline fehlen.  
+Verhalten: Operational Readiness bleibt blockiert; erlaubte Teilservices werden klar gekennzeichnet; keine scheinbare Vollaktivierung.
 
 ### 28.2 Kundenmitwirkung fehlt wiederholt
 
-Problem: Evidence und Freigaben bleiben aus. Verhalten: gebündelte Requests, Auswirkungen sichtbar, OLA/Eskalation, Governanceentscheidung über Route, Scope oder Unterstützung.
+Problem: Evidence und Freigaben bleiben aus.  
+Verhalten: gebündelte Requests, Auswirkungen sichtbar, OLA/Eskalation, Governanceentscheidung über Route, Scope oder Unterstützung.
 
 ### 28.3 Integration liefert falsche Daten
 
-Problem: automatisierte Auswertung basiert auf fehlerhaftem Connector. Verhalten: betroffene Ergebnisse erhalten Warnung, Reportveröffentlichung wird gegebenenfalls blockiert, Snapshot/Claims werden identifiziert, Correction Workflow startet.
+Problem: automatisierte Auswertung basiert auf fehlerhaftem Connector.  
+Verhalten: betroffene Ergebnisse erhalten Warnung, Reportveröffentlichung wird gegebenenfalls blockiert, Snapshot/Claims werden identifiziert, Correction Workflow startet.
 
 ### 28.4 Provider-Kapazität reicht nicht
 
-Problem: Team kann Verpflichtung voraussichtlich nicht erfüllen. Verhalten: frühzeitige interne Eskalation, Vertretung/Skill Matching, transparente Kundenkommunikation, Recovery Plan; keine falsche SLA-Pause.
+Problem: Team kann Verpflichtung voraussichtlich nicht erfüllen.  
+Verhalten: frühzeitige interne Eskalation, Vertretung/Skill Matching, transparente Kundenkommunikation, Recovery Plan; keine falsche SLA-Pause.
 
 ### 28.5 Kritischer Security Incident beim Kunden
 
-Problem: Regelbetrieb wird durch Incident überlagert. Verhalten: definierter Incident- und Krisenpfad, Schutz vor Scopeverwirrung, Prioritätsentscheidung, spezielle Reports und spätere Lessons Learned.
+Problem: Regelbetrieb wird durch Incident überlagert.  
+Verhalten: definierter Incident- und Krisenpfad, Schutz vor Scopeverwirrung, Prioritätsentscheidung, spezielle Reports und spätere Lessons Learned.
 
 ### 28.6 Automatisierung erzeugt falsche Aufgaben
 
-Problem: Regel oder KI interpretiert Trigger falsch. Verhalten: Dry Run/Review, Batch Stop, betroffene Objekte markieren, Ursache korrigieren, keine automatische Löschung der Historie.
+Problem: Regel oder KI interpretiert Trigger falsch.  
+Verhalten: Dry Run/Review, Batch Stop, betroffene Objekte markieren, Ursache korrigieren, keine automatische Löschung der Historie.
 
 ### 28.7 Service scheint SLA-konform, aber Outcome scheitert
 
-Problem: Aktivität und Fristen stimmen, Zielwirkung bleibt aus. Verhalten: Outcome Review, Methodenanalyse, Service Improvement oder Scope-/Zielentscheidung. SLA-Erfüllung darf das Problem nicht verdecken.
+Problem: Aktivität und Fristen stimmen, Zielwirkung bleibt aus.  
+Verhalten: Outcome Review, Methodenanalyse, Service Improvement oder Scope-/Zielentscheidung. SLA-Erfüllung darf das Problem nicht verdecken.
 
 ### 28.8 Beziehung oder Vertrauen kippt
 
-Problem: Kunde zweifelt an Transparenz oder Unabhängigkeit. Verhalten: nachvollziehbarer Daten-/Entscheidungsreview, unabhängige QA, klare Darstellung von Unsicherheit und Interessen, gegebenenfalls Governance-Eskalation.
+Problem: Kunde zweifelt an Transparenz oder Unabhängigkeit.  
+Verhalten: nachvollziehbarer Daten-/Entscheidungsreview, unabhängige QA, klare Darstellung von Unsicherheit und Interessen, gegebenenfalls Governance-Eskalation.
 
 ## 29. End-to-End-Szenarien
 
@@ -1275,7 +1246,7 @@ Nicht als primäre Erfolgskennzahl verwenden:
 ## 36. Ideenparkplatz
 
 - Service Sandbox zur Simulation von Scope, Kapazität, SLA, Kosten und Outcome vor Aktivierung,
-- „Service Digital Twin" mit Live-Zustand, Abhängigkeiten und Prognose,
+- „Service Digital Twin“ mit Live-Zustand, Abhängigkeiten und Prognose,
 - Outcome-basierte Servicevarianten zusätzlich zu klassischen Kapazitätsmodellen,
 - Marketplace für genehmigte Service Definitions, Work Packages und Branchenpacks,
 - autonom vorbereitete Service Runs mit menschlicher Freigabe,
@@ -1285,7 +1256,7 @@ Nicht als primäre Erfolgskennzahl verwenden:
 - Service Reliability Score mit erklärbarer Ursache,
 - Contract-to-Configuration-Import für strukturierte Serviceparameter,
 - digitale Abnahme und Signatur von Charters und Reviewentscheidungen,
-- Simulation „Was passiert, wenn wir diesen Service reduzieren oder ausbauen?".
+- Simulation „Was passiert, wenn wir diesen Service reduzieren oder ausbauen?“.
 
 ## 37. Dokumentenabhängigkeiten
 

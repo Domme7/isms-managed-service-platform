@@ -1,56 +1,13 @@
-# Dokument 16 - Kunden-Onboarding, Zielprofil & Lifecycle
-
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_16_Kunden_Onboarding_Zielprofil_Lifecycle_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (alte Arbeitsfassung → diese Fassung nach PDF-Folientiteln): Die Hauptnummern 1–41 und alle Unterabschnitte (x.y) sind unverändert; die alte Arbeitsfassung war laut Abgleichbericht 2026-07-23 in den Abschnitten 1–41 nahezu wortgleich. Neu bzw. korrigiert gegenüber der alten Fassung:
->
-> | Alt (Arbeitsfassung) | Neu (PDF) |
-> |---|---|
-> | – (fehlte vollständig) | Deckblatt-Untertitel („Ein geführter Weg vom ersten Kundenbild …" / „Kunden-Onboarding: vom unvollständigen Startbild zum belastbaren, freigegebenen Betrieb") |
-> | – (fehlte vollständig) | Unnummerierte Governance-Seite „Dokumentauftrag & Verbindlichkeit" (vor §1) mit Vorrangregel und Steuerungsfeld-Tabelle (Dokument-ID, Status, Owner, Gültigkeit, Datenstatus, Änderungskontrolle) sowie der „Inhalt"-Navigationszeile |
-> | Kopffeld „**Primäre Nachfolger:** Dokument 17 bis 20C" | – ersatzlos entfallen (existiert im PDF nicht als Metadatum; inhaltlich durch §1 und §40.2 abgedeckt) |
-> | Platzhalter `[[FIGURE:FIG1]]`–`[[FIGURE:FIG4]]` ohne Bildunterschrift | Abbildung 1–4 mit den Original-Bildunterschriften des PDF |
->
-> **PDF-interne Nummerierungskonflikte:** keine. Folientitel 1–41 und die Navigationszeile „Inhalt" (Seite 2) verwenden dieselben Nummern; die Inhalt-Zeile nutzt Kurzlabels (z. B. „14 Requirements" für §14 „Regulatorische, vertragliche und Framework-Ziele"), aber identische Zählung.
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Das Deckblatt nennt „ABHÄNGIGKEITEN Dokument 00 bis 15"; §40.1 „Eingehende Abhängigkeiten" listet jedoch nur Dokument 00, 01 und 03–15 — **Dokument 02 fehlt in der Liste**. Nicht aufgelöst, nur benannt.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Abbildung 1–4: Nur die Bildunterschriften sind im Textlayer enthalten und hier übernommen; der grafische Inhalt ist es nicht — je Abbildung als benannte Lücke gekennzeichnet (visuelle Verifikation offen, vgl. O-WP019-04).
-> - §5.2: Im Textextrakt sind die Pfeilglyphen der Statuskette an das Zeilenende verschoben („Draft  Qualified … Closed→ → →"); die Pfeile wurden hier zwischen die Statusnamen zurückgesetzt. Wortlaut und Reihenfolge der Status unverändert.
-> - Tabellen §5.1, §11.2, §16.1, §22.2, §33.1: Zellgrenzen wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellinhalte über Zeilenumbrüche verteilt; Wortlaut unverändert.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-**PRODUKTKONZEPT 16**
-
-Ein geführter Weg vom ersten Kundenbild zu Scope, Strategie-DNA, Baseline, Zielroute, betriebsbereiten Managed Services und einem kontrollierten, lernenden Lifecycle.
-
-Kunden-Onboarding: vom unvollständigen Startbild zum belastbaren, freigegebenen Betrieb
+# Dokument 16 – Kunden-Onboarding, Zielprofil & Lifecycle
 
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
 **Version:** 1.0  
 **Status:** Erstellt  
 **Stand:** 22.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 15
+**Abhängigkeiten:** Dokument 00 bis 15  
+**Primäre Nachfolger:** Dokument 17 bis 20C
 
 ---
-
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 16 ist die kanonische Quelle für Kundenanlage, Qualification, Scope, Strategie-DNA, Zielprofil, Datenaufnahme, Baseline, Zielroute, Servicekonfiguration, Operational Readiness, Aktivierung, Lifecycle-Änderungen und Exit. Nachfolgende Dokumente dürfen technische Umsetzung und Sicherheitsmechanismen konkretisieren, aber diese fachliche Lifecycle-Semantik nicht still verändern.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 16 |
-| Status | Erstellt – Version 1.0 |
-| Owner | Product Architecture / Customer Lifecycle & Onboarding Owner |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Datenstatus | Alle Personen, Unternehmen, Preise, Termine und Risiken der Demo sind synthetisch. |
-| Änderungskontrolle | Änderungen an Lifecycle, Strategy DNA, Target Profile, Baseline, Route, Readiness oder Exit benötigen Version, Impactanalyse, Tests und Freigabe. |
-
-**Inhalt:** 1 Auftrag · 2 Summary · 3 Verfassung · 4 Objekte · 5 Lifecycle · 6 Qualification · 7 Organisation · 8 Identität · 9 Scope · 10 Datenaufnahme · 11 Strategie-DNA · 12 Zielprofile · 13 Risikotoleranz · 14 Requirements · 15 Budget & Kapazität · 16 Serviceanteil · 17 Baseline · 18 Datenqualität · 19 Zielrouten · 20 Serviceempfehlung · 21 Simulation · 22 Readiness · 23 Sichten · 24 Guided UX · 25 Zusammenarbeit · 26 Transition · 27 Regelbetrieb · 28 Changes · 29 Ausbau/Reduktion · 30 M&A · 31 Exit · 32 Sonderfälle · 33 KPIs · 34 Demo · 35–41 Governance, Entscheidungen und Abhängigkeiten
 
 ## 1. Auftrag und Abgrenzung
 
@@ -71,7 +28,7 @@ Nicht Gegenstand dieses Dokuments sind die vollständige technische Integrations
 
 ## 2. Executive Summary
 
-Onboarding ist kein einmaliger Datenimport und kein Wizard, der nach dem letzten Schritt verschwindet. Es ist der kontrollierte Übergang von einer Annahme über den Kunden zu einem betreibbaren Sicherheits- und Service-System. Die Plattform führt den Kunden und die Beratung von der ersten Orientierung bis zu einem freigegebenen Zielbild und anschließend in einen lernenden Lifecycle.
+Onboarding ist kein einmaliger Datenimport und kein Wizard, der nach dem letzten Schritt verschwindet. Es ist der **kontrollierte Übergang von einer Annahme über den Kunden zu einem betreibbaren Sicherheits- und Service-System**. Die Plattform führt den Kunden und die Beratung von der ersten Orientierung bis zu einem freigegebenen Zielbild und anschließend in einen lernenden Lifecycle.
 
 Der Einstieg beginnt bewusst mit wenigen Fragen: Was muss geschützt werden? Warum? Welche Verpflichtungen und Termine existieren? Welche Risiken akzeptiert das Unternehmen? Welche Kapazität ist intern vorhanden? Was soll selbst gesteuert und was als Managed Service übernommen werden? Erst danach wird die Tiefe schrittweise erhöht.
 
@@ -83,11 +40,11 @@ Aus diesen Angaben entstehen fünf miteinander verbundene Ergebnisse:
 4. eine Baseline mit Datenqualität und Confidence,
 5. eine freigegebene Zielroute inklusive Verantwortungen, Services, Budgetkorridor und Meilensteinen.
 
-Die Plattform bietet drei Einstiegspfade: Guided Quickstart, Collaborative Workshop und Structured Import. Alle Wege enden in denselben kanonischen Objekten und Quality Gates. Ein kleiner Kunde kann innerhalb weniger Stunden eine arbeitsfähige erste Version erhalten; ein komplexer, regulierter Kunde kann mehrere Workshops, Imports, Reviews und Freigaben durchlaufen, ohne dass ein separates Produktmodell entsteht.
+Die Plattform bietet drei Einstiegspfade: **Guided Quickstart**, **Collaborative Workshop** und **Structured Import**. Alle Wege enden in denselben kanonischen Objekten und Quality Gates. Ein kleiner Kunde kann innerhalb weniger Stunden eine arbeitsfähige erste Version erhalten; ein komplexer, regulierter Kunde kann mehrere Workshops, Imports, Reviews und Freigaben durchlaufen, ohne dass ein separates Produktmodell entsteht.
 
-Der Lifecycle endet nicht mit „Go-live". Zielprofil, Scope, Risikobereitschaft, Budget und Serviceanteil werden regelmäßig oder ereignisbezogen überprüft. Bei Akquisitionen, neuen Standorten, Regulierung, Bedrohungen, Budgetkürzungen oder Strategiewechseln berechnet die Plattform Auswirkungen und Routen neu. Der Kunde kann Managed Services ausbauen, reduzieren, internalisieren oder geordnet beenden, ohne seine Daten, Historie oder Entscheidungsnachweise zu verlieren.
+Der Lifecycle endet nicht mit „Go-live“. Zielprofil, Scope, Risikobereitschaft, Budget und Serviceanteil werden regelmäßig oder ereignisbezogen überprüft. Bei Akquisitionen, neuen Standorten, Regulierung, Bedrohungen, Budgetkürzungen oder Strategiewechseln berechnet die Plattform Auswirkungen und Routen neu. Der Kunde kann Managed Services ausbauen, reduzieren, internalisieren oder geordnet beenden, ohne seine Daten, Historie oder Entscheidungsnachweise zu verlieren.
 
-*Abbildung 1: Vom qualifizierten Bedarf zum aktivierten, lernenden Kundenbetrieb.* [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG1]]
 
 ## 3. Onboarding- und Lifecycle-Verfassung
 
@@ -129,51 +86,51 @@ Der Lifecycle endet nicht mit „Go-live". Zielprofil, Scope, Risikobereitschaft
 
 ### 4.1 Customer Account
 
-Der Customer Account ist der oberste Mandantenkontext. Er enthält rechtliche und operative Identität, zulässige Datenregion, primäre Stakeholder, Vertrags- und Servicebezug, Status, Lifecycle-Phase und Verweise auf alle untergeordneten Scopes und Engagements.
+Der **Customer Account** ist der oberste Mandantenkontext. Er enthält rechtliche und operative Identität, zulässige Datenregion, primäre Stakeholder, Vertrags- und Servicebezug, Status, Lifecycle-Phase und Verweise auf alle untergeordneten Scopes und Engagements.
 
 ### 4.2 Organization Profile
 
-Das Organization Profile beschreibt die für Sicherheitssteuerung relevante Unternehmensstruktur: Einheiten, Standorte, Regionen, Geschäftsmodelle, kritische Produkte, Prozesse, Verantwortungen, Sprachen und Zeitzonen. Es ersetzt kein HR- oder ERP-System, sondern referenziert nur benötigte Strukturen.
+Das **Organization Profile** beschreibt die für Sicherheitssteuerung relevante Unternehmensstruktur: Einheiten, Standorte, Regionen, Geschäftsmodelle, kritische Produkte, Prozesse, Verantwortungen, Sprachen und Zeitzonen. Es ersetzt kein HR- oder ERP-System, sondern referenziert nur benötigte Strukturen.
 
 ### 4.3 Onboarding Case
 
-Der Onboarding Case ist der versionierte Arbeitscontainer für einen Einstieg, eine Erweiterung oder eine wesentliche Re-Transition. Er enthält Ziel, Einstiegspfad, Owner, Teilnehmer, Aufgaben, Imports, Annahmen, Entscheidungen, Quality Gates, Timeline, Risiken und Status.
+Der **Onboarding Case** ist der versionierte Arbeitscontainer für einen Einstieg, eine Erweiterung oder eine wesentliche Re-Transition. Er enthält Ziel, Einstiegspfad, Owner, Teilnehmer, Aufgaben, Imports, Annahmen, Entscheidungen, Quality Gates, Timeline, Risiken und Status.
 
 ### 4.4 Scope Proposal und Approved Scope
 
-Ein Scope Proposal ist ein noch nicht freigegebener Vorschlag mit Ein- und Ausschlüssen, Begründung, Abhängigkeiten, Datenlücken und Auswirkungen. Nach Freigabe entsteht eine versionierte Approved Scope-Version. Historische Versionen bleiben rekonstruierbar.
+Ein **Scope Proposal** ist ein noch nicht freigegebener Vorschlag mit Ein- und Ausschlüssen, Begründung, Abhängigkeiten, Datenlücken und Auswirkungen. Nach Freigabe entsteht eine versionierte **Approved Scope**-Version. Historische Versionen bleiben rekonstruierbar.
 
 ### 4.5 Strategy DNA
 
-Die Strategie-DNA ist die versionierte Sicherheits- und Betriebsphilosophie des Kunden. Sie beeinflusst Priorisierung, Schwellenwerte, Zieltiefe, Nachweisintensität, Kommunikationsform, Automatisierungsgrad und Managed-Service-Anteil.
+Die **Strategie-DNA** ist die versionierte Sicherheits- und Betriebsphilosophie des Kunden. Sie beeinflusst Priorisierung, Schwellenwerte, Zieltiefe, Nachweisintensität, Kommunikationsform, Automatisierungsgrad und Managed-Service-Anteil.
 
 ### 4.6 Target Profile
 
-Das Target Profile beschreibt den gewünschten Zielzustand für definierte Capabilities, Risiken, Controls, Prozesse, Verpflichtungen und Termine. Es kann mehrere Zielarten kombinieren und muss nicht auf Audit- oder Zertifizierungsbereitschaft ausgerichtet sein.
+Das **Target Profile** beschreibt den gewünschten Zielzustand für definierte Capabilities, Risiken, Controls, Prozesse, Verpflichtungen und Termine. Es kann mehrere Zielarten kombinieren und muss nicht auf Audit- oder Zertifizierungsbereitschaft ausgerichtet sein.
 
 ### 4.7 Baseline Assessment
 
-Die Baseline Assessment ist die freigegebene Ausgangsbewertung mit Stichtag, Scope, Methodik, Datenquellen, Findings, Reife, Risiken, Control-Abdeckung, Datenqualität und Confidence. Sie ist kein unveränderlicher Wahrheitsanspruch, sondern ein nachvollziehbarer Startpunkt.
+Die **Baseline Assessment** ist die freigegebene Ausgangsbewertung mit Stichtag, Scope, Methodik, Datenquellen, Findings, Reife, Risiken, Control-Abdeckung, Datenqualität und Confidence. Sie ist kein unveränderlicher Wahrheitsanspruch, sondern ein nachvollziehbarer Startpunkt.
 
 ### 4.8 Target Route
 
-Eine Target Route ist ein versionierter Weg vom Ausgangszustand zum Zielprofil. Sie enthält Meilensteine, Work Packages, Abhängigkeiten, Verantwortungen, Services, Zeit, Budgetkorridor, erwartete Wirkung, Risiken und Confidence.
+Eine **Target Route** ist ein versionierter Weg vom Ausgangszustand zum Zielprofil. Sie enthält Meilensteine, Work Packages, Abhängigkeiten, Verantwortungen, Services, Zeit, Budgetkorridor, erwartete Wirkung, Risiken und Confidence.
 
 ### 4.9 Responsibility Blueprint
 
-Der Responsibility Blueprint ordnet Capabilities, Prozesse, Work Packages und Entscheidungen dem Kunden, Provider, gemeinsamen Teams oder deterministischen Automationen zu. Er ist die onboardingbezogene Ausprägung des Shared-Responsibility-Modells aus Dokument 13.
+Der **Responsibility Blueprint** ordnet Capabilities, Prozesse, Work Packages und Entscheidungen dem Kunden, Provider, gemeinsamen Teams oder deterministischen Automationen zu. Er ist die onboardingbezogene Ausprägung des Shared-Responsibility-Modells aus Dokument 13.
 
 ### 4.10 Operational Readiness Record
 
-Der Operational Readiness Record dokumentiert, ob Daten, Rollen, Zugriff, Verfahren, Service Charter, Quality Gates, Eskalation, Reporting, Sicherheit und Exit-Mindestanforderungen für Go-live erfüllt sind.
+Der **Operational Readiness Record** dokumentiert, ob Daten, Rollen, Zugriff, Verfahren, Service Charter, Quality Gates, Eskalation, Reporting, Sicherheit und Exit-Mindestanforderungen für Go-live erfüllt sind.
 
 ### 4.11 Lifecycle Event
 
-Ein Lifecycle Event ist eine Veränderung mit möglicher Auswirkung auf Scope, Ziel, Baseline, Route, Services oder Verantwortung. Beispiele sind Akquisition, Standorteröffnung, neue Regulierung, Budgetänderung, Providerwechsel, Incident, Reorganisation oder Auditentscheidung.
+Ein **Lifecycle Event** ist eine Veränderung mit möglicher Auswirkung auf Scope, Ziel, Baseline, Route, Services oder Verantwortung. Beispiele sind Akquisition, Standorteröffnung, neue Regulierung, Budgetänderung, Providerwechsel, Incident, Reorganisation oder Auditentscheidung.
 
 ### 4.12 Customer Snapshot
 
-Ein Customer Snapshot friert zu einem Stichtag Scope, Strategie-DNA, Zielprofil, Baseline, Route, Services, Verantwortungen, Confidence und offene Entscheidungen ein. Er dient Vergleich, Management Review, Export, Transition und Auditierbarkeit.
+Ein **Customer Snapshot** friert zu einem Stichtag Scope, Strategie-DNA, Zielprofil, Baseline, Route, Services, Verantwortungen, Confidence und offene Entscheidungen ein. Er dient Vergleich, Management Review, Export, Transition und Auditierbarkeit.
 
 ## 5. Lifecycle-Modell
 
@@ -195,13 +152,13 @@ Ein Customer Snapshot friert zu einem Stichtag Scope, Strategie-DNA, Zielprofil,
 
 Phasen können überlappen, aber Quality Gates dürfen nicht still übersprungen werden. Ein kleiner Kunde kann Foundation, Discover und Design in einem geführten Workshop durchlaufen; ein regulierter Konzern kann mehrere Scopes und parallele Onboarding Cases besitzen.
 
-*Abbildung 2: Der Kunden-Lifecycle ist ein geschlossener, versionierter Steuerungskreislauf.* [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG2]]
 
 ### 5.2 Status eines Onboarding Case
 
-Draft → Qualified → In Discovery → In Design → In Validation → In Transition → Ready for Activation → Active → Closed
+`Draft → Qualified → In Discovery → In Design → In Validation → In Transition → Ready for Activation → Active → Closed`
 
-Querschnittsstatus sind Blocked, On Hold, Rework Required, Cancelled und Superseded. Jeder Statuswechsel benötigt Owner, Zeitpunkt, Grund und nächsten erwarteten Schritt.
+Querschnittsstatus sind `Blocked`, `On Hold`, `Rework Required`, `Cancelled` und `Superseded`. Jeder Statuswechsel benötigt Owner, Zeitpunkt, Grund und nächsten erwarteten Schritt.
 
 ## 6. Qualification und Onboarding Charter
 
@@ -373,15 +330,15 @@ Migration wird nicht als einmaliges Copy-Paste verstanden. Für jedes Objekt wir
 
 ### 10.4 Datenminimierung und Altlasten
 
-Die Plattform warnt vor ungenutzten personenbezogenen Daten, veralteten Maßnahmen, duplizierten Controls, nicht mehr gültigen Policies und Findings ohne Kontext. „Alles importieren" ist keine Standardempfehlung.
+Die Plattform warnt vor ungenutzten personenbezogenen Daten, veralteten Maßnahmen, duplizierten Controls, nicht mehr gültigen Policies und Findings ohne Kontext. „Alles importieren“ ist keine Standardempfehlung.
 
-*Abbildung 3: Importierte Daten werden vor Übernahme gemappt, geprüft, freigegeben und reconciled.* [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG3]]
 
 ## 11. Strategie-DNA
 
 ### 11.1 Zweck
 
-Die Strategie-DNA beschreibt, wie der Kunde Sicherheit führen will. Sie ist keine unveränderliche Typisierung, sondern eine versionierte Konfiguration, die Entscheidungen und Empfehlungen erklärt.
+Die Strategie-DNA beschreibt, **wie** der Kunde Sicherheit führen will. Sie ist keine unveränderliche Typisierung, sondern eine versionierte Konfiguration, die Entscheidungen und Empfehlungen erklärt.
 
 ### 11.2 Pflichtdimensionen
 
@@ -404,11 +361,11 @@ Die Strategie-DNA beschreibt, wie der Kunde Sicherheit führen will. Sie ist kei
 
 - Dimensionen können pro Scope oder Capability abweichen.
 - Widersprüche werden sichtbar gemacht, etwa hohe Ambition bei niedrigem Budget und geringer Kapazität.
-- Die Plattform schlägt keine „richtige Persönlichkeit" vor, sondern erklärt Konsequenzen.
+- Die Plattform schlägt keine „richtige Persönlichkeit“ vor, sondern erklärt Konsequenzen.
 - Änderungen benötigen Owner, Grund, erwartete Wirkung und gegebenenfalls neue Freigaben.
 - Historische Bewertungen bleiben auf die damals gültige Strategie-DNA bezogen.
 
-*Abbildung 4: Die Strategie-DNA verbindet Geschäft, Risiko, Ambition, Kapazität und Betriebsmodell.* [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG4]]
 
 ## 12. Zielprofile
 
@@ -457,7 +414,7 @@ Die Plattform zeigt Konflikte und gemeinsame Maßnahmen, ohne Werte unzulässig 
 
 ### 13.1 Appetite versus Tolerance
 
-Risikobereitschaft beschreibt die grundsätzliche Haltung. Toleranzen sind messbare Grenzen für konkrete Risiken, Prozesse, Ausfallzeiten, Datenverluste oder Control-Lücken.
+**Risikobereitschaft** beschreibt die grundsätzliche Haltung. **Toleranzen** sind messbare Grenzen für konkrete Risiken, Prozesse, Ausfallzeiten, Datenverluste oder Control-Lücken.
 
 ### 13.2 Erfassung
 
@@ -479,7 +436,7 @@ Beispiele:
 - schnelle Zertifizierung, aber fehlende Evidence-Historie,
 - geringer Managed-Service-Anteil bei dauerhaft fehlender interner Kapazität.
 
-Die Plattform darf solche Konflikte nicht „wegrechnen". Sie erzeugt eine Decision Card mit Optionen, Auswirkungen und benötigter Freigabe.
+Die Plattform darf solche Konflikte nicht „wegrechnen“. Sie erzeugt eine Decision Card mit Optionen, Auswirkungen und benötigter Freigabe.
 
 ## 14. Regulatorische, vertragliche und Framework-Ziele
 
@@ -566,7 +523,7 @@ Die Plattform erkennt Aufgaben ohne Owner, doppelte Accountability, unklare Frei
 
 ### 17.2 Baseline-Methodik
 
-Die Baseline bewertet nicht nur „vorhanden / nicht vorhanden", sondern mindestens:
+Die Baseline bewertet nicht nur „vorhanden / nicht vorhanden“, sondern mindestens:
 
 - Design,
 - Implementierung,
@@ -641,7 +598,7 @@ Die Plattform erzeugt mindestens:
 
 ### 19.3 Route-Vergleich
 
-Die Oberfläche zeigt keine scheinbar objektive „beste Route", sondern Unterschiede:
+Die Oberfläche zeigt keine scheinbar objektive „beste Route“, sondern Unterschiede:
 
 - Zieltermin,
 - Investition,
@@ -839,7 +796,7 @@ Für reife Kunden oder Migrationen:
 
 ### 24.4 Adaptive Guidance
 
-Die Plattform passt Tiefe, Begriffserklärung und nächste Schritte an Rolle und Reife an. Ein Anfänger sieht „Was muss ich entscheiden?". Ein Experte kann Methodik, Objektbeziehungen und Rohdaten öffnen.
+Die Plattform passt Tiefe, Begriffserklärung und nächste Schritte an Rolle und Reife an. Ein Anfänger sieht „Was muss ich entscheiden?“. Ein Experte kann Methodik, Objektbeziehungen und Rohdaten öffnen.
 
 ## 25. Zusammenarbeit, Workshops und Entscheidungen
 
@@ -967,7 +924,7 @@ Services können reduziert werden, wenn interne Fähigkeiten gewachsen sind, Zie
 
 ### 29.3 Internalisierung
 
-Bei Internalisierung werden Runbooks, Work Packages, Evidenz, Historie, offene Risiken, Zugriffe und Skill-Anforderungen übergeben. Erfolg ist nicht „Provider weniger", sondern ein belastbarer interner Betrieb.
+Bei Internalisierung werden Runbooks, Work Packages, Evidenz, Historie, offene Risiken, Zugriffe und Skill-Anforderungen übergeben. Erfolg ist nicht „Provider weniger“, sondern ein belastbarer interner Betrieb.
 
 ### 29.4 Pause
 
@@ -1018,7 +975,7 @@ Kunde und Provider bestätigen Übergabe, offene Restrisiken, Verantwortungswech
 
 ### 32.1 Sponsor oder Owner fällt aus
 
-Der Case wechselt in Blocked oder nutzt freigegebene Vertretung. Ziel- oder Go-live-Entscheidungen dürfen nicht automatisch übernommen werden.
+Der Case wechselt in `Blocked` oder nutzt freigegebene Vertretung. Ziel- oder Go-live-Entscheidungen dürfen nicht automatisch übernommen werden.
 
 ### 32.2 Datenimport ist unvollständig oder falsch
 
@@ -1208,7 +1165,7 @@ Alle Personen, Preise, Risiken, Termine, Dokumente, Standorte und Unternehmensda
 - Kunden-Sandbox zum risikofreien Testen neuer Zielprofile,
 - generative Erklärungen in Sprache und Detailtiefe der jeweiligen Rolle,
 - simulationsgestützte Verhandlung von Budget, Termin und Serviceanteil,
-- „Onboarding Health Coach" für Sponsor und Onboarding Lead,
+- „Onboarding Health Coach“ für Sponsor und Onboarding Lead,
 - anonymisierte Muster für typische Scope- und Datenqualitätsfehler,
 - mobile Vor-Ort-Erfassung mit Offline-Synchronisation,
 - automatisierte Skill- und Trainingsroute für die spätere Internalisierung.

@@ -39,9 +39,10 @@ Die ISMS Managed Service Platform ist ein mandantenfähiges, rollenbasiertes Bet
    in ein Datenmodell, eine Acceptance Criterion oder eine Produktaussage einfließt, wird im PDF
    gegengelesen. Textextraktion: Python + `pypdf`.
 2. **Arbeitsfassung: `docs/concept/active/` (24 Markdown-Dokumente)** — durchsuchbar und zitierbar.
-   **Dok. 03–07 sind seit WP-019 quellentreu neu abgeleitet** (Kopfnotiz je Datei); der Rest ist
-   nachweislich **nicht** verlustfrei (FINDING-0007). Eine Aussage, die **nur** im Markdown steht,
-   ist begründungspflichtig.
+   **Dok. 00, 03–18, 20B, 20C sind quellentreu neu abgeleitet** (WP-019 + WP-023, Kopfnotiz je
+   Datei); Dok. 01, 19, 20A, 21 tragen kleine, unkorrigierte Abweichungen; Dok. 02 ist treu
+   (FINDING-0007-Rohbefund). Eine Aussage, die **nur** im Markdown steht, ist begründungspflichtig;
+   **Regel Null gilt bis zum automatisierten Treue-Check (WP-024) unverändert**.
 3. **Schichtenmodell der Produktwahrheit:** PDF-Basis → Owner-Entscheidungen (`docs/decisions/`,
    gehen bei Konflikt vor) → Ideen (`research/ideas/`). Navigator: `docs/README.md`.
 4. Master-Index: `docs/concept/active/00_MASTER_INDEX_UND_PROJEKTVERFASSUNG_v1.2.md`

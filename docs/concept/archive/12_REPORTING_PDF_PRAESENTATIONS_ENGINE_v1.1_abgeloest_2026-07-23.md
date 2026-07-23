@@ -1,58 +1,16 @@
-# Dokument 12 - Reporting, PDF & Präsentations-Engine
-
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_12_Reporting_PDF_Praesentations_Engine_v1.1.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (alte Arbeitsfassung → diese Fassung nach PDF-Folientiteln): Die Hauptnummern 1-35 und alle Unterabschnitte (3.1-3.2, 4.1-4.3, 5.1-5.5, 6.1-6.5, 7.1-7.3, 8.1-8.4, 9.1-9.4, 10.1-10.12, 11.1-11.3, 13.1-13.4, 14.1-14.3, 15.1-15.3, 16.1-16.3, 17.1-17.3, 18.1-18.2, 19.1-19.3, 21.1-21.3, 22.1-22.2, 23.1-23.3, 24.1-24.2, 25.1-25.8) sind unverändert; der Abgleich vom 2026-07-23 bestätigt exakte Deckung der Nummerierung. Geändert ist ausschließlich der Vorspann:
->
-> | Alt (Arbeitsfassung) | Neu (PDF) |
-> |---|---|
-> | - (ohne Entsprechung) | Titelfolie: Untertitel und Leitsatz „Eine Datenbasis. Viele verantwortungsvolle Narrative. Kontrolliert aktualisiert." |
-> | - (ohne Entsprechung) | Abschnitt „Dokumentauftrag & Verbindlichkeit" mit Steuerungsfeld-Tabelle (Dokument-ID, Status, Owner, Gültigkeit, Zentrale Neuerung, Änderungskontrolle) und Navigationszeile „Inhalt" |
-> | Kopfzeile „Zweck" (Markdown-eigene Umformulierung) | ersatzlos entfallen — der Geltungsbereich steht wörtlich in „Dokumentauftrag & Verbindlichkeit" |
-> | Blockquote „Zentrale Festlegung" (ohne PDF-Beleg) | ersatzlos entfallen (Rohbefund 2026-07-23: eigene Zusammenfassung, u. a. „jede Grafik" breiter als R05) |
-> | Abbildungs-Platzhalter `[[FIGURE:FIG1]]` bis `[[FIGURE:FIG5]]` | wörtliche Bildunterschriften mit benannter Lücke für den grafischen Inhalt |
->
-> **PDF-interne Nummerierungskonflikte:** keine. Die Folientitel-Zählung 1-35 ist durchgängig; die Navigationszeile „Inhalt" verwendet dieselben Nummern (1-9 · 10 · 11-24 · 25-35).
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Die Abbildungsnummerierung ist nicht sequenziell zur Dokumentreihenfolge: Abschnitt „Executive Summary" trägt Abbildung 1, Abschnitt „Kanonisches Report Package" Abbildung 3, Abschnitt „Zielgruppenprisma" Abbildung 2, Abschnitt „Standarddramaturgie für Management-Präsentationen" Abbildung 4, Abschnitt „Presentation Repository" Abbildung 5.
-> - Abschnitt „KI-Provenance": Der Textlayer trägt „Prüfhinsweise" (sic, vermutlich „Prüfhinweise"); wörtlich übernommen.
-> - Abschnitt „Fehler- und Sonderfälle": Der Textlayer trägt „Freigaber abwesend" (sic, vermutlich „Freigeber"); wörtlich übernommen.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Abbildungen 1-5: Nur die Bildunterschriften sind textlich extrahierbar; der grafische Inhalt ist nicht übertragen (visuelle Verifikation offen, vgl. O-WP019-04). An jeder Stelle als benannte Lücke markiert.
-> - Tabellen (Steuerungsfeld, Pflichtfelder 4.1, Reporttypen 5.1, Blocktypen 7.1, Manifest 10.6, Modi 10.10, Reviewarten 17.1, KPI-Familien 24.1, Änderungsprotokoll 35): Die Spaltengrenzen wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellinhalte über Zeilenumbrüche verteilt. Wortlaut unverändert.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-Report Packages, PowerPoint Cases, PDF-Ausgaben, Presentation Repository, kontrollierte Updates und freigabefähige Kommunikation aus einer vertrauenswürdigen Datenbasis.
-
-*Eine Datenbasis. Viele verantwortungsvolle Narrative. Kontrolliert aktualisiert.*
+# Dokument 12 - Reporting-, PDF- und Präsentations-Engine
 
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
 **Version:** 1.1  
 **Status:** Erstellt  
 **Stand:** 22.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 11 sowie 13 bis 21
+**Zweck:** Verbindliches Produkt- und Fachkonzept für die Erzeugung, Prüfung, Freigabe, Ausgabe, repositorygestützte Pflege und kontrollierte Aktualisierung zielgruppengerechter Reports, PDF-Dokumente, PowerPoint-Präsentationen, Briefings, Auditpakete und Management-Unterlagen aus einer gemeinsamen vertrauenswürdigen Datenbasis.
 
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 12 Version 1.1 ist die verbindliche Produkt- und Fachquelle für Report Packages, PDF- und PowerPoint-Ausgaben, Presentation Cases, Templates, Manifests, Snapshots, Update-Diffs, geschützte manuelle Inhalte, Reviews, Freigaben und kontrollierte Creative Modes. Version 1.0 bleibt archiviert; Version 1.1 ist aktiv.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 12 |
-| Status | Aktiv - Version 1.1 |
-| Owner | Product / Reporting & Communication / Security & Quality |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Zentrale Neuerung | Repositorygestützte Pflege wiederkehrender Presentation Cases mit Manifest, Update statt Neuerstellung und Schutz manueller Inhalte. |
-| Änderungskontrolle | Änderungen an Claims, Templates, Audience Modes, geschützten Regionen, Freigaben oder externen Veröffentlichungen benötigen nachvollziehbare Impactanalyse und Review. |
-
-**Inhalt:** 1-9 Auftrag, Reporting-Verfassung, Report Package, Zielgruppen, Content Blocks, Storyline und Report Studio · 10 PowerPoint Engine mit Presentation Repository, Manifests, Case-Katalog, Update-Diff und geschützten Inhalten · 11-24 PDF, Ausgaben, Templates, Snapshots, Claims, Charts, Review, Verteilung, Sicherheit, KI und Managed Services · 25-35 Szenarien, Demonstrator, Akzeptanz, Entscheidungen, Annahmen, Fragen, Ideen, Abhängigkeiten und Änderungen.
+> **Zentrale Festlegung:** Die Plattform erzeugt nicht einfach schöne Dateien. Sie verwandelt einen nachvollziehbaren Datenstand in eine zielgruppengerechte, handlungsorientierte und freigabefähige Kommunikation. PowerPoint-Cases werden als versionierte Repository-Artefakte mit Manifest, geschützten manuellen Inhalten, Update-Diff und kontrollierten Audience-/Creative-Modi gepflegt. Jede Aussage, Kennzahl, Grafik und Empfehlung bleibt auf Quellen, Methodik, Snapshot, Verantwortliche und Version zurückführbar.
 
 ## 1. Dokumentauftrag und Abgrenzung
 
-Dieses Dokument definiert die Reporting- und Kommunikationsartefaktschicht der Plattform. Es konkretisiert insbesondere M23 Reporting, PDF & Presentation Engine, die Export- und Briefingteile von M01 bis M06, die Zusammenarbeit mit M21 Team Workspace & Decision Records sowie die Nutzung von Daten aus Dokument 07 bis 10.
+Dieses Dokument definiert die Reporting- und Kommunikationsartefaktschicht der Plattform. Es konkretisiert insbesondere **M23 Reporting, PDF & Presentation Engine**, die Export- und Briefingteile von **M01 bis M06**, die Zusammenarbeit mit **M21 Team Workspace & Decision Records** sowie die Nutzung von Daten aus Dokument 07 bis 10.
 
 Es beschreibt:
 
@@ -76,17 +34,15 @@ Dieses Dokument legt keine konkrete Rendering-Bibliothek, Cloud-Komponente oder 
 
 ## 2. Executive Summary
 
-Die Reporting Engine folgt dem Prinzip One Source, Many Responsible Narratives: Ein freigegebener Snapshot derselben Datenbasis kann für unterschiedliche Rollen anders verdichtet und visualisiert werden, ohne Zahlen, Methodik oder Bedeutung still zu verändern.
+Die Reporting Engine folgt dem Prinzip **One Source, Many Responsible Narratives**: Ein freigegebener Snapshot derselben Datenbasis kann für unterschiedliche Rollen anders verdichtet und visualisiert werden, ohne Zahlen, Methodik oder Bedeutung still zu verändern.
 
-*Abbildung 1: Ein gemeinsamer vertrauenswürdiger Datenstand wird durch die Reporting Engine in verantwortungsvolle, zielgruppengerechte Narrative für Executive, CISO, Audit und Service übersetzt.*
-
-[Abbildung: grafischer Inhalt im Textlayer nicht lesbar — nur die Bildunterschrift ist übertragen; visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG1]]
 
 Ein Geschäftsführer benötigt Entscheidungen, Business Impact und Investitionsoptionen. Ein CISO benötigt Risikoentwicklung, Zielerreichung und Eskalationen. Ein ISMS-Manager benötigt Maßnahmen, Controls, Owner und Evidence. Ein Auditor benötigt Scope, Nachweise, Findings und Historie. Ein Service Lead benötigt SLA, Delivery, Kapazität und Wertnachweis. Diese Sichten verwenden denselben Datenstand, aber eine andere Sprache, Tiefe und Dramaturgie.
 
 Die Engine soll insbesondere den heute hohen manuellen Aufbereitungsaufwand reduzieren. Ein Berater darf einen Kundentermin nicht damit beginnen müssen, mehrere Stunden lang Folien, Tabellen und Statuswerte aus E-Mails, Excel-Dateien und Einzeltools zusammenzutragen. Die Plattform soll in wenigen Schritten einen terminfertigen, editierbaren und nachvollziehbaren Entwurf erzeugen. Der Mensch prüft fachliche Aussage, Schwerpunkt, Vertraulichkeit und Empfehlung; er baut nicht jedes Mal die gleiche Grundstruktur neu.
 
-Der Qualitätsmaßstab lautet daher nicht „Export erfolgreich", sondern:
+Der Qualitätsmaßstab lautet daher nicht „Export erfolgreich“, sondern:
 
 - Ist die Kernaussage verständlich?
 - Passen Inhalt und Detailtiefe zur Zielgruppe?
@@ -102,7 +58,7 @@ Der Qualitätsmaßstab lautet daher nicht „Export erfolgreich", sondern:
 ### 3.1 Globale Prinzipien
 
 - **R01 - Eine Datenbasis, mehrere Sichten:** Zielgruppenvarianten dürfen verdichten und umformulieren, aber keine widersprüchlichen Fakten erzeugen.
-- **R02 - Zweck vor Format:** Ein Report beginnt mit Kommunikationsziel, Zielgruppe und gewünschter Handlung, nicht mit der Auswahl „PDF oder PowerPoint".
+- **R02 - Zweck vor Format:** Ein Report beginnt mit Kommunikationsziel, Zielgruppe und gewünschter Handlung, nicht mit der Auswahl „PDF oder PowerPoint“.
 - **R03 - Entscheidung vor Datenmenge:** Hauptseiten und Hauptfolien zeigen zuerst Bedeutung, Handlungsbedarf und nächste Entscheidung; Detailtabellen wandern in Drill-down oder Appendix.
 - **R04 - Snapshot statt bewegliches Ziel:** Jeder veröffentlichte Report referenziert einen definierten Datenstand, Zeitraum, Filter und Methodenstand.
 - **R05 - Quelle am Claim:** Materiale Aussagen, Kennzahlen und Empfehlungen besitzen maschinenlesbare Quellen- und Herleitungslinks.
@@ -126,17 +82,15 @@ Der Qualitätsmaßstab lautet daher nicht „Export erfolgreich", sondern:
 - kopierte Altfolien mit falschem Kunden, Zeitraum oder Branding,
 - Charts ohne Definition, Zeitraum oder Datenvertrauen,
 - automatisches Versenden vertraulicher Reports ohne Empfängerprüfung,
-- „grüne" Statusdarstellung trotz fehlender Evidence,
+- „grüne“ Statusdarstellung trotz fehlender Evidence,
 - unlesbare Tabellenwände als Hauptstory,
 - unversionierte Berichte, deren Inhalt später nicht reproduzierbar ist.
 
 ## 4. Kanonisches Report Package
 
-Ein Report ist in der Plattform kein bloßer Dateianhang. Das kanonische Objekt heißt Report Package. Es bündelt Kommunikationsauftrag, Datenstand, Storyline, Inhalte, Governance, Artefakte, Verteilung und Outcome.
+Ein Report ist in der Plattform kein bloßer Dateianhang. Das kanonische Objekt heißt **Report Package**. Es bündelt Kommunikationsauftrag, Datenstand, Storyline, Inhalte, Governance, Artefakte, Verteilung und Outcome.
 
-*Abbildung 3: Das kanonische Report Package verbindet Kommunikationsauftrag, Snapshot, Storyline, Governance, Artefakte und Outcome.*
-
-[Abbildung: grafischer Inhalt im Textlayer nicht lesbar — nur die Bildunterschrift ist übertragen; visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG3]]
 
 ### 4.1 Pflichtfelder
 
@@ -164,10 +118,10 @@ Ein Report ist in der Plattform kein bloßer Dateianhang. Das kanonische Objekt 
 
 Zusatzstatus:
 
-- blockiert: erforderliche Daten, Freigabe oder Klassifikation fehlt,
-- zurückgezogen: veröffentlichte Fassung darf nicht weiterverwendet werden,
-- fehlgeschlagen: Rendering oder Verteilung ist technisch gescheitert,
-- manuell abgezweigt: exportierte Datei wurde außerhalb der Plattform verändert.
+- `blockiert`: erforderliche Daten, Freigabe oder Klassifikation fehlt,
+- `zurückgezogen`: veröffentlichte Fassung darf nicht weiterverwendet werden,
+- `fehlgeschlagen`: Rendering oder Verteilung ist technisch gescheitert,
+- `manuell abgezweigt`: exportierte Datei wurde außerhalb der Plattform verändert.
 
 ### 4.3 Versionierung und Ersetzung
 
@@ -246,9 +200,7 @@ Jede freigegebene Version bleibt unverändert erhalten. Eine Korrektur erzeugt e
 
 Die Engine erzeugt keine bloßen Filter derselben langen Tabelle. Sie transformiert dieselbe vertrauenswürdige Grundlage in eine zielgruppengerechte Kommunikationsform.
 
-*Abbildung 2: Das Zielgruppenprisma verändert Sprache, Detailtiefe und Dramaturgie, ohne die zugrunde liegenden Fakten zu verändern.*
-
-[Abbildung: grafischer Inhalt im Textlayer nicht lesbar — nur die Bildunterschrift ist übertragen; visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG2]]
 
 ### 6.1 Executive
 
@@ -309,7 +261,7 @@ Diese Reports zeigen zusätzlich:
 
 ## 7. Content-Block-Architektur
 
-Jeder Report wird aus wiederverwendbaren, versionierten Content Blocks aufgebaut. Ein Block besitzt Zweck, Datenvertrag, Darstellungsregeln, Zielgruppenfreigabe, Quellen und Qualitätsprüfungen.
+Jeder Report wird aus wiederverwendbaren, versionierten **Content Blocks** aufgebaut. Ein Block besitzt Zweck, Datenvertrag, Darstellungsregeln, Zielgruppenfreigabe, Quellen und Qualitätsprüfungen.
 
 ### 7.1 Kanonische Blocktypen
 
@@ -335,7 +287,7 @@ Jeder Report wird aus wiederverwendbaren, versionierten Content Blocks aufgebaut
 
 Ein Content Block besitzt:
 
-- block_type und schema_version,
+- `block_type` und `schema_version`,
 - semantischen Zweck,
 - erlaubte Zielgruppen,
 - erforderliche Datenobjekte,
@@ -365,7 +317,7 @@ ausgegeben werden. Semantik und Datenvertrag bleiben gleich; Layout und Erläute
 
 ### 8.1 Storyline vor Folienplan
 
-Vor der Generierung wird ein Report Plan erstellt:
+Vor der Generierung wird ein **Report Plan** erstellt:
 
 1. Kommunikationsziel,
 2. Zielgruppe und erwartete Reaktion,
@@ -377,18 +329,16 @@ Vor der Generierung wird ein Report Plan erstellt:
 
 ### 8.2 Standarddramaturgie für Management-Präsentationen
 
-*Abbildung 4: Eine wirksame Präsentation folgt einer Storyline von Kontext und Bedeutung über Optionen zur Entscheidung und zum nächsten Schritt.*
-
-[Abbildung: grafischer Inhalt im Textlayer nicht lesbar — nur die Bildunterschrift ist übertragen; visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG4]]
 
 Die Standardstory lautet:
 
-1. Orientierung: Ziel, Zeitraum und Kernaussage.
-2. Veränderung: Was hat sich seit dem letzten Stand geändert?
-3. Ursache: Warum ist es passiert und wie belastbar ist die Erklärung?
-4. Bedeutung: Was bedeutet es für Geschäft, Risiko, Compliance oder Zielroute?
-5. Entscheidung: Welche Optionen bestehen, was wird empfohlen und warum?
-6. Weiteres Vorgehen: Owner, Meilenstein, Abhängigkeiten und Reviewdatum.
+1. **Orientierung:** Ziel, Zeitraum und Kernaussage.
+2. **Veränderung:** Was hat sich seit dem letzten Stand geändert?
+3. **Ursache:** Warum ist es passiert und wie belastbar ist die Erklärung?
+4. **Bedeutung:** Was bedeutet es für Geschäft, Risiko, Compliance oder Zielroute?
+5. **Entscheidung:** Welche Optionen bestehen, was wird empfohlen und warum?
+6. **Weiteres Vorgehen:** Owner, Meilenstein, Abhängigkeiten und Reviewdatum.
 
 ### 8.3 Narrative Regeln
 
@@ -402,15 +352,15 @@ Die Standardstory lautet:
 - Risiken werden nicht automatisch in Angstkommunikation übersetzt.
 - Serviceangebote werden als fachlich begründete Option, nicht als versteckte Werbung dargestellt.
 
-### 8.4 „One Click" ohne Blindflug
+### 8.4 „One Click“ ohne Blindflug
 
 Die Plattform bietet Quick Actions wie:
 
-- „Vorstandstermin morgen vorbereiten",
-- „Monatsreport erzeugen",
-- „Audit Pack aktualisieren",
-- „Kundenstatus als PowerPoint erstellen",
-- „Decision Brief zu diesem Risiko erzeugen".
+- „Vorstandstermin morgen vorbereiten“,
+- „Monatsreport erzeugen“,
+- „Audit Pack aktualisieren“,
+- „Kundenstatus als PowerPoint erstellen“,
+- „Decision Brief zu diesem Risiko erzeugen“.
 
 Ein Klick startet jedoch einen kontrollierten Prozess. Vor dem finalen Export zeigt die Engine:
 
@@ -439,16 +389,16 @@ Ein Report kann gestartet werden aus:
 
 ### 9.2 Geführter Ablauf
 
-1. Zweck wählen: Meeting, Entscheidung, Audit, Status, Service oder Export.
-2. Audience wählen: Rolle, Erfahrungsniveau, Sprache und erlaubte Tiefe.
-3. Scope und Zeitraum bestätigen: Mandant, Einheiten, Ziele und Filter.
-4. Snapshot prüfen: Aktualität, Confidence, fehlende Daten und Methodik.
-5. Storyline bestätigen: Kernaussagen, Blocks, Reihenfolge und Appendix.
-6. Entwurf erzeugen: Vorschau mit Quellen- und Warnhinweisen.
-7. Review durchführen: Kommentare, Änderungsaufträge und Verantwortlichkeiten.
-8. Freigeben: Version, Scope, Empfänger, Klassifikation und Ablauf bestätigen.
-9. Rendern und verteilen: Artefakte erzeugen, sicher teilen und archivieren.
-10. Outcome erfassen: Entscheidung, Actions, Feedback und Nutzen zurückführen.
+1. **Zweck wählen:** Meeting, Entscheidung, Audit, Status, Service oder Export.
+2. **Audience wählen:** Rolle, Erfahrungsniveau, Sprache und erlaubte Tiefe.
+3. **Scope und Zeitraum bestätigen:** Mandant, Einheiten, Ziele und Filter.
+4. **Snapshot prüfen:** Aktualität, Confidence, fehlende Daten und Methodik.
+5. **Storyline bestätigen:** Kernaussagen, Blocks, Reihenfolge und Appendix.
+6. **Entwurf erzeugen:** Vorschau mit Quellen- und Warnhinweisen.
+7. **Review durchführen:** Kommentare, Änderungsaufträge und Verantwortlichkeiten.
+8. **Freigeben:** Version, Scope, Empfänger, Klassifikation und Ablauf bestätigen.
+9. **Rendern und verteilen:** Artefakte erzeugen, sicher teilen und archivieren.
+10. **Outcome erfassen:** Entscheidung, Actions, Feedback und Nutzen zurückführen.
 
 ### 9.3 Vorschau
 
@@ -466,7 +416,8 @@ Die Vorschau ermöglicht:
 
 ### 9.4 Beginner Mode und Expert Mode
 
-Beginner Mode: Zweck und Audience wählen; Engine schlägt eine freigegebene Struktur vor. Expert Mode: Storyline, Blocks, Methodenansicht, Appendix, Branding, Sprecherhinweise und Verteilungsregeln gezielt konfigurieren.
+**Beginner Mode:** Zweck und Audience wählen; Engine schlägt eine freigegebene Struktur vor.  
+**Expert Mode:** Storyline, Blocks, Methodenansicht, Appendix, Branding, Sprecherhinweise und Verteilungsregeln gezielt konfigurieren.
 
 ## 10. PowerPoint-Engine
 
@@ -507,7 +458,7 @@ Die PowerPoint-Ausgabe ist ein terminfähiger, editierbarer Entwurf - nicht nur 
 
 ### 10.4 Manuelle Bearbeitung und Forking
 
-Nach Download kann der Nutzer die PPTX bearbeiten. Die Plattform behandelt dies als externen Fork:
+Nach Download kann der Nutzer die PPTX bearbeiten. Die Plattform behandelt dies als **externen Fork**:
 
 - Originalexport bleibt archiviert.
 - Manuelle Änderungen aktualisieren nicht automatisch die Plattformdaten.
@@ -530,9 +481,7 @@ PowerPoint-Cases werden nicht als lose Download-Dateien behandelt. Das Repositor
 
 Im produktiven Betrieb können erzeugte, vertrauliche Kundendateien in geschütztem Object Storage liegen. Im Repository verbleiben dann Manifest, Template, synthetische Testdaten, Prüfergebnisse und technische Referenz - nicht zwingend der vertrauliche Binärinhalt.
 
-*Abbildung 5: Das Presentation Repository trennt Templates, Manifests, Snapshots und Assets und ermöglicht kontrollierte Updates mit Diff, Schutz manueller Inhalte, Review und Release.*
-
-[Abbildung: grafischer Inhalt im Textlayer nicht lesbar — nur die Bildunterschrift ist übertragen; visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG5]]
 
 ### 10.6 Presentation Manifest
 
@@ -559,22 +508,22 @@ Jedes regelmäßig gepflegte Deck besitzt ein maschinenlesbares Manifest. Pflich
 
 Die erste Produktbibliothek enthält mindestens folgende wiederverwendbare Presentation Cases:
 
-1. Executive Board Update: Geschäftsrisiken, Zielerreichung, Entscheidungen und Investitionsoptionen.
-2. CISO Monthly Review: Risiko-, Control-, Incident-, Maßnahmen- und Zieltrend.
-3. ISMS Management Review: Management-Review-Eingaben, Beschlüsse und Folgeaktionen.
-4. Audit Readiness & Kick-off: Scope, Readiness, Evidence-Lücken, Termine, Reisen und Owner.
-5. Risk Investment Case: Optionen, Kostenband, Risikowirkung, Kapazität und Nichtstun-Szenario.
-6. Managed Service Review: Delivery, SLA, Outcome, Automatisierung, Value Ledger und Verbesserungen.
-7. Customer Workshop: Agenda, Ausgangslage, Zielbild, Fragen, Entscheidungs- und Arbeitsfolien.
-8. Incident Executive Update: Lage, Business Impact, Maßnahmen, Entscheidungen und Zeitachse.
-9. Consultant Meeting Prep: automatisch vorbereitetes Kundentermin-Deck mit Prioritäten und Gesprächszielen.
-10. Service Proposal: empfohlene Servicebausteine, Verantwortungsverteilung, Nutzen und transparente Preisannahmen.
-11. Portfolio Review: mehrere Mandanten, Kapazität, Risiken, Reiseplanung, Qualität und Opportunities.
-12. Handover & Transition Pack: Service-, Personen-, Anbieter- oder Auditübergabe mit offenen Punkten und Verantwortlichkeiten.
+1. **Executive Board Update:** Geschäftsrisiken, Zielerreichung, Entscheidungen und Investitionsoptionen.
+2. **CISO Monthly Review:** Risiko-, Control-, Incident-, Maßnahmen- und Zieltrend.
+3. **ISMS Management Review:** Management-Review-Eingaben, Beschlüsse und Folgeaktionen.
+4. **Audit Readiness & Kick-off:** Scope, Readiness, Evidence-Lücken, Termine, Reisen und Owner.
+5. **Risk Investment Case:** Optionen, Kostenband, Risikowirkung, Kapazität und Nichtstun-Szenario.
+6. **Managed Service Review:** Delivery, SLA, Outcome, Automatisierung, Value Ledger und Verbesserungen.
+7. **Customer Workshop:** Agenda, Ausgangslage, Zielbild, Fragen, Entscheidungs- und Arbeitsfolien.
+8. **Incident Executive Update:** Lage, Business Impact, Maßnahmen, Entscheidungen und Zeitachse.
+9. **Consultant Meeting Prep:** automatisch vorbereitetes Kundentermin-Deck mit Prioritäten und Gesprächszielen.
+10. **Service Proposal:** empfohlene Servicebausteine, Verantwortungsverteilung, Nutzen und transparente Preisannahmen.
+11. **Portfolio Review:** mehrere Mandanten, Kapazität, Risiken, Reiseplanung, Qualität und Opportunities.
+12. **Handover & Transition Pack:** Service-, Personen-, Anbieter- oder Auditübergabe mit offenen Punkten und Verantwortlichkeiten.
 
 ### 10.8 Update statt Neuerstellung
 
-Die Standardaktion für wiederkehrende Cases lautet bestehendes Deck kontrolliert aktualisieren. Die Engine:
+Die Standardaktion für wiederkehrende Cases lautet **bestehendes Deck kontrolliert aktualisieren**. Die Engine:
 
 1. lädt Manifest, letzte freigegebene Version und geschützte Bereiche,
 2. erzeugt einen neuen Frozen Snapshot,
@@ -588,11 +537,11 @@ Die Standardaktion für wiederkehrende Cases lautet bestehendes Deck kontrollier
 
 ### 10.9 Geschützte manuelle Inhalte
 
-Manuelle Inhalte können als locked, review-on-change oder replaceable klassifiziert werden:
+Manuelle Inhalte können als `locked`, `review-on-change` oder `replaceable` klassifiziert werden:
 
-- locked: bleibt bei automatischen Updates unverändert; Änderung nur durch berechtigten Owner.
-- review-on-change: bleibt erhalten, wird aber bei relevanten Datenänderungen zur fachlichen Prüfung markiert.
-- replaceable: darf aus aktuellem Snapshot und Template neu erzeugt werden.
+- **locked:** bleibt bei automatischen Updates unverändert; Änderung nur durch berechtigten Owner.
+- **review-on-change:** bleibt erhalten, wird aber bei relevanten Datenänderungen zur fachlichen Prüfung markiert.
+- **replaceable:** darf aus aktuellem Snapshot und Template neu erzeugt werden.
 
 Die Plattform darf einen geschützten Text nicht still überschreiben. Kollidiert er mit aktuellen Daten, wird ein klarer Konflikt mit Quelle, Änderung und Lösungsvorschlag angezeigt.
 
@@ -608,7 +557,7 @@ Der Präsentationsstil wird bewusst gesteuert:
 | Workshop | kollaborative Arbeitssitzungen | aktivierende Fragen, Canvas, visuelle Analogien |
 | Creative | interne Innovation, Training oder ausgewählte Workshops | stärkere Storytelling- und Visualisierungselemente |
 
-Humor Mode = subtle erlaubt höchstens dezente, kontextpassende und nicht abwertende Visuals. workshop-only erlaubt kreativere Meme-ähnliche Eigenvisualisierungen für interne Formate. Für Executive-, Audit-, Incident- und externe Reports ist Humor standardmäßig aus. Es werden keine ungeprüften Internet-Memes, geschützten Figuren, fremden Logos oder unklar lizenzierten Bilder übernommen. Bevorzugt werden eigene Diagramme, generierte Illustrationen, freigegebene Stock Assets oder textbasierte visuelle Analogien.
+`Humor Mode = subtle` erlaubt höchstens dezente, kontextpassende und nicht abwertende Visuals. `workshop-only` erlaubt kreativere Meme-ähnliche Eigenvisualisierungen für interne Formate. Für Executive-, Audit-, Incident- und externe Reports ist Humor standardmäßig aus. Es werden keine ungeprüften Internet-Memes, geschützten Figuren, fremden Logos oder unklar lizenzierten Bilder übernommen. Bevorzugt werden eigene Diagramme, generierte Illustrationen, freigegebene Stock Assets oder textbasierte visuelle Analogien.
 
 ### 10.11 Presentation Update Request
 
@@ -697,10 +646,10 @@ PDF und PPTX sind priorisierte Flagship-Ausgaben. Weitere Formate werden nur imp
 
 ### 13.1 Ebenen
 
-1. Plattform-Standardtheme: neutrales, professionelles Enterprise-Design.
-2. Betreiber-Theme: Logo, Farben, Schriften, Disclaimer und Standardlayouts eines Beratungs- oder Serviceanbieters.
-3. Mandanten-Theme: freigegebene Kundenmarke und kundenspezifische Titelseiten.
-4. Artefakt-Theme: kontrollierte Variante für Vorstand, Audit, Workshop oder externen Versand.
+1. **Plattform-Standardtheme:** neutrales, professionelles Enterprise-Design.
+2. **Betreiber-Theme:** Logo, Farben, Schriften, Disclaimer und Standardlayouts eines Beratungs- oder Serviceanbieters.
+3. **Mandanten-Theme:** freigegebene Kundenmarke und kundenspezifische Titelseiten.
+4. **Artefakt-Theme:** kontrollierte Variante für Vorstand, Audit, Workshop oder externen Versand.
 
 ### 13.2 Design Tokens
 
@@ -753,10 +702,10 @@ Ein veröffentlichter Report verwendet einen eingefrorenen Snapshot mit:
 
 ### 14.2 Live Preview versus freigegebene Fassung
 
-- Live Preview: aktualisiert sich mit aktuellen Daten und ist klar als dynamisch markiert.
-- Frozen Draft: stabiler Datenstand für Review.
-- Released Artifact: unveränderbarer, freigegebener Snapshot.
-- Current Web View: zeigt aktuelle Daten und verweist auf die letzte freigegebene Fassung.
+- **Live Preview:** aktualisiert sich mit aktuellen Daten und ist klar als dynamisch markiert.
+- **Frozen Draft:** stabiler Datenstand für Review.
+- **Released Artifact:** unveränderbarer, freigegebener Snapshot.
+- **Current Web View:** zeigt aktuelle Daten und verweist auf die letzte freigegebene Fassung.
 
 ### 14.3 Reproduzierbarkeit
 
@@ -773,7 +722,7 @@ Ein berechtigter Reviewer muss später nachvollziehen können:
 
 ### 15.1 Claim-Modell
 
-Eine materiale Aussage wird als Claim modelliert:
+Eine materiale Aussage wird als **Claim** modelliert:
 
 - Aussage,
 - Typ: Fakt, Interpretation, Prognose, Empfehlung oder Annahme,
@@ -1015,7 +964,7 @@ KI-generierte oder wesentlich umformulierte Inhalte speichern:
 - Prompt-/Aufgabenklasse,
 - Modell- und Konfigurationsversion,
 - Erstellzeit,
-- Confidence bzw. Prüfhinsweise [sic],
+- Confidence bzw. Prüfhinsweise,
 - menschliche Änderungen,
 - Reviewer und Freigabe.
 
@@ -1125,7 +1074,7 @@ Nicht als primäres Ziel verwenden:
 
 ### 25.1 CISO erzeugt Vorstandspräsentation
 
-1. CISO startet „Vorstandstermin vorbereiten" im Customer Workspace.
+1. CISO startet „Vorstandstermin vorbereiten“ im Customer Workspace.
 2. Plattform schlägt Zielgruppe, letzten freigegebenen Report und aktuellen Snapshot vor.
 3. Zwei Datenlücken und eine geänderte Risikomethode werden sichtbar.
 4. CISO bestätigt Storyline: Zielstatus, wesentliche Änderung, Investitionsentscheidung, nächste Schritte.
@@ -1138,7 +1087,7 @@ Nicht als primäres Ziel verwenden:
 ### 25.2 Berater bereitet kurzfristigen Kundentermin vor
 
 1. Morning Mission meldet sinkende Zielerreichung bei einem Mandanten.
-2. Berater öffnet „Kundenmeeting-Deck erzeugen".
+2. Berater öffnet „Kundenmeeting-Deck erzeugen“.
 3. Plattform zeigt Ursache: drei überfällige Maßnahmen, neue Threat-Relevanz, fehlende Evidence.
 4. Ein 8-Folien-Deck wird mit Executive Summary, Ursache, Route und drei Optionen erzeugt.
 5. Reise- und Termininfo erscheint in Speaker Notes und nicht im Kundenreport.
@@ -1187,17 +1136,17 @@ Nicht als primäres Ziel verwenden:
 2. Neue Risiken, Maßnahmen und KPI-Werte lösen einen Presentation Update Request aus.
 3. Die Engine erzeugt neuen Snapshot und Update-Diff.
 4. Charts, Tabellen und Standardnarrative werden aktualisiert; die Einleitung bleibt erhalten.
-5. Eine alte Aussage kollidiert mit dem aktuellen Trend und wird als review-on-change markiert.
+5. Eine alte Aussage kollidiert mit dem aktuellen Trend und wird als `review-on-change` markiert.
 6. CISO und Berater passen die Aussage an, Reviewer bestätigt Quellen und Storyline.
 7. Version 1.4 wird veröffentlicht; Version 1.3 bleibt archiviert und reproduzierbar.
 
 ### 25.8 Interner Workshop mit dezentem Creative Mode
 
 1. Ein Berater erstellt ein internes Workshop-Deck für Asset Owner.
-2. Audience Mode workshop und Humor Mode subtle werden bewusst aktiviert.
+2. Audience Mode `workshop` und Humor Mode `subtle` werden bewusst aktiviert.
 3. Die Engine nutzt eine eigene, rechtegeprüfte visuelle Analogie zur Priorisierung überfälliger Evidence.
 4. Fachliche Kernaussagen, Risiken und Owner bleiben unverändert und quellengebunden.
-5. Vor externer Nutzung fordert die Plattform den Wechsel auf formal oder eine zusätzliche Freigabe.
+5. Vor externer Nutzung fordert die Plattform den Wechsel auf `formal` oder eine zusätzliche Freigabe.
 
 ## 26. Demonstrator und synthetische Daten
 
@@ -1217,33 +1166,33 @@ Der Demonstrator muss mindestens folgende Szenen glaubwürdig unterstützen:
 12. Ein bestehendes CISO-Deck wird aktualisiert, ohne geschützte manuelle Einleitung zu überschreiben.
 13. Update-Diff zeigt geänderte Claims, Charts, Folien und erforderliche Reviews.
 14. Audience Mode wechselt zwischen Executive, Operational und Workshop aus demselben Snapshot.
-15. Humor Mode subtle ist nur in einem internen Workshop sichtbar und in Audit-/Executive-Cases deaktiviert.
+15. Humor Mode `subtle` ist nur in einem internen Workshop sichtbar und in Audit-/Executive-Cases deaktiviert.
 16. Presentation Update Request wird durch eine geänderte KPI-Definition oder einen neuen Research Claim ausgelöst.
 
 Synthetische Inhalte enthalten keine realen PwC-Daten, internen Preise oder geschützten Templates. Sie dürfen öffentlich recherchierbare Marktmechaniken und vollständig erfundene Unternehmen, Kennzahlen und Brandings verwenden.
 
 ## 27. Fehler- und Sonderfälle
 
-- Leerer Scope: Generierung wird blockiert; Nutzer erhält eine verständliche Scope-Auswahl.
-- Veraltete Daten: Preview zeigt Freshness-Warnung und betroffene Claims.
-- Widersprüchliche KPI-Werte: kein stiller Mittelwert; Reconciliation Request wird erzeugt.
-- Template fehlt: neutrales Standardtheme wird angeboten; kein Rendering mit beschädigtem Layout.
-- Rendering scheitert: technische Diagnose, Retry und keine Veröffentlichung eines defekten Artefakts.
-- Chart ist zu komplex: Engine schlägt Split, Appendix oder Tabellenalternative vor.
-- Report überschreitet Längengrenze: Hauptstory wird verdichtet; Details wandern in Appendix oder separates Datenartefakt.
-- Freigaber [sic] abwesend: Vertretungs- oder Eskalationsregel aus Dokument 11 greift.
-- Empfänger nicht berechtigt: Verteilung wird blockiert und protokolliert.
-- Manuell geänderte PPTX hochgeladen: als externer Fork gespeichert; kein automatischer Rückschreibvorgang.
-- KI-Text ohne Quellen: Block bleibt ungeprüft und kann nicht extern freigegeben werden.
-- Mehrsprachige Versionen weichen ab: Übersetzungsdiff und fachliche Reviewanforderung.
-- Abgelaufener Link: Zugriff endet; Package bleibt archiviert.
-- Widerruf: sicherer Link wird deaktiviert, Downloadhistorie bleibt sichtbar.
-- Große Evidence-Anhänge: werden als verknüpfte Datenraumobjekte statt unkontrolliert in PDF eingebettet.
-- Geschützter Text widerspricht aktuellen Daten: automatische Aktualisierung stoppt für diesen Block; Konflikt und Lösungsvorschlag werden angezeigt.
-- Manifest verweist auf unbekannte Template-Version: Build wird blockiert oder kontrolliert auf das freigegebene Standardtemplate zurückgesetzt.
-- Creative Asset besitzt unklare Rechte: Asset wird entfernt; neutrale Visualisierung wird verwendet.
-- Humor-Modus für ungeeignete Audience: System deaktiviert ihn oder fordert eine zusätzliche Freigabe.
-- Binärdatei wurde außerhalb des Builds verändert: Hashabweichung erzeugt Fork-/Tampering-Hinweis und verhindert stilles Überschreiben.
+- **Leerer Scope:** Generierung wird blockiert; Nutzer erhält eine verständliche Scope-Auswahl.
+- **Veraltete Daten:** Preview zeigt Freshness-Warnung und betroffene Claims.
+- **Widersprüchliche KPI-Werte:** kein stiller Mittelwert; Reconciliation Request wird erzeugt.
+- **Template fehlt:** neutrales Standardtheme wird angeboten; kein Rendering mit beschädigtem Layout.
+- **Rendering scheitert:** technische Diagnose, Retry und keine Veröffentlichung eines defekten Artefakts.
+- **Chart ist zu komplex:** Engine schlägt Split, Appendix oder Tabellenalternative vor.
+- **Report überschreitet Längengrenze:** Hauptstory wird verdichtet; Details wandern in Appendix oder separates Datenartefakt.
+- **Freigaber abwesend:** Vertretungs- oder Eskalationsregel aus Dokument 11 greift.
+- **Empfänger nicht berechtigt:** Verteilung wird blockiert und protokolliert.
+- **Manuell geänderte PPTX hochgeladen:** als externer Fork gespeichert; kein automatischer Rückschreibvorgang.
+- **KI-Text ohne Quellen:** Block bleibt ungeprüft und kann nicht extern freigegeben werden.
+- **Mehrsprachige Versionen weichen ab:** Übersetzungsdiff und fachliche Reviewanforderung.
+- **Abgelaufener Link:** Zugriff endet; Package bleibt archiviert.
+- **Widerruf:** sicherer Link wird deaktiviert, Downloadhistorie bleibt sichtbar.
+- **Große Evidence-Anhänge:** werden als verknüpfte Datenraumobjekte statt unkontrolliert in PDF eingebettet.
+- **Geschützter Text widerspricht aktuellen Daten:** automatische Aktualisierung stoppt für diesen Block; Konflikt und Lösungsvorschlag werden angezeigt.
+- **Manifest verweist auf unbekannte Template-Version:** Build wird blockiert oder kontrolliert auf das freigegebene Standardtemplate zurückgesetzt.
+- **Creative Asset besitzt unklare Rechte:** Asset wird entfernt; neutrale Visualisierung wird verwendet.
+- **Humor-Modus für ungeeignete Audience:** System deaktiviert ihn oder fordert eine zusätzliche Freigabe.
+- **Binärdatei wurde außerhalb des Builds verändert:** Hashabweichung erzeugt Fork-/Tampering-Hinweis und verhindert stilles Überschreiben.
 
 ## 28. Nicht-Ziele
 
@@ -1290,7 +1239,7 @@ Die Reporting Engine ist nicht:
 ## 30. Festgelegte Entscheidungen
 
 - **ENTSCHEIDUNG 12-01:** Das Report Package ist das kanonische Objekt für Planung, Snapshot, Inhalte, Governance, Artefakte, Verteilung und Outcome.
-- **ENTSCHEIDUNG 12-02:** Reporting folgt „One Source, Many Responsible Narratives".
+- **ENTSCHEIDUNG 12-02:** Reporting folgt „One Source, Many Responsible Narratives“.
 - **ENTSCHEIDUNG 12-03:** Zweck, Zielgruppe und gewünschte Handlung werden vor Format und Layout festgelegt.
 - **ENTSCHEIDUNG 12-04:** Veröffentlichte Reports verwenden einen eingefrorenen, reproduzierbaren Daten- und Methodenstand.
 - **ENTSCHEIDUNG 12-05:** Materiale Aussagen werden als Claims mit Quellen, Typ, Confidence, Owner und Gültigkeit modelliert.
@@ -1358,7 +1307,7 @@ Die Reporting Engine ist nicht:
 - interaktiver Board Mode mit Live-Entscheidungen,
 - Sprach- oder Meetingaufnahme zu freigabefähigem Decision Brief,
 - semantischer PPTX-Round-trip für ausgewählte Text- und Datenfelder,
-- automatisches „Slide Quality Review" für Überladung und unklare Botschaften,
+- automatisches „Slide Quality Review“ für Überladung und unklare Botschaften,
 - digitale Signatur und zertifizierte Archivfassung,
 - personalisierte Executive Audio Briefings,
 - interaktive PDF- oder Web-Anhänge mit Drill-down,
@@ -1368,7 +1317,7 @@ Die Reporting Engine ist nicht:
 - regulatorische Submission Packs,
 - integrierte Kundenkommentierung auf Folien-/Seitenebene,
 - Presenter Copilot mit Quellen und erwartbaren Fragen,
-- „Was hat sich seit der letzten Version geändert?"-Video oder Story,
+- „Was hat sich seit der letzten Version geändert?“-Video oder Story,
 - automatisches Redaction Preview für externe Empfänger,
 - Report Marketplace mit genehmigten Branchen- und Servicevorlagen,
 - chart-spezifische Daten- und Accessibility-Tests,
@@ -1385,29 +1334,29 @@ Die Reporting Engine ist nicht:
 
 ## 34. Dokumentenabhängigkeiten
 
-- Dokument 00: Master-Index, zentrale Wahrheit, Status und Änderungssteuerung.
-- Dokument 01: Produktvision, Nutzenversprechen und Business Case.
-- Dokument 02: Markt- und Wettbewerbsdifferenzierung durch Reporting, Decision Support und Managed Services.
-- Dokument 03: Zielgruppen, Rollen, Sprache, Arbeitssituationen und Entscheidungsrechte.
-- Dokument 04: Nutzerreisen für Meetings, Reports, Audits, Reviews und Servicezyklen.
-- Dokument 05: Modul M23 und angrenzende Produktfunktionen.
-- Dokument 06: UX/UI, Seitenlogik, Designsystem, Accessibility und rollenbezogene Erlebniswelten.
-- Dokument 07: digitaler Zwilling, Objektgraph, Historie, Provenance und Snapshots.
-- Dokument 08: ISMS-Prozesse, Audits, Evidenzen, Management Review und Maßnahmen.
-- Dokument 09: Risiko-, Reife-, Threat-, Control-, Confidence- und Methodensemantik.
-- Dokument 10: Decision Cards, KPIs, Simulationen, Zielrouten und Value Ledger.
-- Dokument 11: Review, Freigabe, Kommentare, Work Items, Benachrichtigungen und Handover.
-- Dokument 13: Reporting als Managed-Service-Betriebsprozess.
-- Dokument 14: Report- und Briefingservices, Pakete, SLAs und Preislogik.
-- Dokument 15: Beraterkapazität, Termin-, Reise- und Portfolio-Reporting.
-- Dokument 16: Onboarding, Strategie-DNA, Reportprofil und Lifecycle.
-- Dokument 17: Datenintegrationen, Reportautomatisierung, Trigger und Workflow Designer.
-- Dokument 18: technische Reporting-, Rendering-, Storage-, Event- und API-Architektur.
-- Dokument 19: Rechte, Datenschutz, Klassifikation, Exportkontrolle, Audit Logs und sichere Artefakte.
-- Dokument 20A: KI-Funktionen, Modellwahl, Provenance und Guardrails.
-- Dokument 20B: Agentenrollen für Reportplanung, Fachreview, Design, QA und Governance.
-- Dokument 20C: Claude-Code-Umsetzung, Renderingtests, Repository, Checkpoints und Dokumentation.
-- Dokument 21: Research-, Innovations- und Concept-Governance, Presentation Curator, Update Requests sowie Audience-/Creative-Regeln.
+- **Dokument 00:** Master-Index, zentrale Wahrheit, Status und Änderungssteuerung.
+- **Dokument 01:** Produktvision, Nutzenversprechen und Business Case.
+- **Dokument 02:** Markt- und Wettbewerbsdifferenzierung durch Reporting, Decision Support und Managed Services.
+- **Dokument 03:** Zielgruppen, Rollen, Sprache, Arbeitssituationen und Entscheidungsrechte.
+- **Dokument 04:** Nutzerreisen für Meetings, Reports, Audits, Reviews und Servicezyklen.
+- **Dokument 05:** Modul M23 und angrenzende Produktfunktionen.
+- **Dokument 06:** UX/UI, Seitenlogik, Designsystem, Accessibility und rollenbezogene Erlebniswelten.
+- **Dokument 07:** digitaler Zwilling, Objektgraph, Historie, Provenance und Snapshots.
+- **Dokument 08:** ISMS-Prozesse, Audits, Evidenzen, Management Review und Maßnahmen.
+- **Dokument 09:** Risiko-, Reife-, Threat-, Control-, Confidence- und Methodensemantik.
+- **Dokument 10:** Decision Cards, KPIs, Simulationen, Zielrouten und Value Ledger.
+- **Dokument 11:** Review, Freigabe, Kommentare, Work Items, Benachrichtigungen und Handover.
+- **Dokument 13:** Reporting als Managed-Service-Betriebsprozess.
+- **Dokument 14:** Report- und Briefingservices, Pakete, SLAs und Preislogik.
+- **Dokument 15:** Beraterkapazität, Termin-, Reise- und Portfolio-Reporting.
+- **Dokument 16:** Onboarding, Strategie-DNA, Reportprofil und Lifecycle.
+- **Dokument 17:** Datenintegrationen, Reportautomatisierung, Trigger und Workflow Designer.
+- **Dokument 18:** technische Reporting-, Rendering-, Storage-, Event- und API-Architektur.
+- **Dokument 19:** Rechte, Datenschutz, Klassifikation, Exportkontrolle, Audit Logs und sichere Artefakte.
+- **Dokument 20A:** KI-Funktionen, Modellwahl, Provenance und Guardrails.
+- **Dokument 20B:** Agentenrollen für Reportplanung, Fachreview, Design, QA und Governance.
+- **Dokument 20C:** Claude-Code-Umsetzung, Renderingtests, Repository, Checkpoints und Dokumentation.
+- **Dokument 21:** Research-, Innovations- und Concept-Governance, Presentation Curator, Update Requests sowie Audience-/Creative-Regeln.
 
 ## 35. Änderungsprotokoll
 

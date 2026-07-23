@@ -1,53 +1,13 @@
-# Dokument 18 - Technische Architektur & Plattformbetrieb
-
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_18_Technische_Architektur_Plattformbetrieb_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (alte Arbeitsfassung → diese Fassung nach PDF-Folientiteln): Die Hauptnummerierung 1-51 und alle Unterabschnitte sind unverändert; die alte Arbeitsfassung folgte der PDF-Zählung bereits exakt. Strukturelle Änderungen dieser Re-Ableitung:
->
-> | Alt (Arbeitsfassung) | Neu (PDF-Folientitel) |
-> |---|---|
-> | - (ohne Entsprechung; Deckblatt-Folie fehlte komplett) | unnummerierte Folie „Dokumentauftrag & Verbindlichkeit" mit Steuerungsfeld-Tabelle (Owner, Gültigkeit, Datenstatus, Änderungskontrolle) und Inhaltszeile, zwischen Titel und §1 |
-> | Metadatenfeld „Primäre Nachfolger: Dokument 19 bis 20C" im Kopf | ersatzlos entfallen — dieses Steuerungsfeld existiert im PDF nicht; der zugrunde liegende Satz steht jetzt vollständig (inkl. Nicht-Umgehungs-Pflicht) in der Deckblatt-Folie |
-> | Platzhalter `[[FIGURE:FIG1]]`, `[[FIGURE:FIG2]]`, `[[FIGURE:FIG4]]` ohne Text | Bildunterschriften wörtlich übernommen; grafischer Inhalt als benannte Lücke gekennzeichnet |
->
-> **PDF-interne Nummerierungskonflikte:** keine festgestellt. Folientitel und Navigations-/Inhaltszeile verwenden dieselbe Zählung 1-51. Einzige unnummerierte Einheit ist die Deckblatt-Folie „Dokumentauftrag & Verbindlichkeit"; sie wird über den Titel zitiert.
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Der Textlayer trägt Bildunterschriften nur zu Abbildung 1, 2 und 4; eine „Abbildung 3" existiert im Textlayer nicht — die Abbildungszählung springt von 2 auf 4.
-> - §1 „Auftrag und Abgrenzung" enthält die Formulierung „betrieben, beobachtet, skaliert, gesichert, gesichert wiederhergestellt und kontrolliert weiterentwickelt" — die Doppelung „gesichert, gesichert wiederhergestellt" ist wörtlich transkribiert, nicht geglättet.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Abbildung 1 (nach §2), Abbildung 2 (§11) und Abbildung 4 (§31): Nur die Bildunterschriften sind textlich extrahierbar; der grafische Inhalt ist im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04. Nichts davon wurde aus der Alt-Fassung oder aus dem Gedächtnis rekonstruiert.
-> - Steuerungsfeld-Tabelle sowie Tabellen in §4, §5, §6, §11.2, §23, §29 und §51: Die Spaltengrenzen wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellen zeilenweise verschmilzt (besonders Zeile „C - Dedicated" in §11.2, die über einen Seitenumbruch läuft). Wortlaut unverändert.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-Umsetzbares Enterprise-Zielbild für modularen Kern, Tenant Isolation, Daten, Events, Workflows, Reporting, Deployment, Resilienz, Observability und kontrollierte Evolution.
-
-Referenzarchitektur: modular entwickeln, getrennt betreiben und nur bei echtem Bedarf verteilen
+# Dokument 18 – Technische Architektur & Plattformbetrieb
 
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
 **Version:** 1.0  
 **Status:** Erstellt  
 **Stand:** 22.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 17
+**Abhängigkeiten:** Dokument 00 bis 17  
+**Primäre Nachfolger:** Dokument 19 bis 20C
 
 ---
-
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 18 ist die kanonische technische Quelle für Laufzeitkomponenten, Modulgrenzen, führende Datenhaltung, Graphrepräsentation, Mandantenfähigkeit, APIs, Events, Workflow Runtime, Object Storage, Reporting Worker, Deployment, Skalierung, Resilienz, Backup, Observability und Plattformbetrieb. Dokument 19 bis 20C konkretisieren Sicherheit, KI, Agenten und Implementierung, dürfen diese Architekturgrenzen aber nicht still umgehen.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 18 |
-| Status | Erstellt – Version 1.0 |
-| Owner | Chief Architect / Platform Engineering Owner |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Datenstatus | Alle Unternehmen, Nutzer, Reports, Integrationen, Lasten und Betriebsereignisse der Demo sind synthetisch. |
-| Änderungskontrolle | Änderungen an System of Record, Tenant Isolation, Event Backbone, Workflow Runtime, Storage, Identity, Backup, RPO/RTO oder Modulgrenzen benötigen ADR, Impactanalyse, Tests und Freigabe. |
-
-**Inhalt:** 1 Auftrag · 2 Summary · 3 Verfassung · 4 Zielarchitektur · 5 Domänenmodule · 6 Technologien · 7 Frontend · 8 Backend · 9 Datenbank · 10 Graph · 11 Mandanten · 12 Identity · 13 APIs · 14 Events · 15 Workflow · 16 Connector Runtime · 17 Storage · 18 Reporting · 19 Suche/Read Models · 20 Cache · 21 Konsistenz · 22 Audit · 23 Umgebungen · 24 Deployment · 25 CI/CD · 26 Konfiguration · 27 Skalierung · 28 Resilienz · 29 Performance · 30 Backup/DR · 31–33 Observability & Operations · 34–37 Security, Datenschutz, Kosten & Qualität · 38 Demo · 39 Evolution · 40 Governance · 41–43 Szenarien · 44–51 Akzeptanz, Entscheidungen, Quellen und Änderungen
 
 ## 1. Auftrag und Abgrenzung
 
@@ -70,7 +30,7 @@ Nicht Gegenstand dieses Dokuments sind die vollständigen Sicherheits-, Datensch
 
 ## 2. Executive Summary
 
-Die Plattform wird in der ersten produktfähigen Ausbaustufe als modularer Monolith mit getrennten Laufzeit-Workern gebaut. Das ist eine bewusste Entscheidung gegen einen vorzeitigen Microservice-Zoo. Fachlogik, Berechtigungsentscheidungen und Transaktionsgrenzen bleiben in einem klar strukturierten Backend; langlaufende, ressourcenintensive oder extern gekoppelte Aufgaben wie Connector-Synchronisation, Workflow-Ausführung, Report-Rendering, Benachrichtigungen und geplante Jobs laufen in separaten Worker-Prozessen. Alle Komponenten teilen definierte Verträge, werden aber unabhängig skaliert und überwacht.
+Die Plattform wird in der ersten produktfähigen Ausbaustufe als **modularer Monolith mit getrennten Laufzeit-Workern** gebaut. Das ist eine bewusste Entscheidung gegen einen vorzeitigen Microservice-Zoo. Fachlogik, Berechtigungsentscheidungen und Transaktionsgrenzen bleiben in einem klar strukturierten Backend; langlaufende, ressourcenintensive oder extern gekoppelte Aufgaben wie Connector-Synchronisation, Workflow-Ausführung, Report-Rendering, Benachrichtigungen und geplante Jobs laufen in separaten Worker-Prozessen. Alle Komponenten teilen definierte Verträge, werden aber unabhängig skaliert und überwacht.
 
 Das technische Referenzbild verwendet:
 
@@ -87,15 +47,13 @@ Das technische Referenzbild verwendet:
 - OpenTelemetry-basierte Traces, Metriken und Logs,
 - containerisierte lokale, Test-, Demo- und Produktionsumgebungen.
 
-Die Architektur ist API-first, event-aware und tenant-aware, aber nicht „distributed by default". Jeder Request, jedes Event, jeder Job, jeder Dateiobjektpfad und jede Auditspur trägt einen expliziten Tenant Context. Die Standard-Isolation nutzt eine gemeinsame PostgreSQL-Datenbank mit tenant_id, Row Level Security und tenantbezogenen Storage-Prefixes. Höhere Assurance-Stufen können später dedizierte Schemas, Datenbanken oder Deployments erhalten, ohne das fachliche Modell zu ändern.
+Die Architektur ist **API-first, event-aware und tenant-aware**, aber nicht „distributed by default“. Jeder Request, jedes Event, jeder Job, jeder Dateiobjektpfad und jede Auditspur trägt einen expliziten Tenant Context. Die Standard-Isolation nutzt eine gemeinsame PostgreSQL-Datenbank mit `tenant_id`, Row Level Security und tenantbezogenen Storage-Prefixes. Höhere Assurance-Stufen können später dedizierte Schemas, Datenbanken oder Deployments erhalten, ohne das fachliche Modell zu ändern.
 
 Der digitale Unternehmenszwilling bleibt im ersten Build in PostgreSQL führend. Eine Graph-Abstraktion kapselt Knoten- und Kantenoperationen, sodass bei nachgewiesenem Bedarf eine spezialisierte Graphprojektion ergänzt werden kann. Ein separater Search Index ist ebenfalls nur eine Projektion; weder Suchindex noch Cache noch Queue dürfen zur einzigen Quelle fachlicher Wahrheit werden.
 
-Für Zuverlässigkeit gilt das Muster Transaction + Outbox + Idempotent Worker + Checkpoint. Ein fachlicher Befehl speichert Zustand, Auditinformation und Outbox Event atomar. Worker verarbeiten Events mindestens einmal, aber idempotent. Langlaufende Workflows speichern nach jedem stabilen Schritt einen Checkpoint und können nach Prozess-, Deployment- oder Chatunterbrechung fortgesetzt werden. Diese technische Wiederaufnahme ergänzt die in Dokument 20C definierte Entwicklungswiederaufnahme über GitHub.
+Für Zuverlässigkeit gilt das Muster **Transaction + Outbox + Idempotent Worker + Checkpoint**. Ein fachlicher Befehl speichert Zustand, Auditinformation und Outbox Event atomar. Worker verarbeiten Events mindestens einmal, aber idempotent. Langlaufende Workflows speichern nach jedem stabilen Schritt einen Checkpoint und können nach Prozess-, Deployment- oder Chatunterbrechung fortgesetzt werden. Diese technische Wiederaufnahme ergänzt die in Dokument 20C definierte Entwicklungswiederaufnahme über GitHub.
 
-*Abbildung 1: Die Referenzarchitektur verbindet rollenbezogene Erlebnisse, modularen Fachkern, getrennte Laufzeitdienste, führende Datenhaltung und reproduzierbaren Plattformbetrieb.*
-
-[Abbildung 1, grafischer Inhalt: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG1]]
 
 ## 3. Architekturverfassung
 
@@ -130,15 +88,15 @@ Für Zuverlässigkeit gilt das Muster Transaction + Outbox + Idempotent Worker +
 - Graphdatenbank, Suchindex oder Redis als alleinige Quelle fachlicher Wahrheit,
 - verteilte Transaktionen über mehrere Systeme,
 - synchrone Ketten externer APIs im Nutzerrequest,
-- unversionierte Events oder „JSON ohne Vertrag",
+- unversionierte Events oder „JSON ohne Vertrag“,
 - direkte Dateilinks ohne autorisierte Zugriffsschicht,
-- produktive Secrets in .env-Dateien, GitHub oder Demo-Konfiguration,
+- produktive Secrets in `.env`-Dateien, GitHub oder Demo-Konfiguration,
 - Datenbankmigrationen beim ersten Nutzerrequest,
 - Deployments ohne Health Checks, Rollback und Datenbankkompatibilität,
 - Logs mit Zugangstokens, Passwörtern, vollständigen Nachweisen oder unnötigen Personendaten,
 - automatisch aktivierte KI als Voraussetzung für Kernfunktionen,
 - ein universeller Super-Admin ohne dokumentierten Break-Glass-Prozess,
-- „High Availability" als Marketingbegriff ohne SLO, Failure Mode und Test.
+- „High Availability“ als Marketingbegriff ohne SLO, Failure Mode und Test.
 
 ## 4. Zielarchitektur und Laufzeitkomponenten
 
@@ -310,7 +268,7 @@ PostgreSQL speichert:
 
 ### 9.2 Schemaorganisation
 
-Der erste Build nutzt eine Datenbank mit logisch getrennten Modulbereichen. Tabellen besitzen einen eindeutigen Modulpräfix oder modulbezogene Schemas. Gemeinsame tenantbezogene Tabellen enthalten tenant_id als nicht-nullbaren Bestandteil der Schlüssel- und Indexstrategie.
+Der erste Build nutzt eine Datenbank mit logisch getrennten Modulbereichen. Tabellen besitzen einen eindeutigen Modulpräfix oder modulbezogene Schemas. Gemeinsame tenantbezogene Tabellen enthalten `tenant_id` als nicht-nullbaren Bestandteil der Schlüssel- und Indexstrategie.
 
 ### 9.3 Migrationsprinzipien
 
@@ -337,7 +295,7 @@ Der digitale Zwilling wird zunächst relational gespeichert. Das Graph Repositor
 
 - Kernobjekte mit umfangreicher eigener Semantik erhalten eigene Tabellen.
 - Generische Twin-Knoten besitzen eine gemeinsame Identität, Typ, Status und Metadaten.
-- Beziehungen liegen in einer Edge-Tabelle mit source_id, target_id, Beziehungstyp, Gültigkeit, Provenance und Tenant.
+- Beziehungen liegen in einer Edge-Tabelle mit `source_id`, `target_id`, Beziehungstyp, Gültigkeit, Provenance und Tenant.
 - Häufige Pfade und Aggregationen erhalten spezialisierte Indizes oder Materialized Views.
 - Graphberechnungen mit langer Laufzeit werden asynchron ausgeführt und als Projection gespeichert.
 
@@ -354,13 +312,11 @@ Die Graphdatenbank wäre dann Projektion, solange keine spätere Architekturents
 
 ## 11. Mandantenfähigkeit und Isolation
 
-*Abbildung 2: Mandanten können bei gemeinsamer Produktlogik über abgestufte Daten-, Schlüssel-, Laufzeit- und Deploymentgrenzen isoliert werden.*
-
-[Abbildung 2, grafischer Inhalt: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG2]]
 
 ### 11.1 Standardmodell
 
-Der Standard für Demo, Entwicklung und frühe Piloten ist Shared Database, Shared Schema, Tenant ID und Row Level Security. Die Anwendung setzt zusätzlich tenantbewusste Repositories und Policy Checks ein. RLS ist eine zweite technische Schutzschicht, nicht die einzige.
+Der Standard für Demo, Entwicklung und frühe Piloten ist **Shared Database, Shared Schema, Tenant ID und Row Level Security**. Die Anwendung setzt zusätzlich tenantbewusste Repositories und Policy Checks ein. RLS ist eine zweite technische Schutzschicht, nicht die einzige.
 
 ### 11.2 Isolationsstufen
 
@@ -372,7 +328,7 @@ Der Standard für Demo, Entwicklung und frühe Piloten ist Shared Database, Shar
 
 ### 11.3 Verbindliche Tenant-Regeln
 
-- tenant_id wird serverseitig aus Session oder signiertem Jobkontext bestimmt, nicht aus frei vertrauenswürdigen Requestfeldern.
+- `tenant_id` wird serverseitig aus Session oder signiertem Jobkontext bestimmt, nicht aus frei vertrauenswürdigen Requestfeldern.
 - Jeder Job und Event enthält Tenant, Correlation und Actor/System Context.
 - Tenant Context wird vor jedem Datenzugriff gesetzt und nach Verarbeitung verworfen.
 - Es gibt keine tenantlosen fachlichen Tabellen außer expliziten globalen Referenzdaten.
@@ -412,7 +368,7 @@ Das vollständige Rollen-, Rechte-, Break-Glass- und Supportzugriffsmodell folgt
 - Filter, Sortierung und Feldauswahl sind allowlist-basiert.
 - Responses enthalten stabile IDs, Version/ETag und relevante Links.
 - Mutationen unterstützen Optimistic Concurrency.
-- Lange Operationen antworten mit 202 Accepted, Job-ID und Statuslink.
+- Lange Operationen antworten mit `202 Accepted`, Job-ID und Statuslink.
 - Rate Limits unterscheiden Nutzer-, Tenant-, Integration- und Exportlast.
 - API-Versionierung erfolgt kompatibel; Breaking Changes benötigen Parallelbetrieb oder Migrationsfenster.
 
@@ -450,7 +406,7 @@ Jedes Event enthält mindestens:
 
 ## 15. Workflow Runtime
 
-Die erste Workflow Runtime ist eine PostgreSQL-gestützte Zustandsmaschine mit Queue-basierten Workern. Sie implementiert die Semantik aus Dokument 17, ohne im Prototyp zwingend einen externen Workflowanbieter vorauszusetzen.
+Die erste Workflow Runtime ist eine **PostgreSQL-gestützte Zustandsmaschine mit Queue-basierten Workern**. Sie implementiert die Semantik aus Dokument 17, ohne im Prototyp zwingend einen externen Workflowanbieter vorauszusetzen.
 
 ### 15.1 Workflowzustand
 
@@ -597,7 +553,7 @@ Ein Redis-Verlust darf zu Verzögerung oder Requeue führen, nicht zu dauerhafte
 
 - Innerhalb eines Aggregats und einer Datenbanktransaktion gilt starke Konsistenz.
 - Zwischen Modulen und Projektionen gilt nachvollziehbare Eventual Consistency.
-- UI zeigt bei relevanten Projektionen Datenfrische und gegebenenfalls „wird aktualisiert".
+- UI zeigt bei relevanten Projektionen Datenfrische und gegebenenfalls „wird aktualisiert“.
 - Kritische Entscheidungen verwenden führende Daten oder einen freigegebenen Snapshot, nicht einen möglicherweise veralteten Cache.
 
 ### 21.2 Nebenläufigkeit
@@ -805,8 +761,8 @@ Zusätzlich gelten Budgets für Bundlegröße, Web Vitals, Queue Waiting Time, D
 
 Für Standardproduktion wird zunächst angenommen:
 
-- RPO: höchstens 15 Minuten für führende Fachwerte,
-- RTO: höchstens 4 Stunden für Kernplattform,
+- **RPO:** höchstens 15 Minuten für führende Fachwerte,
+- **RTO:** höchstens 4 Stunden für Kernplattform,
 - strengere Profile können dedizierte, kostenpflichtige Optionen erhalten.
 
 Diese Werte sind keine zugesagte SLA, bis Dokument 14 und Betreiberentscheidung sie bestätigen.
@@ -821,9 +777,7 @@ Diese Werte sind keine zugesagte SLA, bis Dokument 14 und Betreiberentscheidung 
 
 ## 31. Observability-Architektur
 
-*Abbildung 4: Observability verbindet technische Signale mit fachlicher Auswirkung, Recovery, Postmortems und laufender Verbesserung.*
-
-[Abbildung 4, grafischer Inhalt: im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG4]]
 
 OpenTelemetry dient als vendorneutrale Instrumentierung für Traces, Metrics und Logs. Telemetrie wird durch Correlation-, Causation-, Tenant-, Actor-, Module- und Workflowinformationen verbunden.
 
@@ -1293,7 +1247,7 @@ Automatisierte Fitness Functions prüfen:
 - automatische Restore-Game-Days,
 - Chaos Engineering für Connector-, Queue- und Reportpfade,
 - adaptive Autoscaling-Regeln auf Basis von fachlicher Priorität,
-- zeitlich rekonstruierbare Twin- und Decision-Snapshots als „Platform Time Machine".
+- zeitlich rekonstruierbare Twin- und Decision-Snapshots als „Platform Time Machine“.
 
 ## 49. Dokumentenabhängigkeiten
 

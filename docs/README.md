@@ -19,7 +19,8 @@ Die Produktwahrheit hat **drei Schichten**. Wer nur eine liest, baut falsch:
 ├─ 1. BASIS ────────────────────── docs/concept/pdf/ (24 PDFs) ────────────┤
 │   Die vom Owner geschriebenen Originale. REGEL NULL: hieraus wird        │
 │   abgeleitet. docs/concept/active/*.md sind die Arbeitsfassungen         │
-│   (Dok. 03–07 quellentreu; Rest: FINDING-0007 beachten).                 │
+│   (Dok. 00, 03–18, 20B, 20C quellentreu — WP-019/023; 01/19/20A/21:      │
+│   kleine unkorrigierte Abweichungen).                                    │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -34,7 +35,7 @@ Konzeptänderungen laufen als Change Proposal (`research/change-proposals/`) mit
 | Pfad | Inhalt | Status |
 |---|---|---|
 | `docs/concept/pdf/` | **Schicht 1: die 24 Original-PDFs** (Regel Null) | verbindlich |
-| `docs/concept/active/` | Markdown-Arbeitsfassungen (Kopfnotiz beachten: Dok. 03–07 quellentreu) | Arbeitskopie |
+| `docs/concept/active/` | Markdown-Arbeitsfassungen (Kopfnotiz je Datei; quellentreu bis auf Dok. 01/19/20A/21) | Arbeitskopie |
 | `docs/concept/abgleich/` | PDF↔Markdown-Abgleich + WP-019-Nachtrag (inkl. 11 WP-020-Punkte) | Befund |
 | `docs/concept/archive/` | abgelöste Konzeptfassungen | nur Historie |
 | `docs/decisions/` | **Schicht 2: Owner-/Produktentscheidungen (DR-0001…)** | verbindlich |

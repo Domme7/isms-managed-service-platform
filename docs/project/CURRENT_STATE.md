@@ -10,11 +10,14 @@ PDFs, Dok. 14/16 zuerst). Details: `ACTIVE_WORK_PACKAGE.md`
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Lauffähige Demo-App (Shell + Heute + Zwilling + ISMS + Services + **Entscheidungen** + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
-**Konzeptstatus:** Produktwahrheit sind die 24 **PDF-Originale** (DR-0006). **Dok. 03–07 sind seit
-WP-019 quellentreu nachgezogen** (Vollableitung + Konsistenz-Gate je Dokument, Kopfnotiz mit
-Konkordanz); **14 material abweichende Dokumente stehen noch aus** (WP-023), ebenso der
-automatische Treue-Check (O-WP019-01/WP-024). Rohbefund + Nachtrag: `docs/concept/abgleich/`.
-Manifest per `scripts/update_manifest.py` regenerierbar — Hashes sagen nichts über PDF-Treue.
+**Konzeptstatus:** Produktwahrheit sind die 24 **PDF-Originale** (DR-0006). **Alle schwerwiegend
+und material abweichenden Fassungen sind quellentreu nachgezogen** — Dok. 03–07 (WP-019) und
+Dok. 00, 08–18, 20B, 20C (**WP-023**, 2026-07-23: Vollableitung + unabhängiges Konsistenz-Gate
+je Dokument; 13× FREIGABE Runde 1, Dok. 10 inhaltlich bestanden, Befund war nur die fehlende
+Archivkopie — für alle 14 nachgezogen). **Unkorrigiert (bewusst):** Dok. 01, 19, 20A, 21 (kleine
+Abweichungen) · Dok. 02 (treu). Autoritätsrückgabe ans Markdown erst nach dem automatischen
+Treue-Check (O-WP019-01/WP-024) — **Regel Null gilt unverändert**. Rohbefund + Nachträge:
+`docs/concept/abgleich/`. Manifest per `scripts/update_manifest.py` regeneriert.
 
 ## Gesichert
 
@@ -61,7 +64,7 @@ sichtbare Abnahme). Jede mit Empfehlung und Default — **keine blockiert den We
 | ID | Kurz | Schwere | blockiert? |
 |---|---|---|---|
 | **FINDING-0009** | **Cross-Tenant-Leak im /services-Leerzustand** (seit WP-012, dritte Instanz der Leak-Klasse) — behoben in WP-020 Slice 1 (`7971bc6`), Wächter erweitert | mittel | nein — **Security-Gate-Verifikation im WP-020-Review ausstehend** |
-| **FINDING-0007** | **Markdown-Ableitung der Konzeptdokumente nicht verlustfrei** — es wurde aus einer ungeprüften Interpretation gebaut | **hoch** | blockiert nichts sofort, aber **jedes neue WP muss ab jetzt am PDF gegenlesen**; **WP-023 läuft parallel (DR-0010)** |
+| **FINDING-0007** | **Markdown-Ableitung der Konzeptdokumente nicht verlustfrei** — es wurde aus einer ungeprüften Interpretation gebaut | **hoch → weitgehend behoben** | Kern behoben: alle 5 schwerwiegenden (WP-019) + alle 14 materialen (WP-023) Fassungen quellentreu. Rest: 4 kleine Abweichungen (01/19/20A/21) + Treue-Check (WP-024). **Regel Null bleibt in Kraft** |
 | FINDING-0008 | `<dl role="group">` entfernt die Listensemantik — 3× serious (axe, WCAG 1.3.1) auf den Kontextzeilen von /heute, /entscheidungen, Objekt-360; der A11y-Fix aus WP-014 hatte eine ungemessene Kehrseite | mittel | nein — Korrektur als Folge-WP mit Product Gate |
 | FINDING-0006 | Domain Gate und QA Gate waren nie besetzt (4 von 9 Gates aus Dok. 20B §36) | mittel | in Behebung ab WP-017 |
 | FINDING-0005 | Kein Linter im Stack | niedrig | **geschlossen 2026-07-23** (WP-018: Biome, ADR-0003) |

@@ -1,45 +1,12 @@
-# Dokument 09 - Reifegrad, Risiken, Bedrohungen & Control Intelligence
-
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_09_Reifegrad_Risiken_Bedrohungen_Control_Intelligence_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (alte Arbeitsfassung, in dieser Datei ersetzt → diese Fassung nach PDF-Folientiteln). Die Hauptabschnitte 1-32 und alle Unterabschnitte (4.1-4.3, 5.1-5.5, ... 25.1-25.3) sind zwischen alter Fassung und PDF identisch nummeriert; Zitate auf Paragraphen von Dokument 09 bleiben gültig. Abweichungen betreffen ausschließlich den Vorspann:
->
-> | Alt (Arbeitsfassung) | Neu (PDF-Folientitel) |
-> |---|---|
-> | Kopffeld „Zweck" (verdichtete Eigenformulierung „Verbindliches Bewertungs-, Vertrauens- und Entscheidungsmodell ...") | Untertitel der Titelfolie, wörtlich: „Erklärbare Bewertungs-, Vertrauens- und Entscheidungslogik für ein lebendes, zielorientiertes ISMS." |
-> | Blockquote „Zentrale Festlegung" (vor §1) | - (ersatzlos entfallen; im PDF nicht vorhanden, vgl. Rohbefund Dok. 09) |
-> | - (ohne Entsprechung) | unnummerierte Folie „Dokumentauftrag & Verbindlichkeit" (vor §1) mit Kanonizitätsregel, Steuerungsfeld-Tabelle und Inhaltszeile |
-> | - (ohne Entsprechung) | Titelfolien-Angabe „ABHÄNGIGKEITEN Dokument 00 bis 08" |
-> | §1 bis §32 inkl. aller Unterabschnitte | unverändert identisch |
->
-> **PDF-interne Nummerierungskonflikte:** Die Folientitel-Zählung 1-32 ist durchgängig und deckt sich mit der Inhaltszeile auf PDF-Seite 2. Eine Anomalie besteht bei nummerierten Listen: Im PDF laufen die Aufzählungen in §12.2 (Punkte 5-12), §17.1 (Punkte 13-22) und §23.1 (Punkte 23-32) dokumentweit durch (Word-Listenfehler des Originals). In dieser Fassung sind sie auf 1-8 bzw. 1-10 bzw. 1-10 normalisiert; Reihenfolge, Anzahl und Wortlaut der Punkte sind unverändert. Wer gegen das PDF zitiert, beachte die dortige Durchzählung.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - **Abbildungen:** Der Textlayer des PDFs trägt keinerlei Abbildungstext. Die alte Arbeitsfassung markierte drei Abbildungsplatzhalter (nach §3, zwischen §12.2 und §13, zu Beginn von §17); Existenz, Position und Inhalt dieser Abbildungen sind aus dem Textlayer nicht verifizierbar und wurden NICHT rekonstruiert. An den drei Stellen steht eine benannte Lücke; visuelle Verifikation offen, vgl. O-WP019-04.
-> - **Tabellen:** Die Spaltengrenzen der Tabellen (Steuerungsfeld, §4.1, §5.2, §7.1, §13, §18.1, §24, §32) wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellen bei Zeilenumbrüchen verschmilzt; der Wortlaut je Zelle ist unverändert.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-Erklärbare Bewertungs-, Vertrauens- und Entscheidungslogik für ein lebendes, zielorientiertes ISMS.
+# Dokument 09 - Reifegrad, Risiken, Bedrohungen und Control Intelligence
 
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
-**Version:** 1.0  |  **Status:** Erstellt  |  **Stand:** 21.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 08
+**Version:** 1.0  
+**Status:** Erstellt  
+**Stand:** 21.07.2026  
+**Zweck:** Verbindliches Bewertungs-, Vertrauens- und Entscheidungsmodell für Reifegrad, Zielerreichung, Risiken, Bedrohungssignale und Control-Wirksamkeit.
 
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 09 ist die kanonische fachliche Quelle für Reifegrad-, Risiko-, Threat-, Control- und Confidence-Logik. Nachfolgende Dokumente dürfen diese Modelle visualisieren, technisch implementieren oder profilspezifisch konfigurieren, aber nicht still semantisch verändern.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 09 |
-| Status | Erstellt - Version 1.0 |
-| Owner | Product Architecture / ISMS Method Owner |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Änderungskontrolle | Methoden-, Gewichtungs- und Schwellenänderungen benötigen Version, Begründung, Impactanalyse und Freigabe. |
-| Zentrale Nachfolger | Dokument 10, 17, 18, 19, 20A und 20C |
-
-**Inhalt:** 1 Auftrag · 2 Executive Summary · 3 Prinzipien · 4 Strategie-DNA · 5 bis 7 Reife und Confidence · 8 bis 11 Risiko · 12 bis 14 Threat/Vulnerability · 15 bis 17 Control Intelligence · 18 Zielerreichung/Readiness · 19 Benchmarking · 20 Erklärbarkeit · 21 KI-Grenzen · 22 Rollen · 23 Szenarien · 24 bis 32 Governance und Übergaben
+> **Zentrale Festlegung:** Die Plattform zeigt niemals nur einen Score. Jede verdichtete Aussage wird in fachliche Bedeutung, Datenstand, Ursachen, Unsicherheit, Zielbezug und nächste sinnvolle Handlung zerlegt. Reifegrad, Risiko, Control-Wirksamkeit und Vertrauen bleiben getrennte Dimensionen und werden erst für konkrete Entscheidungen zusammengeführt.
 
 ## 1. Dokumentauftrag und Abgrenzung
 
@@ -58,7 +25,7 @@ Die Plattform führt vier heute häufig vermischte Fragen bewusst auseinander:
 3. **Control Intelligence:** Welche Schutzwirkung liefern vorhandene Controls im konkreten Scope tatsächlich?
 4. **Vertrauen:** Wie vollständig, aktuell, unabhängig und nachvollziehbar ist die Datengrundlage der Aussage?
 
-Aus diesen Dimensionen entsteht keine einzige magische Sicherheitszahl. Die Plattform bildet stattdessen einen erklärbaren Entscheidungsraum: Zielzustand, aktueller Zustand, relevante Veränderungen, Ursachen, Handlungsoptionen, erwartete Wirkung, Kosten, Abhängigkeiten und Confidence. Kunden können unterschiedliche Zielprofile verfolgen - etwa ein pragmatisches Mindestniveau, einen definierten Reifegrad, eine regulatorische Pflichterfüllung, Zertifizierungsbereitschaft oder ein resilienzorientiertes Unternehmensziel.
+Aus diesen Dimensionen entsteht keine einzige magische Sicherheitszahl. Die Plattform bildet stattdessen einen **erklärbaren Entscheidungsraum**: Zielzustand, aktueller Zustand, relevante Veränderungen, Ursachen, Handlungsoptionen, erwartete Wirkung, Kosten, Abhängigkeiten und Confidence. Kunden können unterschiedliche Zielprofile verfolgen - etwa ein pragmatisches Mindestniveau, einen definierten Reifegrad, eine regulatorische Pflichterfüllung, Zertifizierungsbereitschaft oder ein resilienzorientiertes Unternehmensziel.
 
 Bedrohungen werden nicht pauschal auf alle Kunden verteilt. Ein Signal wird erst relevant, wenn technische oder organisatorische Anwendbarkeit, betroffene Assets, Geschäftsbezug, Exposition und Control-Lücken zusammenpassen. Danach entsteht ein nachvollziehbarer Pfad: Signal -> Relevanz -> Risikoszenario -> Control-Impact -> Entscheidung -> Maßnahme oder Managed Service -> Wirksamkeitsprüfung.
 
@@ -80,11 +47,11 @@ Bedrohungen werden nicht pauschal auf alle Kunden verteilt. Ein Signal wird erst
 - **M14 - Kalibrierung statt Dogma:** Referenzgewichtungen sind Startwerte und werden anhand Zielprofil, Kundenerfahrung und Validierung versioniert angepasst.
 - **M15 - Vergleich nur bei Vergleichbarkeit:** Benchmarks zeigen Population, Scope, Datenqualität und Methodenversion.
 
-> [Abbildung: laut alter Arbeitsfassung an dieser Stelle vorhanden; im Textlayer nicht lesbar — Existenz, Position und Inhalt visuell unbestätigt, vgl. O-WP019-04]
+[[FIGURE:FIG2]]
 
 ## 4. Strategie-DNA und Zielprofile
 
-Die Strategie-DNA beschreibt, wie ein Kunde Informationssicherheit steuern will. Sie ist keine Marketingpersona, sondern eine versionierte Konfiguration, die Schwellenwerte, Priorisierung, Tiefe und Kommunikationsform beeinflusst.
+Die **Strategie-DNA** beschreibt, wie ein Kunde Informationssicherheit steuern will. Sie ist keine Marketingpersona, sondern eine versionierte Konfiguration, die Schwellenwerte, Priorisierung, Tiefe und Kommunikationsform beeinflusst.
 
 ### 4.1 Pflichtdimensionen der Strategie-DNA
 
@@ -111,7 +78,7 @@ Die Strategie-DNA beschreibt, wie ein Kunde Informationssicherheit steuern will.
 - **Transformation-Profil:** Sicherheitsanforderungen für Cloud, M&A, Produktlaunch oder Organisationsumbau.
 - **Hybrid-Profil:** Kombination mehrerer Zieltypen mit expliziter Prioritätsregel.
 
-Ein Kunde kann mehrere Profile parallel führen. Die Plattform benötigt jedoch ein primäres Steuerungsprofil, damit tägliche Mission, Eskalationen und Zielroute nicht widersprüchlich werden.
+Ein Kunde kann mehrere Profile parallel führen. Die Plattform benötigt jedoch ein **primäres Steuerungsprofil**, damit tägliche Mission, Eskalationen und Zielroute nicht widersprüchlich werden.
 
 ### 4.3 Zielkonflikte
 
@@ -121,7 +88,7 @@ Typische Konflikte sind maximale Nachweistiefe versus Geschwindigkeit, niedrige 
 
 ### 5.1 Reife ist eine Fähigkeitseigenschaft
 
-Reife wird für eine klar definierte Capability im Scope bewertet, nicht pauschal für das gesamte Unternehmen. Beispiele sind Identity Governance, Supplier Security, Incident Management oder Policy Lifecycle. Eine Capability kann mehrere Controls und Prozesse enthalten.
+Reife wird für eine klar definierte **Capability im Scope** bewertet, nicht pauschal für das gesamte Unternehmen. Beispiele sind Identity Governance, Supplier Security, Incident Management oder Policy Lifecycle. Eine Capability kann mehrere Controls und Prozesse enthalten.
 
 ### 5.2 Referenzskala 0 bis 5
 
@@ -151,9 +118,7 @@ Die Plattform darf eine hohe Reife nicht allein aus Dokumentation ableiten. Ein 
 
 Für Demonstrator und Standardprofil gilt als transparente Ausgangslogik:
 
-```
-Maturity = 0,20 × Design + 0,25 × Implementierung + 0,20 × Betrieb + 0,35 × Wirksamkeit
-```
+`Maturity = 0,20 × Design + 0,25 × Implementierung + 0,20 × Betrieb + 0,35 × Wirksamkeit`
 
 Alle Facetten liegen zwischen 0 und 5. Das Ergebnis wird auf eine Dezimalstelle angezeigt und zusätzlich als Band interpretiert. Gewichtungen sind versioniert konfigurierbar. Fehlt eine Facette, wird sie nicht still mit null bewertet; stattdessen sinkt Confidence und der Status wird als unvollständig markiert.
 
@@ -191,7 +156,7 @@ Evidence besitzt je Typ eine erwartete Aktualität. Eine Architekturfreigabe kan
 
 ## 7. Confidence- und Datenvertrauensmodell
 
-Confidence beantwortet: Wie belastbar ist diese konkrete Aussage für diesen Verwendungszweck? Es ist keine allgemeine Datenqualitätsampel.
+Confidence beantwortet: **Wie belastbar ist diese konkrete Aussage für diesen Verwendungszweck?** Es ist keine allgemeine Datenqualitätsampel.
 
 ### 7.1 Dimensionen
 
@@ -227,9 +192,7 @@ Ein Monatsbriefing kann mit mittlerer Confidence ausreichen. Eine Risikoakzeptan
 
 Ein Risiko wird als nachvollziehbares Szenario modelliert:
 
-```
-Ursache/Bedrohung -> Schwäche oder Exposition -> Ereignis -> betroffene Assets/Prozesse -> geschäftliche Auswirkung
-```
+`Ursache/Bedrohung -> Schwäche oder Exposition -> Ereignis -> betroffene Assets/Prozesse -> geschäftliche Auswirkung`
 
 Pflichtfelder sind Scope, Risk Owner, betroffene Geschäftsziele, Zeitbezug, bestehende Controls, Quellen, Annahmen, inhärente Bewertung, Restrisikobewertung, Behandlungsentscheidung und Reviewdatum.
 
@@ -259,15 +222,14 @@ Die Plattform unterstützt mehrere versionierte Methoden. Ein Kunde wählt eine 
 
 Likelihood und Impact werden jeweils von 1 bis 5 bewertet. Der Matrixwert dient Priorisierung. Impact kann aus mehreren Dimensionen bestehen, etwa Finanzen, Betrieb, Regulierung, Personen, Reputation und Strategie. Die höchste oder gewichtete relevante Dimension wird transparent ausgewiesen.
 
-Stärken: verständlich, schnell, workshopfähig. Grenzen: ordinal, subjektiv, anfällig für Scheingenauigkeit und Score-Ballung.
+**Stärken:** verständlich, schnell, workshopfähig.  
+**Grenzen:** ordinal, subjektiv, anfällig für Scheingenauigkeit und Score-Ballung.
 
 ### 9.2 Methode B - semi-quantitativ 0 bis 100
 
 Likelihood, Exposure, Threat Activity, Business Impact und Control Effectiveness werden auf definierte Skalen normalisiert. Das Modell erzeugt Bänder, keine scheinpräzise Schadenswahrscheinlichkeit. Referenzlogik:
 
-```
-Current Risk = Inherent Risk × Exposure Factor × (1 - Combined Control Mitigation)
-```
+`Current Risk = Inherent Risk × Exposure Factor × (1 - Combined Control Mitigation)`
 
 Die Komponenten werden getrennt angezeigt. Combined Control Mitigation wird gedeckelt und berücksichtigt Überschneidungen sowie Abhängigkeiten; mehrere Controls dürfen nicht einfach addiert werden.
 
@@ -299,11 +261,11 @@ Ein Toleranzobjekt enthält:
 
 ### 10.2 Eskalationslogik
 
-- **Unter Toleranz:** operativ steuern und überwachen.
-- **Nahe Toleranz:** Trendwarnung und Behandlungsoptionen.
-- **Über Toleranz:** Entscheidungspflicht innerhalb definierter Frist.
-- **Kritische Überschreitung:** sofortige Eskalation, ggf. Incident- oder Krisenprozess.
-- **Unzureichende Confidence:** keine automatische Entwarnung; Datenlücke wird selbst zum Steuerungsthema.
+- Unter Toleranz: operativ steuern und überwachen.
+- Nahe Toleranz: Trendwarnung und Behandlungsoptionen.
+- Über Toleranz: Entscheidungspflicht innerhalb definierter Frist.
+- Kritische Überschreitung: sofortige Eskalation, ggf. Incident- oder Krisenprozess.
+- Unzureichende Confidence: keine automatische Entwarnung; Datenlücke wird selbst zum Steuerungsthema.
 
 ### 10.3 Risikoakzeptanz
 
@@ -366,14 +328,14 @@ Ein Signal wird erst zum Kundenthema, wenn mindestens ein begründeter Relevanzp
 7. Aktualität und Qualität der Quelle,
 8. Zielprofil und Risikotoleranz.
 
-> [Abbildung: laut alter Arbeitsfassung an dieser Stelle vorhanden; im Textlayer nicht lesbar — Existenz, Position und Inhalt visuell unbestätigt, vgl. O-WP019-04]
+[[FIGURE:FIG3]]
 
 ## 13. Threat-Relevanzscore
 
 Für den Demonstrator gilt ein erklärbarer Referenzscore von 0 bis 100:
 
 | Faktor | Referenzgewicht | Frage |
-|---|---|---|
+|---|---:|---|
 | Asset-/Scope-Match | 20 % | Ist die betroffene Technologie oder Organisation im bestätigten Scope vorhanden? |
 | Exposition | 20 % | Ist das Objekt erreichbar, aktiv, ungepatcht oder anderweitig exponiert? |
 | Business-Kritikalität | 15 % | Welche geschäftliche Bedeutung besitzt das betroffene Objekt? |
@@ -390,13 +352,7 @@ Mehrere Feeds zum selben Sachverhalt werden zu einem kanonischen Signalcluster v
 
 ### 13.2 Ablauf und Verfall
 
-Signale besitzen Status:
-
-```
-eingegangen -> normalisiert -> gematcht -> relevant / nicht relevant / unklar -> analysiert -> behandelt -> überwacht -> geschlossen
-```
-
-Relevanz und Aktualität verfallen nach konfigurierbaren Regeln; eine geschlossene Meldung kann bei neuer Evidence wieder geöffnet werden.
+Signale besitzen Status: `eingegangen -> normalisiert -> gematcht -> relevant / nicht relevant / unklar -> analysiert -> behandelt -> überwacht -> geschlossen`. Relevanz und Aktualität verfallen nach konfigurierbaren Regeln; eine geschlossene Meldung kann bei neuer Evidence wieder geöffnet werden.
 
 ## 14. Vulnerability Intelligence
 
@@ -437,9 +393,7 @@ Control Intelligence verbindet Anforderung, Control-Ziel, konkrete Implementieru
 
 ### 15.1 Control-Lebenszyklus
 
-```
-vorgeschlagen -> anwendbar / nicht anwendbar -> geplant -> implementiert -> in Betrieb -> getestet -> wirksam / eingeschränkt / unwirksam -> verbessert / ersetzt / stillgelegt
-```
+`vorgeschlagen -> anwendbar / nicht anwendbar -> geplant -> implementiert -> in Betrieb -> getestet -> wirksam / eingeschränkt / unwirksam -> verbessert / ersetzt / stillgelegt`
 
 Anwendbarkeit, Implementierung, Betrieb und Wirksamkeit sind getrennte Aussagen.
 
@@ -474,9 +428,7 @@ Diese Trennung verhindert, dass eine Richtlinie oder technische Konfiguration au
 
 Für das Standardprofil gilt als transparente Ausgangslogik auf 0 bis 100:
 
-```
-Control Effectiveness = 0,15 × Design + 0,25 × Implementation + 0,20 × Operation + 0,40 × Outcome
-```
+`Control Effectiveness = 0,15 × Design + 0,25 × Implementation + 0,20 × Operation + 0,40 × Outcome`
 
 Jede Facette wird über definierte Kriterien und Evidence bewertet. Outcome erhält das höchste Gewicht, weil tatsächliche Schutzwirkung wichtiger ist als Dokumentation. Bei Controls, deren Wirkung nur schwer direkt messbar ist, kann ein freigegebenes profilspezifisches Gewicht verwendet werden.
 
@@ -511,7 +463,7 @@ Control Debt beschreibt dauerhaft bekannte, aber nicht nachhaltig gelöste Defiz
 
 ## 17. Zusammenspiel von Risiko, Reife, Threat und Control
 
-> [Abbildung: laut alter Arbeitsfassung an dieser Stelle vorhanden; im Textlayer nicht lesbar — Existenz, Position und Inhalt visuell unbestätigt, vgl. O-WP019-04]
+[[FIGURE:FIG1]]
 
 ### 17.1 Kausaler Pfad
 
@@ -538,12 +490,12 @@ Die Intelligenzschicht verarbeitet nicht nur Warnungen. Erfolgreiche Tests, gesc
 
 ### 18.1 Goal Proximity Score
 
-Der allgemeine Goal Proximity Score beschreibt, wie nah der Kunde seinem ausgewählten Zielprofil ist. Er ist profilabhängig und kann Reife, Risiko, Meilensteine, Control-Abdeckung, Evidence, Findings und Governance kombinieren. Er ersetzt keine Detailwerte.
+Der allgemeine **Goal Proximity Score** beschreibt, wie nah der Kunde seinem ausgewählten Zielprofil ist. Er ist profilabhängig und kann Reife, Risiko, Meilensteine, Control-Abdeckung, Evidence, Findings und Governance kombinieren. Er ersetzt keine Detailwerte.
 
 Referenzdimensionen:
 
 | Dimension | Standardgewicht |
-|---|---|
+|---|---:|
 | Ziel-Capability-Erreichung | 25 % |
 | priorisierte Risikobehandlung | 20 % |
 | Control-Abdeckung und Wirksamkeit | 20 % |
@@ -604,7 +556,7 @@ Mandantenübergreifende Learnings dürfen nur aus anonymisierten, aggregierten M
 
 ## 20. Erklärbarkeit, Overrides und Decision Records
 
-Jeder Score oder Vorschlag besitzt einen Explain Panel mit:
+Jeder Score oder Vorschlag besitzt einen **Explain Panel** mit:
 
 - Aussage in Klartext,
 - betroffenen Scope,

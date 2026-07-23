@@ -1,53 +1,12 @@
-# Dokument 10 - Decision Center, KPIs & Simulationen
-
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_10_Decision_Center_KPIs_Simulationen_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (vorherige Arbeitsfassung → diese Vollableitung nach PDF-Folientiteln). Die Hauptabschnitte 1-34 sind in Titel und Nummer unverändert; Änderungen betreffen nur Kopf und Governance-Folie:
->
-> | Alt (Arbeitsfassung) | Neu (PDF-Folientitel) |
-> |---|---|
-> | Dokumenttitel „... KPIs und Simulationen" | „... KPIs & Simulationen" (PDF-Schreibweise) |
-> | Kopffeld „Zweck" | ersatzlos entfallen (Formulierung vom PDF nicht getragen; ersetzt durch PDF-Untertitel und Abhängigkeiten der Titelfolie) |
-> | Blockzitat „Zentrale Festlegung" (vor §1) | ersatzlos entfallen (kommt im PDF nicht vor; die dort aufgestellte Neun-Attribut-Pflicht ist keine PDF-Anforderung — maßgeblich sind die 14 Pflichtfelder in §9.1) |
-> | - (ohne Entsprechung) | „Dokumentauftrag & Verbindlichkeit" (unnummerierte Governance-Folie vor §1 mit Kanonizitätsregel, Steuerungsfeld-Tabelle und Inhaltsübersicht) |
-> | §§1-34 inkl. aller Unterabschnitte | unverändert (Titel und Nummern identisch mit den PDF-Folientiteln) |
-> | `[[FIGURE:FIG1..FIG4]]`-Platzhalter (§2, §5, §10, §13) | entfallen; siehe Lückenhinweis unten |
->
-> **PDF-interne Nummerierungskonflikte:** keine. Die Folientitel-Zählung 1-34 ist durchgängig und wird durch die Inhaltsübersicht der Governance-Folie bestätigt.
->
-> **Transkriptionshinweise:**
-> - Die nummerierten Listen in §5.1, §14.2 und §25 laufen im PDF-Textlayer über Foliengrenzen fortlaufend durch (§5.1 beginnt dort mit 7, §14.2 mit 12, §25 mit 22). Das ist ein Extraktionsartefakt der durchlaufenden Listenzählung; die Listen sind hier mit 1-5 bzw. 1-10 transkribiert.
-> - Die Spaltengrenzen der Tabellen wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellinhalte über Zeilenumbrüche verteilt; Wortlaut unverändert.
->
-> **Gekennzeichnete Lücken:**
-> - [Abbildungen: im Textlayer nicht lesbar — der Extrakt trägt keinerlei Abbildungsinhalte oder Bildunterschriften. Die abgelöste Arbeitsfassung enthielt vier Abbildungs-Platzhalter (§2, §5, §10, §13); ob und wo das PDF tatsächlich Abbildungen enthält, ist aus dem Textlayer nicht verifizierbar. Visuelle Verifikation offen, vgl. O-WP019-04. Es wurde nichts aus der Alt-Fassung rekonstruiert.]
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Die Steuerungsfeld-Zeile „Änderungskontrolle" (Version, Begründung, Tests und Impactanalyse für KPI-, Priorisierungs-, Simulations- und Routenänderungen) und §22.2 „Freigaberegeln" (Method Owner, Impactanalyse, Test gegen Referenzdaten, Freigabe und Migrationshinweis für materiale Änderungen an KPI- oder Simulationsmethoden) schneiden Change-Control-Pflichten unterschiedlich (Geltungsbereich und Artefaktlisten); das PDF stellt keine explizite Beziehung zwischen beiden Regelwerken her.
-> - §1 nennt als Ort der technischen Festlegungen „Dokument 14, 17, 18 und 20A", das Steuerungsfeld als zentrale Nachfolger „Dokument 11, 12, 13 bis 20C" — zwei sich überlappende Nachfolger-Listen mit unterschiedlichem Zweck, ohne dass das PDF das Verhältnis erläutert.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-Von komplexen ISMS-Daten zu wenigen erklärbaren Entscheidungen, realistischen Zielrouten und belegbarer Wirkung.
+# Dokument 10 - Decision Center, KPIs und Simulationen
 
 **Arbeitsbezeichnung:** ISMS Managed Service Platform  
-**Version:** 1.0 | **Status:** Erstellt | **Stand:** 21.07.2026  
-**Abhängigkeiten:** Dokument 00 bis 09
+**Version:** 1.0  
+**Status:** Erstellt  
+**Stand:** 21.07.2026  
+**Zweck:** Verbindliches Steuerungs-, KPI-, Priorisierungs- und Simulationskonzept für rollenbezogene Entscheidungen im Kunden-, Berater- und Executive-Kontext.
 
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 10 ist die kanonische fachliche Quelle für Decision Center, Missionen, KPI-Verträge, Priorisierung, Zielrouten, Simulationen, Forecasts und Wertnachweise. Nachfolgende Dokumente dürfen diese Logik technisch implementieren, visualisieren oder profilspezifisch konfigurieren, aber nicht still semantisch verändern.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 10 |
-| Status | Erstellt - Version 1.0 |
-| Owner | Product Architecture / Decision Intelligence Owner |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Änderungskontrolle | KPI-, Priorisierungs-, Simulations- und Routenänderungen benötigen Version, Begründung, Tests und Impactanalyse. |
-| Zentrale Nachfolger | Dokument 11, 12, 13 bis 20C |
-
-**Inhalt:** 1 Auftrag · 2 Summary · 3 Prinzipien · 4 Produktbetriebssystem · 5 Morning Mission · 6 bis 8 Customer, Portfolio und Executive · 9 Decision Cards · 10 bis 12 KPI, Trends und Kausalität · 13 bis 18 Routen, Simulationen und Priorisierung · 19 bis 23 Wert, Reporting und Governance · 24 bis 34 Szenarien, Entscheidungen und Übergaben
+> **Zentrale Festlegung:** Das Decision Center ist kein dekoratives Dashboard und keine Sammlung möglichst vieler Kennzahlen. Es übersetzt Veränderungen im digitalen Unternehmenszwilling in wenige, erklärbare und handlungsfähige Entscheidungen. Jede Entscheidung zeigt Zielbezug, Ursache, erwartete Wirkung, Aufwand, Unsicherheit, Abhängigkeiten, Alternativen, Verantwortliche und spätere Ergebnisprüfung.
 
 ## 1. Dokumentauftrag und Abgrenzung
 
@@ -61,12 +20,12 @@ Simulationen sind Managementhilfen. Sie zeigen nachvollziehbare Szenarien und Ba
 
 Das Decision Center beantwortet für jede Rolle dieselbe Grundlogik in unterschiedlicher Tiefe:
 
-1. Was hat sich verändert?
-2. Warum ist es für mein Ziel relevant?
-3. Was muss ich heute entscheiden oder veranlassen?
-4. Welche Option liefert unter realen Grenzen die beste Wirkung?
-5. Was geschieht voraussichtlich, wenn wir handeln, warten oder die Route ändern?
-6. Wie messen wir danach, ob die erwartete Wirkung tatsächlich eingetreten ist?
+1. **Was hat sich verändert?**
+2. **Warum ist es für mein Ziel relevant?**
+3. **Was muss ich heute entscheiden oder veranlassen?**
+4. **Welche Option liefert unter realen Grenzen die beste Wirkung?**
+5. **Was geschieht voraussichtlich, wenn wir handeln, warten oder die Route ändern?**
+6. **Wie messen wir danach, ob die erwartete Wirkung tatsächlich eingetreten ist?**
 
 Daraus entstehen vier zusammenhängende Produktoberflächen:
 
@@ -76,6 +35,8 @@ Daraus entstehen vier zusammenhängende Produktoberflächen:
 - **Executive Decision Center** für geschäftsrelevante Entscheidungen, Investitionen und Zielerreichung.
 
 Die Plattform zeigt nicht nur Zustände, sondern Ursache-Wirkungs-Ketten. Ein roter KPI wird nicht isoliert dargestellt, sondern mit betroffenen Geschäftsservices, Risiken, Controls, Datenqualität, offenen Maßnahmen und Handlungsoptionen verbunden. Simulationen vergleichen mindestens eine Baseline und mehrere Optionen. Jede Option besitzt Kosten, Zeit, interne und externe Kapazität, erwartete Zielwirkung, Risikowirkung, Confidence, Abhängigkeiten und nicht monetäre Konsequenzen.
+
+[[FIGURE:FIG1]]
 
 ## 3. Verbindliche Steuerungsprinzipien
 
@@ -123,6 +84,8 @@ Jede zentrale Seite folgt einem stabilen Interaktionsmodell:
 
 Die Morning Mission ist die persönliche Startseite eines Arbeitstages. Sie ersetzt keine Aufgabenverwaltung, sondern verdichtet Aufgaben, Fristen, Veränderungen und Abhängigkeiten zu einer handlungsfähigen Mission.
 
+[[FIGURE:FIG2]]
+
 ### 5.1 Fünf Ebenen
 
 1. **Mission:** Ein kurzer Ergebnissatz, der einen sinnvollen Tageserfolg beschreibt.
@@ -135,7 +98,7 @@ Die Morning Mission ist die persönliche Startseite eines Arbeitstages. Sie erse
 
 Eine Mission darf mehrere Tasks bündeln, wenn sie gemeinsam ein Outcome erzeugen. Beispiel:
 
-> Mission heute: Stabilisiere die Auditroute von Nordstern Health, entscheide über die blockierte IAM-Maßnahme und sichere die Evidence für zwei kritische Controls. Erwartete Wirkung: Readiness +6 bis +9 Prozentpunkte, zwei rote Findings aus dem kritischen Pfad entfernt, zwölf Beraterstunden vor dem Audit geschützt.
+> **Mission heute:** Stabilisiere die Auditroute von Nordstern Health, entscheide über die blockierte IAM-Maßnahme und sichere die Evidence für zwei kritische Controls. Erwartete Wirkung: Readiness +6 bis +9 Prozentpunkte, zwei rote Findings aus dem kritischen Pfad entfernt, zwölf Beraterstunden vor dem Audit geschützt.
 
 Die Mission verlinkt in die Einzelaufgaben, zwingt Nutzer aber nicht, zuerst alle Details zu lesen.
 
@@ -204,7 +167,7 @@ Der Kopfbereich enthält:
 
 ### 6.3 Management-Modus
 
-Ein Umschalter „Wenn ich Geschäftsführer wäre" reduziert die Seite auf:
+Ein Umschalter **„Wenn ich Geschäftsführer wäre“** reduziert die Seite auf:
 
 - drei geschäftliche Risiken oder Zielabweichungen,
 - maximal fünf Entscheidungen,
@@ -278,7 +241,7 @@ Die Auswertung unterliegt Dokument 19 und darf keine unzulässige Mandantendaten
 
 ## 8. Executive Decision Center
 
-Das Executive Decision Center ist eine eigenständige Erlebniswelt für seltene, aber folgenreiche Nutzung. Es beantwortet keine Frage wie „Welche 37 Maßnahmen sind offen?", sondern „Welche Entscheidung benötigt meine Autorität und welchen geschäftlichen Unterschied macht sie?"
+Das Executive Decision Center ist eine eigenständige Erlebniswelt für seltene, aber folgenreiche Nutzung. Es beantwortet keine Frage wie „Welche 37 Maßnahmen sind offen?“, sondern „Welche Entscheidung benötigt meine Autorität und welchen geschäftlichen Unterschied macht sie?“
 
 ### 8.1 Executive Startansicht
 
@@ -337,6 +300,8 @@ Nach Freigabe wird die Karte zum unveränderbaren Decision Record. Korrekturen e
 
 KPIs dienen Steuerung, nicht Dekoration. Jede Kennzahl muss eine Entscheidung unterstützen, ein Verhalten sichtbar machen oder eine Zielabweichung früh erkennen.
 
+[[FIGURE:FIG4]]
+
 ### 10.1 KPI-Hierarchie
 
 - **Business Outcomes:** Resilienz kritischer Services, Marktzugang, Kundenvertrauen, regulatorische Handlungsfähigkeit.
@@ -378,10 +343,13 @@ Jede KPI besitzt:
 
 ### 10.4 Beispielhafte Referenzformeln
 
-- Impact-weighted Completion = Summe (erledigter Maßnahmenimpact) / Summe (geplanter Maßnahmenimpact)
-- Goal Proximity = erreichte gewichtete Zielkriterien / alle gewichteten Zielkriterien
-- Automation Benefit = vermiedene manuelle Zeit - zusätzliche Prüf- und Ausnahmezeit
-- Forecast Variance = prognostizierter Zieltermin - genehmigter Zieltermin
+`Impact-weighted Completion = Summe (erledigter Maßnahmenimpact) / Summe (geplanter Maßnahmenimpact)`
+
+`Goal Proximity = erreichte gewichtete Zielkriterien / alle gewichteten Zielkriterien`
+
+`Automation Benefit = vermiedene manuelle Zeit - zusätzliche Prüf- und Ausnahmezeit`
+
+`Forecast Variance = prognostizierter Zieltermin - genehmigter Zieltermin`
 
 Diese Formeln sind Startlogiken und müssen mit Scope, Datengrundlage und Methodenversion angezeigt werden.
 
@@ -391,7 +359,7 @@ Die Plattform verbietet oder markiert Kennzahlen mit hohem Fehlsteuerungsrisiko,
 
 - bloße Anzahl geschlossener Tasks ohne Impact,
 - Gesamtzahl hochgeladener Dokumente,
-- „100 Prozent compliant" ohne Scope und Evidence,
+- „100 Prozent compliant“ ohne Scope und Evidence,
 - durchschnittlicher Risikoscore, der kritische Ausreißer verdeckt,
 - Beraterauslastung ohne Qualitäts- und Outcome-Bezug,
 - automatisierte Schritte ohne Fehler- und Reviewquote.
@@ -425,13 +393,13 @@ Eine Veränderung wird relevant, wenn mindestens eine Bedingung erfüllt ist:
 
 Das Decision Center erzeugt eine kurze, prüfbare Change Story:
 
-> „Die Zielerreichungsprognose sank von 78 auf 69 Prozent. Hauptursachen sind ein vierwöchiger IAM-Blocker, zwei abgelaufene Evidence-Sets und ein neuer externer Threat mit Relevanz für den Kunden-Scope. Die Methodenversion blieb unverändert; Confidence liegt bei 82."
+> „Die Zielerreichungsprognose sank von 78 auf 69 Prozent. Hauptursachen sind ein vierwöchiger IAM-Blocker, zwei abgelaufene Evidence-Sets und ein neuer externer Threat mit Relevanz für den Kunden-Scope. Die Methodenversion blieb unverändert; Confidence liegt bei 82.“
 
 ## 12. Kausalität statt isolierter Scores
 
 Jede relevante Aussage besitzt einen Explainability Path. Der Nutzer kann von einer Managementaussage bis zu den zugrunde liegenden Objekten navigieren:
 
-Geschäftsziel -> Geschäftsservice -> Risikoszenario -> Threat/Schwäche -> Control -> Evidence/Test -> Maßnahme -> Entscheidung
+`Geschäftsziel -> Geschäftsservice -> Risikoszenario -> Threat/Schwäche -> Control -> Evidence/Test -> Maßnahme -> Entscheidung`
 
 ### 12.1 Kausalitätsregeln
 
@@ -442,13 +410,15 @@ Geschäftsziel -> Geschäftsservice -> Risikoszenario -> Threat/Schwäche -> Con
 - Änderungen an Kausalregeln sind versioniert.
 - Ein Score darf nie die einzige Begründung einer Entscheidung sein.
 
-### 12.2 „Warum?"-Interaktion
+### 12.2 „Warum?“-Interaktion
 
-Jede KPI, Priorität und Simulation besitzt den Befehl „Warum sehe ich das?". Die Antwort enthält maximal drei Hauptursachen, danach Details auf Nachfrage. So bleibt die Oberfläche einfach, ohne Transparenz zu verlieren.
+Jede KPI, Priorität und Simulation besitzt den Befehl **„Warum sehe ich das?“**. Die Antwort enthält maximal drei Hauptursachen, danach Details auf Nachfrage. So bleibt die Oberfläche einfach, ohne Transparenz zu verlieren.
 
 ## 13. Zielnavigation und Routenlogik
 
 Die Plattform behandelt ein Zielprofil wie eine Navigation: Ist-Zustand, Ziel, verfügbare Routen, kritischer Pfad, Meilensteine, erwartete Ankunft und Gründe für eine Neuberechnung.
+
+[[FIGURE:FIG3]]
 
 ### 13.1 Routentypen
 
@@ -541,9 +511,9 @@ Jede Option zeigt mindestens:
 
 Drei Darstellungen sind zulässig:
 
-- Punktwert mit hoher Confidence, wenn Daten und Methode stabil sind,
-- Bandbreite, wenn Parameter schwanken,
-- Szenarioband mit optimistisch, erwartet und konservativ.
+- **Punktwert mit hoher Confidence**, wenn Daten und Methode stabil sind,
+- **Bandbreite**, wenn Parameter schwanken,
+- **Szenarioband** mit optimistisch, erwartet und konservativ.
 
 Eine Simulation mit niedriger Confidence kann trotzdem nützlich sein, muss aber zuerst die Entscheidung über Datenerhebung oder Pilotierung nahelegen.
 
@@ -568,7 +538,7 @@ Die Investitionssimulation übersetzt fachliche Maßnahmen in Managementoptionen
 ### 15.2 Optionendarstellung
 
 | Option | Budget | Zielzeit | Interne Last | Erwartete Wirkung | Hauptrisiko |
-|---|---|---|---|---|---|
+|---|---:|---:|---:|---|---|
 | Baseline / Nichtstun | 0 zusätzlich | +14 Wochen | mittel | Zielabweichung wächst | Audit- und Risikofristen gefährdet |
 | Interne Umsetzung | mittel | +8 Wochen | hoch | hohe Ownership, moderate Geschwindigkeit | Skill- und Kapazitätsengpass |
 | Mischmodell | mittel bis hoch | +4 Wochen | mittel | gute Geschwindigkeit und Wissenstransfer | Governance und Schnittstellen |
@@ -639,7 +609,7 @@ Eine Route wird neu berechnet, wenn ein Ereignis die Annahmen oder den kritische
 - kleine operative Anpassungen können innerhalb definierter Toleranzen automatisch erfolgen,
 - Benachrichtigung richtet sich nach Rolle und Materialität.
 
-### 17.3 Stabilität gegen „Dashboard-Flattern"
+### 17.3 Stabilität gegen „Dashboard-Flattern“
 
 Um ständige unruhige Wechsel zu vermeiden, nutzt die Plattform Schwellen, Mindestdauer, Materialitätsregeln und Ereignisbündelung. Kritische Ereignisse erscheinen sofort; geringfügige Änderungen werden zusammengefasst.
 
@@ -663,7 +633,7 @@ Die Referenzpriorität einer Handlungsoption ergibt sich nicht aus einer einzige
 
 ### 18.2 Referenzlogik
 
-Für den Demonstrator kann eine transparente gewichtete Logik genutzt werden. Die Oberfläche zeigt jedoch keine scheinobjektive „Wahrheit", sondern Prioritätsband und Hauptgründe. Gewichtungen werden je Zielprofil versioniert.
+Für den Demonstrator kann eine transparente gewichtete Logik genutzt werden. Die Oberfläche zeigt jedoch keine scheinobjektive „Wahrheit“, sondern Prioritätsband und Hauptgründe. Gewichtungen werden je Zielprofil versioniert.
 
 ### 18.3 Human Override
 
@@ -675,7 +645,7 @@ Die Plattform muss zeigen, ob sie und der Managed Service tatsächlich Wert erze
 
 ### 19.1 Value Ledger
 
-Das Value Ledger verbindet jede relevante Leistung mit:
+Das **Value Ledger** verbindet jede relevante Leistung mit:
 
 - Ausgangslage,
 - genehmigter Entscheidung,
@@ -700,7 +670,7 @@ Das Value Ledger verbindet jede relevante Leistung mit:
 
 ### 19.3 Vorsicht bei vermiedenen Schäden
 
-„Verhinderter Schaden" wird nur ausgewiesen, wenn Methode, Datengrundlage und Unsicherheit belastbar sind. Standardmäßig spricht die Plattform von Risikoreduktion, Expositionsreduktion, vermiedener Verzögerung oder verbesserter Assurance.
+„Verhinderter Schaden“ wird nur ausgewiesen, wenn Methode, Datengrundlage und Unsicherheit belastbar sind. Standardmäßig spricht die Plattform von Risikoreduktion, Expositionsreduktion, vermiedener Verzögerung oder verbesserter Assurance.
 
 ## 20. Reporting und Deliverables
 
@@ -790,7 +760,7 @@ Ein externes Threat-Signal wird für zwei Assets relevant. Dokument 09 aktualisi
 
 ### 24.4 Datenlücke statt falscher Sicherheit
 
-Eine Management-KPI wirkt stabil, aber mehrere Evidence-Sets sind veraltet. Confidence fällt unter den Schwellenwert. Die Morning Mission priorisiert nicht sofort eine neue technische Maßnahme, sondern ein fokussiertes Assurance-Paket. Der Executive Report zeigt „Bewertung unsicher" statt eine grüne Ampel.
+Eine Management-KPI wirkt stabil, aber mehrere Evidence-Sets sind veraltet. Confidence fällt unter den Schwellenwert. Die Morning Mission priorisiert nicht sofort eine neue technische Maßnahme, sondern ein fokussiertes Assurance-Paket. Der Executive Report zeigt „Bewertung unsicher“ statt eine grüne Ampel.
 
 ### 24.5 Servicechance ohne Verkaufsdruck
 
@@ -929,7 +899,7 @@ Das Decision Center ist nicht:
 - digitale Verhandlung mehrerer Zielkonflikte mit sichtbarer Pareto-Front,
 - persönliche Lernprofile für Berater und ISMS-Verantwortliche,
 - Agent, der schwache oder manipulative KPIs erkennt,
-- „Was würden ähnliche Unternehmen tun?"-Ansicht mit strenger Vergleichbarkeitsprüfung,
+- „Was würden ähnliche Unternehmen tun?“-Ansicht mit strenger Vergleichbarkeitsprüfung,
 - Simulation von M&A-, Cloud- oder regulatorischen Szenarien,
 - kontrollierte automatische Erzeugung neuer Servicepakete aus wiederkehrenden Mustern,
 - Live-Board-Modus für Vorstandssitzungen mit protokollierten Entscheidungen.

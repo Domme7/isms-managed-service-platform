@@ -1,61 +1,17 @@
 # Dokument 20C – Claude Code, GitHub, Checkpoints & Bauplan
 
-> **Re-Ableitung:** 2026-07-23 (WP-023, DR-0010) | Quell-PDF: `Dokument_20C_Claude_Code_GitHub_Checkpoints_Bauplan_v1.0.pdf` | Bei jeder Abweichung zwischen dieser Arbeitsfassung und dem PDF gilt das PDF (DR-0006).
->
-> **Nummerierungs-Konkordanz alt → neu** (alte Arbeitsfassung in der Git-Historie vor 2026-07-23 → diese Fassung nach PDF-Folientiteln). Die Hauptnummerierung 1–56 und alle Unterabschnitte (7.1–7.4, 11.1, 15.1–15.4, 21.1–21.3, 25.1–25.3, 38.1–38.5, 45.1–45.4, 46.1–46.4) sind unverändert und titelgleich. Abweichungen betreffen ausschließlich den Deckblatt-/Steuerungsteil und die Abbildungen:
->
-> | Alt (Arbeitsfassung) | Neu (PDF-Folientitel) |
-> |---|---|
-> | Kopfblock-Felder „Owner" (erweiterte Rollennamen) und „Nachfolger" (im PDF nicht vorhanden) | ersatzlos entfallen; stattdessen PDF-Deckblatt „Dokumentauftrag & Verbindlichkeit" mit Steuerungsfeld-Tabelle (Dokument-ID, Status, Owner, Gültigkeit, Umsetzungsstatus, Änderungskontrolle) und Block „Inhalt" |
-> | Platzhalter `[[FIGURE:FIG1]]` bis `[[FIGURE:FIG4]]` ohne Bildunterschrift | Abbildungsunterschriften 1–4 aus dem Textlayer transkribiert (§4, §13, §15, §21) |
-> | §§1–56 | unverändert (identische Nummern und Titel) |
->
-> **PDF-interne Nummerierungskonflikte:** keine. Die Folientitel-Zählung 1–56 ist durchgängig; der Deckblatt-Block „Inhalt" gruppiert dieselben Nummern (1 · 2 · 3 · 4-10 · 11-20 · 21-35 · 36-41 · 42-47 · 48-56) und widerspricht den Folientiteln nicht.
->
-> **Benannte, nicht aufgelöste PDF-interne Auffälligkeiten:**
-> - Die Abbildungsnummerierung folgt nicht der Lesereihenfolge: Abbildung 3 steht in §13 „Session-Boot-Sequenz" (früher im Dokument), Abbildung 2 in §15 „Checkpoint-Typen" (später im Dokument). Übernommen wie im PDF.
-> - Entwicklungsverfassung Regel 2 („Markdown vor PDF"), D20C-002 und Akzeptanzkriterium 2 erklären die Markdown-Konzeptdateien zur maschinenlesbaren Quelle. Die Owner-Entscheidung DR-0006 legt demgegenüber die PDF-Originale als Produktwahrheit fest, weil die Markdown-Ableitungen nachweislich nicht verlustfrei waren (FINDING-0007). Kein PDF-interner Widerspruch, aber ein dokumentierter Konflikt PDF ↔ Owner-Entscheidung; nach dem Schichtenmodell geht DR-0006 vor. Der PDF-Wortlaut wird hier unverändert wiedergegeben.
-> - §55: Die Quellentabelle führt 12 Zeilen, die Liste „Offizielle Referenzen" 13 URLs; die Tabellenzeile „Permissions/Settings" bündelt zwei URLs. Kein Widerspruch, nur benannt.
->
-> **Gekennzeichnete Lücken und Transkriptionshinweise:**
-> - Abbildung 1 (§4), Abbildung 3 (§13), Abbildung 2 (§15), Abbildung 4 (§21): Nur die Bildunterschriften sind textlich extrahierbar; der grafische Inhalt ist im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04.
-> - Tabellen: Die Spaltengrenzen wurden anhand der Spaltenköpfe rekonstruiert, weil die Textextraktion Zellen und Zeilenumbrüche verschmilzt; Zellinhalte wörtlich übernommen.
-> - §17: Der Stil- und Interpunktionswechsel innerhalb der nummerierten Liste (Punkte 1–6 als Sätze mit Punkt, Punkte 7–10 kleingeschrieben mit Komma) steht so im PDF und wurde wörtlich übernommen.
->
-> Zitierregel: immer den **Abschnittstitel** zitieren, nicht nur die Nummer. Diese Kopfnotiz ist Nicht-PDF-Inhalt.
-
-**PRODUKTKONZEPT 20C**
-
-Claude Code, GitHub, Checkpoints & Bauplan
-
-Repository-first Entwicklung, Context-sichere Sessions, kontinuierliche Checkpoints, GitHub Quality Gates, Agentenorchestrierung und ein phasenweiser Umsetzungsplan.
-
-Gesichert. Fortsetzbar. Prüfbar. Schrittweise gebaut.
-
-**ARBEITSBEZEICHNUNG:** ISMS Managed Service Platform  
-**VERSION:** 1.0  
-**STATUS:** Erstellt  
-**STAND:** 22.07.2026  
-**ABHÄNGIGKEITEN:** Dokument 00 bis 20B
-
-## Dokumentauftrag & Verbindlichkeit
-
-Dokument 20C ist die verbindliche Entwicklungs-, Repository-, Checkpoint-, Handover-, GitHub- und Bauplanquelle. Es definiert, wie Claude Code und die Rollen aus Dokument 20B die vollständige Plattform über viele Context Windows, Sessions, Branches und Releases hinweg fortsetzbar, prüfbar und sicher umsetzen.
-
-| Steuerungsfeld | Festlegung |
-|---|---|
-| Dokument-ID | 20C |
-| Status | Erstellt - Version 1.0 |
-| Owner | Human Product Owner / CEO-Orchestrator / CTO / GitHub Steward / Project Memory / Quality Lead |
-| Gültigkeit | Bis zur freigegebenen Nachfolgeversion |
-| Umsetzungsstatus | Das Dokument definiert das Zielbetriebssystem. Konkrete Framework-, Hosting- und Toolversionen werden in Phase 0 durch Capability Check und ADR bestätigt. |
-| Änderungskontrolle | Änderungen an Truth-Hierarchie, Checkpoint-Protokoll, Branchschutz, Human Gates, Quality Gates, Repository-Struktur oder Bauphasen benötigen Product-, Architecture-, Security-, Quality- und Continuity-Impactanalyse. |
-
-**Inhalt:** 1 Auftrag · 2 Summary · 3 Entwicklungsverfassung · 4-10 Repository-Truth, Struktur, Claude-Konfiguration und Context Packs · 11-20 Work Packages, Sessions, Checkpoints und Wiederaufnahme · 21-35 GitHub, Tests, Agenten, Skills, Hooks und Rechte · 36-41 Umgebungen, Recovery, Gates und Metriken · 42-47 Bauphasen und Startprompts · 48-56 Demo, Akzeptanz, Entscheidungen, Annahmen, offene Fragen, Quellen und Änderungen.
+**Arbeitsbezeichnung:** ISMS Managed Service Platform  
+**Dokument-ID:** 20C  
+**Version:** 1.0  
+**Status:** Erstellt  
+**Stand:** 22.07.2026  
+**Owner:** Human Product Owner, CEO-/Orchestrator-Agent, CTO-/Architecture Lead, GitHub Steward, Project Memory Agent, Quality & Governance Lead  
+**Abhängigkeiten:** Dokument 00 bis 20B  
+**Nachfolger:** Aktualisierung von Dokument 00; anschließend Repository-Bootstrap und Claude-Code-Übergabe  
 
 ## 1. Auftrag und Geltungsbereich
 
-Dokument 20C übersetzt die Produktvision, die technische Architektur und die virtuelle KI-Firma in ein konkret ausführbares Entwicklungsbetriebssystem. Es legt fest, wie Claude Code und spezialisierte Agenten das Projekt über viele Sessions, Chats, Context Windows, Branches und Releases hinweg fortsetzbar, prüfbar und sicher umsetzen.
+Dokument 20C übersetzt die Produktvision, die technische Architektur und die virtuelle KI-Firma in ein **konkret ausführbares Entwicklungsbetriebssystem**. Es legt fest, wie Claude Code und spezialisierte Agenten das Projekt über viele Sessions, Chats, Context Windows, Branches und Releases hinweg fortsetzbar, prüfbar und sicher umsetzen.
 
 Das Dokument beantwortet insbesondere:
 
@@ -69,13 +25,13 @@ Das Dokument beantwortet insbesondere:
 - Welche Entscheidungen darf Claude selbst treffen und wann muss der Mensch eingreifen?
 - In welcher Reihenfolge wird die vollständige Plattform aufgebaut?
 
-Dieses Dokument beschreibt nicht den Produktumfang selbst. Dafür gelten insbesondere Dokument 05 bis 19. Es beschreibt das Verfahren, mit dem dieser Umfang kontrolliert gebaut wird.
+Dieses Dokument beschreibt **nicht den Produktumfang selbst**. Dafür gelten insbesondere Dokument 05 bis 19. Es beschreibt das Verfahren, mit dem dieser Umfang kontrolliert gebaut wird.
 
 ## 2. Executive Summary
 
-Die zentrale Entscheidung lautet: Das Repository ist das Projektgedächtnis. Der Chat ist nur eine Arbeitsoberfläche.
+Die zentrale Entscheidung lautet: **Das Repository ist das Projektgedächtnis. Der Chat ist nur eine Arbeitsoberfläche.**
 
-Claude Code darf niemals darauf angewiesen sein, dass eine frühere Konversation vollständig verfügbar bleibt. Jede Session beginnt mit einem begrenzten, relevanten Kontextpaket und hinterlässt einen fortsetzbaren, versionierten Stand. Die Arbeit wird in kleine Work Packages zerlegt. Innerhalb eines Work Packages entstehen nicht nur am Ende, sondern regelmäßig Micro Checkpoints, Verified Checkpoints und bei Übergängen Handover Checkpoints.
+Claude Code darf niemals darauf angewiesen sein, dass eine frühere Konversation vollständig verfügbar bleibt. Jede Session beginnt mit einem begrenzten, relevanten Kontextpaket und hinterlässt einen fortsetzbaren, versionierten Stand. Die Arbeit wird in kleine Work Packages zerlegt. Innerhalb eines Work Packages entstehen nicht nur am Ende, sondern regelmäßig **Micro Checkpoints**, **Verified Checkpoints** und bei Übergängen **Handover Checkpoints**.
 
 Die Umsetzungsorganisation folgt dem Modell aus Dokument 20B:
 
@@ -88,12 +44,12 @@ Die Umsetzungsorganisation folgt dem Modell aus Dokument 20B:
 
 Der Build-Ansatz kombiniert:
 
-1. Markdown-Konzeptbibliothek als fachliche Produktwahrheit,
-2. Architecture Decision Records und Decision Records als Entscheidungswahrheit,
-3. Code, Tests und Migrationen als Umsetzungswahrheit,
-4. Work Items, Current State, Checkpoints und Handovers als Ausführungsstatus,
-5. Git und GitHub als dauerhafte Versions-, Review- und Integrationsschicht,
-6. Claude-Code-Konfiguration, Skills, Rules, Hooks und Agentendefinitionen als ausführbare Arbeitsregeln.
+1. **Markdown-Konzeptbibliothek** als fachliche Produktwahrheit,
+2. **Architecture Decision Records und Decision Records** als Entscheidungswahrheit,
+3. **Code, Tests und Migrationen** als Umsetzungswahrheit,
+4. **Work Items, Current State, Checkpoints und Handovers** als Ausführungsstatus,
+5. **Git und GitHub** als dauerhafte Versions-, Review- und Integrationsschicht,
+6. **Claude-Code-Konfiguration, Skills, Rules, Hooks und Agentendefinitionen** als ausführbare Arbeitsregeln.
 
 Die vollständige Plattform wird in kontrollierten Phasen aufgebaut. Die Produktvision wird nicht gekürzt; die Reihenfolge reduziert lediglich Risiko, Integrationsaufwand und Context-Überlastung.
 
@@ -104,7 +60,7 @@ Für alle menschlichen und künstlichen Beteiligten gelten folgende Regeln:
 1. **Repository vor Chat.** Eine relevante Entscheidung, ein Fortschritt oder ein Blocker gilt erst als gesichert, wenn er in einem versionierten Artefakt steht.
 2. **Markdown vor PDF.** Die Markdown-Konzeptdateien sind die maschinenlesbare Quelle; PDFs und DOCX dienen Menschen, Präsentation und Review.
 3. **Outcome vor Dateimenge.** Arbeit wird nach verifiziertem Nutzer- oder Systemergebnis bewertet, nicht nach erzeugten Dateien oder Zeilen Code.
-4. **Kleine Work Packages.** Kein Agent erhält den Auftrag „Baue das gesamte Produkt" oder „Implementiere das ganze Modul".
+4. **Kleine Work Packages.** Kein Agent erhält den Auftrag „Baue das gesamte Produkt“ oder „Implementiere das ganze Modul“.
 5. **Kontinuierliche Checkpoints.** Zwischenspeicherung erfolgt während der Arbeit und nicht erst, wenn eine Session endet.
 6. **Git ist Langzeitgedächtnis.** Native Session- oder Edit-Checkpoints sind zusätzliche Rückfallebenen, aber kein Ersatz für Commits und Pull Requests.
 7. **Tests und Dokumentation entstehen mit der Funktion.** Sie sind kein späteres Aufräumprojekt.
@@ -119,9 +75,7 @@ Für alle menschlichen und künstlichen Beteiligten gelten folgende Regeln:
 
 ## 4. Repository-first Truth Model
 
-> **Abbildung 1:** Das Repository-first Truth Model trennt Produkt-, Entscheidungs-, Umsetzungs- und Statuswahrheit von nicht verbindlichem Chat- oder Auto-Memory-Kontext.
->
-> [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG1]]
 
 Die Projektwahrheit besitzt vier verbindliche Ebenen:
 
@@ -202,25 +156,25 @@ Die folgende Struktur ist die verbindliche Ausgangsarchitektur. Claude darf sie 
 | `/docs/project/WORK_QUEUE.md` | priorisierte Queue und Abhängigkeiten |
 | `/docs/project/ACTIVE_WORK_PACKAGE.md` | Verweis auf genau ein primäres aktives Paket |
 | `/docs/project/checkpoints/` | versionierte Checkpoint Records |
-| `/docs/project/handovers/` | Session- und Rollenübergaben; LATEST.md zeigt aktuellsten Einstieg |
+| `/docs/project/handovers/` | Session- und Rollenübergaben; `LATEST.md` zeigt aktuellsten Einstieg |
 | `/docs/project/risks/` | Entwicklungs-, Architektur-, Security- und Delivery-Risiken |
 | `/docs/quality/` | Teststrategie, Definition of Done, Testmatrix, Findings |
 | `/docs/security/` | Threat Model, Security Architecture, Ausnahmen und Reviews |
 | `/docs/releases/` | Release Notes, Evidenz, Rollback und bekannte Einschränkungen |
 | `/demo/` | synthetische Unternehmen, Seed-Daten und Demo-Skripte |
 
-Große generierte Dateien, Build Outputs, lokale Datenbanken, .env-Dateien und Secrets werden über .gitignore ausgeschlossen.
+Große generierte Dateien, Build Outputs, lokale Datenbanken, `.env`-Dateien und Secrets werden über `.gitignore` ausgeschlossen.
 
 ## 7. Zentrale Wahrheitsdateien
 
 ### 7.1 `CLAUDE.md`
 
-CLAUDE.md ist die Betriebsanweisung, nicht das vollständige Konzept. Sie bleibt kurz und präzise. Zielgröße: etwa 80 bis 160 Zeilen; harte Leitplanke: keine unstrukturierte Wiederholung der Konzeptbibliothek.
+`CLAUDE.md` ist die **Betriebsanweisung**, nicht das vollständige Konzept. Sie bleibt kurz und präzise. Zielgröße: etwa 80 bis 160 Zeilen; harte Leitplanke: keine unstrukturierte Wiederholung der Konzeptbibliothek.
 
 Sie enthält mindestens:
 
 - Produktdefinition in fünf bis acht Sätzen,
-- Verweis auf docs/concept/00_MASTER_INDEX...md,
+- Verweis auf `docs/concept/00_MASTER_INDEX...md`,
 - verbindliche Startreihenfolge,
 - Build-, Test-, Lint- und Typprüfbefehle,
 - Repository- und Architekturprinzipien,
@@ -248,7 +202,7 @@ Sie ist kein historisches Log. Geschichte liegt in Git, Checkpoints, Releases un
 
 ### 7.3 `LATEST.md`
 
-docs/project/handovers/LATEST.md verweist auf das aktuellste Handover Packet und enthält zusätzlich eine maschinenlesbare Kurzfassung:
+`docs/project/handovers/LATEST.md` verweist auf das aktuellste Handover Packet und enthält zusätzlich eine maschinenlesbare Kurzfassung:
 
 - Branch, Worktree und letzter Commit,
 - Work Package ID,
@@ -278,12 +232,12 @@ Das Projekt verwendet Claude Code in mehreren Konfigurationsebenen:
 
 | Mechanismus | Einsatz im Projekt | Nicht verwenden für |
 |---|---|---|
-| CLAUDE.md | globale, dauerhafte und kurze Regeln | lange Fachkonzepte oder historische Logs |
+| `CLAUDE.md` | globale, dauerhafte und kurze Regeln | lange Fachkonzepte oder historische Logs |
 | `.claude/rules/*.md` | pfad- oder domänenspezifische Regeln | generische Wiederholungen |
 | `.claude/agents/*.md` | spezialisierte Rollen mit Tool- und Scope-Grenzen | Projektstatus |
 | `.claude/skills/` | wiederholbare Prozesse und Qualitätsroutinen | einmalige Produktentscheidung |
 | `.claude/settings.json` | projektweit teilbare Einstellungen, Rechte und Hooks | Secrets oder persönliche Präferenzen |
-| CLAUDE.local.md | persönliche lokale Hinweise, nicht committen | Teamregeln |
+| `CLAUDE.local.md` | persönliche lokale Hinweise, nicht committen | Teamregeln |
 | Auto-Memory | optionale lokale Lernnotizen | Single Source of Truth oder Teamwissen |
 | Session Transcript | kurzfristige Wiederaufnahme | dauerhafte Projektkontinuität |
 
@@ -295,20 +249,20 @@ Große Projekte scheitern häufig nicht an fehlendem Wissen, sondern an zu viel 
 
 | Regeldatei | Geltungsbereich | Beispielinhalt |
 |---|---|---|
-| architecture.md | `apps/api/**`, `workers/**`, `packages/domain/**` | Modulgrenzen, Events, Transaktionen, Fehlerverträge |
-| frontend.md | `apps/web/**`, `packages/ui/**` | Designsystem, Accessibility, Loading-/Error-States |
-| security.md | alle produktiven Dateien | Tenant Isolation, Secrets, Logging, Input Validation |
-| testing.md | `**/*.test.*`, `tests/**` | Testpyramide, Fixtures, keine instabilen Sleeps |
-| reporting.md | Reporting Engine | PPTX/PDF-Verträge, visuelle Regression, Quellenpflicht |
-| integrations.md | Connectoren und Workflows | Idempotenz, Retries, Rate Limits, Dead Letter |
-| docs.md | `docs/**` | Entscheidungstrennung, Quellen, Änderungslog |
-| demo-data.md | `demo/**` | ausschließlich synthetische Daten, keine realen Markeninterna |
+| `architecture.md` | `apps/api/**`, `workers/**`, `packages/domain/**` | Modulgrenzen, Events, Transaktionen, Fehlerverträge |
+| `frontend.md` | `apps/web/**`, `packages/ui/**` | Designsystem, Accessibility, Loading-/Error-States |
+| `security.md` | alle produktiven Dateien | Tenant Isolation, Secrets, Logging, Input Validation |
+| `testing.md` | `**/*.test.*`, `tests/**` | Testpyramide, Fixtures, keine instabilen Sleeps |
+| `reporting.md` | Reporting Engine | PPTX/PDF-Verträge, visuelle Regression, Quellenpflicht |
+| `integrations.md` | Connectoren und Workflows | Idempotenz, Retries, Rate Limits, Dead Letter |
+| `docs.md` | `docs/**` | Entscheidungstrennung, Quellen, Änderungslog |
+| `demo-data.md` | `demo/**` | ausschließlich synthetische Daten, keine realen Markeninterna |
 
-Regeln werden so formuliert, dass ein Agent sie prüfen kann. „Schreibe guten Code" ist unzureichend. „Jeder tenantgebundene Query benötigt einen expliziten Tenant Scope und einen Isolationstest" ist prüfbar.
+Regeln werden so formuliert, dass ein Agent sie prüfen kann. „Schreibe guten Code“ ist unzureichend. „Jeder tenantgebundene Query benötigt einen expliziten Tenant Scope und einen Isolationstest“ ist prüfbar.
 
 ## 10. Kontextpakete pro Work Package
 
-Kein Agent lädt zu Beginn alle PDFs, DOCX-Dateien und vollständigen Markdown-Dokumente. Für jedes Work Package wird ein kuratiertes CONTEXT_PACK.md erzeugt.
+Kein Agent lädt zu Beginn alle PDFs, DOCX-Dateien und vollständigen Markdown-Dokumente. Für jedes Work Package wird ein kuratiertes `CONTEXT_PACK.md` erzeugt.
 
 Ein Kontextpaket enthält:
 
@@ -335,11 +289,11 @@ Wenn eine Frage außerhalb des Kontextpakets liegt, liest der Agent gezielt die 
 
 ## 11. Work-Item- und Work-Package-Modell
 
-Ein Work Item ist jede nachverfolgbare Arbeit. Ein Work Package ist die kleinste kontrolliert umsetzbare Einheit mit einem prüfbaren Outcome.
+Ein **Work Item** ist jede nachverfolgbare Arbeit. Ein **Work Package** ist die kleinste kontrolliert umsetzbare Einheit mit einem prüfbaren Outcome.
 
 | Feld | Pflichtinhalt |
 |---|---|
-| ID | stabile Kennung, z. B. WP-042 |
+| ID | stabile Kennung, z. B. `WP-042` |
 | Titel | Outcome-orientiert, nicht rein technisch |
 | Problem | welcher Nutzer- oder Systemnachteil behoben wird |
 | Ziel | beobachtbares Ergebnis |
@@ -408,17 +362,15 @@ Issues sind mit Product Contract, ADR, Branch, Pull Request und Checkpoint verkn
 
 ## 13. Session-Boot-Sequenz
 
-> **Abbildung 3:** Ein Repository-Checkpoint ermöglicht die kontrollierte Fortsetzung eines Work Packages in einer neuen Claude-Code-Session.
->
-> [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG3]]
 
 Jede neue Claude-Code-Session führt vor materieller Arbeit folgende Sequenz aus:
 
 1. Repository-Root und aktuellen Branch bestätigen.
-2. git status, letzte Commits und offenen Merge-/Rebase-Zustand prüfen.
-3. CLAUDE.md und relevante path-scoped Rules laden.
-4. docs/project/CURRENT_STATE.md lesen.
-5. docs/project/handovers/LATEST.md lesen.
+2. `git status`, letzte Commits und offenen Merge-/Rebase-Zustand prüfen.
+3. `CLAUDE.md` und relevante path-scoped Rules laden.
+4. `docs/project/CURRENT_STATE.md` lesen.
+5. `docs/project/handovers/LATEST.md` lesen.
 6. Aktives Work Package und sein Context Pack laden.
 7. Relevante Product Contracts, ADRs und Findings lesen.
 8. Abhängigkeiten und Human Gates prüfen.
@@ -432,10 +384,10 @@ Der Agent fragt nicht erneut nach Entscheidungen, die im Repository eindeutig do
 
 Ein Context Window ist ein begrenzter Arbeitsraum, kein Projektarchiv. Das Projekt verwendet deshalb vier Schutzmechanismen:
 
-1. Context Packs statt vollständiger Konzeptbibliothek,
-2. Subagents für große Recherche-, Log- oder Reviewaufgaben mit komprimierter Rückgabe,
-3. regelmäßige Checkpoints unabhängig vom sichtbaren Context-Stand,
-4. Sessionwechsel nach einem verifizierten Zwischenstand statt maximaler Ausschöpfung.
+1. **Context Packs** statt vollständiger Konzeptbibliothek,
+2. **Subagents** für große Recherche-, Log- oder Reviewaufgaben mit komprimierter Rückgabe,
+3. **regelmäßige Checkpoints** unabhängig vom sichtbaren Context-Stand,
+4. **Sessionwechsel** nach einem verifizierten Zwischenstand statt maximaler Ausschöpfung.
 
 Da ein Agent den verbleibenden Context nicht immer exakt und rechtzeitig beurteilen kann, stützt sich die Sicherheit nicht allein auf Selbsteinschätzung. Stattdessen gelten harte Arbeitsgrenzen:
 
@@ -444,15 +396,13 @@ Da ein Agent den verbleibenden Context nicht immer exakt und rechtzeitig beurtei
 - nach einem größeren Testlauf oder Review ein Verified Checkpoint,
 - vor jeder Kompaktierung oder bewussten Sessionübergabe ein Handover,
 - bei unübersichtlicher Fehlersuche nach zwei bis drei Hypothesen einen Erkenntnis-Checkpoint,
-- keine mehrstündige oder modulweite „One-Shot"-Implementierung ohne Zwischenergebnisse.
+- keine mehrstündige oder modulweite „One-Shot“-Implementierung ohne Zwischenergebnisse.
 
 **ENTSCHEIDUNG:** Claude soll lieber eine Session früher kontrolliert beenden als einen großen ungesicherten Zustand im Context zu halten.
 
 ## 15. Checkpoint-Typen
 
-> **Abbildung 2:** Checkpoints entstehen während der Arbeit nach festen Triggern und nicht erst am Ende einer Session.
->
-> [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG2]]
 
 ### 15.1 Micro Checkpoint
 
@@ -476,7 +426,7 @@ Ein Verified Checkpoint ist ein dauerhafter, wiederherstellbarer Zwischenstand. 
 - Ergebnisse dokumentiert,
 - keine wissentlich defekte Basis ohne Kennzeichnung,
 - atomarer Git-Commit oder klarer PR-Zwischenstand,
-- CURRENT_STATE.md oder Work Package aktualisiert,
+- `CURRENT_STATE.md` oder Work Package aktualisiert,
 - offene Risiken und nächster Einstieg dokumentiert.
 
 ### 15.3 Handover Checkpoint
@@ -507,29 +457,29 @@ Ein Checkpoint ist zwingend:
 - vor Übergabe an einen Reviewer,
 - nach erfolgreichem Test- oder Fix-Zyklus,
 - sobald ein Blocker oder ungeklärter Widerspruch entdeckt wird,
-- vor /compact, /rewind, Sessionende oder bewusstem Chatwechsel,
+- vor `/compact`, `/rewind`, Sessionende oder bewusstem Chatwechsel,
 - vor Merge, Release oder Deployment,
 - wenn ein Agent seine Turn-, Zeit-, Kosten- oder Context-Grenze erreicht,
 - wenn ein paralleler Agent auf denselben Vertrag oder dieselben Dateien angewiesen ist.
 
-Ein Stop- oder vergleichbarer Hook soll prüfen, ob ein aktuelles Handover und ein frischer Status existieren. Der Hook darf das Beenden blockieren oder eine klare Warnung erzeugen, wenn materiale Änderungen ungesichert sind. Die genaue Hook-Konfiguration wird gegen die installierte Claude-Code-Version validiert.
+Ein `Stop`- oder vergleichbarer Hook soll prüfen, ob ein aktuelles Handover und ein frischer Status existieren. Der Hook darf das Beenden blockieren oder eine klare Warnung erzeugen, wenn materiale Änderungen ungesichert sind. Die genaue Hook-Konfiguration wird gegen die installierte Claude-Code-Version validiert.
 
 ## 17. Checkpoint-Automatisierung
 
-Das Repository enthält ein reproduzierbares Skript, beispielsweise scripts/checkpoint, mit folgenden Aufgaben:
+Das Repository enthält ein reproduzierbares Skript, beispielsweise `scripts/checkpoint`, mit folgenden Aufgaben:
 
 1. Work Package und Branch erkennen.
 2. Git-Status und geänderte Dateien erfassen.
 3. Tests oder einen gewählten Test-Scope ausführen.
 4. Testergebnisse und bekannte Fehler speichern.
 5. Checkpoint Record aus Template erzeugen.
-6. CURRENT_STATE.md, Work Package und LATEST.md aktualisieren.
+6. `CURRENT_STATE.md`, Work Package und `LATEST.md` aktualisieren.
 7. bei Verified Checkpoint einen atomaren Commit vorbereiten oder erstellen,
 8. Geheimnisse, große Binärdateien und nicht erlaubte Dateien vor Commit prüfen,
 9. einen maschinenlesbaren JSON-Status für nächste Agenten schreiben,
 10. exakten Resume-Befehl oder Startprompt ausgeben.
 
-Der Checkpoint-Prozess darf nicht automatisch einen fehlerhaften Zustand als „grün" deklarieren. Ein bewusst roter Zwischenstand ist zulässig, wenn er isoliert, dokumentiert und nicht auf main gemergt ist.
+Der Checkpoint-Prozess darf nicht automatisch einen fehlerhaften Zustand als „grün“ deklarieren. Ein bewusst roter Zwischenstand ist zulässig, wenn er isoliert, dokumentiert und nicht auf `main` gemergt ist.
 
 ## 18. Handover Packet
 
@@ -555,15 +505,15 @@ Jede Übergabe verwendet dasselbe Schema:
 | Environment | notwendige Services, Seeds, Feature Flags und Ports |
 | Recovery | wie auf letzten sicheren Stand zurückgekehrt wird |
 
-Ein Handover ohne „Exact Next Step" ist unvollständig.
+Ein Handover ohne „Exact Next Step“ ist unvollständig.
 
 ## 19. Wiederaufnahme in einem neuen Chat
 
 Die nächste Session erhält nicht das gesamte alte Gespräch. Sie erhält einen kurzen Startauftrag:
 
-Fortsetzungsprompt:
+**Fortsetzungsprompt:**
 
-> „Arbeite im vorhandenen Repository weiter. Lies zuerst CLAUDE.md, docs/project/CURRENT_STATE.md, docs/project/handovers/LATEST.md und das dort referenzierte aktive Work Package. Prüfe Git-Status, Branch, letzten Commit und vorhandene Tests. Fasse dein Verständnis und den exakten nächsten Schritt in höchstens zehn Punkten zusammen. Setze danach das aktive Work Package fort. Plane nicht das gesamte Projekt neu und wiederhole keine abgeschlossene Arbeit. Stoppe nur bei einem dokumentierten Widerspruch, einer irreversiblen Entscheidung, einem Sicherheits-/Datenschutzrisiko, einem Kostenrisiko oder einem fehlenden Human Gate. Aktualisiere während der Arbeit regelmäßig Checkpoints, Tests, Dokumentation und Handover."
+„Arbeite im vorhandenen Repository weiter. Lies zuerst `CLAUDE.md`, `docs/project/CURRENT_STATE.md`, `docs/project/handovers/LATEST.md` und das dort referenzierte aktive Work Package. Prüfe Git-Status, Branch, letzten Commit und vorhandene Tests. Fasse dein Verständnis und den exakten nächsten Schritt in höchstens zehn Punkten zusammen. Setze danach das aktive Work Package fort. Plane nicht das gesamte Projekt neu und wiederhole keine abgeschlossene Arbeit. Stoppe nur bei einem dokumentierten Widerspruch, einer irreversiblen Entscheidung, einem Sicherheits-/Datenschutzrisiko, einem Kostenrisiko oder einem fehlenden Human Gate. Aktualisiere während der Arbeit regelmäßig Checkpoints, Tests, Dokumentation und Handover.“
 
 Nach dem Startprompt muss die Session auch dann fortsetzbar sein, wenn der vorherige Chat abrupt beendet wurde. Voraussetzung ist, dass der letzte Zwangscheckpoint nicht zu lange zurückliegt.
 
@@ -571,10 +521,10 @@ Nach dem Startprompt muss die Session auch dann fortsetzbar sein, wenn der vorhe
 
 Folgende Aussagen basieren auf der offiziellen Claude-Code-Dokumentation mit Recherchestand 22.07.2026 und müssen vor Implementierung gegen die konkret installierte Version geprüft werden:
 
-- Jede Session startet mit einem frischen Context Window; CLAUDE.md und Rules tragen dauerhafte Projektanweisungen über Sessions.
+- Jede Session startet mit einem frischen Context Window; `CLAUDE.md` und Rules tragen dauerhafte Projektanweisungen über Sessions.
 - Sessions können lokal gespeichert und fortgesetzt werden, sind aber kein teamweites oder maschinenübergreifendes Projektgedächtnis.
 - Native Checkpoints verfolgen direkte Dateiänderungen durch Editierwerkzeuge, erfassen aber nicht zuverlässig jede Änderung durch Bash oder externe Prozesse und ersetzen daher Git nicht.
-- Projektbezogene Subagents können in .claude/agents/ versioniert werden, besitzen eigene Context Windows und eingeschränkte Werkzeuge.
+- Projektbezogene Subagents können in `.claude/agents/` versioniert werden, besitzen eigene Context Windows und eingeschränkte Werkzeuge.
 - Subagents eignen sich zur Context-Entlastung; verschachtelte Delegation ist begrenzt, weshalb zentrale Orchestrierung im Main Thread bleibt.
 - Worktrees können parallele Sessions oder schreibende Agenten isolieren.
 - Hooks können an Lifecycle- und Tool-Ereignisse gekoppelt werden und eignen sich für deterministische Guardrails.
@@ -584,22 +534,20 @@ Folgende Aussagen basieren auf der offiziellen Claude-Code-Dokumentation mit Rec
 
 ## 21. Branch- und Worktree-Strategie
 
-> **Abbildung 4:** Der GitHub Delivery Flow isoliert Änderungen, erzwingt unabhängige Reviews und integriert nur nach erfolgreichen Quality Gates.
->
-> [Abbildung: grafischer Inhalt im Textlayer nicht lesbar — visuelle Verifikation offen, vgl. O-WP019-04]
+[[FIGURE:FIG4]]
 
 ### 21.1 Branches
 
 Empfohlene Namenskonvention:
 
-- feat/WP-042-morning-mission
-- fix/BUG-117-tenant-scope
-- sec/SEC-014-export-authz
-- docs/DOC-032-risk-model
-- chore/OPS-021-ci-cache
-- spike/SPIKE-008-graph-query
+- `feat/WP-042-morning-mission`
+- `fix/BUG-117-tenant-scope`
+- `sec/SEC-014-export-authz`
+- `docs/DOC-032-risk-model`
+- `chore/OPS-021-ci-cache`
+- `spike/SPIKE-008-graph-query`
 
-main ist geschützt. Direkte Pushes sind nicht erlaubt. Materiale Änderungen laufen über Pull Requests.
+`main` ist geschützt. Direkte Pushes sind nicht erlaubt. Materiale Änderungen laufen über Pull Requests.
 
 ### 21.2 Worktrees
 
@@ -610,12 +558,12 @@ Jeder parallel schreibende Agent oder jede parallele Claude-Session erhält eine
 - gemeinsame Verträge werden vor Parallelisierung versioniert,
 - Änderungen werden nicht über Copy/Paste zwischen Worktrees übertragen, sondern über Commits oder Cherry-Picks,
 - Worktrees ohne relevante Änderungen werden bereinigt,
-- lokale .env- oder Tooldateien werden nur kontrolliert und niemals mit Secrets committed.
+- lokale `.env`- oder Tooldateien werden nur kontrolliert und niemals mit Secrets committed.
 
 ### 21.3 Parallelitätsmatrix
 
 | Arbeit | Parallel geeignet? | Bedingung |
-|---|---|---|
+|---|---:|---|
 | Frontend gegen stabilen API-Contract | ja | Mock/Contract vorhanden |
 | Backend und Migration derselben Entität | eingeschränkt | ein Owner, sequenzierte Commits |
 | Unit Tests zu stabilem Contract | ja | klare Akzeptanzkriterien |
@@ -638,10 +586,10 @@ Commits sind klein, atomar und verständlich. Jeder Commit soll:
 
 Empfohlenes Format:
 
-- feat(decision-center): add role-aware morning mission cards [WP-042]
-- fix(authz): enforce tenant scope on evidence export [SEC-014]
-- test(graph): cover impact path cycle handling [WP-058]
-- docs(adr): record workflow runtime choice [ADR-0012]
+- `feat(decision-center): add role-aware morning mission cards [WP-042]`
+- `fix(authz): enforce tenant scope on evidence export [SEC-014]`
+- `test(graph): cover impact path cycle handling [WP-058]`
+- `docs(adr): record workflow runtime choice [ADR-0012]`
 
 Ein Verified Checkpoint kann aus mehreren atomaren Commits bestehen. Ein Micro Checkpoint muss nicht committed werden.
 
@@ -663,11 +611,11 @@ Jeder materiale Pull Request enthält:
 - offene Findings,
 - Reviewer und Human Gates.
 
-Ein PR wird als Draft geöffnet, sobald ein früher Review Mehrwert liefert. Er wird erst „Ready for Review", wenn lokale Mindestgates erfüllt sind.
+Ein PR wird als Draft geöffnet, sobald ein früher Review Mehrwert liefert. Er wird erst „Ready for Review“, wenn lokale Mindestgates erfüllt sind.
 
 ## 24. Branch Protection, Rulesets und CODEOWNERS
 
-Für main gelten mindestens:
+Für `main` gelten mindestens:
 
 - Pull Request erforderlich,
 - direkte Pushes und Force Pushes gesperrt,
@@ -775,11 +723,11 @@ Ein Work Package ist erst fertig, wenn:
 8. keine ungeklärten kritischen Findings bestehen,
 9. Review durch unabhängige Rolle dokumentiert ist,
 10. Demo- oder Abnahmeschritte vorhanden sind,
-11. CURRENT_STATE.md und Work Queue aktualisiert sind,
+11. `CURRENT_STATE.md` und Work Queue aktualisiert sind,
 12. ein Verified oder Release Checkpoint existiert,
 13. der nächste Workstream nicht auf Chatwissen angewiesen ist.
 
-„Code geschrieben" ist kein Done-Zustand.
+„Code geschrieben“ ist kein Done-Zustand.
 
 ## 28. Architecture Decision Records und Decision Records
 
@@ -810,10 +758,10 @@ Records enthalten Kontext, Optionen, Entscheidung, Gründe, Folgen, Risiken, Own
 
 Dokumentation wird in vier Rhythmen gepflegt:
 
-- mit jedem Work Package: Product Contract, Work Item, Tests, relevante technische Doku,
-- bei jeder Entscheidung: ADR oder Decision Record,
-- bei jedem Checkpoint: Current State und Handover,
-- bei jedem Release: Release Notes, bekannte Einschränkungen, Runbook und Demo-Stand.
+- **mit jedem Work Package:** Product Contract, Work Item, Tests, relevante technische Doku,
+- **bei jeder Entscheidung:** ADR oder Decision Record,
+- **bei jedem Checkpoint:** Current State und Handover,
+- **bei jedem Release:** Release Notes, bekannte Einschränkungen, Runbook und Demo-Stand.
 
 Project Memory prüft regelmäßig:
 
@@ -846,7 +794,7 @@ Die Rollen aus Dokument 20B werden als Kombination aus Main Session, Custom Suba
 | GitHub Steward | Agent/Workflow für Branch, PR, Labels und Checks |
 | HR/Capability | Planungsagent; darf nur Vorschläge erzeugen |
 
-Projektbezogene Agentendefinitionen werden in .claude/agents/ versioniert. Jede Definition verweist auf den Role Contract aus Dokument 20B und begrenzt Tools, Scope, Turns, Modellwahl und Stop Conditions.
+Projektbezogene Agentendefinitionen werden in `.claude/agents/` versioniert. Jede Definition verweist auf den Role Contract aus Dokument 20B und begrenzt Tools, Scope, Turns, Modellwahl und Stop Conditions.
 
 ## 31. Orchestrierungsregeln
 
@@ -882,20 +830,20 @@ Mindestens folgende projektbezogene Skills werden vorgesehen:
 
 | Skill | Ergebnis |
 |---|---|
-| bootstrap-session | sichere Session-Boot-Sequenz und Verständniszusammenfassung |
-| create-work-package | vollständiges Work Package mit Context Pack und Gates |
-| checkpoint | Micro-, Verified- oder Handover-Checkpoint |
-| handover | standardisiertes Handover Packet und LATEST.md |
-| create-adr | ADR aus Optionen und Folgen |
-| product-contract | Nutzeroutcome, Journey, Nicht-Ziele und Acceptance Criteria |
-| review-pr | strukturierter Code-, Product-, Security- und QA-Review |
-| security-review | Threat-, Tenant- und Datenflussprüfung |
-| test-changed | risikobasierte Auswahl und Ausführung betroffener Tests |
-| visual-qa | Screens, PDF und PPTX rendern und prüfen |
-| release-candidate | Release Gate, Evidenz und Rollback Pack |
-| project-memory-sync | Current State, Queue, Decisions und Handover konsolidieren |
-| context-pack | relevante Quellen für ein Work Package zusammenstellen |
-| resume-work | Repository prüfen und aktives Paket fortsetzen |
+| `bootstrap-session` | sichere Session-Boot-Sequenz und Verständniszusammenfassung |
+| `create-work-package` | vollständiges Work Package mit Context Pack und Gates |
+| `checkpoint` | Micro-, Verified- oder Handover-Checkpoint |
+| `handover` | standardisiertes Handover Packet und `LATEST.md` |
+| `create-adr` | ADR aus Optionen und Folgen |
+| `product-contract` | Nutzeroutcome, Journey, Nicht-Ziele und Acceptance Criteria |
+| `review-pr` | strukturierter Code-, Product-, Security- und QA-Review |
+| `security-review` | Threat-, Tenant- und Datenflussprüfung |
+| `test-changed` | risikobasierte Auswahl und Ausführung betroffener Tests |
+| `visual-qa` | Screens, PDF und PPTX rendern und prüfen |
+| `release-candidate` | Release Gate, Evidenz und Rollback Pack |
+| `project-memory-sync` | Current State, Queue, Decisions und Handover konsolidieren |
+| `context-pack` | relevante Quellen für ein Work Package zusammenstellen |
+| `resume-work` | Repository prüfen und aktives Paket fortsetzen |
 
 Skills dürfen keine stillen Produktentscheidungen treffen. Sie automatisieren Verfahren.
 
@@ -914,7 +862,7 @@ Beispielhafte Einsatzpunkte:
 | PostToolUse Write/Edit | Formatierung, Lint oder Checkpoint-Alter prüfen |
 | Subagent Start | Role Contract und taskbezogenen Kontext injizieren |
 | Subagent Stop | Output Contract und Handover-Vollständigkeit prüfen |
-| Stop | frischen Checkpoint, Tests und LATEST.md verlangen |
+| Stop | frischen Checkpoint, Tests und `LATEST.md` verlangen |
 | Pre-Commit | Secrets, Größen, Format, Lint und Tests prüfen |
 | Pre-Merge/CI | unabhängige Quality Gates erzwingen |
 
@@ -926,13 +874,13 @@ Claude Code arbeitet mit Least Privilege:
 
 - Standardmäßig Lesezugriff auf das Repository,
 - Schreibzugriff nur auf Work-Package-Scope,
-- kein Zugriff auf .env, Secrets, private Schlüssel oder reale Kundendaten,
+- kein Zugriff auf `.env`, Secrets, private Schlüssel oder reale Kundendaten,
 - Bash-Befehle über Allow-/Ask-/Deny-Regeln,
-- git push, Releases, Deployment, Cloudänderungen und kostenpflichtige Befehle benötigen Freigabe,
+- `git push`, Releases, Deployment, Cloudänderungen und kostenpflichtige Befehle benötigen Freigabe,
 - produktive Datenbanken und Produktionsumgebungen sind im Prototyp nicht verbunden,
 - Security- und Review-Agenten erhalten bevorzugt read-only Rechte,
 - Worktree-Agenten dürfen nur in ihrem isolierten Bereich schreiben,
-- bypassPermissions oder vergleichbare gefährliche Modi werden nicht als Standard verwendet.
+- `bypassPermissions` oder vergleichbare gefährliche Modi werden nicht als Standard verwendet.
 
 Lokale persönliche Einstellungen bleiben außerhalb des Repositories. Geteilte Einstellungen dürfen niemals Secrets enthalten.
 
@@ -980,7 +928,7 @@ Ein Demo-Seed darf keine realen PwC-Daten, internen Preise, vertraulichen Templa
 ### 38.2 Fehlerhafter Agenten-Commit
 
 - Branch isolieren,
-- nicht auf main mergen,
+- nicht auf `main` mergen,
 - Tests und Diff analysieren,
 - über Git revert, fix-forward oder Worktree-Neustart entscheiden,
 - Finding und Root Cause dokumentieren.
@@ -997,7 +945,7 @@ Ein Demo-Seed darf keine realen PwC-Daten, internen Preise, vertraulichen Templa
 
 - Status aus Git, Issues, PRs, Checkpoints und Tests rekonstruieren,
 - Project Memory Finding erstellen,
-- CURRENT_STATE.md reviewen,
+- `CURRENT_STATE.md` reviewen,
 - Ursache beheben, beispielsweise fehlender Stop Hook oder zu großes Work Package.
 
 ### 38.5 Context-Verlust ohne Handover
@@ -1097,18 +1045,18 @@ Die vollständige Produktvision bleibt bestehen. Die Phasen definieren Integrati
 Phase 0 ist abgeschlossen, wenn:
 
 - Git-Repository initialisiert und remote gesichert ist,
-- main geschützt oder lokal äquivalent geregelt ist,
-- Ordnerstruktur und CLAUDE.md existieren,
-- Konzept-Markdown 00 bis 20C unter docs/concept/ liegt,
-- CURRENT_STATE.md, Work Queue, Work-Package- und Handover-Templates existieren,
-- .claude/agents/, .claude/rules/, .claude/skills/ und sichere Settings angelegt sind,
+- `main` geschützt oder lokal äquivalent geregelt ist,
+- Ordnerstruktur und `CLAUDE.md` existieren,
+- Konzept-Markdown 00 bis 20C unter `docs/concept/` liegt,
+- `CURRENT_STATE.md`, Work Queue, Work-Package- und Handover-Templates existieren,
+- `.claude/agents/`, `.claude/rules/`, `.claude/skills/` und sichere Settings angelegt sind,
 - Checkpoint- und Context-Pack-Skripte als erste Version funktionieren,
 - Issue- und PR-Templates vorhanden sind,
 - Basis-CI mit Format, Lint, Typprüfung, Test, Secret Scan und Docs Check läuft,
 - synthetische Demo-Datenregeln festgelegt sind,
 - eine frische Claude-Code-Session anhand eines Handover Packets erfolgreich fortsetzt.
 
-Der wichtigste Abnahmetest von Phase 0 ist kein Feature, sondern ein Context-Loss-Drill: Session A beginnt ein kleines Work Package, erstellt einen Verified Checkpoint und beendet. Session B setzt ohne alten Chat korrekt fort, schließt das Paket ab und erzeugt einen geprüften PR.
+Der wichtigste Abnahmetest von Phase 0 ist kein Feature, sondern ein **Context-Loss-Drill**: Session A beginnt ein kleines Work Package, erstellt einen Verified Checkpoint und beendet. Session B setzt ohne alten Chat korrekt fort, schließt das Paket ab und erzeugt einen geprüften PR.
 
 ## 44. Phase 1 – Product Shell und Demo Foundation
 
@@ -1203,22 +1151,22 @@ Kernlieferungen:
 
 ## 47. Erster ausführbarer Claude-Code-Startprompt
 
-> „Du übernimmst die strukturierte Umsetzung der ISMS Managed Service Platform auf Grundlage der Konzeptbibliothek im Repository.
->
-> 1. Lies zuerst CLAUDE.md, docs/concept/00_MASTER_INDEX_UND_PROJEKTVERFASSUNG_v1.0.md und docs/concept/20C_CLAUDE_CODE_GITHUB_CHECKPOINTS_BAUPLAN_v1.0.md.
-> 2. Prüfe danach die vorhandene Repository-Struktur, Git-Historie, docs/project/CURRENT_STATE.md, Work Queue und das aktuelle Handover.
-> 3. Fasse dein Verständnis von Produkt, Nutzern, vollständiger Zielvision, Entwicklungsverfassung, Agentenorganisation und Phase 0 zusammen.
-> 4. Melde nur tatsächliche Widersprüche oder blockierende Voraussetzungen. Erfinde keine Produktentscheidungen.
-> 5. Erstelle, falls noch nicht vorhanden, einen begrenzten Bootstrap-Plan für Phase 0 mit kleinen Work Packages und klaren Acceptance Criteria.
-> 6. Lege Repository, CLAUDE.md, .claude-Struktur, Projektstatus, Templates, sichere Settings, Testgrundlage und CI schrittweise an.
-> 7. Arbeite in kleinen, prüfbaren Outcomes. Erzeuge während der Arbeit regelmäßig Micro und Verified Checkpoints; warte damit nicht bis zum Ende der Session.
-> 8. Aktualisiere nach jedem größeren Teilziel Work Package, Tests, Dokumentation und CURRENT_STATE.md.
-> 9. Nutze spezialisierte Agenten nach Dokument 20B, aber halte Orchestrierung und finale Integration zentral. Schreibende parallele Agenten arbeiten isoliert in Worktrees.
-> 10. Frage nur bei blockierenden, irreversiblen, sicherheits-, datenschutz-, kosten- oder produktionsrelevanten Entscheidungen. Bei reversiblen technischen Details entscheide sinnvoll, dokumentiere und arbeite weiter.
-> 11. Führe vor Merge oder Übergabe alle relevanten Tests und Quality Gates aus.
-> 12. Beende jede Session mit einem Handover Packet, einem genauen nächsten Schritt und einem sicheren Repository-Zustand.
->
-> Beginne mit Analyse und Verständniszusammenfassung. Fahre anschließend mit dem ersten nicht blockierten Phase-0-Work-Package fort."
+„Du übernimmst die strukturierte Umsetzung der ISMS Managed Service Platform auf Grundlage der Konzeptbibliothek im Repository.
+
+1. Lies zuerst `CLAUDE.md`, `docs/concept/00_MASTER_INDEX_UND_PROJEKTVERFASSUNG_v1.0.md` und `docs/concept/20C_CLAUDE_CODE_GITHUB_CHECKPOINTS_BAUPLAN_v1.0.md`.
+2. Prüfe danach die vorhandene Repository-Struktur, Git-Historie, `docs/project/CURRENT_STATE.md`, Work Queue und das aktuelle Handover.
+3. Fasse dein Verständnis von Produkt, Nutzern, vollständiger Zielvision, Entwicklungsverfassung, Agentenorganisation und Phase 0 zusammen.
+4. Melde nur tatsächliche Widersprüche oder blockierende Voraussetzungen. Erfinde keine Produktentscheidungen.
+5. Erstelle, falls noch nicht vorhanden, einen begrenzten Bootstrap-Plan für Phase 0 mit kleinen Work Packages und klaren Acceptance Criteria.
+6. Lege Repository, `CLAUDE.md`, `.claude`-Struktur, Projektstatus, Templates, sichere Settings, Testgrundlage und CI schrittweise an.
+7. Arbeite in kleinen, prüfbaren Outcomes. Erzeuge während der Arbeit regelmäßig Micro und Verified Checkpoints; warte damit nicht bis zum Ende der Session.
+8. Aktualisiere nach jedem größeren Teilziel Work Package, Tests, Dokumentation und `CURRENT_STATE.md`.
+9. Nutze spezialisierte Agenten nach Dokument 20B, aber halte Orchestrierung und finale Integration zentral. Schreibende parallele Agenten arbeiten isoliert in Worktrees.
+10. Frage nur bei blockierenden, irreversiblen, sicherheits-, datenschutz-, kosten- oder produktionsrelevanten Entscheidungen. Bei reversiblen technischen Details entscheide sinnvoll, dokumentiere und arbeite weiter.
+11. Führe vor Merge oder Übergabe alle relevanten Tests und Quality Gates aus.
+12. Beende jede Session mit einem Handover Packet, einem genauen nächsten Schritt und einem sicheren Repository-Zustand.
+
+Beginne mit Analyse und Verständniszusammenfassung. Fahre anschließend mit dem ersten nicht blockierten Phase-0-Work-Package fort.“
 
 ## 48. Verbindliche Demo- und Abnahmeszenarien
 
@@ -1231,7 +1179,7 @@ Kernlieferungen:
 7. Micro Checkpoint nach einem logischen Teilziel.
 8. Verified Checkpoint mit Tests und atomarem Commit.
 9. Stop Hook erkennt fehlendes Handover.
-10. Neuer Chat liest LATEST.md und setzt exakt fort.
+10. Neuer Chat liest `LATEST.md` und setzt exakt fort.
 11. PR zeigt Product-, Test-, Security- und Dokumentationsevidence.
 12. Required Check verhindert Merge bei Tenant-Isolationstestfehler.
 13. CODEOWNERS oder simulierte Reviewmatrix fordert unabhängige Freigabe.
@@ -1239,7 +1187,7 @@ Kernlieferungen:
 15. Konflikt in gemeinsamem Vertrag stoppt Parallelität kontrolliert.
 16. Projektgedächtnis rekonstruiert Status aus Git und Issues.
 17. Auto-Memory enthält ein Learning, das erst nach Review als Rule übernommen wird.
-18. Native /rewind- oder Sessioncheckpoint-Funktion wird demonstriert, aber Git bleibt Recovery-Basis.
+18. Native `/rewind`- oder Sessioncheckpoint-Funktion wird demonstriert, aber Git bleibt Recovery-Basis.
 19. Demo-Seed wird reproduzierbar zurückgesetzt.
 20. Phase-0-Release enthält Release Record und funktionsfähigen Continuity Drill.
 
@@ -1247,7 +1195,7 @@ Kernlieferungen:
 
 1. Das Repository besitzt eine eindeutige Truth-Hierarchie.
 2. Markdown und nicht PDF ist die maschinenlesbare Konzeptquelle.
-3. CLAUDE.md bleibt kurz, konkret und verweist auf weitere Quellen.
+3. `CLAUDE.md` bleibt kurz, konkret und verweist auf weitere Quellen.
 4. Path-scoped Rules reduzieren irrelevanten Context.
 5. Jedes materiale Work Item besitzt ein Work Package mit Owner, Scope und Acceptance Criteria.
 6. Work Packages sind klein genug für kontrollierte Checkpoints.
@@ -1257,7 +1205,7 @@ Kernlieferungen:
 10. Eine neue Session kann ohne alten Chat fortsetzen.
 11. Chat, Transcript und Auto-Memory sind nicht die einzige Projektquelle.
 12. Git wird als dauerhafte Historie verwendet.
-13. main ist vor direkten oder ungeprüften Änderungen geschützt.
+13. `main` ist vor direkten oder ungeprüften Änderungen geschützt.
 14. Parallele Writer arbeiten in getrennten Worktrees.
 15. Builder und finaler Reviewer sind getrennt.
 16. PRs enthalten fachliche, technische, Test-, Security- und Doku-Evidence.
@@ -1283,7 +1231,7 @@ Kernlieferungen:
 - **D20C-001:** Das Git-Repository ist das zentrale Projektgedächtnis; Chats sind nicht autoritativ.
 - **D20C-002:** Markdown-Konzeptdateien sind die maschinenlesbare Quelle; PDF und DOCX sind Derivate.
 - **D20C-003:** Produkt-, Entscheidungs-, Umsetzungs- und Statuswahrheit werden getrennt verwaltet.
-- **D20C-004:** CLAUDE.md bleibt kurz und enthält keine vollständige Konzeptbibliothek.
+- **D20C-004:** `CLAUDE.md` bleibt kurz und enthält keine vollständige Konzeptbibliothek.
 - **D20C-005:** Kontext wird pro Work Package kuratiert.
 - **D20C-006:** Arbeit wird in kleine outcome-orientierte Work Packages zerlegt.
 - **D20C-007:** Checkpoints entstehen kontinuierlich und nicht nur am Session-Ende.
@@ -1292,7 +1240,7 @@ Kernlieferungen:
 - **D20C-010:** Jede Session beginnt mit einer festen Boot-Sequenz.
 - **D20C-011:** Jede Session oder Rollenübergabe erzeugt ein Handover Packet.
 - **D20C-012:** Eine neue Session plant das Projekt nicht neu, solange kein Widerspruch oder Blocker besteht.
-- **D20C-013:** main wird geschützt und materiale Änderungen laufen über Pull Requests.
+- **D20C-013:** `main` wird geschützt und materiale Änderungen laufen über Pull Requests.
 - **D20C-014:** Parallele Writer verwenden isolierte Worktrees und getrennte Änderungsgrenzen.
 - **D20C-015:** Builder und finaler Reviewer sind bei materialer Arbeit getrennt.
 - **D20C-016:** Required Quality Gates dürfen von Agenten nicht umgangen werden.
@@ -1330,7 +1278,7 @@ Kernlieferungen:
 - **O20C-004:** Welche Claude-Code-Version und welche Features sind beim Start installiert?
 - **O20C-005:** Werden Agent Teams in Phase 0 getestet oder bewusst bis zu einer stabileren Version verschoben?
 - **O20C-006:** Welche Hooks können in der gewählten Version zuverlässig blockierend arbeiten?
-- **O20C-007:** Soll autoMemoryEnabled projektweit deaktiviert oder nur als nicht autoritativ dokumentiert werden?
+- **O20C-007:** Soll `autoMemoryEnabled` projektweit deaktiviert oder nur als nicht autoritativ dokumentiert werden?
 - **O20C-008:** Welche maximale Zeit-, Token- oder Kostenbudgets gelten pro Work Package und Agent?
 - **O20C-009:** Wer übernimmt in der Ein-Personen-Phase reale PR-Freigaben, wenn GitHub eine menschliche Approval verlangt?
 - **O20C-010:** Welche CI-Ressourcen dürfen kostenpflichtig verwendet werden?
@@ -1385,7 +1333,7 @@ Die folgenden externen Quellen wurden ausschließlich für aktuelle Tool- und Gi
 
 | Quelle | Verwendeter Aspekt | Abrufstand |
 |---|---|---|
-| Anthropic Claude Code Docs – Memory | frische Context Windows, CLAUDE.md, Rules, Auto-Memory und deren Grenzen | 22.07.2026 |
+| Anthropic Claude Code Docs – Memory | frische Context Windows, `CLAUDE.md`, Rules, Auto-Memory und deren Grenzen | 22.07.2026 |
 | Anthropic Claude Code Docs – Sessions | Resume, lokale Sessions und Sessionverwaltung | 22.07.2026 |
 | Anthropic Claude Code Docs – Checkpointing | native Edit-Checkpoints, Rewind und Abgrenzung zu Git | 22.07.2026 |
 | Anthropic Claude Code Docs – Subagents | projektbezogene Subagents, eigene Context Windows, Toolgrenzen | 22.07.2026 |
