@@ -1,28 +1,24 @@
 # Active Work Package
 
-- **ID:** — (kein aktives Work Package)
-- **Zuletzt abgeschlossen:** **WP-018 Werkzeuge & sichtbare Abnahme**
-  - Datei: `work-packages/WP-018_WERKZEUGE_SICHTBARE_ABNAHME.md`
-  - Review-Notiz: `docs/project/reviews/WP-018_INDEPENDENT_REVIEW.md`
-  - Ergebnis: Linter (FINDING-0005 geschlossen, ADR-0003) · `pnpm qa:visual <WP>` mit committeten
-    Screenshots + axe-Report (ADR-0004, E-03 eingelöst) · drei Wächtertests · 448 Tests grün
-  - Erster axe-Lauf → **FINDING-0008** (dl-Semantik, Folge-Arbeit mit Product Gate)
-  - Neue Owner-Fragen: O-WP018-04 (QA-Lauf in CI = Kosten), O-WP018-06 (weitere Abnahme-Perspektiven)
-
-## Nächstes Work Package: WP-019 Konzeptfassungen aus den PDFs (FINDING-0007)
-
-Die Markdown-Arbeitsfassungen werden aus den PDF-Originalen **korrigiert** — beginnend mit den
-fünf schwerwiegend abweichenden Dok. 03, 04, 05, 06, 07 (Rohbefund:
-`docs/concept/abgleich/PDF_MARKDOWN_ABGLEICH_2026-07-23.md`). Keine Produktentscheidung, sondern
-Reparatur der Übertragung (DR-0006) — **kein Human Gate nötig**, aber `concept-consistency-reviewer`
-als Gate. Danach werden die offenen Fragen neu bewertet, die Artefakte der Ableitung sind
-(Kandidat: O-WP014-01), und `MANIFEST.json` wird nachgezogen.
-
-Ein WP + Context Pack existiert noch nicht — vom `program-manager` erstellen lassen.
-
-Danach: **WP-020** verlorene Anforderungen (Cross-Tenant-Schutz zuerst) → **WP-021** Demo-Welt
-konzeptkonform (E-01) → **WP-022** Research Assistenz-Vision (IDEA-003).
+- **ID:** WP-019
+- **Titel:** Konzeptfassungen aus den PDFs nachziehen (FINDING-0007)
+- **Datei:** `work-packages/WP-019_KONZEPTFASSUNGEN_AUS_PDFS.md`
+- **Context Pack:** `context-packs/WP-019/CONTEXT_PACK.md`
+- **Führende Quellen:** die PDF-Originale von Dok. 03–07 (`docs/concept/pdf/`) · Abgleichbericht
+  `docs/concept/abgleich/PDF_MARKDOWN_ABGLEICH_2026-07-23.md` · DR-0006 (+ Nachtrag O-KONZ-01)
+- **Status:** Active — Slice 0 (`scripts/update_manifest.py`), dann Dok. 06/07, dann 03/04/05
+- **Builder:** `concept-author` je Dokument (Schreib-Scope für diesen Auftrag explizit erweitert,
+  im WP begründet) · `platform-devops-reliability` (Manifest-Skript)
+- **Gates:** `concept-consistency-reviewer` je Dokument (neue Fassung gegen den PDF-Text), zwei
+  Runden; Code-Review für das Skript
+- **Human Gates:** keine (DR-0006: Reparatur der Übertragung, keine Produktentscheidung).
+  ABER: widerlegt eine Korrektur eine **gebaute** Produktaussage → Befundliste für WP-020,
+  nicht hier fixen (DR-0005-Weg).
+- **Ziel:** Die fünf schwerwiegend abweichenden Arbeitsfassungen (Dok. 03, 04, 05, 06, 07) tragen
+  den PDF-Inhalt vollständig; 73 hoch-Befunde einzeln nachgewiesen, alle 145 mit Verbleib;
+  Manifest regenerierbar; O-WP014-01 am PDF neu bewertet.
 
 > Abgeschlossen: WP-001..004, 007, 011..018.
-> Offene Human Gates (nicht blockierend): CCP-001..003, Docker-Engine-Start, FINDING-0004,
-> O-WP014-09 vor DB→UI; E-02 nur als Change Proposal; FINDING-0008 mit Product Gate.
+> Danach: WP-020 verlorene Anforderungen → WP-021 Demo-Welt → WP-022 Research Assistenz-Vision.
+> Offene Human Gates: CCP-001..003, Docker, FINDING-0004, O-WP014-09, FINDING-0008 (Product Gate),
+> E-02 nur Change Proposal.

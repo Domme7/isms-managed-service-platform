@@ -2,7 +2,7 @@
 
 **Stand:** WP-018 **fertig** — der Prozess erzeugt Qualität jetzt auch über **Mechanik**: Linter (FINDING-0005 geschlossen), `pnpm qa:visual` mit committeten Screenshots + axe-Report je WP (E-03 eingelöst), drei Wächtertests. Der erste axe-Lauf fand sofort einen echten A11y-Befund (FINDING-0008), den zwei manuelle Reviewrunden nicht sehen konnten  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** keins — als Nächstes **WP-019** Konzeptfassungen aus den PDFs nachziehen (FINDING-0007, Dok. 03–07 zuerst)  
+**Aktives Work Package:** **WP-019** Konzeptfassungen aus den PDFs nachziehen (FINDING-0007, Dok. 03–07)  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
 **Implementierungsstatus:** Lauffähige Demo-App (Shell + Heute + Zwilling + ISMS + Services + **Entscheidungen** + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
