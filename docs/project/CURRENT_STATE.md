@@ -63,7 +63,7 @@ sichtbare Abnahme). Jede mit Empfehlung und Default — **keine blockiert den We
 
 | ID | Kurz | Schwere | blockiert? |
 |---|---|---|---|
-| **FINDING-0009** | **Cross-Tenant-Leak im /services-Leerzustand** (seit WP-012, dritte Instanz der Leak-Klasse) — behoben in WP-020 Slice 1 (`7971bc6`), Wächter erweitert | mittel | nein — **Security-Gate-Verifikation im WP-020-Review ausstehend** |
+| **FINDING-0009** | **Cross-Tenant-Leak in Leerzuständen** (/services + `TenantDetailView`, 3.+4. Instanz der Klasse) — behoben (`7971bc6`, `4a195a9`), Wächter mit Meta-Assertion + Zähl-Mustern mechanisch gegen Wiederkehr gesichert | mittel | **geschlossen 2026-07-23** (Security-Gate, 2. Runde) |
 | **FINDING-0007** | **Markdown-Ableitung der Konzeptdokumente nicht verlustfrei** — es wurde aus einer ungeprüften Interpretation gebaut | **hoch → weitgehend behoben** | Kern behoben: alle 5 schwerwiegenden (WP-019) + alle 14 materialen (WP-023) Fassungen quellentreu. Rest: 4 kleine Abweichungen (01/19/20A/21) + Treue-Check (WP-024). **Regel Null bleibt in Kraft** |
 | FINDING-0008 | `<dl role="group">` entfernt die Listensemantik — 3× serious (axe, WCAG 1.3.1) auf den Kontextzeilen von /heute, /entscheidungen, Objekt-360; der A11y-Fix aus WP-014 hatte eine ungemessene Kehrseite | mittel | nein — Korrektur als Folge-WP mit Product Gate |
 | FINDING-0006 | Domain Gate und QA Gate waren nie besetzt (4 von 9 Gates aus Dok. 20B §36) | mittel | in Behebung ab WP-017 |
