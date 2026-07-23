@@ -604,7 +604,10 @@ function datenprofil(container: HTMLElement): { hrefs: string[]; werte: string[]
   // Die Kontextzeile gehört ausdrücklich dazu: dort stehen Mandant, Scope-Kennungen und
   // Datenstand – der wahrscheinlichste Ort für ein versehentliches Rollen-Gating. Ausgenommen
   // sind genau die zwei bewusst rollenabhängigen Felder (Rahmung, keine Daten).
-  const rollenabhaengig = ['Aktive Rolle', 'Erlebniswelt'];
+  // WP-020 Slice 1: Label „Aktive Produktrolle" nach Dok. 06 „Sichtbarer Kontext" – die Regel
+  // (alle übrigen Kontextwerte sind rollenUNabhängig) bleibt unverändert; die neuen benannten
+  // Datenlücken (Vertretung, Vertraulichkeit, Vertrauensgrad) werden mitverglichen.
+  const rollenabhaengig = ['Aktive Produktrolle', 'Erlebniswelt'];
   const kontextWerte = Array.from(container.querySelectorAll('.od-context > div'))
     .filter((eintrag) => !rollenabhaengig.includes(eintrag.querySelector('dt')?.textContent ?? ''))
     .map((eintrag) => eintrag.querySelector('dd')?.textContent ?? '');

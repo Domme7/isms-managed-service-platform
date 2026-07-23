@@ -113,7 +113,7 @@ describe('EntscheidungenContent – Leitfrage und ihre Grenze', () => {
       return treffer.textContent ?? '';
     };
 
-    const isms = render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+    const isms = render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
     const referenz = satzAus(isms.container);
     isms.unmount();
 
@@ -538,7 +538,9 @@ function datenprofil(container: HTMLElement): { hrefs: string[]; werte: string[]
     ),
   ).map((el) => el.textContent ?? '');
 
-  const rollenabhaengig = ['Aktive Rolle'];
+  // WP-020 Slice 1: Label „Aktive Produktrolle" nach Dok. 06 „Sichtbarer Kontext" – die Regel
+  // (alle übrigen Kontextwerte sind rollenUNabhängig) bleibt unverändert.
+  const rollenabhaengig = ['Aktive Produktrolle'];
   const kontextWerte = Array.from(container.querySelectorAll('.od-context > div'))
     .filter((eintrag) => !rollenabhaengig.includes(eintrag.querySelector('dt')?.textContent ?? ''))
     .map((eintrag) => eintrag.querySelector('dd')?.textContent ?? '');

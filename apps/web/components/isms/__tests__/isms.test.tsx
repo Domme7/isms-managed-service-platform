@@ -18,11 +18,19 @@ import { MeasureCard } from '../IsmsCards';
 import { IsmsView } from '../IsmsView';
 import { SessionProvider } from '../../shell/SessionProvider';
 import { buildIsmsCoreView, type IsmsLink, type MeasureView } from '../../../lib/isms/data';
+import { getRole, type DemoRole } from '../../../lib/shell/roles';
 import { objectDetailHref } from '../../../lib/twin/object-detail';
 
 function tenant(tenantId: string): DemoTenant {
   const found = DEMO_TENANTS.find((t) => t.tenant_id === tenantId);
   if (!found) throw new Error(`Testfixture fehlt: ${tenantId}`);
+  return found;
+}
+
+/** Rolle für die Kontextleiste (WP-020 Slice 1) – reine Anzeige, kein Gating (06-D05). */
+function role(roleId: string): DemoRole {
+  const found = getRole(roleId);
+  if (!found) throw new Error(`Testfixture fehlt: ${roleId}`);
   return found;
 }
 
@@ -36,7 +44,7 @@ function cardByHeading(name: string): HTMLElement {
 
 describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', () => {
   it('zeigt Leitfrage und die vier Sektionen Risiken/Controls/Maßnahmen/Nachweise', () => {
-    render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
 
     expect(
       screen.getByText('Wie ist die Risiko- und Control-Lage von Nordwerk Manufacturing SE?'),
@@ -48,7 +56,7 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
   });
 
   it('zeigt die Risiko-Karte mit Herkunfts-Kette in Klartext (Szenario, Threat, Weakness, affects)', () => {
-    render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
 
     // Risiko mit Status als Text (nie nur Farbe, Dok. 06 06-D11).
     const riskCard = cardByHeading('Betriebsunterbrechung Auftragsabwicklung');
@@ -76,7 +84,7 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
   });
 
   it('weist Control „wirksam" und Implementation „implementiert" getrennt aus (08-D07)', () => {
-    render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
     const controlCard = cardByHeading('Backup & Recovery Control');
 
     // Control-Stand als eigener Text an der Karte – bewusst als Lebenszyklus-Stand gerahmt
@@ -106,7 +114,7 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
   });
 
   it('zeigt Maßnahmen- und Nachweis-Karte mit Status und Bezug', () => {
-    render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
 
     const measureCard = cardByHeading('Härtung & Patch-Management ERP-Schnittstelle');
     expect(
@@ -139,7 +147,7 @@ describe('IsmsContent – Verlinkung auf die Objekt-360-Seite (WP-014 Slice 2)',
   ];
 
   it('verlinkt jeden Kartenkopf auf die Detailseite seines Objekts', () => {
-    render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
 
     expect(kartenkoepfe.length).toBeGreaterThanOrEqual(6);
     for (const ref of kartenkoepfe) {
@@ -152,7 +160,7 @@ describe('IsmsContent – Verlinkung auf die Objekt-360-Seite (WP-014 Slice 2)',
   });
 
   it('verlinkt die verknüpften Objekte einer Karte (LinkItems) auf ihre Detailseite', () => {
-    render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
 
     const controlView = view.controls.find((c) => c.control.name === 'Backup & Recovery Control');
     if (!controlView) throw new Error('Testfixture fehlt: Control „Backup & Recovery Control"');
@@ -175,7 +183,9 @@ describe('IsmsContent – Verlinkung auf die Objekt-360-Seite (WP-014 Slice 2)',
   });
 
   it('adressiert JEDEN Objektlink im aktiven Mandanten (nie ein fremdes Objekt)', () => {
-    const { container } = render(<IsmsContent tenant={tenant(TENANT_ID.NORDWERK)} />);
+    const { container } = render(
+      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
 
     const nordwerkIds = new Set(
       DEMO_SEED.objects.filter((o) => o.tenant_id === TENANT_ID.NORDWERK).map((o) => o.object_id),
@@ -234,7 +244,7 @@ describe('IsmsCards – nicht auflösbarer Verweis bleibt ohne Link', () => {
 
 describe('IsmsContent – Empty-State (Mandanten ohne ISMS-Kernobjekte)', () => {
   it('zeigt für den Consulting Operator den Empty-State, obwohl er Services trägt', () => {
-    render(<IsmsContent tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)} />);
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.CONSULTING_OPERATOR)} />);
 
     expect(
       screen.getByRole('heading', {
@@ -267,7 +277,7 @@ describe('IsmsContent – Empty-State (Mandanten ohne ISMS-Kernobjekte)', () => 
   });
 
   it('zeigt für Finovia den Empty-State ohne Services-Hinweis', () => {
-    render(<IsmsContent tenant={tenant(TENANT_ID.FINOVIA)} />);
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />);
 
     expect(
       screen.getByRole('heading', {

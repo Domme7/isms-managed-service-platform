@@ -7,11 +7,23 @@
  * KEINE Autorisierungslogik. Rendert innerhalb des `main`-Landmarks aus dem Twin-Layout.
  */
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
 import { tenantDetailHref } from '../../lib/twin/routes';
 import { Badge } from './Badge';
 
-export function TenantOverview({ tenants }: { tenants: readonly DemoTenant[] }) {
+/**
+ * `contextSlot` ergänzt in WP-020 Slice 1: die Route `/twin` bettet hier die Kontextleiste
+ * (`TwinContextBar`, Client-Komponente mit Session-Zugriff) ein – diese Komponente selbst
+ * bleibt server-renderbar und ohne Session-Abhängigkeit testbar.
+ */
+export function TenantOverview({
+  tenants,
+  contextSlot,
+}: {
+  tenants: readonly DemoTenant[];
+  contextSlot?: ReactNode;
+}) {
   return (
     <>
       <p className="tw-eyebrow">Digitaler Unternehmenszwilling</p>
@@ -26,6 +38,8 @@ export function TenantOverview({ tenants }: { tenants: readonly DemoTenant[] }) 
       <p className="tw-question">
         Was enthält der digitale Zwilling eines Mandanten und wie hängt es zusammen?
       </p>
+
+      {contextSlot}
 
       <h2 id="mandanten">Mandanten</h2>
       <nav aria-labelledby="mandanten">

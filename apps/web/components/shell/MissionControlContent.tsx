@@ -48,6 +48,7 @@ import {
 } from '../../lib/heute/framing';
 import { getPlace } from '../../lib/shell/places';
 import { worldForRole, type DemoRole, type ExperienceWorld } from '../../lib/shell/roles';
+import { PageContextBar } from './PageContextBar';
 
 /** Stabile DOM-ID je Abschnitt (für `aria-labelledby`). */
 function sectionHeadingId(id: MissionSectionId): string {
@@ -126,20 +127,14 @@ export function MissionControlContent({ role, tenant }: { role: DemoRole; tenant
  * --------------------------------------------------------------------------- */
 
 /**
- * Rolle, Erlebniswelt, Mandant, Scope und Datenstand querschnittlich sichtbar (Dok. 06 §6,
- * 06-D04). „Datenstand" ist ausdrücklich die SYSTEMACHSE (`record_time.recorded_at`, Dok. 07 §11)
- * und wird nicht mit der fachlichen Gültigkeit vermischt. Als Scope erscheinen die belegten
- * Kennungen aus dem Datenbestand – ein Klartextname existiert dazu nicht (O-WP014-03).
- *
- * // OFFENE FRAGE O-WP016-08: Dok. 06 §6 nennt für den Querschnitt außerdem „Vertrauensgrad"
- * // und „Version". Beide sind im Objektvertrag Felder EINES Objekts bzw. EINER Kante; für eine
- * // ganze Seite über einen Mandanten existiert kein belegter Wert. Ein zusammengefasster
- * // Vertrauensgrad wäre eine Verdichtung und damit eine Bewertung (verboten in diesem WP;
- * // vgl. Dok. 07 D10 und O-WP014-02), eine „Version des Mandanten" kennt der Contract nicht.
- * // Beide Felder bleiben hier deshalb LEER statt geraten; die belegten Einzelwerte stehen
- * // weiterhin an der Objekt-360-Seite. Produkt-/Konzeptklärung ausstehend.
- *
- * `role="group"` wie in `ObjectDetailView`: `dl` hat keine verlässliche implizite Rolle.
+ * Kontextleiste über die gemeinsame `PageContextBar` (WP-020 Slice 1, Dok. 06 „Sichtbarer
+ * Kontext"): Mandant, Produktrolle, die drei benannten Datenlücken (Vertretung,
+ * Vertraulichkeit/Exportrestriktion, Vertrauensgrad – Muster O-WP016-08, dort begründet) sowie
+ * seitenspezifisch Scope und Datenstand. „Datenstand" ist ausdrücklich die SYSTEMACHSE
+ * (`record_time.recorded_at`, Dok. 07 §11) und wird nicht mit der fachlichen Gültigkeit
+ * vermischt. Als Scope erscheinen die belegten Kennungen aus dem Datenbestand – ein
+ * Klartextname existiert dazu nicht (O-WP014-03). Die Erlebniswelt bleibt als seitenspezifische
+ * Rahmungszeile erhalten (Zusatzeintrag).
  */
 function ContextBar({
   model,
@@ -160,39 +155,27 @@ function ContextBar({
   }
 
   return (
-    /* `role="group"` wie in `ObjectDetailView`: `dl` hat keine verlässliche implizite Rolle. */
-    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: bewusstes, dokumentiertes Muster – `dl` hat keine verlässliche implizite Rolle; die ARIA-Semantik zu ändern wäre eine Produktänderung außerhalb dieses Tooling-WP.
-    // biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf `dl` ist gültiges ARIA; ein Ersatz durch `fieldset`/`section` würde gerendertes Markup ändern (nicht verhaltensneutral).
-    <dl className="od-context" role="group" aria-label="Kontext dieser Seite">
-      <div>
-        <dt>Aktive Rolle</dt>
-        <dd>{`${role.id} · ${role.name}`}</dd>
-      </div>
+    <PageContextBar
+      role={role}
+      tenant={tenant}
+      scopeLabel="Scope-Kennungen"
+      scopeValue={scopeIds.length > 0 ? scopeIds.join(' · ') : 'keine Scope-Zuordnung erfasst'}
+      datenstandLabel="Datenstand (zuletzt im System erfasst)"
+      datenstandValue={
+        /* Kalendertag statt vollständigem Zeitstempel: die Anzeige nennt einen Tag, und eine
+           Uhrzeit ist für die Tagesgruppe nicht belegt (`RecordingWave.recordedOn`). */
+        letzte ? (
+          <time dateTime={letzte.recordedOn}>{letzte.dateDisplay}</time>
+        ) : (
+          'keine Erfassung im Datenbestand'
+        )
+      }
+    >
       <div>
         <dt>Erlebniswelt</dt>
         <dd>{world.name}</dd>
       </div>
-      <div>
-        <dt>Aktiver Mandant</dt>
-        <dd>{tenant.display_name}</dd>
-      </div>
-      <div>
-        <dt>Scope-Kennungen</dt>
-        <dd>{scopeIds.length > 0 ? scopeIds.join(' · ') : 'keine Scope-Zuordnung erfasst'}</dd>
-      </div>
-      <div>
-        <dt>Datenstand (zuletzt im System erfasst)</dt>
-        <dd>
-          {/* Kalendertag statt vollständigem Zeitstempel: die Anzeige nennt einen Tag, und eine
-              Uhrzeit ist für die Tagesgruppe nicht belegt (`RecordingWave.recordedOn`). */}
-          {letzte ? (
-            <time dateTime={letzte.recordedOn}>{letzte.dateDisplay}</time>
-          ) : (
-            'keine Erfassung im Datenbestand'
-          )}
-        </dd>
-      </div>
-    </dl>
+    </PageContextBar>
   );
 }
 

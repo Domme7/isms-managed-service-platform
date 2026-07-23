@@ -20,6 +20,7 @@
 
 import type { ObjectEnvelope, RelationshipEnvelope } from '@isms/contracts';
 import { DEMO_SEED, type DemoTenant } from '@isms/demo-seed';
+import { derivePageContextFacts, type PageContextFacts } from '../shell/page-context';
 import { confidenceQualitative } from '../twin/data';
 
 /* -----------------------------------------------------------------------------
@@ -233,6 +234,20 @@ export function getManagedServicesForTenant(tenantId: string): ManagedServiceVie
     .map((service) => buildServiceView(service, relationships, byId));
 }
 
+/**
+ * Kontextfakten für die Kontextleiste der Seite (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext"):
+ * Scope-Kennungen und jüngster Erfassungstag – abgeleitet AUSSCHLIESSLICH aus den Managed
+ * Services DIESES Mandanten, damit die Leiste dem Seiteninhalt nie widerspricht (Muster
+ * „Datenstand der Entscheidungen" aus `lib/entscheidungen/data.ts`).
+ */
+export function buildServicesPageContext(tenantId: string): PageContextFacts {
+  return derivePageContextFacts(
+    DEMO_SEED.objects.filter(
+      (o) => o.tenant_id === tenantId && o.object_type === 'Managed Service',
+    ),
+  );
+}
+
 /* -----------------------------------------------------------------------------
  * Portfolio-Übersicht (Aggregation je Mandant – KEINE Cross-Tenant-Kanten)
  * --------------------------------------------------------------------------- */
@@ -273,8 +288,18 @@ export function buildPortfolioOverview(): PortfolioTenantEntry[] {
 }
 
 /**
- * Mandanten mit mindestens einem Managed Service – aus dem Seed abgeleitet (NICHT hartkodiert),
- * damit der Empty-State automatisch korrekt bleibt, sobald weitere Mandanten Services erhalten.
+ * Mandanten mit mindestens einem Managed Service – aus dem Seed abgeleitet (NICHT hartkodiert).
+ *
+ * ⚠️ NUR FÜR TESTS UND SEED-DIAGNOSE — **niemals** im Produkt rendern. Diese Funktion zählt
+ * mandantenübergreifend. Bis 2026-07-23 (WP-020 Slice 1) speiste sie den Empty-State von
+ * `/services` mit dem Satz „Services laufen derzeit für <fremde Mandanten>; weitere Mandanten
+ * folgen in späteren Ausbaustufen." – eine Existenzaussage über FREMDE Mandanten und damit eine
+ * Mandantengrenzverletzung (Dok. 07, Abschnitt „Mandantenfähigkeit, Rechte und Datenschutz" /
+ * P09), dieselbe Fehlerklasse wie zuvor auf `/isms` (WP-013) und `/entscheidungen` (WP-017).
+ * Ein Leerzustand darf ausschließlich etwas über den EIGENEN Mandanten aussagen; der Wächter
+ * `components/__tests__/leerzustand-mandantengrenze.test.tsx` prüft das seither auch hier.
+ * (Die Portfolio-Übersicht der Consulting & Service World ist davon getrennt: sie ist eine
+ * DOKUMENTIERTE mandantenübergreifende Verdichtung, kein Leerzustand – O-WP012-03.)
  */
 export function getServiceTenants(): DemoTenant[] {
   return buildPortfolioOverview()

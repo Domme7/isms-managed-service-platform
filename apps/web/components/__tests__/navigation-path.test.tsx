@@ -24,7 +24,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { DEMO_SEED, DEMO_TENANTS, TENANT_ID } from '@isms/demo-seed';
+import { DEMO_SEED, TENANT_ID } from '@isms/demo-seed';
 import { IsmsContent } from '../isms/IsmsContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
@@ -183,10 +183,9 @@ describe('Navigationsvertrag – vom Geschäftsprozess bis zum Managed Service (
 
 describe('Einstieg in die Objekt-360-Seite aus den session-gebundenen Ansichten', () => {
   it('führt aus der ISMS-Ansicht in den Mandanten der aktiven Session', () => {
-    const tenant = DEMO_TENANTS.find((t) => t.tenant_id === TENANT);
-    if (!tenant) throw new Error(`Testfixture fehlt: ${TENANT}`);
+    const { role, tenant } = sessionOrThrow('R03', TENANT);
 
-    const { container } = render(<IsmsContent tenant={tenant} />);
+    const { container } = render(<IsmsContent role={role} tenant={tenant} />);
     const ziele = objektLinkZiele(container);
 
     expect(ziele.length).toBeGreaterThanOrEqual(1);

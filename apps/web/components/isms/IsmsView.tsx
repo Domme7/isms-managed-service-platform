@@ -53,5 +53,5 @@ export function IsmsView() {
     );
   }
 
-  return <IsmsContent tenant={resolved.tenant} />;
+  return <IsmsContent role={resolved.role} tenant={resolved.tenant} />;
 }

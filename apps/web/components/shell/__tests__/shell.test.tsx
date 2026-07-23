@@ -120,22 +120,103 @@ describe('AppShell – aktive Rolle + Mandant in der Topbar', () => {
     ).toBe(true);
   });
 
-  it('löst beim Wechsel die jeweiligen Callbacks aus (reine Demo-Navigation)', () => {
+  it('zeigt den permanenten Demo-Hinweis (keine echte Sicherheit)', () => {
+    renderShell();
+    expect(screen.getByText(/keine echte Anmeldung/i)).toBeInTheDocument();
+  });
+});
+
+/**
+ * WP-020 Slice 1 – Mandanten- und Rollenwechsel sind ANGEKÜNDIGTE Kontextänderungen.
+ * QUELLE (Regel Null): Dok. 06, Abschnitt „Sichtbarer Kontext", Kasten CROSS-TENANT-SCHUTZ
+ * („Ein Wechsel zwischen Mandanten benötigt eine klare visuelle Kontextänderung.") und
+ * Abschnitt „Bewusst vermiedene Muster" („Rollenwechsel oder Mandantenwechsel ohne sichtbaren
+ * Kontext."). Rückmeldung immer Text + Form (Symbol, Live-Region), nie nur Farbe (06-D11).
+ */
+describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUTZ)', () => {
+  it('wechselt NICHT still: die Select-Auswahl öffnet erst den Bestätigungsschritt', () => {
+    const props = renderShell();
+    fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {
+      target: { value: TENANT_ID.FINOVIA },
+    });
+
+    // Kein stiller Wechsel: der Callback ist noch NICHT gefeuert.
+    expect(props.onSwitchTenant).not.toHaveBeenCalled();
+
+    // Der Bestätigungsschritt benennt alten UND neuen Mandanten (Text + Struktur).
+    const bestaetigung = screen.getByRole('group', { name: 'Mandantenwechsel bestätigen' });
+    expect(bestaetigung.textContent).toContain('Nordwerk Manufacturing SE');
+    expect(bestaetigung.textContent).toContain('Finovia Digital Bank AG');
+
+    // Erst die explizite Bestätigung wechselt.
+    fireEvent.click(
+      within(bestaetigung).getByRole('button', { name: 'Zu Finovia Digital Bank AG wechseln' }),
+    );
+    expect(props.onSwitchTenant).toHaveBeenCalledWith(TENANT_ID.FINOVIA);
+
+    // Danach: benannte, sichtbare Rückmeldung als Live-Region mit beiden Namen und Symbol.
+    const status = screen.getByRole('status');
+    expect(status.textContent).toContain('Kontextänderung');
+    expect(status.textContent).toContain('Nordwerk Manufacturing SE');
+    expect(status.textContent).toContain('Finovia Digital Bank AG');
+    expect(status.querySelector('[aria-hidden="true"]')).not.toBeNull();
+
+    // Die Rückmeldung ist schließbar (kein Timeout, keine Animation).
+    fireEvent.click(within(status).getByRole('button', { name: 'Hinweis schließen' }));
+    expect(status.textContent).toBe('');
+  });
+
+  it('Abbrechen (Button oder Escape) verwirft den Wechselwunsch ohne Callback', () => {
+    const props = renderShell();
+    fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {
+      target: { value: TENANT_ID.FINOVIA },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Abbrechen' }));
+    expect(props.onSwitchTenant).not.toHaveBeenCalled();
+    expect(
+      screen.queryByRole('group', { name: 'Mandantenwechsel bestätigen' }),
+    ).not.toBeInTheDocument();
+
+    // Escape bricht ebenfalls ab (Tastaturweg).
+    fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {
+      target: { value: TENANT_ID.FINOVIA },
+    });
+    fireEvent.keyDown(screen.getByRole('group', { name: 'Mandantenwechsel bestätigen' }), {
+      key: 'Escape',
+    });
+    expect(props.onSwitchTenant).not.toHaveBeenCalled();
+    expect(
+      screen.queryByRole('group', { name: 'Mandantenwechsel bestätigen' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('die erneute Auswahl des AKTIVEN Mandanten öffnet keinen Bestätigungsschritt', () => {
+    renderShell();
+    fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {
+      target: { value: TENANT_ID.NORDWERK },
+    });
+    expect(
+      screen.queryByRole('group', { name: 'Mandantenwechsel bestätigen' }),
+    ).not.toBeInTheDocument();
+  });
+});
+
+describe('AppShell – Rollenwechsel als sichtbarer Moduswechsel (Dok. 06 „Rollenwechsel")', () => {
+  it('wechselt direkt, meldet den Moduswechsel aber benannt zurück (alte und neue Rolle)', () => {
     const props = renderShell();
     fireEvent.change(screen.getByLabelText('Aktive Rolle wechseln (Simulation)'), {
       target: { value: 'R07' },
     });
+    // Gleicher Mandant, gleiche Daten: der Wechsel selbst bleibt direkt …
     expect(props.onSwitchRole).toHaveBeenCalledWith('R07');
 
-    fireEvent.change(screen.getByLabelText('Aktiven Mandanten wechseln (Simulation)'), {
-      target: { value: TENANT_ID.FINOVIA },
-    });
-    expect(props.onSwitchTenant).toHaveBeenCalledWith(TENANT_ID.FINOVIA);
-  });
-
-  it('zeigt den permanenten Demo-Hinweis (keine echte Sicherheit)', () => {
-    renderShell();
-    expect(screen.getByText(/keine echte Anmeldung/i)).toBeInTheDocument();
+    // … aber nicht still: die Live-Region nennt beide Modi.
+    const status = screen.getByRole('status');
+    expect(status.textContent).toContain('Moduswechsel');
+    expect(status.textContent).toContain('R01 · Executive Sponsor');
+    expect(status.textContent).toContain('R07 · Auditor');
+    // Und sie sagt, was der Wechsel NICHT ändert (keine rückwirkende Datenänderung).
+    expect(status.textContent).toMatch(/Daten und Mandant bleiben unverändert/);
   });
 });
 

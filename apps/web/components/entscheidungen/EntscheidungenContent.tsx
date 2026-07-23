@@ -42,6 +42,7 @@ import {
 } from '../../lib/entscheidungen/data';
 import { getPlace } from '../../lib/shell/places';
 import type { DemoRole } from '../../lib/shell/roles';
+import { PageContextBar } from '../shell/PageContextBar';
 import { formatIsoDateDe } from '../../lib/twin/routes';
 
 /* -----------------------------------------------------------------------------
@@ -162,52 +163,40 @@ export function EntscheidungenContent({ role, tenant }: { role: DemoRole; tenant
  * --------------------------------------------------------------------------- */
 
 /**
- * Rolle, Mandant, Scope-Kennungen und Datenstand querschnittlich sichtbar. „Datenstand" ist
- * ausdrücklich die SYSTEMACHSE (`record_time.recorded_at`, Dok. 07 §11) und wird nicht mit der
- * fachlichen Gültigkeit vermischt. Die Rolle ist reine Perspektive (WP-011) – sie ändert keine
- * Daten dieser Seite.
- *
- * `role="group"` wie in `ObjectDetailView`/`MissionControlContent`: `dl` hat keine verlässliche
- * implizite Rolle.
+ * Kontextleiste über die gemeinsame `PageContextBar` (WP-020 Slice 1, Dok. 06 „Sichtbarer
+ * Kontext"): Mandant, Produktrolle, die drei benannten Datenlücken (Vertretung,
+ * Vertraulichkeit/Exportrestriktion, Vertrauensgrad – Muster O-WP016-08) sowie seitenspezifisch
+ * Scope und Datenstand DER ENTSCHEIDUNGEN. „Datenstand" ist ausdrücklich die SYSTEMACHSE
+ * (`record_time.recorded_at`, Dok. 07 §11) und wird nicht mit der fachlichen Gültigkeit
+ * vermischt. Die Rolle ist reine Perspektive (WP-011) – sie ändert keine Daten dieser Seite.
  */
 function ContextBar({ model, role }: { model: DecisionRegisterModel; role: DemoRole }) {
   return (
-    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: bewusstes, dokumentiertes Muster (s. Kommentar oben) – die ARIA-Semantik zu ändern wäre eine Produktänderung außerhalb dieses Tooling-WP.
-    // biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf `dl` ist gültiges ARIA; ein Ersatz durch `fieldset`/`section` würde gerendertes Markup ändern (nicht verhaltensneutral).
-    <dl className="od-context" role="group" aria-label="Kontext dieser Seite">
-      <div>
-        <dt>Aktive Rolle</dt>
-        <dd>{`${role.id} · ${role.name}`}</dd>
-      </div>
-      <div>
-        <dt>Aktiver Mandant</dt>
-        <dd>{model.tenant.display_name}</dd>
-      </div>
+    <PageContextBar
+      role={role}
+      tenant={model.tenant}
+      scopeLabel="Scope-Kennungen der Entscheidungen"
+      scopeValue={
+        model.scopeIds.length > 0 ? model.scopeIds.join(' · ') : 'keine Scope-Zuordnung erfasst'
+      }
+      /* Der Wert wird AUSSCHLIESSLICH aus den Entscheidungen gebildet. Vorher hieß die Zeile
+         „Datenstand" und der Ersatzwert „keine Erfassung im Datenbestand" – bei einem
+         Mandanten mit Graph, aber ohne Entscheidungen widersprach das auf demselben Bildschirm
+         der Aussage darunter, dass ein Datenbestand modelliert ist (Review-Fix). */
+      datenstandLabel="Datenstand der Entscheidungen (zuletzt im System erfasst)"
+      datenstandValue={
+        model.recordedOn && model.recordedOnDisplay ? (
+          <time dateTime={model.recordedOn}>{model.recordedOnDisplay}</time>
+        ) : (
+          'keine Entscheidung erfasst'
+        )
+      }
+    >
       <div>
         <dt>Erfasste Entscheidungen</dt>
         <dd>{model.decisions.length}</dd>
       </div>
-      <div>
-        <dt>Scope-Kennungen der Entscheidungen</dt>
-        <dd>
-          {model.scopeIds.length > 0 ? model.scopeIds.join(' · ') : 'keine Scope-Zuordnung erfasst'}
-        </dd>
-      </div>
-      <div>
-        {/* Der Wert wird AUSSCHLIESSLICH aus den Entscheidungen gebildet. Vorher hieß die Zeile
-            „Datenstand" und der Ersatzwert „keine Erfassung im Datenbestand" – bei einem
-            Mandanten mit Graph, aber ohne Entscheidungen widersprach das auf demselben Bildschirm
-            der Aussage darunter, dass ein Datenbestand modelliert ist (Review-Fix). */}
-        <dt>Datenstand der Entscheidungen (zuletzt im System erfasst)</dt>
-        <dd>
-          {model.recordedOn && model.recordedOnDisplay ? (
-            <time dateTime={model.recordedOn}>{model.recordedOnDisplay}</time>
-          ) : (
-            'keine Entscheidung erfasst'
-          )}
-        </dd>
-      </div>
-    </dl>
+    </PageContextBar>
   );
 }
 

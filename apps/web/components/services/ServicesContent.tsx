@@ -14,14 +14,16 @@ import type { DemoTenant } from '@isms/demo-seed';
 import { worldForRole, type DemoRole } from '../../lib/shell/roles';
 import {
   buildPortfolioOverview,
+  buildServicesPageContext,
   getManagedServicesForTenant,
-  getServiceTenants,
 } from '../../lib/services/data';
+import { PageContextBar } from '../shell/PageContextBar';
 import { PortfolioOverview } from './PortfolioOverview';
 import { ServiceCard } from './ServiceCard';
 
 export function ServicesContent({ role, tenant }: { role: DemoRole; tenant: DemoTenant }) {
   const services = getManagedServicesForTenant(tenant.tenant_id);
+  const context = buildServicesPageContext(tenant.tenant_id);
   // Rollen-Gating der Portfolio-Sicht über das bestehende Welt-Mapping (Dok. 06 §5):
   // R08–R11 gehören zur Consulting & Service World. Reine UI-Verdichtung, keine Authz.
   const isConsultingWorld = role.worldId === 'consulting';
@@ -41,6 +43,28 @@ export function ServicesContent({ role, tenant }: { role: DemoRole; tenant: Demo
         Leistungsversprechen, SLA, Deliverables und Wirkungsbeitrag – aus demselben Datenmodell wie
         der digitale Zwilling. Ohne Preise, ohne Buchung, ohne Verkaufslogik (Dok. 13 MS15).
       </p>
+
+      {/* Kontextleiste (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext"): Scope und Datenstand
+          beziehen sich ausdrücklich auf die HIER GEZEIGTEN Managed Services des aktiven
+          Mandanten – die Leiste widerspricht damit nie dem Seiteninhalt. */}
+      <PageContextBar
+        role={role}
+        tenant={tenant}
+        scopeLabel="Scope-Kennungen der Managed Services"
+        scopeValue={
+          context.scopeIds.length > 0
+            ? context.scopeIds.join(' · ')
+            : 'keine Scope-Zuordnung erfasst'
+        }
+        datenstandLabel="Datenstand der Managed Services (zuletzt im System erfasst)"
+        datenstandValue={
+          context.recordedOn && context.recordedOnDisplay ? (
+            <time dateTime={context.recordedOn}>{context.recordedOnDisplay}</time>
+          ) : (
+            'kein Managed Service erfasst'
+          )
+        }
+      />
 
       <section aria-labelledby="mandanten-services">
         {/* Zustandstreue (UX-Review MINOR-1): auch „Review"/„konfiguriert" werden gelistet –
@@ -78,30 +102,31 @@ export function ServicesContent({ role, tenant }: { role: DemoRole; tenant: Demo
   );
 }
 
-/** Verbindet Namen deutsch: „A", „A und B", „A, B und C". */
-function joinDe(names: readonly string[]): string {
-  if (names.length <= 1) return names[0] ?? '';
-  return `${names.slice(0, -1).join(', ')} und ${names[names.length - 1]}`;
-}
-
-/** Ehrlicher Empty-State für Mandanten ohne Services (Finovia/MediCore, Dok. 06 §17). */
+/**
+ * Ehrlicher Empty-State für Mandanten ohne Services (Finovia/MediCore, Dok. 06 §17).
+ *
+ * MANDANTENLOKAL (WP-020 Slice 1). Hier stand bis 2026-07-23: „Services laufen derzeit für
+ * <Namen fremder Mandanten>; weitere Mandanten folgen in späteren Ausbaustufen." Das war eine
+ * Existenzaussage über FREMDE Mandanten und damit eine Mandantengrenzverletzung (Dok. 07,
+ * Abschnitt „Mandantenfähigkeit, Rechte und Datenschutz" / P09) – dieselbe Fehlerklasse, die
+ * auf `/isms` (WP-013) und `/entscheidungen` (WP-017) bereits behoben wurde; dieses dritte
+ * Vorkommen bestand seit WP-012 unbemerkt und wurde im Cross-Tenant-Umbau gefunden. Der
+ * Leerzustand sagt jetzt ausschließlich etwas über DIESEN Mandanten; der Wächter
+ * `components/__tests__/leerzustand-mandantengrenze.test.tsx` prüft das mechanisch.
+ * (Die Portfolio-Übersicht der Consulting & Service World bleibt davon getrennt: eine
+ * dokumentierte mandantenübergreifende Verdichtung, kein Leerzustand – O-WP012-03.)
+ */
 function EmptyServices({ tenant }: { tenant: DemoTenant }) {
-  // Aus dem Seed abgeleitet (nicht hartkodiert), damit die Meldung korrekt bleibt.
-  const serviceTenants = getServiceTenants();
-  const names = joinDe(serviceTenants.map((t) => t.display_name));
-
   return (
     <div className="tw-empty" role="note">
       <h3>Keine Managed Services für {tenant.display_name}</h3>
       <p style={{ marginTop: 0 }}>
-        Für <strong>{tenant.display_name}</strong> sind im aktuellen Demo-Seed keine Managed
-        Services modelliert.{' '}
-        {serviceTenants.length > 0
-          ? `Services laufen derzeit für ${names}; weitere Mandanten folgen in späteren Ausbaustufen.`
-          : 'Im aktuellen Demo-Seed ist noch kein Mandant mit Services modelliert.'}
+        Für <strong>{tenant.display_name}</strong> sind im aktuellen Demo-Datenbestand keine Managed
+        Services modelliert. Der Ort bleibt erreichbar und zeigt hier ausschließlich, was für diesen
+        Mandanten belegt ist.
       </p>
       <p className="tw-muted">
-        Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Demo-Seed
+        Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Demo-Datenbestand
         abgeleitete Services – keine erfundenen Angebote und keine Preise.
       </p>
       {/* Nächster Schritt im Empty-State (Dok. 06 §17, UX-Review MINOR-3). */}

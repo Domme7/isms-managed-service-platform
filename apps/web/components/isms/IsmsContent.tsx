@@ -14,6 +14,8 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
 import { buildIsmsCoreView, hasManagedServices } from '../../lib/isms/data';
+import type { DemoRole } from '../../lib/shell/roles';
+import { PageContextBar } from '../shell/PageContextBar';
 import {
   ControlCard,
   EvidenceCard,
@@ -23,7 +25,12 @@ import {
   WeaknessCard,
 } from './IsmsCards';
 
-export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
+/**
+ * `role` ergänzt in WP-020 Slice 1: die Kontextleiste (Dok. 06 „Sichtbarer Kontext") zeigt die
+ * aktive Produktrolle auf jeder Live-Hauptseite. Reine Anzeige – KEIN Rollen-Gating, die Sicht
+ * bleibt für alle Rollen identisch (Dok. 06 06-D05).
+ */
+export function IsmsContent({ role, tenant }: { role: DemoRole; tenant: DemoTenant }) {
   const view = buildIsmsCoreView(tenant.tenant_id);
   // Mandant für alle Objekt-Links dieser Ansicht (WP-014 Slice 2): ausschließlich der AKTIVE
   // Mandant der Session-Simulation – derselbe, aus dem die Karten abgeleitet sind. Niemals
@@ -57,6 +64,28 @@ export function IsmsContent({ tenant }: { tenant: DemoTenant }) {
         selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen (Dok. 07 §9 R15 nennt für
         einen Nachweisbezug ausdrücklich Zeitraum und Prüfstatus).
       </p>
+
+      {/* Kontextleiste (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext"): Scope und Datenstand
+          beziehen sich ausdrücklich auf die HIER GEZEIGTEN ISMS-Kernobjekte – die Leiste
+          widerspricht damit nie dem Seiteninhalt (Muster `/entscheidungen`). */}
+      <PageContextBar
+        role={role}
+        tenant={tenant}
+        scopeLabel="Scope-Kennungen der ISMS-Kernobjekte"
+        scopeValue={
+          view.context.scopeIds.length > 0
+            ? view.context.scopeIds.join(' · ')
+            : 'keine Scope-Zuordnung erfasst'
+        }
+        datenstandLabel="Datenstand der ISMS-Kernobjekte (zuletzt im System erfasst)"
+        datenstandValue={
+          view.context.recordedOn && view.context.recordedOnDisplay ? (
+            <time dateTime={view.context.recordedOn}>{view.context.recordedOnDisplay}</time>
+          ) : (
+            'kein ISMS-Kernobjekt erfasst'
+          )
+        }
+      />
 
       {view.isEmpty ? (
         <section aria-labelledby="isms-empty">

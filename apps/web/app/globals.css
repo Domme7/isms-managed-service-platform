@@ -433,6 +433,14 @@ h3 {
   font-weight: 600;
   color: var(--tw-ink);
 }
+/* Benannte Datenlücke in der Kontextleiste (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext"):
+   Klartext statt erfundenem Wert – bewusst als Fließtext gesetzt, nicht als Wert-Optik. */
+.od-context dd.od-context-gap {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--tw-ink-soft);
+  max-width: 34rem;
+}
 
 @media (max-width: 640px) {
   .tw-container {
@@ -606,6 +614,96 @@ h3 {
   padding: 0.5rem 1rem;
   font-size: 0.83rem;
   line-height: 1.4;
+}
+
+/* --- Kontextänderung: Mandanten-/Rollenwechsel (WP-020 Slice 1) ------------
+   Dok. 06 „Sichtbarer Kontext", Kasten CROSS-TENANT-SCHUTZ: klare visuelle
+   Kontextänderung. Immer Text + Form (Rahmen, Symbol, Buttons), nie nur Farbe
+   (06-D11). Keine Animationen – damit gibt es auch nichts, was
+   `prefers-reduced-motion` unterdrücken müsste. */
+.shell-context-confirm {
+  background: var(--shell-navy-2);
+  color: #ffffff;
+  border-bottom: 3px solid var(--shell-teal);
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+/* `:focus` statt `:focus-visible`: die Container erhalten programmatischen Fokus
+   (Ankündigung der Kontextänderung) – der muss immer sichtbar sein. */
+.shell-context-confirm:focus,
+.shell-context-status:focus {
+  outline: 3px solid var(--shell-teal);
+  outline-offset: -3px;
+}
+.shell-context-confirm-text {
+  margin: 0 0 0.6rem;
+  max-width: 72rem;
+}
+.shell-context-icon {
+  display: inline-block;
+  margin-right: 0.45rem;
+  font-weight: 700;
+}
+.shell-context-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.shell-context-confirm-btn {
+  background: #ffffff;
+  color: var(--shell-navy);
+  border: 2px solid #ffffff;
+  border-radius: 6px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.shell-context-cancel-btn {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 6px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.shell-context-confirm-btn:focus-visible,
+.shell-context-cancel-btn:focus-visible,
+.shell-context-dismiss-btn:focus-visible {
+  outline: 3px solid var(--shell-teal);
+  outline-offset: 2px;
+}
+
+.shell-context-announce {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  background: var(--shell-teal-soft);
+  color: #08403f;
+  border-top: 2px solid var(--shell-teal);
+  border-bottom: 2px solid var(--shell-teal);
+  padding: 0.6rem 1rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+.shell-context-announce-text {
+  margin: 0;
+  flex: 1;
+  min-width: 16rem;
+}
+.shell-context-dismiss-btn {
+  background: transparent;
+  color: #08403f;
+  border: 1px solid var(--shell-teal);
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 /* --- Body: Seitennavigation + Inhalt -------------------------------------- */

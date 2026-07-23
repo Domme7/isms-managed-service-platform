@@ -47,6 +47,7 @@
 
 import type { ObjectEnvelope, RelationshipEnvelope } from '@isms/contracts';
 import { DEMO_SEED, type DemoTenant } from '@isms/demo-seed';
+import { derivePageContextFacts, type PageContextFacts } from '../shell/page-context';
 import { confidenceQualitative } from '../twin/data';
 
 /* -----------------------------------------------------------------------------
@@ -159,6 +160,13 @@ export interface IsmsCoreView {
   readonly evidence: readonly EvidenceView[];
   /** `true`, wenn der Mandant keinerlei ISMS-Kernobjekte trägt (Empty-State). */
   readonly isEmpty: boolean;
+  /**
+   * Kontextfakten für die Kontextleiste der Seite (WP-020 Slice 1, Dok. 06 „Sichtbarer
+   * Kontext"): Scope-Kennungen und jüngster Erfassungstag – abgeleitet AUSSCHLIESSLICH aus den
+   * hier gezeigten ISMS-Kernobjekten dieses Mandanten, damit die Leiste dem Seiteninhalt nie
+   * widerspricht (Muster „Datenstand der Entscheidungen" aus `lib/entscheidungen/data.ts`).
+   */
+  readonly context: PageContextFacts;
 }
 
 /* -----------------------------------------------------------------------------
@@ -298,7 +306,19 @@ export function buildIsmsCoreView(tenantId: string): IsmsCoreView {
     covered_by_services: coveredByServiceNames(ev.object_id),
   }));
 
+  // Kontextfakten aus GENAU den Kernobjekt-Typen, die diese Sicht zeigt – keine Kanten:
+  // das Datenstand-Label der Seite spricht von den Kernobjekten (WP-020 Slice 1).
+  const coreEnvelopes: ObjectEnvelope[] = [
+    ...ofType('Risk'),
+    ...ofType('Risk Scenario'),
+    ...ofType('Weakness'),
+    ...ofType('Control'),
+    ...ofType('Measure'),
+    ...ofType('Evidence'),
+  ];
+
   return {
+    context: derivePageContextFacts(coreEnvelopes),
     risks,
     scenarios,
     weaknesses,

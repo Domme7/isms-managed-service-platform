@@ -241,7 +241,45 @@ describe('ServicesContent – Rollen-Gating der Portfolio-Sicht (Welt-Mapping Do
 });
 
 describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
-  it('zeigt eine ehrliche Meldung und verweist auf die Mandanten mit Services (aus dem Seed)', () => {
+  /**
+   * MANDANTENLOKAL seit WP-020 Slice 1. Bis dahin stand hier die Assertion auf den Satz
+   * „Services laufen derzeit für Nordwerk Manufacturing SE und Consulting Operator Demo;
+   * weitere Mandanten folgen …" – dieser Test nagelte damit eine Mandantengrenzverletzung
+   * fest (Existenzaussage über FREMDE Mandanten im Leerzustand, Dok. 07 „Mandantenfähigkeit,
+   * Rechte und Datenschutz"/P09; dieselbe Fehlerklasse wie /isms in WP-013 und
+   * /entscheidungen in WP-017). Der Leerzustand spricht jetzt nur über DIESEN Mandanten;
+   * mechanisch bewacht in `components/__tests__/leerzustand-mandantengrenze.test.tsx`.
+   */
+  it('zeigt eine ehrliche, MANDANTENLOKALE Meldung ohne Aussage über fremde Mandanten', () => {
+    // Bewusst R03 (Customer Operations World): ohne die – dokumentiert mandantenübergreifende –
+    // Portfolio-Sicht lässt sich die Mandantenlokalität des Leerzustands über den ganzen
+    // Seiteninhalt prüfen.
+    const { role, tenant } = session('R03', TENANT_ID.FINOVIA);
+    const { container } = render(<ServicesContent role={role} tenant={tenant} />);
+
+    expect(
+      screen.getByRole('heading', {
+        level: 3,
+        name: 'Keine Managed Services für Finovia Digital Bank AG',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/sind im aktuellen Demo-Datenbestand keine\s+Managed Services modelliert/),
+    ).toBeInTheDocument();
+    // Kein fremder Mandant – weder Name noch Kennung (die Kontextleiste und der Leerzustand
+    // sprechen ausschließlich über den aktiven Mandanten).
+    expect(container.textContent).not.toContain('Nordwerk Manufacturing SE');
+    expect(container.textContent).not.toContain('Consulting Operator Demo');
+    expect(container.textContent).not.toContain(TENANT_ID.NORDWERK);
+    expect(container.textContent).not.toContain(TENANT_ID.CONSULTING_OPERATOR);
+    // Nächster Schritt bleibt erhalten (Dok. 06 §17).
+    expect(screen.getByRole('link', { name: /Mandant wechseln/ })).toHaveAttribute(
+      'href',
+      '/login',
+    );
+  });
+
+  it('R08 sieht trotz Empty-State weiterhin das Portfolio (dokumentierte Verdichtung)', () => {
     const { role, tenant } = session('R08', TENANT_ID.FINOVIA);
     render(<ServicesContent role={role} tenant={tenant} />);
 
@@ -251,12 +289,8 @@ describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
         name: 'Keine Managed Services für Finovia Digital Bank AG',
       }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        /Services laufen derzeit für Nordwerk Manufacturing SE und Consulting Operator Demo/,
-      ),
-    ).toBeInTheDocument();
-    // R08 sieht trotz Empty-State weiterhin das Portfolio (mandantenübergreifende Verdichtung).
+    // Die Portfolio-Sicht (O-WP012-03) ist KEIN Leerzustand und bleibt für die
+    // Consulting & Service World sichtbar.
     expect(screen.getByRole('heading', { name: 'Portfolio: Alle Mandanten' })).toBeInTheDocument();
   });
 });

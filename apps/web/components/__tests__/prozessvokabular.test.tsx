@@ -33,11 +33,14 @@ import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
+import { SessionProvider } from '../shell/SessionProvider';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
 import { TenantDetailView } from '../twin/TenantDetailView';
 import { TenantOverview } from '../twin/TenantOverview';
+import { TwinContextBar } from '../twin/TwinContextBar';
 import { NAV_PLACES, type PlaceId } from '../../lib/shell/places';
 import { DEMO_ROLES, getRole, type DemoRole } from '../../lib/shell/roles';
+import { SESSION_STORAGE_KEY, serializeSession } from '../../lib/shell/session';
 import { buildTenantDetail } from '../../lib/twin/data';
 import { buildObjectDetail } from '../../lib/twin/object-detail';
 
@@ -135,15 +138,37 @@ const RENDERER_JE_LIVE_ORT = {
       kontext: '/twin · Mandantenübersicht',
       render: () => render(<TenantOverview tenants={DEMO_TENANTS} />),
     },
+    {
+      // Die Kontextleiste der Übersicht ist eine eigene Client-Komponente (WP-020 Slice 1) und
+      // wird hier mit echter Session-Simulation gerendert, damit auch ihr Text unter dem
+      // Wächter steht.
+      kontext: '/twin · Kontextleiste (R01 · nordwerk)',
+      render: () => {
+        window.localStorage.setItem(
+          SESSION_STORAGE_KEY,
+          serializeSession({ roleId: 'R01', tenantId: TENANT_ID.NORDWERK }),
+        );
+        return render(
+          <SessionProvider>
+            <TwinContextBar />
+          </SessionProvider>,
+        );
+      },
+    },
     ...DEMO_TENANTS.map((t) => ({
       kontext: `/twin/${t.tenant_id} · Detailseite`,
       render: () => render(<TenantDetailView model={buildTenantDetail(t)} />),
     })),
   ],
-  isms: DEMO_TENANTS.map((t) => ({
-    kontext: `/isms · ${t.tenant_id}`,
-    render: () => render(<IsmsContent tenant={t} />),
-  })),
+  // Rolle seit WP-020 Slice 1 (Kontextleiste zeigt die aktive Produktrolle): eine Kunden- und
+  // eine Betreiberrolle je Mandant – die Rolle ändert auf /isms keine Daten (06-D05), wohl aber
+  // den gerenderten Rollennamen in der Leiste.
+  isms: DEMO_TENANTS.flatMap((t) =>
+    ['R03', 'R08'].map((roleId) => ({
+      kontext: `/isms · ${roleId} · ${t.tenant_id}`,
+      render: () => render(<IsmsContent role={role(roleId)} tenant={t} />),
+    })),
+  ),
   entscheidungen: rollenMandantenMatrix('/entscheidungen', (r, t) =>
     render(<EntscheidungenContent role={r} tenant={t} />),
   ),

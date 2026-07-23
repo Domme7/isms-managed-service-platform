@@ -1,10 +1,21 @@
 /**
- * Globale Topbar der Shell (WP-011, Dok. 06 §4).
+ * Globale Topbar der Shell (WP-011, Dok. 06 §4; Wechsler-Umbau WP-020 Slice 1).
  *
  * Zeigt Betreiber-/Produktidentität, den sichtbaren Kontext (aktive Rolle + Mandant, Dok. 06 P07 /
  * 06-D04) sowie die jederzeit bedienbaren Wechsler und "Abmelden". Der Wechsel erfolgt über
  * native `<select>` (tastatur- und screenreaderfreundlich) – das ist reine Demo-Perspektive,
  * KEINE Autorisierung.
+ *
+ * MANDANTENWECHSEL IST NICHT MEHR STILL (Dok. 06, Abschnitt „Sichtbarer Kontext", Kasten
+ * CROSS-TENANT-SCHUTZ: „Ein Wechsel zwischen Mandanten benötigt eine klare visuelle
+ * Kontextänderung."): Die Auswahl im Mandanten-Select wechselt NICHT direkt, sondern meldet nur
+ * einen Wechselwunsch (`onRequestTenantSwitch`). Bestätigung und sichtbare Rückmeldung liegen in
+ * `AppShell` – das Select zeigt bis zur Bestätigung weiterhin den tatsächlich aktiven Mandanten
+ * und behauptet nie einen Kontext, der noch nicht gilt.
+ *
+ * Der Rollenwechsel bleibt direkt (gleicher Mandant, gleiche Daten – Dok. 06, Abschnitt
+ * „Rollenwechsel": sichtbarer Moduswechsel), erhält aber in `AppShell` dieselbe benannte
+ * Umschalt-Rückmeldung.
  *
  * Rein präsentational: alle Zustände/Aktionen kommen als Props herein (leicht testbar).
  */
@@ -19,7 +30,7 @@ export function Topbar({
   roles,
   tenants,
   onSwitchRole,
-  onSwitchTenant,
+  onRequestTenantSwitch,
   onSignOut,
   onToggleNav,
   navOpen,
@@ -30,7 +41,8 @@ export function Topbar({
   roles: readonly DemoRole[];
   tenants: readonly DemoTenant[];
   onSwitchRole: (roleId: string) => void;
-  onSwitchTenant: (tenantId: string) => void;
+  /** Meldet einen Wechselwunsch – der eigentliche Wechsel folgt erst nach Bestätigung. */
+  onRequestTenantSwitch: (tenantId: string) => void;
   onSignOut: () => void;
   onToggleNav?: () => void;
   navOpen?: boolean;
@@ -85,10 +97,13 @@ export function Topbar({
               </label>
               <label className="shell-switch-field">
                 <span className="shell-switch-label">Mandant</span>
+                {/* Kontrolliert über den AKTIVEN Mandanten: bis zur Bestätigung in `AppShell`
+                    springt die Anzeige auf den tatsächlichen Kontext zurück – das Select zeigt
+                    nie einen Mandanten an, der noch nicht aktiv ist (CROSS-TENANT-SCHUTZ). */}
                 <select
                   className="shell-select"
                   value={session.tenant.tenant_id}
-                  onChange={(e) => onSwitchTenant(e.target.value)}
+                  onChange={(e) => onRequestTenantSwitch(e.target.value)}
                   aria-label="Aktiven Mandanten wechseln (Simulation)"
                 >
                   {tenants.map((tenant) => (
