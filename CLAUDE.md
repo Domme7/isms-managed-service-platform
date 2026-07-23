@@ -38,6 +38,18 @@ Die ISMS Managed Service Platform ist ein mandantenfähiges, rollenbasiertes Bet
 - Builder und finaler Reviewer sind getrennt.
 - Parallele Writer verwenden getrennte Branches/Worktrees und stabile Verträge.
 
+## Konzepttreue und Konzeptfehler (DR-0005)
+
+- Das **Zielbild der Konzeptdokumente gilt vollständig** und wird nie verkleinert.
+- **Fehlt** eine Aussage: als OFFENE FRAGE dokumentieren, **nicht** füllen.
+- **Ist** eine Aussage nachweislich falsch, widersprüchlich oder klar schlechter als eine
+  offensichtliche Alternative: **weder still umsetzen noch still korrigieren** — benennen,
+  begründen, Besseres vorschlagen (OFFENE FRAGE + Change Proposal), Umsetzung erst nach
+  Owner-Freigabe.
+- „Oder besser" ist erlaubt — **als Vorschlag, nie als Alleingang**.
+- Das ist **keine** Lizenz zum Erfinden: es gilt für belegte Fehler, nicht für Geschmack,
+  Bequemlichkeit oder Lücken.
+
 ## Context-Regel
 
 - Lade niemals pauschal alle Konzeptdokumente.

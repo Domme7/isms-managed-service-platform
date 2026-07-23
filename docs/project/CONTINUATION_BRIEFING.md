@@ -116,7 +116,12 @@ Es gibt **keinen Linter** im Stack (FINDING-0005) — „Lint" in Acceptance Cri
 
 - **Aus dem Konzept ableiten, nie erfinden.** Fehlt etwas in `docs/concept/active/` oder im Contract:
   als `// OFFENE FRAGE` markieren, in `docs/project/OPEN_QUESTIONS.md` eintragen — **nicht** raten.
-  (Bisher so entstanden: O-D07-01…11, O-WP012-01…06, O-WP013-01.)
+  (Bisher so entstanden: O-D07-01…11, O-WP012-01…06, O-WP013-01, O-WP014-01…11, O-WP016-01…08.)
+- **Zielbild vollständig, Konzeptfehler nicht (DR-0005).** Das Konzept wird nie verkleinert — aber
+  eine nachweislich **falsche oder widersprüchliche** Konzeptaussage muss nicht gebaut werden.
+  Dann gilt: benennen, begründen, Besseres vorschlagen (OFFENE FRAGE + Change Proposal in
+  `research/change-proposals/`), im Produkt bis zur Freigabe den ehrlichen Zustand zeigen,
+  Umsetzung der Korrektur **erst nach Owner-Freigabe**. Weder den Fehler noch die Korrektur still.
 - **Keine echten Daten, Secrets, Preise, Kundennamen.** Nur synthetischer Seed. Es existiert ein
   Guardrail-Test gegen Währungs-/Preisangaben im Seed.
 - **Tenant-Isolation** ist Pflicht und wird mit **Negativbeweisen** getestet.
