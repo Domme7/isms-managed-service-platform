@@ -1,5 +1,21 @@
 # Active Work Package
 
+> ## AUTONOMIE-AUFTRAG (Owner, 2026-07-23)
+> „Bau das Produkt fertig, so weit es geht, ohne mich noch etwas zu fragen." **Verbindlich:**
+> autonom weiterbauen ohne Rückfragen; jede buildbare Arbeit umsetzen, verifizieren, committen,
+> reviewen, Stand jederzeit resumierbar halten. **Nur diese harten Gates bleiben stehen** (nicht
+> autonom überschreitbar, CLAUDE.md/Sicherheitsregeln): FINDING-0004 (DB-RLS vor DB→UI **und** vor
+> echter Auth), **echte Authentisierung / getrennte Logins WP-030** (security-sensibel, Dok. 19),
+> **CCP-001..004** (Konzept-/Contract-Freigaben), Contract-/Seed-Erweiterungen (E-02), Docker,
+> kostenpflichtige/Cloud/Prod-Ressourcen, reale Daten/Secrets. Cockpit-Varianten werden **gebaut
+> und vorgelegt** (nicht als „gewählt" festgeschrieben — Stilwahl bleibt Owner), der Bau blockiert
+> nicht darauf.
+>
+> **Buildbare Kette (autonom):** WP-028 Slices 2–5 (Antwort-Modus + Sprache) → Gate-Runde →
+> WP-006 Slices 2–3 (Servicekatalog, Struktur-Assistent) → Gate → Cockpit-Varianten (vorlegen) →
+> WP-029 kuratierte Personalisierung → WP-027 Suche. Danach ist ohne Owner-Gates Schluss.
+
+
 - **ID:** WP-020 – Verdichtungs-Umbau, Dashboard-Schicht aus belegten Daten, neuer Einstiegsfluss (DR-0008/DR-0009)
 - **Modus:** **Produktkorrektur-Sprint (DR-0010)** — Reihenfolge Owner-geändert, Kundenwelt
   Stufe 1 und Cockpit-Varianten in den Sprint gezogen, danach **STOPP für visuelle Freigabe**
