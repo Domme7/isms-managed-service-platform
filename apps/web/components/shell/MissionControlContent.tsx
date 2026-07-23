@@ -58,6 +58,7 @@
  */
 import Link from 'next/link';
 import { useId, useState } from 'react';
+import type { ReactNode } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
 
 import {
@@ -82,6 +83,12 @@ import {
   framingForRole,
   type MissionSectionId,
 } from '../../lib/heute/framing';
+import {
+  KANONISCHE_KACHELORDNUNG,
+  KEINE_VARIANTE_TEXT,
+  varianteForRole,
+  type TileId,
+} from '../../lib/heute/rollenvarianten';
 import { getPlace } from '../../lib/shell/places';
 import { worldForRole, type DemoRole, type ExperienceWorld } from '../../lib/shell/roles';
 import {
@@ -159,7 +166,7 @@ export function MissionControlContent({
 
           <TiefenSchalter tiefe={aktiveTiefe} onChange={wechsleTiefe} />
 
-          <DashboardSection dashboard={dashboard} />
+          <DashboardSection dashboard={dashboard} role={role} />
 
           {sectionOrder
             .filter((id) => SECTION_EBENE[id] <= aktiveTiefe)
@@ -344,7 +351,36 @@ function TiefenSchalter({
  * (WP-020 Slice 4, DR-0008; Modelle aus `lib/heute/dashboard.ts`)
  * --------------------------------------------------------------------------- */
 
-function DashboardSection({ dashboard }: { dashboard: HeuteDashboardModel }) {
+function DashboardSection({
+  dashboard,
+  role,
+}: {
+  dashboard: HeuteDashboardModel;
+  role: DemoRole | null;
+}) {
+  // Rollenvariante (WP-020 Slice 5): ordnet die Kacheln nach der normativen Tabelle bzw. der
+  // Welt-Ableitung – NIE Entzug, nur Betonung. Neutral und Rollen ohne Variante rendern die
+  // kanonische Reihenfolge (`lib/heute/rollenvarianten.ts`, dort vollständig begründet).
+  const zuordnung = varianteForRole(role?.id ?? null);
+  const ordnung = zuordnung.variante?.tileOrder ?? KANONISCHE_KACHELORDNUNG;
+
+  // Kachel-Elemente je Kennung; die Reihenfolge kommt AUSSCHLIESSLICH aus der Variante.
+  const kacheln = new Map<TileId, ReactNode>();
+  for (const tile of dashboard.stockTiles) kacheln.set(tile.id, <StockKachel tile={tile} />);
+  if (dashboard.lifecycleSummary) {
+    kacheln.set(
+      'lebenszyklus_zaehlung',
+      <LifecycleSummaryKachel tile={dashboard.lifecycleSummary} />,
+    );
+  }
+  for (const tile of dashboard.coverage) kacheln.set(tile.id, <CoverageKachel tile={tile} />);
+  // Fail-soft, kein Datenverlust: eine Kachel, die in keiner Ordnung stünde, fiele ans Ende
+  // statt still zu verschwinden (per Test unerreichbar – jede Ordnung ist vollständig).
+  const sichtbar: TileId[] = [
+    ...ordnung.filter((id) => kacheln.has(id)),
+    ...[...kacheln.keys()].filter((id) => !ordnung.includes(id)),
+  ];
+
   return (
     <section aria-labelledby="heute-stand">
       <h2 id="heute-stand">Wie ist der Stand?</h2>
@@ -358,28 +394,60 @@ function DashboardSection({ dashboard }: { dashboard: HeuteDashboardModel }) {
       </ul>
 
       {dashboard.isEmpty && dashboard.emptyTile ? (
-        /* Leerer Mandant: EINE ehrliche Datenlücken-Kachel statt einer „0 von 0"-Wand. */
+        /* Leerer Mandant: EINE ehrliche Datenlücken-Kachel statt einer „0 von 0"-Wand.
+           Ein Rollenfokus wird hier bewusst NICHT gerendert: ohne Kacheln gibt es nichts zu
+           betonen – die Datenlücken-Kachel ist die Aussage. */
         <EmptyTenantKachel tile={dashboard.emptyTile} />
       ) : (
-        <ul className="db-grid" aria-label="Kacheln aus belegten Daten">
-          {dashboard.stockTiles.map((tile) => (
-            <li key={tile.id}>
-              <StockKachel tile={tile} />
-            </li>
-          ))}
-          {dashboard.lifecycleSummary ? (
-            <li>
-              <LifecycleSummaryKachel tile={dashboard.lifecycleSummary} />
-            </li>
-          ) : null}
-          {dashboard.coverage.map((tile) => (
-            <li key={tile.id}>
-              <CoverageKachel tile={tile} />
-            </li>
-          ))}
-        </ul>
+        <>
+          {role ? <RollenfokusBlock role={role} /> : null}
+          <ul className="db-grid" aria-label="Kacheln aus belegten Daten">
+            {sichtbar.map((id) => (
+              <li key={id}>{kacheln.get(id)}</li>
+            ))}
+          </ul>
+        </>
       )}
     </section>
+  );
+}
+
+/**
+ * Sichtbarer Rollenfokus der Ebene 1 (WP-020 Slice 5): benennt die angewendete Variante samt
+ * Herkunft (normiert / Welt-Ableitung / keine), die belegten Fokus-Kacheln, die Fokusinhalte
+ * OHNE Träger (Lücke statt Erfindung, DR-0005) und was die normierte „Ausblendung" heute
+ * bedeutet – inklusive der Zusage, dass nichts entzogen wird (eine Wahrheit, Dok. 06 P02).
+ * Für neutral erscheint stattdessen der Erstbesuchs-Hinweis (Slice 2), kein Fokus.
+ */
+function RollenfokusBlock({ role }: { role: DemoRole }) {
+  const { variante, herkunft } = varianteForRole(role.id);
+
+  if (!variante) {
+    return (
+      <div className="rv-fokus rv-fokus--keine" role="note">
+        <p className="rv-fokus-text">
+          <strong>Rollenfokus:</strong> {KEINE_VARIANTE_TEXT}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rv-fokus" role="note">
+      <p className="rv-fokus-text">
+        <strong>{`Rollenfokus „${variante.name}":`}</strong>{' '}
+        {herkunft === 'normiert'
+          ? 'Diese Variante ist im Konzept normiert (Dok. 06, Abschnitt „Mission Control & ' +
+            `Morning Mission", Tabelle „Rollenvarianten", Zeile „${variante.name}").`
+          : 'Für diese Rolle ist keine eigene Variante normiert; angewendet wird die Variante ' +
+            `„${variante.name}" ihrer Erlebniswelt – eine reversible Anzeigeentscheidung, ` +
+            'keine Konzeptvorgabe.'}
+      </p>
+      <p className="rv-fokus-text">
+        {variante.fokusBelegtText} {variante.fokusLueckenText}
+      </p>
+      <p className="rv-fokus-text">{variante.ausblendungText}</p>
+    </div>
   );
 }
 

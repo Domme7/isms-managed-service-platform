@@ -27,6 +27,7 @@ import {
   type ObjectDetailModel,
   type ObjectEdge,
 } from '../../../lib/twin/object-detail';
+import { TRUST_LAYER_ANGABEN, countTrustAngaben } from '../../../lib/twin/trust-layer';
 
 const O = NORDWERK_OBJECT_ID;
 
@@ -494,5 +495,54 @@ describe('ObjectDetailView – Navigationspfad über gerenderte Links', () => {
       (o) => o.tenant_id !== TENANT_ID.NORDWERK && besucht.has(o.object_id),
     );
     expect(fremd).toEqual([]);
+  });
+});
+
+/* -----------------------------------------------------------------------------
+ * Trust-Layer-Abgleich (WP-020 Slice 5 – AC 19)
+ * --------------------------------------------------------------------------- */
+
+describe('ObjectDetailView – Trust-Layer-Abgleich (Dok. 06 „Sonder-, Fehler- und Vertrauenszustände")', () => {
+  it('ordnet die acht Trust-Layer-Angaben sichtbar zu und benennt die unbelegten als Lücke', () => {
+    render(
+      <ObjectDetailView model={detailOrThrow(TENANT_ID.NORDWERK, O.RISK_BETRIEBSUNTERBRECHUNG)} />,
+    );
+
+    const abschnitt = screen
+      .getByRole('heading', { level: 3, name: 'Trust-Layer-Abgleich' })
+      .closest('section') as HTMLElement;
+    const liste = abschnitt.querySelector('#objekt-trust-abgleich') as HTMLElement;
+    expect(liste).not.toBeNull();
+
+    // Alle acht Angaben mit Deckungsgrad (als Text, nie nur Farbe) und Trägertext.
+    expect(TRUST_LAYER_ANGABEN).toHaveLength(8);
+    for (const angabe of TRUST_LAYER_ANGABEN) {
+      expect(within(liste).getByText(angabe.angabe)).toBeInTheDocument();
+      expect(within(liste).getByText(angabe.traeger)).toBeInTheDocument();
+    }
+    expect(within(liste).getAllByText(/im heutigen Datenbestand: kein Träger/)).toHaveLength(
+      countTrustAngaben('kein Träger'),
+    );
+    expect(within(liste).getAllByText(/im heutigen Datenbestand: teilweise/)).toHaveLength(
+      countTrustAngaben('teilweise'),
+    );
+
+    // Die Kopfzeile nennt Quelle (Abschnittstitel) und die GEZÄHLTEN Anzahlen – und sagt
+    // ausdrücklich, dass nichts berechnet wird (kein verdichteter Vertrauenswert).
+    const text = abschnitt.textContent ?? '';
+    expect(text).toContain('Sonder-, Fehler- und Vertrauenszustände');
+    expect(text).toContain(`${countTrustAngaben('belegt')} Angaben sind belegt`);
+    expect(text).toMatch(/nichts\s+berechnet/);
+    expect(text).toMatch(/nichts\s+verdichtet/);
+  });
+
+  it('verspricht nichts: der Abgleich ist eine Aussage über den heutigen Datenbestand', () => {
+    const { container } = render(
+      <ObjectDetailView model={detailOrThrow(TENANT_ID.NORDWERK, O.RISK_BETRIEBSUNTERBRECHUNG)} />,
+    );
+    const liste = container.querySelector('#objekt-trust-abgleich') as HTMLElement;
+    expect(liste.textContent ?? '').not.toMatch(
+      /kommt bald|in Kürze|demnächst|geplant für|wird künftig|Roadmap/i,
+    );
   });
 });

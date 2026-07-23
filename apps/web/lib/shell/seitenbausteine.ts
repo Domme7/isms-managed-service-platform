@@ -363,7 +363,10 @@ export const BAUSTEIN_ABDECKUNG: Readonly<Record<BausteinOrt, readonly BausteinZ
     {
       baustein: 'trust_layer',
       status: 'teilweise',
-      wo: 'Datenvertrauen der Seite (Bestätigungsstufe, Qualitätsdimensionen, Kanten-Vertrauensgrad).',
+      wo:
+        'Datenvertrauen der Seite (Bestätigungsstufe, Qualitätsdimensionen, ' +
+        'Kanten-Vertrauensgrad) samt Abgleich mit den acht Trust-Layer-Angaben unter ' +
+        '„Wie entwickelt es sich?".',
       fehlt: 'Widerspruchs- und Vollständigkeitsangaben über die erfassten Dimensionen hinaus.',
     },
   ],

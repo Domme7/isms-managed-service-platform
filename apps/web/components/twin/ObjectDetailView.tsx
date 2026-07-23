@@ -33,6 +33,11 @@ import type {
 } from '../../lib/twin/object-detail';
 import { formatIsoDateDe, objectDetailHref, tenantDetailHref } from '../../lib/twin/routes';
 import { objectTypeDisplay, relationshipTypeId, relationshipTypeLabel } from '../../lib/twin/data';
+import {
+  TRUST_LAYER_ANGABEN,
+  TRUST_LAYER_QUELLE,
+  countTrustAngaben,
+} from '../../lib/twin/trust-layer';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
 /* -----------------------------------------------------------------------------
@@ -677,6 +682,28 @@ function EvolutionSection({
       ) : (
         <p className="sv-item-meta">Keine Quellreferenz im Demo-Seed erfasst.</p>
       )}
+
+      {/* WP-020 Slice 5: Abgleich der hier belegten Vertrauensanzeigen gegen die acht
+          Trust-Layer-Angaben des Konzepts – dokumentierte Zuordnung, keine Berechnung
+          (`lib/twin/trust-layer.ts`; unbelegte Angaben sichtbar benannt statt gefüllt). */}
+      <h3>Trust-Layer-Abgleich</h3>
+      <p className="sv-edge-note">
+        Das Konzept beschreibt eine Vertrauensebene mit {TRUST_LAYER_ANGABEN.length} Angaben (
+        {TRUST_LAYER_QUELLE}). Diese Seite ordnet zu, was der heutige Datenbestand davon trägt:{' '}
+        {countTrustAngaben('belegt')} Angaben sind belegt, {countTrustAngaben('teilweise')} nur
+        teilweise, {countTrustAngaben('kein Träger')} haben keinen Träger. Es wird nichts berechnet,
+        nichts verdichtet und nichts erfunden – die Lücken stehen ausgeschrieben dabei.
+      </p>
+      <ul className="sv-items" id="objekt-trust-abgleich">
+        {TRUST_LAYER_ANGABEN.map((angabe) => (
+          <li key={angabe.angabe}>
+            <span className="sv-item-name">{angabe.angabe}</span>
+            {/* Deckungsgrad als Text, nie nur als Farbe (Dok. 06 06-D11). */}
+            <span className="sv-item-meta">{` · im heutigen Datenbestand: ${angabe.abdeckung}`}</span>
+            <span className="sv-item-note">{angabe.traeger}</span>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

@@ -1269,6 +1269,32 @@ h3 {
 }
 
 /* =============================================================================
+   Rollenfokus der Ebene 1 (WP-020 Slice 5, Dok. 06 Tabelle „Rollenvarianten"):
+   benannte Betonung + Lücken, Teal als aktive Orientierung, Text + Rahmen,
+   keine Animation. Kein Entzug – reine Reihenfolge-Betonung.
+   ========================================================================== */
+.rv-fokus {
+  background: var(--tw-surface);
+  border: 1px solid var(--tw-line);
+  border-left: 4px solid var(--shell-teal);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  margin: 0 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.rv-fokus--keine {
+  border-left-color: var(--tw-line);
+}
+.rv-fokus-text {
+  margin: 0;
+  font-size: 0.83rem;
+  color: var(--tw-ink-soft);
+  max-width: 88ch;
+}
+
+/* =============================================================================
    Detailtiefe-Schalter auf „Heute" (WP-020 Slice 3, Dok. 06 „Detailtiefe"/P06).
    Auswahlzustand = Radio-Form + Rahmen + Text, nie nur Farbe (06-D11).
    ========================================================================== */

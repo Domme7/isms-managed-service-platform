@@ -26,8 +26,10 @@ import { IsmsContent } from '../../isms/IsmsContent';
 import { SessionProvider } from '../../shell/SessionProvider';
 import {
   DECISION_CARD_FIELDS,
+  DECISION_CARD_FIELDS_DOK06,
   DECISION_RECORD_CONTENTS,
   buildDecisionRegister,
+  countFields,
 } from '../../../lib/entscheidungen/data';
 import { getPlace } from '../../../lib/shell/places';
 import { DEMO_ROLES, getRole, type DemoRole } from '../../../lib/shell/roles';
@@ -620,6 +622,17 @@ const ERLAUBTE_NEGATIONEN = ['Es wird nichts gewichtet, nichts eingestuft und ni
 const QUELLEN_PRIORITAET = /· Priorität: \d+/g;
 
 /**
+ * BEGRÜNDETE AUSNAHME (WP-020 Slice 5, AC 18): Der Feldabgleich zeigt die Dok.-06-Liste
+ * „Decision Card – Pflichtfelder" mit WÖRTLICHEN Feldnamen – eines heißt „Kosten-, Zeit- und
+ * Kapazitätsannahmen". Das ist ein zitierter Konzept-Feldname in einer Lückenliste, keine
+ * Geldangabe der Seite (der Trägertext sagt ausdrücklich, dass Geldangaben ausgeschlossen
+ * bleiben). Der exakte Name kommt aus der Datenquelle (nie dupliziert), wird vor der Prüfung
+ * entfernt und sein Vorhandensein geprüft, damit die Ausnahme nicht still wächst.
+ */
+const DOK06_GELDWORT_FELD =
+  DECISION_CARD_FIELDS_DOK06.find((f) => f.field.includes('Kosten'))?.field ?? '';
+
+/**
  * Zusätzlich verboten in den DATENABSCHNITTEN. Im Rahmungsabsatz unter der Leitfrage und im
  * Ehrlichkeitsblock sind diese Begriffe zulässig und notwendig: dort wird BENANNT, dass es kein
  * Feld für Frist, Priorität oder Empfehlung gibt. Eine benannte Lücke ist keine Bewertung.
@@ -656,6 +669,13 @@ describe('EntscheidungenContent – kein Score, keine Priorisierung, keine Gelda
           }
           text = text.split(negation).join(' ');
         }
+        // WP-020 Slice 5: der zitierte Dok.-06-Feldname mit Geldwort (Begründung oben an
+        // `DOK06_GELDWORT_FELD`) – der Abgleich rendert für jeden bekannten Mandanten.
+        expect(
+          text,
+          `${demoRole.id}/${tenantId}: der zitierte Dok.-06-Feldname steht nicht mehr im Text`,
+        ).toContain(DOK06_GELDWORT_FELD);
+        text = text.split(DOK06_GELDWORT_FELD).join(' ');
         for (const muster of [...BEWERTUNG_VERBOTEN, ...GELD_VERBOTEN]) {
           expect(
             muster.test(text),
@@ -763,6 +783,58 @@ describe('EntscheidungenContent – Ehrlichkeitsblock „Was eine Entscheidung h
     expect(text).toContain('Nach Freigabe wird die Karte zum unveränderbaren Decision Record.');
     expect(text).toContain('Korrekturen erfolgen als neue Version oder Nachtrag.');
     expect(text).toMatch(/Korrekturen entstehen als neuer Stand, nicht als Überschreibung/);
+  });
+
+  /**
+   * WP-020 Slice 5 (AC 18): der Feldabgleich läuft jetzt gegen BEIDE Pflichtfeldlisten –
+   * Dok. 10 „Pflichtfelder" (oben) UND Dok. 06 „Decision Card – Pflichtfelder" – samt benanntem
+   * Widerspruch (O-WP017-11 bleibt offen: keine Liste wird kanonisch erklärt).
+   */
+  it('AC 18: zeigt die Dok.-06-Zweitliste feldweise mit Deckungsgrad', () => {
+    const abschnitt = lueckenAbschnitt();
+    const liste = abschnitt.querySelector('#entscheidungen-luecke-dok06') as HTMLElement;
+    expect(liste).not.toBeNull();
+
+    expect(DECISION_CARD_FIELDS_DOK06).toHaveLength(8);
+    for (const feld of DECISION_CARD_FIELDS_DOK06) {
+      expect(within(liste).getByText(feld.field)).toBeInTheDocument();
+      expect(within(liste).getByText(feld.carrier)).toBeInTheDocument();
+    }
+    // Deckungsgrade als Text – gezählt aus der Liste, nirgends als Konstante geschrieben.
+    expect(within(liste).getAllByText(/im heutigen Datenmodell: kein Träger/)).toHaveLength(
+      countFields(DECISION_CARD_FIELDS_DOK06, 'kein Träger'),
+    );
+    expect(within(liste).getAllByText(/im heutigen Datenmodell: teilweise/)).toHaveLength(
+      countFields(DECISION_CARD_FIELDS_DOK06, 'teilweise'),
+    );
+    // Die Feldnamen sind die WÖRTLICHEN acht aus dem PDF-Abschnitt „Collaboration,
+    // Entscheidungen & Freigaben" – festgenagelt gegen stilles Umformulieren.
+    expect(DECISION_CARD_FIELDS_DOK06.map((f) => f.field)).toEqual([
+      'Entscheidungsfrage und Frist',
+      'Optionen einschließlich Nichtstun',
+      'Business-/Zielwirkung und Risiken',
+      'Kosten-, Zeit- und Kapazitätsannahmen',
+      'Datenquellen, Lücken und Vertrauensgrad',
+      'Empfehlung und Gegenargument',
+      'Entscheider, Vertretung und Freigabestufe',
+      'Review-Datum und Erfolgskriterium',
+    ]);
+  });
+
+  it('AC 18: benennt den Widerspruch beider Listen, ohne eine zur kanonischen zu erklären', () => {
+    const abschnitt = lueckenAbschnitt();
+    const text = abschnitt.textContent ?? '';
+
+    // Beide Listen mit ihren Zählungen benannt; die Quelle mit ABSCHNITTSTITEL.
+    expect(text).toMatch(/widerspricht der Dok\.-10-Liste/);
+    expect(text).toContain('Collaboration, Entscheidungen & Freigaben');
+    expect(text).toContain(`${DECISION_CARD_FIELDS_DOK06.length} Feldern`);
+    expect(text).toContain(`${DECISION_CARD_FIELDS.length} Felder`);
+    // Der Widerspruch bleibt OFFEN – keine Liste wird entschieden (O-WP017-11).
+    expect(text).toMatch(/Welche Liste kanonisch ist, ist im Konzept nicht entschieden/);
+    expect(text).toMatch(/wird hier nicht entschieden/);
+    // Und es wird weiterhin KEINE Decision Card gebaut (bestehende Aussage bleibt).
+    expect(within(abschnitt).getByText(/keine Decision Card/)).toBeInTheDocument();
   });
 
   it('benennt die Grenze der Leitfrage auch hier – ohne sie zu beantworten', () => {

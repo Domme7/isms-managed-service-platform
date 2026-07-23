@@ -30,10 +30,12 @@ import type { DemoTenant } from '@isms/demo-seed';
 
 import {
   DECISION_CARD_FIELDS,
+  DECISION_CARD_FIELDS_DOK06,
   DECISION_OBJECT_TYPE,
   DECISION_RECORD_CONTENTS,
   buildDecisionRegister,
   countDecisionCardFields,
+  countFields,
   type DecisionCardField,
   type DecisionEdge,
   type DecisionEntry,
@@ -718,6 +720,30 @@ function HonestySection() {
         Ablösekette oben – der abgelöste Stand bleibt unverändert, vollständig sichtbar und
         verlinkt, und der Nachfolgestand steht als eigenes Objekt daneben.
       </p>
+
+      {/* WP-020 Slice 5: die ZWEITE Pflichtfeldliste (Dok. 06) samt benanntem Widerspruch
+          beider Listen. O-WP017-11 bleibt offen: keine Liste wird zur kanonischen erklärt,
+          es wird weiterhin KEINE Decision Card gebaut – nur der Abgleich gezeigt. */}
+      <h3>Die zweite Pflichtfeldliste: Dok. 06 – und der Widerspruch der beiden Listen</h3>
+      <p className="sv-edge-note">
+        Dok. 06 führt im Abschnitt „Collaboration, Entscheidungen &amp; Freigaben" eine{' '}
+        <strong>eigene</strong> Liste „Decision Card – Pflichtfelder" mit{' '}
+        {DECISION_CARD_FIELDS_DOK06.length} Feldern. Sie{' '}
+        <strong>widerspricht der Dok.-10-Liste oben</strong> ({DECISION_CARD_FIELDS.length} Felder):
+        Zählung und Zuschnitt decken sich nicht – Dok. 06 bündelt etwa „Entscheidungsfrage und
+        Frist" in einem Feld und verlangt ein Gegenargument und ein Erfolgskriterium, die Dok. 10
+        nicht nennt; Dok. 10 verlangt umgekehrt Auslöser, Baseline und Abhängigkeiten, die Dok. 06
+        nicht führt. Welche Liste kanonisch ist, ist im Konzept nicht entschieden und wird hier
+        nicht entschieden – gezeigt wird der Abgleich gegen beide. Im heutigen Objektvertrag haben
+        von den {DECISION_CARD_FIELDS_DOK06.length} Dok.-06-Feldern{' '}
+        <strong>{countFields(DECISION_CARD_FIELDS_DOK06, 'kein Träger')} keinen Träger</strong> und{' '}
+        <strong>{countFields(DECISION_CARD_FIELDS_DOK06, 'teilweise')} nur teilweise</strong> einen.
+      </p>
+      <ul className="sv-items" id="entscheidungen-luecke-dok06">
+        {DECISION_CARD_FIELDS_DOK06.map((field) => (
+          <FieldItem key={field.field} field={field} />
+        ))}
+      </ul>
 
       <p className="tw-muted">
         Auch die Leitfrage dieses Ortes bleibt damit offen: „{getPlace('entscheidungen').question}"

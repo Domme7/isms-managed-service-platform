@@ -42,6 +42,12 @@ import { buildMissionControl } from '../../../lib/heute/data';
 import { BADGE_RULES, buildHeuteDashboard } from '../../../lib/heute/dashboard';
 import { DETAILTIEFE_STORAGE_KEY } from '../../../lib/heute/detailtiefe';
 import { framingForRole, MISSION_SECTIONS } from '../../../lib/heute/framing';
+import {
+  KANONISCHE_KACHELORDNUNG,
+  NORMIERTE_ROLLEN,
+  kachelOrdnungForRole,
+  varianteForRole,
+} from '../../../lib/heute/rollenvarianten';
 import { getPlace } from '../../../lib/shell/places';
 import { DEMO_ROLES, getRole, type DemoRole } from '../../../lib/shell/roles';
 import { SESSION_STORAGE_KEY, serializeSession } from '../../../lib/shell/session';
@@ -665,8 +671,23 @@ function datenprofil(container: HTMLElement): { hrefs: string[]; werte: string[]
   return { hrefs, werte: [...werte, ...kontextWerte].sort() };
 }
 
-describe('MissionControlContent – identische Datenmenge über alle zwölf Rollen', () => {
-  it('zeigt für R01–R12 dieselben Objekt-IDs und dieselben Zählwerte', () => {
+/**
+ * KONTROLLIERT UMGESTELLTE INVARIANTE (WP-020 Slice 5 – die einzige im WP genehmigte
+ * Regelevolution): Bis Slice 4 hieß die Regel „alle zwölf Rollen sehen dieselben Daten in
+ * derselben Darstellung". Seit der Rollenvarianten-Personalisierung lautet sie:
+ *   „Dieselben Daten bleiben für JEDE Perspektive erreichbar (keine getrennte Wahrheit,
+ *    Dok. 06 P02/06-D05); eine Rolle darf ausschließlich die dokumentierte BETONUNG/
+ *    REIHENFOLGE ändern – exakt nach der normativen Tabelle „Rollenvarianten" bzw. der
+ *    Welt-Ableitung (O-WP020-03), geprüft im Rollenvarianten-Block unten."
+ * Der Vergleich hier arbeitet deshalb SORTIERT (Datenmenge, nicht Reihenfolge); die exakte
+ * Reihenfolge je Rolle prüft der Rollenvarianten-Block gegen `kachelOrdnungForRole`. Vom
+ * Vergleich ausgenommen bleiben nur die dokumentiert rollenabhängigen RAHMUNGS-Texte
+ * (Kontextzeile Rolle/Erlebniswelt, Welt-Rahmungsnote, Rollenfokus-Block – alles Rahmung,
+ * keine Daten; der Rollenfokus nutzt eigene `rv-`Klassen und liegt damit außerhalb des
+ * Datenprofils). Die Regel wurde umgebaut, nicht gelöscht.
+ */
+describe('MissionControlContent – dieselben Daten für alle zwölf Rollen (keine getrennte Wahrheit)', () => {
+  it('zeigt für R01–R12 dieselben Objekt-IDs und dieselben Zählwerte (sortiert verglichen)', () => {
     expect(DEMO_ROLES).toHaveLength(12);
 
     let referenz: { hrefs: string[]; werte: string[] } | undefined;
@@ -714,6 +735,106 @@ describe('MissionControlContent – identische Datenmenge über alle zwölf Roll
 
     expect(neutralProfil.hrefs).toEqual(rolleProfil.hrefs);
     expect(neutralProfil.werte).toEqual(rolleProfil.werte.filter((w) => w !== WELT_RAHMUNGSNOTE));
+  });
+});
+
+/* -----------------------------------------------------------------------------
+ * 7b. Rollenvarianten der Ebene 1 (WP-020 Slice 5 – AC 17)
+ * --------------------------------------------------------------------------- */
+
+/** Gerenderte Kachel-Reihenfolge (data-tile-id in DOM-Reihenfolge). */
+function gerenderteKachelOrdnung(container: HTMLElement): string[] {
+  return Array.from(container.querySelectorAll('.db-grid > li > .db-tile')).map(
+    (el) => el.getAttribute('data-tile-id') ?? '',
+  );
+}
+
+describe('MissionControlContent – Rollenvarianten (Dok. 06 Tabelle „Rollenvarianten")', () => {
+  it('ordnet die Kacheln für JEDE Perspektive exakt nach der dokumentierten Variante – ohne Entzug', () => {
+    // Alle zwölf Rollen + neutral: DOM-Reihenfolge == dokumentierte Ordnung; Kachel-MENGE
+    // ist immer vollständig (Betonung, kein Entzug – die umgestellte Invariante).
+    for (const perspektive of [...DEMO_ROLES, null]) {
+      const { container, unmount } = render(
+        // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (auch `null` = neutral), kein ARIA-Attribut – Fehlalarm der Regel.
+        <MissionControlContent role={perspektive} tenant={tenant(TENANT_ID.NORDWERK)} />,
+      );
+      const erwartet = kachelOrdnungForRole(perspektive?.id ?? null);
+      const gerendert = gerenderteKachelOrdnung(container);
+      expect(gerendert, perspektive?.id ?? 'neutral').toEqual([...erwartet]);
+      expect([...gerendert].sort()).toEqual([...KANONISCHE_KACHELORDNUNG].sort());
+      unmount();
+    }
+  });
+
+  it('AC 17: die vier normierten Rollen tragen den Rollenfokus mit benannten Lücken', () => {
+    for (const roleId of Object.keys(NORMIERTE_ROLLEN)) {
+      const { container, unmount } = render(
+        <MissionControlContent role={role(roleId)} tenant={tenant(TENANT_ID.NORDWERK)} />,
+      );
+      const zuordnung = varianteForRole(roleId);
+      if (!zuordnung.variante) throw new Error(`Variante fehlt: ${roleId}`);
+      const fokus = container.querySelector('.rv-fokus');
+      const text = fokus?.textContent ?? '';
+
+      // Variante + Herkunft „normiert" sind benannt (Quelle mit Abschnittstitel).
+      expect(text, roleId).toContain(`Rollenfokus „${zuordnung.variante.name}"`);
+      expect(text, roleId).toContain('im Konzept normiert');
+      expect(text, roleId).toContain('Tabelle „Rollenvarianten"');
+      // Belegte Betonung + Fokus-Lücken + Ausblendungs-Klartext stehen sichtbar da.
+      expect(text, roleId).toContain(zuordnung.variante.fokusBelegtText);
+      expect(text, roleId).toContain(zuordnung.variante.fokusLueckenText);
+      expect(text, roleId).toContain(zuordnung.variante.ausblendungText);
+      // Erreichbarkeits-Zusage (keine getrennte Wahrheit, alles über Drill-down/Tiefe).
+      expect(text, roleId).toMatch(/nichts entzogen/);
+      unmount();
+    }
+    // Stichprobe der geforderten Lücken-Benennung (AC 17: „z. B. Freigaben, Investition").
+    const executive = varianteForRole('R01').variante;
+    expect(executive?.fokusLueckenText).toContain('Freigaben');
+    expect(executive?.fokusLueckenText).toContain('Investition');
+  });
+
+  it('Welt-Ableitung: nicht normierte Rollen benennen die Ableitung als Anzeigeentscheidung', () => {
+    // R02 (Executive World) erhält die Executive-Variante ÜBER DIE WELT – sichtbar benannt.
+    const { container, unmount } = render(
+      <MissionControlContent role={role('R02')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const text = container.querySelector('.rv-fokus')?.textContent ?? '';
+    expect(text).toContain('keine eigene Variante normiert');
+    expect(text).toContain('ihrer Erlebniswelt');
+    expect(text).toContain('reversible Anzeigeentscheidung');
+    expect(gerenderteKachelOrdnung(container)).toEqual([...kachelOrdnungForRole('R01')]);
+    unmount();
+  });
+
+  it('Assurance-Rollen erhalten BEWUSST keine Betonung (keine Zeile in der Tabelle)', () => {
+    for (const roleId of ['R07', 'R12']) {
+      const { container, unmount } = render(
+        <MissionControlContent role={role(roleId)} tenant={tenant(TENANT_ID.NORDWERK)} />,
+      );
+      const fokus = container.querySelector('.rv-fokus');
+      expect(fokus?.textContent, roleId).toContain('keine Betonung erfunden');
+      expect(gerenderteKachelOrdnung(container), roleId).toEqual([...KANONISCHE_KACHELORDNUNG]);
+      unmount();
+    }
+  });
+
+  it('neutral bleibt kanonisch und ohne Rollenfokus (der Neutral-Hinweis rahmt stattdessen)', () => {
+    const { container } = render(
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop dieser Komponente (hier bewusst `null` = neutral), kein ARIA-Attribut – Fehlalarm der Regel.
+      <MissionControlContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    expect(container.querySelector('.rv-fokus')).toBeNull();
+    expect(container.querySelector('.ht-neutral')).not.toBeNull();
+    expect(gerenderteKachelOrdnung(container)).toEqual([...KANONISCHE_KACHELORDNUNG]);
+  });
+
+  it('leerer Mandant: kein Rollenfokus – ohne Kacheln gibt es nichts zu betonen', () => {
+    const { container } = render(
+      <MissionControlContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+    );
+    expect(container.querySelector('.rv-fokus')).toBeNull();
+    expect(container.querySelector('.db-tile[data-tile-id="datenluecke"]')).not.toBeNull();
   });
 });
 
@@ -833,6 +954,21 @@ describe('MissionControlContent – kein Score, keine Ampel, keine Empfehlung', 
             `${kennung}/${tenantId}: die zitierte Kernverantwortung steht nicht mehr im Text`,
           ).toContain(demoRole.responsibility);
           datentext = datentext.split(demoRole.responsibility).join(' ');
+        }
+        // BEGRÜNDETE AUSNAHME (WP-020 Slice 5, AC 17): Der Rollenfokus benennt die Fokusinhalte
+        // OHNE Träger mit dem PDF-Vokabular der Tabelle „Rollenvarianten" – für die
+        // Consultant-Variante enthält das „Mandantenpriorität". Das ist eine ZITIERTE, als
+        // Lücke benannte Konzeptvorgabe, keine Priorisierung von Daten durch diese Seite.
+        // Dieselbe Mechanik: exakter Satz aus `rollenvarianten.ts` wird entfernt UND sein
+        // Vorhandensein geprüft (nur wo der Fokus rendert – nicht bei leeren Mandanten,
+        // dort gibt es bewusst keinen Rollenfokus).
+        const fokusVariante = demoRole ? varianteForRole(demoRole.id).variante : null;
+        if (fokusVariante && tenantId !== TENANT_ID.FINOVIA) {
+          expect(
+            datentext,
+            `${kennung}/${tenantId}: der Fokus-Lückentext steht nicht mehr im Text`,
+          ).toContain(fokusVariante.fokusLueckenText);
+          datentext = datentext.split(fokusVariante.fokusLueckenText).join(' ');
         }
         for (const muster of NUR_IM_LUECKENBLOCK) {
           expect(

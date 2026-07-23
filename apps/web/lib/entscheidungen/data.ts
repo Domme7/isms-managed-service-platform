@@ -543,6 +543,98 @@ export function countDecisionCardFields(coverage: FieldCoverage): number {
   return DECISION_CARD_FIELDS.filter((f) => f.coverage === coverage).length;
 }
 
+/** Anzahl je Deckungsgrad für eine BELIEBIGE Feldliste – gezählt, nie geschrieben. */
+export function countFields(fields: readonly DecisionCardField[], coverage: FieldCoverage): number {
+  return fields.filter((f) => f.coverage === coverage).length;
+}
+
+/* -----------------------------------------------------------------------------
+ * Die ZWEITE Pflichtfeldliste: Dok. 06 „Decision Card – Pflichtfelder"
+ * (WP-020 Slice 5; O-WP017-11 – der Widerspruch beider Listen bleibt OFFEN)
+ * --------------------------------------------------------------------------- */
+
+/**
+ * QUELLE (Regel Null, am PDF gegengelesen): Dok. 06, Abschnitt „Collaboration, Entscheidungen
+ * & Freigaben", Liste „Decision Card – Pflichtfelder" – ACHT Felder, wörtlich:
+ * Entscheidungsfrage und Frist · Optionen einschließlich Nichtstun · Business-/Zielwirkung und
+ * Risiken · Kosten-, Zeit- und Kapazitätsannahmen · Datenquellen, Lücken und Vertrauensgrad ·
+ * Empfehlung und Gegenargument · Entscheider, Vertretung und Freigabestufe · Review-Datum und
+ * Erfolgskriterium.
+ *
+ * // OFFENE FRAGE O-WP017-11 (bestehend, hier NICHT entschieden): Dok. 06 (8 Felder) und
+ * // Dok. 10 §9.1 (14 Felder) beschreiben dieselbe Decision Card mit ZWEI verschiedenen
+ * // Pflichtfeldlisten, die sich weder in Zählung noch Zuschnitt decken. Welche Liste
+ * // kanonisch ist, entscheidet der Concept Author – diese Datei zeigt den Abgleich gegen
+ * // BEIDE und erklärt keine zur Wahrheit.
+ *
+ * Deckungsgrade sind dieselbe Auswertung gegen Dok. 07 wie bei der Dok.-10-Liste oben
+ * (gebündelte Felder gelten als `teilweise`, wenn mindestens ein Teil einen Träger hat und
+ * mindestens ein Teil keinen – der Trägertext benennt beides). Feldnamen wörtlich aus dem PDF;
+ * die Trägertexte vermeiden bewusst Geld-Vokabular (Wächter der Seite).
+ */
+export const DECISION_CARD_FIELDS_DOK06: readonly DecisionCardField[] = [
+  {
+    field: 'Entscheidungsfrage und Frist',
+    coverage: 'teilweise',
+    carrier:
+      'Träger der Entscheidungsfrage ist der Objektname („display_name"). Für eine Frist gibt ' +
+      'es kein Feld – die beiden erfassten Zeitachsen (fachliche Gültigkeit, Systemerfassung) ' +
+      'sind keine Fälligkeit.',
+  },
+  {
+    field: 'Optionen einschließlich Nichtstun',
+    coverage: 'kein Träger',
+    carrier:
+      'Kein Feld und kein Objekttyp für Handlungsalternativen – auch nicht für das Nichtstun. ' +
+      'Dieselbe Lücke führt die Dok.-10-Liste oben als „Optionen".',
+  },
+  {
+    field: 'Business-/Zielwirkung und Risiken',
+    coverage: 'teilweise',
+    carrier:
+      'Träger des Risiko-Bezugs ist die Beziehung „decided_in" auf ein Risiko bzw. einen ' +
+      'Managed Service. Ein Feld für eine Business- oder Zielwirkung gibt es nicht.',
+  },
+  {
+    field: 'Kosten-, Zeit- und Kapazitätsannahmen',
+    coverage: 'kein Träger',
+    carrier:
+      'Kein Feld für Zeit- oder Kapazitätsannahmen; Geldangaben sind im Demo-Datenbestand ' +
+      'ausdrücklich ausgeschlossen und werden auch nicht ersatzweise geschätzt.',
+  },
+  {
+    field: 'Datenquellen, Lücken und Vertrauensgrad',
+    coverage: 'teilweise',
+    carrier:
+      'Träger sind die Quellreferenzen („source_refs"), die Datenqualitäts-Dimensionen ' +
+      '(„quality_state") und der Vertrauensgrad der Beziehung („confidence"). Eine ' +
+      'Lücken-Aufstellung je Entscheidung gibt es nicht.',
+  },
+  {
+    field: 'Empfehlung und Gegenargument',
+    coverage: 'kein Träger',
+    carrier:
+      'Kein Feld – und in dieser read-only Sicht auch bewusst kein abgeleiteter Vorschlag; ' +
+      'ein Gegenargument hätte ebenfalls keinen Träger.',
+  },
+  {
+    field: 'Entscheider, Vertretung und Freigabestufe',
+    coverage: 'teilweise',
+    carrier:
+      'Träger der Verantwortung sind „owner_ids" und die Beziehung „owns". Eine zeitlich ' +
+      'begrenzte Vertretung und eine Freigabestufe kennt das Modell nicht – Verantwortung ' +
+      'wird nicht zu einer Freigabe umgedeutet.',
+  },
+  {
+    field: 'Review-Datum und Erfolgskriterium',
+    coverage: 'kein Träger',
+    carrier:
+      'Kein Feld für einen Zeitpunkt der Überprüfung und keines für ein Erfolgskriterium; ' +
+      'dieselbe Lücke führt Dok. 10 als „Outcome Check" bzw. der Decision Record als ' +
+      '„Reviewtermin".',
+  },
+];
+
 /* -----------------------------------------------------------------------------
  * Zweite, EIGENSTÄNDIGE Feldliste: der Decision Record selbst
  * --------------------------------------------------------------------------- */
