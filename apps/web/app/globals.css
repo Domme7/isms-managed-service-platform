@@ -242,6 +242,18 @@ h3 {
   margin-top: 0.6rem;
 }
 
+/*
+ * WCAG 2.2 AA (2.5.8 Zielgröße): Jedes <summary> ist ein Klick-/Touchziel und muss mindestens
+ * 24px hoch sein — kompakte Aufklappzeilen unterschritten das Maß (axe `target-size`, in
+ * WP-032 auf /reports und /administration gefangen, weil die neuen Orte erstmals im
+ * Motivbestand der sichtbaren Abnahme standen). Bewusst GLOBAL statt je Klasse, damit ein
+ * künftiger Aufklapper das Maß nicht erneut unterschreiten kann.
+ */
+summary {
+  min-height: 24px;
+  padding-block: 0.15rem;
+}
+
 /* Summary panel */
 .tw-summary {
   display: flex;

@@ -24,6 +24,7 @@ import path from 'node:path';
 import { AxeBuilder } from '@axe-core/playwright';
 import { NORDWERK_OBJECT_ID, TENANT_ID } from '@isms/demo-seed';
 import { expect, test } from '@playwright/test';
+import { NAV_PLACES } from '../lib/shell/places';
 import { getRole } from '../lib/shell/roles';
 import { SESSION_STORAGE_KEY, serializeSession } from '../lib/shell/session';
 
@@ -53,16 +54,25 @@ if (!getRole(ROLLEN_ID)) {
 }
 
 /**
- * Die sieben Seiten des Motivbestands (AC 10). Die Objekt-360-Seite nutzt die stabile
- * Seed-Konstante NORDWERK_OBJECT_ID.RISK_BETRIEBSUNTERBRECHUNG – kein ID-Literal.
+ * Der Motivbestand: JEDER Live-Ort plus die Sub-Seiten (Mandanten-Detail, Objekt-360) und die
+ * Kunden-Startseite. Die Objekt-360-Seite nutzt die stabile Seed-Konstante
+ * NORDWERK_OBJECT_ID.RISK_BETRIEBSUNTERBRECHUNG – kein ID-Literal.
+ *
+ * WP-032: Mit `reports`, `wissen` und `administration` sind alle acht Orte live – die
+ * Owner-Abnahme muss sie sehen, sonst zeigt die sichtbare Abnahme ein unvollständiges Produkt
+ * (die Meta-Prüfung unten erzwingt das mechanisch).
  */
 const SEITEN = [
   { slug: 'heute', pfad: '/heute' },
   { slug: 'twin', pfad: '/twin' },
   { slug: 'twin-tenant-nordwerk', pfad: `/twin/${MANDANT_ID}` },
+  { slug: 'kunden', pfad: '/kunden' },
   { slug: 'isms', pfad: '/isms' },
   { slug: 'services', pfad: '/services' },
   { slug: 'entscheidungen', pfad: '/entscheidungen' },
+  { slug: 'reports', pfad: '/reports' },
+  { slug: 'wissen', pfad: '/wissen' },
+  { slug: 'administration', pfad: '/administration' },
   {
     slug: 'objekt-360-risk-betriebsunterbrechung',
     pfad: `/twin/${MANDANT_ID}/objekt/${NORDWERK_OBJECT_ID.RISK_BETRIEBSUNTERBRECHUNG}`,
@@ -186,6 +196,20 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
       },
       [SESSION_STORAGE_KEY, wert] as const,
     );
+  });
+
+  /**
+   * META-PRÜFUNG (Muster der Wächter): Der Motivbestand deckt JEDEN Live-Ort ab. Wird künftig
+   * ein Ort live geschaltet, ohne ihn hier einzutragen, wird dieser Test rot — statt dass die
+   * sichtbare Owner-Abnahme still ein unvollständiges Produkt zeigt. (WP-032: genau das war
+   * passiert — reports/wissen/administration fehlten im ersten Lauf.)
+   */
+  test('Meta: der Motivbestand deckt alle Live-Orte ab', () => {
+    const abgedeckt = new Set<string>(SEITEN.map((s) => s.pfad));
+    const fehlend = NAV_PLACES.filter((p) => p.live === true && !abgedeckt.has(p.href)).map(
+      (p) => `${p.label} (${p.href})`,
+    );
+    expect(fehlend, 'Live-Orte ohne Screenshot-Motiv').toEqual([]);
   });
 
   test('Fehlprobe Serverstopp (nur mit QA_VISUAL_PROBE_FAIL=1)', () => {
