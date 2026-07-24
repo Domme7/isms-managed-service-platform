@@ -53,3 +53,20 @@
 **Feinsequenz ab jetzt:** Cockpit-Fix (Blocker: Dark-Mode) → Gate-Runde 2 → Usability-Quick-Wins (U-16 zuerst) →
 getrennte Login-Welten (simuliert) + synthetische Preisbänder + WP-033 (Demo-Wörter raus) → **WP-021 (fünf
 Firmen reich)** → **E-02 → Decision Cards** → die vier Verbesserungen → Modern-Rollout über die übrigen Seiten.
+
+## Nachtrag (Einstiegswelt-Abnahme, DoD-Governance)
+
+Die Einstiegswelt (Landing `/willkommen` + getrennte Kunde/Berater-Login-Welten + Quick-Wins) ist gebaut und
+**abgenommen**: Security FREIGABE, Konzepttreue FREIGABE, Product FREIGABE_MIT_AUFLAGEN (nur Minors/Nits),
+855 Tests grün, axe 0. Zwei Punkte für die Rückverfolgbarkeit:
+
+- **DR-0009 ↔ DR-0015 Nr. 7 (Login-Fluss) — hier entschieden statt nur im Code-Kommentar:** DR-0009 machte den
+  **neutralen** Einstieg zum Primärfluss; DR-0015 Nr. 7 (jüngere, gleiche Owner-Entscheidung) fordert **getrennte
+  Kunde/Berater-Anmeldewelten**. Aufgelöst: die zwei rollensetzenden Welten stehen prominent (bewusste Nutzerwahl),
+  der **neutrale Einstieg bleibt als ausdrückliche dritte Option** (Aufklapper „Lieber ohne Rolle starten?").
+  Keine DR gebrochen. Falls der Owner den neutralen Einstieg wieder prominenter (oder weg) will, ist das eine
+  kleine Folgeänderung (dann ziehen die drei DR-0009-LoginPage-Tests mit).
+- **Nicht-blockierende Auflagen (Modern-Rollout-Folgepass):** je Welt auf der Landing die konkreten Zielrollen aus
+  Dok. 06 §5.1 ergänzen; die 4-Welten→2-Einstiege-Brücke knapp erklären (Assurance/Admin über neutralen Einstieg);
+  Landing-Quellzitat auf den DR-0015-Nachtrag „Zielpublikum/30-Sekunden" umstellen (statt Nr. 7); Hero-Lead
+  optional zweiteilen. Konzept-Nit: Dok. 03 „drei primäre Erlebniswelten" vs. Dok. 06 §5 „vier" — Concept-Author-Frage.
