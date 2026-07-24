@@ -314,6 +314,9 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
       'ohne Owner) sowie aus einer veralteten Inventarquelle übernommen.',
     // DECKUNGSLÜCKE (kritisch ohne Owner) + VERALTETE QUELLE (Dok.-07-Demo-Graph-Pflicht):
     // KEIN Owner; alte Import-Quelle 2024 + Dimension „Aktualität".
+    // Hinweis (Konzept-Review): Bearbeitungsstand (`lifecycle_status`) und Vertrauensachse
+    // (`confirmation_level`) sind orthogonal (Dok. 07 §8 vs. §12) – „geprüft" meint den
+    // Informations-Lebenszyklus, nicht die Bestätigung; die Quelle bleibt „Ungeprüft".
     lifecycle_status: 'geprüft', // Informations-Lifecycle (Dok. 05 §7)
     classification: { confidentiality: 'intern', protection_need: 'hoch' },
     source_refs: [
@@ -493,6 +496,8 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     description:
       'Synthetisches Risikoszenario: Angreifer nutzen eine ungehärtete Schnittstelle und greifen ' +
       'über die öffentliche API Kundendaten ab.',
+    // Bewusste Entlehnung (Domänen-Review): Dok. 05 §7 führt keine eigene Zeile „Risk Scenario";
+    // der Zustand „bewertet" stammt aus dem Risiko-Lebenszyklus (Szenarien werden bewertet).
     lifecycle_status: 'bewertet', // Risiko-Lifecycle (Dok. 05 §7)
   }),
   alpencloudObject({
@@ -779,16 +784,21 @@ export const ALPENCLOUD_RELATIONSHIPS: readonly RelationshipEnvelope[] = [
 
   // R12 mitigates: Control/Measure -> Risk / Risk Scenario
   // (RISK_ZERTIFIZIERUNGSLUECKE erhält BEWUSST keine mitigates-Kante → Deckungslücke.)
+  // Fachliche Zuordnung (Domänen-Review): der Abfluss ÜBER DIE authentisierte API wird durch die
+  // rollenbasierte Zugriffssteuerung (IAM) gemindert – NICHT durch Verschlüsselung ruhender Daten
+  // (die schützt gegen Diebstahl im Ruhezustand, nicht gegen Exfiltration über die API). Die
+  // Verschlüsselung bleibt bewusst OHNE mitigates-Kante: sie erfüllt eine Anforderung und ist
+  // belegt, mindert aber keines der drei erfassten Risiken direkt (ehrliche Modellierung).
   alpencloudRelationship({
-    relationship_id: 'alpencloud-rel-21-mitigates-ctrl-verschluesselung-risk-datenabfluss',
+    relationship_id: 'alpencloud-rel-21-mitigates-ctrl-iam-risk-datenabfluss',
     relationship_type: 'mitigates',
-    source_id: A.CTRL_VERSCHLUESSELUNG,
+    source_id: A.CTRL_IAM,
     target_id: A.RISK_DATENABFLUSS,
     assertion_kind: 'freigegeben',
-    confidence: 0.8,
+    confidence: 0.6,
     effectiveness_assumption:
-      'Erwartete Reduktion der Abflusswirkung durch Verschlüsselung ruhender Kundendaten ' +
-      '(synthetische Annahme, keine Garantie).',
+      'Erwartete Reduktion des unbefugten Datenabrufs über die API durch rollenbasierte ' +
+      'Zugriffssteuerung (synthetische Annahme, keine Garantie).',
   }),
   alpencloudRelationship({
     relationship_id: 'alpencloud-rel-22-mitigates-ctrl-gateway-risk-verfuegbarkeit',
