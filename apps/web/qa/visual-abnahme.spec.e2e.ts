@@ -64,6 +64,10 @@ if (!getRole(ROLLEN_ID)) {
  * (die Meta-Prüfung unten erzwingt das mechanisch).
  */
 const SEITEN = [
+  // Front-Door-Seiten (DR-0015): Produkt-Landing vor der Anmeldung und die getrennten
+  // Anmeldewelten. Kein NAV_PLACES-Ort, aber Teil der Owner-Abnahme (erster Eindruck + axe).
+  { slug: 'willkommen', pfad: '/willkommen' },
+  { slug: 'login', pfad: '/login' },
   { slug: 'heute', pfad: '/heute' },
   { slug: 'twin', pfad: '/twin' },
   { slug: 'twin-tenant-nordwerk', pfad: `/twin/${MANDANT_ID}` },

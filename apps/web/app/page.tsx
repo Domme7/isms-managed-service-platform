@@ -3,11 +3,15 @@
 /**
  * Einstieg `/` (WP-011): leitet auf einen sinnvollen Default weiter.
  *  - angemeldet (Simulation)  -> `/cockpit` (Startseite nach Login, DR-0010 Nr. 3)
- *  - nicht angemeldet         -> `/login` (Rollen-/Mandanten-Simulation)
+ *  - nicht angemeldet         -> `/willkommen` (Produkt-Landing vor der Anmeldung, DR-0015 Nr. 7)
  *
  * COCKPIT ALS STARTSEITE (DR-0010 Nr. 3): Der Owner hat das Cockpit als Einstieg nach der
  * Anmeldung freigegeben; die ausführliche Tagesansicht „Heute" bleibt über den Cockpit-Link und
  * die Navigation erreichbar.
+ *
+ * LANDING VOR DER ANMELDUNG (DR-0015 Nr. 7): Ein neuer Besucher landet zuerst auf der
+ * Erklärseite `/willkommen` (was ist das, für wen, was ist anders), von der ein CTA zur
+ * Anmeldung führt – statt ihn ohne Kontext direkt ins Formular zu setzen.
  *
  * Da die Auswahl clientseitig (localStorage) liegt, erfolgt die Weiterleitung nach dem Mount.
  * Ohne JavaScript bleiben die expliziten Links als Fallback funktionsfähig.
@@ -23,7 +27,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!hydrated) return;
-    router.replace(session ? '/cockpit' : '/login');
+    router.replace(session ? '/cockpit' : '/willkommen');
   }, [hydrated, session, router]);
 
   return (

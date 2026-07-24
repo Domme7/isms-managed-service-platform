@@ -34,6 +34,7 @@ import type {
 import { formatIsoDateDe, objectDetailHref, tenantDetailHref } from '../../lib/twin/routes';
 import { objectTypeDisplay, relationshipTypeLabel } from '../../lib/twin/data';
 import { TRUST_LAYER_ANGABEN, countTrustAngaben } from '../../lib/twin/trust-layer';
+import { BegriffeWissenHinweis } from '../shell/BegriffeWissenHinweis';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
 /* -----------------------------------------------------------------------------
@@ -252,6 +253,10 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
         Was ist dieses Objekt, warum ist es wichtig, womit hängt es zusammen, wie entwickelt es sich
         – und was ist dazu im Datenbestand belegt?
       </p>
+
+      {/* U-03: Objekt-360 ist die vokabulardichteste Seite (Beziehungsarten, Vertrauensgrad,
+          Lebenszyklus-Stand) – ruhiger Weg zum Glossar. */}
+      <BegriffeWissenHinweis />
 
       {/* Seitenweite Rahmung (UX-Review MAJOR-1 aus WP-013): auch hier erscheinen Status-Werte
           wie „wirksam" – an dieser Stelle sogar ungerahmt in jeder Kanten- und

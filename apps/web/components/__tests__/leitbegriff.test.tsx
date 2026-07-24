@@ -32,6 +32,7 @@ import { ReportsContent } from '../reports/ReportsContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
+import { WillkommenContent } from '../willkommen/WillkommenContent';
 import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
 import { TenantOverview } from '../twin/TenantOverview';
 import { NAV_PLACES, getPlace, type PlaceId } from '../../lib/shell/places';
@@ -136,6 +137,25 @@ describe('Ein Leitbegriff je Konzept: Nav-Label = Seitentitel (DR-0013 Nr. 9)', 
       }
       ergebnis.unmount();
     }
+  });
+
+  it('die Produkt-Landing führt den Leitbegriff „digitaler Zwilling" – nie „Digital Twin"', () => {
+    // Front-Door-Seite (DR-0015): kein NAV_PLACES-Ort, deshalb außerhalb des Registers. Sie ist
+    // die erste Fläche mit dem Begriff und muss ihn deutsch führen (DR-0013 Nr. 9). „Zwilling"
+    // (großes Z) tritt nur als „digitaler Zwilling" auf, nie als englisches „Digital Twin".
+    const { container, unmount } = render(<WillkommenContent />);
+    const text = container.textContent ?? '';
+    expect(text.length).toBeGreaterThan(80);
+    expect(text).not.toMatch(/Digital Twin/i);
+    expect(text).not.toMatch(/Objektgraph/);
+    for (const treffer of text.match(/.{0,12}Zwilling/g) ?? []) {
+      expect(treffer, `„${treffer}" – Leitbegriff ist „digitaler Zwilling"`).toMatch(
+        /[Dd]igitale[rn]?\s+Zwilling$/,
+      );
+    }
+    // Positivbeleg: der Begriff kommt wirklich vor (sonst wäre die Prüfung trivial).
+    expect(text).toMatch(/digitaler Zwilling/);
+    unmount();
   });
 
   it('Negativbeweis: die Regel würde einen abweichenden Titel erkennen', () => {

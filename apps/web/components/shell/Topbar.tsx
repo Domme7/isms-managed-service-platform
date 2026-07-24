@@ -116,62 +116,71 @@ export function Topbar({
           </span>
         ) : session ? (
           <>
-            {/* Eine benannte Gruppe statt zweier zusammenhangloser Felder: die Beschriftung
+            {/* U-16 (Usability-Audit 2026-07-24): Die Kopfleiste war in der Ein-Unternehmens-Sicht
+                sichtbar fehlausgerichtet – der feste Mandant wurde als dreizeiliger Block (Label /
+                Name / Berechtigungs-Notiz) gerendert, während das Rolle-Select einzeilig daneben
+                stand; „MANDANT" ragte heraus. Fix: Die ruhige Berechtigungs-Notiz steht nicht mehr
+                INNERHALB der Auswahlzeile, sondern UNTER der Ansicht (`shell-switch-wrap`). Damit
+                trägt der feste Mandant nur noch Label + Wert – dieselbe Höhe wie das Rolle-Select,
+                beide auf gemeinsamer Grundlinie (`align-items: flex-end`). Reines CSS + Umbau der
+                Notiz-Position; die Notiz bleibt sichtbarer Text (nicht nur `title`). */}
+            <div className="shell-switch-wrap">
+              {/* Eine benannte Gruppe statt zweier zusammenhangloser Felder: die Beschriftung
                 sagt, dass hier die ANSICHT gesteuert wird (DR-0013 Nr. 12). */}
-            {/* biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf einem `div` ist gültiges ARIA für diese Kopfzeilen-Gruppe; `fieldset` verlangt eine `legend` und ist für Formular-Abschnitte gedacht – hier steuern die Felder eine Ansicht, es gibt kein Formular und kein Submit. Dokumentiertes Bestandsmuster (`AppShell`, `od-context`). */}
-            <div className="shell-switch" role="group" aria-label="Ansicht: Rolle und Mandant">
-              <span className="shell-switch-title" aria-hidden="true">
-                Ansicht:
-              </span>
-              <label className="shell-switch-field">
-                <span className="shell-switch-label">Rolle</span>
-                <select
-                  className="shell-select"
-                  value={session.role?.id ?? NEUTRAL_VALUE}
-                  onChange={(e) =>
-                    onSwitchRole(e.target.value === NEUTRAL_VALUE ? null : e.target.value)
-                  }
-                  aria-label="Ansicht: Rolle"
-                >
-                  {/* Neutral steht ZUERST: es ist der Einstiegszustand (DR-0009), keine
-                      dreizehnte Rolle. Wahl und Abwahl sind jederzeit möglich. */}
-                  <option value={NEUTRAL_VALUE}>{NEUTRAL_ROLLEN_OPTION}</option>
-                  {roles.map((role) => (
-                    /* `value` trägt die Rollen-ID (Kennung), der sichtbare Text nur den
-                       Namen – kein Rollencode im UI (DR-0013 Nr. 12). */
-                    <option key={role.id} value={role.id}>
-                      {role.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              {mandantWaehlbar ? (
+              {/* biome-ignore lint/a11y/useSemanticElements: `role="group"` + `aria-label` auf einem `div` ist gültiges ARIA für diese Kopfzeilen-Gruppe; `fieldset` verlangt eine `legend` und ist für Formular-Abschnitte gedacht – hier steuern die Felder eine Ansicht, es gibt kein Formular und kein Submit. Dokumentiertes Bestandsmuster (`AppShell`, `od-context`). */}
+              <div className="shell-switch" role="group" aria-label="Ansicht: Rolle und Mandant">
+                <span className="shell-switch-title" aria-hidden="true">
+                  Ansicht:
+                </span>
                 <label className="shell-switch-field">
-                  <span className="shell-switch-label">Mandant</span>
-                  {/* Kontrolliert über den AKTIVEN Mandanten: bis zur Bestätigung in `AppShell`
-                      springt die Anzeige auf den tatsächlichen Kontext zurück – das Select zeigt
-                      nie einen Mandanten an, der noch nicht aktiv ist (CROSS-TENANT-SCHUTZ). */}
+                  <span className="shell-switch-label">Rolle</span>
                   <select
                     className="shell-select"
-                    id={tenantSelectId}
-                    value={session.tenant.tenant_id}
-                    onChange={(e) => onRequestTenantSwitch(e.target.value)}
-                    aria-label="Ansicht: Mandant"
+                    value={session.role?.id ?? NEUTRAL_VALUE}
+                    onChange={(e) =>
+                      onSwitchRole(e.target.value === NEUTRAL_VALUE ? null : e.target.value)
+                    }
+                    aria-label="Ansicht: Rolle"
                   >
-                    {tenants.map((tenant) => (
-                      <option key={tenant.tenant_id} value={tenant.tenant_id}>
-                        {tenant.display_name}
+                    {/* Neutral steht ZUERST: es ist der Einstiegszustand (DR-0009), keine
+                      dreizehnte Rolle. Wahl und Abwahl sind jederzeit möglich. */}
+                    <option value={NEUTRAL_VALUE}>{NEUTRAL_ROLLEN_OPTION}</option>
+                    {roles.map((role) => (
+                      /* `value` trägt die Rollen-ID (Kennung), der sichtbare Text nur den
+                       Namen – kein Rollencode im UI (DR-0013 Nr. 12). */
+                      <option key={role.id} value={role.id}>
+                        {role.name}
                       </option>
                     ))}
                   </select>
                 </label>
-              ) : (
-                /* Ein-Unternehmens-Sicht: der aktive Mandant bleibt sichtbarer Pflichtkontext
+                {mandantWaehlbar ? (
+                  <label className="shell-switch-field">
+                    <span className="shell-switch-label">Mandant</span>
+                    {/* Kontrolliert über den AKTIVEN Mandanten: bis zur Bestätigung in `AppShell`
+                      springt die Anzeige auf den tatsächlichen Kontext zurück – das Select zeigt
+                      nie einen Mandanten an, der noch nicht aktiv ist (CROSS-TENANT-SCHUTZ). */}
+                    <select
+                      className="shell-select"
+                      id={tenantSelectId}
+                      value={session.tenant.tenant_id}
+                      onChange={(e) => onRequestTenantSwitch(e.target.value)}
+                      aria-label="Ansicht: Mandant"
+                    >
+                      {tenants.map((tenant) => (
+                        <option key={tenant.tenant_id} value={tenant.tenant_id}>
+                          {tenant.display_name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                ) : (
+                  /* Ein-Unternehmens-Sicht: der aktive Mandant bleibt sichtbarer Pflichtkontext
                    (Dok. 06), wird aber nicht zur Auswahl gestellt. Bewusst KEINE Aussage über
                    andere Mandanten – weder ihre Zahl noch ihre Existenz. */
-                /* Native Definitionsliste statt ARIA-Verdrahtung: Beschriftung und Wert sind
+                  /* Native Definitionsliste statt ARIA-Verdrahtung: Beschriftung und Wert sind
                    ohne Attribute verbunden (Muster der Kontextleiste `od-context`). */
-                /* RUHIGE ZEILE STATT NONVERBALER BEHAUPTUNG (WP-028-Fixpass, Security-Auflage):
+                  /* RUHIGE ZEILE STATT NONVERBALER BEHAUPTUNG (WP-028-Fixpass, Security-Auflage):
                    Ein Auswahlfeld, das ohne ein Wort verschwindet, liest sich wie eine
                    DURCHGESETZTE Grenze. Das wäre eine Sicherheitsbehauptung, die dieser
                    Aufbaustand nicht einlösen kann – serverseitig durchgesetzte Rechte entstehen
@@ -179,18 +188,31 @@ export function Topbar({
                    deshalb, was wahr ist: Die gewählte Sicht bestimmt die ANSICHT, nicht die
                    Berechtigung. Sie sagt bewusst NICHTS über andere Mandanten – weder ihre Zahl
                    noch ihre Existenz, auch nicht negativ (Mandantengrenze). */
-                <dl className="shell-switch-field shell-switch-field--fest">
-                  <dt className="shell-switch-label">Mandant</dt>
-                  <dd className="shell-switch-value">{session.tenant.display_name}</dd>
-                  {/* Ansicht-≠-Berechtigung aus EINER Quelle (Nachfix nach Gate-Runde 2): derselbe
-                      Satz stand bis hierher in zwei Wortlauten (hier + `EigenerMandantEinstieg`)
-                      und ohne Wächter. Jetzt `ANSICHT_NICHT_BERECHTIGUNG_SATZ` aus `sphaere.ts`,
-                      per `rollenreichweite.test.tsx` an beiden Stellen geprüft. */}
-                  <dd className="shell-switch-note">{ANSICHT_NICHT_BERECHTIGUNG_SATZ}</dd>
-                </dl>
-              )}
+                  <dl className="shell-switch-field shell-switch-field--fest">
+                    <dt className="shell-switch-label">Mandant</dt>
+                    {/* Die Notiz steht jetzt UNTER der Auswahlzeile (U-16); der `title` trägt sie
+                      zusätzlich am Wert (Audit-Vorschlag „title/unter die Ansicht"). */}
+                    <dd className="shell-switch-value" title={ANSICHT_NICHT_BERECHTIGUNG_SATZ}>
+                      {session.tenant.display_name}
+                    </dd>
+                  </dl>
+                )}
+              </div>
+              {/* Ansicht-≠-Berechtigung aus EINER Quelle (Nachfix nach Gate-Runde 2): derselbe
+                Satz stand bis hierher in zwei Wortlauten (hier + `EigenerMandantEinstieg`) und
+                ohne Wächter. Jetzt `ANSICHT_NICHT_BERECHTIGUNG_SATZ` aus `sphaere.ts`, per
+                `rollenreichweite.test.tsx` an beiden Stellen geprüft. Position seit U-16 unter der
+                Ansicht (statt in der Auswahlzeile), damit die beiden Felder gleich hoch bleiben. */}
+              {!mandantWaehlbar ? (
+                <p className="shell-switch-note">{ANSICHT_NICHT_BERECHTIGUNG_SATZ}</p>
+              ) : null}
             </div>
-            <button type="button" className="shell-signout" onClick={onSignOut}>
+            <button
+              type="button"
+              className="shell-signout"
+              onClick={onSignOut}
+              title="Verwirft die gewählte Rolle und den Mandanten und führt zurück zur Mandantenauswahl. Es gibt keine Anmeldung, die beendet würde."
+            >
               Ansicht zurücksetzen
             </button>
           </>

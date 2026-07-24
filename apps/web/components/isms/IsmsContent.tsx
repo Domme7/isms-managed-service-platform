@@ -30,6 +30,7 @@ import { anzahl } from '../../lib/heute/data';
 import { buildIsmsVerdichtung } from '../../lib/heute/dashboard';
 import { buildIsmsCoreView, hasManagedServices } from '../../lib/isms/data';
 import type { DemoRole } from '../../lib/shell/roles';
+import { BegriffeWissenHinweis } from '../shell/BegriffeWissenHinweis';
 import { CoverageKachel, LifecycleVerteilungKachel } from '../shell/DashboardKacheln';
 import { PageContextBar } from '../shell/PageContextBar';
 import { ScopeKontextWert } from '../shell/ScopeKontext';
@@ -90,6 +91,10 @@ export function IsmsContent({ role, tenant }: { role: DemoRole | null; tenant: D
           )
         }
       />
+
+      {/* U-03: ruhiger Weg zum Glossar – die ISMS-Seite ist vokabularstark (Control, Nachweis,
+          Maßnahme, Lebenszyklus-Stand). */}
+      <BegriffeWissenHinweis />
 
       {view.isEmpty ? (
         <section aria-labelledby="isms-empty">
