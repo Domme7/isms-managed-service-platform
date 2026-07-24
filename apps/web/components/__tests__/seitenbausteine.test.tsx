@@ -22,9 +22,11 @@ import { AdministrationContent } from '../administration/AdministrationContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
+import { StrukturAssistentContent } from '../kunden/StrukturAssistentContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { ServicesContent } from '../services/ServicesContent';
+import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
 import { TenantOverview } from '../twin/TenantOverview';
@@ -72,6 +74,12 @@ const RENDERER_JE_ORT: Record<BausteinOrt, () => RenderResult> = {
   // Zusatzseite UNTER dem Ort „Kunden" (kein NAV_PLACES-Ort, Muster `objekt360`, WP-006 Slice 1).
   kundenstart: () =>
     render(<KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
+  // Zusatzseite UNTER dem Ort „Services" (Servicekatalog, WP-006 Slice 2).
+  servicekatalog: () =>
+    render(<ServicekatalogContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
+  // Zusatzseite UNTER dem Ort „Kunden" (Struktur-Assistent, WP-006 Slice 3).
+  strukturassistent: () =>
+    render(<StrukturAssistentContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
 };
 
 function hinweisElement(container: HTMLElement): HTMLElement {
@@ -87,15 +95,18 @@ describe('Seitenbausteine-Konvention auf den Orten der Konvention (Dok. 06)', ()
     const liveOrte = NAV_PLACES.filter((p) => p.live)
       .map((p) => String(p.id))
       .sort();
-    // `objekt360` und `kundenstart` sind dokumentierte Zusatzseiten UNTER bestehenden Orten
-    // (kein neuer NAV_PLACES-Ort). Ein künftiger echter live-Ort macht die Gleichheit trotzdem rot.
+    // `objekt360`, `kundenstart`, `servicekatalog` und `strukturassistent` sind dokumentierte
+    // Zusatzseiten UNTER bestehenden Orten (kein neuer NAV_PLACES-Ort). Ein künftiger echter
+    // live-Ort macht die Gleichheit trotzdem rot.
+    const zusatzseiten = ['objekt360', 'kundenstart', 'servicekatalog', 'strukturassistent'];
     expect(
       Object.keys(RENDERER_JE_ORT)
-        .filter((o) => o !== 'objekt360' && o !== 'kundenstart')
+        .filter((o) => !zusatzseiten.includes(o))
         .sort(),
     ).toEqual(liveOrte);
-    expect(Object.keys(RENDERER_JE_ORT)).toContain('objekt360');
-    expect(Object.keys(RENDERER_JE_ORT)).toContain('kundenstart');
+    for (const zusatz of zusatzseiten) {
+      expect(Object.keys(RENDERER_JE_ORT)).toContain(zusatz);
+    }
   });
 
   for (const [ort, renderOrt] of Object.entries(RENDERER_JE_ORT) as [

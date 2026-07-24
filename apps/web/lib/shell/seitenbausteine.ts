@@ -121,11 +121,13 @@ export function getBaustein(id: BausteinId): Seitenbaustein {
 
 /**
  * Orte der Konvention: alle acht Live-Hauptseiten (`heute`/`kunden`/`isms`/`entscheidungen`/
- * `services`/`reports`/`wissen`/`administration`) plus zwei Detailseiten UNTER bestehenden Orten (Muster: eigene
- * Zuordnung, kein neuer Nav-Ort). `objekt360` liegt unter „Kunden"/„ISMS"/„Services";
- * `kundenstart` ist die
- * Kunden-Startseite „verwalten" unter dem Ort „Kunden" (WP-006 Slice 1). Beide sind KEINE
- * `NAV_PLACES`-Orte – der Wächter behandelt sie wie dokumentierte Zusatzseiten (Meta-Assertion).
+ * `services`/`reports`/`wissen`/`administration`) plus vier Zusatzseiten UNTER bestehenden Orten
+ * (Muster: eigene Zuordnung, kein neuer Nav-Ort). `objekt360` liegt unter „Kunden"/„ISMS"/
+ * „Services"; `kundenstart` ist die Kunden-Startseite „verwalten" unter dem Ort „Kunden"
+ * (WP-006 Slice 1); `servicekatalog` ist der Servicekatalog unter dem Ort „Services" und
+ * `strukturassistent` der Struktur-Assistent unter dem Ort „Kunden" (WP-006 Slice 2/3). Alle vier
+ * sind KEINE `NAV_PLACES`-Orte – der Wächter behandelt sie wie dokumentierte Zusatzseiten
+ * (Meta-Assertion).
  */
 export type BausteinOrt =
   | 'heute'
@@ -137,7 +139,9 @@ export type BausteinOrt =
   | 'wissen'
   | 'administration'
   | 'objekt360'
-  | 'kundenstart';
+  | 'kundenstart'
+  | 'servicekatalog'
+  | 'strukturassistent';
 
 export type BausteinStatus = 'vorhanden' | 'teilweise' | 'verweis' | 'ohne_traeger';
 
@@ -541,6 +545,86 @@ export const BAUSTEIN_ABDECKUNG: Readonly<Record<BausteinOrt, readonly BausteinZ
       baustein: 'trust_layer',
       status: 'verweis',
       wo: 'Vertrauensgrad je Beziehung und Datenqualität je Objekt auf den Detailseiten.',
+    },
+  ],
+  // Servicekatalog (`/services/katalog`, WP-006 Slice 2): eine Konzeptstruktur (Familien, Offers,
+  // Tiefen, Pakete) plus die aktiven Services des Mandanten – bewusst ohne Preise und ohne Buchung.
+  servicekatalog: [
+    {
+      baustein: 'question_header',
+      status: 'teilweise',
+      wo: 'Leitfrage am Seitenkopf.',
+      fehlt: 'Ein Seiten-Status und ein Seiten-Owner (der Katalog ist kein Objekt).',
+    },
+    { baustein: 'context_bar', status: 'vorhanden', wo: 'Kontextleiste unter der Leitfrage.' },
+    { baustein: 'summary_pulse', status: 'ohne_traeger', grund: GRUND_SUMMARY },
+    {
+      baustein: 'relationship_panel',
+      status: 'verweis',
+      wo: 'Beziehungen je aktivem Service auf der Objektseite (Objekt-360-Drill-down).',
+    },
+    { baustein: 'impact_panel', status: 'ohne_traeger', grund: GRUND_IMPACT },
+    { baustein: 'decision_card', status: 'ohne_traeger', grund: GRUND_DECISION_CARD },
+    { baustein: 'action_rail', status: 'ohne_traeger', grund: GRUND_ACTION_RAIL },
+    {
+      baustein: 'history_decision_record',
+      status: 'ohne_traeger',
+      grund:
+        'Die Katalogstruktur ist eine Konzeptbeschreibung; einen Versions- und Änderungsverlauf ' +
+        'trägt sie im Produkt nicht, und ein erfundener Eintrag würde Nachvollziehbarkeit ' +
+        'vortäuschen.',
+    },
+    {
+      baustein: 'trust_layer',
+      status: 'teilweise',
+      wo: 'Herkunft und Aktualität der aktiven Services (nur der aktive Mandant, zuletzt erfasster Stand).',
+      fehlt:
+        'Quellen- und Vertrauensangaben je Katalogeintrag; die Katalogstruktur ist eine ' +
+        'Konzeptbeschreibung ohne erfassten Vertrauenswert.',
+    },
+  ],
+  // Struktur-Assistent (`/kunden/struktur`, WP-006 Slice 3): eine geführte Read-Ansicht der
+  // Onboarding-/Lifecycle-Strukturen aus dem Konzept – er erfasst nichts und speichert nichts.
+  strukturassistent: [
+    {
+      baustein: 'question_header',
+      status: 'teilweise',
+      wo: 'Leitfrage am Seitenkopf.',
+      fehlt:
+        'Ein Seiten-Status und ein Seiten-Owner (der Assistent ist kein Objekt und erfasst nichts).',
+    },
+    { baustein: 'context_bar', status: 'vorhanden', wo: 'Kontextleiste unter der Leitfrage.' },
+    {
+      baustein: 'summary_pulse',
+      status: 'ohne_traeger',
+      grund:
+        'Der Assistent erklärt eine Konzeptstruktur; er hat keinen veränderlichen Zustand, den ' +
+        'ein verdichteter Puls zusammenfassen könnte.',
+    },
+    {
+      baustein: 'relationship_panel',
+      status: 'ohne_traeger',
+      grund:
+        'Der Assistent zeigt erklärte Struktur, keine konkret verknüpften Objekte eines ' +
+        'Mandanten; er benennt Rollen und Objekttypen, nicht einzelne Verbindungen.',
+    },
+    { baustein: 'impact_panel', status: 'ohne_traeger', grund: GRUND_IMPACT },
+    { baustein: 'decision_card', status: 'ohne_traeger', grund: GRUND_DECISION_CARD },
+    { baustein: 'action_rail', status: 'ohne_traeger', grund: GRUND_ACTION_RAIL },
+    {
+      baustein: 'history_decision_record',
+      status: 'ohne_traeger',
+      grund:
+        'Der Assistent erfasst nichts und schreibt nichts; es entsteht kein Verlauf, dessen ' +
+        'Versionen hier stehen könnten.',
+    },
+    {
+      baustein: 'trust_layer',
+      status: 'ohne_traeger',
+      grund:
+        'Der Assistent zeigt Konzeptstruktur ohne erfassten Datenstand; eine Quellen-, ' +
+        'Aktualitäts- oder Vollständigkeitsangabe über einen Mandantenbestand gäbe es hier nicht ' +
+        'und wäre erfunden.',
     },
   ],
 } as const;

@@ -34,9 +34,11 @@ import { AdministrationContent } from '../administration/AdministrationContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
+import { StrukturAssistentContent } from '../kunden/StrukturAssistentContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { ServicesContent } from '../services/ServicesContent';
+import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { AppShell } from '../shell/AppShell';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
@@ -294,6 +296,84 @@ describe('Kunden-Startseite spricht nie über fremde Mandanten (Kundensphäre, P
         /Mandantenvergleich/i,
       ]) {
         expect(text, `/kunden/${tenantId}: „${verboten}"`).not.toMatch(verboten);
+      }
+      unmount();
+    }
+  });
+});
+
+/* -----------------------------------------------------------------------------
+ * Servicekatalog (`/services/katalog`, WP-006 Slice 2) und Struktur-Assistent
+ * (`/kunden/struktur`, WP-006 Slice 3): dieselbe Kundensphäre-Grenze wie die Kunden-Startseite.
+ * -----------------------------------------------------------------------------
+ *
+ * Der Servicekatalog trägt eine „aktive Services dieses Mandanten"-Hälfte mit eigenem
+ * Leerzustand (Finovia/MediCore) – die neueste Stelle mit der FINDING-0009-Versuchung. Der
+ * Struktur-Assistent ist mandantenneutrale Konzeptstruktur, nennt aber den aktiven Mandanten in
+ * der Kontextleiste. Beide werden gegen dieselben Muster wie die Live-Orte geprüft, plus die
+ * Anzeigenamen/IDs aller anderen Mandanten. Kein `NAV_PLACES`-Ort – deshalb außerhalb des
+ * Registers (die Meta-Assertion oben bleibt intakt).
+ */
+describe('Servicekatalog und Struktur-Assistent halten die Kundensphäre (P09/FINDING-0009)', () => {
+  const FIXTURES: { tenantId: string; roleId: string | null }[] = [
+    { tenantId: TENANT_ID.NORDWERK, roleId: 'R03' },
+    { tenantId: TENANT_ID.NORDWERK, roleId: null },
+    { tenantId: TENANT_ID.CONSULTING_OPERATOR, roleId: 'R08' },
+    { tenantId: TENANT_ID.FINOVIA, roleId: 'R03' },
+    { tenantId: TENANT_ID.MEDICORE, roleId: null },
+  ];
+
+  for (const { tenantId, roleId } of FIXTURES) {
+    it(`Servicekatalog nennt für ${tenantId} (${roleId ?? 'neutral'}) keinen fremden Mandanten`, () => {
+      const { container } = render(
+        <ServicekatalogContent role={roleId ? role(roleId) : null} tenant={tenant(tenantId)} />,
+      );
+      const text = container.textContent ?? '';
+      expect(text.length).toBeGreaterThan(80);
+      for (const muster of FREMDER_MANDANT) {
+        expect(text, `Servicekatalog/${tenantId}: „${muster}"`).not.toMatch(muster);
+      }
+      for (const fremd of DEMO_TENANTS.filter((t) => t.tenant_id !== tenantId)) {
+        expect(text).not.toContain(fremd.display_name);
+        expect(text).not.toContain(fremd.tenant_id);
+      }
+    });
+
+    it(`Struktur-Assistent nennt für ${tenantId} (${roleId ?? 'neutral'}) keinen fremden Mandanten`, () => {
+      const { container } = render(
+        <StrukturAssistentContent role={roleId ? role(roleId) : null} tenant={tenant(tenantId)} />,
+      );
+      const text = container.textContent ?? '';
+      expect(text.length).toBeGreaterThan(80);
+      for (const muster of FREMDER_MANDANT) {
+        expect(text, `Struktur-Assistent/${tenantId}: „${muster}"`).not.toMatch(muster);
+      }
+      for (const fremd of DEMO_TENANTS.filter((t) => t.tenant_id !== tenantId)) {
+        expect(text).not.toContain(fremd.display_name);
+        expect(text).not.toContain(fremd.tenant_id);
+      }
+    });
+  }
+
+  it('der Servicekatalog zeigt für einen leeren Mandanten die Katalogstruktur ohne Fremdmandant', () => {
+    const { container } = render(
+      <ServicekatalogContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+    );
+    const text = container.textContent ?? '';
+    // Katalogstruktur bleibt sichtbar (Konzept); die aktiven Services sind mandantenlokal leer.
+    expect(text).toContain('Servicefamilien');
+    expect(text).toContain('Finovia Digital Bank AG');
+    expect(text).toContain('keine aktiven Services erfasst');
+  });
+
+  it('keine Betreiber-Portfolio-Inhalte im Servicekatalog (Kundensphäre)', () => {
+    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR]) {
+      const { container, unmount } = render(
+        <ServicekatalogContent role={role('R08')} tenant={tenant(tenantId)} />,
+      );
+      const text = container.textContent ?? '';
+      for (const verboten of [/Auslastung/i, /Profitabilit/i, /Mandantenvergleich/i]) {
+        expect(text, `Servicekatalog/${tenantId}: „${verboten}"`).not.toMatch(verboten);
       }
       unmount();
     }

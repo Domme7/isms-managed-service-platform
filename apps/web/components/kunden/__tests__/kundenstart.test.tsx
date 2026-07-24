@@ -102,9 +102,13 @@ describe('Kunden-Startseite „verwalten" – Slice 1', () => {
       // Einladung statt leerer Platzhalter (Dok. 03 „Anfängererlebnis"), mandantenlokal.
       expect(text).toContain(`Kundenbereich für ${t.display_name} einrichten`);
       expect(text).toContain('Struktur-Assistent');
+      // Verdrahtete Einstiege (WP-006 Slice 2/3): Katalog- und Struktur-Assistent-Route.
       expect(
         screen.getByRole('link', { name: /Servicekatalog ansehen/ }).getAttribute('href'),
-      ).toBe('/services');
+      ).toBe('/services/katalog');
+      expect(
+        screen.getByRole('link', { name: /Struktur-Assistent öffnen/ }).getAttribute('href'),
+      ).toBe('/kunden/struktur');
       // Keine leeren Datensektionen – die Datensektionen entfallen im Leerzustand.
       expect(screen.queryByRole('heading', { level: 2, name: 'Scopes' })).not.toBeInTheDocument();
       unmount();

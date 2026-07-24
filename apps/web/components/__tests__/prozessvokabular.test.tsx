@@ -33,7 +33,9 @@ import { AdministrationContent } from '../administration/AdministrationContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
+import { StrukturAssistentContent } from '../kunden/StrukturAssistentContent';
 import { ServicesContent } from '../services/ServicesContent';
+import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
@@ -43,6 +45,7 @@ import { ObjectDetailView } from '../twin/ObjectDetailView';
 import { TenantDetailView } from '../twin/TenantDetailView';
 import { TenantOverview } from '../twin/TenantOverview';
 import { TwinContextBar } from '../twin/TwinContextBar';
+import { EXIT_ACCEPTANCE, LIFECYCLE_PHASEN } from '../../lib/kunden/struktur';
 import { NAV_PLACES, type PlaceId } from '../../lib/shell/places';
 import { DEMO_ROLES, getRole, type DemoRole } from '../../lib/shell/roles';
 import { SESSION_STORAGE_KEY, serializeSession } from '../../lib/shell/session';
@@ -81,6 +84,31 @@ function gefundeneMuster(text: string): string[] {
   return VERBOTENE_MUSTER.filter((muster) => muster.test(text)).map((muster) => String(muster));
 }
 
+/**
+ * EINE DOKUMENTIERTE, QUELLENBELEGTE AUSNAHME (Muster wie `entscheidungen.test.tsx` /
+ * `produktsprache.test.tsx` KONZEPTZITATE: Ausnahme auslassen UND ihre Existenz beweisen –
+ * die Regel selbst wird NICHT abgeschwächt und NICHT verallgemeinert).
+ *
+ * `EXIT_ACCEPTANCE` = „Exit Acceptance" ist der worttreue Exit-Gate-Wert der Lifecycle-Phase 10
+ * aus Dok. 16 (Abschnitt „Lifecycle-Modell", Tabelle „Kanonische Phasen"). Er kollidiert mit dem
+ * Muster `/\bAcceptance\b/`, obwohl er kein Projekt-Prozessvokabular ist, sondern ein
+ * Konzept-Fachbegriff. Umformulieren wäre eine stille Konzeptänderung (Regel Null). Der
+ * Struktur-Assistent (`/kunden/struktur`, WP-006 Slice 3) zeigt ihn worttreu.
+ *
+ * ⚠️ REGELEVOLUTION AUSSTEHEND (O-WP006-08): Diese Ausnahme wurde vom Builder dokumentiert und
+ * quellenbelegt eingeführt und ist dem QA-/Product-Gate zur Bestätigung gemeldet (nicht still).
+ * Sie maskiert AUSSCHLIESSLICH die exakte Zwei-Wort-Wendung – „Acceptance" allein bleibt verboten
+ * (Negativbeweis unten), und der Wert ist gegen `LIFECYCLE_PHASEN` geprüft (Meta-Test unten).
+ */
+const KONZEPT_AUSNAHMEN: readonly string[] = [EXIT_ACCEPTANCE];
+
+/** Entfernt die dokumentierten Konzept-Ausnahmen aus dem gerenderten Text vor der Musterprüfung. */
+function ohneKonzeptausnahmen(text: string): string {
+  let rest = text;
+  for (const ausnahme of KONZEPT_AUSNAHMEN) rest = rest.split(ausnahme).join(' ');
+  return rest;
+}
+
 interface RenderVariante {
   /** Menschlich lesbarer Kontext für die Fehlermeldung (Ort, Rolle, Mandant). */
   readonly kontext: string;
@@ -98,7 +126,7 @@ function pruefeVarianten(varianten: readonly RenderVariante[]): void {
       `${variante.kontext}: leerer Render – der Wächter wäre blind`,
     ).toBeGreaterThan(80);
     expect(
-      gefundeneMuster(text),
+      gefundeneMuster(ohneKonzeptausnahmen(text)),
       `${variante.kontext}: Prozessvokabular im gerenderten Produkttext`,
     ).toEqual([]);
     ergebnis.unmount();
@@ -228,6 +256,11 @@ const RENDERER_JE_LIVE_ORT = {
         // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop (null = neutral, DR-0009), kein ARIA-Attribut.
         render(<KundenStartContent role={null} tenant={tenant(TENANT_ID.MEDICORE)} />),
     },
+    // Struktur-Assistent „`/kunden/struktur`" (WP-006 Slice 3): trägt lange, worttreu übernommene
+    // Konzept-Strukturtexte über alle Rollen/Mandanten (Leerzustand ist die Versuchungsstelle).
+    ...rollenMandantenMatrix('/kunden/struktur', (r, t) =>
+      render(<StrukturAssistentContent role={r} tenant={t} />),
+    ),
   ],
   // Rolle seit WP-020 Slice 1 (Kontextleiste zeigt die aktive Produktrolle): eine Kunden- und
   // eine Betreiberrolle sowie der NEUTRALE Zustand (Slice 2) je Mandant – die Rolle ändert auf
@@ -241,9 +274,16 @@ const RENDERER_JE_LIVE_ORT = {
   entscheidungen: rollenMandantenMatrix('/entscheidungen', (r, t) =>
     render(<EntscheidungenContent role={r} tenant={t} />),
   ),
-  services: rollenMandantenMatrix('/services', (r, t) =>
-    render(<ServicesContent role={r} tenant={t} />),
-  ),
+  services: [
+    ...rollenMandantenMatrix('/services', (r, t) =>
+      render(<ServicesContent role={r} tenant={t} />),
+    ),
+    // Servicekatalog „`/services/katalog`" (WP-006 Slice 2): worttreu übernommene Katalogstruktur
+    // über alle Rollen/Mandanten (Leerzustand der aktiven Services ist die Versuchungsstelle).
+    ...rollenMandantenMatrix('/services/katalog', (r, t) =>
+      render(<ServicekatalogContent role={r} tenant={t} />),
+    ),
+  ],
   // Reports (WP-032 Slice 2): trägt lange, wörtlich aus der Quelle übernommene Strukturtexte –
   // volle Rollen-/Mandantenmatrix inklusive der leeren Mandanten.
   reports: rollenMandantenMatrix('/reports', (r, t) =>
@@ -306,5 +346,21 @@ describe('Kein Prozessvokabular im gerenderten Produkttext (WP-018-Wächter)', (
     expect(gefundeneMuster('kein Objektgraph (Demo-Slice)')).toEqual([String(/\bSlice\b/)]);
     // … unauffällige Produktsprache dagegen nicht (Wächter schlägt nicht blind an).
     expect(gefundeneMuster('Risiko Betriebsunterbrechung, Nachweis und Maßnahme')).toEqual([]);
+  });
+
+  it('Meta: die Konzept-Ausnahme „Exit Acceptance" ist quellenbelegt und eng (kein Freibrief)', () => {
+    // (1) Der maskierte Wert ist wirklich der worttreue Exit-Gate-Wert der Lifecycle-Phase 10
+    // (Dok. 16, Abschnitt „Lifecycle-Modell") – wird er dort umbenannt, fällt die Ausnahme hier
+    // auf, statt still weiterzuleben.
+    const phase10 = LIFECYCLE_PHASEN.find((p) => p.nummer === 10);
+    expect(phase10?.exitGate).toBe(EXIT_ACCEPTANCE);
+
+    // (2) Die Maskierung entfernt NUR die exakte Zwei-Wort-Wendung. „Acceptance" allein – und
+    // „Slice" – bleiben verboten (die Regel wird nicht verallgemeinert und nicht abgeschwächt).
+    expect(gefundeneMuster(ohneKonzeptausnahmen('Exit Acceptance'))).toEqual([]);
+    expect(gefundeneMuster(ohneKonzeptausnahmen('Slice 3, Acceptance 24'))).toEqual([
+      String(/\bSlice\b/),
+      String(/\bAcceptance\b/),
+    ]);
   });
 });

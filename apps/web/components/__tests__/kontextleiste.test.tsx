@@ -57,7 +57,9 @@ import { AdministrationContent } from '../administration/AdministrationContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
+import { StrukturAssistentContent } from '../kunden/StrukturAssistentContent';
 import { ServicesContent } from '../services/ServicesContent';
+import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
@@ -349,6 +351,74 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     // Kein Leerfeld mehr; die benannte Lücke steht aufklappbar in der Leiste (DR-0013).
     expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
     expect(kontext.textContent ?? '').toContain(CONTEXT_GAPS.vertretung);
+    unmount();
+  });
+
+  /**
+   * Zusatzseite „Servicekatalog" (`/services/katalog`, WP-006 Slice 2) UNTER dem Ort „Services":
+   * eigene Kontextleiste (belegter Mandant + neutral). Scope/Datenstand beziehen sich auf die
+   * aktiven Services des Mandanten; die Katalogstruktur selbst ist mandantenneutral.
+   */
+  it('Servicekatalog: belegte Elemente belegt (Nordwerk), unbelegte als benannte Datenlücke', () => {
+    const { unmount } = render(
+      <ServicekatalogContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
+    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+    expect(ROLLENNAMEN).toContain(eintrag(kontext, 'Aktive Produktrolle').dd);
+    expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
+    expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
+    expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
+    for (const begruendung of Object.values(CONTEXT_GAPS)) {
+      expect(kontext.textContent ?? '').toContain(begruendung);
+    }
+    unmount();
+  });
+
+  it('Servicekatalog: rendert ohne Rolle vollständig, Leiste nennt „neutral"', () => {
+    const { container, unmount } = render(
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop (null = neutral, DR-0009), kein ARIA-Attribut.
+      <ServicekatalogContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
+    expect((container.textContent ?? '').length).toBeGreaterThan(200);
+    expect(eintrag(kontext, 'Aktive Produktrolle').dd).toBe(CONTEXT_NEUTRAL_ROLE);
+    unmount();
+  });
+
+  /**
+   * Zusatzseite „Struktur-Assistent" (`/kunden/struktur`, WP-006 Slice 3) UNTER dem Ort „Kunden":
+   * eigene Kontextleiste. Der Assistent zeigt Konzeptstruktur ohne Mandantenbestand – Scope und
+   * Datenstand tragen deshalb einen ehrlichen Text, KEIN erfundenes Datum.
+   */
+  it('Struktur-Assistent: belegte Elemente belegt (Nordwerk), Konzeptstruktur als ehrlicher Wert', () => {
+    const { unmount } = render(
+      <StrukturAssistentContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
+    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+    expect(ROLLENNAMEN).toContain(eintrag(kontext, 'Aktive Produktrolle').dd);
+    expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
+    // Konzeptstruktur: kein Datum, ein ehrlicher Scope-/Datenstand-Text.
+    expect(kontext.querySelectorAll('time')).toHaveLength(0);
+    expect(eintrag(kontext, 'Bezug des Struktur-Assistenten').dd).toContain(
+      'kein Mandantenbestand',
+    );
+    expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
+    for (const begruendung of Object.values(CONTEXT_GAPS)) {
+      expect(kontext.textContent ?? '').toContain(begruendung);
+    }
+    unmount();
+  });
+
+  it('Struktur-Assistent: rendert ohne Rolle vollständig, Leiste nennt „neutral"', () => {
+    const { container, unmount } = render(
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop (null = neutral, DR-0009), kein ARIA-Attribut.
+      <StrukturAssistentContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
+    expect((container.textContent ?? '').length).toBeGreaterThan(200);
+    expect(eintrag(kontext, 'Aktive Produktrolle').dd).toBe(CONTEXT_NEUTRAL_ROLE);
     unmount();
   });
 

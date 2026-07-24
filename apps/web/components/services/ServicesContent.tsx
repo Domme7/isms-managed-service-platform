@@ -74,6 +74,14 @@ export function ServicesContent({
         Ohne Preise, ohne Buchung, ohne Verkaufslogik.
       </p>
 
+      {/* Verweis auf die Katalogstruktur des Konzepts (WP-006 Slice 2, `/services/katalog`):
+          Servicefamilien, Offers, Service-Tiefen und Pakete zum Ansehen – preisfrei, ohne Buchung. */}
+      <p className="sv-edge-note">
+        <Link className="tw-cta" href="/services/katalog">
+          Servicekatalog ansehen (Familien, Offers, Tiefen, Pakete) →
+        </Link>
+      </p>
+
       {/* Kontextleiste (WP-020 Slice 1, Dok. 06 „Sichtbarer Kontext"): Scope und Datenstand
           beziehen sich ausdrücklich auf die HIER GEZEIGTEN Managed Services des aktiven
           Mandanten – die Leiste widerspricht damit nie dem Seiteninhalt. */}

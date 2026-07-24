@@ -120,6 +120,7 @@ export function KundenStartContent({
           <ServicesSection tenant={tenant} services={model.services} />
           <NachweiseSection tenant={tenant} evidence={model.evidence} />
           <EntscheidungenSection tenant={tenant} decisionCount={model.decisionCount} />
+          <AufbauEinstiege />
         </>
       )}
 
@@ -363,6 +364,36 @@ function EntscheidungenSection({
 }
 
 /* -----------------------------------------------------------------------------
+ * Aufbau-Einstiege (WP-006 Slice 2/3): geführter Struktur-Assistent und Servicekatalog
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Einstiege in die beiden read-only Aufbau-Ansichten des Kundenbereichs (Struktur-Assistent,
+ * Dok. 16; Servicekatalog, Dok. 14). Beide sind Ansehen, keine Erfassung und keine Buchung –
+ * die ehrliche Grenze steht auf den Zielseiten. Im Leerzustand tragen sie die Einladung
+ * (`EinladungLeererMandant`); hier für Mandanten mit erfasster Struktur.
+ */
+function AufbauEinstiege() {
+  return (
+    <section aria-labelledby="kunden-aufbau">
+      <h2 id="kunden-aufbau">Aufbau ansehen</h2>
+      <p className="sv-edge-note">
+        Geführte Read-Ansichten aus dem Konzept: welche Strukturen ein Kunde anlegt und welche
+        Services es gibt. Beide sind zum Ansehen – ohne Erfassung, ohne Preise, ohne Buchung.
+      </p>
+      <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
+        <Link className="tw-cta" href="/kunden/struktur">
+          Struktur-Assistent öffnen →
+        </Link>{' '}
+        <Link className="tw-cta" href="/services/katalog">
+          Servicekatalog ansehen →
+        </Link>
+      </p>
+    </section>
+  );
+}
+
+/* -----------------------------------------------------------------------------
  * Gemeinsame Objektzeile (Ziel/Kennzahl/Nachweis) mit Objekt-360-Verweis
  * --------------------------------------------------------------------------- */
 
@@ -419,7 +450,10 @@ function EinladungLeererMandant({ tenant }: { tenant: DemoTenant }) {
           durchgehen (Scopes, Zielprofil und Rollen) und den Servicekatalog ansehen.
         </p>
         <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
-          <Link className="tw-cta" href="/services">
+          <Link className="tw-cta" href="/kunden/struktur">
+            Struktur-Assistent öffnen →
+          </Link>{' '}
+          <Link className="tw-cta" href="/services/katalog">
             Servicekatalog ansehen →
           </Link>{' '}
           <Link className="tw-cta" href="/login">
