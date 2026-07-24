@@ -41,3 +41,15 @@
 | Reichweite modernes Design | **Erst Cockpit fertig/abgenommen, dann Seite für Seite** | kein Big-Bang; moderne Bildsprache (DR-0014) rollt nach der Cockpit-Abnahme kontrolliert über die übrigen Orte |
 | Tiefe der Demo-Welt (Dok. 16) | **Alle fünf Firmen reich ausgebaut** — je eigene Branche, Reifegrad, Storyline, **synthetische Bewertungen** (Risiko-Level/KPI/Trust-States nach DR-0008) | großes **WP-021**; erzeugt echte, unterschiedliche Ampeln über ein Portfolio; stabile IDs, Reset, dokumentierte Storyline (`.claude/rules/demo-data.md`) |
 | Konkretheit der Preise | **Illustrative Preisbänder** (z. B. „€1.500–6.000 / Monat"), klar synthetisch, Dok.-14-nah | keine festen Einzelpreise (weniger Schein-Verbindlichkeit); Preisbänder je Service/Paket am PDF (Dok. 14 „Illustrative … Bänder") gegengelesen, mit Security |
+
+## Nachtrag (vierte Terminal-Runde, 2026-07-24)
+
+| Frage | Entscheidung | Wirkung |
+|---|---|---|
+| Online teilbare Version (Hosting) | **Später entscheiden** | vorerst lokal + Screenshots/Aufnahmen; kein Hosting/keine Kosten jetzt (O-COST-001 bleibt offen). Erst wenn der Kern vorzeigbarer ist |
+| Reihenfolge des freigegebenen Programms | **Demo-Welt zuerst (WP-021)** — nach Cockpit-Fix + Usability-Quick-Wins | alle fünf Dok.-16-Firmen reich + synthetische Bewertungen → die Cockpit-Ampeln leuchten grün/amber/rot, Portfolio wird eindrucksvoll (größter sichtbarer Effekt) |
+| Tiefe des Decision Center | **Erst echte Decision Cards** (Simulation später) | Entscheidungen als belegte, versionierte, ablösbare Objekte aus den Daten (nach E-02); Routen-Vergleich/Simulation ist ein späterer Ausbau |
+
+**Feinsequenz ab jetzt:** Cockpit-Fix (Blocker: Dark-Mode) → Gate-Runde 2 → Usability-Quick-Wins (U-16 zuerst) →
+getrennte Login-Welten (simuliert) + synthetische Preisbänder + WP-033 (Demo-Wörter raus) → **WP-021 (fünf
+Firmen reich)** → **E-02 → Decision Cards** → die vier Verbesserungen → Modern-Rollout über die übrigen Seiten.
