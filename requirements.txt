@@ -1,0 +1,9 @@
+# Python-Werkzeugketten-Abhaengigkeiten (nicht das Produkt, sondern Repo-Tooling).
+#
+# pypdf: Textextraktion aus den 24 PDF-Originalen (Regel Null / DR-0006).
+#   Gebraucht von scripts/pdf_text.py und scripts/treue_check.py; der
+#   Repository-Contract-Workflow ruft treue_check ueber tests/repository auf.
+#   Ohne pypdf beendet sich die CLI mit Exit 2 ("pypdf fehlt") und der
+#   CLI-Rauchtest test_treue_check.TreueCheckCliTests schlaegt fehl.
+# Exakt gepinnt fuer reproduzierbare CI-Laeufe (lokal wie Runner identisch).
+pypdf==6.14.2
