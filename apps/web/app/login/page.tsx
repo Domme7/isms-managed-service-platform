@@ -20,8 +20,10 @@
  */
 import { useRouter } from 'next/navigation';
 import { LoginForm } from '../../components/shell/LoginForm';
+import { LoginProfile } from '../../components/shell/LoginProfile';
 import { LoginWelten } from '../../components/shell/LoginWelten';
 import { useSession } from '../../components/shell/SessionProvider';
+import { getCustomerTenants } from '../../lib/portfolio/data';
 import { DEMO_ROLES } from '../../lib/shell/roles';
 import { defaultSession } from '../../lib/shell/session';
 import { einstiegHref } from '../../lib/shell/sphaere';
@@ -63,11 +65,27 @@ export default function LoginPage() {
             nicht angebunden.
           </div>
 
-          <LoginWelten
-            tenants={DEMO_TENANTS}
-            defaultTenantId={initial.tenantId}
+          {/* PRIMÄRER EINSTIEG (5-Profile-Modell, Owner-Richtung 2026-07-24): jede Kundenfirma als
+              eigenes Kunden-Profil + ein Berater/Admin-Profil. Keine feine Rollenwahl im Einstieg. */}
+          <LoginProfile
+            customers={getCustomerTenants()}
+            beraterTenantId={initial.tenantId}
             onEnter={(roleId, tenantId) => eintreten(roleId, tenantId)}
           />
+
+          {/* WEITERE ANSICHTEN: die feine 12-Rollen-Wahl (getrennte Welten, DR-0015) bleibt
+              erreichbar, aber eingeklappt – aus dem primären Einstieg genommen (Owner-Richtung);
+              die Rollen-/Sphären-Logik bleibt vollständig erhalten (OF-1). */}
+          <details className="login-weitere">
+            <summary className="login-neutral-summary">
+              Weitere Ansichten: die zwölf Produktrollen einzeln wählen
+            </summary>
+            <LoginWelten
+              tenants={DEMO_TENANTS}
+              defaultTenantId={initial.tenantId}
+              onEnter={(roleId, tenantId) => eintreten(roleId, tenantId)}
+            />
+          </details>
 
           {/* NEUTRALER EINSTIEG (DR-0009) als ausdrückliche dritte Option, ruhig aufklappbar. */}
           <details className="login-neutral">

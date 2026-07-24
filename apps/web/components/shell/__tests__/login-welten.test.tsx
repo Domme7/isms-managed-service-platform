@@ -143,6 +143,33 @@ describe('LoginPage – der Welten-Eintritt schreibt eine Sitzung MIT Rolle und 
     routerPush.mockClear();
   });
 
+  it('Profil-Login (primär): „als Firma X eintreten" schreibt R03 + Firma und pusht /cockpit', () => {
+    render(
+      <SessionProvider>
+        <LoginPage />
+      </SessionProvider>,
+    );
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Als Kunde MediNova Clinics Holding eintreten' }),
+    );
+    const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
+    // Slot tenant-medicore trägt die Anzeige „MediNova"; Kunde-Sphäre → eigenes Cockpit.
+    expect(gespeichert).toEqual({ roleId: 'R03', tenantId: TENANT_ID.MEDICORE });
+    expect(routerPush).toHaveBeenCalledWith('/cockpit');
+  });
+
+  it('Profil-Login (primär): „als Berater/Admin eintreten" schreibt R08 und pusht /portfolio', () => {
+    render(
+      <SessionProvider>
+        <LoginPage />
+      </SessionProvider>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Als Berater und Admin eintreten' }));
+    const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
+    expect(gespeichert?.roleId).toBe('R08');
+    expect(routerPush).toHaveBeenCalledWith('/portfolio');
+  });
+
   it('Kundenwelt: schreibt Rolle + Mandant und pusht /cockpit', () => {
     render(
       <SessionProvider>

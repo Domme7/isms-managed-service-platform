@@ -2510,6 +2510,10 @@ summary {
   color: var(--ck-muted);
   font-weight: 600;
 }
+/* biome-ignore lint/style/noDescendingSpecificity: Basis-Regel `.ck-kachel-mehr` (opacity:0 im
+   Ruhezustand) steht bewusst nach der Hover-Regel `.ck-kachel:hover .ck-kachel-mehr` (opacity:1);
+   bei unterschiedlicher Spezifität entscheidet die Spezifität, die Quellreihenfolge ist ohne
+   Wirkung. Bestandsmuster WP-034 (Cockpit-Bento). */
 .ck-kachel-mehr {
   position: absolute;
   right: 0.9rem;
@@ -3685,4 +3689,97 @@ summary {
     --ck-info: #93a4ff;
     --ck-info-soft: #1f2542;
   }
+}
+
+/* =========================================================================
+ * Profil-Login (5-Profile-Modell, DR-0017): Firmen als Kunden-Profile + Berater/Admin.
+ * ========================================================================= */
+
+.login-profile {
+  display: grid;
+  gap: 1.4rem;
+  margin: 1.2rem 0 1.6rem;
+}
+
+.login-profil-eyebrow {
+  margin: 0 0 0.15rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ck-muted);
+}
+
+.login-profil-titel {
+  margin: 0 0 0.3rem;
+  font-size: 1.05rem;
+}
+
+.login-profil-sicht {
+  margin: 0 0 0.7rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--ck-ink-soft);
+}
+
+.login-profil-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.6rem;
+}
+
+.login-profil-karte {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--ck-border);
+  border-radius: 12px;
+  background: var(--ck-surface);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.login-profil-karte:hover,
+.login-profil-karte:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--ck-info);
+  box-shadow: 0 6px 18px rgba(20, 24, 40, 0.1);
+  outline: none;
+}
+
+.login-profil-name {
+  font-size: 0.98rem;
+  font-weight: 650;
+}
+
+.login-profil-branche {
+  font-size: 0.74rem;
+  color: var(--ck-muted);
+}
+
+.login-profil-cta {
+  margin-top: 0.35rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--ck-info);
+}
+
+.login-profil-gruppe--berater .login-profil-karte--berater {
+  max-width: 340px;
+  border-color: var(--ck-info);
+  background: var(--ck-info-soft);
+}
+
+.login-weitere,
+.login-neutral {
+  margin-top: 0.6rem;
 }
