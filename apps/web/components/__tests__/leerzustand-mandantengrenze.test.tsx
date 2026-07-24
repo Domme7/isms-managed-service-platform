@@ -40,6 +40,7 @@ import { WissenContent } from '../wissen/WissenContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { AppShell } from '../shell/AppShell';
+import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
 import { TenantDetailView } from '../twin/TenantDetailView';
@@ -397,6 +398,57 @@ describe('Servicekatalog und Struktur-Assistent halten die Kundensphäre (P09/FI
         /Mandantenvergleich/i,
       ]) {
         expect(text, `Struktur-Assistent/${tenantId}: „${verboten}"`).not.toMatch(verboten);
+      }
+      unmount();
+    }
+  });
+});
+
+/* -----------------------------------------------------------------------------
+ * Cockpit-Varianten-Vergleich (`/cockpit`, WP-025): dieselbe Mandantengrenze wie „Heute".
+ * -----------------------------------------------------------------------------
+ *
+ * Die drei Cockpit-Varianten rendern das belegte Modell des aktiven Mandanten. Ihr Leerzustand
+ * (Finovia/MediCore) ist die Klasse-Fundstelle-Versuchung (FINDING-0009): keine Variante darf im
+ * Leerzustand über einen fremden Mandanten sprechen – auch nicht als Verneinung. Kein
+ * `NAV_PLACES`-Ort, deshalb außerhalb des Registers geprüft (die Meta-Assertion bleibt intakt).
+ */
+describe('Cockpit-Varianten sprechen im Leerzustand nie über fremde Mandanten (P09/FINDING-0009)', () => {
+  for (const v of ['a', 'b', 'c'] as const) {
+    for (const tenantId of LEERE_MANDANTEN) {
+      it(`Variante ${v} nennt für ${tenantId} keinen fremden Mandanten`, () => {
+        const { container } = render(
+          <CockpitVariantenContent
+            role={role('R03')}
+            tenant={tenant(tenantId)}
+            variante={v}
+            initialTiefe={3}
+          />,
+        );
+        const text = container.textContent ?? '';
+        expect(text.length).toBeGreaterThan(80);
+        for (const muster of FREMDER_MANDANT) {
+          expect(text, `cockpit-${v}/${tenantId}: „${muster}"`).not.toMatch(muster);
+        }
+        for (const fremd of DEMO_TENANTS.filter((t) => t.tenant_id !== tenantId)) {
+          expect(text).not.toContain(fremd.display_name);
+          expect(container.innerHTML).not.toContain(fremd.tenant_id);
+        }
+      });
+    }
+  }
+
+  it('keine Betreiber-Portfolio-Aggregation auf der Kundensicht des Cockpits (Variante C)', () => {
+    // Eine Kundenrolle (R03) sieht im Cockpit die Ein-Unternehmens-Sphäre – kein
+    // mandantenübergreifendes Portfolio, keine Aggregation (DR-0012 / DR-0013 Nr. 11).
+    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR]) {
+      const { container, unmount } = render(
+        <CockpitVariantenContent role={role('R03')} tenant={tenant(tenantId)} variante="c" />,
+      );
+      const text = container.textContent ?? '';
+      expect(text).toContain('Kundensicht: dieses eine Unternehmen.');
+      for (const fremd of DEMO_TENANTS.filter((t) => t.tenant_id !== tenantId)) {
+        expect(text).not.toContain(fremd.display_name);
       }
       unmount();
     }

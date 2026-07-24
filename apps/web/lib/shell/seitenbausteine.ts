@@ -125,9 +125,10 @@ export function getBaustein(id: BausteinId): Seitenbaustein {
  * (Muster: eigene Zuordnung, kein neuer Nav-Ort). `objekt360` liegt unter „Kunden"/„ISMS"/
  * „Services"; `kundenstart` ist die Kunden-Startseite „verwalten" unter dem Ort „Kunden"
  * (WP-006 Slice 1); `servicekatalog` ist der Servicekatalog unter dem Ort „Services" und
- * `strukturassistent` der Struktur-Assistent unter dem Ort „Kunden" (WP-006 Slice 2/3). Alle vier
- * sind KEINE `NAV_PLACES`-Orte – der Wächter behandelt sie wie dokumentierte Zusatzseiten
- * (Meta-Assertion).
+ * `strukturassistent` der Struktur-Assistent unter dem Ort „Kunden" (WP-006 Slice 2/3);
+ * `cockpit` ist die Cockpit-Varianten-Vergleichsseite unter dem Ort „Heute" (WP-025). Alle
+ * Zusatzseiten sind KEINE `NAV_PLACES`-Orte – der Wächter behandelt sie wie dokumentierte
+ * Zusatzseiten (Meta-Assertion).
  */
 export type BausteinOrt =
   | 'heute'
@@ -141,7 +142,8 @@ export type BausteinOrt =
   | 'objekt360'
   | 'kundenstart'
   | 'servicekatalog'
-  | 'strukturassistent';
+  | 'strukturassistent'
+  | 'cockpit';
 
 export type BausteinStatus = 'vorhanden' | 'teilweise' | 'verweis' | 'ohne_traeger';
 
@@ -625,6 +627,45 @@ export const BAUSTEIN_ABDECKUNG: Readonly<Record<BausteinOrt, readonly BausteinZ
         'Der Assistent zeigt Konzeptstruktur ohne erfassten Datenstand; eine Quellen-, ' +
         'Aktualitäts- oder Vollständigkeitsangabe über einen Mandantenbestand gäbe es hier nicht ' +
         'und wäre erfunden.',
+    },
+  ],
+  // Cockpit-Varianten-Vergleich (`/cockpit`, WP-025): drei Start-Varianten auf DEMSELBEN belegten
+  // Datenmodell wie „Heute" (Kacheln, Klartext-Zustand, Fragenkette). Die Baustein-Lage ist eine
+  // Aussage über DATEN-Träger und deshalb identisch zu „Heute", unabhängig vom Layout der Variante.
+  cockpit: [
+    {
+      baustein: 'question_header',
+      status: 'teilweise',
+      wo: 'Leitfrage am Seitenkopf; Scope in der Kontextleiste.',
+      fehlt:
+        'Ein Seiten-Status und ein Seiten-Owner (die Vergleichsseite ist kein Objekt und trägt beides nicht).',
+    },
+    { baustein: 'context_bar', status: 'vorhanden', wo: 'Kontextleiste unter dem Seitenkopf.' },
+    {
+      baustein: 'summary_pulse',
+      status: 'teilweise',
+      wo: 'Klartext-Zustand (Variante A) bzw. die beantworteten Fragen (Variante B).',
+      fehlt: FEHLT_SUMMARY,
+    },
+    {
+      baustein: 'relationship_panel',
+      status: 'verweis',
+      wo: 'Beziehungen je Objekt auf der Objektseite (Drill-down der Kacheln und Einstiege).',
+    },
+    { baustein: 'impact_panel', status: 'ohne_traeger', grund: GRUND_IMPACT },
+    { baustein: 'decision_card', status: 'ohne_traeger', grund: GRUND_DECISION_CARD },
+    { baustein: 'action_rail', status: 'ohne_traeger', grund: GRUND_ACTION_RAIL },
+    {
+      baustein: 'history_decision_record',
+      status: 'verweis',
+      wo: 'Version und Ablösung je Objekt auf der Objektseite (Drill-down der Kacheln).',
+    },
+    {
+      baustein: 'trust_layer',
+      status: 'teilweise',
+      wo: 'Gezählte Beobachtungen zur Datenlage (Variante B); benannte Lücke in der Kontextleiste.',
+      fehlt:
+        'Ein seitenweiter Vertrauenswert (belegte Einzelwerte stehen an Beziehungen und Objekten).',
     },
   ],
 } as const;

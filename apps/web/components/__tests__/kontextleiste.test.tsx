@@ -62,6 +62,7 @@ import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
+import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { CONTEXT_GAPS, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
 import { SessionProvider } from '../shell/SessionProvider';
@@ -419,6 +420,68 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
     expect((container.textContent ?? '').length).toBeGreaterThan(200);
     expect(eintrag(kontext, 'Aktive Produktrolle').dd).toBe(CONTEXT_NEUTRAL_ROLE);
+    unmount();
+  });
+
+  /**
+   * Zusatzseite „Cockpit-Varianten-Vergleich" (`/cockpit`, WP-025) UNTER dem Ort „Heute": eine
+   * eigene Kontextleiste je Variante (belegter Mandant + neutral + leer). Kein NAV_PLACES-Ort,
+   * deshalb außerhalb des Registers geprüft (die Meta-Assertion oben bleibt intakt).
+   */
+  for (const v of ['a', 'b', 'c'] as const) {
+    it(`Cockpit (Variante ${v}): belegte Elemente belegt (Nordwerk), unbelegte als benannte Datenlücke`, () => {
+      const { unmount } = render(
+        <CockpitVariantenContent
+          role={role('R03')}
+          tenant={tenant(TENANT_ID.NORDWERK)}
+          variante={v}
+        />,
+      );
+      const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
+      expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+      const rolle = eintrag(kontext, 'Aktive Produktrolle').dd;
+      expect(ROLLENNAMEN).toContain(rolle);
+      expect(rolle).not.toMatch(/R\d{2}/);
+      const labels = Array.from(kontext.querySelectorAll('dt')).map((dt) => dt.textContent ?? '');
+      expect(labels.find((l) => l.includes('Scope'))).toBeDefined();
+      const datenstandLabel = labels.find((l) => l.startsWith('Datenstand'));
+      expect(datenstandLabel).toMatch(/im System erfasst/);
+      expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
+      expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
+      expect(kontext.querySelector('.od-context-hinweis .od-context-details')).not.toBeNull();
+      for (const begruendung of Object.values(CONTEXT_GAPS)) {
+        expect(kontext.textContent ?? '').toContain(begruendung);
+      }
+      unmount();
+    });
+  }
+
+  it('Cockpit: rendert ohne Rolle vollständig, Leiste nennt „neutral"', () => {
+    const { container, unmount } = render(
+      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop (null = neutral, DR-0009), kein ARIA-Attribut.
+      <CockpitVariantenContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} variante="c" />,
+    );
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
+    expect((container.textContent ?? '').length).toBeGreaterThan(200);
+    expect(eintrag(kontext, 'Aktive Produktrolle').dd).toBe(CONTEXT_NEUTRAL_ROLE);
+    expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
+    unmount();
+  });
+
+  it('Cockpit (leerer Mandant): Leiste vollständig, kein erfundener Scope/Datenstand', () => {
+    const { unmount } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.FINOVIA)}
+        variante="a"
+      />,
+    );
+    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
+    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Finovia Digital Bank AG');
+    expect(kontext.querySelectorAll('time')).toHaveLength(0);
+    expect(eintrag(kontext, 'Scopes dieses Mandanten').dd).toBe('keine Scope-Zuordnung erfasst');
+    expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
+    expect(kontext.textContent ?? '').toContain(CONTEXT_GAPS.vertretung);
     unmount();
   });
 

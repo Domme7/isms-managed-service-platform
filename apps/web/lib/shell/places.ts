@@ -65,7 +65,11 @@ export const NAV_PLACES: readonly NavPlace[] = [
     // nicht steht". Ob der `question`-Wortlaut selbst überarbeitet wird, ist eine Produkt-/
     // Owner-Entscheidung (O-WP032-02).
     question: 'Was hat sich seit meinem letzten Besuch verändert und was verdient Aufmerksamkeit?',
-    match: ['/heute'],
+    // `/cockpit` (WP-025) ist KEIN neuer Hauptnav-Ort (06-D01, acht Orte fix): die
+    // Cockpit-Varianten-Vergleichsseite hängt unter „Heute" – der Präfix hält deshalb das
+    // Nav-Label „Heute" aktiv, wenn sie geöffnet ist. Sie ist von `/heute` verlinkt und dient dem
+    // visuellen Owner-Vergleich der drei Start-Varianten (DR-0010 Nr. 3).
+    match: ['/heute', '/cockpit'],
     // WP-016 Slice 2: der Ort zeigt echten, aus dem Demo-Seed abgeleiteten Inhalt
     // (Mission Control read-only, ohne Morning Mission – die Lücke wird auf der Seite benannt).
     live: true,

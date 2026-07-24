@@ -1580,3 +1580,143 @@ summary {
   color: var(--tw-muted);
   max-width: 72ch;
 }
+
+/* =============================================================================
+   Cockpit-Varianten-Vergleich (WP-025, DR-0010 Nr. 3): drei Start-Entwürfe auf
+   EINEM Datenmodell. Reine Layout-Schicht – reuse der db-/ht-/rv-/sv-Bausteine;
+   die ck-Klassen tragen nur den Varianten-Umschalter, das Weltband und den
+   Management-Modus. Keine Animation (nichts, was prefers-reduced-motion bräuchte).
+   ========================================================================== */
+
+/* Einstiegslink von „Heute" in den Vergleich (rollen-neutral, eigene Klasse). */
+.ht-cockpit {
+  margin: 0 0 1.25rem;
+  font-size: 0.9rem;
+}
+
+/* Varianten-Umschalter: Auswahl = Radio-Form + Rahmen + Text, nie nur Farbe (06-D11). */
+.ck-schalter {
+  border: 1px solid var(--tw-line);
+  border-radius: 10px;
+  padding: 0.8rem 1rem 1rem;
+  margin: 0 0 1.5rem;
+  background: var(--tw-surface);
+}
+.ck-schalter > legend {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tw-muted);
+  padding: 0 0.35rem;
+}
+.ck-schalter-optionen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.7rem;
+}
+.ck-schalter-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "radio titel"
+    "radio nutzer"
+    "leitidee leitidee";
+  align-items: start;
+  gap: 0.15rem 0.5rem;
+  border: 1px solid var(--tw-line);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+}
+.ck-schalter-option:hover {
+  border-color: var(--shell-navy);
+}
+.ck-schalter-option--aktiv {
+  border-color: var(--shell-navy);
+  background: var(--tw-surface-2);
+  box-shadow: 0 0 0 1px var(--shell-navy) inset;
+}
+.ck-schalter-option input {
+  grid-area: radio;
+  margin-top: 0.25rem;
+}
+.ck-schalter-titel {
+  grid-area: titel;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.ck-schalter-nutzer {
+  grid-area: nutzer;
+  font-size: 0.76rem;
+  color: var(--tw-muted);
+}
+.ck-schalter-leitidee {
+  grid-area: leitidee;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--tw-ink-soft);
+}
+
+.ck-buehne {
+  margin: 0;
+}
+.ck-frage {
+  margin: 0 0 1.25rem;
+}
+
+/* Weltband (Variante C): Weltname + Weltleitfrage, Navy als ruhige Rahmung. */
+.ck-weltband {
+  background: var(--shell-navy);
+  color: #eaf0fb;
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  margin: 0 0 1.25rem;
+}
+.ck-weltband-name {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  /* Kontrast auf var(--shell-navy) (#12233f): #c6d2e6 ≈ 9:1 – deutlich über AA. */
+  color: #c6d2e6;
+}
+.ck-weltband-frage {
+  margin: 0.25rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.ck-weltband-note {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+  color: #c6d2e6;
+  max-width: 78ch;
+}
+
+/* Management-Modus-Umschalter (Variante C): Checkbox + benannte Grenze, keine Fabrikation. */
+.ck-mgmt {
+  border: 1px solid var(--tw-line);
+  border-left: 4px solid var(--shell-teal);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  margin: 0 0 1rem;
+  background: var(--tw-surface);
+}
+.ck-mgmt-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ck-mgmt-toggle input {
+  margin-top: 0.2rem;
+}
+.ck-mgmt-grenze {
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+  color: var(--tw-ink-soft);
+  max-width: 82ch;
+}
