@@ -23,6 +23,7 @@ import {
 } from './managed-services';
 import { NORDWERK_OBJECTS, NORDWERK_RELATIONSHIPS } from './nordwerk-graph';
 import { NORDSTERN_OBJECTS, NORDSTERN_RELATIONSHIPS } from './nordstern-graph';
+import { ALPENCLOUD_OBJECTS, ALPENCLOUD_RELATIONSHIPS } from './alpencloud-graph';
 import { DEMO_SEED } from './seed';
 
 /** Zählpaar Objekte/Beziehungen. */
@@ -67,6 +68,11 @@ const SEED_LAYERS: ReadonlyArray<{
     key: 'isms_erweiterung_nordstern',
     objects: NORDSTERN_OBJECTS,
     relationships: NORDSTERN_RELATIONSHIPS,
+  },
+  {
+    key: 'isms_graph_alpencloud',
+    objects: ALPENCLOUD_OBJECTS,
+    relationships: ALPENCLOUD_RELATIONSHIPS,
   },
 ];
 

@@ -13,6 +13,7 @@ import { NORDWERK_OBJECTS, NORDWERK_RELATIONSHIPS } from './nordwerk-graph';
 import { MANAGED_SERVICE_OBJECTS, MANAGED_SERVICE_RELATIONSHIPS } from './managed-services';
 import { DECISION_OBJECTS, DECISION_RELATIONSHIPS } from './decisions';
 import { NORDSTERN_OBJECTS, NORDSTERN_RELATIONSHIPS } from './nordstern-graph';
+import { ALPENCLOUD_OBJECTS, ALPENCLOUD_RELATIONSHIPS } from './alpencloud-graph';
 
 /**
  * Version der Seed-Grundlage (SemVer). Muss zu `seed-manifest.json` passen.
@@ -27,8 +28,11 @@ import { NORDSTERN_OBJECTS, NORDSTERN_RELATIONSHIPS } from './nordstern-graph';
  * stabile `tenant_id`, keine Änderung an bestehenden Objekten/Beziehungen.
  * 1.4.0 (WP-021 Slice 3 Vorstufe): zwei weitere Dok-16-Kundenmandanten (AlpenCloud, GreenGrid)
  * als Empty-State ergänzt — Mandantenwelt auf sechs erweitert; noch KEINE neuen Objekte/Kanten.
+ * 1.5.0 (WP-021 Slice 3): AlpenCloud GmbH erhält einen eigenen ISMS-Graphen (30 Objekte, 34 Kanten,
+ * eigene vierte Erfassungswelle 2026-04-15) mit bewussten Deckungslücken + Dok-07-Demo-Graph-Pflicht;
+ * KEINE numerische Bewertung (Slice 7, gated). Neuer Beziehungstyp `depends_on` erstmals belegt.
  */
-export const SEED_VERSION = '1.4.0';
+export const SEED_VERSION = '1.5.0';
 
 export interface DemoSeed {
   readonly version: string;
@@ -40,8 +44,9 @@ export interface DemoSeed {
 /**
  * Der vollständige Demo-Seed: ISMS-Kerngraph (Nordwerk) + Managed-Service-Schicht
  * (Nordwerk und Consulting Operator Demo) + Entscheidungsschicht (nur Nordwerk).
- * Finovia, MediCore, AlpenCloud und GreenGrid bleiben (noch) ohne Objekte (Empty-State-Nachweis);
- * AlpenCloud/Rheinbank-Slot/MediNova-Slot folgen in WP-021 Slices 3–5, GreenGrid bleibt leer.
+ * AlpenCloud trägt seit WP-021 Slice 3 einen eigenen ISMS-Graphen. Finovia, MediCore und GreenGrid
+ * bleiben (noch) ohne Objekte (Empty-State); Rheinbank-Slot/MediNova-Slot folgen in Slices 4–5,
+ * GreenGrid bleibt bewusst leer.
  *
  * REIHENFOLGE (bewusst): die Entscheidungsschicht wird HINTER der Managed-Service-Schicht
  * angehängt. Dadurch bleibt innerhalb der Objektfamilie F09 das erste Objekt unverändert – und
@@ -61,11 +66,13 @@ export const DEMO_SEED: DemoSeed = {
     ...MANAGED_SERVICE_OBJECTS,
     ...DECISION_OBJECTS,
     ...NORDSTERN_OBJECTS,
+    ...ALPENCLOUD_OBJECTS,
   ],
   relationships: [
     ...NORDWERK_RELATIONSHIPS,
     ...MANAGED_SERVICE_RELATIONSHIPS,
     ...DECISION_RELATIONSHIPS,
     ...NORDSTERN_RELATIONSHIPS,
+    ...ALPENCLOUD_RELATIONSHIPS,
   ],
 };

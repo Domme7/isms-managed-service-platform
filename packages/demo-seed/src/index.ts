@@ -9,6 +9,7 @@
 export * from './tenants';
 export * from './nordwerk-graph';
 export * from './nordstern-graph';
+export * from './alpencloud-graph';
 export * from './managed-services';
 export * from './decisions';
 export * from './integrity';

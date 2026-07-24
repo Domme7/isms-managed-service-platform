@@ -13,6 +13,7 @@ import { DEMO_SEED, SEED_VERSION } from './seed';
 import { DEMO_TENANTS, TENANT_ID } from './tenants';
 import { NORDWERK_DECISION_OBJECT_ID } from './decisions';
 import { NORDSTERN_OBJECT_ID } from './nordstern-graph';
+import { ALPENCLOUD_OBJECT_ID } from './alpencloud-graph';
 import {
   findCrossTenantRelationships,
   findDanglingRelationships,
@@ -89,12 +90,13 @@ describe('Demo-Seed – Tenant-Isolation (P09, D11, Dok. 19)', () => {
     expect(byTenant(TENANT_ID.NORDWERK)).toHaveLength(58);
     // Consulting Operator Demo: eigene Serviceschicht (WP-012 Slice 1).
     expect(byTenant(TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(9);
-    // Finovia/MediCore/AlpenCloud/GreenGrid tragen (noch) keine Objekte — Empty-State-Nachweis.
-    // Finovia→Rheinbank / MediCore→MediNova / AlpenCloud werden in WP-021 Slices 3–5 gefüllt;
+    // AlpenCloud trägt seit WP-021 Slice 3 einen eigenen ISMS-Graphen (30 Objekte).
+    expect(byTenant(TENANT_ID.ALPENCLOUD)).toHaveLength(30);
+    // Finovia/MediCore/GreenGrid tragen (noch) keine Objekte — Empty-State-Nachweis.
+    // Finovia→Rheinbank / MediCore→MediNova werden in WP-021 Slices 4–5 gefüllt;
     // GreenGrid bleibt bewusst leer (getrennter Discovery-Scope, Owner-Direktive).
     expect(byTenant(TENANT_ID.FINOVIA)).toEqual([]);
     expect(byTenant(TENANT_ID.MEDICORE)).toEqual([]);
-    expect(byTenant(TENANT_ID.ALPENCLOUD)).toEqual([]);
     expect(byTenant(TENANT_ID.GREENGRID)).toEqual([]);
   });
 
@@ -105,9 +107,10 @@ describe('Demo-Seed – Tenant-Isolation (P09, D11, Dok. 19)', () => {
     // Entscheidungsschicht + 33 Kanten Nordstern-ISMS-Erweiterung (WP-021 Slice 1) = 84.
     expect(byTenant(TENANT_ID.NORDWERK)).toHaveLength(84);
     expect(byTenant(TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(11);
+    // AlpenCloud: 34 Kanten (WP-021 Slice 3).
+    expect(byTenant(TENANT_ID.ALPENCLOUD)).toHaveLength(34);
     expect(byTenant(TENANT_ID.FINOVIA)).toEqual([]);
     expect(byTenant(TENANT_ID.MEDICORE)).toEqual([]);
-    expect(byTenant(TENANT_ID.ALPENCLOUD)).toEqual([]);
     expect(byTenant(TENANT_ID.GREENGRID)).toEqual([]);
   });
 
@@ -230,9 +233,13 @@ describe('Demo-Seed – Mandanten & Determinismus', () => {
     }
   });
 
-  it('ausmodelliert sind Nordwerk und der Consulting Operator Demo; Finovia/MediCore nicht', () => {
+  it('ausmodelliert sind Nordwerk, AlpenCloud und der Consulting Operator Demo', () => {
     const withGraph = tenants.filter((t) => t.has_object_graph).map((t) => t.tenant_id);
-    expect(withGraph).toEqual([TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR]);
+    expect(withGraph).toEqual([
+      TENANT_ID.NORDWERK,
+      TENANT_ID.ALPENCLOUD,
+      TENANT_ID.CONSULTING_OPERATOR,
+    ]);
   });
 
   it('DEMO_TENANTS und DEMO_SEED.tenants sind dieselbe Quelle', () => {
@@ -473,7 +480,7 @@ describe('Demo-Seed – Entscheidungsschicht (WP-017 Slice 1)', () => {
         ].map((iso) => iso.slice(0, 10)),
       ),
     ].sort();
-    expect(tage).toEqual(['2026-01-15', '2026-02-16', '2026-03-16']);
+    expect(tage).toEqual(['2026-01-15', '2026-02-16', '2026-03-16', '2026-04-15']);
 
     const decisionEdges = relationships.filter((r) =>
       decisions.some((d) => d.object_id === r.source_id || d.object_id === r.target_id),
@@ -576,6 +583,89 @@ describe('Demo-Seed – Flaggschiff Nordstern: Dok-07-Demo-Graph-Pflicht über b
     // existieren als erfasstes Feld; `tags_custom_fields` bleibt im Flaggschiff ungenutzt.
     const nordwerk = objects.filter((o) => o.tenant_id === TENANT_ID.NORDWERK);
     for (const o of nordwerk) {
+      expect(o.tags_custom_fields ?? undefined).toBeUndefined();
+    }
+  });
+});
+
+describe('Demo-Seed – AlpenCloud: bewusste Deckungslücken (WP-021 Slice 3)', () => {
+  const A = ALPENCLOUD_OBJECT_ID;
+  const acObjects = objects.filter((o) => o.tenant_id === TENANT_ID.ALPENCLOUD);
+  const acRels = relationships.filter((r) => r.tenant_id === TENANT_ID.ALPENCLOUD);
+  const incoming = (type: string, targetId: string) =>
+    acRels.filter((r) => r.relationship_type === type && r.target_id === targetId);
+  const objectById = new Map(acObjects.map((o) => [o.object_id, o] as const));
+
+  it('trägt eine Control-Grundgesamtheit über der Kleinheitsschwelle (n ≥ 3)', () => {
+    const controls = acObjects.filter((o) => o.object_type === 'Control');
+    expect(controls.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('mindestens ein Control ohne eingehende Nachweis-Kante (R15) – „Control ohne Nachweis"', () => {
+    const controls = acObjects.filter((o) => o.object_type === 'Control');
+    const ohneNachweis = controls.filter((c) => incoming('evidences', c.object_id).length === 0);
+    expect(ohneNachweis.map((c) => c.object_id)).toContain(A.CTRL_API_GATEWAY);
+    // Gegenprobe: mindestens ein Control ist belegt (amber, nicht rot).
+    expect(controls.some((c) => incoming('evidences', c.object_id).length > 0)).toBe(true);
+  });
+
+  it('trägt eine Risiko-Grundgesamtheit über der Kleinheitsschwelle (n ≥ 3)', () => {
+    const risks = acObjects.filter((o) => o.object_type === 'Risk');
+    expect(risks.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('mindestens ein Risiko ohne eingehende Minderungs-Kante (R12) – „Risiko ohne Minderung"', () => {
+    const risks = acObjects.filter((o) => o.object_type === 'Risk');
+    const ohneMinderung = risks.filter((r) => incoming('mitigates', r.object_id).length === 0);
+    expect(ohneMinderung.map((r) => r.object_id)).toContain(A.RISK_ZERTIFIZIERUNGSLUECKE);
+    expect(risks.some((r) => incoming('mitigates', r.object_id).length > 0)).toBe(true);
+  });
+
+  it('mindestens ein kritisches Objekt ohne benannten Owner', () => {
+    const telemetrie = objectById.get(A.ASSET_TELEMETRIE);
+    expect(telemetrie, 'ASSET_TELEMETRIE fehlt').toBeDefined();
+    expect(telemetrie?.owner_ids).toEqual([]);
+    expect(telemetrie?.classification.protection_need).toBe('hoch');
+  });
+});
+
+describe('Demo-Seed – AlpenCloud: Dok-07-Demo-Graph-Pflicht über belegte Felder (WP-021 Slice 3)', () => {
+  const A = ALPENCLOUD_OBJECT_ID;
+  const objectById = new Map(objects.map((o) => [o.object_id, o] as const));
+
+  it('KONFLIKT: ein Objekt trägt widersprüchliche Quellen + Dimension „Konsistenz"', () => {
+    const weak = objectById.get(A.WEAK_INTEGRATION);
+    expect(weak, 'WEAK_INTEGRATION fehlt').toBeDefined();
+    expect(weak!.source_refs.length).toBeGreaterThanOrEqual(2);
+    const konsistenz = weak!.quality_state.dimensions.find((d) => d.dimension === 'Konsistenz');
+    expect(konsistenz?.note ?? '').toMatch(/Konflikt/i);
+  });
+
+  it('VERALTETE QUELLE: ein Objekt trägt eine alte Quelle (2024) + Dimension „Aktualität"', () => {
+    const asset = objectById.get(A.ASSET_TELEMETRIE);
+    expect(asset, 'ASSET_TELEMETRIE fehlt').toBeDefined();
+    expect(asset!.source_refs.some((s) => /2024/.test(s.reference))).toBe(true);
+    const aktualitaet = asset!.quality_state.dimensions.find((d) => d.dimension === 'Aktualität');
+    expect(aktualitaet?.note ?? '').toMatch(/veraltet/i);
+  });
+
+  it('ERKLÄRBARER TRUST-STATE: ungeprüfte Bestätigung + Herkunft + niedriger Kanten-Vertrauensgrad', () => {
+    const risk = objectById.get(A.RISK_ZERTIFIZIERUNGSLUECKE);
+    expect(risk, 'RISK_ZERTIFIZIERUNGSLUECKE fehlt').toBeDefined();
+    const bestaetigung = risk!.quality_state.dimensions.find((d) => d.dimension === 'Bestätigung');
+    expect(bestaetigung?.confirmation_level).toBe('Ungeprüft');
+    expect(risk!.quality_state.dimensions.some((d) => d.dimension === 'Herkunft')).toBe(true);
+    const affects = relationships.filter(
+      (r) => r.relationship_type === 'affects' && r.source_id === risk!.object_id,
+    );
+    expect(affects.length).toBeGreaterThanOrEqual(1);
+    expect(affects.every((r) => typeof r.confidence === 'number')).toBe(true);
+    expect(Math.min(...affects.map((r) => r.confidence ?? 1))).toBeLessThan(0.5);
+  });
+
+  it('KEIN neues Contract-Trägerfeld: kein Assessment-Feld leckt in tags_custom_fields', () => {
+    const ac = objects.filter((o) => o.tenant_id === TENANT_ID.ALPENCLOUD);
+    for (const o of ac) {
       expect(o.tags_custom_fields ?? undefined).toBeUndefined();
     }
   });

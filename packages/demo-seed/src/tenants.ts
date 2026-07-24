@@ -91,7 +91,7 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
   },
   {
     // Dok. 16 §34.1 Nr. 2: Cloud-Softwareanbieter, schnelles Wachstum, Zertifizierungsziel,
-    // hohe Automatisierungsbereitschaft. Neuer Mandant (WP-021 Slice 3); Objektgraph folgt.
+    // hohe Automatisierungsbereitschaft. Neuer Mandant (WP-021 Slice 3); eigener ISMS-Graph.
     tenant_id: TENANT_ID.ALPENCLOUD,
     display_name: 'AlpenCloud GmbH',
     industry: 'Cloud-Softwareanbieter / SaaS (synthetisch)',
@@ -99,7 +99,7 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
       'Synthetischer Cloud-Softwareanbieter mit schnellem Wachstum und einem ' +
       'Zertifizierungsziel. ISMS-Fokus auf Automatisierung der Nachweisführung, Absicherung ' +
       'der Cloud-Ressourcen und Schritthalten der Kontrollabdeckung mit dem Wachstum.',
-    has_object_graph: false,
+    has_object_graph: true,
   },
   {
     // Dok. 16 §34.1 Nr. 5: M&A-Szenario mit neu erworbener Tochtergesellschaft und getrenntem
