@@ -22,8 +22,9 @@
  *      (neun Typen mit Beschreibung), worttreu.
  *   - `GUIDED_QUICKSTART`     ← Abschnitt „Guided UX und Einstiegspfade", Unterabschnitt
  *      „Guided Quickstart" (sieben Schritte), worttreu.
- *   - `FREIGABEPFLICHTIG`     ← Entscheidung 16-D07 (Abschnitt „Festgelegte Entscheidungen") /
- *      Prinzip OL07 (Abschnitt „Onboarding- und Lifecycle-Verfassung"), worttreu-nah.
+ *   - `FREIGABEPFLICHTIG`     ← Entscheidung 16-D07 (Abschnitt „Festgelegte Entscheidungen", fünf
+ *      Positionen). Delta zu Prinzip OL07 (sechs, inkl. „kommerzielle Baseline") ist an der
+ *      Konstante unten benannt statt still aufgelöst.
  *
  * READ-ONLY, KEINE ERFASSUNG (16-D01 „Lifecycle, kein Wizard"; OL04 „jede Annahme bleibt
  * sichtbar"; OL06 „Datenminimierung"; OL07/16-D07 „menschliche Freigabe"): Diese Strukturen
@@ -39,9 +40,12 @@
  *   - Phase 10 „Exit Gate" = „Exit Acceptance" kollidiert mit `prozessvokabular` (`/\bAcceptance\b/`).
  *     Behandelt als dokumentierte, quellenbelegte EINZEL-Ausnahme des Wächters (`EXIT_ACCEPTANCE`),
  *     Regel unverändert; Gate-Bestätigung ausstehend (O-WP006-08).
- *   - Phase 0 „Zentrale Ergebnisse" = „synthetischer Account, Demo-Story, …" kollidiert mit
- *     `produktsprache` (`/synthetisch/i`, `/\bDemo\b/i`). Der Assistent steht (noch) NICHT unter
- *     `produktsprache`; die latente Kollision ist gemeldet (O-WP006-09).
+ *   - Phase 0 „Zentrale Ergebnisse" = „synthetischer Account, Demo-Story, …" (und Phase 5
+ *     „Baseline, Confidence, Simulation, …") kollidieren mit `produktsprache` (`/synthetisch/i`,
+ *     `/\bDemo\b/i`, `/\bSimulation\b/i`). Der Assistent steht jetzt UNTER `produktsprache` mit
+ *     einer engen, mechanisch aus `LIFECYCLE_PHASEN.ergebnisse` abgeleiteten Ausnahme (O-WP006-09,
+ *     Muster O-WP032-11: PDF-wörtlicher Produktinhalt, kein Disclaimer über unsere Daten). Interim
+ *     = worttreu belassen; die DR-0011-vs-Regel-Null-Owner-Frage bleibt offen.
  *
  * React-frei und deterministisch testbar (Muster `lib/shell/roles.ts`).
  */
@@ -380,6 +384,13 @@ export const GUIDED_QUICKSTART: readonly string[] = [
 /**
  * Die Gegenstände, die eine menschliche Freigabe benötigen (16-D07), worttreu. Werden als
  * Strukturinhalt GEZEIGT, nicht simuliert – der Assistent löst keine Freigabe aus.
+ *
+ * DOPPELZITAT-DELTA (benannt, nicht still aufgelöst – O-WP006-xx): Das Verfassungsprinzip OL07
+ * (Abschnitt „Onboarding- und Lifecycle-Verfassung") nennt ZUSÄTZLICH „kommerzielle Baseline"
+ * – also sechs Gegenstände: „Scope, Zielprofil, Risikotoleranz, Serviceübernahme, kommerzielle
+ * Baseline und Go-live". Hier bewusst NICHT übernommen, weil (a) die bindende Entscheidung 16-D07
+ * (Abschnitt „Festgelegte Entscheidungen") genau fünf nennt und „kommerzielle Baseline" auslässt,
+ * und (b) dieser Slice preisfrei ist (DR-0008). Bei Konflikt geht die Owner-Entscheidung vor.
  */
 export const FREIGABEPFLICHTIG: readonly string[] = [
   'Scope',

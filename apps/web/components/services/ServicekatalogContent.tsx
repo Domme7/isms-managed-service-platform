@@ -204,7 +204,7 @@ function ServicefamilienSection() {
 function ServiceOffersSection() {
   return (
     <section aria-labelledby="katalog-offers">
-      <h2 id="katalog-offers">Kanonische Service Offers</h2>
+      <h2 id="katalog-offers">Service Offers</h2>
       <p className="sv-edge-note">
         Fünfzehn kaufbare Offers. Je Offer: Standardergebnis und typischer Rhythmus. Der Preis ist
         hier bewusst nicht Teil der Karte (siehe Angebotskarte, Frage 8).

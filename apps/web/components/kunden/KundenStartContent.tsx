@@ -297,7 +297,7 @@ function ServicesSection({
       ) : (
         <p className="tw-empty" role="note">
           Für {tenant.display_name} sind keine Services erfasst.{' '}
-          <Link href="/services">Zum Servicekatalog</Link>.
+          <Link href="/services/katalog">Zum Servicekatalog</Link>.
         </p>
       )}
     </section>
@@ -446,8 +446,9 @@ function EinladungLeererMandant({ tenant }: { tenant: DemoTenant }) {
           für diesen Mandanten erfasst ist.
         </p>
         <p>
-          Nächste Schritte, um {tenant.display_name} aufzubauen: den geführten Struktur-Assistenten
-          durchgehen (Scopes, Zielprofil und Rollen) und den Servicekatalog ansehen.
+          Nächste Schritte, um zu verstehen, wie {tenant.display_name} aufgebaut wird: den
+          Struktur-Assistenten durchgehen (er erklärt Scopes, Zielprofil und Rollen, ohne etwas zu
+          erfassen) und den Servicekatalog ansehen.
         </p>
         <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
           <Link className="tw-cta" href="/kunden/struktur">

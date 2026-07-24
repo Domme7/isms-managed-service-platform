@@ -97,8 +97,17 @@ describe('Servicekatalog-Konstanten – Vollzähligkeit (am PDF verifiziert)', (
   });
 });
 
+/**
+ * Geldartiges Zahlenband OHNE Währungstoken (Security-Auflage): ein Band wie „3.500-6.500 pro
+ * Monat" bliebe von der reinen Währungstoken-Liste unentdeckt – ausgerechnet an der strengsten
+ * Guardrail (O-KUNDE-01). Dieses Muster erfasst zwei Zahlen im Band, gefolgt von einem
+ * Geld-Rhythmuswort.
+ */
+const GELDBAND =
+  /\d[\d.,]*\s?[-–]\s?\d[\d.,]*\s?(pro\s?Monat|monatlich|einmalig|\/\s?Monat|Monatsbereich)/i;
+
 describe('Servicekatalog-Konstanten – Preisfreiheit der Quelle (O-KUNDE-01)', () => {
-  it('keine Konstante trägt ein Währungszeichen, EUR/USD oder einen Prozentwert', () => {
+  it('keine Konstante trägt ein Währungszeichen, EUR/USD, einen Prozentwert oder ein Geldband', () => {
     const alleTexte = [
       ...SERVICEFAMILIEN.flatMap((f) => [f.name, f.outcome, f.kaeufer]),
       ...SERVICE_OFFERS.flatMap((o) => [o.name, o.ergebnis, o.rhythmus]),
@@ -109,8 +118,21 @@ describe('Servicekatalog-Konstanten – Preisfreiheit der Quelle (O-KUNDE-01)', 
       ...LEITPLANKEN.flatMap((l) => [l.titel, l.beschreibung]),
     ].join(' \n ');
 
-    for (const verboten of [/€/, /\bEUR\b/, /\bUSD\b/, /\$/, /\d+\s?%/, /\d[\d.,]*\s?(Euro|Mio)/]) {
+    for (const verboten of [
+      /€/,
+      /\bEUR\b/,
+      /\bUSD\b/,
+      /\$/,
+      /\d+\s?%/,
+      /\d[\d.,]*\s?(Euro|Mio)/,
+      GELDBAND,
+    ]) {
       expect(alleTexte, `Preisangabe „${verboten}"`).not.toMatch(verboten);
     }
+
+    // Negativbeweis: ein WÄHRUNGSLOSES Geldband würde die Guardrail jetzt auslösen (ohne das neue
+    // Muster wäre es durchgerutscht) – die Konstanten tragen keines.
+    expect('3.500-6.500 pro Monat', 'währungsloses Geldband muss auffallen').toMatch(GELDBAND);
+    expect('1200 – 1800 monatlich', 'Geldband mit Gedankenstrich muss auffallen').toMatch(GELDBAND);
   });
 });

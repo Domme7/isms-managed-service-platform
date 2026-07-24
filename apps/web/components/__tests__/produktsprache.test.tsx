@@ -18,7 +18,7 @@
  *    Kontextwechsel (`leerzustand-mandantengrenze.test.tsx`).
  * Verboten ist ausschließlich die META-Kennzeichnung des Produkts als Demo/Simulation.
  *
- * ZWEI DOKUMENTIERTE AUSNAHMEN (Muster „EINE dokumentierte Ausnahme" aus
+ * DREI DOKUMENTIERTE AUSNAHMEN (Muster „EINE dokumentierte Ausnahme" aus
  * `entscheidungen.test.tsx`: Ausnahme auslassen UND ihre Existenz beweisen — die Regel selbst
  * wird nicht abgeschwächt):
  *
@@ -33,6 +33,11 @@
  *  2. **Ein Konzeptzitat**: „kurzlebige Demo- oder Testidentitäten" ist ein wörtlicher
  *     Identitätstyp aus Dok. 19 (Administration, `IDENTITAETSTYPEN`). Ihn umzuformulieren wäre
  *     eine stille Konzeptänderung (Regel Null). Seine Existenz wird unten bewiesen.
+ *  3. **Worttreue Lifecycle-Ergebnisse** (Dok. 16, „Kanonische Phasen"): zwei „Zentrale
+ *     Ergebnisse"-Zellen tragen legitim ein verbotenes Wort („synthetischer Account, Demo-Story,
+ *     …" / „… Simulation …"). MECHANISCH aus `LIFECYCLE_PHASEN.ergebnisse` abgeleitet — nur die
+ *     exakte Zell-Zeichenkette, nie ihre Wörter. Owner-Frage offen (O-WP006-09); Existenz und
+ *     Enge werden unten bewiesen.
  *
  * REICHWEITE: die Inhaltskomponenten ALLER `live`-Orte (Meta-Assertion gegen `NAV_PLACES`),
  * die Zusatzseiten unter „Kunden", die Objekt-360-Seite, die globale Shell und die Anmeldung —
@@ -52,8 +57,10 @@ import { AdministrationContent } from '../administration/AdministrationContent';
 import { EntscheidungenContent } from '../entscheidungen/EntscheidungenContent';
 import { IsmsContent } from '../isms/IsmsContent';
 import { KundenStartContent } from '../kunden/KundenStartContent';
+import { StrukturAssistentContent } from '../kunden/StrukturAssistentContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { ServicesContent } from '../services/ServicesContent';
+import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { AppShell } from '../shell/AppShell';
 import { MissionControlContent } from '../shell/MissionControlContent';
@@ -64,6 +71,7 @@ import { TenantDetailView } from '../twin/TenantDetailView';
 import { TenantOverview } from '../twin/TenantOverview';
 import { TwinContextBar } from '../twin/TwinContextBar';
 import { IDENTITAETSTYPEN } from '../../lib/administration/modell';
+import { LIFECYCLE_PHASEN } from '../../lib/kunden/struktur';
 import { NAV_PLACES, type PlaceId } from '../../lib/shell/places';
 import { DEMO_ROLES, getRole, type DemoRole } from '../../lib/shell/roles';
 import {
@@ -191,10 +199,33 @@ const SEED_MASKEN: readonly string[] = [...seedAnzeigeTexte(DEMO_SEED, null)]
 
 const KONZEPTZITATE: readonly string[] = ['kurzlebige Demo- oder Testidentitäten'];
 
-/** Entfernt die beiden dokumentierten Ausnahmen aus dem gerenderten Text. */
+/* -----------------------------------------------------------------------------
+ * Ausnahme 3: worttreue Lifecycle-Phasen-Ergebnisse (Dok. 16, „Kanonische Phasen")
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Zwei „Zentrale Ergebnisse"-Zellen des Lifecycle-Modells tragen legitim ein verbotenes Wort,
+ * WORTTREU aus Dok. 16 (Abschnitt „Lifecycle-Modell", Unterabschnitt „Kanonische Phasen"):
+ * Phase 0 „synthetischer Account, Demo-Story, …" und Phase 5 „Baseline, Confidence, Simulation,
+ * …". Umschreiben wäre eine stille Konzeptänderung (Regel Null). Der Struktur-Assistent
+ * (`/kunden/struktur`) zeigt sie worttreu; er steht seit O-WP006-09 unter diesem Wächter.
+ *
+ * MECHANISCH und ENG (dasselbe Muster wie SEED_MASKEN und die prozessvokabular-Ausnahme
+ * `EXIT_ACCEPTANCE`): maskiert wird AUSSCHLIESSLICH die exakte, aus `LIFECYCLE_PHASEN.ergebnisse`
+ * abgeleitete Zell-Zeichenkette – nie ihre blanken Wörter. Die Menge schrumpft/wächst automatisch
+ * mit der Konstante, ist kein handgepflegter Freibrief und wird unten gegen die Quelle geprüft.
+ * Die DR-0011-vs-Regel-Null-Owner-Frage bleibt offen (Interim = worttreu belassen, Muster
+ * O-WP032-11: PDF-wörtlicher Produktinhalt, kein Disclaimer über unsere Daten).
+ */
+const LIFECYCLE_KONZEPT_MASKEN: readonly string[] = LIFECYCLE_PHASEN.map((p) => p.ergebnisse)
+  .filter((s) => gefundeneMuster(s).length > 0)
+  .sort((a, b) => b.length - a.length);
+
+/** Entfernt die drei dokumentierten Ausnahmen aus dem gerenderten Text. */
 function ohneAusnahmen(text: string): string {
   let rest = text;
-  for (const maske of [...SEED_MASKEN, ...KONZEPTZITATE]) rest = rest.split(maske).join(' ');
+  for (const maske of [...SEED_MASKEN, ...KONZEPTZITATE, ...LIFECYCLE_KONZEPT_MASKEN])
+    rest = rest.split(maske).join(' ');
   return rest;
 }
 
@@ -304,12 +335,21 @@ const RENDERER_JE_LIVE_ORT = {
         ),
     },
     ...matrix('/kunden', (r, t) => render(<KundenStartContent role={r} tenant={t} />)),
+    // Struktur-Assistent (`/kunden/struktur`, WP-006 Slice 3): Unterseite des Ortes „Kunden",
+    // trägt worttreue Lifecycle-Ergebnisse mit einem verbotenen Wort (enge Ausnahme oben).
+    ...matrix('/kunden/struktur', (r, t) =>
+      render(<StrukturAssistentContent role={r} tenant={t} />),
+    ),
   ],
   isms: matrix('/isms', (r, t) => render(<IsmsContent role={r} tenant={t} />)),
   entscheidungen: matrix('/entscheidungen', (r, t) =>
     render(<EntscheidungenContent role={r} tenant={t} />),
   ),
-  services: matrix('/services', (r, t) => render(<ServicesContent role={r} tenant={t} />)),
+  services: [
+    ...matrix('/services', (r, t) => render(<ServicesContent role={r} tenant={t} />)),
+    // Servicekatalog (`/services/katalog`, WP-006 Slice 2): Unterseite des Ortes „Services".
+    ...matrix('/services/katalog', (r, t) => render(<ServicekatalogContent role={r} tenant={t} />)),
+  ],
   reports: matrix('/reports', (r, t) => render(<ReportsContent role={r} tenant={t} />)),
   wissen: matrix('/wissen', (r, t) => render(<WissenContent role={r} tenant={t} />)),
   administration: matrix('/administration', (r, t) =>
@@ -598,5 +638,32 @@ describe('Produktsprache: keine Demo-/Simulations-Kennzeichnung im Produkttext (
     );
     // Der reale, gerenderte Quellverweis-Slug bleibt trotzdem gedeckt (er ist ein Anzeige-Feld).
     expect(SEED_MASKEN).toContain('demo-workshop-nordwerk');
+
+    // (5) Die Lifecycle-Ausnahme (O-WP006-09) ist quellenbelegt und eng:
+    //   (a) sie ist nicht leer (sonst wäre sie toter Code – der Assistent zeigt sie worttreu).
+    expect(LIFECYCLE_KONZEPT_MASKEN.length).toBeGreaterThan(0);
+    //   (b) jede Maske ist wörtlich ein `ergebnisse`-Wert aus `LIFECYCLE_PHASEN`. Wird die
+    //       Konstante umformuliert, veraltet die Ausnahme nicht still, sondern fällt hier auf.
+    const ergebnisWerte = LIFECYCLE_PHASEN.map((p) => p.ergebnisse);
+    for (const maske of LIFECYCLE_KONZEPT_MASKEN) expect(ergebnisWerte).toContain(maske);
+    //   (c) NEGATIVBEWEIS: die BLANKEN verbotenen Wörter überleben die Maskierung und bleiben
+    //       verboten – maskiert wird nur die exakte, vollständige Zell-Zeichenkette, nie ihre
+    //       Wörter. Erste Assertion: die Maskierung entfernt aus dieser Probe NICHTS.
+    const blank = 'Ein synthetischer Demo-Datenbestand, reine Simulation';
+    expect(gefundeneMuster(ohneAusnahmen(blank))).toEqual(gefundeneMuster(blank));
+    expect(gefundeneMuster(blank)).toEqual([
+      String(/\bDemo\b/i),
+      String(/Demo-(Datenbestand|Mandant|Seed|Welt|Sicht|Simulation|Hinweis|Slice)/i),
+      String(/\bSimulation\b/i),
+      String(/synthetisch/i),
+    ]);
+    //   (d) die Maske schneidet nur das exakte Zell-Teilstück, nie den ganzen Satz (ein leerer
+    //       Rest wäre ein blinder Wächter).
+    const satz = `Zentrale Ergebnisse: ${LIFECYCLE_PHASEN[0].ergebnisse}. Exit Gate: qualifizierter Einstieg.`;
+    const restSatz = ohneAusnahmen(satz);
+    expect(restSatz).not.toContain(LIFECYCLE_PHASEN[0].ergebnisse);
+    expect(restSatz).toContain('Zentrale Ergebnisse:');
+    expect(restSatz.trim().length).toBeGreaterThan(20);
+    expect(gefundeneMuster(restSatz)).toEqual([]);
   });
 });

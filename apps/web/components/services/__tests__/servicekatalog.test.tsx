@@ -30,6 +30,14 @@ function role(roleId: string): DemoRole {
   return found;
 }
 
+/**
+ * Geldartiges Zahlenband OHNE Währungstoken (Security-Auflage): ein Band wie „3.500-6.500 pro
+ * Monat" bliebe von der reinen Währungstoken-Liste unentdeckt – ausgerechnet an der strengsten
+ * Guardrail (O-KUNDE-01). Erfasst zwei Zahlen im Band, gefolgt von einem Geld-Rhythmuswort.
+ */
+const GELDBAND =
+  /\d[\d.,]*\s?[-–]\s?\d[\d.,]*\s?(pro\s?Monat|monatlich|einmalig|\/\s?Monat|Monatsbereich)/i;
+
 describe('Servicekatalog – Slice 2', () => {
   it('AC6: zeigt alle 12 Familien, 15 Offers, 4 Tiefen und 6 Pakete vollständig und quellentreu', () => {
     const { container } = render(
@@ -65,6 +73,7 @@ describe('Servicekatalog – Slice 2', () => {
         /\$/,
         /\d+\s?%/,
         /\d[\d.,]*\s?(Euro|Mio)/,
+        GELDBAND,
       ]) {
         expect(text, `Servicekatalog/${tenantId}: „${verboten}"`).not.toMatch(verboten);
       }
@@ -73,6 +82,9 @@ describe('Servicekatalog – Slice 2', () => {
       expect(text).toMatch(/bewusst ohne Preise|nicht hinterlegt – der Katalog ist bewusst ohne/);
       unmount();
     }
+    // Negativbeweis: ein währungsloses Geldband würde die Guardrail jetzt auslösen (ohne das neue
+    // Muster wäre es durchgerutscht) – die gerenderten Katalogtexte tragen keines.
+    expect('3.500-6.500 pro Monat', 'währungsloses Geldband muss auffallen').toMatch(GELDBAND);
   });
 
   it('AC8: zwei getrennte Herkünfte, keine behauptete Zuordnung Instanz↔Offer', () => {

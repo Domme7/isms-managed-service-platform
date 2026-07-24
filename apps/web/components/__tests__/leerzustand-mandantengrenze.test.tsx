@@ -378,6 +378,29 @@ describe('Servicekatalog und Struktur-Assistent halten die Kundensphäre (P09/FI
       unmount();
     }
   });
+
+  it('keine Betreiber-Portfolio-Inhalte im Struktur-Assistenten (Kundensphäre)', () => {
+    // Defense-in-depth analog zur Kunden-Startseite und zum Servicekatalog: auch die dritte neue
+    // Kundenseite trägt den Portfolio-Ausschluss. Der Assistent rendert nur Rollen-NAMEN und
+    // -Sphären (nicht die betreiberlastige `responsibility`), deshalb hält er die volle
+    // Vier-Muster-Probe – inkl. `/Portfolio/i`, das der Servicekatalog wegen „Portfolio-Struktur"
+    // auslassen muss.
+    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR]) {
+      const { container, unmount } = render(
+        <StrukturAssistentContent role={role('R08')} tenant={tenant(tenantId)} />,
+      );
+      const text = container.textContent ?? '';
+      for (const verboten of [
+        /Portfolio/i,
+        /Auslastung/i,
+        /Profitabilit/i,
+        /Mandantenvergleich/i,
+      ]) {
+        expect(text, `Struktur-Assistent/${tenantId}: „${verboten}"`).not.toMatch(verboten);
+      }
+      unmount();
+    }
+  });
 });
 
 /* -----------------------------------------------------------------------------

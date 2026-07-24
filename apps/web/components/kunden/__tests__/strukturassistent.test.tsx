@@ -38,7 +38,7 @@ function role(roleId: string): DemoRole {
 }
 
 describe('Struktur-Assistent – Slice 3', () => {
-  it('AC10: zeigt alle Strukturen vollständig (11/10/8/9/6/12/9/7) und worttreu', () => {
+  it('AC10: zeigt alle Strukturen vollständig (11/10/10/8/9/6/12/9/7/5) und worttreu', () => {
     const { container } = render(
       <StrukturAssistentContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
