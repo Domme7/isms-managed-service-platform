@@ -399,7 +399,12 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
         window.localStorage.setItem(vk, vv);
         window.localStorage.setItem(tk, tv);
       },
-      [COCKPIT_STORAGE_KEY, serializeCockpitVariante('a'), 'isms-cockpit-theme-v1', 'dunkel'] as const,
+      [
+        COCKPIT_STORAGE_KEY,
+        serializeCockpitVariante('a'),
+        'isms-cockpit-theme-v1',
+        'dunkel',
+      ] as const,
     );
     await page.goto('/cockpit');
     await warteAufSeite(page);
