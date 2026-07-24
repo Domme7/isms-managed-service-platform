@@ -15,7 +15,11 @@ import { describe, expect, it } from 'vitest';
 
 import { DEMO_SEED, DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
 import { CockpitVariantenContent } from '../CockpitVariantenContent';
-import { BADGE_RULES } from '../../../lib/heute/dashboard';
+import { CockpitWarnungen } from '../CockpitWarnungen';
+import { coverageTileStatus, type CockpitStatus } from '../../../lib/cockpit/ampel';
+import { buildCockpitLebenszyklus } from '../../../lib/cockpit/lebenszyklus';
+import { buildCockpitWarnungen } from '../../../lib/cockpit/warnungen';
+import { BADGE_RULES, buildHeuteDashboard } from '../../../lib/heute/dashboard';
 import { MISSION_SECTIONS } from '../../../lib/heute/framing';
 import { varianteForRole } from '../../../lib/heute/rollenvarianten';
 import { worldForRole, getRole, type DemoRole } from '../../../lib/shell/roles';
@@ -62,7 +66,7 @@ describe('CockpitVariantenContent – Kopf und Varianten-Umschalter', () => {
     expect(container.textContent ?? '').not.toContain('seit meinem letzten Besuch verändert');
 
     const schalter = screen
-      .getByRole('group', { name: 'Cockpit-Variante zum Vergleich' })
+      .getByRole('group', { name: 'Cockpit-Ansicht wählen (bleibt gespeichert)' })
       .querySelectorAll('input[type="radio"]');
     expect(schalter).toHaveLength(3);
   });
@@ -407,5 +411,242 @@ describe('CockpitVariantenContent – neutral-fähig und Leerzustände', () => {
     for (const object of DEMO_SEED.objects.filter((o) => o.tenant_id !== TENANT_ID.NORDWERK)) {
       expect(html).not.toContain(object.object_id);
     }
+  });
+});
+
+/* -----------------------------------------------------------------------------
+ * 8. Moderne Dashboard-Sprache – Ampel-Legende, Deckungsringe, Warnungen,
+ *    Lebenszyklus-Leiste, Hell/Dunkel (jedes Element aus echten Daten abgeleitet).
+ * --------------------------------------------------------------------------- */
+
+const ALLE_STATUS: readonly CockpitStatus[] = ['ok', 'warn', 'alert', 'info'];
+
+function statusVon(el: Element): CockpitStatus | undefined {
+  return ALLE_STATUS.find((s) => el.classList.contains(`ck-status--${s}`));
+}
+
+describe('Cockpit – Ampel-Legende (nie nur Farbe)', () => {
+  it('führt EINMAL vier Zustände mit Symbol + Text und der Ehrlichkeitszeile', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.NORDWERK)}
+        variante="a"
+      />,
+    );
+    const legende = container.querySelector('.ck-legende') as HTMLElement;
+    expect(legende).not.toBeNull();
+    expect(legende.querySelectorAll('.ck-legende-item')).toHaveLength(4);
+    // Jeder Eintrag trägt ein Symbol (Form) – Farbe ist nie alleinige Information.
+    for (const punkt of Array.from(legende.querySelectorAll('.ck-legende-punkt'))) {
+      expect((punkt.textContent ?? '').length).toBeGreaterThan(0);
+    }
+    expect(legende.textContent ?? '').toMatch(/kein Prüfergebnis/);
+  });
+
+  it('zeigt für den leeren Mandanten keine Legende (keine Farben ohne Bestand)', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.FINOVIA)}
+        variante="a"
+      />,
+    );
+    expect(container.querySelector('.ck-legende')).toBeNull();
+  });
+});
+
+describe('Cockpit – KPI-Band mit Deckungsringen (echte Werte, funktionale Links)', () => {
+  it('rendert je Abdeckungskachel einen Ring, eingefärbt exakt nach der Ampel-Regel', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.NORDWERK)}
+        variante="a"
+      />,
+    );
+    const dashboard = buildHeuteDashboard(TENANT_ID.NORDWERK);
+    if (!dashboard) throw new Error('Dashboard fehlt');
+
+    const ringKacheln = buehne(container).querySelectorAll('.ck-kpi--ring');
+    expect(ringKacheln).toHaveLength(dashboard.coverage.length);
+    expect(buehne(container).querySelectorAll('.ck-ring svg')).toHaveLength(
+      dashboard.coverage.length,
+    );
+
+    // Die Farbverteilung folgt der Ableitung, nicht einer Konstante.
+    const erwartet = dashboard.coverage.map((t) => coverageTileStatus(t)).sort();
+    const tatsaechlich = Array.from(ringKacheln)
+      .map((el) => statusVon(el) ?? 'info')
+      .sort();
+    expect(tatsaechlich).toEqual(erwartet);
+  });
+
+  it('jede KPI-Kachel ist ein funktionaler Link zu ihrer Quelle (kein toter Klick)', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.NORDWERK)}
+        variante="a"
+      />,
+    );
+    const kacheln = buehne(container).querySelectorAll('a.ck-kpi');
+    // Zwei Zahl-KPIs + vier Deckungsringe.
+    expect(kacheln.length).toBe(2 + buildHeuteDashboard(TENANT_ID.NORDWERK)!.coverage.length);
+    for (const kachel of Array.from(kacheln)) {
+      const href = kachel.getAttribute('href') ?? '';
+      expect(href.length, 'leerer Link').toBeGreaterThan(0);
+      expect(href, 'toter Link').not.toBe('#');
+    }
+  });
+
+  it('keine Ring-/KPI-Zahl ist ein Prozentwert (immer „x von y")', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.NORDWERK)}
+        variante="a"
+      />,
+    );
+    for (const zahl of Array.from(
+      buehne(container).querySelectorAll('.ck-kpi-wert, .ck-kpi-num'),
+    )) {
+      expect(zahl.textContent ?? '').not.toMatch(/%|Prozent/);
+    }
+  });
+});
+
+describe('Cockpit – Warnungen aus echten Lücken', () => {
+  it('rendert exakt die abgeleiteten Warnungen des aktiven Mandanten, jede mit gültigem Link', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.NORDWERK)}
+        variante="a"
+      />,
+    );
+    const abgeleitet = buildCockpitWarnungen(TENANT_ID.NORDWERK);
+    expect(abgeleitet.length).toBeGreaterThan(0);
+
+    const karten = container.querySelectorAll('.ck-warnung');
+    expect(karten).toHaveLength(abgeleitet.length);
+    for (const karte of Array.from(karten)) {
+      const ziel = karte.querySelector('a.ck-warnung-link');
+      const href = ziel?.getAttribute('href') ?? '';
+      expect(href.length).toBeGreaterThan(0);
+      expect(href).not.toBe('#');
+    }
+  });
+
+  it('leerer Mandant: ehrlicher Leerzustand, keine erfundene Warnung, kein fremder Mandant', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.MEDICORE)}
+        variante="a"
+      />,
+    );
+    expect(container.querySelectorAll('.ck-warnung')).toHaveLength(0);
+    expect(container.querySelector('.ck-warnungen-leer')).not.toBeNull();
+    for (const fremd of DEMO_TENANTS.filter((t) => t.tenant_id !== TENANT_ID.MEDICORE)) {
+      expect(container.innerHTML).not.toContain(fremd.display_name);
+      expect(container.innerHTML).not.toContain(fremd.tenant_id);
+    }
+  });
+
+  it('Objekt-Lücken führen ZU den Lückenobjekten (Objekt-360-Links, U-09)', () => {
+    // Direkter Render des Panels mit einer abgeleitet-geformten Warnung: die betroffenen Objekte
+    // erscheinen je als Link auf ihren exakten Objekt-360-Pfad (kein toter Link).
+    const { container } = render(
+      <CockpitWarnungen
+        warnungen={[
+          {
+            id: 'controls_ohne_nachweis',
+            status: 'warn',
+            titel: '2 Controls ohne Nachweis',
+            begruendung: 'Diese Auswahl trägt keine eingehende Nachweis-Beziehung.',
+            ziel: { label: 'Zum Control-Abschnitt', href: '/isms#isms-controls' },
+            objekte: [
+              { name: 'Zugriffskontrolle', href: '/twin/tenant-nordwerk/objekt/ctrl-a' },
+              { name: 'Protokollierung', href: '/twin/tenant-nordwerk/objekt/ctrl-b' },
+            ],
+          },
+        ]}
+      />,
+    );
+    const links = Array.from(container.querySelectorAll('a.ck-warnung-objekt-link'));
+    expect(links.map((a) => a.getAttribute('href'))).toEqual([
+      '/twin/tenant-nordwerk/objekt/ctrl-a',
+      '/twin/tenant-nordwerk/objekt/ctrl-b',
+    ]);
+    expect(container.querySelector('a.ck-warnung-link')?.getAttribute('href')).toBe(
+      '/isms#isms-controls',
+    );
+  });
+});
+
+describe('Cockpit – Lebenszyklus-Ampelleiste (echte Verteilung)', () => {
+  it('Segmentanzahl und Grundgesamtheit entsprechen der Ableitung; Glosse „kein Prüfergebnis"', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.NORDWERK)}
+        variante="a"
+      />,
+    );
+    const bar = buildCockpitLebenszyklus(TENANT_ID.NORDWERK);
+    if (!bar) throw new Error('Lebenszyklus-Leiste fehlt');
+
+    const leiste = container.querySelector('.ck-lebenszyklus') as HTMLElement;
+    expect(leiste).not.toBeNull();
+    expect(leiste.querySelectorAll('.ck-lz-bar-seg')).toHaveLength(bar.segments.length);
+    expect(leiste.querySelectorAll('.ck-lz-legende-item')).toHaveLength(bar.segments.length);
+    expect(leiste.textContent ?? '').toMatch(/kein Prüfergebnis/);
+  });
+
+  it('leerer Mandant: keine Leiste (ehrlicher Leerzustand)', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.FINOVIA)}
+        variante="a"
+      />,
+    );
+    expect(container.querySelector('.ck-lebenszyklus')).toBeNull();
+  });
+});
+
+describe('Cockpit – Hell/Dunkel und Startseiten-Rückweg', () => {
+  it('schaltet Hell/Dunkel über einen benannten Umschalter (nie nur Farbe)', () => {
+    window.localStorage.clear();
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.NORDWERK)}
+        variante="a"
+      />,
+    );
+    const wrapper = container.querySelector('.ck-cockpit') as HTMLElement;
+    expect(wrapper.getAttribute('data-ck-theme')).toBe('hell');
+
+    const toggle = screen.getByRole('button', { name: /Dunkles Design/ });
+    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+    fireEvent.click(toggle);
+    expect(wrapper.getAttribute('data-ck-theme')).toBe('dunkel');
+    expect(screen.getByRole('button', { name: /Helles Design/ }).getAttribute('aria-pressed')).toBe(
+      'true',
+    );
+  });
+
+  it('führt zurück zur ausführlichen Tagesansicht „Heute" (Einstiegslink umgekehrt)', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.NORDWERK)}
+        variante="a"
+      />,
+    );
+    const heute = container.querySelector('a[href="/heute"]');
+    expect(heute).not.toBeNull();
   });
 });

@@ -2,8 +2,12 @@
 
 /**
  * Einstieg `/` (WP-011): leitet auf einen sinnvollen Default weiter.
- *  - angemeldet (Simulation)  -> `/heute` (Standard-Startpunkt, Dok. 06 06-D02)
+ *  - angemeldet (Simulation)  -> `/cockpit` (Startseite nach Login, DR-0010 Nr. 3)
  *  - nicht angemeldet         -> `/login` (Rollen-/Mandanten-Simulation)
+ *
+ * COCKPIT ALS STARTSEITE (DR-0010 Nr. 3): Der Owner hat das Cockpit als Einstieg nach der
+ * Anmeldung freigegeben; die ausführliche Tagesansicht „Heute" bleibt über den Cockpit-Link und
+ * die Navigation erreichbar.
  *
  * Da die Auswahl clientseitig (localStorage) liegt, erfolgt die Weiterleitung nach dem Mount.
  * Ohne JavaScript bleiben die expliziten Links als Fallback funktionsfähig.
@@ -19,7 +23,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!hydrated) return;
-    router.replace(session ? '/heute' : '/login');
+    router.replace(session ? '/cockpit' : '/login');
   }, [hydrated, session, router]);
 
   return (
@@ -33,8 +37,8 @@ export default function Home() {
         <Link className="tw-cta" href="/login">
           Zur Anmeldung →
         </Link>
-        <Link className="tw-cta" href="/heute">
-          Zur App (Heute) →
+        <Link className="tw-cta" href="/cockpit">
+          Zum Cockpit →
         </Link>
       </p>
     </main>

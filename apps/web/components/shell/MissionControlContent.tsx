@@ -192,13 +192,14 @@ export function MissionControlContent({
 
           <KundenbereichEinstieg role={role} tenant={tenant} />
 
-          {/* Einstieg in den Cockpit-Varianten-Vergleich (WP-025): drei Entwürfe für diesen
-              Startpunkt auf demselben Datenbestand. Kein neuer Hauptnav-Ort – die Seite hängt
-              unter „Heute" (`/cockpit`, Nav-Match in `lib/shell/places.ts`). Rollen-neutrale,
-              gleiche Zeile für jede Perspektive (eigene Klasse `ht-cockpit`). */}
+          {/* Einstiegslink UMGEKEHRT (DR-0010 Nr. 3): Das Cockpit ist jetzt die Startseite nach
+              der Anmeldung; „Heute" ist die ausführliche Tagesansicht dahinter. Diese Seite führt
+              deshalb ZURÜCK zum Cockpit (vorher führte das Cockpit von hier weg). Kein neuer
+              Hauptnav-Ort – `/cockpit` bleibt unter „Heute" (Nav-Match in `lib/shell/places.ts`).
+              Rollen-neutrale, gleiche Zeile für jede Perspektive (eigene Klasse `ht-cockpit`). */}
           <p className="ht-cockpit">
             <Link className="tw-cta" href="/cockpit">
-              Drei Cockpit-Varianten für diesen Startpunkt vergleichen →
+              Zum Cockpit (Startseite mit Überblick und Warnungen) →
             </Link>
           </p>
 

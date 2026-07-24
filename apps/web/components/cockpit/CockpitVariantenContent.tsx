@@ -35,9 +35,16 @@
  * Wächter den GESAMTEN gerenderten Text prüfen – die echte Seite startet in Standardtiefe 1.
  */
 import Link from 'next/link';
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
+
+import { buildCockpitLebenszyklus } from '../../lib/cockpit/lebenszyklus';
+import { buildCockpitWarnungen } from '../../lib/cockpit/warnungen';
+import { CockpitKpiBand } from './CockpitKpiBand';
+import { CockpitLebenszyklusLeiste } from './CockpitLebenszyklusLeiste';
+import { CockpitLegende } from './CockpitLegende';
+import { CockpitWarnungen } from './CockpitWarnungen';
 
 import {
   anzahl,
@@ -88,6 +95,10 @@ import { PageContextBar } from '../shell/PageContextBar';
 import { ScopeKontextWert } from '../shell/ScopeKontext';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
+/** Hell/Dunkel des Cockpits – reine Anzeige, mandanten-/rollenfrei persistiert (Cross-Tenant). */
+type CockpitTheme = 'hell' | 'dunkel';
+const COCKPIT_THEME_KEY = 'isms-cockpit-theme-v1';
+
 export function CockpitVariantenContent({
   role,
   tenant,
@@ -118,16 +129,47 @@ export function CockpitVariantenContent({
   // die echte Persistenz einer bevorzugten Tiefe gehört zu WP-029 (O-WP025-01).
   const [tiefe, setTiefe] = useState<Detailtiefe>(initialTiefe);
 
+  // Hell/Dunkel – reiner Anzeigezustand, mandanten-/rollenfrei persistiert (Cross-Tenant-Schutz).
+  const [theme, setTheme] = useState<CockpitTheme>('hell');
+  useEffect(() => {
+    try {
+      const gespeichert = window.localStorage.getItem(COCKPIT_THEME_KEY);
+      if (gespeichert === 'hell' || gespeichert === 'dunkel') setTheme(gespeichert);
+    } catch {
+      // Speicher nicht verfügbar (z. B. privater Modus) – Hell bleibt.
+    }
+  }, []);
+  const wechsleTheme = () => {
+    setTheme((prev) => {
+      const next: CockpitTheme = prev === 'dunkel' ? 'hell' : 'dunkel';
+      try {
+        window.localStorage.setItem(COCKPIT_THEME_KEY, next);
+      } catch {
+        // Speicher nicht verfügbar – die Wahl gilt dann nur für diese Sitzung.
+      }
+      return next;
+    });
+  };
+
   const model = buildMissionControl(tenant.tenant_id);
   const dashboard = buildHeuteDashboard(tenant.tenant_id);
   const world = role ? worldForRole(role) : null;
+  // „Nichts nur Show": Warnungen und Lebenszyklus-Leiste sind eigenständige, mandantengescopte
+  // Ableitungen (kein hartkodierter Wert, keine erfundene Warnung, ehrlicher Leerzustand).
+  const warnungen = buildCockpitWarnungen(tenant.tenant_id);
+  const lebenszyklus = buildCockpitLebenszyklus(tenant.tenant_id);
 
   return (
-    <>
-      <p className="tw-eyebrow">Cockpit · Varianten im Vergleich</p>
-      <h1>Cockpit</h1>
+    <div className="ck-cockpit" data-ck-theme={theme}>
+      <div className="ck-kopf">
+        <div>
+          <p className="tw-eyebrow">Cockpit</p>
+          <h1>Cockpit</h1>
+        </div>
+        <ThemeSchalter theme={theme} onToggle={wechsleTheme} />
+      </div>
 
-      {/* SICHTBARE LEITFRAGE = die Frage, die jede Variante beantwortet (DR-0013 Nr. 1). Die
+      {/* SICHTBARE LEITFRAGE = die Frage, die das Cockpit beantwortet (DR-0013 Nr. 1). Die
           aspirative Mission-Control-Frage des Screenkatalogs („seit meinem letzten Besuch …")
           wird bewusst NICHT geführt – sie hat keinen Träger und stünde nur, um im nächsten Satz
           zurückgenommen zu werden (siehe „Was hier bewusst nicht steht"). */}
@@ -136,9 +178,9 @@ export function CockpitVariantenContent({
       </p>
 
       <p className="tw-lead">
-        Drei Entwürfe für denselben Startpunkt auf demselben Datenbestand – zum Vergleich
-        umschaltbar. Alle drei zeigen denselben belegten Stand des aktiven Mandanten; sie
-        unterscheiden sich im Aufbau und im Erstkontakt, nicht in den Daten.
+        Ihr Cockpit auf den Datenbestand des aktiven Mandanten – farbcodiert nach erfasster
+        Datenlage. Jede Zahl, jeder Ring und jede Warnung ist abgeleitet und führt zu ihrer Quelle;
+        die Ansicht ist persönlich wählbar und bleibt erhalten.
       </p>
 
       {model && dashboard ? (
@@ -146,6 +188,10 @@ export function CockpitVariantenContent({
           <CockpitContextBar model={model} role={role} tenant={tenant} world={world} />
 
           <VariantenSchalter variante={aktiveVariante} onChange={wechsleVariante} />
+
+          {/* Ampel-Legende EINMAL oben – erklärt jede Farbe, bevor sie als Ring/Balken/Warnung
+              auftaucht (nur bei Bestand; ein leerer Mandant zeigt keine Farben). */}
+          {dashboard.isEmpty ? null : <CockpitLegende />}
 
           {/* Der `data-cockpit-variante`-Anker macht die aktive Variante für die visuelle
               Abnahme (`qa:visual`) und die Wächter eindeutig adressierbar. */}
@@ -164,6 +210,21 @@ export function CockpitVariantenContent({
               <VarianteC dashboard={dashboard} role={role} world={world} />
             )}
           </div>
+
+          {/* Warnungen aus echten Lücken (immer sichtbar; leerer Mandant = ehrlicher
+              Leerzustand ohne erfundene Warnung) und die Lebenszyklus-Ampelleiste (nur bei
+              Bestand). Beide leben außerhalb der Variantenbühne – die moderne Datensprache gilt
+              für alle drei Ansichten. */}
+          <CockpitWarnungen warnungen={warnungen} />
+          {lebenszyklus ? <CockpitLebenszyklusLeiste bar={lebenszyklus} /> : null}
+
+          {/* Cockpit ist die Startseite; die ausführliche Tagesansicht „Heute" bleibt erreichbar
+              (Einstiegslink umgekehrt – DR-0010 Nr. 3). */}
+          <p className="ck-heute-link">
+            <Link className="tw-cta" href="/heute">
+              Zur ausführlichen Tagesansicht „Heute" →
+            </Link>
+          </p>
 
           <CockpitLuecken />
 
@@ -187,7 +248,28 @@ export function CockpitVariantenContent({
           </p>
         </div>
       )}
-    </>
+    </div>
+  );
+}
+
+/* -----------------------------------------------------------------------------
+ * Hell/Dunkel-Umschalter (Text + Zustand, nie nur Farbe – 06-D11)
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Umschalter Hell/Dunkel. Er kennt seinen Zustand über `aria-pressed`, und die Beschriftung
+ * benennt die AKTION („Dunkles Design" / „Helles Design") – die Farbe ist nie die einzige
+ * Information. Der Dunkelmodus ist auf den Cockpit-Teilbaum begrenzt (`.ck-cockpit[data-ck-theme]`).
+ */
+function ThemeSchalter({ theme, onToggle }: { theme: CockpitTheme; onToggle: () => void }) {
+  const dunkel = theme === 'dunkel';
+  return (
+    <button type="button" className="ck-theme-toggle" aria-pressed={dunkel} onClick={onToggle}>
+      <span aria-hidden="true" className="ck-theme-icon">
+        {dunkel ? '☾' : '☀'}
+      </span>
+      {dunkel ? 'Helles Design' : 'Dunkles Design'}
+    </button>
   );
 }
 
@@ -205,7 +287,7 @@ function VariantenSchalter({
   const gruppe = useId();
   return (
     <fieldset className="ck-schalter">
-      <legend>Cockpit-Variante zum Vergleich</legend>
+      <legend>Cockpit-Ansicht wählen (bleibt gespeichert)</legend>
       <div className="ck-schalter-optionen">
         {COCKPIT_VARIANTEN.map((meta) => (
           <label
@@ -330,11 +412,17 @@ function VarianteA({ dashboard, role }: { dashboard: HeuteDashboardModel; role: 
       {dashboard.isEmpty && dashboard.emptyTile ? (
         <EmptyTenantKachel tile={dashboard.emptyTile} />
       ) : (
-        <ul className="db-grid" aria-label="Kacheln aus belegten Daten">
-          {sichtbar.map((id) => (
-            <li key={id}>{kacheln.get(id)}</li>
-          ))}
-        </ul>
+        <>
+          {/* Modernes KPI-Band mit Deckungsringen (Überblick) … */}
+          <CockpitKpiBand dashboard={dashboard} />
+          {/* … und darunter die dichte Kachelmatrix mit Drill-down je Kachel (Detail). */}
+          <h3 className="ck-detail-titel">Im Detail</h3>
+          <ul className="db-grid" aria-label="Kacheln aus belegten Daten">
+            {sichtbar.map((id) => (
+              <li key={id}>{kacheln.get(id)}</li>
+            ))}
+          </ul>
+        </>
       )}
     </section>
   );
@@ -677,11 +765,17 @@ function VarianteC({
       {dashboard.isEmpty && dashboard.emptyTile ? (
         <EmptyTenantKachel tile={dashboard.emptyTile} />
       ) : (
-        <ul className="db-grid" aria-label="Rollengewichtete Kacheln aus belegten Daten">
-          {sichtbar.map((id) => (
-            <li key={id}>{kacheln.get(id)}</li>
-          ))}
-        </ul>
+        <>
+          {/* Modernes KPI-Band mit Deckungsringen (Überblick, rollenunabhängig) … */}
+          <CockpitKpiBand dashboard={dashboard} />
+          {/* … darunter die rollengewichtete Kachelmatrix (Detail, Reihenfolge = Rollenfokus). */}
+          <h3 className="ck-detail-titel">Im Detail – rollengewichtet</h3>
+          <ul className="db-grid" aria-label="Rollengewichtete Kacheln aus belegten Daten">
+            {sichtbar.map((id) => (
+              <li key={id}>{kacheln.get(id)}</li>
+            ))}
+          </ul>
+        </>
       )}
     </section>
   );

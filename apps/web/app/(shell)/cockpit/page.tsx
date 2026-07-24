@@ -1,9 +1,11 @@
 /**
- * `/cockpit` – Vergleich der drei Cockpit-Start-Varianten (WP-025, DR-0010 Nr. 3).
+ * `/cockpit` – modernes Cockpit und Startseite nach der Anmeldung (WP-025, DR-0010 Nr. 3).
  *
  * KEIN neuer Hauptnav-Ort (06-D01, acht Orte fix): Die Seite hängt unter „Heute" (Navigations-
- * Match in `lib/shell/places.ts`) und ist von dort verlinkt. Sie dient dem visuellen Owner-
- * Vergleich; danach hält der Sprint an (Owner wählt Variante/Hybrid, O-WP025-05).
+ * Match in `lib/shell/places.ts`). Der Owner hat die moderne Dashboard-Sprache (Ampeln,
+ * Deckungsringe, Warnungen, Lebenszyklus-Leiste) und das Cockpit als Einstieg freigegeben; die
+ * A/B/C-Ansichten bleiben als dauerhafte Personalisierung (DR-0012 Stufe A). „Heute" ist die
+ * ausführliche Tagesansicht dahinter und über den Cockpit-Link erreichbar.
  */
 import { CockpitView } from '../../../components/cockpit/CockpitView';
 

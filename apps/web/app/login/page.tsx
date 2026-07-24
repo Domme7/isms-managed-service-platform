@@ -58,7 +58,9 @@ export default function LoginPage() {
             onSubmit={(tenantId) => {
               // Neutraler Einstieg (DR-0009): keine Rolle beim Anmelden – Wahl in der App.
               signIn(null, tenantId);
-              router.push('/heute');
+              // Cockpit ist seit DR-0010 Nr. 3 die Startseite nach der Anmeldung; „Heute" bleibt
+              // als ausführliche Tagesansicht über den Cockpit-Link und die Navigation erreichbar.
+              router.push('/cockpit');
             }}
           />
         </div>

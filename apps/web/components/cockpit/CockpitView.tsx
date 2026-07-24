@@ -74,8 +74,8 @@ export function CockpitView() {
         <div className="tw-empty" role="note">
           <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Kein Mandant gewählt</h2>
           <p style={{ marginTop: 0 }}>
-            Es ist kein Mandant gewählt. Wählen Sie einen Mandanten, um die Cockpit-Varianten zu
-            vergleichen – die Rollenwahl ist danach optional in der Kopfleiste möglich.
+            Es ist kein Mandant gewählt. Wählen Sie einen Mandanten, um das Cockpit zu öffnen – die
+            Rollenwahl ist danach optional in der Kopfleiste möglich.
           </p>
           <p style={{ marginBottom: 0 }}>
             <Link className="tw-cta" href="/login">
