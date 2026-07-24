@@ -1,5 +1,10 @@
 # Active Work Package
 
+> **👉 Owner-Vision, alle Entscheidungen & Fahrplan: [`OWNER_VISION_UND_BACKLOG.md`](OWNER_VISION_UND_BACKLOG.md).**
+> **Aktiv (2026-07-24):** **Cockpit-Redesign ([DR-0016]:** kompaktes Grafik-Dashboard + Drill-down + Tauch-
+> Animation statt Langscroll) als nächster großer UX-Schritt · **Demo-Welt WP-021** (Slice 1 Nordstern
+> abgenommen; Slices 3–6 offen). Vollständige Feinsequenz: `OWNER_VISION_UND_BACKLOG.md` §4.
+
 > ## AUTONOMIE-AUFTRAG (Owner, 2026-07-23/24)
 > „Bau das Produkt fertig, so weit es geht, ohne mich noch etwas zu fragen. Wenn doch etwas
 > kommt, das eine Antwort bräuchte, mach einfach mit etwas anderem weiter." **Verbindlich:**

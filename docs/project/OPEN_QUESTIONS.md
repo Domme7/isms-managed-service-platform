@@ -240,3 +240,22 @@ Variantenwahl, Leitfrage-Wortlaut, Customer-Workspace-Kopf). Beim Bau des modern
 | O-WP025-08 | **Dunkelmodus** ist auf den Cockpit-Teilbaum begrenzt; ein app-weites Theme-Control und das Ziehen der `--ck-*`-Tokens über die anderen Seiten ist Folgeschritt | Rollout-Frage | Cockpit hell/dunkel umschaltbar; Rest folgt beim Modern-Rollout (DR-0015) | Product (Modern-Rollout) |
 | O-WP025-09 | Interne Doku-Kommentare in `lib/cockpit/varianten.ts` sprechen noch von „Vergleich" (nicht nutzersichtbar; sichtbares Framing ist bereits Personalisierung) | Code-Kosmetik | **im Cockpit-Fix-Pass erledigt** (Kommentare auf „Personalisierung/Stile" umgeschrieben) | erledigt |
 | O-WP025-10 | **FOUC im Dunkelmodus:** Dunkel-Nutzer sehen beim Laden einen 1-Frame-Hellblitz (Theme-Attribut sitzt auf dem client-gerenderten, gescopten `.ck-cockpit`, Initial-State `hell`). Ein Pre-Hydration-Inline-Script ist hier NICHT risikoarm (Hydration-Mismatch, kein `suppressHydrationWarning` am Root) | Politur-Frage | bewusst nicht implementiert; sauber erst mit dokument-root-getragenem Theme oder `suppressHydrationWarning`-Muster (next-themes-Stil) — koppelt an das app-weite Theme-Control (O-WP025-08) | Product / UX (beim Modern-Rollout) |
+
+## WP-021 – Demo-Welt (fünf reiche Dok-16-Firmen, DR-0015)
+
+Slice 1 (Nordstern tief) gebaut und abgenommen (qa/domain/security FREIGABE, Konzept mit Auflagen;
+995 Tests grün, axe 0). Die bewussten Deckungslücken lassen die Cockpit-Ampeln echt leuchten.
+
+| ID | Frage | Art | Aktueller Umgang | Owner / Gate |
+|---|---|---|---|---|
+| O-WP021-01 | **ID-Namespace:** Objekt-IDs bleiben im stabilen `nordwerk-*`-Namespace (tenant_id `tenant-nordwerk`), Anzeigename = Nordstern; Beziehungs-IDs tragen `nordstern-rel-*` | reversible Namenskonsistenz | so belassen (funktionslos, Isolation läuft über `tenant_id`); Kopfnotiz in `nordstern-graph.ts` präzisiert die zwei Präfixe | reversibel (Data-Graph) |
+| O-WP021-02 | **Verbleib der Dok-03-Firmen** (Consulting Operator, Finovia, MediCore) neben den fünf Dok-16-Firmen — ergänzen, ersetzen oder migrieren? | Konzeptspannung (O-WP006-01-Umfeld) | Slice 1: Nordstern (= umbenanntes Nordwerk) + die drei Dok-03-Firmen bleiben; Slices 3–6 fügen die vier weiteren Dok-16-Firmen hinzu | Owner / Concept beim WP-021-Vollausbau |
+| O-WP021-03 | **Risiko-Primärmethode** der Demo (5×5 Likelihood/Impact vs. semi-quant 0–100) | Modell-/Owner-Frage (koppelt CCP-008) | in Slice 7 (gated) zu entscheiden; Slice 1 trägt keine Score-Werte | Owner (mit CCP-008) |
+| O-WP021-04 | **UI-Konsumschicht** der synthetischen Bewertungen (wie Reifegrad/Risiko-Level im Cockpit/ISMS gerendert werden) | Folge-WP (Slice 7) | benannt; kommt mit Slice 7 nach CCP-008-Freigabe | Product / Owner |
+| O-WP021-05 | **Szenen-/Dramaturgie-Umfang je Firma** (Tiefe von GreenGrid-M&A, Rheinbank-Regulierung …) | Scope-Frage | Slice 1 = Nordstern-Manufacturing-Storyline; Slices 3–6 je Firma | Concept / Owner |
+| O-WP021-06 | **Trust-/Confidence-Verdichtung** über das Portfolio (aggregierte Vertrauensanzeige) | Konzeptlücke | Slice 1: Trust-State je Objekt belegt; Aggregation offen | Concept (WP-021-Umfeld) |
+| O-WP021-07 | „`packages/db` unberührt" vs. „Tests grün": die db-Count-Fixtures kodieren Seed-Zahlen hart | Anweisungs-Kollision | **aufgelöst:** db-Source/Logik unberührt, nur Count-Konstanten wahrheitsgemäß nachgezogen | erledigt |
+| O-WP021-08 | `scripts/update_manifest.py` regeneriert `docs/concept/MANIFEST.json`, **nicht** `seed-manifest.json` (handgepflegt, per Tests verifiziert) | Doku-Ungenauigkeit | seed-manifest bleibt handgepflegt; Doc/Skript angleichen | program-manager |
+| O-WP021-09 | 2 additive deutsche Kanten-Labels (`located_at`→„angesiedelt an", `supports`→„unterstützt") in `lib/twin/data.ts`, damit neue Kanten nicht snake_case rendern | kleiner Scope-Hinweis | rein additiv (Fail-soft war da) | erledigt |
+| O-WP021-10 | **Namenskollision:** „Nordstern" ist in Dok. 06 eine Bank, in Dok. 16 der Fertigungskonzern | Konzept-Quellenspannung | Dok-16-Bedeutung (Fertiger) für die Demo-Firma verwendet; Dok-06-Vorkommen unberührt | Concept Author (bestätigen) |
+| O-WP021-11 | Netzsegmentierungs-Control an A.8.20 statt des präziseren A.8.22 (synthetischer ISO-Katalog, reale Annex-A-Nummern) | Framework-Mapping-Präzision | so belassen (Slice 1, synthetisch); optional A.8.22-Kante in einem Mapping-Slice | Domain (späterer Slice) |

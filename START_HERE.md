@@ -1,5 +1,10 @@
 # START HERE
 
+> **👉 Aktueller Produktstand, Owner-Vision & Backlog (2026-07-24): [`docs/project/OWNER_VISION_UND_BACKLOG.md`](docs/project/OWNER_VISION_UND_BACKLOG.md).**
+> Der untenstehende Abschnitt beschreibt die ursprüngliche Konzept→Umsetzung-Übergabe (Phase 0). Das Produkt
+> ist inzwischen **weit gebaut** (modernes Cockpit, Einstiegswelt, reiche Demo-Welt Slice 1) — siehe
+> `docs/project/CURRENT_STATE.md`.
+
 ## Zweck
 
 Dieses Repository-Paket ist die verbindliche Übergabe von der Konzeptphase in die kontrollierte Umsetzung der **ISMS Managed Service Platform**.

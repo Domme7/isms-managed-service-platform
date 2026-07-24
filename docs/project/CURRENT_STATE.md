@@ -1,6 +1,16 @@
 # Current State
 
-**Stand (2026-07-24):** **Produktkorrektur-Sprint (DR-0010) weit fortgeschritten.** Autonomer
+> **👉 Owner-Vision, ALLE Entscheidungen & Backlog: [`OWNER_VISION_UND_BACKLOG.md`](OWNER_VISION_UND_BACKLOG.md) — dort zuerst lesen.**
+
+**Stand (2026-07-24, AKTUELL):** Modernes **Cockpit fertig** (hell/dunkel, Ampeln/Warnungen/Deckungsringe,
+„nichts nur Show", [DR-0014]), **Einstiegswelt** (Landing `/willkommen` + getrennte Kunde/Berater-Login-Welten)
+und **WP-021 Slice 1** (Nordstern tief → Cockpit-Ampeln leuchten amber) **abgenommen**. **995 Tests grün**,
+axe 0 (21 Motive), CI grün, Seed 1.3.0. **Owner-Feedback → Cockpit-Redesign** (kompaktes Grafik-Dashboard +
+Drill-down + „Eintauch"-Animation statt Langscroll, [DR-0016]) = nächster großer UX-Schritt. Nächste Schritte
+& offene Fragen: `OWNER_VISION_UND_BACKLOG.md`. — *Der folgende Abschnitt ist der frühere Sprint-Stand
+(WP-028/032), historisch:*
+
+**Stand (Sprint-Beginn):** **Produktkorrektur-Sprint (DR-0010) weit fortgeschritten.** Autonomer
 Weiterbau ohne Rückfragen (Owner-Auftrag, `ACTIVE_WORK_PACKAGE.md`). Zuletzt: der komplette
 **Usability-Reframe „Antwort-Modus statt Rechtfertigung"** (WP-028, DR-0013) und die drei letzten
 Navigations-Orte **Reports · Wissen · Administration** (WP-032) — **alle acht Orte der Shell sind
