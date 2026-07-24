@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -102,19 +103,25 @@ def main() -> None:
     if offene_findings:
         fail('offene Findings fehlen in CURRENT_STATE.md: ' + ', '.join(offene_findings))
 
-    skip_dirs = {'.git', 'node_modules', 'dist', '.next', '.turbo', 'build', 'coverage'}
-    for p in ROOT.rglob('*'):
-        if not p.is_file() or skip_dirs & set(p.parts):
-            continue
-        if p.suffix.lower() in {'.png','.jpg','.jpeg','.pdf','.docx','.zip'}:
-            continue
-        try:
-            text = p.read_text(encoding='utf-8')
-        except UnicodeDecodeError:
-            continue
-        for pattern in SECRET_PATTERNS:
-            if pattern.search(text):
-                fail(f'possible secret pattern in {p.relative_to(ROOT)}')
+    # os.walk mit Verzeichnis-Pruning statt rglob('*'): schwere/ephemere Verzeichnisse
+    # (node_modules, Git-Worktrees unter .claude/worktrees, Build-Artefakte) werden gar nicht
+    # erst betreten. rglob('*') crasht sonst beim Traversieren tiefer/langer node_modules-Pfade
+    # (WinError 3), noch bevor der Skip greift. Diese Dirs tragen keinen Produktcode.
+    skip_dirs = {'.git', 'node_modules', 'dist', '.next', '.next-qa', '.turbo', 'build', 'coverage', 'worktrees'}
+    skip_suffixes = {'.png', '.jpg', '.jpeg', '.pdf', '.docx', '.zip'}
+    for dirpath, dirnames, filenames in os.walk(ROOT):
+        dirnames[:] = [d for d in dirnames if d not in skip_dirs]
+        for name in filenames:
+            p = Path(dirpath) / name
+            if p.suffix.lower() in skip_suffixes:
+                continue
+            try:
+                text = p.read_text(encoding='utf-8')
+            except (UnicodeDecodeError, OSError):
+                continue
+            for pattern in SECRET_PATTERNS:
+                if pattern.search(text):
+                    fail(f'possible secret pattern in {p.relative_to(ROOT)}')
 
     # Jede Meldung sagt auch, was sie NICHT abdeckt. Ein "[OK]", das mehr behauptet als es prueft,
     # ist schlimmer als keine Pruefung - der Owner liest es und glaubt es zu Recht.

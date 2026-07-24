@@ -50,3 +50,4 @@ logs/
 # Claude local-only memory/settings
 CLAUDE.local.md
 .claude/local/
+.claude/worktrees/
