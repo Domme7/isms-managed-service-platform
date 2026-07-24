@@ -27,7 +27,7 @@ import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
-import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
+import { CockpitModulContent } from '../cockpit/CockpitModulContent';
 import { LoginWelten } from '../shell/LoginWelten';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { WillkommenContent } from '../willkommen/WillkommenContent';
@@ -87,13 +87,7 @@ const RENDERER_JE_ORT: Record<BausteinOrt, () => RenderResult> = {
   // Seitenbausteine-Hinweis ist varianten-unabhängig (eine `SeitenbausteineHinweis ort="cockpit"`
   // pro Seite) – geprüft mit Variante A auf Nordwerk.
   cockpit: () =>
-    render(
-      <CockpitVariantenContent
-        role={role('R01')}
-        tenant={tenant(TENANT_ID.NORDWERK)}
-        variante="a"
-      />,
-    ),
+    render(<CockpitModulContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />),
 };
 
 function hinweisElement(container: HTMLElement): HTMLElement {

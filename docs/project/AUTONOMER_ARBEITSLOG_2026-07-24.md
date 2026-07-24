@@ -44,6 +44,13 @@
 - ✅ Modularer Cockpit-Baum `lib/cockpit/module.ts` + 6 Tests (`2758682`).
 - ✅ Modulare Ansicht live: `CockpitModulContent`/`CockpitModulView` + CSS, `/cockpit` umgestellt
   (`029bc10`); rendert mit echten Nordstern-Daten, 875 Tests grün.
-- ⏳ Cleanup (Alt-Ansichten löschen, Guards umziehen, qa:visual anpassen, neuer Komponententest).
-- ⏳ Visual-Politur bis es dem freigegebenen Entwurf gleicht (Screenshot-Vergleich).
-- ⏳ Schritt 2–4.
+- ✅ Visual-Politur (`ca504ce`): eigene Inline-SVG-Icons (Webfont @tabler verworfen wegen 174-Paket-
+  Ballast + CI-Risiko), Kontrast-Fix, Briefing-Hero; **qa:visual axe 0** auf cockpit/-eintauchen/-dunkel.
+  Screenshot gleicht dem freigegebenen Entwurf (kompakt, ein Screen, alles per Eintauchen).
+- ✅ Cleanup: **A/B/C + Bento gelöscht** (11 Dateien: CockpitVarianten/View, CockpitBento*, KpiBand,
+  Warnungen-/Lebenszyklus-Komponente, varianten.ts, 3 Alt-Tests), **5 Guards** (produktsprache,
+  prozessvokabular, seitenbausteine, kontextleiste, leerzustand) **auf `CockpitModulContent` umgezogen**,
+  neuer Komponententest `cockpit-modul.test.tsx` (8). **835 Tests + lint + typecheck grün.** Schließt
+  Gate-Befunde AE-1 (A/B/C verwaist) + Guard-Abdeckung (O-WP034-04).
+- **✅ SCHRITT 1 (Kunde-Cockpit modular) FERTIG.**
+- ⏳ Schritt 2 (5 Profile) · 3 (Mandanten füllen) · 4 (Berater-Cockpit-Konzept).

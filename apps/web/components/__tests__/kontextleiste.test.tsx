@@ -62,7 +62,7 @@ import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
-import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
+import { CockpitModulContent } from '../cockpit/CockpitModulContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { CONTEXT_GAPS, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
 import { SessionProvider } from '../shell/SessionProvider';
@@ -431,11 +431,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
   for (const v of ['a', 'b', 'c'] as const) {
     it(`Cockpit (Variante ${v}): belegte Elemente belegt (Nordwerk), unbelegte als benannte Datenlücke`, () => {
       const { unmount } = render(
-        <CockpitVariantenContent
-          role={role('R03')}
-          tenant={tenant(TENANT_ID.NORDWERK)}
-          variante={v}
-        />,
+        <CockpitModulContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
       );
       const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
       expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordstern Manufacturing SE');
@@ -459,7 +455,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
   it('Cockpit: rendert ohne Rolle vollständig, Leiste nennt „neutral"', () => {
     const { container, unmount } = render(
       // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop (null = neutral, DR-0009), kein ARIA-Attribut.
-      <CockpitVariantenContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} variante="c" />,
+      <CockpitModulContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
     expect((container.textContent ?? '').length).toBeGreaterThan(200);
@@ -470,11 +466,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
 
   it('Cockpit (leerer Mandant): Leiste vollständig, kein erfundener Scope/Datenstand', () => {
     const { unmount } = render(
-      <CockpitVariantenContent
-        role={role('R01')}
-        tenant={tenant(TENANT_ID.FINOVIA)}
-        variante="a"
-      />,
+      <CockpitModulContent role={role('R01')} tenant={tenant(TENANT_ID.FINOVIA)} />,
     );
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
     expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Finovia Digital Bank AG');

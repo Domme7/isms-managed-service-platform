@@ -63,7 +63,7 @@ import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { AppShell } from '../shell/AppShell';
-import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
+import { CockpitModulContent } from '../cockpit/CockpitModulContent';
 import { LoginWelten } from '../shell/LoginWelten';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
@@ -286,11 +286,7 @@ const RENDERER_JE_LIVE_ORT = {
     ...matrix('/heute', (r, t) => render(<MissionControlContent role={r} tenant={t} />)),
     // Zusatzseite UNTER dem Ort „Heute" (Cockpit-Varianten-Vergleich, WP-025): jede der drei
     // Varianten über die volle Matrix; Variante B mit voller Detailtiefe (kompletter Textumfang).
-    ...(['a', 'b', 'c'] as const).flatMap((v) =>
-      matrix(`/cockpit (${v})`, (r, t) =>
-        render(<CockpitVariantenContent role={r} tenant={t} variante={v} initialTiefe={3} />),
-      ),
-    ),
+    ...matrix('/cockpit', (r, t) => render(<CockpitModulContent role={r} tenant={t} />)),
   ],
   kunden: [
     {

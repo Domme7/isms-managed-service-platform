@@ -40,7 +40,7 @@ import { WissenContent } from '../wissen/WissenContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { AppShell } from '../shell/AppShell';
-import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
+import { CockpitModulContent } from '../cockpit/CockpitModulContent';
 import { WillkommenContent } from '../willkommen/WillkommenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
@@ -449,12 +449,7 @@ describe('Cockpit-Varianten sprechen im Leerzustand nie über fremde Mandanten (
     for (const tenantId of LEERE_MANDANTEN) {
       it(`Variante ${v} nennt für ${tenantId} keinen fremden Mandanten`, () => {
         const { container } = render(
-          <CockpitVariantenContent
-            role={role('R03')}
-            tenant={tenant(tenantId)}
-            variante={v}
-            initialTiefe={3}
-          />,
+          <CockpitModulContent role={role('R03')} tenant={tenant(tenantId)} />,
         );
         const text = container.textContent ?? '';
         expect(text.length).toBeGreaterThan(80);
@@ -474,7 +469,7 @@ describe('Cockpit-Varianten sprechen im Leerzustand nie über fremde Mandanten (
     // mandantenübergreifendes Portfolio, keine Aggregation (DR-0012 / DR-0013 Nr. 11).
     for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR]) {
       const { container, unmount } = render(
-        <CockpitVariantenContent role={role('R03')} tenant={tenant(tenantId)} variante="c" />,
+        <CockpitModulContent role={role('R03')} tenant={tenant(tenantId)} />,
       );
       const text = container.textContent ?? '';
       expect(text).toContain('Kundensicht: dieses eine Unternehmen.');

@@ -38,7 +38,7 @@ import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
-import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
+import { CockpitModulContent } from '../cockpit/CockpitModulContent';
 import { LoginWelten } from '../shell/LoginWelten';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
@@ -175,10 +175,8 @@ const RENDERER_JE_LIVE_ORT = {
     // Zusatzseite UNTER dem Ort „Heute" (Cockpit-Varianten-Vergleich, WP-025): jede der drei
     // Varianten über die volle Rollen-/Mandantenmatrix – Variante B mit voller Detailtiefe
     // (`initialTiefe={3}`), damit der Wächter den GESAMTEN gestaffelten Text sieht.
-    ...(['a', 'b', 'c'] as const).flatMap((v) =>
-      rollenMandantenMatrix(`/cockpit (${v})`, (r, t) =>
-        render(<CockpitVariantenContent role={r} tenant={t} variante={v} initialTiefe={3} />),
-      ),
+    ...rollenMandantenMatrix('/cockpit', (r, t) =>
+      render(<CockpitModulContent role={r} tenant={t} />),
     ),
   ],
   kunden: [
