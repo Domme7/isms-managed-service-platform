@@ -87,6 +87,14 @@
   kurze Query, Gruppierung/Determinismus). web 883 grün. Nebenbei: 2 Format-Reste aus `bfa1f66` (WP-033,
   nur `vitest` statt `lint` nachgelaufen) mitgefixt. **Slice 2 (offen):** Suchfeld + Trefferliste im
   Wissen-Bereich (schließt die im `WissenContent`-Kopf benannte „kein Suchfeld"-Lücke), Leerzustände.
+  **Slice 2 (FERTIG):** `WissenSuche` (Client-Komponente) im Wissen-Bereich: Suchfeld + Trefferliste
+  nach Mandant gruppiert, jeder Treffer ein Deep-Link (`objectDetailHref`); **Leak-Schutz SICHTBAR**
+  („Vorschau ausgeblendet (vertraulich)" statt Snippet); Leerzustände (leer/zuKurz/kein Treffer).
+  Platziert NACH dem Glossar (Antwort zuerst, DR-0013 — Glossar bleibt erste h2). Der „kein
+  Suchfeld"-Kopfkommentar + der Lücken-Eintrag „Suche über alle Inhalte" (jetzt „Drei Bausteine")
+  entfernt/aktualisiert; die 2 WP-032-„kein Suchfeld"-Assertions auf die neue Realität umgestellt.
+  6 Komponententests (Leak-Schutz sichtbar, Sphäre, Leerzustände). web 889 grün; Browser: „Auftrag"
+  → 8 Treffer (nur eigener Mandant), Vertraulich-Maske sichtbar, keine Konsolenfehler.
 
 ## Offene Fragen an den Owner (nicht blockierend — Default gewählt, jederzeit umstellbar)
 - **OF-1 (2 Profile):** Sollen die 12 Rollen-Perspektiven wirklich ganz raus, oder nur der

@@ -3740,3 +3740,31 @@ summary {
   color: var(--ck-ink-soft, #454b5e);
   font-weight: 600;
 }
+
+/* Globale Objektsuche im Wissen-Bereich (WP-027 Slice 2). */
+.wis-suche {
+  margin: 1.25rem 0;
+}
+.wis-suche-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+.wis-suche-feld {
+  width: 100%;
+  max-width: 480px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--tw-line);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--tw-surface);
+  color: var(--tw-ink);
+}
+.wis-suche-gruppe {
+  margin-top: 0.9rem;
+}
+.wis-suche-vertraulich {
+  font-style: italic;
+  color: var(--tw-muted);
+}

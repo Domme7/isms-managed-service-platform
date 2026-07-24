@@ -24,9 +24,9 @@
  * bewährte Vorgehen sind es nicht – benannt als Sach-Lücke, ohne Termin und ohne Erfindung.
  *
  * GRENZEN (Zuschnitt):
- *  - KEIN SUCHFELD. Die globale Suche ist ein eigenes Vorhaben; sie braucht als Pflichtteil
- *    einen Schutz davor, dass Vorschautexte vertrauliche Treffer verraten. Ein halb
- *    funktionierendes Suchfeld wäre hier schlechter als keines.
+ *  - SUCHE (WP-027): Der Ort trägt jetzt eine globale Objektsuche (`WissenSuche`, angebunden an
+ *    `lib/suche`). Ihr Pflichtteil ist erfüllt – vertrauliche Treffer leaken NICHT über
+ *    Vorschautexte (Snippet-Leak-Schutz in der Suchmaschine, in der Trefferliste sichtbar gemacht).
  *  - KEINE VORLAGEN, KEINE „bewährten Vorgehen": Für beides gibt es keinen Datenträger und
  *    keine Konzeptaussage, die man ohne Erfindung wiedergeben könnte.
  *  - KEINE CODES: weder Familien- noch Beziehungs-Kennungen noch technische Beziehungsnamen.
@@ -43,6 +43,7 @@ import { getObjectsForTenant, getRelationshipsForTenant } from '../../lib/twin/d
 import { buildGlossar, type GlossarFamilie } from '../../lib/wissen/glossar';
 import { PageContextBar } from '../shell/PageContextBar';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
+import { WissenSuche } from './WissenSuche';
 
 /**
  * `tenant`/`role` dienen ausschließlich der KONTEXTLEISTE: Auch auf einer mandantenunabhängigen
@@ -94,6 +95,11 @@ export function WissenContent({ role, tenant }: { role: DemoRole | null; tenant:
 
       <FamilienSection glossar={glossar} />
       <BeziehungenSection glossar={glossar} />
+
+      {/* Suche nach dem Glossar (Antwort zuerst, DR-0013): erst die Begriffe, dann der Weg ins
+          Modell. Der Glossar bleibt die erste Antwort der Seite. */}
+      <WissenSuche role={role} tenantId={tenant.tenant_id} />
+
       <NochNichtDaSection />
 
       <SeitenbausteineHinweis ort="wissen" />
@@ -196,19 +202,10 @@ function NochNichtDaSection() {
     <section aria-labelledby="wis-luecken">
       <h2 id="wis-luecken">Was hier noch nicht steht</h2>
       <p className="sv-edge-note">
-        Dieser Ort soll mehr können als Begriffe erklären. Vier Bausteine sind noch nicht angebunden
+        Dieser Ort soll mehr können als Begriffe erklären. Drei Bausteine sind noch nicht angebunden
         – sie werden hier benannt statt angedeutet.
       </p>
       <ul className="sv-items">
-        <li>
-          <span className="sv-item-name">Suche über alle Inhalte</span>
-          <span className="sv-item-note">
-            Eine Suche ist der wichtigste Weg in ein großes Modell. Sie ist ein eigenes Vorhaben,
-            weil sie mehr braucht als ein Eingabefeld: Vorschautexte dürfen nichts preisgeben, was
-            man ohne Berechtigung nicht sehen darf. Deshalb steht hier bewusst kein halb
-            funktionierendes Suchfeld.
-          </span>
-        </li>
         <li>
           <span className="sv-item-name">Vorlagen</span>
           <span className="sv-item-note">

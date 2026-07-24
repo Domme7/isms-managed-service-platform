@@ -148,7 +148,7 @@ describe('Wissen – AC 10: Glossar vollständig und in Domänensprache', () => 
 });
 
 describe('Wissen – AC 11: Lücken benannt statt erfunden', () => {
-  it('benennt Suche, Vorlagen, bewährte Vorgehen und Kontextbezug – ohne Erfindung', () => {
+  it('benennt Vorlagen, bewährte Vorgehen und Kontextbezug – ohne Erfindung (Suche ist seit WP-027 keine Lücke)', () => {
     const { container } = render(
       <WissenContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
@@ -159,28 +159,27 @@ describe('Wissen – AC 11: Lücken benannt statt erfunden', () => {
     const text = (luecken as HTMLElement).textContent ?? '';
 
     for (const luecke of [
-      'Suche über alle Inhalte',
       'Vorlagen',
       'Bewährte Vorgehen und Lernhinweise',
       'Bezug zum aktuellen Kontext',
     ]) {
       expect(text, `Lücke „${luecke}" fehlt`).toContain(luecke);
     }
-    // Die Suche wird mit ihrem echten Grund benannt (Schutz vor Preisgabe in Vorschautexten).
-    expect(text).toContain('Vorschautexte dürfen nichts preisgeben');
+    // Die Suche ist mit WP-027 gebaut und steht deshalb NICHT mehr in diesem Lücken-Abschnitt.
+    expect(text).not.toContain('Suche über alle Inhalte');
     // Kein Zeitversprechen.
     expect(text).not.toMatch(/kommt bald|in Kürze|geplant für|folgt in/i);
     expect(container.textContent ?? '').toContain('keinen Zeitplan');
   });
 
-  it('NEGATIVBEWEIS: kein Suchfeld, keine Vorlage, keine ausgedachte Empfehlung', () => {
+  it('NEGATIVBEWEIS: das Suchfeld ist das einzige Bedienelement; keine Vorlage, keine ausgedachte Empfehlung', () => {
     const { container } = render(
       <WissenContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
-    // Kein Eingabefeld irgendeiner Art (ein halb funktionierendes Suchfeld wäre schlechter
-    // als keines) und überhaupt kein Bedienelement mit Schreibsemantik.
-    expect(container.querySelectorAll('form, input, select, textarea, button')).toHaveLength(0);
-    expect(container.querySelector('[role="search"]')).toBeNull();
+    // Genau EIN Bedienelement: das Suchfeld (WP-027). Kein Formular und kein weiteres Schreib-/
+    // Aktionselement – der Ort bleibt read-only bis auf die Sucheingabe.
+    expect(container.querySelectorAll('input[type="search"]')).toHaveLength(1);
+    expect(container.querySelectorAll('form, select, textarea, button')).toHaveLength(0);
 
     const text = container.textContent ?? '';
     // Keine ausgedachte Empfehlung: das Produkt spricht hier keine Handlungsempfehlung aus.
