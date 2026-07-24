@@ -97,7 +97,22 @@
   vor dem Test frisch; nur lokal ist der manuelle Rebuild nötig.) Der frische-dist-Fallout (Beziehungs-
   typ-Labels, „Slice"-Beschreibungsleck, CISO-Namenskollision, `finovia`→`greengrid` als Leer-Fixture,
   „vier→sechs"-Counts) wurde in `07955df` behoben; alle Suiten gegen frisches dist grün.
-- ⏳ **WP-021 Slice 5 (MediNova Clinics Holding):** Entwurf `medinova-graph.ts` liegt fertig auf Platte
+- ✅ **WP-021 Slice 5 (MediNova Clinics Holding)** (`0c5067c`): Slot `tenant-medicore`, Anzeige→MediNova,
+  eigener ISMS-Graph (30/36), **erster Mandant mit F05 Lieferkette** (System/Lieferant/Unterauftragnehmer),
+  mehrere Deckungslücken (dezentral). Fallout wie Rheinbank behoben (medicore→greengrid, Anzeigename,
+  Framework-Namenskollision distinkt, getIsmsCoreTenants +MediCore, db 157/199, Manifest 1.7.0 + F05).
+- 🎉 **WP-021 MANDANTEN-FÜLLEN KOMPLETT (Liste-A-Punkt 1):** vier gefüllte Kundenfirmen — Nordstern
+  (nordwerk), AlpenCloud (neu), Rheinbank (finovia-Slot), MediNova (medicore-Slot) — + **GreenGrid
+  bewusst leer** (der dauerhaft leere Mandant, = „ein Mandant bleibt leer") + Consulting Operator
+  (Provider). demo-seed 90 + db 19 + web 840 grün. Seed 1.7.0, 157 Objekte / 199 Kanten.
+  - **Offen an WP-021 (nicht mehr autonom / minor):** (a) **Slice 7** (numerische Bewertungen: Reifegrad,
+    Risiko-Level, KPI-Zielwerte) = **E-02-Owner-Gate**, blockiert (CCP-003/005/008). (b) *Minor autonom:*
+    CCP-008-Trägerschema-Vorschlag (`research/change-proposals/`) + Firmen-Storylines in
+    `packages/demo-seed/README.md` (AC-10) — nachziehbar, blockiert nichts.
+- ⏭️ **Nächster autonomer Punkt: DR-0017 Stage 1 — Berater-Portfolio-Dashboard-Einstieg** (jetzt
+  datenreich: 4 Firmen mit echten Graphen + 1 leer → echte Rangliste nach Datenlücken je Kunde,
+  „krassere" Heatmap Kunde×Bereich). Danach 5-Profile-Login, DR-0017 Stages 2–4.
+- ~~⏳ **WP-021 Slice 5 (MediNova Clinics Holding):** Entwurf `medinova-graph.ts` liegt fertig auf Platte~~
   (Workflow, 30 Objekte/36 Kanten, inkl. F05 Lieferkette), noch **nicht verdrahtet**. Integration wie
   Rheinbank: Slot `tenant-medicore`, Anzeige→MediNova; `seed.ts`/`index`/`seed-facts`/`seed.spec`/
   Manifest 1.7.0; Web-Test-Churn für die **MediCore-Leer-Fixtures** (→ `tenant-greengrid`) + Anzeigename.
