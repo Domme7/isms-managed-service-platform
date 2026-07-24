@@ -41,3 +41,23 @@ Drill-down. Erlebnis: „von der Übersicht immer tiefer verzweigen", nicht scro
 - **DR-0008** (Ampeln/Charts/Dashboards erwünscht, datengestützt) wird hier weiter ausgebaut (mehr Grafik).
 - Die A/B/C-Stil-Personalisierung (DR-0012) wird im Redesign neu bewertet (evtl. hinfällig, wenn das
   Dashboard-Erlebnis die Varianten ablöst) — offene Frage im Redesign-WP.
+
+## Owner-Bestätigung (2026-07-24) + Iterationswünsche
+
+**Der Owner hat die interaktive Drill-down-/„Eintauch"-Vorschau vom 2026-07-24 gesehen und ausdrücklich
+bestätigt: „findet es sehr gut, gefällt so schon gut" — diese Richtung ist die verbindliche Basis für das
+Redesign** (kompaktes Dashboard → Klick → Eintauch-Animation → Bereich → tiefer → Objekt, verzweigend, kein
+Langscroll). So merken und umsetzen.
+
+**Vor der finalen Festlegung noch ausprobieren (Owner-Wunsch, als Design-Experimente zeigen, dann wählt der
+Owner):**
+1. **Mehr Charts/Grafiken** auf der Dashboard-Startebene (wo fachlich sinnvoll — datengetragen, kein Deko-Chart).
+2. **Unterschiedliche Kachelgrößen — NICHT alle gleich groß:** bewusste Größenhierarchie (Wichtiges größer,
+   Nebeninfo kleiner), lebendigeres Raster statt Uniform-Grid.
+3. **Andere Grafiktypen wo sinnvoll**, u. a. ein **Radar-/Web-Chart** (z. B. Reifegrad-/Abdeckungsprofil über
+   Domänen) sowie ggf. Balken/Donut/Trend — passend zur jeweiligen Kennzahl.
+4. **Coolere/stärkere „Eintauch"-Animation** (mehr Tiefe/Wirkung) — weiterhin `prefers-reduced-motion`-fest.
+
+Diese Varianten kommen als nächste Iteration (Design-Vorschauen), bevor der echte Bau des Cockpit-Redesigns
+final festgezurrt wird. **Der aktuelle Stand ist bereits owner-abgesegnet und darf gebaut werden**, falls vor
+der Experiment-Runde weitergearbeitet wird.
