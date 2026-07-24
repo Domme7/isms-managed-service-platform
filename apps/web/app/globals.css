@@ -1693,6 +1693,13 @@ summary {
   padding: var(--ck-panel-pad);
   border-radius: 14px;
 }
+/* Bereich im selben Dashboard-Rahmen wie das Cockpit (DR-0017 Stage 3, `BereichRahmen`). Die
+   Fläche/Farbwelt kommt aus `.ck-cockpit`; hier nur der Abstand innerhalb der Shell und eine
+   ruhige Mindesthöhe, damit auch kurze Bereiche als Panel lesen. */
+.ck-cockpit--bereich {
+  margin-bottom: 1.5rem;
+  min-height: 60vh;
+}
 
 .ck-cockpit[data-ck-theme="dunkel"] {
   --ck-surface: #191c24;

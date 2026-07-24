@@ -16,41 +16,43 @@
  */
 import Link from 'next/link';
 import { useSession } from '../shell/SessionProvider';
+import { BereichRahmen } from '../shell/BereichRahmen';
 import { WissenContent } from './WissenContent';
 
 export function WissenView() {
   const { resolved, hydrated } = useSession();
 
-  if (!hydrated) {
-    return (
-      <>
-        <p className="tw-eyebrow">Wissen · Glossar</p>
-        <h1>Wissen</h1>
-        <p className="tw-muted">Lade Kontext …</p>
-      </>
-    );
-  }
-
-  if (!resolved) {
-    return (
-      <>
-        <p className="tw-eyebrow">Wissen · Glossar</p>
-        <h1>Wissen</h1>
-        <div className="tw-empty" role="note">
-          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Nicht angemeldet</h2>
-          <p style={{ marginTop: 0 }}>
-            Es ist kein Mandant gewählt. Melden Sie sich an, um den Glossar mit sichtbarem Kontext
-            zu öffnen.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            <Link className="tw-cta" href="/login">
-              Zur Anmeldung →
-            </Link>
-          </p>
-        </div>
-      </>
-    );
-  }
-
-  return <WissenContent role={resolved.role} tenant={resolved.tenant} />;
+  // DR-0017 Stage 3: der Bereich taucht aus dem Cockpit in dieselbe Dashboard-Fläche ein
+  // (`BereichRahmen`, folgt der Cockpit-Themenwahl). Kopf, Leitfrage und die feinjustierte
+  // Ehrlichkeitsrahmung des Glossars bleiben unverändert in `WissenContent`.
+  return (
+    <BereichRahmen>
+      {!hydrated ? (
+        <>
+          <p className="tw-eyebrow">Wissen · Glossar</p>
+          <h1>Wissen</h1>
+          <p className="tw-muted">Lade Kontext …</p>
+        </>
+      ) : !resolved ? (
+        <>
+          <p className="tw-eyebrow">Wissen · Glossar</p>
+          <h1>Wissen</h1>
+          <div className="tw-empty" role="note">
+            <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Nicht angemeldet</h2>
+            <p style={{ marginTop: 0 }}>
+              Es ist kein Mandant gewählt. Melden Sie sich an, um den Glossar mit sichtbarem Kontext
+              zu öffnen.
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              <Link className="tw-cta" href="/login">
+                Zur Anmeldung →
+              </Link>
+            </p>
+          </div>
+        </>
+      ) : (
+        <WissenContent role={resolved.role} tenant={resolved.tenant} />
+      )}
+    </BereichRahmen>
+  );
 }

@@ -21,6 +21,7 @@ import type { ReactNode } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
 
 import { buildCockpitModul, type ModulKachel, type ModulKnoten } from '../../lib/cockpit/module';
+import { COCKPIT_THEME_KEY, type CockpitTheme } from '../../lib/cockpit/theme';
 import { buildMissionControl } from '../../lib/heute/data';
 import type { DemoRole } from '../../lib/shell/roles';
 import { NAV_PLACES } from '../../lib/shell/places';
@@ -28,9 +29,6 @@ import { kundenSicht, orteFuerRolle } from '../../lib/shell/sphaere';
 import { CockpitRadar } from './CockpitRadar';
 import { CoverageRing } from './CoverageRing';
 import { EmptyTenantKachel } from '../shell/DashboardKacheln';
-
-type CockpitTheme = 'hell' | 'dunkel';
-const COCKPIT_THEME_KEY = 'isms-cockpit-theme-v1';
 
 export function CockpitModulContent({
   role,

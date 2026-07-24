@@ -37,6 +37,13 @@
   LEER** (Owner-Direktive „ein Mandant bleibt leer" + Dok-16-Profil „getrennter Discovery-Scope").
   DR-0005-Spannung Dok-07 §20 ↔ Dok-16 §34.1 im `tenants.ts`-Kopf benannt. Sequenz: erst beide
   Neuen als Leer-Mandanten, dann Graphen **einzeln** füllen — nie roter Zwischenstand.
+- **AE-6 (DR-0017 Stage 3 Ansatz):** Die 8 Bereiche werden über einen **geteilten, inhalts-neutralen
+  Dashboard-Rahmen** (`BereichRahmen`) in die Cockpit-Sprache überführt (gleiche Fläche/Farbwelt,
+  geteilte Themenwahl), **ohne** die feinjustierte Ehrlichkeits-/Antwort-Modus-/Detailtiefe-Logik der
+  Inhalte anzutasten (DR-0017 Pkt. 3 „Inhaltskomponenten wiederverwenden"; O-DR17-02-Default „im selben
+  Rahmen"). Ein tieferer Innen-Umbau reicher Bereiche in echte Bento-Kacheln wartet auf Owner-Richtung
+  (offene Frage O-DR17-02, im DR-0017-Fortschrittsblock unten notiert) — er würde bewährte, getestete
+  Nuancen berühren und ist deshalb kein stiller Alleingang (DR-0005).
 
 ## Offene Fragen an den Owner (nicht blockierend — Default gewählt, jederzeit umstellbar)
 - **OF-1 (2 Profile):** Sollen die 12 Rollen-Perspektiven wirklich ganz raus, oder nur der
@@ -144,10 +151,26 @@
   `ShellBreadcrumb`-Kopf als DR-0005-Spannung benannt (von DR-0017/DR-0006 gedeckt). Browser: beide
   Sphären am `/isms` bzw. `/services` verifiziert (keine Sidebar, kein Toggle, keine Konsolenfehler).
   **web: lint 0 · typecheck 0 · 865 grün (55 Dateien).**
-- ⏭️ **Verbleibend an DR-0017 (GROSS, sorgfältig):**
-  - **Stage 3 — 8 Bereiche im Dashboard-Stil:** je Bereich (Heute/Kunden/ISMS/Entscheidungen/Services/
-    Reports/Wissen/Administration) in die Bento-/Dive-Sprache überführen, Dive bis Zwilling.
-    Mehr-Iterationen-Aufwand (je Bereich ein eigener, getesteter Umbau).
+- 🟡 **DR-0017 Stage 3 begonnen — geteilter Dashboard-Rahmen, Bereich 1/8 (Wissen) fertig:**
+  Ansatz (AE-6, s. u.): ein wiederverwendbarer **`BereichRahmen`** (`components/shell/BereichRahmen.tsx`)
+  trägt dieselbe Cockpit-Fläche (`.ck-cockpit`) und übernimmt die im Cockpit gewählte Hell/Dunkel-Stufe
+  über den GETEILTEN Schlüssel (`lib/cockpit/theme.ts`, aus dem Cockpit herausgezogen → DRY; der
+  Umschalter bleibt im Cockpit, die Bereiche lesen nur). Der Rahmen ist **inhalts-neutral**: Kopf,
+  Leitfrage, Kontextleiste und die feinjustierte Antwort-Modus-/Ehrlichkeitsrahmung (DR-0013) bleiben
+  in der jeweiligen Bereichs-Inhaltskomponente UNVERÄNDERT — so gewinnt der Bereich die Dashboard-Optik,
+  ohne dass eine generische Hülle die per-Bereich-Nuancen einebnet. **Wissen** als erster (einfacher,
+  O-DR17-02-„Dive-Detail") Adopter: `WissenContent` unverändert, nur `WissenView` umschließt sie mit dem
+  Rahmen. 4 `BereichRahmen`-Tests; web lint 0 · typecheck 0 · **869 grün**. Browser: `/wissen` in
+  `.ck-cockpit--bereich`, Dunkel aus dem Cockpit übernommen (Panel `rgb(20,22,28)`), keine Konsolenfehler.
+  - **Verbleibend Stage 3 (7 Bereiche):** Heute (reich, 1033 Z., sorgfältig) · ISMS · Services ·
+    Entscheidungen · Reports · Administration · Kunden. Je Bereich = ein eigener getesteter Umbau; wo ein
+    Bereich schon reich ist, prüfen, ob nur der Rahmen greift oder Inhalt in die Bento-Sprache wandert.
+  - **↪ OFFENE FRAGE O-DR17-02 (Owner) — Tiefe der Überführung je Bereich:** Reicht der geteilte
+    **Dashboard-Rahmen um den bestehenden Inhalt** (so gebaut, DR-0017-Default „im selben Rahmen",
+    inhalts-treu, risikoarm), oder sollen reiche Bereiche (v. a. Heute) zusätzlich **innen in echte
+    Bento-Kacheln + Dive** umgebaut werden (mehr „grafisch geil", aber Eingriff in feinjustierte
+    Ehrlichkeits-/Detailtiefe-Logik → Gefahr, Nuancen einzuebnen)? Autonom umgesetzt: der Rahmen. Der
+    tiefere Innen-Umbau je Bereich wartet auf Owner-Richtung.
 - **Owner-Gates weiter offen (nicht autonom):** WP-021 Slice 7 (numerische Bewertungen, E-02),
   Eisenhower/Fristen (E-02), echte Auth (WP-030), DB→UI (FINDING-0004).
 - ~~⏳ **WP-021 Slice 5 (MediNova Clinics Holding):** Entwurf `medinova-graph.ts` liegt fertig auf Platte~~
