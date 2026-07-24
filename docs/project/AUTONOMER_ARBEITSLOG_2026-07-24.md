@@ -44,6 +44,22 @@
   Rahmen"). Ein tieferer Innen-Umbau reicher Bereiche in echte Bento-Kacheln wartet auf Owner-Richtung
   (offene Frage O-DR17-02, im DR-0017-Fortschrittsblock unten notiert) — er würde bewährte, getestete
   Nuancen berühren und ist deshalb kein stiller Alleingang (DR-0005).
+- **AE-7 (synthetische Preisbänder — AUTORISIERT, kein Gate):** Zunächst sah es nach einem Konflikt
+  aus: `lib/services/katalog.ts` (WP-006) ist als „PREISFREIHEIT ABSOLUT (O-KUNDE-01/DR-0008)"
+  dokumentiert. **Regel-Null-Prüfung ergab: dieser Kommentar ist VERALTET.** **DR-0015 (Owner,
+  2026-07-24), Punkt 8** stellt O-KUNDE-01 ausdrücklich um: „gekennzeichnete, synthetische
+  Beispielpreise im Servicekatalog/den Paketen erlaubt (mit Security); keine realen Preise,
+  DR-0011-konform ohne ‚Demo'-Etikett". Die Aufgabe ist damit autonom autorisiert. Quelle (Regel Null):
+  Dok. 14 „Illustrative Plattformbänder" (Core/Professional/Enterprise/Provider) — vom Konzept selbst
+  als „Produktannahmen … synthetische Designannahmen und keine realen Preise" markiert. **Slice 1
+  (fertig):** react-freier Datenträger `lib/services/preisbaender.ts` (4 Plattformbänder worttreu,
+  Provider ohne erfundene Zahl = benannte „individuelle Vereinbarung", `formatPreisband`, Ehrlichkeits-
+  zeile ohne „Demo"-Wort), 5 Tests, web 874 grün. **Slice 2 (nächster Schritt):** Anzeige im Services-/
+  Servicekatalog-Bereich + **Guardrail-Umstellung** (der Preisfrei-Wächtertest UND der veraltete
+  `katalog.ts`-„PREISFREIHEIT ABSOLUT"-Kopf müssen auf „synthetische, gekennzeichnete Preise erlaubt;
+  keine realen; kein ‚Demo'-Wort" umgestellt werden) — heikler, mit Security-Blick (DR-0015 „mit
+  Security"). Weitere Bänder (Pakete, Einzel-Managed-Services) folgen als eigene Scheiben (Dok. 14
+  „Illustrative Managed-Service-Pakete"/„Illustrative Einzelservice-Bänder", je vollständig gelesen).
 
 ## Offene Fragen an den Owner (nicht blockierend — Default gewählt, jederzeit umstellbar)
 - **OF-1 (2 Profile):** Sollen die 12 Rollen-Perspektiven wirklich ganz raus, oder nur der
