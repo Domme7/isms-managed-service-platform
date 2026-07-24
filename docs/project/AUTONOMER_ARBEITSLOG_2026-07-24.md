@@ -121,9 +121,18 @@
     Portfolio. Login + Root-Redirect verdrahtet. web 857 grün.
   - **Ehrlich getrennt:** Teil 1 (Lücken-Last-Rangliste + Heatmap) = echte Daten. Teil 2
     (Eisenhower/Fristen/Dringlichkeit) = **E-02-Owner-Gate**, als benannte Lücke gezeigt, nicht gebaut.
-- ⏭️ **Nächster autonomer Punkt: 5-Profile-Login** (Liste-A-Punkt 3): Firmen als Kunden-Profile +
-  Berater/Admin; feine 12-Rollen aus dem Login-Einstieg raus (interne Sphären-Logik bleibt, OF-1).
-  Danach DR-0017 Stages 2–4 (Kunde-Dashboard-Einstieg, Bereiche als Kacheln, Sidebar raus).
+- ✅ **5-Profile-Login (Liste-A-Punkt 3)** (`9c1fe51`): primärer Login = Profile statt Rolle×Mandant-
+  Matrix — 5 Firmen-Profile (`als [Firma] eintreten` → Kundensicht R03 → /cockpit) + 1 Berater/Admin
+  (R08 → /portfolio). Feine 12-Rollen (LoginWelten) + neutraler Einstieg (DR-0009) im eingeklappten
+  „Weitere Ansichten" (OF-1: Rollen-Logik bleibt). DR-0005-Spannung DR-0015→Profil-Modell im
+  `LoginProfile`-Kopf benannt. `LoginProfile` + 4 Komponenten- + 2 Page-Tests; Login visuell geprüft.
+  web 863 grün.
+- ⏭️ **Nächster autonomer Punkt: DR-0017 Stages 2–4** (Liste-A-Punkte 4–6): Stage 2 Kunde-Dashboard-
+  Einstieg (die 8 Bereiche als Kacheln — im Cockpit teils schon da via `BereichKacheln`), Stage 3
+  Bereiche im Dashboard-Stil (Dive bis Zwilling), Stage 4 Sidebar raus + Routing auf Drill,
+  Guard-Tests anpassen. Danach Cleanup/DRY, Preisbänder, WP-033, WP-027/029, Politur.
+  - **Owner-Gates weiter offen (nicht autonom):** WP-021 Slice 7 (numerische Bewertungen, E-02),
+    Eisenhower/Fristen (E-02), echte Auth (WP-030), DB→UI (FINDING-0004).
 - ~~⏳ **WP-021 Slice 5 (MediNova Clinics Holding):** Entwurf `medinova-graph.ts` liegt fertig auf Platte~~
   (Workflow, 30 Objekte/36 Kanten, inkl. F05 Lieferkette), noch **nicht verdrahtet**. Integration wie
   Rheinbank: Slot `tenant-medicore`, Anzeige→MediNova; `seed.ts`/`index`/`seed-facts`/`seed.spec`/
