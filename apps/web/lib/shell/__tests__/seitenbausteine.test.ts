@@ -52,16 +52,11 @@ describe('BAUSTEIN_ABDECKUNG – Zuordnung je Live-Ort', () => {
     const liveOrte = NAV_PLACES.filter((p) => p.live)
       .map((p) => String(p.id))
       .sort();
-    // `objekt360`, `kundenstart`, `servicekatalog`, `strukturassistent` und `cockpit` sind
-    // dokumentierte Zusatzseiten UNTER bestehenden Orten (kein neuer NAV_PLACES-Ort, 06-D01).
-    // Ein neuer echter live-Ort macht die Gleichheit rot.
-    const zusatzseiten = [
-      'objekt360',
-      'kundenstart',
-      'servicekatalog',
-      'strukturassistent',
-      'cockpit',
-    ];
+    // `objekt360`, `kundenstart`, `servicekatalog` und `strukturassistent` sind dokumentierte
+    // Zusatzseiten UNTER bestehenden Orten (kein neuer NAV_PLACES-Ort, 06-D01). Ein neuer echter
+    // live-Ort macht die Gleichheit rot. Das Cockpit ist seit DR-0017 eigenständig (keine
+    // Seitenbausteine-Konvention mehr).
+    const zusatzseiten = ['objekt360', 'kundenstart', 'servicekatalog', 'strukturassistent'];
     expect([...orte].filter((o) => !zusatzseiten.includes(o)).sort()).toEqual(liveOrte);
     for (const zusatz of zusatzseiten) {
       expect(orte).toContain(zusatz);

@@ -464,15 +464,15 @@ describe('Cockpit-Varianten sprechen im Leerzustand nie über fremde Mandanten (
     }
   }
 
-  it('keine Betreiber-Portfolio-Aggregation auf der Kundensicht des Cockpits (Variante C)', () => {
-    // Eine Kundenrolle (R03) sieht im Cockpit die Ein-Unternehmens-Sphäre – kein
-    // mandantenübergreifendes Portfolio, keine Aggregation (DR-0012 / DR-0013 Nr. 11).
+  it('das Cockpit nennt bei datentragenden Mandanten keinen fremden Mandanten (Cross-Tenant)', () => {
+    // Das eigenständige Cockpit (DR-0017) zeigt ausschließlich den aktiven Mandanten – kein
+    // mandantenübergreifendes Portfolio, keine Aggregation (DR-0012 / DR-0013 Nr. 11). Der
+    // frühere Sphären-Hinweistext ist entfallen; die Cross-Tenant-Grenze bleibt geprüft.
     for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR]) {
       const { container, unmount } = render(
         <CockpitModulContent role={role('R03')} tenant={tenant(tenantId)} />,
       );
       const text = container.textContent ?? '';
-      expect(text).toContain('Kundensicht: dieses eine Unternehmen.');
       for (const fremd of DEMO_TENANTS.filter((t) => t.tenant_id !== tenantId)) {
         expect(text).not.toContain(fremd.display_name);
       }

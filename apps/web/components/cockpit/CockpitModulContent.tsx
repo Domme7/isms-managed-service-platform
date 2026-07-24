@@ -21,26 +21,13 @@ import type { ReactNode } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
 
 import { buildCockpitModul, type ModulKachel, type ModulKnoten } from '../../lib/cockpit/module';
-import {
-  buildMissionControl,
-  type MissionControlModel,
-  type RecordingWave,
-} from '../../lib/heute/data';
-import { worldForRole, type DemoRole, type ExperienceWorld } from '../../lib/shell/roles';
+import { buildMissionControl } from '../../lib/heute/data';
+import type { DemoRole } from '../../lib/shell/roles';
 import { NAV_PLACES } from '../../lib/shell/places';
-import {
-  kundenSicht,
-  mandantenwechselSichtbar,
-  orteFuerRolle,
-  rollenReichweiteSatz,
-} from '../../lib/shell/sphaere';
-import { CockpitLegende } from './CockpitLegende';
+import { orteFuerRolle } from '../../lib/shell/sphaere';
 import { CockpitRadar } from './CockpitRadar';
 import { CoverageRing } from './CoverageRing';
 import { EmptyTenantKachel } from '../shell/DashboardKacheln';
-import { PageContextBar } from '../shell/PageContextBar';
-import { ScopeKontextWert } from '../shell/ScopeKontext';
-import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
 type CockpitTheme = 'hell' | 'dunkel';
 const COCKPIT_THEME_KEY = 'isms-cockpit-theme-v1';
@@ -77,7 +64,10 @@ export function CockpitModulContent({
 
   const model = buildMissionControl(tenant.tenant_id);
   const baum = buildCockpitModul(tenant.tenant_id);
-  const world = role ? worldForRole(role) : null;
+  const datenstand =
+    model && model.recordingWaves.length > 0
+      ? model.recordingWaves[model.recordingWaves.length - 1]?.dateDisplay
+      : undefined;
 
   return (
     <div className="ck-cockpit" data-ck-theme={theme}>
@@ -98,27 +88,23 @@ export function CockpitModulContent({
 
       {model && baum ? (
         <>
-          <details className="ck-fold">
-            <summary>Kontext dieser Seite — Mandant, Rolle, Datenstand</summary>
-            <CockpitContextBar model={model} role={role} tenant={tenant} world={world} />
-          </details>
+          {/* EIGENSTÄNDIG (DR-0017): keine Shell-Hinweisblöcke (Kontextleiste, Legende, Sphäre,
+              Seitenbausteine). Der Mandant steht im Wechsler oben, die Lücken als Kacheln im
+              Dashboard. Es bleibt EINE dezente Ehrlichkeitszeile: Datenstand + die eine Grenze
+              (Farbe = erfasste Datenlage, kein Prüfergebnis) – damit die Ampeln nicht als
+              Prüf-/Audit-Urteil missverstanden werden (DR-0008). */}
+          <p className="ck-datenstand">
+            {datenstand ? `Datenstand ${datenstand} · ` : ''}Farben zeigen die erfasste Datenlage
+            nach offengelegter Regel – kein Prüfergebnis.
+          </p>
 
           {baum.isEmpty && baum.emptyTile ? (
             <EmptyTenantKachel tile={baum.emptyTile} />
           ) : (
-            <>
-              <details className="ck-legende-fold">
-                <summary>Was die Farben bedeuten</summary>
-                <CockpitLegende />
-              </details>
-              <CockpitModulBuehne baum={baum} />
-            </>
+            <CockpitModulBuehne baum={baum} />
           )}
 
           <BereichKacheln role={role} />
-
-          <SphaerenNotiz role={role} />
-          <SeitenbausteineHinweis ort="cockpit" />
         </>
       ) : (
         <div className="tw-empty" role="note">
@@ -568,73 +554,5 @@ function ThemeSchalter({ theme, onToggle }: { theme: CockpitTheme; onToggle: () 
       </span>
       {dunkel ? 'Helles Design' : 'Dunkles Design'}
     </button>
-  );
-}
-
-function CockpitContextBar({
-  model,
-  role,
-  tenant,
-  world,
-}: {
-  model: MissionControlModel;
-  role: DemoRole | null;
-  tenant: DemoTenant;
-  world: ExperienceWorld | null;
-}) {
-  const waves = model.recordingWaves;
-  const letzte: RecordingWave | undefined = waves.length > 0 ? waves[waves.length - 1] : undefined;
-  const scopeIds: string[] = [];
-  for (const wave of waves) {
-    for (const scopeId of wave.scopeIds) if (!scopeIds.includes(scopeId)) scopeIds.push(scopeId);
-  }
-  return (
-    <PageContextBar
-      role={role}
-      tenant={tenant}
-      scopeLabel="Scopes dieses Mandanten"
-      scopeValue={<ScopeKontextWert scopeIds={scopeIds} />}
-      datenstandLabel="Datenstand (zuletzt im System erfasst)"
-      datenstandValue={
-        letzte ? (
-          <time dateTime={letzte.recordedOn}>{letzte.dateDisplay}</time>
-        ) : (
-          'keine Erfassung im Datenbestand'
-        )
-      }
-    >
-      {world ? (
-        <div>
-          <dt>Erlebniswelt</dt>
-          <dd>{world.name}</dd>
-        </div>
-      ) : null}
-    </PageContextBar>
-  );
-}
-
-function SphaerenNotiz({ role }: { role: DemoRole | null }) {
-  const portfolio = kundenSicht(role) === 'portfolio';
-  const wechsel = mandantenwechselSichtbar(role);
-  const titel =
-    role === null
-      ? 'Grundform: Portfolio-Übersicht.'
-      : portfolio
-        ? 'Betreibersicht: Portfolio.'
-        : 'Kundensicht: dieses eine Unternehmen.';
-  return (
-    <div className="ht-neutral" role="note">
-      <p className="ht-neutral-text">
-        <strong>{titel}</strong>{' '}
-        {portfolio
-          ? `Dieser Einstieg gehört zur Portfolio-Sphäre; ${
-              wechsel
-                ? 'ein Mandantenwechsel steht in der Kopfleiste bereit'
-                : 'ein Mandantenwechsel ist hier nicht vorgesehen'
-            }. Gezeigt wird ausschließlich der aktive Mandant.`
-          : 'Dieser Einstieg zeigt ausschließlich den aktiven Mandanten – ohne mandantenübergreifende Portfolio-Übersicht und ohne Mandantenwechsel in der Kopfleiste.'}{' '}
-        {rollenReichweiteSatz(role)}
-      </p>
-    </div>
   );
 }

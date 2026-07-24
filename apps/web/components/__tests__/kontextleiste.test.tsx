@@ -62,7 +62,6 @@ import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
-import { CockpitModulContent } from '../cockpit/CockpitModulContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { CONTEXT_GAPS, CONTEXT_NEUTRAL_ROLE } from '../shell/PageContextBar';
 import { SessionProvider } from '../shell/SessionProvider';
@@ -423,59 +422,9 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     unmount();
   });
 
-  /**
-   * Zusatzseite „Cockpit-Varianten-Vergleich" (`/cockpit`, WP-025) UNTER dem Ort „Heute": eine
-   * eigene Kontextleiste je Variante (belegter Mandant + neutral + leer). Kein NAV_PLACES-Ort,
-   * deshalb außerhalb des Registers geprüft (die Meta-Assertion oben bleibt intakt).
-   */
-  for (const v of ['a', 'b', 'c'] as const) {
-    it(`Cockpit (Variante ${v}): belegte Elemente belegt (Nordwerk), unbelegte als benannte Datenlücke`, () => {
-      const { unmount } = render(
-        <CockpitModulContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
-      );
-      const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
-      expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordstern Manufacturing SE');
-      const rolle = eintrag(kontext, 'Aktive Produktrolle').dd;
-      expect(ROLLENNAMEN).toContain(rolle);
-      expect(rolle).not.toMatch(/R\d{2}/);
-      const labels = Array.from(kontext.querySelectorAll('dt')).map((dt) => dt.textContent ?? '');
-      expect(labels.find((l) => l.includes('Scope'))).toBeDefined();
-      const datenstandLabel = labels.find((l) => l.startsWith('Datenstand'));
-      expect(datenstandLabel).toMatch(/im System erfasst/);
-      expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
-      expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
-      expect(kontext.querySelector('.od-context-hinweis .od-context-details')).not.toBeNull();
-      for (const begruendung of Object.values(CONTEXT_GAPS)) {
-        expect(kontext.textContent ?? '').toContain(begruendung);
-      }
-      unmount();
-    });
-  }
-
-  it('Cockpit: rendert ohne Rolle vollständig, Leiste nennt „neutral"', () => {
-    const { container, unmount } = render(
-      // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop (null = neutral, DR-0009), kein ARIA-Attribut.
-      <CockpitModulContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
-    );
-    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
-    expect((container.textContent ?? '').length).toBeGreaterThan(200);
-    expect(eintrag(kontext, 'Aktive Produktrolle').dd).toBe(CONTEXT_NEUTRAL_ROLE);
-    expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
-    unmount();
-  });
-
-  it('Cockpit (leerer Mandant): Leiste vollständig, kein erfundener Scope/Datenstand', () => {
-    const { unmount } = render(
-      <CockpitModulContent role={role('R01')} tenant={tenant(TENANT_ID.FINOVIA)} />,
-    );
-    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
-    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Finovia Digital Bank AG');
-    expect(kontext.querySelectorAll('time')).toHaveLength(0);
-    expect(eintrag(kontext, 'Scopes dieses Mandanten').dd).toBe('keine Scope-Zuordnung erfasst');
-    expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
-    expect(kontext.textContent ?? '').toContain(CONTEXT_GAPS.vertretung);
-    unmount();
-  });
+  // Das Cockpit trägt seit DR-0017 KEINE Kontextleiste mehr (eigenständige Full-Screen-Ansicht,
+  // Mandant im Wechsler statt in einer Seiten-Leiste). Es ist deshalb aus dieser Shell-Seiten-
+  // Konvention herausgenommen; die Kontextleiste der echten NAV_PLACES-Orte bleibt oben voll geprüft.
 
   it('Negativbeweis: die Lückentexte behaupten keinen Wert und keine Stufe', () => {
     // Die drei Texte müssen Lücken BENENNEN („nicht erfasst"/„kein … erfasst") und dürfen

@@ -11,7 +11,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
@@ -36,7 +36,7 @@ function kachel(container: HTMLElement, key: string): HTMLElement {
 }
 
 describe('Bento-Cockpit – Kopf, Kontextleiste, Übersicht', () => {
-  it('führt mit Leitfrage + Kontextleiste und rendert das Bento aus echten Daten', () => {
+  it('führt mit Leitfrage und rendert das Bento aus echten Daten', () => {
     const { container } = render(
       <CockpitModulContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
@@ -44,9 +44,9 @@ describe('Bento-Cockpit – Kopf, Kontextleiste, Übersicht', () => {
     expect(container.querySelector('p.tw-question')?.textContent).toBe(
       'Wie steht Nordstern Manufacturing SE heute da – was ist erfasst und wo sind die Lücken?',
     );
-    const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
-    expect(within(kontext).getByText('Nordstern Manufacturing SE')).toBeInTheDocument();
-    expect(kontext.textContent ?? '').not.toMatch(/R\d{2}/);
+    // Eigenständiges Cockpit (DR-0017): kein Kontext-Block; der Mandantenname steht in der
+    // Leitfrage, kein Rollencode im sichtbaren Text (DR-0013 Nr. 12).
+    expect(container.textContent ?? '').not.toMatch(/R\d{2}/);
 
     expect(container.querySelector('.ck-bento-grid')).not.toBeNull();
     expect(kachel(container, 'k_heute')).toBeInTheDocument();
@@ -106,26 +106,13 @@ describe('Bento-Cockpit – modulares Eintauchen (N Ebenen)', () => {
   });
 });
 
-describe('Bento-Cockpit – Sphäre und neutral', () => {
-  it('Kundenrolle (R03) sieht die Ein-Unternehmens-Sphäre; Betreiber (R08) das Portfolio', () => {
-    const kunde = render(
-      <CockpitModulContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
-    );
-    expect(kunde.container.textContent ?? '').toContain('Kundensicht: dieses eine Unternehmen.');
-    kunde.unmount();
-    const betreiber = render(
-      <CockpitModulContent role={role('R08')} tenant={tenant(TENANT_ID.NORDWERK)} />,
-    );
-    expect(betreiber.container.textContent ?? '').toContain('Betreibersicht: Portfolio.');
-  });
-
-  it('neutral (keine Rolle) rendert vollständig inkl. Kontextleiste', () => {
+describe('Bento-Cockpit – neutral', () => {
+  it('neutral (keine Rolle) rendert vollständig', () => {
     const { container } = render(
       // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop (null = neutral, DR-0009).
       <CockpitModulContent role={null} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
     expect((container.textContent ?? '').length).toBeGreaterThan(200);
-    expect(screen.getByRole('region', { name: 'Kontext dieser Seite' })).toBeInTheDocument();
     expect(container.querySelector('.ck-bento-grid')).not.toBeNull();
   });
 });

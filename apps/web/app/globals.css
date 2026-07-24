@@ -2309,6 +2309,12 @@ summary {
 .ck-legende-fold {
   margin: 0.25rem 0 1rem;
 }
+.ck-datenstand {
+  font-size: 0.8rem;
+  color: var(--ck-muted);
+  margin: 0.15rem 0 1.1rem;
+  line-height: 1.5;
+}
 .ck-legende-fold > summary {
   cursor: pointer;
   font-size: 0.85rem;
