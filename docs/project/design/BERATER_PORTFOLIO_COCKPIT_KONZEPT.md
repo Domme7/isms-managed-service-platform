@@ -40,6 +40,14 @@ sehen, **wo es gerade brennt** und **welche Termine anstehen** — statt in jede
 3. **Teil 1 bauen** (echte Portfolio-Aggregation, read-only) — sofort ehrlich möglich.
 4. **Teil 2 (Eisenhower/E-02)** — nach Owner-Freigabe des Change Proposals; synthetisch zuerst.
 
+## Owner-Feedback (2026-07-24)
+Der Entwurf **gefällt** als Idee — der Owner will beim Bau aber **deutlich mehr**: **mehr Dashboard, stärker
+interaktiv**, auf einen Blick **wo bei welchem Kunden was wie hängt**. Also nicht nur Rangliste + Board,
+sondern ein reiches, interaktives Portfolio-Dashboard — z. B. **Heatmap/Matrix Kunde × Bereich** (Controls,
+Risiken, Owner, Nachweise, Fristen), Drill-down je Zelle in die konkrete Hängestelle, Live-Verdichtung,
+Filter. Wird beim Bau (nach Schritt 2+3) umgesetzt; der jetzige Entwurf ist die tragfähige Basis. Vor dem
+Bau zeige ich einen **erweiterten, „krasseren" Entwurf**.
+
 ## Offen (Owner)
 - OF-B1: Reicht die Lücken-Last als „Dringlichkeit" für Teil 1, bis E-02 da ist? (Default: ja, klar so benannt.)
 - OF-B2: Eisenhower-Achsen — Dringlichkeit/Wichtigkeit rein kundengesetzt, oder Frist-Nähe automatisch

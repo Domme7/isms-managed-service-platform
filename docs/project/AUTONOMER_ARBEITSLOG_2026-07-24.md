@@ -56,7 +56,9 @@
 - ✅ **Schritt 4 (Konzept)**: Berater-Portfolio-Cockpit als **Entwurf** gezeigt (Mockup
   `berater_portfolio_cockpit_konzept`) + Konzeptdoc `docs/project/design/BERATER_PORTFOLIO_COCKPIT_KONZEPT.md`
   — Teil 1 echte Kunden-Rangliste nach Lücken-Last, Teil 2 Eisenhower/E-02 (geplant). Braucht Schritt 3 für
-  ein echtes Portfolio; Owner-Reaktion auf den Entwurf steht aus.
+  ein echtes Portfolio. **Owner-Feedback (2026-07-24): gefällt als Idee, will aber MEHR — mehr Dashboard,
+  interaktiver, „wo hängt bei welchem Kunden was wie" (z. B. Heatmap Kunde × Bereich, Drill-down je Zelle).**
+  Vor dem Bau erweiterten „krasseren" Entwurf zeigen.
 - ⏳ **Schritt 2 (5 Profile)** + **Schritt 3 (Mandanten füllen, WP-021 Slices 3–6)** — beides Code-Änderungen
   mit Test-Count-Churn (all-or-nothing für grüne Suite), bewusst für einen fokussierten Durchgang gelassen,
   damit kein halbfertiger, roter Zwischenstand entsteht. Nächster Einstieg: WP-021 Slices 3–6 (AE-2-Mapping),
