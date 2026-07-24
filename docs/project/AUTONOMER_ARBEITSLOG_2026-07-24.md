@@ -83,6 +83,25 @@
   Control ohne Nachweis, Wachstumsrisiko ohne Minderung, Telemetriedaten ohne Owner) + Dok-07-Pflichten
   (Konflikt/veraltete Quelle/Trust-State), keine numerische Bewertung (Slice 7 gated). `depends_on`
   erstmals belegt. demo-seed 72 + db 19 + web 826 + typecheck grün. Manifest 1.5.0.
+- ✅ **AlpenCloud-Politur** (`b01542b`): Domänen-Review-Fund behoben (mitigates von Verschlüsselung
+  auf IAM umgehängt — API-Exfiltration wird durch Zugriffssteuerung gemindert, nicht durch
+  Ruhedaten-Verschlüsselung); zwei klärende Kommentare.
+- ✅ **WP-021 Slice 4 (Rheinbank Digital AG)** (`07955df`): Slot `tenant-finovia`, Anzeige→Rheinbank,
+  eigener ISMS-Graph (30/34), neue Typen `operates`/`caused_by`. **Mandantenwelt: 3 gefüllte
+  Kundenfirmen** (Nordstern, AlpenCloud, Rheinbank) + Provider; MediCore + GreenGrid leer.
+- 🔴 **KRITISCHER BEFUND (stale dist):** `apps/web` und `packages/db` lösen `@isms/demo-seed` über das
+  **gebaute `dist/`** auf (`main: dist/index.js`, `dist/` ist **gitignored**). **Lokale Web-/DB-Tests
+  liefen gegen einen veralteten Seed** und zeigten falsch-grün, bis
+  `pnpm --filter @isms/demo-seed build` lief. **REGEL für jede Seed-Änderung: erst `demo-seed build`,
+  dann Web-/DB-Tests** — sonst spiegelt weder die App noch die Suite den neuen Seed. (CI baut via Turbo
+  vor dem Test frisch; nur lokal ist der manuelle Rebuild nötig.) Der frische-dist-Fallout (Beziehungs-
+  typ-Labels, „Slice"-Beschreibungsleck, CISO-Namenskollision, `finovia`→`greengrid` als Leer-Fixture,
+  „vier→sechs"-Counts) wurde in `07955df` behoben; alle Suiten gegen frisches dist grün.
+- ⏳ **WP-021 Slice 5 (MediNova Clinics Holding):** Entwurf `medinova-graph.ts` liegt fertig auf Platte
+  (Workflow, 30 Objekte/36 Kanten, inkl. F05 Lieferkette), noch **nicht verdrahtet**. Integration wie
+  Rheinbank: Slot `tenant-medicore`, Anzeige→MediNova; `seed.ts`/`index`/`seed-facts`/`seed.spec`/
+  Manifest 1.7.0; Web-Test-Churn für die **MediCore-Leer-Fixtures** (→ `tenant-greengrid`) + Anzeigename.
+  GreenGrid bleibt leer (= Slice 6, der bewusst leere Mandant).
 - ⏳ **WP-021 Slices 4+5 (Rheinbank/MediNova) + AlpenCloud-Review** — Hintergrund-**Workflow**
   (`wp021-slice45-draft-und-ac-review`): zwei `data-graph-analytics`-Agenten entwerfen `rheinbank-graph.ts`
   (Finovia-Slot, Anzeige→Rheinbank) + `medinova-graph.ts` (MediCore-Slot, Anzeige→MediNova, inkl. F05
