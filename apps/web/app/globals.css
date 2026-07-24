@@ -22,6 +22,33 @@
   --shell-demo: #7a4b00;
   --shell-demo-bg: #fdf1d6;
   --shell-demo-line: #ecd9a6;
+
+  /* -------------------------------------------------------------------------
+   * Cockpit-Designsystem (WP-025) – wiederverwendbare Ampel- und Flächen-Tokens.
+   * Vier SEMANTISCHE Ampelfarben (je „stark" für Text/Strich und „soft" für Flächen)
+   * plus EINE neutrale Flächen-Rampe. Absicht: die moderne Sprache lässt sich später über
+   * dieselben Tokens auf andere Seiten ziehen. Jede Farbe hat eine offengelegte Regel
+   * (`lib/cockpit/ampel.ts`) und tritt nie ohne Symbol + Text auf (06-D11).
+   * ----------------------------------------------------------------------- */
+  --ck-ok: #147a45;
+  --ck-ok-soft: #e6f4ec;
+  --ck-warn: #8a5a00;
+  --ck-warn-soft: #fbf0d6;
+  --ck-alert: #b42318;
+  --ck-alert-soft: #fbe7e5;
+  --ck-info: #3a4ea8;
+  --ck-info-soft: #e9ecfb;
+
+  /* Neutrale Flächen-Rampe (eine Rampe, keine zweite Grau-Familie). */
+  --ck-surface: #ffffff;
+  --ck-surface-2: #f6f7f9;
+  --ck-surface-3: #eceef3;
+  --ck-border: #d9dce3;
+  --ck-ink: #1a1a2e;
+  --ck-ink-soft: #454b5e;
+  --ck-muted: #5b6172;
+  --ck-panel-bg: transparent;
+  --ck-panel-pad: 0;
 }
 
 * {
@@ -1719,4 +1746,440 @@ summary {
   font-size: 0.82rem;
   color: var(--tw-ink-soft);
   max-width: 82ch;
+}
+
+/* ===========================================================================
+ * Cockpit (WP-025) – moderne, flache Dashboard-Sprache auf dem Cockpit-Teilbaum.
+ * Alle Farben stammen aus den --ck-*-Tokens; der Dunkelmodus remappt die Tokens
+ * (inkl. der bestehenden --tw-*-Variablen), sodass auch die wiederverwendeten
+ * Kacheln der Buehne mitziehen. Keine Verlaeufe, keine Animationen.
+ * ========================================================================= */
+
+.ck-status--ok {
+  --ck-accent: var(--ck-ok);
+  --ck-accent-soft: var(--ck-ok-soft);
+}
+.ck-status--warn {
+  --ck-accent: var(--ck-warn);
+  --ck-accent-soft: var(--ck-warn-soft);
+}
+.ck-status--alert {
+  --ck-accent: var(--ck-alert);
+  --ck-accent-soft: var(--ck-alert-soft);
+}
+.ck-status--info {
+  --ck-accent: var(--ck-info);
+  --ck-accent-soft: var(--ck-info-soft);
+}
+
+.ck-cockpit {
+  background: var(--ck-panel-bg);
+  padding: var(--ck-panel-pad);
+  border-radius: 14px;
+}
+
+.ck-cockpit[data-ck-theme="dark"] {
+  --ck-surface: #191c24;
+  --ck-surface-2: #20242e;
+  --ck-surface-3: #2a2f3b;
+  --ck-border: #363d4d;
+  --ck-ink: #eef1f6;
+  --ck-ink-soft: #c4cad6;
+  --ck-muted: #9aa2b1;
+  --ck-ok: #4ecb86;
+  --ck-ok-soft: #16301f;
+  --ck-warn: #e2ab4a;
+  --ck-warn-soft: #322810;
+  --ck-alert: #f28b80;
+  --ck-alert-soft: #3a201d;
+  --ck-info: #93a4ff;
+  --ck-info-soft: #1f2542;
+  --ck-panel-bg: #14161c;
+  --ck-panel-pad: 1.25rem;
+
+  --tw-ink: #eef1f6;
+  --tw-ink-soft: #c4cad6;
+  --tw-muted: #9aa2b1;
+  --tw-line: #363d4d;
+  --tw-surface: #20242e;
+  --tw-surface-2: #191c24;
+  --tw-accent: #93a4ff;
+  --tw-focus: #93a4ff;
+  color: var(--ck-ink);
+}
+
+.ck-kopf {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.ck-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--ck-border);
+  background: var(--ck-surface);
+  color: var(--ck-ink);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ck-theme-toggle[aria-pressed="true"] {
+  background: var(--ck-surface-3);
+}
+.ck-theme-toggle:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+}
+.ck-theme-icon {
+  font-size: 1rem;
+}
+
+.ck-legende {
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  margin: 0 0 1.5rem;
+}
+.ck-legende-titel {
+  font-size: 0.9rem;
+  margin: 0 0 0.6rem;
+  border: none;
+  padding: 0;
+}
+.ck-legende-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+.ck-legende-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.5rem;
+  align-items: baseline;
+  background: var(--ck-accent-soft);
+  border-left: 3px solid var(--ck-accent);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+}
+.ck-legende-punkt {
+  color: var(--ck-accent);
+  font-size: 1rem;
+  line-height: 1;
+}
+.ck-legende-label {
+  font-weight: 700;
+  font-size: 0.86rem;
+  color: var(--ck-ink);
+}
+.ck-legende-regel {
+  grid-column: 2;
+  font-size: 0.78rem;
+  color: var(--ck-ink-soft);
+}
+.ck-legende-ehrlich {
+  margin: 0.7rem 0 0;
+  font-size: 0.8rem;
+  color: var(--ck-muted);
+  font-style: italic;
+}
+
+.ck-kpi-band {
+  margin: 0 0 1.5rem;
+}
+.ck-kpi-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.ck-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  height: 100%;
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-top: 3px solid var(--ck-accent, var(--ck-border));
+  border-radius: 12px;
+  padding: 0.9rem 1rem 1rem;
+  color: var(--ck-ink);
+  text-decoration: none;
+}
+.ck-kpi:hover {
+  background: var(--ck-surface-2);
+}
+.ck-kpi:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+}
+.ck-kpi-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ck-ink-soft);
+}
+.ck-kpi-num {
+  font-size: 2.1rem;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--ck-ink);
+}
+.ck-kpi-num--leer {
+  font-size: 1.4rem;
+}
+.ck-kpi-sub {
+  font-size: 0.78rem;
+  color: var(--ck-muted);
+}
+.ck-kpi-wert {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ck-ink);
+}
+.ck-kpi-status {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ck-accent);
+}
+.ck-kpi-klein {
+  font-size: 0.74rem;
+  color: var(--ck-muted);
+}
+.ck-kpi-mehr {
+  margin-top: auto;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--tw-accent);
+}
+
+.ck-ring {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  --ck-accent: var(--ck-info);
+}
+.ck-ring--ok {
+  --ck-accent: var(--ck-ok);
+}
+.ck-ring--warn {
+  --ck-accent: var(--ck-warn);
+}
+.ck-ring--alert {
+  --ck-accent: var(--ck-alert);
+}
+.ck-ring--info {
+  --ck-accent: var(--ck-info);
+}
+.ck-ring-svg {
+  width: 88px;
+  height: 88px;
+}
+.ck-ring-track {
+  stroke: var(--ck-surface-3);
+  stroke-width: 7;
+}
+.ck-ring-fill {
+  stroke: var(--ck-accent);
+  stroke-width: 7;
+}
+.ck-ring-zahl {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--ck-ink);
+}
+.ck-ring-von {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ck-muted);
+}
+
+.ck-warnungen {
+  margin: 1.75rem 0 0;
+}
+.ck-warnungen-lead {
+  color: var(--ck-ink-soft);
+  font-size: 0.9rem;
+  margin: 0 0 0.75rem;
+}
+.ck-warnungen-leer {
+  background: var(--ck-surface);
+  border: 1px dashed var(--ck-border);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  color: var(--ck-ink-soft);
+}
+.ck-warnungen-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.ck-warnung {
+  background: var(--ck-accent-soft);
+  border: 1px solid var(--ck-border);
+  border-left: 4px solid var(--ck-accent);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+}
+.ck-warnung-kopf {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0 0 0.35rem;
+}
+.ck-warnung-symbol {
+  color: var(--ck-accent);
+  font-weight: 800;
+}
+.ck-warnung-titel {
+  font-weight: 700;
+  color: var(--ck-ink);
+}
+.ck-warnung-grund {
+  margin: 0 0 0.5rem;
+  font-size: 0.84rem;
+  color: var(--ck-ink-soft);
+}
+.ck-warnung-objekte {
+  list-style: none;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.ck-warnung-objekt-link {
+  display: inline-block;
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.78rem;
+  text-decoration: none;
+  color: var(--tw-accent);
+}
+.ck-warnung-objekt-link:hover {
+  background: var(--ck-surface-2);
+}
+.ck-warnung-ziel {
+  margin: 0;
+}
+.ck-warnung-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--tw-accent);
+}
+
+.ck-lebenszyklus {
+  margin: 1.75rem 0 0;
+}
+.ck-lz-glosse {
+  font-size: 0.84rem;
+  color: var(--ck-muted);
+  margin: 0 0 0.6rem;
+}
+.ck-lz-bar {
+  display: flex;
+  width: 100%;
+  height: 18px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--ck-border);
+}
+.ck-lz-bar-seg {
+  height: 100%;
+  min-width: 2px;
+}
+.ck-lz-legende {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.ck-lz-legende-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  column-gap: 0.5rem;
+  font-size: 0.82rem;
+}
+.ck-lz-punkt {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  align-self: center;
+}
+.ck-lz-stand {
+  font-weight: 600;
+  color: var(--ck-ink);
+}
+.ck-lz-zahl {
+  color: var(--ck-ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.ck-lz-hinweis {
+  grid-column: 2 / -1;
+  font-size: 0.75rem;
+  color: var(--ck-muted);
+}
+.ck-lz-fuss {
+  margin: 0.7rem 0 0;
+  font-size: 0.78rem;
+  color: var(--ck-muted);
+}
+
+.ck-lz-seg--1 {
+  background: #3a4ea8;
+}
+.ck-lz-seg--2 {
+  background: #5a7d9a;
+}
+.ck-lz-seg--3 {
+  background: #6b7280;
+}
+.ck-lz-seg--4 {
+  background: #8a6d3b;
+}
+.ck-lz-seg--5 {
+  background: #4b7d6a;
+}
+.ck-lz-seg--6 {
+  background: #7a5a8a;
+}
+
+.ck-detail-titel {
+  margin: 1.4rem 0 0.6rem;
+  font-size: 0.9rem;
+  color: var(--ck-ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ck-heute-link {
+  margin: 1.75rem 0 0;
+}
+
+@media (max-width: 640px) {
+  .ck-kpi-grid,
+  .ck-warnungen-liste {
+    grid-template-columns: 1fr;
+  }
 }
