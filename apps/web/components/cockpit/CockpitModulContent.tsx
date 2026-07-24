@@ -89,8 +89,10 @@ export function CockpitModulContent({
 
       {model && baum ? (
         <>
-          <CockpitContextBar model={model} role={role} tenant={tenant} world={world} />
-          <SphaerenNotiz role={role} />
+          <details className="ck-fold">
+            <summary>Kontext dieser Seite — Mandant, Rolle, Datenstand</summary>
+            <CockpitContextBar model={model} role={role} tenant={tenant} world={world} />
+          </details>
 
           {baum.isEmpty && baum.emptyTile ? (
             <EmptyTenantKachel tile={baum.emptyTile} />
@@ -104,6 +106,7 @@ export function CockpitModulContent({
             </>
           )}
 
+          <SphaerenNotiz role={role} />
           <p className="ck-heute-link">
             <Link className="tw-cta" href="/heute">
               Zur ausführlichen Tagesansicht „Heute" →

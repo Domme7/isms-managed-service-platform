@@ -77,7 +77,7 @@ export function CockpitRadar({ radar }: { radar: CockpitRadarModel }) {
         {axes.map((axis) => (
           <li key={axis.id} className={`ck-status--${axis.status}`}>
             <span className="ck-radar-punktmarke" aria-hidden="true" />
-            <span className="ck-radar-wert-label">{axis.label}</span>
+            <span className="ck-radar-wert-label">{axis.kurz}</span>
             <span className="ck-radar-wert-zahl">
               {axis.isEmpty ? 'keine Grundgesamtheit' : `${axis.covered} von ${axis.total}`}
             </span>

@@ -2291,6 +2291,21 @@ summary {
  * aus den --ck-*-Tokens (Dunkelmodus zieht automatisch mit). Flach; Eintauch-
  * Animation respektiert prefers-reduced-motion.
  * ========================================================================= */
+.ck-fold {
+  margin: 0.25rem 0 0.6rem;
+}
+.ck-fold > summary,
+.ck-legende-fold > summary {
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ck-ink-soft);
+  padding: 0.35rem 0;
+  list-style-position: inside;
+}
+.ck-fold[open] > summary {
+  margin-bottom: 0.5rem;
+}
 .ck-legende-fold {
   margin: 0.25rem 0 1rem;
 }

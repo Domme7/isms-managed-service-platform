@@ -11,6 +11,17 @@ Stand: **2026-07-24**. Aktueller Baustand & Testlage: `docs/project/CURRENT_STAT
 
 ---
 
+## 0. NEUE NORDRICHTUNG (2026-07-24, DR-0017) — HIER ZUERST
+
+**Das ganze Produkt wird ein durchgehendes Eintauch-Dashboard** ([DR-0017](../decisions/DR-0017_drilldown_dashboard_ia_ganzes_produkt.md)):
+Einstieg = **Berater-Portfolio-Dashboard** (alle Kunden) → tiefer in einen **Kunden** → dessen Dashboard zeigt
+die acht Bereiche (Heute/Kunden/ISMS/Entscheidungen/Services/Reports/Wissen/Administration) als **grafische
+Kacheln** → tiefer und tiefer bis in den **digitalen Zwilling**. **Kein Sidebar-Reiter mehr** — Navigation nur
+über Eintauchen (Brotkrume). Alles im **Cockpit-Dashboard-Stil** (das modulare Cockpit ist die Vorlage).
+**Der ehrliche Kern bleibt** (Daten, Ableitungen, Zwilling, Konzepttreue, Tests) — nur Präsentation + IA neu.
+Umsetzung staged (Stage 0 Cockpit-Vorlage ✅ → 1 Berater-Einstieg → 2 Kunde-Dashboard → 3 Bereiche → 4 Sidebar
+raus). Details + Konzept-Tension (06-D01) in DR-0017.
+
 ## 1. Vision & Zielpublikum
 
 Ein **digitaler Unternehmenszwilling für kontinuierliches Informationssicherheits-Management** + skalierbare

@@ -35,10 +35,20 @@ export const RADAR_LABEL: Readonly<Record<CoverageTile['id'], string>> = {
   kanten_vertrauensgrad: 'Beziehungen mit Vertrauensangabe',
 };
 
+/** Kurzlabel für die enge Radar-Werteliste (verhindert den Umbruch in der schmalen Kachel). */
+export const RADAR_KURZ: Readonly<Record<CoverageTile['id'], string>> = {
+  controls_nachweis: 'Controls',
+  risiken_minderung: 'Risiken',
+  objekte_owner: 'Objekte m. Owner',
+  kanten_vertrauensgrad: 'Vertrauensangabe',
+};
+
 /** Eine Radar-Achse = eine erfasste Abdeckung, mit ehrlichem Anteil und Ampel-Status. */
 export interface CockpitRadarAxis {
   readonly id: CoverageTile['id'];
   readonly label: string;
+  /** Kurzlabel für die enge Radar-Werteliste. */
+  readonly kurz: string;
   readonly covered: number;
   readonly total: number;
   /** Anteil 0…1 (Geometrie der Achse); 0 bei fehlender Grundgesamtheit – nie ein Score im Text. */
@@ -75,6 +85,7 @@ export function buildCockpitRadar(
     return {
       id: tile.id,
       label: RADAR_LABEL[tile.id],
+      kurz: RADAR_KURZ[tile.id],
       covered: tile.covered,
       total: tile.total,
       anteil,
