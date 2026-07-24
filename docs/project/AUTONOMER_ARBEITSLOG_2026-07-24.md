@@ -162,9 +162,15 @@
   O-DR17-02-„Dive-Detail") Adopter: `WissenContent` unverändert, nur `WissenView` umschließt sie mit dem
   Rahmen. 4 `BereichRahmen`-Tests; web lint 0 · typecheck 0 · **869 grün**. Browser: `/wissen` in
   `.ck-cockpit--bereich`, Dunkel aus dem Cockpit übernommen (Panel `rgb(20,22,28)`), keine Konsolenfehler.
-  - **Verbleibend Stage 3 (7 Bereiche):** Heute (reich, 1033 Z., sorgfältig) · ISMS · Services ·
-    Entscheidungen · Reports · Administration · Kunden. Je Bereich = ein eigener getesteter Umbau; wo ein
-    Bereich schon reich ist, prüfen, ob nur der Rahmen greift oder Inhalt in die Bento-Sprache wandert.
+- ✅ **DR-0017 Stage 3 Frame-Rollout KOMPLETT — alle 8 Bereiche im geteilten Dashboard-Rahmen:**
+  ISMS, Services, Entscheidungen, Reports, Administration, Kunden(KundenStart) + Heute als Batch auf
+  `BereichRahmen` umgestellt (je *View* umschließt den unveränderten *Content* per Ternary; kein eigener
+  Kopf → genau ein h1). Heute (reich, `MissionControlContent`) bekam **nur den Rahmen** — die Detailtiefe-/
+  Ehrlichkeitslogik blieb unangetastet. web lint 0 · typecheck 0 · **869 grün** (auch die 4 direkt
+  getesteten Views Isms/Services/Entscheidungen/Heute bleiben grün). Browser: `/isms` in
+  `.ck-cockpit--bereich`, Dunkel-Kontinuität aus dem Cockpit, genau ein h1, keine Konsolenfehler.
+  - **Autonom fertig = der Frame-Rollout.** Der tiefere **Bento-Innenumbau** reicher Bereiche (v. a. Heute)
+    bleibt an **O-DR17-02 (Owner)** gated (s. u.) — er würde getestete Nuancen berühren.
   - **↪ OFFENE FRAGE O-DR17-02 (Owner) — Tiefe der Überführung je Bereich:** Reicht der geteilte
     **Dashboard-Rahmen um den bestehenden Inhalt** (so gebaut, DR-0017-Default „im selben Rahmen",
     inhalts-treu, risikoarm), oder sollen reiche Bereiche (v. a. Heute) zusätzlich **innen in echte

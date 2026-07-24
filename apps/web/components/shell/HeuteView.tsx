@@ -43,6 +43,7 @@ import {
   type Detailtiefe,
 } from '../../lib/heute/detailtiefe';
 import { useSession } from './SessionProvider';
+import { BereichRahmen } from './BereichRahmen';
 import { MissionControlContent } from './MissionControlContent';
 
 export function HeuteView() {
@@ -71,47 +72,48 @@ export function HeuteView() {
     }
   }, []);
 
-  if (!hydrated) {
-    return (
-      <>
-        <p className="tw-eyebrow">Heute</p>
-        <h1>Heute</h1>
-        <p className="tw-muted">Lade Kontext …</p>
-      </>
-    );
-  }
-
-  if (!resolved) {
-    return (
-      <>
-        <p className="tw-eyebrow">Heute</p>
-        <h1>Heute</h1>
-        <div className="tw-empty" role="note">
-          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Kein Mandant gewählt</h2>
-          {/* DR-0009-Stand (Review-Pass): angemeldet wird nur mit dem Mandanten, der Einstieg
-              ist der neutrale strategische Überblick – keine Rollen-Voraussetzung behaupten.
-              „Ebene 1" wird bewusst NICHT verwendet: der Begriff gehört zum Detailtiefe-Control,
-              das auf dieser Login-Gate-Seite gar nicht sichtbar ist (Product-Review F4/N1). */}
-          <p style={{ marginTop: 0 }}>
-            Es ist kein Mandant gewählt. Wählen Sie einen Mandanten, um den neutralen strategischen
-            Überblick zu sehen – die Rollenwahl ist danach optional in der Kopfleiste möglich.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            <Link className="tw-cta" href="/login">
-              Zur Anmeldung →
-            </Link>
-          </p>
-        </div>
-      </>
-    );
-  }
-
+  // DR-0017 Stage 3: dieselbe Dashboard-Fläche wie das Cockpit (`BereichRahmen`, folgt der
+  // Cockpit-Themenwahl). NUR die Fläche – die reiche Strategie-Ebene-1-Logik (Detailtiefe,
+  // Ehrlichkeitsblock) bleibt in `MissionControlContent` UNVERÄNDERT; der tiefere Bento-
+  // Innenumbau reicher Bereiche ist an O-DR17-02 (Owner) gated.
   return (
-    <MissionControlContent
-      role={resolved.role}
-      tenant={resolved.tenant}
-      tiefe={tiefe}
-      onTiefeChange={wechsleTiefe}
-    />
+    <BereichRahmen>
+      {!hydrated ? (
+        <>
+          <p className="tw-eyebrow">Heute</p>
+          <h1>Heute</h1>
+          <p className="tw-muted">Lade Kontext …</p>
+        </>
+      ) : !resolved ? (
+        <>
+          <p className="tw-eyebrow">Heute</p>
+          <h1>Heute</h1>
+          <div className="tw-empty" role="note">
+            <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Kein Mandant gewählt</h2>
+            {/* DR-0009-Stand (Review-Pass): angemeldet wird nur mit dem Mandanten, der Einstieg
+                ist der neutrale strategische Überblick – keine Rollen-Voraussetzung behaupten.
+                „Ebene 1" wird bewusst NICHT verwendet: der Begriff gehört zum Detailtiefe-Control,
+                das auf dieser Login-Gate-Seite gar nicht sichtbar ist (Product-Review F4/N1). */}
+            <p style={{ marginTop: 0 }}>
+              Es ist kein Mandant gewählt. Wählen Sie einen Mandanten, um den neutralen
+              strategischen Überblick zu sehen – die Rollenwahl ist danach optional in der
+              Kopfleiste möglich.
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              <Link className="tw-cta" href="/login">
+                Zur Anmeldung →
+              </Link>
+            </p>
+          </div>
+        </>
+      ) : (
+        <MissionControlContent
+          role={resolved.role}
+          tenant={resolved.tenant}
+          tiefe={tiefe}
+          onTiefeChange={wechsleTiefe}
+        />
+      )}
+    </BereichRahmen>
   );
 }

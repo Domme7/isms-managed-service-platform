@@ -18,41 +18,42 @@
  */
 import Link from 'next/link';
 import { useSession } from '../shell/SessionProvider';
+import { BereichRahmen } from '../shell/BereichRahmen';
 import { KundenStartContent } from './KundenStartContent';
 
 export function KundenStartView() {
   const { resolved, hydrated } = useSession();
 
-  if (!hydrated) {
-    return (
-      <>
-        <p className="tw-eyebrow">Kunden · Kundenbereich</p>
-        <h1>Kundenbereich</h1>
-        <p className="tw-muted">Lade Kontext …</p>
-      </>
-    );
-  }
-
-  if (!resolved) {
-    return (
-      <>
-        <p className="tw-eyebrow">Kunden · Kundenbereich</p>
-        <h1>Kundenbereich</h1>
-        <div className="tw-empty" role="note">
-          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Nicht angemeldet</h2>
-          <p style={{ marginTop: 0 }}>
-            Es ist kein Mandant gewählt. Melden Sie sich an, um den Kundenbereich des aktiven
-            Mandanten zu sehen.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            <Link className="tw-cta" href="/login">
-              Zur Anmeldung →
-            </Link>
-          </p>
-        </div>
-      </>
-    );
-  }
-
-  return <KundenStartContent role={resolved.role} tenant={resolved.tenant} />;
+  // DR-0017 Stage 3: dieselbe Dashboard-Fläche wie das Cockpit (`BereichRahmen`, folgt der
+  // Cockpit-Themenwahl). Kopf, Leitfrage und Inhalt bleiben unverändert in `KundenStartContent`.
+  return (
+    <BereichRahmen>
+      {!hydrated ? (
+        <>
+          <p className="tw-eyebrow">Kunden · Kundenbereich</p>
+          <h1>Kundenbereich</h1>
+          <p className="tw-muted">Lade Kontext …</p>
+        </>
+      ) : !resolved ? (
+        <>
+          <p className="tw-eyebrow">Kunden · Kundenbereich</p>
+          <h1>Kundenbereich</h1>
+          <div className="tw-empty" role="note">
+            <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Nicht angemeldet</h2>
+            <p style={{ marginTop: 0 }}>
+              Es ist kein Mandant gewählt. Melden Sie sich an, um den Kundenbereich des aktiven
+              Mandanten zu sehen.
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              <Link className="tw-cta" href="/login">
+                Zur Anmeldung →
+              </Link>
+            </p>
+          </div>
+        </>
+      ) : (
+        <KundenStartContent role={resolved.role} tenant={resolved.tenant} />
+      )}
+    </BereichRahmen>
+  );
 }

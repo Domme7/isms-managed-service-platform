@@ -20,41 +20,42 @@
  */
 import Link from 'next/link';
 import { useSession } from '../shell/SessionProvider';
+import { BereichRahmen } from '../shell/BereichRahmen';
 import { EntscheidungenContent } from './EntscheidungenContent';
 
 export function EntscheidungenView() {
   const { resolved, hydrated } = useSession();
 
-  if (!hydrated) {
-    return (
-      <>
-        <p className="tw-eyebrow">Entscheidungen</p>
-        <h1>Entscheidungen</h1>
-        <p className="tw-muted">Lade Kontext …</p>
-      </>
-    );
-  }
-
-  if (!resolved) {
-    return (
-      <>
-        <p className="tw-eyebrow">Entscheidungen</p>
-        <h1>Entscheidungen</h1>
-        <div className="tw-empty" role="note">
-          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Kein Mandant gewählt</h2>
-          <p style={{ marginTop: 0 }}>
-            Es ist kein Mandant gewählt. Wählen Sie einen Mandanten, um die erfassten Entscheidungen
-            des aktiven Mandanten zu sehen.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            <Link className="tw-cta" href="/login">
-              Zur Anmeldung →
-            </Link>
-          </p>
-        </div>
-      </>
-    );
-  }
-
-  return <EntscheidungenContent role={resolved.role} tenant={resolved.tenant} />;
+  // DR-0017 Stage 3: dieselbe Dashboard-Fläche wie das Cockpit (`BereichRahmen`, folgt der
+  // Cockpit-Themenwahl). Kopf, Leitfrage und Inhalt bleiben unverändert in `EntscheidungenContent`.
+  return (
+    <BereichRahmen>
+      {!hydrated ? (
+        <>
+          <p className="tw-eyebrow">Entscheidungen</p>
+          <h1>Entscheidungen</h1>
+          <p className="tw-muted">Lade Kontext …</p>
+        </>
+      ) : !resolved ? (
+        <>
+          <p className="tw-eyebrow">Entscheidungen</p>
+          <h1>Entscheidungen</h1>
+          <div className="tw-empty" role="note">
+            <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Kein Mandant gewählt</h2>
+            <p style={{ marginTop: 0 }}>
+              Es ist kein Mandant gewählt. Wählen Sie einen Mandanten, um die erfassten
+              Entscheidungen des aktiven Mandanten zu sehen.
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              <Link className="tw-cta" href="/login">
+                Zur Anmeldung →
+              </Link>
+            </p>
+          </div>
+        </>
+      ) : (
+        <EntscheidungenContent role={resolved.role} tenant={resolved.tenant} />
+      )}
+    </BereichRahmen>
+  );
 }

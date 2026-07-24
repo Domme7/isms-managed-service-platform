@@ -16,41 +16,42 @@
  */
 import Link from 'next/link';
 import { useSession } from '../shell/SessionProvider';
+import { BereichRahmen } from '../shell/BereichRahmen';
 import { ServicesContent } from './ServicesContent';
 
 export function ServicesView() {
   const { resolved, hydrated } = useSession();
 
-  if (!hydrated) {
-    return (
-      <>
-        <p className="tw-eyebrow">Services</p>
-        <h1>Services</h1>
-        <p className="tw-muted">Lade Kontext …</p>
-      </>
-    );
-  }
-
-  if (!resolved) {
-    return (
-      <>
-        <p className="tw-eyebrow">Services</p>
-        <h1>Services</h1>
-        <div className="tw-empty" role="note">
-          <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Kein Mandant gewählt</h2>
-          <p style={{ marginTop: 0 }}>
-            Es ist kein Mandant gewählt. Wählen Sie einen Mandanten, um die Managed Services des
-            aktiven Mandanten zu sehen.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            <Link className="tw-cta" href="/login">
-              Zur Anmeldung →
-            </Link>
-          </p>
-        </div>
-      </>
-    );
-  }
-
-  return <ServicesContent role={resolved.role} tenant={resolved.tenant} />;
+  // DR-0017 Stage 3: dieselbe Dashboard-Fläche wie das Cockpit (`BereichRahmen`, folgt der
+  // Cockpit-Themenwahl). Kopf, Leitfrage und Inhalt bleiben unverändert in `ServicesContent`.
+  return (
+    <BereichRahmen>
+      {!hydrated ? (
+        <>
+          <p className="tw-eyebrow">Services</p>
+          <h1>Services</h1>
+          <p className="tw-muted">Lade Kontext …</p>
+        </>
+      ) : !resolved ? (
+        <>
+          <p className="tw-eyebrow">Services</p>
+          <h1>Services</h1>
+          <div className="tw-empty" role="note">
+            <h2 style={{ marginTop: 0, border: 'none', padding: 0 }}>Kein Mandant gewählt</h2>
+            <p style={{ marginTop: 0 }}>
+              Es ist kein Mandant gewählt. Wählen Sie einen Mandanten, um die Managed Services des
+              aktiven Mandanten zu sehen.
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              <Link className="tw-cta" href="/login">
+                Zur Anmeldung →
+              </Link>
+            </p>
+          </div>
+        </>
+      ) : (
+        <ServicesContent role={resolved.role} tenant={resolved.tenant} />
+      )}
+    </BereichRahmen>
+  );
 }
