@@ -39,8 +39,10 @@ import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
+import { LoginWelten } from '../shell/LoginWelten';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
+import { WillkommenContent } from '../willkommen/WillkommenContent';
 import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
 import { TenantDetailView } from '../twin/TenantDetailView';
@@ -340,6 +342,25 @@ describe('Kein Prozessvokabular im gerenderten Produkttext (WP-018-Wächter)', (
       {
         kontext: `/twin/${TENANT_ID.NORDWERK}/objekt/${NORDWERK_OBJECT_ID.RISK_BETRIEBSUNTERBRECHUNG}`,
         render: () => render(<ObjectDetailView model={model} />),
+      },
+    ]);
+  });
+
+  it('die Produkt-Landing und die getrennten Anmeldewelten rendern ohne Prozessvokabular', () => {
+    // Front-Door-Seiten (DR-0015): kein NAV_PLACES-Ort, deshalb außerhalb des Registers – die
+    // Meta-Assertion oben bleibt intakt. Sie dürfen kein Work-Package-/Prozessvokabular tragen.
+    pruefeVarianten([
+      { kontext: '/willkommen', render: () => render(<WillkommenContent />) },
+      {
+        kontext: '/login · getrennte Welten',
+        render: () =>
+          render(
+            <LoginWelten
+              tenants={DEMO_TENANTS}
+              defaultTenantId={DEMO_TENANTS[0]?.tenant_id ?? ''}
+              onEnter={() => {}}
+            />,
+          ),
       },
     ]);
   });

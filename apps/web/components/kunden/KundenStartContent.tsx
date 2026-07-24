@@ -30,6 +30,7 @@ import { ANSICHT_NICHT_BERECHTIGUNG_SATZ, rollenReichweiteSatz } from '../../lib
 import { buildCustomerWorkspace, type WorkspaceObjectRef } from '../../lib/kunden/data';
 import type { ManagedServiceView } from '../../lib/services/data';
 import { objectDetailHref } from '../../lib/twin/routes';
+import { BegriffeWissenHinweis } from '../shell/BegriffeWissenHinweis';
 import { PageContextBar } from '../shell/PageContextBar';
 import { ScopeKontextWert } from '../shell/ScopeKontext';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
@@ -110,6 +111,9 @@ export function KundenStartContent({
           )
         }
       />
+
+      {/* U-03: ruhiger Weg zum Glossar – „Scope", „Ziel/Kennzahl", „Nachweis", „Sphäre". */}
+      <BegriffeWissenHinweis />
 
       {model.isEmpty ? (
         <EinladungLeererMandant tenant={tenant} />

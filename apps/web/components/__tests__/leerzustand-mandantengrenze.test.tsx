@@ -41,6 +41,7 @@ import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { AppShell } from '../shell/AppShell';
 import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
+import { WillkommenContent } from '../willkommen/WillkommenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
 import { TenantDetailView } from '../twin/TenantDetailView';
@@ -231,6 +232,32 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
     }
     expect(text).not.toContain('Nordwerk Manufacturing SE');
     expect(text).not.toContain(TENANT_ID.NORDWERK);
+  });
+});
+
+/* -----------------------------------------------------------------------------
+ * Produkt-Landing `/willkommen` (DR-0015): keine Impersonation realer Organisationen
+ * -----------------------------------------------------------------------------
+ *
+ * DR-0015 verbietet der Landing die Impersonation realer Organisationen; die Erklärseite bleibt
+ * generisch und nennt KEINEN Mandanten. Anders als die Live-Orte hat sie keinen Leerzustand –
+ * genau deshalb steht sie hier: sie darf weder einen konkreten (synthetischen) Mandanten
+ * ausstellen noch über fremde sprechen. Kein NAV_PLACES-Ort, deshalb außerhalb des Registers
+ * (die Meta-Assertion oben bleibt intakt).
+ */
+describe('Produkt-Landing nennt keinen Mandanten (keine Impersonation, DR-0015)', () => {
+  it('rendert generisch – kein Anzeigename und keine ID irgendeines Mandanten', () => {
+    const { container } = render(<WillkommenContent />);
+    const text = container.textContent ?? '';
+    expect(text.length).toBeGreaterThan(80);
+    for (const t of DEMO_TENANTS) {
+      expect(text, `Landing nennt Mandant „${t.display_name}"`).not.toContain(t.display_name);
+      expect(container.innerHTML).not.toContain(t.tenant_id);
+    }
+    // Und keine der Fremdmandanten-Formulierungen (defensiv, dieselben Muster wie die Live-Orte).
+    for (const muster of FREMDER_MANDANT) {
+      expect(text).not.toMatch(muster);
+    }
   });
 });
 

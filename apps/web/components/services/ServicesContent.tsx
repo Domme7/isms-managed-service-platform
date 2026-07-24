@@ -35,6 +35,7 @@ import {
   buildServicesPageContext,
   getManagedServicesForTenant,
 } from '../../lib/services/data';
+import { BegriffeWissenHinweis } from '../shell/BegriffeWissenHinweis';
 import { PageContextBar } from '../shell/PageContextBar';
 import { ScopeKontextWert } from '../shell/ScopeKontext';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
@@ -99,6 +100,10 @@ export function ServicesContent({
           )
         }
       />
+
+      {/* U-03: ruhiger Weg zum Glossar – „Managed Service", „SLA", „Deliverable",
+          „Wirkungsbeitrag" treffen den Neueinsteiger sofort. */}
+      <BegriffeWissenHinweis />
 
       <section aria-labelledby="mandanten-services">
         {/* Zustandstreue (UX-Review MINOR-1): auch „Review"/„konfiguriert" werden gelistet –

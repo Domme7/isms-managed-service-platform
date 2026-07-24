@@ -64,8 +64,10 @@ import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { AppShell } from '../shell/AppShell';
 import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
+import { LoginWelten } from '../shell/LoginWelten';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
+import { WillkommenContent } from '../willkommen/WillkommenContent';
 import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
 import { TenantDetailView } from '../twin/TenantDetailView';
@@ -616,6 +618,50 @@ describe('Produktsprache: keine Demo-/Simulations-Kennzeichnung im Produkttext (
       'Objekte nach Familie',
     ]) {
       expect(FAMILIENCODE.test(legitim), legitim).toBe(false);
+    }
+  });
+
+  /**
+   * FRONT-DOOR-SEITEN (WP nach DR-0015): Produkt-Landing `/willkommen` und die getrennten
+   * Anmeldewelten `/login` sind das Erste, was ein Nutzer sieht – sie müssen dieselben drei
+   * Regeln halten (keine Demo-/Simulations-Kennzeichnung, kein technischer Feldname, kein
+   * Familiencode). Kein NAV_PLACES-Ort, deshalb außerhalb des Registers geprüft (die
+   * Meta-Assertion oben bleibt intakt). Seed-Mandantennamen wie „Consulting Operator Demo"
+   * stehen in den Welt-Selects und werden – wie überall – über `SEED_MASKEN` maskiert.
+   */
+  it('die Produkt-Landing und die getrennten Anmeldewelten halten alle drei Vokabular-Regeln', () => {
+    const varianten: readonly Variante[] = [
+      { kontext: '/willkommen', render: () => render(<WillkommenContent />) },
+      {
+        kontext: '/login · getrennte Welten',
+        render: () =>
+          render(
+            <LoginWelten
+              tenants={DEMO_TENANTS}
+              defaultTenantId={DEMO_TENANTS[0]?.tenant_id ?? ''}
+              onEnter={vi.fn()}
+            />,
+          ),
+      },
+    ];
+    for (const variante of varianten) {
+      const ergebnis = variante.render();
+      const roh = ergebnis.container.textContent ?? '';
+      expect(roh.length, `${variante.kontext}: leerer Render`).toBeGreaterThan(80);
+      // (1) keine Demo-/Simulations-Kennzeichnung (Seed-Namen maskiert).
+      expect(
+        gefundeneMuster(ohneAusnahmen(roh)),
+        `${variante.kontext}: Demo-/Simulations-Kennzeichnung`,
+      ).toEqual([]);
+      // (2) kein technischer Feldname (snake_case).
+      const restSnake = ohneSeedSnake(roh);
+      expect(
+        restSnake.match(new RegExp(SNAKE_CASE.source, 'g')) ?? [],
+        `${variante.kontext}: technischer Feldname`,
+      ).toEqual([]);
+      // (3) kein Familiencode.
+      expect(roh, `${variante.kontext}: Familiencode`).not.toMatch(FAMILIENCODE);
+      ergebnis.unmount();
     }
   });
 

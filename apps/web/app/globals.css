@@ -622,6 +622,15 @@ summary {
   cursor: pointer;
 }
 
+/* U-16 (Usability-Audit 2026-07-24): Spalte aus Auswahlzeile + ruhiger Notiz. Die Notiz sitzt
+   jetzt UNTER der Auswahl statt in ihr – dadurch tragen Rolle-Select und fester Mandant gleich
+   viele Zeilen und richten sich auf gemeinsamer Grundlinie aus (`.shell-switch` unten). */
+.shell-switch-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
 .shell-switch {
   display: flex;
   align-items: flex-end;
@@ -2185,5 +2194,345 @@ summary {
   .ck-kpi-grid,
   .ck-warnungen-liste {
     grid-template-columns: 1fr;
+  }
+}
+
+/* =============================================================================
+   U-03 – „Begriffe erklärt → Wissen" (persistente Zeile auf vokabularstarken Orten)
+   ========================================================================== */
+.tw-begriffe-hinweis {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0.25rem 0 1.25rem;
+  font-size: 0.85rem;
+  color: var(--tw-ink-soft);
+}
+.tw-begriffe-marker {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: var(--ck-info-soft);
+  color: var(--ck-info);
+  font-size: 0.72rem;
+  font-weight: 800;
+  font-style: italic;
+}
+.tw-begriffe-hinweis a {
+  color: var(--shell-teal);
+  font-weight: 600;
+}
+
+/* =============================================================================
+   Getrennte Anmeldewelten (DR-0015 Nr. 7 / DR-0012) + U-02 Mandant-Klartext
+   ========================================================================== */
+.login-mandant-erklaerung {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  color: var(--tw-ink-soft);
+}
+.login-welten {
+  margin: 0 0 1.25rem;
+}
+.login-welten-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.login-welt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--tw-line);
+  border-top: 4px solid var(--shell-teal);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem 1.3rem;
+  background: var(--tw-surface);
+}
+.login-welt--berater {
+  border-top-color: var(--ck-info);
+}
+.login-welt-eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tw-muted);
+}
+.login-welt-titel {
+  margin: 0;
+  font-size: 1.35rem;
+}
+.login-welt-sicht {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--tw-ink-soft);
+  min-height: 2.4em;
+}
+.login-welt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 0.25rem;
+}
+.login-welt-select {
+  color: var(--tw-ink);
+  border: 1px solid var(--tw-line);
+  max-width: 100%;
+}
+.login-welt-submit {
+  align-self: stretch;
+  text-align: center;
+}
+.login-welt--berater .login-welt-submit {
+  background: var(--ck-info);
+}
+.login-welt--berater .login-welt-submit:hover {
+  background: #2c3d86;
+}
+
+/* Neutraler Einstieg (DR-0009) als ruhiger Aufklapper unter den Welten. */
+.login-neutral {
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--tw-line);
+  padding-top: 1rem;
+}
+.login-neutral-summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--shell-teal);
+  padding: 0.25rem 0;
+}
+.login-neutral[open] .login-neutral-summary {
+  margin-bottom: 0.75rem;
+}
+
+/* =============================================================================
+   Produkt-Landing `/willkommen` (DR-0015 Nr. 7 / DR-0014) – moderne, flache, farbige
+   Bildsprache auf den --ck-*-Tokens. Hell/dunkel-fähig (prefers-color-scheme, kein Toggle).
+   Keine Verläufe, keine Animationen. Jede Farbe steht mit Text/Form, nie allein (06-D11).
+   ========================================================================== */
+.wk-main {
+  min-height: 100vh;
+  background: var(--ck-surface-2);
+  color: var(--ck-ink);
+  padding: 3rem 1.25rem 4.5rem;
+}
+.wk-page {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* Akzent je Element – reine Farbzuordnung, immer neben Text/Titel (06-D11). */
+.wk-accent--ok {
+  --wk-accent: var(--ck-ok);
+  --wk-accent-soft: var(--ck-ok-soft);
+}
+.wk-accent--warn {
+  --wk-accent: var(--ck-warn);
+  --wk-accent-soft: var(--ck-warn-soft);
+}
+.wk-accent--info {
+  --wk-accent: var(--ck-info);
+  --wk-accent-soft: var(--ck-info-soft);
+}
+.wk-accent--teal {
+  --wk-accent: var(--shell-teal);
+  --wk-accent-soft: var(--shell-teal-soft);
+}
+
+.wk-hero {
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-top: 5px solid var(--shell-teal);
+  border-radius: 16px;
+  padding: 2.25rem 2rem;
+}
+.wk-eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--shell-teal);
+}
+.wk-title {
+  margin: 0 0 1rem;
+  font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+  line-height: 1.15;
+  color: var(--ck-ink);
+  max-width: 22ch;
+}
+.wk-lead {
+  margin: 0 0 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ck-ink-soft);
+  max-width: 66ch;
+}
+.wk-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin: 0;
+}
+.wk-cta {
+  display: inline-block;
+  background: var(--shell-teal);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  padding: 0.75rem 1.4rem;
+  border-radius: 10px;
+}
+.wk-cta:hover {
+  background: #095757;
+}
+.wk-cta-note {
+  font-size: 0.85rem;
+  color: var(--ck-muted);
+}
+
+.wk-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.wk-h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  color: var(--ck-ink);
+}
+.wk-section-lead {
+  margin: 0;
+  font-size: 0.98rem;
+  color: var(--ck-ink-soft);
+  max-width: 70ch;
+}
+
+/* Für wen – die vier Erlebniswelten */
+.wk-welten {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.wk-welt {
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-left: 4px solid var(--wk-accent, var(--ck-border));
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+}
+.wk-welt-name {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+  color: var(--ck-ink);
+}
+.wk-welt-frage {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ck-ink-soft);
+}
+
+/* Differenzierer-Karten */
+.wk-diff-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+.wk-card {
+  position: relative;
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-top: 4px solid var(--wk-accent, var(--ck-border));
+  border-radius: 12px;
+  padding: 1.2rem 1.25rem 1.3rem;
+}
+.wk-card-chip {
+  display: block;
+  width: 2rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: var(--wk-accent, var(--ck-border));
+  margin-bottom: 0.75rem;
+}
+.wk-card-titel {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  color: var(--ck-ink);
+}
+.wk-card-text {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ck-ink-soft);
+}
+
+/* Ehrliche Grenze */
+.wk-grenze {
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-radius: 14px;
+  padding: 1.75rem 2rem 2rem;
+}
+.wk-grenze-text {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ck-ink-soft);
+  max-width: 70ch;
+}
+
+/* Sichtbarer Fokus (Kontrast, Tastaturweg) – Muster wie .login-page. */
+.wk-main a:focus-visible {
+  outline: 3px solid var(--shell-teal);
+  outline-offset: 2px;
+}
+
+/* Dunkelmodus der Landing (hell/dunkel-fähig, DR-0014): remappt die --ck-*-Tokens im Teilbaum
+   der Landing – dieselben Werte wie der Cockpit-Dunkelmodus. --shell-teal bleibt fest (auch als
+   Hintergrund genutzt), weißer CTA-Text bleibt darauf über AA-Kontrast. */
+@media (prefers-color-scheme: dark) {
+  .wk-main {
+    --ck-surface: #191c24;
+    --ck-surface-2: #14161c;
+    --ck-surface-3: #2a2f3b;
+    --ck-border: #363d4d;
+    --ck-ink: #eef1f6;
+    --ck-ink-soft: #c4cad6;
+    --ck-muted: #9aa2b1;
+    --ck-ok: #4ecb86;
+    --ck-ok-soft: #16301f;
+    --ck-warn: #e2ab4a;
+    --ck-warn-soft: #322810;
+    --ck-alert: #f28b80;
+    --ck-alert-soft: #3a201d;
+    --ck-info: #93a4ff;
+    --ck-info-soft: #1f2542;
+  }
+}
+
+@media (max-width: 640px) {
+  .wk-main {
+    padding: 2rem 1rem 3rem;
+  }
+  .wk-hero {
+    padding: 1.5rem 1.25rem;
   }
 }

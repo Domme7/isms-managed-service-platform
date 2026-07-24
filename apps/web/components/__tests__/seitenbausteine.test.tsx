@@ -28,7 +28,9 @@ import { WissenContent } from '../wissen/WissenContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
+import { LoginWelten } from '../shell/LoginWelten';
 import { MissionControlContent } from '../shell/MissionControlContent';
+import { WillkommenContent } from '../willkommen/WillkommenContent';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
 import { TenantOverview } from '../twin/TenantOverview';
 import { NAV_PLACES } from '../../lib/shell/places';
@@ -224,6 +226,37 @@ describe('Seitenbausteine-Konvention auf den Orten der Konvention (Dok. 06)', ()
       unmount();
     });
   }
+
+  /**
+   * FRONT-DOOR-SEITEN (DR-0015): Die Produkt-Landing `/willkommen` und die getrennten
+   * Anmeldewelten `/login` sind KEINE Orte der Seitenbausteine-Konvention (Dok. 06 „Verbindliche
+   * Seitenbausteine" gilt für die acht Inhaltsorte + dokumentierte Unterseiten, nicht für Landing
+   * und Anmeldung). Sie tragen deshalb bewusst KEINEN Seitenbausteine-Hinweis – dieser Test hält
+   * die Grenze fest, statt einen falschen Registereintrag zu erzwingen (die Meta-Assertion oben
+   * bleibt exakt gegen `NAV_PLACES` + die fünf Zusatzseiten geprüft).
+   */
+  it('die Front-Door-Seiten tragen bewusst KEINEN Seitenbausteine-Hinweis (außerhalb der Konvention)', () => {
+    for (const [kontext, ui] of [
+      ['/willkommen', <WillkommenContent key="wk" />],
+      [
+        '/login · Welten',
+        <LoginWelten
+          key="lw"
+          tenants={DEMO_TENANTS}
+          defaultTenantId={DEMO_TENANTS[0]?.tenant_id ?? ''}
+          onEnter={() => {}}
+        />,
+      ],
+    ] as const) {
+      const { container, unmount } = render(ui);
+      expect(container.textContent?.length ?? 0, `${kontext}: leerer Render`).toBeGreaterThan(80);
+      expect(
+        container.querySelector('section[aria-label="Seitenbausteine dieser Seite"]'),
+        `${kontext}: trägt fälschlich einen Seitenbausteine-Hinweis`,
+      ).toBeNull();
+      unmount();
+    }
+  });
 
   it('der Hinweis bleibt auch im Leerzustand eines Mandanten stehen (Aussage über die Seite)', () => {
     const { container, unmount } = render(
