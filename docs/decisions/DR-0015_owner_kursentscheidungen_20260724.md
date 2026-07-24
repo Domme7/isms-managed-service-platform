@@ -32,3 +32,12 @@
   (nur synthetisch, keine realen PwC-Preise).
 - **Regel Null bleibt:** jede E-02-Feldliste, jede Dok.-16-Firmenstruktur, jedes Preisband wird vor
   Umsetzung am **PDF** gegengelesen (kein Bau aus ungeprüftem Markdown).
+
+## Nachtrag (dritte Terminal-Runde, 2026-07-24)
+
+| Frage | Entscheidung | Wirkung |
+|---|---|---|
+| Zielpublikum der Demo | **Alle vier**: interne PwC-Präsentation · Kunden-Verkaufsdemo · Investoren/Stakeholder · Portfolio | Messlatte in jeder Richtung hoch: **professionell + fachlich korrekt + in 30 Sekunden verständlich + vollständig**. First-class Politur; kein Zielkonflikt zulasten der Ehrlichkeit |
+| Reichweite modernes Design | **Erst Cockpit fertig/abgenommen, dann Seite für Seite** | kein Big-Bang; moderne Bildsprache (DR-0014) rollt nach der Cockpit-Abnahme kontrolliert über die übrigen Orte |
+| Tiefe der Demo-Welt (Dok. 16) | **Alle fünf Firmen reich ausgebaut** — je eigene Branche, Reifegrad, Storyline, **synthetische Bewertungen** (Risiko-Level/KPI/Trust-States nach DR-0008) | großes **WP-021**; erzeugt echte, unterschiedliche Ampeln über ein Portfolio; stabile IDs, Reset, dokumentierte Storyline (`.claude/rules/demo-data.md`) |
+| Konkretheit der Preise | **Illustrative Preisbänder** (z. B. „€1.500–6.000 / Monat"), klar synthetisch, Dok.-14-nah | keine festen Einzelpreise (weniger Schein-Verbindlichkeit); Preisbänder je Service/Paket am PDF (Dok. 14 „Illustrative … Bänder") gegengelesen, mit Security |
