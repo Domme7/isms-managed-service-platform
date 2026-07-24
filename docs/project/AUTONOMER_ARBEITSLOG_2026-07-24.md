@@ -78,7 +78,14 @@
   Web-Tests grün.
 - ✅ **WP-021 Teilschritt 1a** (`54bebbe`): AlpenCloud + GreenGrid als leere Dok-16-Mandanten ergänzt
   (Mandantenwelt 6); `seed.spec` + Manifest 1.4.0 nachgezogen; demo-seed 63 + db 19 + web 826 grün.
-- ⏳ **WP-021 Slice 3 (AlpenCloud-Graph)**: Hintergrund-Subagent entwirft `alpencloud-graph.ts` nach
-  Nordstern-Vorlage (bewusste Lücken + Dok-07-Pflichten, keine numerische Bewertung = Slice 7 gated);
-  Integration + Verifikation + Commit durch mich nach Rückmeldung. Danach Slice 4/5 (Rheinbank/MediNova
-  Umbenennung+Graph gebündelt), dann 5-Profile-Login, Berater-Portfolio-Entry, DR-0017 Stages 2–4.
+- ✅ **WP-021 Slice 3 (AlpenCloud-Graph)** (`e174ae9`): Entwurf per Subagent, Integration + Verifikation
+  durch mich. AlpenCloud trägt jetzt 30 Objekte / 34 Kanten (F01–F09), bewusste Lücken (API-Gateway-
+  Control ohne Nachweis, Wachstumsrisiko ohne Minderung, Telemetriedaten ohne Owner) + Dok-07-Pflichten
+  (Konflikt/veraltete Quelle/Trust-State), keine numerische Bewertung (Slice 7 gated). `depends_on`
+  erstmals belegt. demo-seed 72 + db 19 + web 826 + typecheck grün. Manifest 1.5.0.
+- ⏳ **WP-021 Slices 4+5 (Rheinbank/MediNova) + AlpenCloud-Review** — Hintergrund-**Workflow**
+  (`wp021-slice45-draft-und-ac-review`): zwei `data-graph-analytics`-Agenten entwerfen `rheinbank-graph.ts`
+  (Finovia-Slot, Anzeige→Rheinbank) + `medinova-graph.ts` (MediCore-Slot, Anzeige→MediNova, inkl. F05
+  Lieferkette) parallel; zwei Reviewer (Konzepttreue + Domäne) prüfen den AlpenCloud-Graph adversarial.
+  Integration jeder Firma (Umbenennung + Web-Test-Churn) + Verifikation + Commit sequenziell durch mich.
+  Danach: 5-Profile-Login, Berater-Portfolio-Entry, DR-0017 Stages 2–4, Cleanup, Preisbänder, Suche.
