@@ -63,6 +63,7 @@ import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { AppShell } from '../shell/AppShell';
+import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
 import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
@@ -279,7 +280,16 @@ function matrix(
 }
 
 const RENDERER_JE_LIVE_ORT = {
-  heute: matrix('/heute', (r, t) => render(<MissionControlContent role={r} tenant={t} />)),
+  heute: [
+    ...matrix('/heute', (r, t) => render(<MissionControlContent role={r} tenant={t} />)),
+    // Zusatzseite UNTER dem Ort „Heute" (Cockpit-Varianten-Vergleich, WP-025): jede der drei
+    // Varianten über die volle Matrix; Variante B mit voller Detailtiefe (kompletter Textumfang).
+    ...(['a', 'b', 'c'] as const).flatMap((v) =>
+      matrix(`/cockpit (${v})`, (r, t) =>
+        render(<CockpitVariantenContent role={r} tenant={t} variante={v} initialTiefe={3} />),
+      ),
+    ),
+  ],
   kunden: [
     {
       kontext: '/twin · Portfolio',

@@ -27,6 +27,7 @@ import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
+import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { ObjectDetailView } from '../twin/ObjectDetailView';
 import { TenantOverview } from '../twin/TenantOverview';
@@ -80,6 +81,17 @@ const RENDERER_JE_ORT: Record<BausteinOrt, () => RenderResult> = {
   // Zusatzseite UNTER dem Ort „Kunden" (Struktur-Assistent, WP-006 Slice 3).
   strukturassistent: () =>
     render(<StrukturAssistentContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />),
+  // Zusatzseite UNTER dem Ort „Heute" (Cockpit-Varianten-Vergleich, WP-025). Der
+  // Seitenbausteine-Hinweis ist varianten-unabhängig (eine `SeitenbausteineHinweis ort="cockpit"`
+  // pro Seite) – geprüft mit Variante A auf Nordwerk.
+  cockpit: () =>
+    render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.NORDWERK)}
+        variante="a"
+      />,
+    ),
 };
 
 function hinweisElement(container: HTMLElement): HTMLElement {
@@ -98,7 +110,13 @@ describe('Seitenbausteine-Konvention auf den Orten der Konvention (Dok. 06)', ()
     // `objekt360`, `kundenstart`, `servicekatalog` und `strukturassistent` sind dokumentierte
     // Zusatzseiten UNTER bestehenden Orten (kein neuer NAV_PLACES-Ort). Ein künftiger echter
     // live-Ort macht die Gleichheit trotzdem rot.
-    const zusatzseiten = ['objekt360', 'kundenstart', 'servicekatalog', 'strukturassistent'];
+    const zusatzseiten = [
+      'objekt360',
+      'kundenstart',
+      'servicekatalog',
+      'strukturassistent',
+      'cockpit',
+    ];
     expect(
       Object.keys(RENDERER_JE_ORT)
         .filter((o) => !zusatzseiten.includes(o))

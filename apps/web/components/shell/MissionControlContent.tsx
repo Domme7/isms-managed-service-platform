@@ -192,6 +192,16 @@ export function MissionControlContent({
 
           <KundenbereichEinstieg role={role} tenant={tenant} />
 
+          {/* Einstieg in den Cockpit-Varianten-Vergleich (WP-025): drei Entwürfe für diesen
+              Startpunkt auf demselben Datenbestand. Kein neuer Hauptnav-Ort – die Seite hängt
+              unter „Heute" (`/cockpit`, Nav-Match in `lib/shell/places.ts`). Rollen-neutrale,
+              gleiche Zeile für jede Perspektive (eigene Klasse `ht-cockpit`). */}
+          <p className="ht-cockpit">
+            <Link className="tw-cta" href="/cockpit">
+              Drei Cockpit-Varianten für diesen Startpunkt vergleichen →
+            </Link>
+          </p>
+
           {sectionOrder
             .filter((id) => SECTION_EBENE[id] <= aktiveTiefe)
             .map((id) => (

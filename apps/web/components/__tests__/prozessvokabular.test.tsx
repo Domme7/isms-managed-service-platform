@@ -38,6 +38,7 @@ import { ServicesContent } from '../services/ServicesContent';
 import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
+import { CockpitVariantenContent } from '../cockpit/CockpitVariantenContent';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
 import { EigenerMandantEinstieg } from '../twin/EigenerMandantEinstieg';
@@ -165,9 +166,19 @@ function rollenMandantenMatrix(
  * Meta-Assertion unten rot, bis er hier mit seinen Inhaltskomponenten eingetragen ist.
  */
 const RENDERER_JE_LIVE_ORT = {
-  heute: rollenMandantenMatrix('/heute', (r, t) =>
-    render(<MissionControlContent role={r} tenant={t} />),
-  ),
+  heute: [
+    ...rollenMandantenMatrix('/heute', (r, t) =>
+      render(<MissionControlContent role={r} tenant={t} />),
+    ),
+    // Zusatzseite UNTER dem Ort „Heute" (Cockpit-Varianten-Vergleich, WP-025): jede der drei
+    // Varianten über die volle Rollen-/Mandantenmatrix – Variante B mit voller Detailtiefe
+    // (`initialTiefe={3}`), damit der Wächter den GESAMTEN gestaffelten Text sieht.
+    ...(['a', 'b', 'c'] as const).flatMap((v) =>
+      rollenMandantenMatrix(`/cockpit (${v})`, (r, t) =>
+        render(<CockpitVariantenContent role={r} tenant={t} variante={v} initialTiefe={3} />),
+      ),
+    ),
+  ],
   kunden: [
     {
       kontext: '/twin · Mandantenübersicht',
