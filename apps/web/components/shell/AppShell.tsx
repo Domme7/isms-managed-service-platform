@@ -1,8 +1,9 @@
 'use client';
 
 /**
- * Zusammengesetzte App-Shell (WP-011): Skip-Link, Topbar, sichtbarer Demo-Hinweis, Seitennavigation
- * der acht Orte und `main`-Landmark (Dok. 06 §4, `.claude/rules/frontend.md`).
+ * Zusammengesetzte App-Shell (WP-011): Skip-Link, Topbar, sichtbarer Kontextänderungs-Hinweis
+ * (Mandant/Rolle, ersetzt seit DR-0011/DR-0013 den früheren Demo-Hinweis), Seitennavigation der
+ * acht Orte und `main`-Landmark (Dok. 06 §4, `.claude/rules/frontend.md`).
  *
  * WP-020 Slice 1 – MANDANTENWECHSEL UND ROLLENWECHSEL SIND ANGEKÜNDIGTE KONTEXTÄNDERUNGEN.
  * QUELLE (Regel Null, am PDF gegengelesen): Dok. 06, Abschnitt „Sichtbarer Kontext", Kasten
