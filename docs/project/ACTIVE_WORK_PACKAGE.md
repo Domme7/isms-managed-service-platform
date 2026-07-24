@@ -1,61 +1,49 @@
 # Active Work Package
 
-> ## AUTONOMIE-AUFTRAG (Owner, 2026-07-23)
-> „Bau das Produkt fertig, so weit es geht, ohne mich noch etwas zu fragen." **Verbindlich:**
+> ## AUTONOMIE-AUFTRAG (Owner, 2026-07-23/24)
+> „Bau das Produkt fertig, so weit es geht, ohne mich noch etwas zu fragen. Wenn doch etwas
+> kommt, das eine Antwort bräuchte, mach einfach mit etwas anderem weiter." **Verbindlich:**
 > autonom weiterbauen ohne Rückfragen; jede buildbare Arbeit umsetzen, verifizieren, committen,
-> reviewen, Stand jederzeit resumierbar halten. **Nur diese harten Gates bleiben stehen** (nicht
-> autonom überschreitbar, CLAUDE.md/Sicherheitsregeln): FINDING-0004 (DB-RLS vor DB→UI **und** vor
-> echter Auth), **echte Authentisierung / getrennte Logins WP-030** (security-sensibel, Dok. 19),
-> **CCP-001..004** (Konzept-/Contract-Freigaben), Contract-/Seed-Erweiterungen (E-02), Docker,
-> kostenpflichtige/Cloud/Prod-Ressourcen, reale Daten/Secrets. Cockpit-Varianten werden **gebaut
-> und vorgelegt** (nicht als „gewählt" festgeschrieben — Stilwahl bleibt Owner), der Bau blockiert
-> nicht darauf.
->
-> **Buildbare Kette (autonom):** WP-028 Slices 2–5 (Antwort-Modus + Sprache) → Gate-Runde →
-> WP-006 Slices 2–3 (Servicekatalog, Struktur-Assistent) → Gate → Cockpit-Varianten (vorlegen) →
-> WP-029 kuratierte Personalisierung → WP-027 Suche. Danach ist ohne Owner-Gates Schluss.
+> reviewen; der Stand ist **jederzeit** übernahmefähig (nach jedem Slice committen + pushen,
+> Statusdateien mitziehen). **Nur diese harten Gates bleiben stehen** (nicht autonom
+> überschreitbar, CLAUDE.md/Sicherheitsregeln): FINDING-0004 (DB-RLS vor DB→UI **und** vor echter
+> Auth), **echte Authentisierung / getrennte Logins WP-030** (security-sensibel, Dok. 19),
+> **CCP-001..004** (Konzept-/Contract-Freigaben), Contract-/Seed-**Struktur**-Erweiterungen (E-02),
+> Docker, kostenpflichtige/Cloud/Prod-Ressourcen, reale Daten/Secrets, **Owner-Entscheidung Demo-
+> Firmenliste (WP-021)**. Cockpit-Varianten werden **gebaut und vorgelegt** (Stilwahl bleibt Owner).
 
+## Gerade in Arbeit
 
-- **ID:** WP-020 – Verdichtungs-Umbau, Dashboard-Schicht aus belegten Daten, neuer Einstiegsfluss (DR-0008/DR-0009)
-- **Modus:** **Produktkorrektur-Sprint (DR-0010)** — Reihenfolge Owner-geändert, Kundenwelt
-  Stufe 1 und Cockpit-Varianten in den Sprint gezogen, danach **STOPP für visuelle Freigabe**
-- **Definition:** `work-packages/WP-020_VERDICHTUNG_DASHBOARD_EINSTIEG.md`
-- **Context Pack:** `context-packs/WP-020_CONTEXT_PACK.md`
-- **Status:** **WP-020 abgeschlossen** (alle Slices gebaut, 2 Reviewrunden, 2 Fix-Pässe, 450 Tests
-  grün, axe sauber, FINDING-0009 geschlossen). **Nächster Sprint-Schritt: Kundenwelt Stufe 1 (WP-006)**,
-  dann 2–3 Cockpit-Varianten → **STOPP für visuelle Owner-Freigabe** (DR-0010)
-- **Builder:** `frontend-engineer` (sequenziell, committet nie selbst); `concept-author` für
-  Slice 6 ✓ (CCP-004 liegt vor, `ca9a7bb`)
-- **Gates:** Code + Product + Domain + QA + **Security & Privacy (Pflicht)** + Konzepttreue;
-  zweite Runde nach dem Fix-Pass. FINDING-0009 (behoben in Slice 1) wartet auf Security-Gate.
-- **Human Gates:** Owner-Stil-Abnahme am **Varianten-Stopp** (DR-0010 Nr. 3, DR-0008 Nr. 4);
-  CCP-004 (Human Gate offen, keine Umsetzung)
+**WP-028 (Antwort-Modus, DR-0013) + WP-032 (Reports/Wissen/Administration) — in der Abnahme.**
+- Beide **gebaut und committet**; alle acht Shell-Orte sind live.
+- **Gate-Runde 1** (6 Fachgates): 5× Freigabe mit Auflagen, QA Nacharbeit. **Fix-Pass** (14
+  Auflagen) fertig, axe komplett sauber, FINDING-0008 geschlossen.
+- **Gate-Runde 2** fand fix-induzierte Regressionen (Seitenbausteine-Zeile verlor den Nenner,
+  `STAND_HINWEIS` klassen-falsch bei `Wirksamkeitsprüfung`/`abgelehnt`, blinder Kontextleisten-
+  Selektor, Reichweitensatz nennt nur 1 von 3 Wirkungen, zweite Security-Aussage ohne Wächter,
+  „Portfolio-Arbeitswelt" erfundener Begriff). **Nachfix läuft** (frontend-engineer).
+- **Danach:** Statusdateien final nachziehen, dann diese beiden WP als abgenommen markieren.
 
-## Sprint-Reihenfolge (DR-0010)
+## Reihenfolge danach (buildbare Kette, autonom)
 
-1. ~~Slice 1 Cross-Tenant-Schutz & sichtbarer Kontext~~ ✅ (`7971bc6`; FINDING-0009 gefunden + behoben)
-2. ~~Slice 3+4: strategisches Dashboard~~ ✅ (`c45f581`; web 403 Tests; O-WP020-12/13 neu)
-3. ~~Slice 2: Einstiegsfluss (DR-0009) + Punkt 9~~ ✅ (`03b092c`; web 422; qa:visual-Artefakte `a4d5bf1`)
-4. ~~Slice 5: Rollenvarianten-Personalisierung + Konzeptabgleiche~~ ✅ (`91a9270`)
-   → **6 Gates × 2 Runden abgeschlossen** (Review-Notiz `docs/project/reviews/WP-020_INDEPENDENT_REVIEW.md`),
-   Fix-Pass 1 (`4a195a9`) + Fix-Pass 2 (`3df1224`); FINDING-0009 geschlossen. **WP-020 DONE.**
-5. **Sichtbare Kundenwelt Stufe 1** (WP-006 vorgezogen, DR-0010 Nr. 2): read-only aus PDFs
-   Dok. 14/16, fehlende Träger benannt
-6. **2–3 Cockpit-Varianten** (WP-025-Kern) per `qa:visual` → **STOPP, visuelle Owner-Freigabe**
+1. **Nachfix WP-028/032** verifizieren + committen → beide WP abgenommen.
+2. **Kundenwelt Slice 2 (Servicekatalog) + Slice 3 (Struktur-Assistent)** — read-only aus PDF
+   Dok. 14/16, preisfrei, keine Buchung; dann Gate-Runde. (`work-packages/WP-006_KUNDENWELT_STUFE_1.md`)
+3. **2–3 Cockpit-Varianten** (WP-025-Kern) per `qa:visual` → **STOPP für visuelle Owner-Freigabe**.
+4. **WP-033 Seed-Textpass** (nutzersichtbare Seed-Texte: Codes + „Demo/synthetisch" → Domänensprache;
+   Scopes mit `display_name` — O-WP014-03; nur Text, keine Struktur/Contract).
+5. **WP-029 kuratierte Personalisierung** · **WP-027 globale Suche** (Snippet-Leak-Schutz).
 
-~~Slice 6 CCP-004~~ ✅ (nur Vorlage, Human Gate offen)
+## Offene Owner-Gates (nicht autonom, blockieren nur ihren eigenen Zweig)
 
-## Parallel (DR-0010 Nr. 4)
+FINDING-0004 (RLS) → dann DB→UI · WP-030 echte Auth/getrennte Logins · CCP-001..004 + E-02 ·
+WP-021 Demo-Firmenliste (Dok. 03 vier vs. Dok. 16 fünf Unternehmen — O-WP006-01) ·
+O-WP028-02 (Kontextleisten-Disclosure) · O-WP028-08/10 (Familienname „Tenant", neutral-Portfolio).
 
-**WP-023 ✅ abgeschlossen** (2026-07-23): alle 14 Fassungen quellentreu (13× FREIGABE Runde 1;
-Dok. 10 inhaltlich bestanden, einziger Gate-Befund war die fehlende Archivkopie — für alle 14
-mechanisch nachgezogen). Nachtrag: `docs/concept/abgleich/NACHTRAG_WP-023_2026-07-23.md`.
-Damit ist die fachliche Basis der Kundenwelt (Dok. 14/16) **geprüft** — DR-0010-Bauregel erfüllbar.
+## Nachweis / Übernahme
 
-## Verbleib der 11 WP-019-Übergabepunkte
-
-in-scope: 1 ✓, 2 ✓ (Slice 1), 4, 5, 7, 9 · teilweise: 3 (O-WP020-04-Anker ✓) · nur CCP: 8 ✓ ·
-deferred benannt: 6 (O-WP020-05, WP-027) und 10 (WP-026) · erledigt verifiziert: 11.
-
-> Zuletzt abgeschlossen: **WP-019**. Nach dem Sprint: WP-021 Demo-Welt (E-01).
-> Offene Human Gates: CCP-001..004, Docker, FINDING-0004, O-WP014-09, FINDING-0008.
+- Statuswahrheit: diese Datei + `CURRENT_STATE.md` + `WORK_QUEUE.md` + `handovers/LATEST.md`.
+- Offene Fragen: `docs/project/OPEN_QUESTIONS.md` (O-WP020/028/032-Reihen).
+- Review-Notizen: `docs/project/reviews/`. Screenshots + axe: `docs/project/visual/WP-028/`.
+- Verifikation: `pnpm test --force`, `pnpm lint`, `pnpm typecheck`, `python scripts/validate_handoff.py`,
+  `python scripts/treue_check.py` (Konzepttreue), `pnpm qa:visual <WP>` (Screenshots + axe).

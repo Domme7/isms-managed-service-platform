@@ -1,16 +1,32 @@
 # Current State
 
-**Stand:** WP-019 **fertig** — die fünf schwerwiegend abweichenden Konzeptfassungen (Dok. 03–07) sind **vollständig aus den PDFs neu abgeleitet** und je Dokument unabhängig freigegeben. Das Gate fing dabei eine Erfindung (rekonstruierte Abbildungen in Dok. 04), und der Prozess korrigierte seinen eigenen Fehler: „Kritikalität“ steht doch im PDF — in der **Abbildung**, nicht im Textlayer (O-WP014-01 bestätigt statt gestrichen)  
+**Stand (2026-07-24):** **Produktkorrektur-Sprint (DR-0010) weit fortgeschritten.** Autonomer
+Weiterbau ohne Rückfragen (Owner-Auftrag, `ACTIVE_WORK_PACKAGE.md`). Zuletzt: der komplette
+**Usability-Reframe „Antwort-Modus statt Rechtfertigung"** (WP-028, DR-0013) und die drei letzten
+Navigations-Orte **Reports · Wissen · Administration** (WP-032) — **alle acht Orte der Shell sind
+jetzt live** (kein Platzhalter mehr).  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** **Produktkorrektur-Sprint (DR-0010)** — **WP-020 abgeschlossen**
-(alle Slices, 6 Gates × 2 Reviewrunden, 2 Fix-Pässe, 450 Web-Tests grün, axe sauber,
-FINDING-0009 geschlossen; Review-Notiz `docs/project/reviews/WP-020_INDEPENDENT_REVIEW.md`).
-**Nächster Sprint-Schritt: Kundenwelt Stufe 1 (WP-006, geschnitten)**, dann 2–3 Cockpit-Varianten
-→ **STOPP für visuelle Owner-Freigabe**. **WP-023 fertig** (14 Markdown-Fassungen quellentreu).
-Details: `ACTIVE_WORK_PACKAGE.md`  
+**Aktives Work Package:** **WP-028 + WP-032 in der Abnahme** — beide gebaut, **Gate-Runde 1** (6
+Gates: 5× Freigabe mit Auflagen, QA Nacharbeit) und **Fix-Pass** (14 Auflagen) fertig, **Gate-Runde
+2** fand fix-induzierte Regressionen (die übliche zweite-Runde-Ausbeute), **Nachfix in Arbeit**.
+Review-Notiz: `docs/project/reviews/WP-028_WP-032_INDEPENDENT_REVIEW.md`; WP-Definitionen:
+`work-packages/WP-028_ANTWORT_MODUS.md`, `WP-032_REPORTS_WISSEN_ADMINISTRATION.md`.  
+**Abgeschlossen seit WP-020:** WP-020 (Dashboard/Einstieg), WP-023 (14 Markdown-Fassungen
+quellentreu), WP-024 (automatischer Treue-Check, schließt O-WP019-01 werkzeugseitig), Kundenwelt
+Stufe 1 (WP-006 Slice 1, `/kunden`), FINDING-0008 geschlossen (axe komplett sauber).  
+**Testlage (Stand `77280f4`):** **725 Tests grün** im Monorepo (web 686 · contracts 55 ·
+demo-seed 54 · db 19 · api 2). Lint + typecheck grün, axe 0 Verstöße über alle 15 qa:visual-Motive.  
+**Nächster Sprint-Schritt nach der Abnahme:** Kundenwelt Slice 2/3 (Servicekatalog, Struktur-
+Assistent) → 2–3 Cockpit-Varianten → **STOPP für visuelle Owner-Freigabe** (DR-0010). Danach
+WP-033 (Seed-Textpass), WP-029 (Personalisierung), WP-027 (Suche).  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
 **Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
-**Implementierungsstatus:** Lauffähige Demo-App (Shell + Heute + Zwilling + ISMS + Services + **Entscheidungen** + Objekt-360, read-only, synthetisch); Persistenzschicht vorhanden, noch nicht ans UI angebunden  
+**Implementierungsstatus:** Lauffähige Demo-App, **alle acht Orte live** (Heute · Kunden/Zwilling ·
+ISMS · Entscheidungen · Services · Reports · Wissen · Administration) plus Objekt-360, read-only,
+synthetisch. Seit WP-028 im **Antwort-Modus** (Zahl/Stand zuerst, Lücke als ruhige Zeile), ohne
+internes Vokabular und ohne „synthetisch/Demo/Simulation"-Etiketten im UI (mechanisch bewacht);
+Sphäre an Rolle gekoppelt (Kundenrollen/Auditor sehen den eigenen Mandanten). Persistenzschicht
+(`@isms/db`) vorhanden, **bewusst noch nicht ans UI angebunden** (erst nach FINDING-0004/RLS).  
 **Konzeptstatus:** Produktwahrheit sind die 24 **PDF-Originale** (DR-0006). **Alle schwerwiegend
 und material abweichenden Fassungen sind quellentreu nachgezogen** — Dok. 03–07 (WP-019) und
 Dok. 00, 08–18, 20B, 20C (**WP-023**, 2026-07-23: Vollableitung + unabhängiges Konsistenz-Gate
@@ -77,7 +93,7 @@ sichtbare Abnahme). Jede mit Empfehlung und Default — **keine blockiert den We
 |---|---|---|---|
 | **FINDING-0009** | **Cross-Tenant-Leak in Leerzuständen** (/services + `TenantDetailView`, 3.+4. Instanz der Klasse) — behoben (`7971bc6`, `4a195a9`), Wächter mit Meta-Assertion + Zähl-Mustern mechanisch gegen Wiederkehr gesichert | mittel | **geschlossen 2026-07-23** (Security-Gate, 2. Runde) |
 | **FINDING-0007** | **Markdown-Ableitung der Konzeptdokumente nicht verlustfrei** — es wurde aus einer ungeprüften Interpretation gebaut | **hoch → weitgehend behoben** | Kern behoben: alle 5 schwerwiegenden (WP-019) + alle 14 materialen (WP-023) Fassungen quellentreu. Rest: 4 kleine Abweichungen (01/19/20A/21) + Treue-Check (WP-024). **Regel Null bleibt in Kraft** |
-| FINDING-0008 | `<dl role="group">` entfernt die Listensemantik — 3× serious (axe, WCAG 1.3.1) auf den Kontextzeilen von /heute, /entscheidungen, Objekt-360; der A11y-Fix aus WP-014 hatte eine ungemessene Kehrseite | mittel | nein — Korrektur als Folge-WP mit Product Gate |
+| FINDING-0008 | `<dl role="group">` entfernte die Listensemantik (axe, WCAG 1.3.1) | mittel | **geschlossen 2026-07-24** (WP-028-Fix-Pass: Kontextzeilen app-weit auf valide Struktur; axe jetzt **0 serious** über alle 15 Motive) |
 | FINDING-0006 | Domain Gate und QA Gate waren nie besetzt (4 von 9 Gates aus Dok. 20B §36) | mittel | in Behebung ab WP-017 |
 | FINDING-0005 | Kein Linter im Stack | niedrig | **geschlossen 2026-07-23** (WP-018: Biome, ADR-0003) |
 | FINDING-0004 | DB-RLS + least-privilege-Rolle fehlen | mittel | **ja** — vor der DB→UI-Anbindung |

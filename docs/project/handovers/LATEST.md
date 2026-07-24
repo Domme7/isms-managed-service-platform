@@ -1,8 +1,15 @@
 # Latest Handover
 
-- **Aktuell:** `HND-20260723T185151Z.md`
-- **Work Package:** WP-020 – Verdichtungs-Umbau, Dashboard-Schicht aus belegten Daten, neuer Einstiegsfluss (DR-0008/DR-0009)
-- **Status:** Active / Handover created
-- **Branch:** `main`
-- **Commit:** `276d538`
-- **Exact Next Step:** Kundenwelt Stufe 1 (WP-006, geschnitten - work-packages/WP-006_KUNDENWELT_STUFE_1.md + Context Pack) bauen: read-only aus PDFs Dok. 14/16 auf heutigem Seed, keine Preise/Buchung/echter Login, Kundensphaere-Negativbeweise, Security-Gate Pflicht. Danach 2-3 Cockpit-Varianten (WP-025-Kern) per qa:visual -> STOPP fuer visuelle Owner-Freigabe (DR-0010). Offene Human Gates: CCP-001..004, O-WP020-19 (Wirkung/CCP-004), FINDING-0004 (RLS vor DB->UI), Docker.
+- **Aktuell:** `HND-20260724-sprint.md`
+- **Modus:** Produktkorrektur-Sprint (DR-0010), **autonomer Weiterbau ohne Rückfragen** (Owner)
+- **Stand:** Alle acht Shell-Orte live · Antwort-Modus (WP-028) + Reports/Wissen/Administration
+  (WP-032) gebaut und **in der Abnahme** (Gate-Runde 2 → Nachfix zuletzt in Arbeit) · WP-024
+  Treue-Check fertig · FINDING-0008 geschlossen
+- **Testlage:** 725 Tests grün (web 686), lint + typecheck grün, axe 0 über alle 15 Motive
+- **Branch:** `main` · **Remote:** privat, alles gepusht
+- **Exact Next Step:** Nachfix WP-028/032 verifizieren + committen → beide WP abnehmen; dann
+  Kundenwelt Slice 2/3 (Servicekatalog + Struktur-Assistent, read-only Dok. 14/16, preisfrei) →
+  2–3 Cockpit-Varianten → **STOPP für visuelle Owner-Freigabe** (DR-0010); danach WP-033
+  (Seed-Textpass), WP-029 (Personalisierung), WP-027 (Suche).
+- **Harte Owner-Gates (nicht autonom):** FINDING-0004/RLS → DB→UI · WP-030 echte Auth ·
+  CCP-001..004 + E-02 · WP-021 Demo-Firmenliste (O-WP006-01). Details: `ACTIVE_WORK_PACKAGE.md`.
