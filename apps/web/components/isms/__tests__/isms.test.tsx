@@ -106,7 +106,7 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
     // Requirement + Framework über satisfies/part_of.
     const requirement = within(controlCard).getByText('A.8.13 – Informationssicherung (Backup)');
     expect(requirement.parentElement?.textContent).toMatch(
-      /Framework: ISO\/IEC 27001:2022 \(Demo-Katalog\)/,
+      /Framework: ISO\/IEC 27001:2022 \(illustrativer Katalog\)/,
     );
 
     // Evidence-Stand mit Kantenstatus (evidences) – wortgleich zur Objekt-360-Seite.

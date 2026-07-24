@@ -225,7 +225,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     display_name: 'AlpenCloud GmbH',
     description:
       'Cloud-Softwareanbieter (SaaS) mit schnellem Wachstum und einem ' +
-      'Zertifizierungsziel (Dok. 16 §34.1 Nr. 2). Wurzelorganisation des Demo-Graphen.',
+      'Zertifizierungsziel (Dok. 16 §34.1 Nr. 2). Wurzelorganisation des Datenbestands.',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern', protection_need: 'normal' },
   }),
@@ -387,7 +387,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
   alpencloudObject({
     object_id: A.FRAMEWORK_ISO,
     object_type: 'Framework',
-    display_name: 'ISO/IEC 27001:2022 (Zertifizierungs-Framework, Demo-Katalog)',
+    display_name: 'ISO/IEC 27001:2022 (Zertifizierungs-Framework, illustrativer Katalog)',
     description:
       'Framework-Kontext für das Zertifizierungsziel (Dok. 16 §34.1 Nr. 2). ' +
       'Kein Abdruck realer Normtexte.',
@@ -461,7 +461,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     ],
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
-      { dimension: 'Aktualität', note: 'Bedrohungssignal, Demo-Stand 2026-04.' },
+      { dimension: 'Aktualität', note: 'Bedrohungssignal, Stand 2026-04.' },
     ],
   }),
   alpencloudObject({

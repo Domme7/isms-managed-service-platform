@@ -401,7 +401,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     ],
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
-      { dimension: 'Aktualität', note: 'Bedrohungssignal, Demo-Stand 2026-01.' },
+      { dimension: 'Aktualität', note: 'Bedrohungssignal, Stand 2026-01.' },
     ],
   }),
   nordsternObject({

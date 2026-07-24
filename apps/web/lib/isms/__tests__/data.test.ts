@@ -126,7 +126,7 @@ describe('buildIsmsCoreView – Nordwerk (ISMS-Kerngraph vollständig aufgelöst
       expect.objectContaining({
         name: 'A.8.13 – Informationssicherung (Backup)',
         object_type: 'Requirement',
-        framework_name: 'ISO/IEC 27001:2022 (Demo-Katalog)',
+        framework_name: 'ISO/IEC 27001:2022 (illustrativer Katalog)',
       }),
     ]);
 

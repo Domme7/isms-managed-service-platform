@@ -108,6 +108,27 @@
   + 1 Komponententest; web 897 grün; Browser: „Administration" anheften → rückt vor + persistiert, alle
   8 da, keine Konsolenfehler. **Owner-Gate notiert:** Management-Modus + gespeicherte Sichten/Filter
   brauchen Decision-Center-/filterbare Daten (E-02/Phasen 3–9).
+- **AE-11 (Politur / WP-033-Rest — ABGESCHLOSSEN):** Die im UI gerenderten Demo-Etiketten + die im
+  Auftrag benannten Servicekatalog-Codes aus dem Seed entfernt (DR-0011/DR-0013). **Commit 1 (4d2a9d3):**
+  126 „Synthetische(r/s) X"-Präfixe aus allen 5 Objekt-Graphen (chirurgisches Skript, nur String-
+  Anfänge). **Commit 2:** (a) `managed-services.ts` — 17 „Synthetische"-Präfixe + „SYNTHETISCHES,
+  ILLUSTRATIVES"→„Illustratives" + die Code-Blöcke „(Dok. 13 §4.3), fachliches Muster SOxx (Dok. 14
+  §5.2)"→ raus (Fachbegriff „Service Instance" bleibt); (b) alle „Demo-"-Etiketten neutralisiert:
+  Demo-Stand→Stand, Demo-Katalog→„illustrativer Katalog", Demo-Graph(en)→Datenbestand, „für die
+  Demo"→„des Datenbestands", Demo-Zielbild→Zielbild, Demo-Zielkorridor→Zielkorridor, „(Demo)"-Suffixe
+  weg, „geschönter Demo"→„geschönter Darstellung", Demo-Mandant→Mandant, Demo-Seed→Datenbestand.
+  **BEHALTEN:** die Konfidenz-Qualifier „(synthetische Annahme…)" (Ehrlichkeit über Datenqualität),
+  der Copyright-Disclaimer „Kein Abdruck realer Normtexte", der kanonische Tenant-Name „Consulting
+  Operator Demo" (Dok. 07). 3 Test-Assertions nachgezogen. demo-seed 90 · db 19 · web 897 grün;
+  Browser: /services ohne „Synthetische"/„Muster SO"/Demo-Label, Qualifier sichtbar.
+  **↪ NOTIERT (DR-0005, kein Alleingang):** die inline-Prinzip-/Provenance-Anker „(MS01)"/„(MS03)"/
+  „(Dok. 07/13 §…)" in den Service-Beschreibungen wurden bewusst NICHT entfernt — WP-018 hat sie
+  absichtlich behalten; ihre Streichung ist eine eigene Owner-Entscheidung (DR-0013 Nr. 2 vs.
+  Provenance), kein stiller Umbau.
+- **✅ LISTE A ABGESCHLOSSEN (autonomer Umfang):** WP-021 Mandanten · DR-0017 Stages 1–4 · 5-Profile-
+  Login · Cleanup/DRY · synthetische Preisbänder · WP-033 (U-15 + Graph-/Service-Textpass) · WP-027
+  globale Suche (Engine + UI) · WP-029 Bereiche anheften · Politur. Es bleiben nur noch Owner-Gates
+  (unten). Der Loop stoppt hier.
 
 ## Offene Fragen an den Owner (nicht blockierend — Default gewählt, jederzeit umstellbar)
 - **OF-1 (2 Profile):** Sollen die 12 Rollen-Perspektiven wirklich ganz raus, oder nur der

@@ -102,7 +102,7 @@ describe('getManagedServicesForTenant – Auflösung je Mandant', () => {
 
     expect(evidence.contributions.map((c) => c.target_name).sort()).toEqual(
       [
-        'Auditfähigkeit ISO/IEC 27001 (Demo-Zielbild 2026)',
+        'Auditfähigkeit ISO/IEC 27001 (Zielbild 2026)',
         'Nachweisquote priorisierter Controls',
       ].sort(),
     );

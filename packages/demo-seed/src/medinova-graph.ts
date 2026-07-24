@@ -242,7 +242,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     display_name: 'MediNova Clinics Holding',
     description:
       'Dezentrale Gesundheitsgruppe mit kritischer Verfügbarkeit sowie Lieferanten- ' +
-      'und Standortkomplexität (Dok. 16 §34.1 Nr. 4). Wurzelorganisation des Demo-Graphen.',
+      'und Standortkomplexität (Dok. 16 §34.1 Nr. 4). Wurzelorganisation des Datenbestands.',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern', protection_need: 'normal' },
   }),
@@ -412,7 +412,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
   medinovaObject({
     object_id: M.FRAMEWORK_ISO,
     object_type: 'Framework',
-    display_name: 'ISO/IEC 27001:2022 (Demo-Katalog, Klinikverbund)',
+    display_name: 'ISO/IEC 27001:2022 (illustrativer Katalog, Klinikverbund)',
     description:
       'Framework-Kontext für die Anforderungen an Lieferantensteuerung und ' +
       'Verfügbarkeit. Kein Abdruck realer Normtexte.',
@@ -486,7 +486,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     ],
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
-      { dimension: 'Aktualität', note: 'Bedrohungssignal, Demo-Stand 2026-06.' },
+      { dimension: 'Aktualität', note: 'Bedrohungssignal, Stand 2026-06.' },
     ],
   }),
   medinovaObject({

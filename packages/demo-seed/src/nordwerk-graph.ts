@@ -169,7 +169,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     // Anzeigename nach Dok. 16 §34.1 (Flaggschiff „Nordstern"); die stabile object_id/tenant_id
     // bleibt unverändert `nordwerk-*` / `tenant-nordwerk` (Dok. 07 §7, WP-021 Slice 1).
     display_name: 'Nordstern Manufacturing SE',
-    description: 'Fertigungskonzern (Wurzelorganisation des Demo-Graphen).',
+    description: 'Fertigungskonzern (Wurzelorganisation des Datenbestands).',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern', protection_need: 'normal' },
   }),
@@ -197,7 +197,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     display_name: 'CISO (Informationssicherheitsbeauftragte Rolle)',
     description:
       'Fachliche Rolle statt Einzelperson (Datenminimierung, Dok. 07 P12/D12). ' +
-      'Fachlicher Owner von Control und Risiko im Demo-Graphen.',
+      'Fachlicher Owner von Control und Risiko im Datenbestand.',
     lifecycle_status: 'Freigegeben',
   }),
   nordwerkObject({
@@ -240,8 +240,8 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
   nordwerkObject({
     object_id: O.FRAMEWORK_ISO27001,
     object_type: 'Framework',
-    display_name: 'ISO/IEC 27001:2022 (Demo-Katalog)',
-    description: 'Framework-Kontext für die Demo. Kein Abdruck realer Normtexte.',
+    display_name: 'ISO/IEC 27001:2022 (illustrativer Katalog)',
+    description: 'Framework-Kontext des Datenbestands. Kein Abdruck realer Normtexte.',
     lifecycle_status: 'Freigegeben',
     source_refs: [
       { source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 },
@@ -283,7 +283,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     lifecycle_status: 'Beobachtet',
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
-      { dimension: 'Aktualität', note: 'Bedrohungssignal, Demo-Stand 2026-01.' },
+      { dimension: 'Aktualität', note: 'Bedrohungssignal, Stand 2026-01.' },
     ],
     source_refs: [
       { source_kind: 'Extraktionsregel', reference: 'synthetic-threat-feed', priority: 1 },

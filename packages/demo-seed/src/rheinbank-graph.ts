@@ -258,7 +258,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     display_name: 'Rheinbank Digital AG',
     description:
       'Stark regulierter Finanzdienstleister (Direktbank) mit hoher Nachweistiefe ' +
-      'und strikter Datenresidenz (Dok. 16 §34.1 Nr. 3). Wurzelorganisation des Demo-Graphen.',
+      'und strikter Datenresidenz (Dok. 16 §34.1 Nr. 3). Wurzelorganisation des Datenbestands.',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern', protection_need: 'normal' },
   }),
@@ -399,7 +399,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
   rheinbankObject({
     object_id: R.FRAMEWORK_AUFSICHT,
     object_type: 'Framework',
-    display_name: 'Aufsichtsrechtlicher Anforderungsrahmen (Demo-Katalog)',
+    display_name: 'Aufsichtsrechtlicher Anforderungsrahmen (illustrativer Katalog)',
     description:
       'Aufsichtsrechtlicher Rahmen für den regulierten Finanzdienstleister ' +
       '(Dok. 16 §34.1 Nr. 3). Kein Abdruck realer Aufsichtstexte.',
@@ -463,7 +463,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     ],
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
-      { dimension: 'Aktualität', note: 'Bedrohungssignal, Demo-Stand 2026-05.' },
+      { dimension: 'Aktualität', note: 'Bedrohungssignal, Stand 2026-05.' },
     ],
   }),
   rheinbankObject({

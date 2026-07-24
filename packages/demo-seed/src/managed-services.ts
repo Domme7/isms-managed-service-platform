@@ -1,5 +1,5 @@
 /**
- * Synthetische Managed-Service-Schicht des Demo-Seeds (WP-012, Slice 1).
+ * Synthetische Managed-Service-Schicht des Datenbestands (WP-012, Slice 1).
  *
  * STRUKTUR / VOKABULAR (verbindlich): ausschließlich kanonische Objekttypen (hier vor allem
  * F09 „Ziele, Entscheidungen & Services": `Managed Service`, `SLA`, `Deliverable`, `Objective`,
@@ -225,7 +225,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Team',
     display_name: 'Managed-Service-Delivery-Team (Betreuung Nordwerk)',
     description:
-      'Synthetisches Delivery-Team des Managed-Service-Betreibers, abgebildet im Mandanten ' +
+      'Delivery-Team des Managed-Service-Betreibers, abgebildet im Mandanten ' +
       'Nordwerk. Trägt die Delivery-Verantwortung der aktiven Service Instances (Ziel von ' +
       // AC-24-Korrektur (WP-018): interne Fragen-Kennung aus dem gerenderten Produkttext
       // entfernt (Prozessvokabular-Wächter); die OFFENE FRAGE selbst bleibt benannt.
@@ -240,14 +240,14 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Managed Service',
     display_name: 'Kontinuierliches Risiko- & Control-Monitoring',
     description:
-      'Synthetische Service Instance (Dok. 13 §4.3), fachliches Muster SO02/SO03 (Dok. 14 §5.2). ' +
+      'Service Instance. ' +
       'Ergebnisversprechen (Outcome vor Aktivität, MS01): Die priorisierten Risiken und Controls ' +
       'der Auftragsabwicklung bleiben aktuell bewertet, erklärbar und entscheidungsfähig; ' +
       'Abweichungen werden erkannt, bevor sie den Betrieb treffen. ' +
       'Shared Responsibility (MS03): Nordwerk verantwortet Risikoakzeptanz, Priorisierung und ' +
       'Umsetzung; der Betreiber verantwortet Analyse, Aufbereitung, Qualitätsprüfung und ' +
       'Eskalationsvorschlag. Rhythmus: monatlich, zusätzlich ereignisgetrieben. ' +
-      'Keine Preis-, Paket- oder Vertragsangaben in diesem Demo-Seed.',
+      'Keine Preis-, Paket- oder Vertragsangaben in diesem Datenbestand.',
     lifecycle_status: 'aktiv', // Service-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: K.ROLE_CISO, owner_kind: 'fachlich', role: 'Kunden-Owner (Service)' }],
   }),
@@ -256,7 +256,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Managed Service',
     display_name: 'Nachweis- & Evidence-Betrieb',
     description:
-      'Synthetische Service Instance (Dok. 13 §4.3), fachliches Muster SO05 (Dok. 14 §5.2). ' +
+      'Service Instance. ' +
       'Ergebnisversprechen (MS01): Für die priorisierten Controls liegen jederzeit gültige, ' +
       'geprüfte und auffindbare Nachweise vor; ablaufende Nachweise werden vor Ablauf sichtbar. ' +
       'Shared Responsibility (MS03): Nordwerk liefert Rohnachweise und Freigaben; der Betreiber ' +
@@ -274,7 +274,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Managed Service',
     display_name: 'Management- & Entscheidungsreporting',
     description:
-      'Synthetische Service Instance (Dok. 13 §4.3), fachliches Muster SO12 (Dok. 14 §5.2). ' +
+      'Service Instance. ' +
       'Ergebnisversprechen (MS01): Leitung und CISO-Rolle erhalten je Quartal ein freigabefähiges, ' +
       'quellenbelegtes Bild von Risikolage, Control-Wirksamkeit und offenen Entscheidungen. ' +
       'Der Service befindet sich aktuell im Service Review (Dok. 13 §15): der Berichtsrhythmus ' +
@@ -295,12 +295,12 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'SLA',
     display_name: 'SLA – Risiko- & Control-Monitoring (Band „Standard")',
     description:
-      'SYNTHETISCHES, ILLUSTRATIVES Leistungsversprechen – keine Vertragszusage und kein realer ' +
+      'Illustratives Leistungsversprechen – keine Vertragszusage und kein realer ' +
       'Kundenwert (Dok. 14 §8.4 bezeichnet die Bänder ausdrücklich als Designannahmen). ' +
       'Band „Standard": Betriebszeit Werktage/lokale Geschäftszeit; Acknowledgement P1 in 4 ' +
       'Geschäftsstunden, P2 in 1 Geschäftstag, P3 in 2 Geschäftstagen; Delivery Time: monatlicher ' +
       'Risiko- & Control-Review innerhalb von 5 Geschäftstagen nach Periodenende. ' +
-      'Keine Preise und keine Service Credits im Demo-Seed. ' +
+      'Keine Preise und keine Service Credits im Datenbestand. ' +
       // AC-24-Korrektur (WP-018): Kennung entfernt, OFFENE FRAGE bleibt benannt.
       'Siehe OFFENE FRAGE: Dok. 07 §7 kennt keine typisierten SLA-Felder, daher Klartext.',
     lifecycle_status: 'Freigegeben',
@@ -310,7 +310,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'SLA',
     display_name: 'SLA – Nachweisbetrieb (Band „Priority")',
     description:
-      'SYNTHETISCHES, ILLUSTRATIVES Leistungsversprechen (Dok. 14 §8.4: Designannahmen, keine ' +
+      'Illustratives Leistungsversprechen (Dok. 14 §8.4: Designannahmen, keine ' +
       'Vertragszusage). Band „Priority": verlängerte Geschäftszeit; Acknowledgement P1 in 2 ' +
       'Geschäftsstunden, P2 in 4 Geschäftsstunden; Data Freshness: akzeptierte Nachweise nicht ' +
       'älter als 90 Tage; Ablaufwarnung 30 Tage vor Ablauf. Die Uhr pausiert nur bei dokumentierter ' +
@@ -322,7 +322,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'SLA',
     display_name: 'SLA – Managementreporting (Band „Standard")',
     description:
-      'SYNTHETISCHES, ILLUSTRATIVES Leistungsversprechen (Dok. 14 §8.4: Designannahmen). ' +
+      'Illustratives Leistungsversprechen (Dok. 14 §8.4: Designannahmen). ' +
       'Delivery Time: Quartalsbericht spätestens 10 Geschäftstage nach Quartalsende; Review Time: ' +
       'Freigabeentwurf innerhalb von 3 Geschäftstagen nach Datenschluss. Audit- oder ' +
       'Zertifizierungserfolg ist ausdrücklich KEIN SLA (Dok. 14 §8.2). Keine Preise.',
@@ -336,7 +336,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Deliverable',
     display_name: 'Risiko- & Control-Review 2026-06',
     description:
-      'Synthetisches, prüfbares Ergebnis eines Servicezyklus (Dok. 13 §4.5): aktualisierte ' +
+      'Prüfbares Ergebnis eines Servicezyklus (Dok. 13 §4.5): aktualisierte ' +
       'Bewertung des Risikos „Betriebsunterbrechung Auftragsabwicklung", Status der zugehörigen ' +
       'Controls und vorgeschlagene Entscheidungen. Keine realen Inhalte.',
     lifecycle_status: 'Freigegeben',
@@ -346,7 +346,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Deliverable',
     display_name: 'Control-Assurance-Paket Q2/2026',
     description:
-      'Synthetisches Deliverable: Zusammenstellung von Control-Design, Umsetzungsstand und ' +
+      'Deliverable: Zusammenstellung von Control-Design, Umsetzungsstand und ' +
       'Wirksamkeitsaussage für die priorisierten Controls. Enthält ausdrücklich keine Zusicherung ' +
       'vollständiger Sicherheit (Dok. 13 §3.2).',
     lifecycle_status: 'Freigegeben',
@@ -357,7 +357,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Deliverable',
     display_name: 'Audit-Readiness-Evidence-Pack Q2/2026',
     description:
-      'Synthetisches Nachweispaket des Evidence-Betriebs: gebündelte, geprüfte Nachweise zu den ' +
+      'Nachweispaket des Evidence-Betriebs: gebündelte, geprüfte Nachweise zu den ' +
       'priorisierten Controls inklusive Gültigkeitsfenster und offener Lücken. Grundlage für die ' +
       // AC-24-Korrektur (WP-018): Kennung entfernt, OFFENE FRAGE bleibt benannt.
       'Kante `evidences` auf das Backup-&-Recovery-Control (siehe OFFENE FRAGE).',
@@ -368,10 +368,10 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Deliverable',
     display_name: 'Management-Report Q2/2026 (Entwurf)',
     description:
-      'Synthetisches Deliverable im Entwurf: Managementbild zu Risikolage, Control-Wirksamkeit und ' +
+      'Deliverable im Entwurf: Managementbild zu Risikolage, Control-Wirksamkeit und ' +
       'offenen Entscheidungen. Noch nicht freigegeben – der zugehörige Service befindet sich im ' +
       'Service Review, deshalb ist der Zustand bewusst sichtbar unfertig (Zustandstreue statt ' +
-      'geschönter Demo).',
+      'geschönter Darstellung).',
     lifecycle_status: 'Entwurf',
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'Ungeprüft' },
@@ -383,9 +383,9 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
   nordwerkServiceObject({
     object_id: S.OBJECTIVE_AUDITFAEHIGKEIT,
     object_type: 'Objective',
-    display_name: 'Auditfähigkeit ISO/IEC 27001 (Demo-Zielbild 2026)',
+    display_name: 'Auditfähigkeit ISO/IEC 27001 (Zielbild 2026)',
     description:
-      'Synthetisches Ziel: Nordwerk ist für die priorisierten Controls jederzeit nachweisfähig ' +
+      'Ziel: Nordwerk ist für die priorisierten Controls jederzeit nachweisfähig ' +
       'und kann eine externe Prüfung ohne Sondersammlung von Nachweisen bestehen. ' +
       'Zielerreichung hängt auch von Kundenmitwirkung ab und ist deshalb kein SLA (Dok. 14 §8.2).',
     lifecycle_status: 'Freigegeben',
@@ -397,8 +397,8 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'KPI',
     display_name: 'Nachweisquote priorisierter Controls',
     description:
-      'Synthetische Messgröße: Anteil der priorisierten Controls mit gültigem, akzeptiertem ' +
-      'Nachweis. Illustrativer Demo-Zielkorridor: 90 %. KPI ist Messgröße, nicht Leistungs' +
+      'Messgröße: Anteil der priorisierten Controls mit gültigem, akzeptiertem ' +
+      'Nachweis. Illustrativer Zielkorridor: 90 %. KPI ist Messgröße, nicht Leistungs' +
       // AC-24-Korrektur (WP-018): Kennung entfernt, OFFENE FRAGE bleibt benannt.
       'versprechen (Dok. 14 §8.1). Siehe OFFENE FRAGE: Dok. 07 §7 kennt keine ' +
       'typisierten KPI-Wert-/Zielfelder, daher Klartext statt erfundener Felder.',
@@ -412,7 +412,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Review',
     display_name: 'Outcome Review Q2/2026 – Risiko- & Control-Monitoring',
     description:
-      'Synthetischer Outcome Review (Dok. 13 §4.5): prüft, ob die zugesagte Wirkung tatsächlich ' +
+      'Outcome Review (Dok. 13 §4.5): prüft, ob die zugesagte Wirkung tatsächlich ' +
       'eingetreten ist. Ergebnis: Wirkung für die Control-Nachweise bestätigt; ' +
       'Berichtsrhythmus des Reporting-Service wird angepasst. Ein Zyklus ohne Outcome Review gilt ' +
       'als dokumentiert, aber nicht als wirksam bestätigt.',
@@ -715,8 +715,8 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Organisation',
     display_name: 'Consulting Operator Demo',
     description:
-      'Synthetischer Managed-Service-Betreiber als eigener Demo-Mandant (Dok. 07 §20). ' +
-      'Wurzelorganisation der Betreiber-Serviceschicht in dieser Demo.',
+      'Managed-Service-Betreiber als eigener Mandant (Dok. 07 §20). ' +
+      'Wurzelorganisation der Betreiber-Serviceschicht in diesem Datenbestand.',
     lifecycle_status: 'Freigegeben',
   }),
 
@@ -726,7 +726,7 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Team',
     display_name: 'Delivery-Team Managed ISMS',
     description:
-      'Synthetisches Delivery-Team des Betreibers; Ziel der Kanten `delivered_by` innerhalb ' +
+      'Delivery-Team des Betreibers; Ziel der Kanten `delivered_by` innerhalb ' +
       'dieses Mandanten (Dok. 07 §9 R21).',
     lifecycle_status: 'Freigegeben',
   }),
@@ -744,10 +744,10 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
   operatorObject({
     object_id: P.SERVICE_AUDIT_READINESS,
     object_type: 'Managed Service',
-    display_name: 'Audit-Readiness-Betrieb (Demo)',
+    display_name: 'Audit-Readiness-Betrieb',
     description:
-      'Synthetische Service Instance im eigenen Mandanten des Betreibers, fachliches Muster SO06 ' +
-      '(Dok. 14 §5.2). Ergebnisversprechen (MS01): Prüftermine sind planbar vorbereitet, ' +
+      'Service Instance im eigenen Mandanten des Betreibers. ' +
+      'Ergebnisversprechen (MS01): Prüftermine sind planbar vorbereitet, ' +
       'Nachweislücken und Findings werden früh sichtbar und gesteuert. ' +
       'Shared Responsibility (MS03): Fachbereiche liefern Nachweise und Entscheidungen; das ' +
       'Delivery-Team plant, prüft und steuert die Audit-Vorbereitung. ' +
@@ -762,9 +762,9 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
   operatorObject({
     object_id: P.SERVICE_POLICY_LIFECYCLE,
     object_type: 'Managed Service',
-    display_name: 'Policy-Lifecycle-Betrieb (Demo)',
+    display_name: 'Policy-Lifecycle-Betrieb',
     description:
-      'Synthetische Service Instance, fachliches Muster SO04 (Dok. 14 §5.2). ' +
+      'Service Instance. ' +
       'Ergebnisversprechen (MS01): Vorgaben sind aktuell, freigegeben, verständlich und ' +
       'tatsächlich anwendbar; fällige Reviews laufen nicht still ab. Shared Responsibility (MS03): ' +
       'Vorgaben-Owner entscheiden und geben frei; das Delivery-Team pflegt Lifecycle, Fristen und ' +
@@ -786,7 +786,7 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'SLA',
     display_name: 'SLA – Audit-Readiness-Betrieb (Band „Priority")',
     description:
-      'SYNTHETISCHES, ILLUSTRATIVES Leistungsversprechen (Dok. 14 §8.4: Designannahmen, keine ' +
+      'Illustratives Leistungsversprechen (Dok. 14 §8.4: Designannahmen, keine ' +
       'Vertragszusage). Band „Priority": Acknowledgement P1 in 2 Geschäftsstunden, P2 in 4 ' +
       'Geschäftsstunden; Delivery Time: Readiness-Statusbild spätestens 5 Geschäftstage vor ' +
       'jedem Meilenstein. Auditerfolg ist ausdrücklich kein SLA (Dok. 14 §8.2). Keine Preise.',
@@ -797,7 +797,7 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'SLA',
     display_name: 'SLA – Policy-Lifecycle-Betrieb (Band „Standard")',
     description:
-      'SYNTHETISCHES, ILLUSTRATIVES Leistungsversprechen (Dok. 14 §8.4: Designannahmen). ' +
+      'Illustratives Leistungsversprechen (Dok. 14 §8.4: Designannahmen). ' +
       'Band „Standard": Acknowledgement P3 in 2 Geschäftstagen; Review Time: Kommentierung eines ' +
       'eingereichten Policy-Entwurfs innerhalb von 5 Geschäftstagen. Keine Preise, keine Credits.',
     lifecycle_status: 'Freigegeben',
@@ -809,7 +809,7 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Deliverable',
     display_name: 'Audit-Readiness-Paket 2026-06',
     description:
-      'Synthetisches, prüfbares Ergebnis (Dok. 13 §4.5): Readiness-Status, offene Nachweislücken ' +
+      'Prüfbares Ergebnis (Dok. 13 §4.5): Readiness-Status, offene Nachweislücken ' +
       'und priorisierte Vorbereitungsschritte. Keine realen Prüfinhalte.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -818,7 +818,7 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Deliverable',
     display_name: 'Policy-Review-Bericht 2026-06 (Entwurf)',
     description:
-      'Synthetisches Deliverable im Entwurf: Übersicht fälliger und überholter Vorgaben mit ' +
+      'Deliverable im Entwurf: Übersicht fälliger und überholter Vorgaben mit ' +
       'Vorschlag zur Reihenfolge. Noch nicht freigegeben, da der zugehörige Service erst ' +
       'konfiguriert ist.',
     lifecycle_status: 'Entwurf',
