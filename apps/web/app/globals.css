@@ -3298,3 +3298,391 @@ summary {
     padding: 1.5rem 1.25rem;
   }
 }
+
+/* =========================================================================
+ * Berater-Portfolio-Dashboard (DR-0017 Stage 1) – eigenständig, full-screen,
+ * Cockpit-Design-Sprache (Ampel-Tokens --ck-*). Rangliste + Heatmap Kunde×Abdeckung.
+ * ========================================================================= */
+
+.pf-standalone {
+  min-height: 100vh;
+  background: var(--ck-surface-2);
+  color: var(--ck-ink);
+}
+
+.pf-portfolio {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1.75rem clamp(1rem, 4vw, 3rem) 3.5rem;
+}
+
+.pf-lade {
+  padding: 3rem clamp(1rem, 4vw, 3rem);
+  color: var(--ck-muted);
+}
+
+.pf-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pf-eyebrow {
+  margin: 0;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ck-muted);
+}
+
+.pf-titel {
+  margin: 0.2rem 0 0.35rem;
+  font-size: clamp(1.5rem, 3.4vw, 2.15rem);
+  line-height: 1.1;
+}
+
+.pf-reichweite {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--ck-ink-soft);
+}
+
+.pf-kopf-rechts {
+  flex-shrink: 0;
+}
+
+.pf-rolle {
+  display: inline-block;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--ck-border);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: var(--ck-ink-soft);
+  background: var(--ck-surface);
+}
+
+.pf-datenstand {
+  margin: 0.9rem 0 1.4rem;
+  max-width: 78ch;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--ck-muted);
+}
+
+.pf-kennzahlen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1.9rem;
+}
+
+.pf-kennzahl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--ck-border);
+  border-radius: 12px;
+  background: var(--ck-surface);
+}
+
+.pf-kennzahl strong {
+  font-size: 1.8rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-kennzahl span {
+  font-size: 0.78rem;
+  color: var(--ck-muted);
+}
+
+.pf-abschnitt {
+  margin: 1.6rem 0 0.5rem;
+  font-size: 1.15rem;
+}
+
+.pf-heatmap-hinweis {
+  margin: 0 0 0.85rem;
+  font-size: 0.82rem;
+  color: var(--ck-muted);
+}
+
+/* --- Kunden-Rangliste --- */
+.pf-rangliste {
+  list-style: none;
+  margin: 0 0 1.6rem;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pf-kunde-karte {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "rang haupt last"
+    "rang ampeln ampeln"
+    "rang fuss fuss";
+  align-items: center;
+  gap: 0.35rem 1rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--ck-border);
+  border-radius: 14px;
+  background: var(--ck-surface);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.pf-kunde-karte:hover,
+.pf-kunde-karte:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--ck-info);
+  box-shadow: 0 6px 20px rgba(20, 24, 40, 0.1);
+  outline: none;
+}
+
+.pf-kunde-rang {
+  grid-area: rang;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ck-muted);
+  min-width: 1.6ch;
+  text-align: center;
+}
+
+.pf-kunde-haupt {
+  grid-area: haupt;
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-kunde-name {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.pf-kunde-branche {
+  font-size: 0.76rem;
+  color: var(--ck-muted);
+}
+
+.pf-kunde-last {
+  grid-area: last;
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  justify-self: end;
+}
+
+.pf-kunde-last-zahl {
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-kunde-last-label {
+  font-size: 0.76rem;
+  color: var(--ck-muted);
+}
+
+.pf-kunde-leer {
+  font-size: 0.82rem;
+  color: var(--ck-muted);
+  font-style: italic;
+}
+
+.pf-kunde-ampeln {
+  grid-area: ampeln;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pf-ampel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  border: 1px solid var(--ck-accent);
+  color: var(--ck-accent);
+  background: var(--ck-accent-soft);
+}
+
+.pf-ampel-symbol {
+  font-size: 0.7rem;
+}
+
+.pf-ampel-wert {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+.pf-kunde-fuss {
+  grid-area: fuss;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  color: var(--ck-muted);
+}
+
+.pf-kunde-cta {
+  font-weight: 600;
+  color: var(--ck-info);
+}
+
+/* --- Heatmap --- */
+.pf-heatmap-huelle {
+  overflow-x: auto;
+  border: 1px solid var(--ck-border);
+  border-radius: 14px;
+  background: var(--ck-surface);
+}
+
+.pf-heatmap {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 520px;
+}
+
+.pf-heatmap th,
+.pf-heatmap td {
+  padding: 0.5rem 0.6rem;
+  text-align: center;
+}
+
+.pf-heatmap-eckkopf,
+.pf-heatmap-zeilenkopf {
+  text-align: left;
+}
+
+.pf-heatmap thead th {
+  font-size: 0.76rem;
+  color: var(--ck-muted);
+  border-bottom: 1px solid var(--ck-border);
+  font-weight: 600;
+}
+
+.pf-heatmap-zeilenkopf {
+  font-size: 0.86rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pf-heatmap tbody tr + tr th,
+.pf-heatmap tbody tr + tr td {
+  border-top: 1px solid var(--ck-surface-3);
+}
+
+.pf-zelle {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  width: 100%;
+  min-width: 64px;
+  padding: 0.5rem 0.35rem;
+  border: 1px solid var(--ck-accent);
+  border-radius: 10px;
+  background: var(--ck-accent-soft);
+  color: var(--ck-accent);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+.pf-zelle:hover,
+.pf-zelle:focus-visible {
+  transform: scale(1.05);
+  box-shadow: 0 3px 10px rgba(20, 24, 40, 0.14);
+  outline: none;
+}
+
+.pf-zelle-symbol {
+  font-size: 0.82rem;
+}
+
+.pf-zelle-wert {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* --- Legende + benannte Lücke --- */
+.pf-legende {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  font-size: 0.76rem;
+  color: var(--ck-ink-soft);
+}
+
+.pf-legende li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.pf-legende-symbol {
+  color: var(--ck-accent);
+}
+
+.pf-benannte-luecke {
+  margin: 1.4rem 0 0;
+  max-width: 78ch;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--ck-muted);
+  border-left: 3px solid var(--ck-border);
+  padding-left: 0.8rem;
+}
+
+@media (max-width: 560px) {
+  .pf-kunde-karte {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "rang haupt"
+      "ampeln ampeln"
+      "last last"
+      "fuss fuss";
+  }
+  .pf-kunde-last {
+    justify-self: start;
+  }
+}
+
+/* Dunkelmodus nach Systemvorgabe (das Portfolio bringt keinen eigenen Umschalter mit). */
+@media (prefers-color-scheme: dark) {
+  .pf-standalone {
+    --ck-surface: #191c24;
+    --ck-surface-2: #14161c;
+    --ck-surface-3: #2a2f3b;
+    --ck-border: #363d4d;
+    --ck-ink: #eef1f6;
+    --ck-ink-soft: #c4cad6;
+    --ck-muted: #9aa2b1;
+    --ck-ok: #4ecb86;
+    --ck-ok-soft: #16301f;
+    --ck-warn: #e2ab4a;
+    --ck-warn-soft: #322810;
+    --ck-alert: #f28b80;
+    --ck-alert-soft: #3a201d;
+    --ck-info: #93a4ff;
+    --ck-info-soft: #1f2542;
+  }
+}

@@ -39,6 +39,7 @@ import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { ReportsContent } from '../reports/ReportsContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { CockpitModulContent } from '../cockpit/CockpitModulContent';
+import { PortfolioContent } from '../portfolio/PortfolioContent';
 import { LoginWelten } from '../shell/LoginWelten';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
@@ -182,6 +183,9 @@ const RENDERER_JE_LIVE_ORT = {
     ...rollenMandantenMatrix('/cockpit', (r, t) =>
       render(<CockpitModulContent role={r} tenant={t} />),
     ),
+    // Berater-Portfolio-Einstieg (`/portfolio`, DR-0017 Stage 1): mandantenübergreifend, deshalb
+    // tenant-unabhängig gerendert; unter „Heute" registriert wie das Cockpit (kein NAV_PLACES-Ort).
+    ...rollenMandantenMatrix('/portfolio', (r) => render(<PortfolioContent role={r} />)),
   ],
   kunden: [
     {

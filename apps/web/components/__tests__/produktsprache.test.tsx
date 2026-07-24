@@ -64,6 +64,7 @@ import { ServicekatalogContent } from '../services/ServicekatalogContent';
 import { WissenContent } from '../wissen/WissenContent';
 import { AppShell } from '../shell/AppShell';
 import { CockpitModulContent } from '../cockpit/CockpitModulContent';
+import { PortfolioContent } from '../portfolio/PortfolioContent';
 import { LoginWelten } from '../shell/LoginWelten';
 import { MissionControlContent } from '../shell/MissionControlContent';
 import { SessionProvider } from '../shell/SessionProvider';
@@ -291,6 +292,10 @@ const RENDERER_JE_LIVE_ORT = {
     // Zusatzseite UNTER dem Ort „Heute" (Cockpit-Varianten-Vergleich, WP-025): jede der drei
     // Varianten über die volle Matrix; Variante B mit voller Detailtiefe (kompletter Textumfang).
     ...matrix('/cockpit', (r, t) => render(<CockpitModulContent role={r} tenant={t} />)),
+    // Berater-Portfolio-Einstieg (`/portfolio`, DR-0017 Stage 1): mandantenübergreifend, deshalb
+    // tenant-unabhängig gerendert (die Rangliste/Heatmap kennt alle Kunden). Kein NAV_PLACES-Ort –
+    // unter „Heute" registriert wie das Cockpit, damit die Sprach-Wächter den Text prüfen.
+    ...matrix('/portfolio', (r) => render(<PortfolioContent role={r} />)),
   ],
   kunden: [
     {

@@ -29,10 +29,11 @@ export default function ShellLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { resolved, session, hydrated, signIn, signOut } = useSession();
 
-  // DR-0017: Das Cockpit ist EIGENSTÄNDIG (full-screen, ohne Shell-Chrome) – es bringt seinen
-  // eigenen schlanken Rahmen mit (`CockpitModulView`). Die übrigen Orte behalten die Shell
-  // vorerst (Übergangsstand, bis der Dashboard-Drill sie ablöst). Die Route bleibt `/cockpit`.
-  if (pathname === '/cockpit') {
+  // DR-0017: Cockpit UND Berater-Portfolio sind EIGENSTÄNDIG (full-screen, ohne Shell-Chrome) – sie
+  // bringen ihren eigenen schlanken Rahmen mit (`CockpitModulView` / `PortfolioView`) und sind
+  // KEINE NAV_PLACES-Orte (Drill-only-IA, keine Sidebar-Reiter). Die übrigen Orte behalten die
+  // Shell vorerst (Übergangsstand, bis der Dashboard-Drill sie ablöst).
+  if (pathname === '/cockpit' || pathname === '/portfolio') {
     return <>{children}</>;
   }
 
