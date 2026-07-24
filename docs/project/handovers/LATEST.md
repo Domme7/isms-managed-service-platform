@@ -1,17 +1,28 @@
 # Latest Handover
 
 - **Aktuell:** `HND-20260724-sprint.md`
-- **Modus:** Produktkorrektur-Sprint (DR-0010), **autonomer Weiterbau ohne Rückfragen** (Owner)
-- **Stand:** Alle acht Shell-Orte live · Antwort-Modus (WP-028) + Reports/Wissen/Administration
-  (WP-032) **abgenommen** (Gate-Runde 1+2, Fix-Pass, Nachfix fertig) · WP-024 Treue-Check fertig ·
-  FINDING-0008 geschlossen
-- **Testlage:** 835 Tests grün (web 705), lint + typecheck + format:check grün, axe 0 über alle
-  15 Motive · **beide GitHub-CI-Workflows grün** (Repository-Contract-Job war seit WP-024 rot,
-  weil dem Runner `pypdf` fehlte → `requirements.txt` + Install-Schritt ergänzt, `a8b9d90`)
-- **Branch:** `main` · **Remote:** privat, alles gepusht
-- **Exact Next Step:** WP-028/032 sind abgenommen und CI ist grün. Weiter mit
-  Kundenwelt Slice 2/3 (Servicekatalog + Struktur-Assistent, read-only Dok. 14/16, preisfrei) →
-  2–3 Cockpit-Varianten → **STOPP für visuelle Owner-Freigabe** (DR-0010); danach WP-033
-  (Seed-Textpass), WP-029 (Personalisierung), WP-027 (Suche).
-- **Harte Owner-Gates (nicht autonom):** FINDING-0004/RLS → DB→UI · WP-030 echte Auth ·
-  CCP-001..004 + E-02 · WP-021 Demo-Firmenliste (O-WP006-01). Details: `ACTIVE_WORK_PACKAGE.md`.
+- **Modus:** Produktkorrektur-Sprint (DR-0010) + Owner-Auftrag „alles umsetzen, **usability first**",
+  **autonomer Weiterbau ohne Rückfragen**; owner-gated Materie wird vorbereitet und vorgelegt, nicht eigenmächtig gebaut.
+- **Stand:** Alle acht Shell-Orte live · Antwort-Modus (WP-028) + Reports/Wissen/Administration (WP-032)
+  **abgenommen** · **WP-006 Slice 2+3** (Servicekatalog `/services/katalog` + Struktur-Assistent
+  `/kunden/struktur`) **inhaltlich abgenommen** (Gate 1+2 + Fix-Pass, keine Regression; offen nur der
+  gebündelte `qa:visual`-Lauf). WP-024 Treue-Check + FINDING-0008 fertig.
+- **Neu geliefert (nicht-bindend, Owner-gated):**
+  - **Research/Innovation:** `research/briefs/` (Wettbewerb/Regulatorik/Markt-Web), `research/ideas/IDEEN_BACKLOG_2026-07-24.md`
+    (14 Ideen BL-01..14), `research/change-proposals/CCP-005/006/007_*_DRAFT.md`.
+  - **Usability-Audit:** `docs/project/usability/USABILITY_AUDIT_2026-07-24.md` (22 Fixes U-01..22, Top-10 + Quick-Wins).
+  - **Cockpit-Design:** `docs/project/design/WP-025_COCKPIT_VARIANTEN_KONZEPT.md`.
+- **Läuft gerade:** WP-025 **Cockpit-Varianten-Bau** im **isolierten Worktree** (agentbasiert, apps/web).
+- **Testlage:** **886 Tests grün** (web 756 · contracts 55 · demo-seed 54 · db 19 · api 2), lint + typecheck +
+  format:check grün, beide GitHub-CI-Workflows grün.
+- **Branch:** `main` · **Remote:** privat, alles bis `c64f5e8` gepusht.
+- **Exact Next Step:** (1) Cockpit-Worktree landet → verifizieren/mergen, dabei die 3 WP-006-Runde-2-Nits
+  folden (O-WP006-xx→10, length>80-Guards, GELDBAND-Robustheit). (2) Gebündelter `qa:visual` (Cockpit + WP-006),
+  Cockpit-Screenshots dem Owner vorlegen (DR-0010 Nr. 3 STOPP-Punkt). (3) **Usability-Quick-Wins** (non-invasiv):
+  U-16 Topbar-CSS-Renderfehler, U-03 „Begriffe→Wissen", U-02 Login-Mandant-Erklärung, U-17 Objekt-ID ausblenden,
+  U-13 „Ansicht zurücksetzen"-Tooltip, U-20 Leerzustand-Nächster-Schritt. (4) **WP-033/U-15** Seed-Textpass
+  („synthetisch/Demo" vom Einstiegsschirm entfernen — koppelt an `produktsprache`-Wächter, deshalb nach Cockpit).
+  (5) **BL-01 Trust-/Confidence-Layer** (non-invasiv). (6) U-01 Erstkontakt-Orientierung (Product-Lead-Sichtung).
+- **Harte Owner-Gates (vorbereitet, NICHT autonom):** FINDING-0004/RLS → DB→UI · WP-030 echte Auth ·
+  CCP-001..004 + **CCP-005/006/007** + E-02 (Contract) · BL-05 AIMS-Zusage · BL-08 Framework-Lizenz ·
+  BL-14 Pricing · WP-021 Demo-Firmenliste (O-WP006-01) · U-06/U-08/U-11/U-12 (Product/QA-Sichtung).
