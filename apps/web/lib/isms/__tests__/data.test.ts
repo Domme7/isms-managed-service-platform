@@ -132,10 +132,7 @@ describe('buildIsmsCoreView – Nordwerk (ISMS-Kerngraph vollständig aufgelöst
 
     // R15 evidences: beide realen Nachweis-Kanten (Evidence UND Deliverable) mit Kantenstatus.
     expect(control!.evidenced_by.map((e) => e.name).sort()).toEqual(
-      [
-        'Restore-Test-Protokoll Q2/2026',
-        'Audit-Readiness-Evidence-Pack Q2/2026',
-      ].sort(),
+      ['Restore-Test-Protokoll Q2/2026', 'Audit-Readiness-Evidence-Pack Q2/2026'].sort(),
     );
     expect(control!.evidenced_by.every((e) => e.edge_status === 'geprüft')).toBe(true);
 

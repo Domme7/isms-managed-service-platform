@@ -75,6 +75,18 @@
   /entscheidungen ohne „synthetisch". **Verbleibend (eigene Scheibe):** code-lastige Beschreibungen
   („Synthetische Service Instance (Dok. 13 §4.3), Muster SO02/SO03…") → Domänensprache (Regel Null), und
   die „Synthetische(r) X:"-Präfixe in den Objekt-Graphen (alpencloud/rheinbank/medinova) — größerer Pass.
+- **AE-9 (WP-027 globale Suche, Slice 1 = Suchmaschine + Leak-Schutz):** Regel Null: Dok. 06 „Suche,
+  Benachrichtigungen & Wiederaufnahme" — globale Suche über die Objekttypen, „mandanten- und
+  rollenbezogen gruppiert; vertrauliche Treffer werden nicht über Snippets geleakt". Umgesetzt in
+  `lib/suche/index.ts` (react-frei, deterministisch): `sucheObjekte(query, role, aktiverMandantId)`
+  über `DEMO_SEED.objects`; (1) **Sphärengrenze** (DR-0012): Kundensicht nur eigener Mandant, Portfolio
+  alle Kundenmandanten; (2) **Snippet-Leak-Schutz**: `confidentiality==='vertraulich'` (das einzige
+  höhere Vertraulichkeitswort im Seed neben `'intern'`) → Treffer mit Name/Typ, aber `snippet===null`;
+  (3) Match NUR über Name/Typ, NIE über `description` (kein Query-Leak). Gruppiert nach Mandant,
+  deterministisch sortiert. 7 Tests (Leak-Schutz, kein Query-Leak, Sphären-Isolation Kunde↔Portfolio,
+  kurze Query, Gruppierung/Determinismus). web 883 grün. Nebenbei: 2 Format-Reste aus `bfa1f66` (WP-033,
+  nur `vitest` statt `lint` nachgelaufen) mitgefixt. **Slice 2 (offen):** Suchfeld + Trefferliste im
+  Wissen-Bereich (schließt die im `WissenContent`-Kopf benannte „kein Suchfeld"-Lücke), Leerzustände.
 
 ## Offene Fragen an den Owner (nicht blockierend — Default gewählt, jederzeit umstellbar)
 - **OF-1 (2 Profile):** Sollen die 12 Rollen-Perspektiven wirklich ganz raus, oder nur der

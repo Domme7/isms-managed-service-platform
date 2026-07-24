@@ -50,10 +50,7 @@ describe('getManagedServicesForTenant – Auflösung je Mandant', () => {
       'SLA – Risiko- & Control-Monitoring (Band „Standard")',
     ]);
     expect(monitoring.deliverables.map((d) => d.name).sort()).toEqual(
-      [
-        'Control-Assurance-Paket Q2/2026',
-        'Risiko- & Control-Review 2026-06',
-      ].sort(),
+      ['Control-Assurance-Paket Q2/2026', 'Risiko- & Control-Review 2026-06'].sort(),
     );
     expect(monitoring.reviews.map((r) => r.name)).toEqual([
       'Outcome Review Q2/2026 – Risiko- & Control-Monitoring',
@@ -126,9 +123,7 @@ describe('getManagedServicesForTenant – Auflösung je Mandant', () => {
     expect(audit.slas.map((s) => s.name)).toEqual([
       'SLA – Audit-Readiness-Betrieb (Band „Priority")',
     ]);
-    expect(audit.deliverables.map((d) => d.name)).toEqual([
-      'Audit-Readiness-Paket 2026-06',
-    ]);
+    expect(audit.deliverables.map((d) => d.name)).toEqual(['Audit-Readiness-Paket 2026-06']);
     expect(audit.delivery_team_names).toEqual(['Delivery-Team Managed ISMS']);
 
     const policy = serviceOrThrow(views, P.SERVICE_POLICY_LIFECYCLE);
