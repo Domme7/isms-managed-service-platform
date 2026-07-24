@@ -224,7 +224,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Organisation',
     display_name: 'AlpenCloud GmbH',
     description:
-      'Synthetischer Cloud-Softwareanbieter (SaaS) mit schnellem Wachstum und einem ' +
+      'Cloud-Softwareanbieter (SaaS) mit schnellem Wachstum und einem ' +
       'Zertifizierungsziel (Dok. 16 §34.1 Nr. 2). Wurzelorganisation des Demo-Graphen.',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern', protection_need: 'normal' },
@@ -236,7 +236,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Standort',
     display_name: 'Betriebsregion EU (primäre Cloud-Region)',
     description:
-      'Synthetische primäre Betriebsregion, in der die produktiven Cloud-Ressourcen betrieben ' +
+      'Primäre Betriebsregion, in der die produktiven Cloud-Ressourcen betrieben ' +
       'werden. Primäre Betriebszuordnung der Plattform (Dok. 07 §9 R02).',
     lifecycle_status: 'Freigegeben',
   }),
@@ -245,7 +245,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Organisationseinheit',
     display_name: 'Platform Engineering',
     description:
-      'Synthetische Organisationseinheit; betreibt die Cloud-Ressourcen und die technische ' +
+      'Organisationseinheit; betreibt die Cloud-Ressourcen und die technische ' +
       'Umsetzung der Controls (technischer Owner).',
     lifecycle_status: 'Freigegeben',
   }),
@@ -274,7 +274,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Business Capability',
     display_name: 'SaaS-Plattformbetrieb',
     description:
-      'Synthetische Geschäftsfähigkeit: die mandantenfähige Cloud-Software verfügbar und ' +
+      'Geschäftsfähigkeit: die mandantenfähige Cloud-Software verfügbar und ' +
       'sicher zu betreiben. ISMS-Fokus des wachsenden Cloud-Anbieters.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -283,7 +283,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Geschäftsprozess',
     display_name: 'Mandanten-Provisionierung',
     description:
-      'Synthetischer Kernprozess: automatisierte Bereitstellung und Verwaltung von Kundenmandanten ' +
+      'Kernprozess: automatisierte Bereitstellung und Verwaltung von Kundenmandanten ' +
       'auf der Cloud-Plattform.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [
@@ -296,7 +296,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Information Asset',
     display_name: 'Kundendaten (Mandantendaten)',
     description:
-      'Synthetischer Informationswert: die in der SaaS-Plattform verarbeiteten Mandanten- und ' +
+      'Informationswert: die in der SaaS-Plattform verarbeiteten Mandanten- und ' +
       'Kundendaten. Besonders schützenswert gegen Abfluss.',
     lifecycle_status: 'freigegeben', // Informations-Lifecycle (Dok. 05 §7)
     owner_ids: [
@@ -309,7 +309,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Information Asset',
     display_name: 'Plattform-Telemetrie- und Logdaten',
     description:
-      'Synthetischer Informationswert: Betriebs-, Zugriffs- und Telemetriedaten der Plattform. ' +
+      'Informationswert: Betriebs-, Zugriffs- und Telemetriedaten der Plattform. ' +
       'Im Wachstum neu hinzugekommen und bewusst OHNE benannten Owner erfasst (kritisches Objekt ' +
       'ohne Owner) sowie aus einer veralteten Inventarquelle übernommen.',
     // DECKUNGSLÜCKE (kritisch ohne Owner) + VERALTETE QUELLE (Dok.-07-Demo-Graph-Pflicht):
@@ -343,7 +343,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Cloud-Ressource',
     display_name: 'Kubernetes-Produktionscluster',
     description:
-      'Synthetische Cloud-Ressource: der produktive Container-Cluster, auf dem die ' +
+      'Cloud-Ressource: der produktive Container-Cluster, auf dem die ' +
       'Plattformdienste und Schnittstellen laufen.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [{ owner_id: A.OU_PLATFORM_ENG, owner_kind: 'technisch', role: 'Betrieb' }],
@@ -354,7 +354,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Cloud-Ressource',
     display_name: 'Objektspeicher (Kundendaten-Bucket)',
     description:
-      'Synthetische Cloud-Ressource: der Objektspeicher, in dem die ruhenden Kundendaten abgelegt ' +
+      'Cloud-Ressource: der Objektspeicher, in dem die ruhenden Kundendaten abgelegt ' +
       'werden. Gegenstand der Verschlüsselungs-Control.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [{ owner_id: A.OU_PLATFORM_ENG, owner_kind: 'technisch', role: 'Betrieb' }],
@@ -365,7 +365,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Schnittstelle',
     display_name: 'Öffentliche REST-API',
     description:
-      'Synthetische, öffentlich exponierte Programmierschnittstelle der Plattform. Gegenstand der ' +
+      'Öffentlich exponierte Programmierschnittstelle der Plattform. Gegenstand der ' +
       'API-Gateway-Control.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [{ owner_id: A.OU_PLATFORM_ENG, owner_kind: 'technisch', role: 'Betrieb' }],
@@ -376,7 +376,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Schnittstelle',
     display_name: 'Webhook-/Integrations-Schnittstelle',
     description:
-      'Synthetische, im Wachstum neu eingeführte Integrations-Schnittstelle (Webhooks). Noch in ' +
+      'Im Wachstum neu eingeführte Integrations-Schnittstelle (Webhooks). Noch in ' +
       'Änderung und Gegenstand einer offenen Härtungsmaßnahme.',
     lifecycle_status: 'In Änderung', // generischer Lebenszyklus (Dok. 07 §8): neu/im Umbau
     owner_ids: [{ owner_id: A.OU_PLATFORM_ENG, owner_kind: 'technisch', role: 'Betrieb' }],
@@ -389,7 +389,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Framework',
     display_name: 'ISO/IEC 27001:2022 (Zertifizierungs-Framework, Demo-Katalog)',
     description:
-      'Synthetischer Framework-Kontext für das Zertifizierungsziel (Dok. 16 §34.1 Nr. 2). ' +
+      'Framework-Kontext für das Zertifizierungsziel (Dok. 16 §34.1 Nr. 2). ' +
       'Kein Abdruck realer Normtexte.',
     lifecycle_status: 'Freigegeben',
     source_refs: [KATALOG_SOURCE],
@@ -399,7 +399,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Requirement',
     display_name: 'A.5.23 – Informationssicherheit für Cloud-Dienste',
     description:
-      'Synthetische Anforderung: Cloud-Dienste werden gemäß den Sicherheitsvorgaben beschafft, ' +
+      'Anforderung: Cloud-Dienste werden gemäß den Sicherheitsvorgaben beschafft, ' +
       'genutzt und verwaltet.',
     lifecycle_status: 'Freigegeben',
     source_refs: [KATALOG_SOURCE],
@@ -409,7 +409,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Verschlüsselung ruhender Kundendaten',
     description:
-      'Synthetisches Control: Verschlüsselung der ruhenden Kundendaten im Objektspeicher. Durch ' +
+      'Control: Verschlüsselung der ruhenden Kundendaten im Objektspeicher. Durch ' +
       'einen automatisierten Compliance-Scan belegt.',
     lifecycle_status: 'wirksam', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: A.ROLE_CISO, owner_kind: 'fachlich', role: 'Control Owner' }],
@@ -419,7 +419,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Automatisierte Zugriffssteuerung (IAM)',
     description:
-      'Synthetisches Control: automatisierte, rollenbasierte Zugriffssteuerung auf Plattform und ' +
+      'Control: automatisierte, rollenbasierte Zugriffssteuerung auf Plattform und ' +
       'Kundendaten (hohe Automatisierungsbereitschaft, Dok. 16 §34.1 Nr. 2). Durch einen ' +
       'Zugriffsreview belegt.',
     lifecycle_status: 'wirksam', // Control-Lifecycle (Dok. 05 §7)
@@ -430,7 +430,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Sicheres API-Gateway (Rate-Limiting & Authentisierung)',
     description:
-      'Synthetisches Control zur Absicherung der öffentlichen API (Authentisierung, ' +
+      'Control zur Absicherung der öffentlichen API (Authentisierung, ' +
       'Durchsatzbegrenzung). Umgesetzt, aber im Datenbestand OHNE Nachweis erfasst (bewusste ' +
       'Deckungslücke: Control ohne Nachweis).',
     lifecycle_status: 'implementiert', // Control-Lifecycle (Dok. 05 §7)
@@ -441,7 +441,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control Implementation',
     display_name: 'KMS-Verschlüsselung im Objektspeicher',
     description:
-      'Synthetische lokale Umsetzung der Verschlüsselungs-Control: serverseitige KMS-Verschlüsselung ' +
+      'Lokale Umsetzung der Verschlüsselungs-Control: serverseitige KMS-Verschlüsselung ' +
       'des Kundendaten-Objektspeichers.',
     lifecycle_status: 'implementiert', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: A.OU_PLATFORM_ENG, owner_kind: 'technisch', role: 'Betrieb' }],
@@ -453,7 +453,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Threat',
     display_name: 'Angriff auf die öffentliche API',
     description:
-      'Synthetische Bedrohung: gezielter Angriff auf die öffentlich exponierte Programmier- ' +
+      'Bedrohung: gezielter Angriff auf die öffentlich exponierte Programmier- ' +
       'schnittstelle mit dem Ziel, Kundendaten abzugreifen.',
     lifecycle_status: 'Beobachtet',
     source_refs: [
@@ -461,7 +461,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     ],
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
-      { dimension: 'Aktualität', note: 'Synthetisches Bedrohungssignal, Demo-Stand 2026-04.' },
+      { dimension: 'Aktualität', note: 'Bedrohungssignal, Demo-Stand 2026-04.' },
     ],
   }),
   alpencloudObject({
@@ -469,7 +469,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Weakness',
     display_name: 'Ungehärtete Integrations-Schnittstelle',
     description:
-      'Synthetische Schwäche an der neuen Webhook-/Integrations-Schnittstelle. Der Datenbestand ' +
+      'Schwäche an der neuen Webhook-/Integrations-Schnittstelle. Der Datenbestand ' +
       'trägt zwei widersprüchliche Quellen zu ihrem Zustand (Konflikt, siehe Konsistenz-Vermerk).',
     lifecycle_status: 'Geprüft',
     // KONFLIKT (Dok.-07-Demo-Graph-Pflicht) über belegte Felder: zwei widersprüchliche
@@ -494,7 +494,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk Scenario',
     display_name: 'Datenabfluss über die öffentliche API',
     description:
-      'Synthetisches Risikoszenario: Angreifer nutzen eine ungehärtete Schnittstelle und greifen ' +
+      'Risikoszenario: Angreifer nutzen eine ungehärtete Schnittstelle und greifen ' +
       'über die öffentliche API Kundendaten ab.',
     // Bewusste Entlehnung (Domänen-Review): Dok. 05 §7 führt keine eigene Zeile „Risk Scenario";
     // der Zustand „bewertet" stammt aus dem Risiko-Lebenszyklus (Szenarien werden bewertet).
@@ -505,7 +505,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Abfluss von Kundendaten über die API',
     description:
-      'Synthetisches Risiko: unbefugter Abfluss der Kundendaten über die Plattform-Schnittstellen. ' +
+      'Risiko: unbefugter Abfluss der Kundendaten über die Plattform-Schnittstellen. ' +
       'Wird durch die Verschlüsselung ruhender Daten gemindert.',
     lifecycle_status: 'behandelt', // Risiko-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: A.ROLE_CISO, owner_kind: 'fachlich', role: 'Risk Owner' }],
@@ -516,7 +516,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Kontroll-Lücke durch Wachstum gefährdet die Zertifizierung',
     description:
-      'Synthetisches Risiko: das schnelle Wachstum bringt neue Assets und Schnittstellen schneller ' +
+      'Risiko: das schnelle Wachstum bringt neue Assets und Schnittstellen schneller ' +
       'hervor, als Nachweise und Owner nachgezogen werden — die Control-Abdeckung droht hinter dem ' +
       'Zertifizierungsziel zurückzubleiben. Neu identifiziert und im Datenbestand OHNE mindernde ' +
       'Beziehung erfasst (bewusste Deckungslücke: Risiko ohne Minderung).',
@@ -544,7 +544,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Ausfall der SaaS-Plattform (Verfügbarkeit)',
     description:
-      'Synthetisches Risiko: Ausfall oder Überlast der öffentlichen API beeinträchtigt die ' +
+      'Risiko: Ausfall oder Überlast der öffentlichen API beeinträchtigt die ' +
       'Verfügbarkeit der Plattform. Wird durch das sichere API-Gateway gemindert.',
     lifecycle_status: 'behandelt', // Risiko-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: A.ROLE_CISO, owner_kind: 'fachlich', role: 'Risk Owner' }],
@@ -557,7 +557,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Evidence',
     display_name: 'Automatisierter Compliance-Scan (Verschlüsselung)',
     description:
-      'Synthetischer Nachweis: automatisierter Compliance-Scan, der die Verschlüsselung der ' +
+      'Nachweis: automatisierter Compliance-Scan, der die Verschlüsselung der ' +
       'ruhenden Kundendaten fortlaufend bestätigt (hohe Automatisierung, Dok. 16 §34.1 Nr. 2).',
     lifecycle_status: 'akzeptiert', // Evidence-Lifecycle (Dok. 05 §7)
     quality: [{ dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' }],
@@ -570,7 +570,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Evidence',
     display_name: 'IAM-Zugriffsreview Q1/2026',
     description:
-      'Synthetischer Nachweis: dokumentierter Review der automatisierten Zugriffsberechtigungen ' +
+      'Nachweis: dokumentierter Review der automatisierten Zugriffsberechtigungen ' +
       '(IAM) auf Plattform und Kundendaten.',
     lifecycle_status: 'akzeptiert', // Evidence-Lifecycle (Dok. 05 §7)
     quality: [{ dimension: 'Bestätigung', confirmation_level: 'reviewed' }],
@@ -580,8 +580,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: A.MEASURE_API_HAERTUNG,
     object_type: 'Measure',
     display_name: 'Härtung der Integrations-Schnittstelle',
-    description:
-      'Synthetische Maßnahme: Absicherung und Härtung der neuen Webhook-/Integrations-Schnittstelle.',
+    description: 'Maßnahme: Absicherung und Härtung der neuen Webhook-/Integrations-Schnittstelle.',
     lifecycle_status: 'in Arbeit', // Maßnahmen-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: A.OU_PLATFORM_ENG, owner_kind: 'technisch', role: 'Betrieb' }],
   }),
@@ -590,7 +589,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Audit',
     display_name: 'Zertifizierungsaudit ISO/IEC 27001 (Stufe 1/2)',
     description:
-      'Synthetisches, bevorstehendes Zertifizierungsaudit (Zertifizierungsziel, Dok. 16 §34.1 ' +
+      'Bevorstehendes Zertifizierungsaudit (Zertifizierungsziel, Dok. 16 §34.1 ' +
       'Nr. 2). In Vorbereitung; prüft die priorisierten Controls und ihre Nachweise.',
     lifecycle_status: 'Vorbereitung', // Audit-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: A.ROLE_CISO, owner_kind: 'fachlich', role: 'Audit Owner' }],
@@ -602,7 +601,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Objective',
     display_name: 'Erstzertifizierung ISO/IEC 27001',
     description:
-      'Synthetisches Ziel: die Erstzertifizierung nach ISO/IEC 27001 zu erreichen (Zertifizierungs- ' +
+      'Ziel: die Erstzertifizierung nach ISO/IEC 27001 zu erreichen (Zertifizierungs- ' +
       'ziel, Dok. 16 §34.1 Nr. 2). Kein numerischer Zielwert und keine Kennzahl sind erfasst.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [{ owner_id: A.ROLE_CISO, owner_kind: 'fachlich', role: 'Objective Owner' }],

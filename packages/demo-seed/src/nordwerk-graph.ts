@@ -169,7 +169,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     // Anzeigename nach Dok. 16 §34.1 (Flaggschiff „Nordstern"); die stabile object_id/tenant_id
     // bleibt unverändert `nordwerk-*` / `tenant-nordwerk` (Dok. 07 §7, WP-021 Slice 1).
     display_name: 'Nordstern Manufacturing SE',
-    description: 'Synthetischer Fertigungskonzern (Wurzelorganisation des Demo-Graphen).',
+    description: 'Fertigungskonzern (Wurzelorganisation des Demo-Graphen).',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern', protection_need: 'normal' },
   }),
@@ -179,7 +179,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.OU_PRODUKTION,
     object_type: 'Organisationseinheit',
     display_name: 'Werk Nord – Produktion',
-    description: 'Synthetische Produktionseinheit; betreibt die Auftragsabwicklung.',
+    description: 'Produktionseinheit; betreibt die Auftragsabwicklung.',
     lifecycle_status: 'Freigegeben',
   }),
   nordwerkObject({
@@ -204,8 +204,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.OU_IT_BETRIEB,
     object_type: 'Organisationseinheit',
     display_name: 'IT-Betrieb',
-    description:
-      'Synthetische Organisationseinheit; technischer Owner der Backup-Control-Implementierung.',
+    description: 'Organisationseinheit; technischer Owner der Backup-Control-Implementierung.',
     lifecycle_status: 'Freigegeben',
   }),
 
@@ -214,7 +213,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.PROC_AUFTRAGSABWICKLUNG,
     object_type: 'Geschäftsprozess',
     display_name: 'Auftragsabwicklung',
-    description: 'Synthetischer Kernprozess: Annahme, Planung und Fertigung von Kundenaufträgen.',
+    description: 'Kernprozess: Annahme, Planung und Fertigung von Kundenaufträgen.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [
       {
@@ -229,8 +228,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.ASSET_KUNDENAUFTRAGSDATEN,
     object_type: 'Information Asset',
     display_name: 'Kundenauftragsdaten',
-    description:
-      'Synthetischer Informationswert: Auftrags-, Stückzahl- und Lieferdaten der Kunden.',
+    description: 'Informationswert: Auftrags-, Stückzahl- und Lieferdaten der Kunden.',
     lifecycle_status: 'freigegeben', // Informations-Lifecycle (Dok. 05 §7)
     owner_ids: [
       { owner_id: O.ROLE_PROZESSVERANTWORTUNG, owner_kind: 'fachlich', role: 'Information Owner' },
@@ -243,7 +241,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.FRAMEWORK_ISO27001,
     object_type: 'Framework',
     display_name: 'ISO/IEC 27001:2022 (Demo-Katalog)',
-    description: 'Synthetischer Framework-Kontext für die Demo. Kein Abdruck realer Normtexte.',
+    description: 'Framework-Kontext für die Demo. Kein Abdruck realer Normtexte.',
     lifecycle_status: 'Freigegeben',
     source_refs: [
       { source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 },
@@ -253,7 +251,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.REQ_BACKUP,
     object_type: 'Requirement',
     display_name: 'A.8.13 – Informationssicherung (Backup)',
-    description: 'Synthetische Anforderung: geprüfte, wiederherstellbare Datensicherung.',
+    description: 'Anforderung: geprüfte, wiederherstellbare Datensicherung.',
     lifecycle_status: 'Freigegeben',
     source_refs: [
       { source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 },
@@ -263,8 +261,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.CTRL_BACKUP,
     object_type: 'Control',
     display_name: 'Backup & Recovery Control',
-    description:
-      'Synthetisches generisches Control zur Sicherung und Wiederherstellung kritischer Daten.',
+    description: 'Generisches Control zur Sicherung und Wiederherstellung kritischer Daten.',
     lifecycle_status: 'wirksam', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: O.ROLE_CISO, owner_kind: 'fachlich', role: 'Control Owner' }],
   }),
@@ -272,7 +269,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.CTRLIMPL_BACKUP,
     object_type: 'Control Implementation',
     display_name: 'Backup-Job Werk Nord (ERP)',
-    description: 'Synthetische lokale Umsetzung des Backup-Controls für die ERP-Auftragsdaten.',
+    description: 'Lokale Umsetzung des Backup-Controls für die ERP-Auftragsdaten.',
     lifecycle_status: 'implementiert', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: O.OU_IT_BETRIEB, owner_kind: 'technisch', role: 'Betrieb' }],
   }),
@@ -282,11 +279,11 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.THREAT_RANSOMWARE,
     object_type: 'Threat',
     display_name: 'Ransomware-Angriff auf Produktionsnetz',
-    description: 'Synthetische Bedrohung: Verschlüsselung produktionsrelevanter Systeme und Daten.',
+    description: 'Bedrohung: Verschlüsselung produktionsrelevanter Systeme und Daten.',
     lifecycle_status: 'Beobachtet',
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
-      { dimension: 'Aktualität', note: 'Synthetisches Bedrohungssignal, Demo-Stand 2026-01.' },
+      { dimension: 'Aktualität', note: 'Bedrohungssignal, Demo-Stand 2026-01.' },
     ],
     source_refs: [
       { source_kind: 'Extraktionsregel', reference: 'synthetic-threat-feed', priority: 1 },
@@ -296,7 +293,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.WEAK_ERP_SCHNITTSTELLE,
     object_type: 'Weakness',
     display_name: 'Ungepatchte ERP-Integrationsschnittstelle',
-    description: 'Synthetische Schwäche: veraltete Middleware-Version an der ERP-Schnittstelle.',
+    description: 'Schwäche: veraltete Middleware-Version an der ERP-Schnittstelle.',
     lifecycle_status: 'Geprüft',
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
@@ -309,7 +306,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk Scenario',
     display_name: 'Verschlüsselung der Auftragsdaten durch Ransomware',
     description:
-      'Synthetisches Risikoszenario: Ransomware nutzt die ERP-Schwäche und verschlüsselt ' +
+      'Risikoszenario: Ransomware nutzt die ERP-Schwäche und verschlüsselt ' +
       'die Kundenauftragsdaten.',
     lifecycle_status: 'bewertet', // Risiko-Lifecycle (Dok. 05 §7)
   }),
@@ -318,7 +315,7 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Betriebsunterbrechung Auftragsabwicklung',
     description:
-      'Synthetisches Risiko: Ausfall der Auftragsabwicklung durch Verlust/Verschlüsselung ' +
+      'Risiko: Ausfall der Auftragsabwicklung durch Verlust/Verschlüsselung ' +
       'der Kundenauftragsdaten.',
     lifecycle_status: 'behandelt', // Risiko-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: O.ROLE_CISO, owner_kind: 'fachlich', role: 'Risk Owner' }],
@@ -330,15 +327,14 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: O.MEASURE_PATCH,
     object_type: 'Measure',
     display_name: 'Härtung & Patch-Management ERP-Schnittstelle',
-    description:
-      'Synthetische Maßnahme: Aktualisierung und Härtung der ERP-Integrationsschnittstelle.',
+    description: 'Maßnahme: Aktualisierung und Härtung der ERP-Integrationsschnittstelle.',
     lifecycle_status: 'in Arbeit', // Maßnahmen-Lifecycle (Dok. 05 §7)
   }),
   nordwerkObject({
     object_id: O.EVIDENCE_RESTORE_TEST,
     object_type: 'Evidence',
     display_name: 'Restore-Test-Protokoll Q2/2026',
-    description: 'Synthetischer Nachweis: erfolgreicher Wiederherstellungstest der Auftragsdaten.',
+    description: 'Nachweis: erfolgreicher Wiederherstellungstest der Auftragsdaten.',
     lifecycle_status: 'akzeptiert', // Evidence-Lifecycle (Dok. 05 §7)
     quality: [{ dimension: 'Bestätigung', confirmation_level: 'reviewed' }],
     source_refs: [

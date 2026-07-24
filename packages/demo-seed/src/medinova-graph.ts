@@ -241,7 +241,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Organisation',
     display_name: 'MediNova Clinics Holding',
     description:
-      'Synthetische, dezentrale Gesundheitsgruppe mit kritischer Verfügbarkeit sowie Lieferanten- ' +
+      'Dezentrale Gesundheitsgruppe mit kritischer Verfügbarkeit sowie Lieferanten- ' +
       'und Standortkomplexität (Dok. 16 §34.1 Nr. 4). Wurzelorganisation des Demo-Graphen.',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern', protection_need: 'normal' },
@@ -253,7 +253,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Standort',
     display_name: 'Klinik Nord (Akutklinik, primärer Betriebsstandort)',
     description:
-      'Synthetischer Akutklinik-Standort; primärer Betriebsstandort des zentralen ' +
+      'Akutklinik-Standort; primärer Betriebsstandort des zentralen ' +
       'Krankenhausinformationssystems (KIS). Trägt die höchste Verfügbarkeitsanforderung.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -262,7 +262,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Standort',
     display_name: 'Klinik Süd (Fachklinik)',
     description:
-      'Synthetischer zweiter Klinikstandort. Teil der dezentralen Gruppe; nutzt das zentrale KIS ' +
+      'Zweiter Klinikstandort. Teil der dezentralen Gruppe; nutzt das zentrale KIS ' +
       'mit, ist aber organisatorisch eigenständig (Standortkomplexität, Dok. 16 §34.1 Nr. 4).',
     lifecycle_status: 'Freigegeben',
   }),
@@ -271,7 +271,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Standort',
     display_name: 'Medizinisches Versorgungszentrum (ambulanter Standort)',
     description:
-      'Synthetischer dritter, ambulanter Standort. Bewusst dünner modelliert — die dezentrale ' +
+      'Dritter, ambulanter Standort. Bewusst dünner modelliert — die dezentrale ' +
       'Gruppe zieht Governance und Nachweise an den kleineren Standorten langsamer nach.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -280,7 +280,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Organisationseinheit',
     display_name: 'Zentrale IT',
     description:
-      'Synthetische Organisationseinheit; koordiniert die IT über die Standorte hinweg. In der ' +
+      'Organisationseinheit; koordiniert die IT über die Standorte hinweg. In der ' +
       'dezentralen Gruppe knapp besetzt — der KIS-Betrieb ist an einen externen Dienstleister ' +
       'ausgelagert.',
     lifecycle_status: 'Freigegeben',
@@ -310,7 +310,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Business Capability',
     display_name: 'Patientenversorgung (kritische Verfügbarkeit)',
     description:
-      'Synthetische Geschäftsfähigkeit: die durchgängige, verfügbare Versorgung der Patientinnen ' +
+      'Geschäftsfähigkeit: die durchgängige, verfügbare Versorgung der Patientinnen ' +
       'und Patienten über alle Standorte. ISMS-Fokus der Gruppe (kritische Verfügbarkeit).',
     lifecycle_status: 'Freigegeben',
   }),
@@ -319,7 +319,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Geschäftsprozess',
     display_name: 'Stationäre Patientenversorgung',
     description:
-      'Synthetischer Kernprozess: Aufnahme, Behandlung und Dokumentation der stationären ' +
+      'Kernprozess: Aufnahme, Behandlung und Dokumentation der stationären ' +
       'Versorgung über das KIS. Verfügbarkeitskritisch.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [
@@ -332,7 +332,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Information Asset',
     display_name: 'Patienten- und Behandlungsdaten',
     description:
-      'Synthetischer Informationswert: die besonders schützenswerten Patienten-, Diagnose- und ' +
+      'Informationswert: die besonders schützenswerten Patienten-, Diagnose- und ' +
       'Behandlungsdaten. Werden auch vom externen Labordienstleister verarbeitet.',
     lifecycle_status: 'freigegeben', // Informations-Lifecycle (Dok. 05 §7)
     owner_ids: [
@@ -347,7 +347,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'System',
     display_name: 'Krankenhausinformationssystem (KIS)',
     description:
-      'Synthetisches, verfügbarkeitskritisches Kernsystem der Gruppe. Wird von einem externen ' +
+      'Verfügbarkeitskritisches Kernsystem der Gruppe. Wird von einem externen ' +
       'IT-Betriebsdienstleister betrieben und ist bewusst OHNE benannten internen Owner erfasst ' +
       '(kritisches Objekt ohne Owner): in der dezentralen Gruppe beansprucht intern niemand die ' +
       'Verantwortung für das ausgelagerte Kernsystem (Governance-Lücke).',
@@ -362,7 +362,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Lieferant',
     display_name: 'IT-Betriebsdienstleister (KIS-Betrieb)',
     description:
-      'Synthetischer externer Dienstleister, der den Betrieb des KIS verantwortet. Zentrale ' +
+      'Externer Dienstleister, der den Betrieb des KIS verantwortet. Zentrale ' +
       'Verfügbarkeitsabhängigkeit der Gruppe; stützt sich seinerseits auf einen ' +
       'Rechenzentrums-Unterauftragnehmer.',
     lifecycle_status: 'Freigegeben',
@@ -373,7 +373,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Lieferant',
     display_name: 'Externer Labordienstleister',
     description:
-      'Synthetischer externer Labordienstleister, der Diagnostik- und Laborauswertungen erbringt ' +
+      'Externer Labordienstleister, der Diagnostik- und Laborauswertungen erbringt ' +
       'und dabei Patientendaten verarbeitet. Im Datenbestand aus einem veralteten ' +
       'Lieferantenregister übernommen.',
     // VERALTETE QUELLE (Dok.-07-Demo-Graph-Pflicht) über belegte Felder: alte Import-Quelle 2023 +
@@ -402,7 +402,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Unterauftragnehmer',
     display_name: 'Rechenzentrums-Unterauftragnehmer',
     description:
-      'Synthetischer Unterauftragnehmer des IT-Betriebsdienstleisters: stellt die Rechenzentrums- ' +
+      'Unterauftragnehmer des IT-Betriebsdienstleisters: stellt die Rechenzentrums- ' +
       'und Hosting-Kapazität für das KIS bereit. Zweite Stufe der Lieferkette (Sub-Processor).',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern' },
@@ -414,7 +414,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Framework',
     display_name: 'ISO/IEC 27001:2022 (Demo-Katalog, Klinikverbund)',
     description:
-      'Synthetischer Framework-Kontext für die Anforderungen an Lieferantensteuerung und ' +
+      'Framework-Kontext für die Anforderungen an Lieferantensteuerung und ' +
       'Verfügbarkeit. Kein Abdruck realer Normtexte.',
     lifecycle_status: 'Freigegeben',
     source_refs: [KATALOG_SOURCE],
@@ -424,7 +424,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Requirement',
     display_name: 'A.5.19 – Informationssicherheit in Lieferantenbeziehungen',
     description:
-      'Synthetische Anforderung: Sicherheitsanforderungen an Dienstleister werden vereinbart, ' +
+      'Anforderung: Sicherheitsanforderungen an Dienstleister werden vereinbart, ' +
       'gesteuert und überwacht.',
     lifecycle_status: 'Freigegeben',
     source_refs: [KATALOG_SOURCE],
@@ -434,7 +434,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Requirement',
     display_name: 'A.5.30 – IKT-Bereitschaft für Business Continuity',
     description:
-      'Synthetische Anforderung: die IKT-Bereitschaft für die Aufrechterhaltung kritischer ' +
+      'Anforderung: die IKT-Bereitschaft für die Aufrechterhaltung kritischer ' +
       'Dienste wird geplant, umgesetzt und getestet.',
     lifecycle_status: 'Freigegeben',
     source_refs: [KATALOG_SOURCE],
@@ -444,7 +444,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Lieferantensteuerung und -überwachung',
     description:
-      'Synthetisches Control zur Steuerung und laufenden Überwachung der kritischen Dienstleister. ' +
+      'Control zur Steuerung und laufenden Überwachung der kritischen Dienstleister. ' +
       'Umgesetzt, aber im Datenbestand OHNE Nachweis erfasst (bewusste Deckungslücke: Control ohne ' +
       'Nachweis).',
     lifecycle_status: 'implementiert', // Control-Lifecycle (Dok. 05 §7)
@@ -455,7 +455,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Notfall- und Ausweichbetrieb KIS',
     description:
-      'Synthetisches Control: geplanter Notfall-/Ausweichbetrieb für das KIS, damit die ' +
+      'Control: geplanter Notfall-/Ausweichbetrieb für das KIS, damit die ' +
       'Patientenversorgung einen Dienstleister- oder Systemausfall übersteht. Durch einen ' +
       'Wiederanlauftest belegt.',
     lifecycle_status: 'wirksam', // Control-Lifecycle (Dok. 05 §7)
@@ -466,7 +466,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Zugriffskontrolle Patientendaten',
     description:
-      'Synthetisches Control zur Steuerung des Zugriffs auf die Patienten- und Behandlungsdaten ' +
+      'Control zur Steuerung des Zugriffs auf die Patienten- und Behandlungsdaten ' +
       '(auch an der Schnittstelle zum externen Labordienstleister). Durch einen Zugriffsreview belegt.',
     lifecycle_status: 'wirksam', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: M.ROLE_CISO, owner_kind: 'fachlich', role: 'Control Owner' }],
@@ -478,7 +478,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Threat',
     display_name: 'Ausfall eines kritischen Dienstleisters',
     description:
-      'Synthetische Bedrohung: Ausfall oder schwere Störung eines kritischen Dienstleisters ' +
+      'Bedrohung: Ausfall oder schwere Störung eines kritischen Dienstleisters ' +
       '(IT-Betrieb oder Rechenzentrum) unterbricht den KIS-Betrieb.',
     lifecycle_status: 'Beobachtet',
     source_refs: [
@@ -486,7 +486,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     ],
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
-      { dimension: 'Aktualität', note: 'Synthetisches Bedrohungssignal, Demo-Stand 2026-06.' },
+      { dimension: 'Aktualität', note: 'Bedrohungssignal, Demo-Stand 2026-06.' },
     ],
   }),
   medinovaObject({
@@ -494,7 +494,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Weakness',
     display_name: 'Lückenhaftes Lieferanten-Monitoring',
     description:
-      'Synthetische Schwäche: das laufende Monitoring der kritischen Dienstleister ist über die ' +
+      'Schwäche: das laufende Monitoring der kritischen Dienstleister ist über die ' +
       'dezentralen Standorte uneinheitlich. Der Datenbestand trägt zwei widersprüchliche Quellen zu ' +
       'ihrem Zustand (Konflikt, siehe Konsistenz-Vermerk).',
     lifecycle_status: 'Geprüft',
@@ -519,7 +519,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk Scenario',
     display_name: 'KIS-Ausfall durch Dienstleisterstörung',
     description:
-      'Synthetisches Risikoszenario: eine Störung beim IT-Betriebsdienstleister oder seinem ' +
+      'Risikoszenario: eine Störung beim IT-Betriebsdienstleister oder seinem ' +
       'Rechenzentrums-Unterauftragnehmer führt zum Ausfall des KIS und damit der Versorgung.',
     lifecycle_status: 'bewertet', // Risiko-Lifecycle (Dok. 05 §7)
   }),
@@ -528,7 +528,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Ausfall der kritischen Patientensysteme',
     description:
-      'Synthetisches Risiko: Ausfall des KIS beeinträchtigt die stationäre Versorgung. Wird durch ' +
+      'Risiko: Ausfall des KIS beeinträchtigt die stationäre Versorgung. Wird durch ' +
       'den Notfall-/Ausweichbetrieb gemindert.',
     lifecycle_status: 'behandelt', // Risiko-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: M.ROLE_CISO, owner_kind: 'fachlich', role: 'Risk Owner' }],
@@ -539,7 +539,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Klumpenrisiko Dienstleisterabhängigkeit',
     description:
-      'Synthetisches Risiko: die starke Abhängigkeit von einem einzelnen IT-Betriebsdienstleister ' +
+      'Risiko: die starke Abhängigkeit von einem einzelnen IT-Betriebsdienstleister ' +
       '(mit eigenem Sub-Processor) bündelt das Verfügbarkeitsrisiko. Neu identifiziert und im ' +
       'Datenbestand OHNE mindernde Beziehung erfasst (bewusste Deckungslücke: Risiko ohne Minderung).',
     // ERKLÄRBARER TRUST-STATE (Dok.-07-Demo-Graph-Pflicht) über belegte Felder: niedrige
@@ -566,7 +566,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Verfügbarkeit dezentraler Standorte',
     description:
-      'Synthetisches Risiko: an den kleineren, dezentralen Standorten sind Ausweich- und ' +
+      'Risiko: an den kleineren, dezentralen Standorten sind Ausweich- und ' +
       'Wiederanlaufvorkehrungen ungleich reifer. Bewusst OHNE mindernde Beziehung erfasst ' +
       '(zusätzliche Deckungslücke: Verfügbarkeitsrisiko ohne Minderung).',
     lifecycle_status: 'bewertet', // Risiko-Lifecycle (Dok. 05 §7)
@@ -580,8 +580,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Evidence',
     display_name: 'Notfall- und Wiederanlauftest KIS',
     description:
-      'Synthetischer Nachweis: dokumentierter Test des Notfall-/Ausweichbetriebs und Wiederanlaufs ' +
-      'des KIS.',
+      'Nachweis: dokumentierter Test des Notfall-/Ausweichbetriebs und Wiederanlaufs ' + 'des KIS.',
     lifecycle_status: 'akzeptiert', // Evidence-Lifecycle (Dok. 05 §7)
     quality: [{ dimension: 'Bestätigung', confirmation_level: 'reviewed' }],
     source_refs: [
@@ -593,7 +592,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Evidence',
     display_name: 'Zugriffsreview Patientendaten Q2/2026',
     description:
-      'Synthetischer Nachweis: dokumentierter Review der Zugriffsberechtigungen auf die Patienten- ' +
+      'Nachweis: dokumentierter Review der Zugriffsberechtigungen auf die Patienten- ' +
       'und Behandlungsdaten, inklusive der Labor-Schnittstelle.',
     lifecycle_status: 'akzeptiert', // Evidence-Lifecycle (Dok. 05 §7)
     quality: [{ dimension: 'Bestätigung', confirmation_level: 'reviewed' }],
@@ -610,7 +609,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Measure',
     display_name: 'Lieferanten-Audit-Programm',
     description:
-      'Synthetische Maßnahme: Aufbau eines wiederkehrenden Audit-/Überwachungsprogramms für die ' +
+      'Maßnahme: Aufbau eines wiederkehrenden Audit-/Überwachungsprogramms für die ' +
       'kritischen Dienstleister, um das lückenhafte Monitoring zu schließen.',
     lifecycle_status: 'in Arbeit', // Maßnahmen-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: M.ROLE_CISO, owner_kind: 'fachlich', role: 'Maßnahmenverantwortung' }],
@@ -622,7 +621,7 @@ export const MEDINOVA_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Objective',
     display_name: 'Sicherstellung kritischer Verfügbarkeit',
     description:
-      'Synthetisches Ziel: die kritische Verfügbarkeit der Patientenversorgung über alle Standorte ' +
+      'Ziel: die kritische Verfügbarkeit der Patientenversorgung über alle Standorte ' +
       'und Dienstleister hinweg sicherzustellen (Dok. 16 §34.1 Nr. 4). Kein numerischer Zielwert ' +
       'und keine Kennzahl sind erfasst.',
     lifecycle_status: 'Freigegeben',

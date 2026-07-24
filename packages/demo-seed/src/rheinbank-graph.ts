@@ -257,7 +257,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Organisation',
     display_name: 'Rheinbank Digital AG',
     description:
-      'Synthetischer, stark regulierter Finanzdienstleister (Direktbank) mit hoher Nachweistiefe ' +
+      'Stark regulierter Finanzdienstleister (Direktbank) mit hoher Nachweistiefe ' +
       'und strikter Datenresidenz (Dok. 16 §34.1 Nr. 3). Wurzelorganisation des Demo-Graphen.',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern', protection_need: 'normal' },
@@ -267,7 +267,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'ISMS-Scope',
     display_name: 'ISMS-Scope Kernbankbetrieb',
     description:
-      'Synthetischer ISMS-Geltungsbereich: der regulierte Kernbank- und Zahlungsverkehrsbetrieb. ' +
+      'ISMS-Geltungsbereich: der regulierte Kernbank- und Zahlungsverkehrsbetrieb. ' +
       'Rahmt Prozesse, Assets, Cloud-Ressourcen, Controls und Nachweise dieses Mandanten.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [{ owner_id: R.ROLE_COMPLIANCE, owner_kind: 'fachlich', role: 'Scope Owner' }],
@@ -279,7 +279,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Standort',
     display_name: 'Rechenzentrumsregion (Datenresidenzregion)',
     description:
-      'Synthetische, aufsichtlich vorgegebene Betriebs-/Datenresidenzregion. Die produktiven ' +
+      'Aufsichtlich vorgegebene Betriebs-/Datenresidenzregion. Die produktiven ' +
       'Cloud-Ressourcen und die Zahlungsverkehrs-Netzzone MÜSSEN hier verbleiben (strikte ' +
       'Datenresidenz, Dok. 16 §34.1 Nr. 3). Primäre Betriebszuordnung (Dok. 07 §9 R02).',
     lifecycle_status: 'Freigegeben',
@@ -289,7 +289,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Organisationseinheit',
     display_name: 'IT-Bankbetrieb',
     description:
-      'Synthetische Organisationseinheit; betreibt Kernbanksystem, Netzzone und ' +
+      'Organisationseinheit; betreibt Kernbanksystem, Netzzone und ' +
       'Zahlungsdienst-Schnittstelle (operative Verantwortung, technischer Owner).',
     lifecycle_status: 'Freigegeben',
   }),
@@ -319,7 +319,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Business Capability',
     display_name: 'Digitaler Zahlungsverkehr',
     description:
-      'Synthetische Geschäftsfähigkeit: den regulierten digitalen Zahlungsverkehr sicher und ' +
+      'Geschäftsfähigkeit: den regulierten digitalen Zahlungsverkehr sicher und ' +
       'nachweisbar zu betreiben. ISMS-Fokus des regulierten Finanzdienstleisters.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -328,7 +328,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Geschäftsprozess',
     display_name: 'Zahlungsabwicklung',
     description:
-      'Synthetischer Kernprozess: Annahme, Prüfung, Ausführung und Protokollierung von ' +
+      'Kernprozess: Annahme, Prüfung, Ausführung und Protokollierung von ' +
       'Kundenzahlungen über das Kernbanksystem und die Zahlungsdienst-Schnittstelle.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [
@@ -341,7 +341,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Information Asset',
     display_name: 'Kundenkonto- und Zahlungsverkehrsdaten',
     description:
-      'Synthetischer Informationswert: die im Kernbanksystem verarbeiteten Konto-, Saldo- und ' +
+      'Informationswert: die im Kernbanksystem verarbeiteten Konto-, Saldo- und ' +
       'Zahlungsverkehrsdaten. Besonders schützenswert und residenzpflichtig.',
     lifecycle_status: 'freigegeben', // Informations-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: R.ROLE_COMPLIANCE, owner_kind: 'fachlich', role: 'Information Owner' }],
@@ -352,7 +352,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Information Asset',
     display_name: 'Transaktions- und Prüfprotokolle (Audit Trail)',
     description:
-      'Synthetischer Informationswert: die aufsichtsrelevanten Transaktions-, Zugriffs- und ' +
+      'Informationswert: die aufsichtsrelevanten Transaktions-, Zugriffs- und ' +
       'Prüfprotokolle der Zahlungsabwicklung. Aufsichtlich hoch schützenswert, aber bewusst OHNE ' +
       'benannten Owner erfasst (kritisches Objekt ohne Owner).',
     // DECKUNGSLÜCKE (kritisch ohne Owner): KEIN Owner bei Schutzbedarf „hoch".
@@ -366,7 +366,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Cloud-Ressource',
     display_name: 'Kernbanksystem (residenzgebundene Cloud-Ressource)',
     description:
-      'Synthetische Cloud-Ressource: das produktive Kernbanksystem. Wird ausschließlich in der ' +
+      'Cloud-Ressource: das produktive Kernbanksystem. Wird ausschließlich in der ' +
       'Datenresidenzregion betrieben (strikte Datenresidenz) und verarbeitet die ' +
       'Kundenkonto-/Zahlungsverkehrsdaten.',
     lifecycle_status: 'Freigegeben',
@@ -378,7 +378,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Netzwerkzone',
     display_name: 'Zahlungsverkehrs-Netzzone (Residenzregion)',
     description:
-      'Synthetische, segmentierte Netzwerkzone des Zahlungsverkehrs innerhalb der ' +
+      'Segmentierte Netzwerkzone des Zahlungsverkehrs innerhalb der ' +
       'Datenresidenzregion. Gegenstand der Datenresidenz-Control.',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern', protection_need: 'hoch' },
@@ -388,7 +388,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Schnittstelle',
     display_name: 'Zahlungsdienst-/Clearing-Schnittstelle',
     description:
-      'Synthetische Programmierschnittstelle zur Anbindung des Zahlungs-/Clearing-Verkehrs. ' +
+      'Programmierschnittstelle zur Anbindung des Zahlungs-/Clearing-Verkehrs. ' +
       'Wird vom IT-Bankbetrieb betrieben und hängt am Kernbanksystem.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [{ owner_id: R.OU_BANKBETRIEB, owner_kind: 'technisch', role: 'Betrieb' }],
@@ -401,7 +401,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Framework',
     display_name: 'Aufsichtsrechtlicher Anforderungsrahmen (Demo-Katalog)',
     description:
-      'Synthetischer aufsichtsrechtlicher Rahmen für den regulierten Finanzdienstleister ' +
+      'Aufsichtsrechtlicher Rahmen für den regulierten Finanzdienstleister ' +
       '(Dok. 16 §34.1 Nr. 3). Kein Abdruck realer Aufsichtstexte.',
     lifecycle_status: 'Freigegeben',
     source_refs: [KATALOG_SOURCE],
@@ -411,7 +411,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Requirement',
     display_name: 'Anforderung: strikte Datenresidenz',
     description:
-      'Synthetische Anforderung: schützenswerte Konto-/Zahlungsverkehrsdaten dürfen die ' +
+      'Anforderung: schützenswerte Konto-/Zahlungsverkehrsdaten dürfen die ' +
       'vorgegebene Datenresidenzregion nicht verlassen; die Einhaltung ist nachzuweisen.',
     lifecycle_status: 'Freigegeben',
     source_refs: [KATALOG_SOURCE],
@@ -421,7 +421,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Datenresidenz-Kontrolle (regulatorisch)',
     description:
-      'Synthetisches, regulatorisch wichtiges Control: technische und organisatorische Bindung ' +
+      'Regulatorisch wichtiges Control: technische und organisatorische Bindung ' +
       'der Konto-/Zahlungsverkehrsdaten an die Residenzregion. Umgesetzt, aber im Datenbestand ' +
       'OHNE aktuellen Nachweis erfasst — die letzte Residenz-Attestierung ist 2024 abgelaufen ' +
       '(bewusste Deckungslücke: Control ohne Nachweis; Nachweis-Aktualität als Trust-Thema).',
@@ -433,7 +433,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Zugriffskontrolle auf Zahlungsdaten',
     description:
-      'Synthetisches Control: rollenbasierte, protokollierte Zugriffssteuerung auf die ' +
+      'Control: rollenbasierte, protokollierte Zugriffssteuerung auf die ' +
       'Kundenkonto-/Zahlungsverkehrsdaten. Durch einen Zugriffsreview belegt.',
     lifecycle_status: 'wirksam', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: R.ROLE_CISO, owner_kind: 'fachlich', role: 'Control Owner' }],
@@ -443,7 +443,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Transaktionsüberwachung (Betrugserkennung)',
     description:
-      'Synthetisches Control: kontinuierliche Überwachung der Zahlungstransaktionen zur ' +
+      'Control: kontinuierliche Überwachung der Zahlungstransaktionen zur ' +
       'Erkennung von Betrug und Anomalien. Durch einen Monitoring-Nachweis belegt.',
     lifecycle_status: 'wirksam', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: R.ROLE_CISO, owner_kind: 'fachlich', role: 'Control Owner' }],
@@ -455,7 +455,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Threat',
     display_name: 'Zahlungsbetrug / Kontenmissbrauch',
     description:
-      'Synthetische Bedrohung: betrügerische Zahlungen und Kontenmissbrauch mit dem Ziel, ' +
+      'Bedrohung: betrügerische Zahlungen und Kontenmissbrauch mit dem Ziel, ' +
       'Kundengelder und -daten abzugreifen.',
     lifecycle_status: 'Beobachtet',
     source_refs: [
@@ -463,7 +463,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     ],
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
-      { dimension: 'Aktualität', note: 'Synthetisches Bedrohungssignal, Demo-Stand 2026-05.' },
+      { dimension: 'Aktualität', note: 'Bedrohungssignal, Demo-Stand 2026-05.' },
     ],
   }),
   rheinbankObject({
@@ -471,7 +471,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Weakness',
     display_name: 'Fehlkonfiguration mit Datenabfluss aus der Residenzregion',
     description:
-      'Synthetische Schwäche: eine Konfiguration der Zahlungsverkehrs-Netzzone, die einen ' +
+      'Schwäche: eine Konfiguration der Zahlungsverkehrs-Netzzone, die einen ' +
       'Datenabfluss aus der Residenzregion ermöglichen könnte. Der Datenbestand trägt zwei ' +
       'widersprüchliche Quellen zu ihrem Zustand (Konflikt, siehe Konsistenz-Vermerk).',
     lifecycle_status: 'Geprüft',
@@ -497,7 +497,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Verstoß gegen die Datenresidenz (aufsichtsrelevant)',
     description:
-      'Synthetisches Risiko: schützenswerte Konto-/Zahlungsverkehrsdaten verlassen die vorgegebene ' +
+      'Risiko: schützenswerte Konto-/Zahlungsverkehrsdaten verlassen die vorgegebene ' +
       'Residenzregion — ein aufsichtsrelevanter Verstoß. Neu identifiziert und im Datenbestand ' +
       'OHNE mindernde Beziehung erfasst (bewusste Deckungslücke: Risiko ohne Minderung).',
     // ERKLÄRBARER TRUST-STATE (Dok.-07-Demo-Graph-Pflicht) über belegte Felder: niedrige
@@ -524,7 +524,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Finanzieller Schaden durch Zahlungsbetrug',
     description:
-      'Synthetisches Risiko: betrügerische Zahlungen führen zu finanziellem Schaden und ' +
+      'Risiko: betrügerische Zahlungen führen zu finanziellem Schaden und ' +
       'Reputationsverlust. Wird durch die Transaktionsüberwachung gemindert.',
     lifecycle_status: 'behandelt', // Risiko-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: R.ROLE_CISO, owner_kind: 'fachlich', role: 'Risk Owner' }],
@@ -535,7 +535,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Unbefugter Zugriff auf Zahlungsdaten',
     description:
-      'Synthetisches Risiko: unbefugter Zugriff auf die Kundenkonto-/Zahlungsverkehrsdaten. ' +
+      'Risiko: unbefugter Zugriff auf die Kundenkonto-/Zahlungsverkehrsdaten. ' +
       'Wird durch die Zugriffskontrolle gemindert.',
     lifecycle_status: 'behandelt', // Risiko-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: R.ROLE_CISO, owner_kind: 'fachlich', role: 'Risk Owner' }],
@@ -548,7 +548,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Evidence',
     display_name: 'Datenresidenz-Attestierung 2024 (abgelaufen)',
     description:
-      'Synthetischer Nachweis: eine Attestierung der Datenresidenz aus 2024. Sie ist abgelaufen ' +
+      'Nachweis: eine Attestierung der Datenresidenz aus 2024. Sie ist abgelaufen ' +
       'und seither nicht erneuert — die Datenresidenz-Control trägt deshalb aktuell KEINEN gültigen ' +
       'Nachweis (Nachweis-Aktualität als Trust-Thema).',
     // VERALTETE QUELLE (Dok.-07-Demo-Graph-Pflicht) über belegte Felder: alte Quelle 2024 +
@@ -576,7 +576,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Evidence',
     display_name: 'Zugriffsreview Zahlungsdaten Q2/2026',
     description:
-      'Synthetischer Nachweis: dokumentierter Review der Zugriffsberechtigungen auf die ' +
+      'Nachweis: dokumentierter Review der Zugriffsberechtigungen auf die ' +
       'Kundenkonto-/Zahlungsverkehrsdaten.',
     lifecycle_status: 'akzeptiert', // Evidence-Lifecycle (Dok. 05 §7)
     quality: [{ dimension: 'Bestätigung', confirmation_level: 'reviewed' }],
@@ -593,7 +593,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Evidence',
     display_name: 'Transaktionsmonitoring-Auswertung Q2/2026',
     description:
-      'Synthetischer Nachweis: automatisierte Auswertung der Transaktionsüberwachung, die die ' +
+      'Nachweis: automatisierte Auswertung der Transaktionsüberwachung, die die ' +
       'kontinuierliche Betrugserkennung belegt (hohe Nachweistiefe, Dok. 16 §34.1 Nr. 3).',
     lifecycle_status: 'akzeptiert', // Evidence-Lifecycle (Dok. 05 §7)
     quality: [{ dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' }],
@@ -610,7 +610,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Audit',
     display_name: 'Aufsichtsprüfung Datenresidenz & Nachweisführung',
     description:
-      'Synthetische, bevorstehende Aufsichtsprüfung (hohe Nachweistiefe, Dok. 16 §34.1 Nr. 3). ' +
+      'Bevorstehende Aufsichtsprüfung (hohe Nachweistiefe, Dok. 16 §34.1 Nr. 3). ' +
       'In Vorbereitung; prüft die Datenresidenz-Control und die priorisierten Nachweise.',
     lifecycle_status: 'Vorbereitung', // Audit-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: R.ROLE_COMPLIANCE, owner_kind: 'fachlich', role: 'Audit Owner' }],
@@ -622,7 +622,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Target Profile',
     display_name: 'Zielprofil: aufsichtskonformer Kernbankbetrieb',
     description:
-      'Synthetisches Zielprofil für den regulierten Kernbankbetrieb (eines von mehreren ' +
+      'Zielprofil für den regulierten Kernbankbetrieb (eines von mehreren ' +
       'Zielprofilen, Dok. 16 §34.1 Nr. 3). Kein numerischer Reifegrad und kein Zielwert sind ' +
       'erfasst.',
     lifecycle_status: 'Freigegeben',
@@ -633,7 +633,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Target Profile',
     display_name: 'Zielprofil: Zahlungsdienste-Absicherung',
     description:
-      'Synthetisches, zweites Zielprofil mit Schwerpunkt auf der Absicherung des Zahlungsdienst-/ ' +
+      'Zweites Zielprofil mit Schwerpunkt auf der Absicherung des Zahlungsdienst-/ ' +
       'Clearing-Verkehrs (mehrere Zielprofile, Dok. 16 §34.1 Nr. 3). Kein numerischer Reifegrad ' +
       'und kein Zielwert sind erfasst.',
     lifecycle_status: 'Freigegeben',
@@ -644,7 +644,7 @@ export const RHEINBANK_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Objective',
     display_name: 'Aufsichtskonformität und lückenlose Nachweisführung',
     description:
-      'Synthetisches Ziel: dauerhafte Aufsichtskonformität durch strikte Datenresidenz und ' +
+      'Ziel: dauerhafte Aufsichtskonformität durch strikte Datenresidenz und ' +
       'lückenlose, aktuelle Nachweisführung. Kein numerischer Zielwert und keine Kennzahl sind ' +
       'erfasst.',
     lifecycle_status: 'Freigegeben',

@@ -204,7 +204,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Standort',
     display_name: 'Werk Nord (Produktionsstandort A)',
     description:
-      'Synthetischer erster Produktionsstandort (Dok. 16 §34.1: „zwei Standorte"). Betreibt die ' +
+      'Erster Produktionsstandort (Dok. 16 §34.1: „zwei Standorte"). Betreibt die ' +
       'Fertigungssteuerung und das OT-/Produktionsnetz.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -213,7 +213,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Standort',
     display_name: 'Werk Süd (Produktionsstandort B)',
     description:
-      'Synthetischer zweiter Produktionsstandort (Dok. 16 §34.1). Bewusst noch dünn modelliert – ' +
+      'Zweiter Produktionsstandort (Dok. 16 §34.1). Bewusst noch dünn modelliert – ' +
       'die begrenzte interne Kapazität (Dok. 16 §34.1) zeigt sich als sichtbare Datenlücke.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -222,7 +222,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Organisationseinheit',
     display_name: 'Konstruktion & Entwicklung',
     description:
-      'Synthetische Organisationseinheit; erzeugt und verantwortet die schützenswerten ' +
+      'Organisationseinheit; erzeugt und verantwortet die schützenswerten ' +
       'Konstruktions- und CAD-Daten.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -251,7 +251,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Business Capability',
     display_name: 'Produktionsverfügbarkeit',
     description:
-      'Synthetische Geschäftsfähigkeit: die Fähigkeit, die Fertigung an beiden Standorten ' +
+      'Geschäftsfähigkeit: die Fähigkeit, die Fertigung an beiden Standorten ' +
       'verfügbar zu halten. ISMS-Fokus des Flaggschiffs laut Mandantenprofil.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -260,7 +260,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Geschäftsprozess',
     display_name: 'Fertigungssteuerung',
     description:
-      'Synthetischer Kernprozess: Steuerung und Überwachung der Fertigung über das ' +
+      'Kernprozess: Steuerung und Überwachung der Fertigung über das ' +
       'Manufacturing-Execution-System (MES) an Werk Nord.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [
@@ -273,7 +273,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Information Asset',
     display_name: 'Konstruktions- und CAD-Daten',
     description:
-      'Synthetischer Informationswert: Konstruktionszeichnungen, Stücklisten und CAD-Modelle. ' +
+      'Informationswert: Konstruktionszeichnungen, Stücklisten und CAD-Modelle. ' +
       'Besonders schützenswert gegen Abfluss (Industriespionage).',
     lifecycle_status: 'freigegeben', // Informations-Lifecycle (Dok. 05 §7)
     owner_ids: [
@@ -286,7 +286,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Information Asset',
     display_name: 'Maschinen- und Anlagendaten (OT)',
     description:
-      'Synthetischer Informationswert: Betriebs-, Zustands- und Steuerungsdaten der ' +
+      'Informationswert: Betriebs-, Zustands- und Steuerungsdaten der ' +
       'Produktionsanlagen. Bewusst OHNE benannten Owner erfasst (kritisches Objekt ohne Owner) ' +
       'und aus einer veralteten Inventarquelle übernommen.',
     // VERALTETE QUELLE (Dok.-07-Demo-Graph-Pflicht) über belegte Felder: alte Import-Quelle +
@@ -317,7 +317,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'System',
     display_name: 'MES-Fertigungsleitsystem',
     description:
-      'Synthetisches Manufacturing-Execution-System; verarbeitet die Maschinen- und ' +
+      'Manufacturing-Execution-System; verarbeitet die Maschinen- und ' +
       'Anlagendaten und steuert die Fertigung.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [{ owner_id: K.OU_IT_BETRIEB, owner_kind: 'technisch', role: 'Betrieb' }],
@@ -328,7 +328,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Netzwerkzone',
     display_name: 'OT-/Produktionsnetz Werk Nord',
     description:
-      'Synthetische Netzwerkzone der Produktion (OT). Von der Büro-IT zu trennen – Gegenstand ' +
+      'Netzwerkzone der Produktion (OT). Von der Büro-IT zu trennen – Gegenstand ' +
       'der Netzsegmentierungs-Control.',
     lifecycle_status: 'Freigegeben',
   }),
@@ -338,7 +338,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: N.REQ_NETZSICHERHEIT,
     object_type: 'Requirement',
     display_name: 'A.8.20 – Netzwerksicherheit',
-    description: 'Synthetische Anforderung: Netzwerke werden gesichert und segmentiert.',
+    description: 'Anforderung: Netzwerke werden gesichert und segmentiert.',
     lifecycle_status: 'Freigegeben',
     source_refs: [
       { source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 },
@@ -348,8 +348,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: N.REQ_ZUGRIFFSSTEUERUNG,
     object_type: 'Requirement',
     display_name: 'A.8.3 – Zugriffssteuerung auf Informationen',
-    description:
-      'Synthetische Anforderung: Zugriff auf Informationen wird eingeschränkt und geprüft.',
+    description: 'Anforderung: Zugriff auf Informationen wird eingeschränkt und geprüft.',
     lifecycle_status: 'Freigegeben',
     source_refs: [
       { source_kind: 'Dokument', reference: 'synthetic-iso27001-katalog', priority: 1 },
@@ -360,7 +359,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Netzsegmentierung OT/IT',
     description:
-      'Synthetisches Control zur Trennung von Produktions- und Büronetz. Umgesetzt, aber ' +
+      'Control zur Trennung von Produktions- und Büronetz. Umgesetzt, aber ' +
       'im Datenbestand OHNE Nachweis erfasst (bewusste Deckungslücke: Control ohne Nachweis).',
     lifecycle_status: 'implementiert', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [
@@ -372,7 +371,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control',
     display_name: 'Zugriffskontrolle Konstruktionsdaten',
     description:
-      'Synthetisches Control zur Steuerung des Zugriffs auf die Konstruktionsdaten. Durch einen ' +
+      'Control zur Steuerung des Zugriffs auf die Konstruktionsdaten. Durch einen ' +
       'Zugriffsreview belegt.',
     lifecycle_status: 'wirksam', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [
@@ -384,7 +383,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Control Implementation',
     display_name: 'OT-Firewall & VLAN-Trennung Werk Nord',
     description:
-      'Synthetische lokale Umsetzung der Netzsegmentierungs-Control an Werk Nord ' +
+      'Lokale Umsetzung der Netzsegmentierungs-Control an Werk Nord ' +
       '(Firewall-Regelwerk und VLAN-Trennung).',
     lifecycle_status: 'implementiert', // Control-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: K.OU_IT_BETRIEB, owner_kind: 'technisch', role: 'Betrieb' }],
@@ -395,15 +394,14 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_id: N.THREAT_SPIONAGE,
     object_type: 'Threat',
     display_name: 'Industriespionage / gezielter Datendiebstahl',
-    description:
-      'Synthetische Bedrohung: gezielter Abfluss von Konstruktions- und Fertigungs-Know-how.',
+    description: 'Bedrohung: gezielter Abfluss von Konstruktions- und Fertigungs-Know-how.',
     lifecycle_status: 'Beobachtet',
     source_refs: [
       { source_kind: 'Extraktionsregel', reference: 'synthetic-threat-feed', priority: 1 },
     ],
     quality: [
       { dimension: 'Bestätigung', confirmation_level: 'maschinell plausibilisiert' },
-      { dimension: 'Aktualität', note: 'Synthetisches Bedrohungssignal, Demo-Stand 2026-01.' },
+      { dimension: 'Aktualität', note: 'Bedrohungssignal, Demo-Stand 2026-01.' },
     ],
   }),
   nordsternObject({
@@ -411,7 +409,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Weakness',
     display_name: 'Ungehärteter Fernwartungszugang (OT)',
     description:
-      'Synthetische Schwäche: ein Fernwartungszugang zu Produktionsanlagen. Der Datenbestand ' +
+      'Schwäche: ein Fernwartungszugang zu Produktionsanlagen. Der Datenbestand ' +
       'trägt zwei widersprüchliche Quellen zu ihrem Zustand (Konflikt, siehe Konsistenz-Vermerk).',
     lifecycle_status: 'Geprüft',
     // KONFLIKT (Dok.-07-Demo-Graph-Pflicht) über belegte Felder: zwei widersprüchliche
@@ -436,7 +434,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk Scenario',
     display_name: 'Kompromittierung des Produktionsnetzes über Fernwartung',
     description:
-      'Synthetisches Risikoszenario: Angreifer nutzen den ungehärteten Fernwartungszugang und ' +
+      'Risikoszenario: Angreifer nutzen den ungehärteten Fernwartungszugang und ' +
       'kompromittieren das OT-/Produktionsnetz.',
     lifecycle_status: 'bewertet', // Risiko-Lifecycle (Dok. 05 §7)
   }),
@@ -445,7 +443,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Produktionsausfall durch OT-Störung',
     description:
-      'Synthetisches Risiko: Ausfall der Fertigung durch eine Störung im OT-/Produktionsnetz. ' +
+      'Risiko: Ausfall der Fertigung durch eine Störung im OT-/Produktionsnetz. ' +
       'Wird durch die Netzsegmentierung gemindert.',
     lifecycle_status: 'behandelt', // Risiko-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: N.ROLE_OT_VERANTWORTUNG, owner_kind: 'fachlich', role: 'Risk Owner' }],
@@ -456,7 +454,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Risk',
     display_name: 'Abfluss vertraulicher Konstruktionsdaten',
     description:
-      'Synthetisches Risiko: unbefugter Abfluss der Konstruktions- und CAD-Daten. Neu ' +
+      'Risiko: unbefugter Abfluss der Konstruktions- und CAD-Daten. Neu ' +
       'identifiziert und im Datenbestand OHNE mindernde Beziehung erfasst (bewusste ' +
       'Deckungslücke: Risiko ohne Minderung).',
     // ERKLÄRBARER TRUST-STATE (Dok.-07-Demo-Graph-Pflicht) über belegte Felder: niedrige
@@ -487,8 +485,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Evidence',
     display_name: 'Zugriffsreview Konstruktionsdaten Q1/2026',
     description:
-      'Synthetischer Nachweis: dokumentierter Review der Zugriffsberechtigungen auf die ' +
-      'Konstruktionsdaten.',
+      'Nachweis: dokumentierter Review der Zugriffsberechtigungen auf die ' + 'Konstruktionsdaten.',
     lifecycle_status: 'akzeptiert', // Evidence-Lifecycle (Dok. 05 §7)
     quality: [{ dimension: 'Bestätigung', confirmation_level: 'reviewed' }],
     source_refs: [
@@ -504,7 +501,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Audit',
     display_name: 'Bevorstehender Kunden-Audit ISO/IEC 27001 (Q3/2026)',
     description:
-      'Synthetischer, bevorstehender Kunden-Audit (Dok. 16 §34.1: „bevorstehender Kunden-Audit"). ' +
+      'Bevorstehender Kunden-Audit (Dok. 16 §34.1: „bevorstehender Kunden-Audit"). ' +
       'In Vorbereitung; prüft die priorisierten Controls und ihre Nachweise.',
     lifecycle_status: 'Vorbereitung', // Audit-Lifecycle (Dok. 05 §7)
     owner_ids: [{ owner_id: K.ROLE_CISO, owner_kind: 'fachlich', role: 'Audit Owner' }],
@@ -514,8 +511,7 @@ export const NORDSTERN_OBJECTS: readonly ObjectEnvelope[] = [
     object_type: 'Measure',
     display_name: 'Härtung des Fernwartungszugangs (OT)',
     description:
-      'Synthetische Maßnahme: Absicherung und Härtung des Fernwartungszugangs zu den ' +
-      'Produktionsanlagen.',
+      'Maßnahme: Absicherung und Härtung des Fernwartungszugangs zu den ' + 'Produktionsanlagen.',
     lifecycle_status: 'in Arbeit', // Maßnahmen-Lifecycle (Dok. 05 §7)
   }),
 ] as const;
