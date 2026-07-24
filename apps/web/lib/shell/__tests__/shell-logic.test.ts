@@ -212,12 +212,12 @@ describe('Session – defensive Auflösung (KEINE Sicherheitsgrenze; neutral sei
   it('löst Rolle und Mandant zu Anzeigeobjekten auf; neutral löst mit role null auf', () => {
     const resolved = resolveSession({ roleId: 'R01', tenantId: TENANT_ID.NORDWERK });
     expect(resolved?.role?.name).toBe('Executive Sponsor');
-    expect(resolved?.tenant.display_name).toBe('Nordwerk Manufacturing SE');
+    expect(resolved?.tenant.display_name).toBe('Nordstern Manufacturing SE');
 
     const neutral = resolveSession({ tenantId: TENANT_ID.NORDWERK });
     expect(neutral).not.toBeNull();
     expect(neutral?.role).toBeNull();
-    expect(neutral?.tenant.display_name).toBe('Nordwerk Manufacturing SE');
+    expect(neutral?.tenant.display_name).toBe('Nordstern Manufacturing SE');
   });
 
   it('defaultSession ist der NEUTRALE Einstieg beim ersten Mandanten (DR-0009)', () => {

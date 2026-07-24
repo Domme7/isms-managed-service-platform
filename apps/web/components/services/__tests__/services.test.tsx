@@ -42,7 +42,7 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
     render(<ServicesContent role={role} tenant={tenant} />);
 
     expect(
-      screen.getByText(/Welche Services laufen für Nordwerk Manufacturing SE/),
+      screen.getByText(/Welche Services laufen für Nordstern Manufacturing SE/),
     ).toBeInTheDocument();
 
     // Service-Karten als h3 (eindeutig gegenüber den Namen in der Portfolio-Liste).
@@ -78,7 +78,7 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
     const portfolio = screen.getByRole('region', { name: 'Portfolio: Alle Mandanten' });
     // Alle vier Mandanten nebeneinander (reine Aggregation je Mandant, O-WP012-03).
     for (const tenantName of [
-      'Nordwerk Manufacturing SE',
+      'Nordstern Manufacturing SE',
       'Finovia Digital Bank AG',
       'MediCore Health Services GmbH',
       'Consulting Operator Demo',
@@ -302,7 +302,7 @@ describe('ServicesContent – Sphären-Gating der Portfolio-Sicht (eine Quelle: 
 describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
   /**
    * MANDANTENLOKAL seit WP-020 Slice 1. Bis dahin stand hier die Assertion auf den Satz
-   * „Services laufen derzeit für Nordwerk Manufacturing SE und Consulting Operator Demo;
+   * „Services laufen derzeit für Nordstern Manufacturing SE und Consulting Operator Demo;
    * weitere Mandanten folgen …" – dieser Test nagelte damit eine Mandantengrenzverletzung
    * fest (Existenzaussage über FREMDE Mandanten im Leerzustand, Dok. 07 „Mandantenfähigkeit,
    * Rechte und Datenschutz"/P09; dieselbe Fehlerklasse wie /isms in WP-013 und
@@ -327,7 +327,7 @@ describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
     ).toBeInTheDocument();
     // Kein fremder Mandant – weder Name noch Kennung (die Kontextleiste und der Leerzustand
     // sprechen ausschließlich über den aktiven Mandanten).
-    expect(container.textContent).not.toContain('Nordwerk Manufacturing SE');
+    expect(container.textContent).not.toContain('Nordstern Manufacturing SE');
     expect(container.textContent).not.toContain('Consulting Operator Demo');
     expect(container.textContent).not.toContain(TENANT_ID.NORDWERK);
     expect(container.textContent).not.toContain(TENANT_ID.CONSULTING_OPERATOR);

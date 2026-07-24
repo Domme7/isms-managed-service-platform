@@ -250,7 +250,12 @@ export function relationshipTypeId(relationshipType: string): string | undefined
  */
 const REL_TYPE_TO_LABEL_DE: Readonly<Record<string, string>> = {
   part_of: 'ist Teil von',
+  // Standort-/Betriebszuordnung (WP-021 Slice 1, Dok. 07 §9 R02 „located_at"): der zweite
+  // Produktionsstandort und die OT-Objekte des Flaggschiffs tragen diese Kante.
+  located_at: 'angesiedelt an',
   owns: 'verantwortet',
+  // Unterstützungsbeziehung ohne harte Laufzeitabhängigkeit (WP-021, Dok. 07 §9 R05 „supports").
+  supports: 'unterstützt',
   processes: 'verarbeitet',
   exposes: 'exponiert',
   threatens: 'bedroht',

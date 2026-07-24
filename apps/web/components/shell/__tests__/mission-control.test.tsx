@@ -103,7 +103,7 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Heute' })).toBeInTheDocument();
     const frage = container.querySelector('p.tw-question')?.textContent ?? '';
     expect(frage).toBe(
-      'Wie ist der Stand von Nordwerk Manufacturing SE – was ist erfasst und wo sind die Lücken?',
+      'Wie ist der Stand von Nordstern Manufacturing SE – was ist erfasst und wo sind die Lücken?',
     );
     // Negativbeweis: die aspirative Screenkatalog-Frage wird weder gestellt noch verneint
     // (Konzeptanker bleibt in `lib/shell/places.ts`).
@@ -173,7 +173,7 @@ describe('MissionControlContent – Seitenaufbau und Abschnitte', () => {
     expect(within(kontext).getByText('Executive Sponsor')).toBeInTheDocument();
     expect(kontext.textContent ?? '').not.toMatch(/R\d{2}/);
     expect(within(kontext).getByText('Executive World')).toBeInTheDocument();
-    expect(within(kontext).getByText('Nordwerk Manufacturing SE')).toBeInTheDocument();
+    expect(within(kontext).getByText('Nordstern Manufacturing SE')).toBeInTheDocument();
     // SCOPE-KENNUNGEN VERLAGERT (WP-028-Fixpass, DR-0013 Nr. 2 nennt Scope-IDs unter „weg"):
     // Über der Falz steht die ZÄHLUNG, die Kennungen stehen im Aufklappteil derselben Zeile.
     // NICHTS ABGESCHWÄCHT – beides wird geprüft: die Zählung stimmt mit dem Datenbestand
@@ -244,7 +244,7 @@ describe('MissionControlContent – „Wo stehe ich?"', () => {
     expect(abschnitt.textContent ?? '').not.toContain('Assurance & Administration World');
   });
 
-  it('zeigt Mandant, Branche und den aus dem Seed abgeleiteten Bestand (Nordwerk 34/51)', () => {
+  it('zeigt Mandant, Branche und den aus dem Seed abgeleiteten Bestand (Nordstern 58/84)', () => {
     const nordwerk = tenant(TENANT_ID.NORDWERK);
     render(<MissionControlContent role={role('R01')} tenant={nordwerk} />);
 
@@ -254,9 +254,9 @@ describe('MissionControlContent – „Wo stehe ich?"', () => {
 
     expect(within(abschnitt).getByText(nordwerk.display_name)).toBeInTheDocument();
     expect(within(abschnitt).getByText(nordwerk.industry)).toBeInTheDocument();
-    expect(within(abschnitt).getByText('34')).toBeInTheDocument();
+    expect(within(abschnitt).getByText('58')).toBeInTheDocument();
     expect(within(abschnitt).getByText('Objekte dieses Mandanten')).toBeInTheDocument();
-    expect(within(abschnitt).getByText('51')).toBeInTheDocument();
+    expect(within(abschnitt).getByText('84')).toBeInTheDocument();
     expect(within(abschnitt).getByText('Beziehungen dieses Mandanten')).toBeInTheDocument();
   });
 
@@ -298,8 +298,10 @@ describe('MissionControlContent – „Was ist erfasst worden?"', () => {
       'dateTime',
       '2026-01-15',
     );
+    // WP-021 Slice 1: die Nordstern-ISMS-Erweiterung liegt in derselben ersten Erfassungswelle
+    // wie der Kerngraph (erfasst 2026-01-15) → 41 statt 17 Objekte, 48 statt 15 Beziehungen.
     expect(
-      within(wellen[0]).getByText(/17 Objekte · 15 Beziehungen an diesem Tag im System erfasst/),
+      within(wellen[0]).getByText(/41 Objekte · 48 Beziehungen an diesem Tag im System erfasst/),
     ).toBeInTheDocument();
     expect(
       within(wellen[0]).getByText(
@@ -406,23 +408,24 @@ describe('MissionControlContent – „Was weiß ich über die Datenlage?"', () 
     });
   });
 
-  it('nennt die belegten Zählwerte für Nordwerk (22/34, 2/2, 40/51, 3/5)', () => {
+  it('nennt die belegten Zählwerte für Nordstern (37/58, 2/2, 65/84, 5/8)', () => {
     render(<MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />);
     const abschnitt = datenlageAbschnitt();
 
-    // Nach „von" steht der Dativ – die Zeile wird als ganzer Satz gelesen.
-    expect(within(abschnitt).getByText(/22 von 34 Objekten dieses Mandanten/)).toBeInTheDocument();
+    // Nach „von" steht der Dativ – die Zeile wird als ganzer Satz gelesen. WP-021 Slice 1: das
+    // Flaggschiff ist reich ausgebaut (58 Objekte / 84 Beziehungen), die Deckungslücken wachsen mit.
+    expect(within(abschnitt).getByText(/37 von 58 Objekten dieses Mandanten/)).toBeInTheDocument();
     expect(
       within(abschnitt).getByText(/2 von 2 verschiedenen Scope-Kennungen dieses Mandanten/),
     ).toBeInTheDocument();
     expect(
-      within(abschnitt).getByText(/40 von 51 Beziehungen dieses Mandanten/),
+      within(abschnitt).getByText(/65 von 84 Beziehungen dieses Mandanten/),
     ).toBeInTheDocument();
-    // Seit WP-017 sind auch die drei `Decision Record`-Objekte nachweisfähig (R15); genau eines
-    // trägt eine `evidences`-Kante.
+    // Nachweisfähig sind Control, Measure und Decision Record (R15): drei Controls + zwei
+    // Maßnahmen + drei Entscheidungen = 8, davon 3 belegt.
     expect(
       within(abschnitt).getByText(
-        /3 von 5 Objekten der Typen Control, Measure und Decision Record/,
+        /5 von 8 Objekten der Typen Control, Measure und Decision Record/,
       ),
     ).toBeInTheDocument();
   });
@@ -470,8 +473,8 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
       '/services',
     );
 
-    expect(within(abschnitt).getByText(/34 Objekte · 51 Beziehungen/)).toBeInTheDocument();
-    expect(within(abschnitt).getByText(/6 ISMS-Kernobjekte/)).toBeInTheDocument();
+    expect(within(abschnitt).getByText(/58 Objekte · 84 Beziehungen/)).toBeInTheDocument();
+    expect(within(abschnitt).getByText(/14 ISMS-Kernobjekte/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/3 erfasste Entscheidungen/)).toBeInTheDocument();
     expect(within(abschnitt).getByText(/3 Managed Services/)).toBeInTheDocument();
 
@@ -593,6 +596,8 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
       'F01',
       'F02',
       'F03',
+      // F04 (Technologie & Infrastruktur) seit WP-021 Slice 1 (MES-System, OT-Netzwerkzone).
+      'F04',
       'F06',
       'F07',
       'F08',
@@ -613,7 +618,9 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
       (a) => a.getAttribute('href') ?? '',
     );
 
-    expect(hrefs).toHaveLength(7);
+    // Ein Objekt-Einstieg je belegter Objektfamilie: seit WP-021 Slice 1 acht Familien
+    // (F01–F04, F06–F09) statt sieben – F04 kam mit MES-System/OT-Netzwerkzone hinzu.
+    expect(hrefs).toHaveLength(8);
     for (const href of hrefs) {
       expect(href.startsWith(prefix)).toBe(true);
       expect(eigeneIds.has(decodeURIComponent(href.slice(prefix.length)))).toBe(true);
@@ -1426,7 +1433,13 @@ describe('MissionControlContent – Dashboard-Kacheln (Selbsterklärung, Badges,
       for (const badge of badges) {
         const text = (badge.textContent ?? '').replace(/^[^\wÄÖÜäöü]+/u, '').trim();
         expect(zulaessigeTexte, `${tenantId}: „${text}"`).toContain(text);
-        expect(text).not.toMatch(/hoch|mittel|gering|Reifegrad|Trend|Risiko/i);
+        // Kein SEVERITY-/SCORE-URTEIL im Badge-Text. „Risiko" wurde aus der Liste genommen
+        // (WP-021 Slice 1): seit das Flaggschiff drei Risiken mit einer Deckungslücke trägt,
+        // erscheint die ZAHLENGEBUNDENE Datenlücken-Kachel „Datenlücke: 1 Risiko ohne Minderung" –
+        // „Risiko" ist dort das gezählte Objekt (Domänennomen), KEIN Urteil. Die eigentliche
+        // Guardrail (kein hoch/mittel/gering/Reifegrad/Trend) bleibt scharf, und die Form wird
+        // unten weiterhin auf „alle N …" / „Datenlücke: N …" festgenagelt.
+        expect(text).not.toMatch(/hoch|mittel|gering|Reifegrad|Trend/i);
         // Zahlengebunden oder der merkmalfreie Rückfalltext – nie ein pauschales Urteil.
         expect(
           /^(alle \d+ |Datenlücke: \d+ )/.test(text) ||
@@ -1498,7 +1511,7 @@ describe('HeuteView – Sitzungsrahmen (Perspektive, keine Authz)', () => {
     // Die beantwortete Leitfrage (DR-0013 Nr. 1) – nicht die aspirative aus `places.ts`.
     expect(
       screen.getByText(
-        'Wie ist der Stand von Nordwerk Manufacturing SE – was ist erfasst und wo sind die Lücken?',
+        'Wie ist der Stand von Nordstern Manufacturing SE – was ist erfasst und wo sind die Lücken?',
       ),
     ).toBeInTheDocument();
     // WP-020 (geplanter Umbau): die Seite startet in der ruhigen Ebene 1 (P06) – sichtbar sind

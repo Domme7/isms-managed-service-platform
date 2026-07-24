@@ -73,7 +73,7 @@ describe('Administration – AC 1: mandantenlokaler Konfigurationsstand und Roll
     expect(
       screen.getByRole('heading', {
         level: 2,
-        name: 'Konfigurationsstand von Nordwerk Manufacturing SE',
+        name: 'Konfigurationsstand von Nordstern Manufacturing SE',
       }),
     ).toBeInTheDocument();
 
@@ -369,7 +369,7 @@ describe('Administration – Antwort-Modus und Produktsprache (DR-0013 / DR-0011
       <AdministrationContent role={role('R12')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
     const frage = container.querySelector('.tw-question')?.textContent ?? '';
-    expect(frage).toContain('Wie ist Nordwerk Manufacturing SE eingerichtet');
+    expect(frage).toContain('Wie ist Nordstern Manufacturing SE eingerichtet');
     // Die aspirative Screenkatalog-Frage wird NICHT gerendert (sie müsste im nächsten Satz
     // zurückgenommen werden); der Konzeptanker bleibt in `lib/shell/places.ts`.
     expect(container.textContent ?? '').not.toContain(
@@ -411,7 +411,7 @@ describe('Administration – Antwort-Modus und Produktsprache (DR-0013 / DR-0011
     );
     expect((container.textContent ?? '').length).toBeGreaterThan(200);
     for (const name of [
-      'Konfigurationsstand von Nordwerk Manufacturing SE',
+      'Konfigurationsstand von Nordstern Manufacturing SE',
       'Zuständigkeiten: das Rollenmodell',
       'Mandantentrennung',
       'Was ein Sicherheitsurteil zusätzlich braucht',

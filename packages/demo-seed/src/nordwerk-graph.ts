@@ -166,7 +166,9 @@ export const NORDWERK_OBJECTS: readonly ObjectEnvelope[] = [
   nordwerkObject({
     object_id: O.ORG,
     object_type: 'Organisation',
-    display_name: 'Nordwerk Manufacturing SE',
+    // Anzeigename nach Dok. 16 §34.1 (Flaggschiff „Nordstern"); die stabile object_id/tenant_id
+    // bleibt unverändert `nordwerk-*` / `tenant-nordwerk` (Dok. 07 §7, WP-021 Slice 1).
+    display_name: 'Nordstern Manufacturing SE',
     description: 'Synthetischer Fertigungskonzern (Wurzelorganisation des Demo-Graphen).',
     lifecycle_status: 'Freigegeben',
     classification: { confidentiality: 'intern', protection_need: 'normal' },

@@ -12,6 +12,7 @@ import { DEMO_TENANTS, type DemoTenant } from './tenants';
 import { NORDWERK_OBJECTS, NORDWERK_RELATIONSHIPS } from './nordwerk-graph';
 import { MANAGED_SERVICE_OBJECTS, MANAGED_SERVICE_RELATIONSHIPS } from './managed-services';
 import { DECISION_OBJECTS, DECISION_RELATIONSHIPS } from './decisions';
+import { NORDSTERN_OBJECTS, NORDSTERN_RELATIONSHIPS } from './nordstern-graph';
 
 /**
  * Version der Seed-Grundlage (SemVer). Muss zu `seed-manifest.json` passen.
@@ -20,8 +21,12 @@ import { DECISION_OBJECTS, DECISION_RELATIONSHIPS } from './decisions';
  * 1.2.0 (WP-017 Slice 1): additive Entscheidungsschicht (`Decision Record`, F09) für Nordwerk
  * inklusive erster Ablösekette über R24 `supersedes`; keine Änderung an bestehenden
  * Objekten/Beziehungen.
+ * 1.3.0 (WP-021 Slice 1): additive ISMS-Erweiterung des Flaggschiffs Nordstern (zweiter Standort,
+ * OT-/Fertigungsseite, Konstruktionsdaten, bevorstehender Kunden-Audit) inklusive bewusster
+ * Deckungslücken und der Dok-07-Demo-Graph-Pflicht (Konflikt/veraltete Quelle/Trust-State);
+ * stabile `tenant_id`, keine Änderung an bestehenden Objekten/Beziehungen.
  */
-export const SEED_VERSION = '1.2.0';
+export const SEED_VERSION = '1.3.0';
 
 export interface DemoSeed {
   readonly version: string;
@@ -46,10 +51,19 @@ export interface DemoSeed {
 export const DEMO_SEED: DemoSeed = {
   version: SEED_VERSION,
   tenants: DEMO_TENANTS,
-  objects: [...NORDWERK_OBJECTS, ...MANAGED_SERVICE_OBJECTS, ...DECISION_OBJECTS],
+  // REIHENFOLGE (bewusst): die Nordstern-Erweiterung wird ganz HINTEN angehängt. Dadurch bleibt
+  // je bestehender Objektfamilie das erste Objekt unverändert (stabile „erstes-je-Familie"-
+  // Ableitungen); die neue Familie F04 fügt sich als eigener Einstieg ein.
+  objects: [
+    ...NORDWERK_OBJECTS,
+    ...MANAGED_SERVICE_OBJECTS,
+    ...DECISION_OBJECTS,
+    ...NORDSTERN_OBJECTS,
+  ],
   relationships: [
     ...NORDWERK_RELATIONSHIPS,
     ...MANAGED_SERVICE_RELATIONSHIPS,
     ...DECISION_RELATIONSHIPS,
+    ...NORDSTERN_RELATIONSHIPS,
   ],
 };

@@ -41,13 +41,18 @@ export const TENANT_ID = {
  */
 export const DEMO_TENANTS: readonly DemoTenant[] = [
   {
+    // Flaggschiff der Demo-Welt. Anzeigename nach Dok. 16 §34.1 („Demo-Unternehmen"): der
+    // `display_name` ist „änderbar, nicht identitätsstiftend" (Dok. 07 §7), die STABILE
+    // `tenant_id` bleibt `tenant-nordwerk` — so bricht keine der bestehenden ID-Referenzen
+    // (WP-021 Slice 1, minimal-disruptiv).
     tenant_id: TENANT_ID.NORDWERK,
-    display_name: 'Nordwerk Manufacturing SE',
+    display_name: 'Nordstern Manufacturing SE',
     industry: 'Industrielle Fertigung / Maschinenbau (synthetisch)',
     description:
-      'Synthetischer Industriekonzern mit vernetzter Produktion. ISMS-Fokus auf ' +
-      'Verfügbarkeit der Fertigung, Schutz von Auftrags- und Konstruktionsdaten sowie ' +
-      'Resilienz gegen Ransomware im Produktionsnetz.',
+      'Synthetischer europäischer Produzent mit vernetzter Fertigung an zwei Standorten und ' +
+      'einem bevorstehenden Kunden-Audit (Dok. 16 §34.1: Zielreife 3, begrenzte interne ' +
+      'Kapazität). ISMS-Fokus auf Verfügbarkeit der Fertigung, Schutz von Auftrags- und ' +
+      'Konstruktionsdaten sowie Resilienz gegen Ransomware im Produktionsnetz.',
     has_object_graph: true,
   },
   {

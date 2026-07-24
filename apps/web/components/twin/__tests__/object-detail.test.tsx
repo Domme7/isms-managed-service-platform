@@ -63,7 +63,7 @@ describe('ObjectDetailView – Seitenanatomie', () => {
     render(<ObjectDetailView model={model} />);
     const context = screen.getByLabelText('Kontext dieser Objektseite');
 
-    expect(within(context).getByText('Nordwerk Manufacturing SE')).toBeInTheDocument();
+    expect(within(context).getByText('Nordstern Manufacturing SE')).toBeInTheDocument();
     expect(within(context).getByText('Geschäftsprozess')).toBeInTheDocument();
     // WP-028/DR-0013: die Objektfamilie erscheint ohne Familien-Code (kein „F03 · " im UI).
     expect(within(context).getByText('Geschäft & Information')).toBeInTheDocument();
@@ -166,7 +166,7 @@ describe('ObjectDetailView – Kanten als Links auf das Nachbarobjekt', () => {
     // Der Link zur Mandantenseite benennt sein Ziel (keine „Zurück"-Aussage, weil der Einstieg
     // auch aus /isms oder /services kommen kann) und hält den Mandantenkontext.
     expect(
-      screen.getByRole('link', { name: /Alle Objekte von Nordwerk Manufacturing SE/ }),
+      screen.getByRole('link', { name: /Alle Objekte von Nordstern Manufacturing SE/ }),
     ).toHaveAttribute('href', `/twin/${TENANT_ID.NORDWERK}`);
   });
 

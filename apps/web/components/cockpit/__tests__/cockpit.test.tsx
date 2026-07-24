@@ -62,7 +62,7 @@ describe('CockpitVariantenContent – Kopf und Varianten-Umschalter', () => {
     );
     expect(screen.getByRole('heading', { level: 1, name: 'Cockpit' })).toBeInTheDocument();
     expect(container.querySelector('p.tw-question')?.textContent).toBe(
-      'Wie steht Nordwerk Manufacturing SE heute da – was ist erfasst und wo sind die Lücken?',
+      'Wie steht Nordstern Manufacturing SE heute da – was ist erfasst und wo sind die Lücken?',
     );
     // Die aspirative Screenkatalog-Frage wird NICHT geführt (DR-0013 Nr. 1).
     expect(container.textContent ?? '').not.toContain('seit meinem letzten Besuch verändert');
@@ -95,7 +95,7 @@ describe('CockpitVariantenContent – Kopf und Varianten-Umschalter', () => {
       />,
     );
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
-    expect(within(kontext).getByText('Nordwerk Manufacturing SE')).toBeInTheDocument();
+    expect(within(kontext).getByText('Nordstern Manufacturing SE')).toBeInTheDocument();
     expect(within(kontext).getByText('Executive Sponsor')).toBeInTheDocument();
     expect(within(kontext).getByText('16.03.2026')).toBeInTheDocument();
     // Kein Rollencode im sichtbaren Kontext (DR-0013 Nr. 12).
@@ -117,9 +117,9 @@ describe('CockpitVariantenContent – Variante A „Verdichtung"', () => {
       />,
     );
     const b = buehne(container);
-    // Klartext aus abgeleiteten Zahlen (Nordwerk 34/51).
-    expect(b.querySelector('.db-klartext')?.textContent ?? '').toContain('34');
-    expect(b.querySelector('.db-klartext')?.textContent ?? '').toContain('51');
+    // Klartext aus abgeleiteten Zahlen (Nordstern 58/84, WP-021 Slice 1).
+    expect(b.querySelector('.db-klartext')?.textContent ?? '').toContain('58');
+    expect(b.querySelector('.db-klartext')?.textContent ?? '').toContain('84');
     // Neun Kacheln (vier Statuskacheln + Lebenszyklus-Zählung + vier Abdeckungen).
     expect(b.querySelectorAll('.db-grid > li > .db-tile')).toHaveLength(9);
   });
@@ -519,7 +519,15 @@ describe('Cockpit – KPI-Band mit Deckungsringen (echte Werte, funktionale Link
     }
   });
 
-  it('kleine Grundgesamtheit: KEIN gefüllter Ring über „x von y" – nur Zahl + Kleinheits-Hinweis (DR-0013 Nr. 7)', () => {
+  /**
+   * WP-021 Slice 1 – der Kehrwert des früheren „1 von 1"-Regressionstests: Seit das Flaggschiff
+   * Nordstern drei Controls und drei Risiken trägt (vorher je eines → kleine Grundgesamtheit),
+   * liegt KEINE der Deckungen mehr unter der Kleinheitsschwelle. Also trägt jede Deckungskachel
+   * einen gefüllten Ring, und es gibt keinen Kleinheits-Hinweis mehr. Das Grundverhalten
+   * „n≤2 → kein Ring, nur Zahl + Hinweis" bleibt in `lib/heute/__tests__/dashboard.test.ts`
+   * (badgeFuerAbdeckung / istKleineGrundgesamtheit) unverändert unit-getestet.
+   */
+  it('Nordstern (n≥3): jede Deckung trägt einen gefüllten Ring, kein Kleinheits-Hinweis (WP-021 Slice 1)', () => {
     const { container } = render(
       <CockpitVariantenContent
         role={role('R01')}
@@ -530,36 +538,20 @@ describe('Cockpit – KPI-Band mit Deckungsringen (echte Werte, funktionale Link
     const dashboard = buildHeuteDashboard(TENANT_ID.NORDWERK);
     if (!dashboard) throw new Error('Dashboard fehlt');
 
-    // Testannahme: Nordwerk (1 Control / 1 Risiko) trägt mindestens eine kleine Grundgesamtheit –
-    // sonst prüft dieser Regressionstest ins Leere.
-    const kleine = dashboard.coverage.filter((t) => !t.isEmpty && t.kleineGrundgesamtheit);
-    expect(
-      kleine.length,
-      'Nordwerk ohne kleine Grundgesamtheit – Fixtur passt nicht',
-    ).toBeGreaterThan(0);
+    // Slice-1-Wirkung: keine kleine Grundgesamtheit mehr – die reiche Demo-Welt hebt das
+    // Flaggschiff über die Schwelle, damit die Ringe echt ausschlagen.
+    expect(dashboard.coverage.every((t) => !t.kleineGrundgesamtheit)).toBe(true);
+    expect(dashboard.coverage.length).toBeGreaterThan(0);
 
-    // In JEDER Ring-Kachel mit Kleinheits-Hinweis darf KEIN gefüllter Ring (`.ck-ring-fill`)
-    // stehen; die nackte Zahl „x von y" bleibt aber sichtbar (nichts wird verschwiegen).
-    const ringKacheln = Array.from(
-      buehne(container).querySelectorAll<HTMLElement>('.ck-kpi--ring'),
-    );
-    let gepruefteKleine = 0;
-    for (const kachel of ringKacheln) {
-      if (kachel.querySelector('.ck-kpi-klein') === null) continue;
-      gepruefteKleine += 1;
-      const label = kachel.querySelector('.ck-kpi-label')?.textContent ?? '';
-      expect(
-        kachel.querySelector('.ck-ring'),
-        `Ring bei kleiner Grundgesamtheit (${label})`,
-      ).toBeNull();
-      expect(
-        kachel.querySelector('.ck-ring-fill'),
-        `voll gefüllter Ring über kleiner Grundgesamtheit (${label})`,
-      ).toBeNull();
+    const buehneEl = buehne(container);
+    // Kein Kleinheits-Hinweis mehr im DOM.
+    expect(buehneEl.querySelectorAll('.ck-kpi-klein')).toHaveLength(0);
+    // Jede (nicht-leere) Deckung trägt einen gefüllten Ring; die Zahl bleibt „x von y".
+    const mitRing = dashboard.coverage.filter((t) => !t.isEmpty).length;
+    expect(buehneEl.querySelectorAll('.ck-ring svg')).toHaveLength(mitRing);
+    for (const kachel of Array.from(buehneEl.querySelectorAll<HTMLElement>('.ck-kpi--ring'))) {
       expect(kachel.querySelector('.ck-kpi-wert')?.textContent ?? '').toMatch(/\d+ von \d+/);
     }
-    // Es wurden auch wirklich alle abgeleiteten kleinen Abdeckungen im DOM gefunden.
-    expect(gepruefteKleine).toBe(kleine.length);
   });
 });
 

@@ -22,6 +22,7 @@ import {
   OPERATOR_RELATIONSHIPS,
 } from './managed-services';
 import { NORDWERK_OBJECTS, NORDWERK_RELATIONSHIPS } from './nordwerk-graph';
+import { NORDSTERN_OBJECTS, NORDSTERN_RELATIONSHIPS } from './nordstern-graph';
 import { DEMO_SEED } from './seed';
 
 /** Zählpaar Objekte/Beziehungen. */
@@ -62,6 +63,11 @@ const SEED_LAYERS: ReadonlyArray<{
     relationships: OPERATOR_RELATIONSHIPS,
   },
   { key: 'decisions_nordwerk', objects: DECISION_OBJECTS, relationships: DECISION_RELATIONSHIPS },
+  {
+    key: 'isms_erweiterung_nordstern',
+    objects: NORDSTERN_OBJECTS,
+    relationships: NORDSTERN_RELATIONSHIPS,
+  },
 ];
 
 /**

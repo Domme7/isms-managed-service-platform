@@ -53,7 +53,7 @@ describe('Ort „Kunden" – Einstieg folgt der Sphäre (DR-0013 Nr. 11)', () =>
       const { container, unmount } = renderOrt(roleId);
 
       // Der eigene Mandant ist der Gegenstand der Seite …
-      expect(container.textContent, roleId).toContain('Nordwerk Manufacturing SE');
+      expect(container.textContent, roleId).toContain('Nordstern Manufacturing SE');
       // Der zugängliche Name der Karte ist ihr Titel (die Pfeil-Zeile ist `aria-hidden`).
       expect(screen.getByRole('link', { name: /^Kundenbereich/ }), roleId).toHaveAttribute(
         'href',
