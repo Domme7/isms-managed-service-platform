@@ -6,21 +6,27 @@ Weiterbau ohne Rückfragen (Owner-Auftrag, `ACTIVE_WORK_PACKAGE.md`). Zuletzt: d
 Navigations-Orte **Reports · Wissen · Administration** (WP-032) — **alle acht Orte der Shell sind
 jetzt live** (kein Platzhalter mehr).  
 **Phase:** 1→2→6 (Demo Foundation + Persistenz + Managed-Service-Vorgeschmack)  
-**Aktives Work Package:** **WP-028 + WP-032 in der Abnahme** — beide gebaut, **Gate-Runde 1** (6
-Gates: 5× Freigabe mit Auflagen, QA Nacharbeit) und **Fix-Pass** (14 Auflagen) fertig, **Gate-Runde
-2** fand fix-induzierte Regressionen (die übliche zweite-Runde-Ausbeute), **Nachfix in Arbeit**.
-Review-Notiz: `docs/project/reviews/WP-028_WP-032_INDEPENDENT_REVIEW.md`; WP-Definitionen:
+**Aktives Work Package:** **WP-028 + WP-032 abgenommen** — beide gebaut, **Gate-Runde 1** (6
+Gates: 5× Freigabe mit Auflagen, QA Nacharbeit), **Fix-Pass** (14 Auflagen), **Gate-Runde 2**
+(fix-induzierte Regressionen) und **Nachfix** (11 Punkte + Wächter-Härtung) fertig — 705 Web-Tests
+grün, axe 0 Verstöße. Der Substanz-Review bestätigte die Ehrlichkeitsschicht intakt; offen bleiben
+nur Owner-Fragen O-WP028-08..10 (Familienname, R12, Exklusivitätsaussage). Review-Notiz:
+`docs/project/reviews/WP-028_WP-032_INDEPENDENT_REVIEW.md`; WP-Definitionen:
 `work-packages/WP-028_ANTWORT_MODUS.md`, `WP-032_REPORTS_WISSEN_ADMINISTRATION.md`.  
 **Abgeschlossen seit WP-020:** WP-020 (Dashboard/Einstieg), WP-023 (14 Markdown-Fassungen
 quellentreu), WP-024 (automatischer Treue-Check, schließt O-WP019-01 werkzeugseitig), Kundenwelt
 Stufe 1 (WP-006 Slice 1, `/kunden`), FINDING-0008 geschlossen (axe komplett sauber).  
-**Testlage (Stand `77280f4`):** **725 Tests grün** im Monorepo (web 686 · contracts 55 ·
-demo-seed 54 · db 19 · api 2). Lint + typecheck grün, axe 0 Verstöße über alle 15 qa:visual-Motive.  
+**Testlage (Stand `81448d5`):** **835 Tests grün** im Monorepo (web 705 · contracts 55 ·
+demo-seed 54 · db 19 · api 2). Lint + typecheck + format:check grün, axe 0 Verstöße über alle 15
+qa:visual-Motive. **Beide GitHub-CI-Workflows grün** (App CI + Repository Contract).  
 **Nächster Sprint-Schritt nach der Abnahme:** Kundenwelt Slice 2/3 (Servicekatalog, Struktur-
 Assistent) → 2–3 Cockpit-Varianten → **STOPP für visuelle Owner-Freigabe** (DR-0010). Danach
 WP-033 (Seed-Textpass), WP-029 (Personalisierung), WP-027 (Suche).  
 **Repository-Root:** `apps/ISMS/` · **Default-Branch:** `main` · **Tags:** `phase-0-baseline`  
-**Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — CI grün  
+**Remote:** privat `Domme7/isms-managed-service-platform` (DR-0002) — **beide Workflows grün**
+(seit `a8b9d90`; der Repository-Contract-Job war seit WP-024 rot, weil der Runner `pypdf` nicht
+installierte und der Treue-Check-Rauchtest damit Exit 2 gab — gefixt via `requirements.txt` +
+Install-Schritt; kein Produktcode betroffen)  
 **Implementierungsstatus:** Lauffähige Demo-App, **alle acht Orte live** (Heute · Kunden/Zwilling ·
 ISMS · Entscheidungen · Services · Reports · Wissen · Administration) plus Objekt-360, read-only,
 synthetisch. Seit WP-028 im **Antwort-Modus** (Zahl/Stand zuerst, Lücke als ruhige Zeile), ohne
