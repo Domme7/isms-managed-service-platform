@@ -375,11 +375,15 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
       await warteAufSeite(page);
       // Auf den eindeutigen Bühnen-Anker der Variante warten (statt zu schlafen).
       await expect(page.locator(`[data-cockpit-variante="${variante}"]`)).toBeVisible();
+      // fullPage NUR hier: die Cockpit-Varianten sind der visuelle Owner-Vergleichspunkt
+      // (DR-0010 Nr. 3 / DR-0014); der ganze moderne Aufbau (KPI-Band, Warnungen, Lebenszyklus-
+      // Leiste) liegt unter der Falz. Die allgemeinen SEITEN bleiben Viewport-Shots (Z. 243).
       await page.screenshot({
         path: path.join(
           outDir as string,
           `cockpit-variante-${variante}.${testInfo.project.name}.png`,
         ),
+        fullPage: true,
       });
       await sammleAxe(page, `cockpit-variante-${variante}`, '/cockpit');
     });

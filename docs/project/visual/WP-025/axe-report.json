@@ -1,0 +1,129 @@
+{
+  "hinweis": "axe misst nur den automatisierbaren Teil von Accessibility (O-WP018-03). 0 Verstöße heißt NICHT „vollständig zugänglich\". Verstöße werden Findings, keine Fixes.",
+  "werkzeug": {
+    "name": "axe-core",
+    "version": "4.12.1"
+  },
+  "regelwerk": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "wcag22aa"
+  ],
+  "viewport": "desktop-1440x900",
+  "perspektive": {
+    "rolleId": "R01",
+    "tenantId": "tenant-nordwerk"
+  },
+  "seiten": [
+    {
+      "slug": "heute-neutral",
+      "pfad": "/heute",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "heute",
+      "pfad": "/heute",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "twin",
+      "pfad": "/twin",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "twin-tenant-nordwerk",
+      "pfad": "/twin/tenant-nordwerk",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "kunden",
+      "pfad": "/kunden",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "isms",
+      "pfad": "/isms",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "services",
+      "pfad": "/services",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "entscheidungen",
+      "pfad": "/entscheidungen",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "reports",
+      "pfad": "/reports",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "wissen",
+      "pfad": "/wissen",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "administration",
+      "pfad": "/administration",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "objekt-360-risk-betriebsunterbrechung",
+      "pfad": "/twin/tenant-nordwerk/objekt/nordwerk-risk-betriebsunterbrechung",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "heute-dashboard-r03",
+      "pfad": "/heute",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "heute-leerer-mandant",
+      "pfad": "/heute",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "kunden-portfolio-r08",
+      "pfad": "/twin",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "cockpit-variante-a",
+      "pfad": "/cockpit",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "cockpit-variante-b",
+      "pfad": "/cockpit",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "cockpit-variante-c",
+      "pfad": "/cockpit",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    }
+  ]
+}
