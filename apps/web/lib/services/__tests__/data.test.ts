@@ -51,8 +51,8 @@ describe('getManagedServicesForTenant – Auflösung je Mandant', () => {
     ]);
     expect(monitoring.deliverables.map((d) => d.name).sort()).toEqual(
       [
-        'Control-Assurance-Paket Q2/2026 (synthetisch)',
-        'Risiko- & Control-Review 2026-06 (synthetisch)',
+        'Control-Assurance-Paket Q2/2026',
+        'Risiko- & Control-Review 2026-06',
       ].sort(),
     );
     expect(monitoring.reviews.map((r) => r.name)).toEqual([
@@ -71,7 +71,7 @@ describe('getManagedServicesForTenant – Auflösung je Mandant', () => {
     expect(reporting.service.lifecycle_status).toBe('Review');
     expect(reporting.deliverables).toEqual([
       expect.objectContaining({
-        name: 'Management-Report Q2/2026 (Entwurf, synthetisch)',
+        name: 'Management-Report Q2/2026 (Entwurf)',
         lifecycle_status: 'Entwurf',
       }),
     ]);
@@ -127,7 +127,7 @@ describe('getManagedServicesForTenant – Auflösung je Mandant', () => {
       'SLA – Audit-Readiness-Betrieb (Band „Priority")',
     ]);
     expect(audit.deliverables.map((d) => d.name)).toEqual([
-      'Audit-Readiness-Paket 2026-06 (synthetisch)',
+      'Audit-Readiness-Paket 2026-06',
     ]);
     expect(audit.delivery_team_names).toEqual(['Delivery-Team Managed ISMS']);
 

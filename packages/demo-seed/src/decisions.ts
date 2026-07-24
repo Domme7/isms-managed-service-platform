@@ -250,7 +250,7 @@ export const NORDWERK_DECISION_OBJECTS: readonly ObjectEnvelope[] = [
     // Klartext geführt: ein zweiter Träger derselben Aussage würde divergieren, sobald sich eine
     // Kante ändert (Review-Fix).
     description:
-      'Synthetischer Decision Record: In diesem Stand stützt sich die Absicherung der ' +
+      'In diesem Stand stützt sich die Absicherung der ' +
       'Auftragsabwicklung gegen einen Ausfall der Kundenauftragsdaten allein auf Datensicherung ' +
       'und Wiederherstellung; die ERP-Integrationsschnittstelle bleibt unverändert.',
     // Generischer Zustand aus Dok. 07 §8: „Überholt: durch neue Version ersetzt; historisch
@@ -276,7 +276,7 @@ export const NORDWERK_DECISION_OBJECTS: readonly ObjectEnvelope[] = [
       'Wird die Absicherung der Auftragsabwicklung um die Härtung der ERP-Schnittstelle erweitert?',
     // Ebenfalls ohne Kantenfakten (siehe Kommentar am abgelösten Stand).
     description:
-      'Synthetischer Decision Record: Nachfolgestand zur Absicherung der Auftragsabwicklung. ' +
+      'Nachfolgestand zur Absicherung der Auftragsabwicklung. ' +
       'Datensicherung und Wiederherstellung bleiben bestehen und werden um die Härtung der ' +
       'ERP-Integrationsschnittstelle ergänzt; damit gehört auch die vorhandene ' +
       'Patch-Management-Maßnahme zum Gegenstand der Risikobehandlung.',
@@ -295,7 +295,7 @@ export const NORDWERK_DECISION_OBJECTS: readonly ObjectEnvelope[] = [
     // Weder Kantenfakten (R23) noch der eigene Lebenszyklus-Stand werden hier doppelt geführt:
     // beides steht als Feld bzw. Kante im Datenbestand (Review-Fix).
     description:
-      'Synthetischer Decision Record: offener Stand zum Berichtsrhythmus des Managed Service ' +
+      'Offener Stand zum Berichtsrhythmus des Managed Service ' +
       '„Management- & Entscheidungsreporting". Gegenstand ist, in welchem Rhythmus und an welchen ' +
       'Empfängerkreis das Managementbild künftig geliefert wird.',
     lifecycle_status: 'zur Freigabe', // Entscheidungs-Lifecycle (Dok. 05 §7)

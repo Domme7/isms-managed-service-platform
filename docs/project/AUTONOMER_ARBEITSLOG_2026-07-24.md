@@ -64,6 +64,17 @@
   Rahmungen korrigiert. web 876 grün, browserverifiziert. **Weitere Bänder** (Pakete, Einzel-Managed-
   Services aus Dok. 14 „Illustrative Managed-Service-Pakete"/„Einzelservice-Bänder") folgen als eigene
   Scheiben, je vollständig gelesen.
+- **AE-8 (WP-033 Seed-Textpass, U-15-Kern fertig):** Die im UI **gerenderten** Demo-Etiketten aus den
+  Seed-Texten entfernt (DR-0011; entfernt Labels, fügt keine hinzu): Tenant-`industry` ohne „(synthetisch)"
+  (6×), Tenant-`description` ohne „Synthetischer/Synthetische"-Präfix (6×), Decision-`description` ohne
+  „Synthetischer Decision Record:"-Präfix (3×), Deliverable-`display_name` ohne „(synthetisch)"/„(Entwurf,
+  synthetisch)"→„(Entwurf)", eine Ergebnis-Prosa entschärft. Der Tenant-**Name** „Consulting Operator Demo"
+  BLEIBT (kanonisch, PDF Dok. 07). Der `produktsprache`-Wächter maskiert Seed-Strings mechanisch → seine
+  Ausnahmemenge schrumpft von selbst. Nach Seed-Änderung `demo-seed build` VOR den Tests; 6 Test-Assertions
+  auf die neuen Namen nachgezogen. demo-seed 90 · db 19 · web 876 grün; Browser: /login, /heute,
+  /entscheidungen ohne „synthetisch". **Verbleibend (eigene Scheibe):** code-lastige Beschreibungen
+  („Synthetische Service Instance (Dok. 13 §4.3), Muster SO02/SO03…") → Domänensprache (Regel Null), und
+  die „Synthetische(r) X:"-Präfixe in den Objekt-Graphen (alpencloud/rheinbank/medinova) — größerer Pass.
 
 ## Offene Fragen an den Owner (nicht blockierend — Default gewählt, jederzeit umstellbar)
 - **OF-1 (2 Profile):** Sollen die 12 Rollen-Perspektiven wirklich ganz raus, oder nur der

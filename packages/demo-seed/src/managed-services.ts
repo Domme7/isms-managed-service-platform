@@ -334,7 +334,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
   nordwerkServiceObject({
     object_id: S.DELIVERABLE_RISK_CONTROL_REVIEW,
     object_type: 'Deliverable',
-    display_name: 'Risiko- & Control-Review 2026-06 (synthetisch)',
+    display_name: 'Risiko- & Control-Review 2026-06',
     description:
       'Synthetisches, prüfbares Ergebnis eines Servicezyklus (Dok. 13 §4.5): aktualisierte ' +
       'Bewertung des Risikos „Betriebsunterbrechung Auftragsabwicklung", Status der zugehörigen ' +
@@ -344,7 +344,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
   nordwerkServiceObject({
     object_id: S.DELIVERABLE_CONTROL_ASSURANCE,
     object_type: 'Deliverable',
-    display_name: 'Control-Assurance-Paket Q2/2026 (synthetisch)',
+    display_name: 'Control-Assurance-Paket Q2/2026',
     description:
       'Synthetisches Deliverable: Zusammenstellung von Control-Design, Umsetzungsstand und ' +
       'Wirksamkeitsaussage für die priorisierten Controls. Enthält ausdrücklich keine Zusicherung ' +
@@ -355,7 +355,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
   nordwerkServiceObject({
     object_id: S.DELIVERABLE_EVIDENCE_PACK,
     object_type: 'Deliverable',
-    display_name: 'Audit-Readiness-Evidence-Pack Q2/2026 (synthetisch)',
+    display_name: 'Audit-Readiness-Evidence-Pack Q2/2026',
     description:
       'Synthetisches Nachweispaket des Evidence-Betriebs: gebündelte, geprüfte Nachweise zu den ' +
       'priorisierten Controls inklusive Gültigkeitsfenster und offener Lücken. Grundlage für die ' +
@@ -366,7 +366,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
   nordwerkServiceObject({
     object_id: S.DELIVERABLE_MANAGEMENT_REPORT,
     object_type: 'Deliverable',
-    display_name: 'Management-Report Q2/2026 (Entwurf, synthetisch)',
+    display_name: 'Management-Report Q2/2026 (Entwurf)',
     description:
       'Synthetisches Deliverable im Entwurf: Managementbild zu Risikolage, Control-Wirksamkeit und ' +
       'offenen Entscheidungen. Noch nicht freigegeben – der zugehörige Service befindet sich im ' +
@@ -413,7 +413,7 @@ export const NORDWERK_SERVICE_OBJECTS: readonly ObjectEnvelope[] = [
     display_name: 'Outcome Review Q2/2026 – Risiko- & Control-Monitoring',
     description:
       'Synthetischer Outcome Review (Dok. 13 §4.5): prüft, ob die zugesagte Wirkung tatsächlich ' +
-      'eingetreten ist. Ergebnis (synthetisch): Wirkung für die Control-Nachweise bestätigt; ' +
+      'eingetreten ist. Ergebnis: Wirkung für die Control-Nachweise bestätigt; ' +
       'Berichtsrhythmus des Reporting-Service wird angepasst. Ein Zyklus ohne Outcome Review gilt ' +
       'als dokumentiert, aber nicht als wirksam bestätigt.',
     lifecycle_status: 'Geprüft',
@@ -807,7 +807,7 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
   operatorObject({
     object_id: P.DELIVERABLE_AUDIT_READINESS_PACK,
     object_type: 'Deliverable',
-    display_name: 'Audit-Readiness-Paket 2026-06 (synthetisch)',
+    display_name: 'Audit-Readiness-Paket 2026-06',
     description:
       'Synthetisches, prüfbares Ergebnis (Dok. 13 §4.5): Readiness-Status, offene Nachweislücken ' +
       'und priorisierte Vorbereitungsschritte. Keine realen Prüfinhalte.',
@@ -816,7 +816,7 @@ export const OPERATOR_OBJECTS: readonly ObjectEnvelope[] = [
   operatorObject({
     object_id: P.DELIVERABLE_POLICY_REVIEW_REPORT,
     object_type: 'Deliverable',
-    display_name: 'Policy-Review-Bericht 2026-06 (Entwurf, synthetisch)',
+    display_name: 'Policy-Review-Bericht 2026-06 (Entwurf)',
     description:
       'Synthetisches Deliverable im Entwurf: Übersicht fälliger und überholter Vorgaben mit ' +
       'Vorschlag zur Reihenfolge. Noch nicht freigegeben, da der zugehörige Service erst ' +

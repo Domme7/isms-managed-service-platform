@@ -62,9 +62,9 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
     // (WP-021 Slice 1, minimal-disruptiv).
     tenant_id: TENANT_ID.NORDWERK,
     display_name: 'Nordstern Manufacturing SE',
-    industry: 'Industrielle Fertigung / Maschinenbau (synthetisch)',
+    industry: 'Industrielle Fertigung / Maschinenbau',
     description:
-      'Synthetischer europäischer Produzent mit vernetzter Fertigung an zwei Standorten und ' +
+      'Europäischer Produzent mit vernetzter Fertigung an zwei Standorten und ' +
       'einem bevorstehenden Kunden-Audit (Dok. 16 §34.1: Zielreife 3, begrenzte interne ' +
       'Kapazität). ISMS-Fokus auf Verfügbarkeit der Fertigung, Schutz von Auftrags- und ' +
       'Konstruktionsdaten sowie Resilienz gegen Ransomware im Produktionsnetz.',
@@ -76,9 +76,9 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
     // (WP-021 Slice 4); eigener ISMS-Graph. Die stabile `tenant_id` bleibt `tenant-finovia`.
     tenant_id: TENANT_ID.FINOVIA,
     display_name: 'Rheinbank Digital AG',
-    industry: 'Regulierter Finanzdienstleister / Direktbank (synthetisch)',
+    industry: 'Regulierter Finanzdienstleister / Direktbank',
     description:
-      'Synthetischer, stark regulierter Finanzdienstleister mit mehreren Zielprofilen, hoher ' +
+      'Stark regulierter Finanzdienstleister mit mehreren Zielprofilen, hoher ' +
       'Nachweistiefe und strikter Datenresidenz. ISMS-Fokus auf Vertraulichkeit der Konto- und ' +
       'Zahlungsverkehrsdaten, Verbleib der Daten in der Residenzregion und lückenlose ' +
       'Nachweisführung gegenüber der Aufsicht.',
@@ -90,9 +90,9 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
     // eigener ISMS-Graph (erster Mandant mit F05 Lieferkette).
     tenant_id: TENANT_ID.MEDICORE,
     display_name: 'MediNova Clinics Holding',
-    industry: 'Dezentrale Gesundheitsgruppe / Klinikverbund (synthetisch)',
+    industry: 'Dezentrale Gesundheitsgruppe / Klinikverbund',
     description:
-      'Synthetische, dezentrale Gesundheitsgruppe mit mehreren Standorten und hoher ' +
+      'Dezentrale Gesundheitsgruppe mit mehreren Standorten und hoher ' +
       'Lieferantenkomplexität. ISMS-Fokus auf kritische Verfügbarkeit der patientennahen Systeme, ' +
       'Steuerung ausgelagerter IT-Dienstleister und Schutz der Patientendaten über die Standorte.',
     has_object_graph: true,
@@ -102,9 +102,9 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
     // hohe Automatisierungsbereitschaft. Neuer Mandant (WP-021 Slice 3); eigener ISMS-Graph.
     tenant_id: TENANT_ID.ALPENCLOUD,
     display_name: 'AlpenCloud GmbH',
-    industry: 'Cloud-Softwareanbieter / SaaS (synthetisch)',
+    industry: 'Cloud-Softwareanbieter / SaaS',
     description:
-      'Synthetischer Cloud-Softwareanbieter mit schnellem Wachstum und einem ' +
+      'Cloud-Softwareanbieter mit schnellem Wachstum und einem ' +
       'Zertifizierungsziel. ISMS-Fokus auf Automatisierung der Nachweisführung, Absicherung ' +
       'der Cloud-Ressourcen und Schritthalten der Kontrollabdeckung mit dem Wachstum.',
     has_object_graph: true,
@@ -117,9 +117,9 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
     // bleibt leer").
     tenant_id: TENANT_ID.GREENGRID,
     display_name: 'GreenGrid Energy Services',
-    industry: 'Energiedienstleistung (synthetisch)',
+    industry: 'Energiedienstleistung',
     description:
-      'Synthetischer Energiedienstleister in einem Zusammenschluss-Szenario: eine neu ' +
+      'Energiedienstleister in einem Zusammenschluss-Szenario: eine neu ' +
       'erworbene Tochtergesellschaft mit getrenntem Erhebungsumfang. ISMS-Fokus auf die ' +
       'getrennte Aufnahme der Tochter, bevor Objekte, Risiken und Nachweise erfasst sind.',
     has_object_graph: false,
@@ -127,10 +127,10 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
   {
     tenant_id: TENANT_ID.CONSULTING_OPERATOR,
     display_name: 'Consulting Operator Demo',
-    industry: 'Managed-Service-/Beratungsbetreiber (synthetisch)',
+    industry: 'Managed-Service-/Beratungsbetreiber',
     description:
-      'Synthetischer Managed-Service-Betreiber, der ISMS-Dienstleistungen für ' +
-      'mehrere Mandanten erbringt. Dient als Demo-Kontext für Serviceverantwortung, ' +
+      'Managed-Service-Betreiber, der ISMS-Dienstleistungen für ' +
+      'mehrere Mandanten erbringt. Dient als Kontext für Serviceverantwortung, ' +
       'Deliverables und mandantenübergreifende, ausschließlich anonymisierte Benchmarks.',
     // WP-012 Slice 1: eigene Managed-Service-Objekte vorhanden (Service, SLA, Deliverable).
     has_object_graph: true,

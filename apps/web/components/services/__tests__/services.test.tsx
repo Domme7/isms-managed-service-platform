@@ -63,7 +63,7 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
     expect(screen.getByText('SLA – Nachweisbetrieb (Band „Priority")')).toBeInTheDocument();
 
     // Deliverable im Entwurf: Status als Text, nie nur Farbe (Dok. 06 06-D11).
-    const draft = screen.getByText('Management-Report Q2/2026 (Entwurf, synthetisch)');
+    const draft = screen.getByText('Management-Report Q2/2026 (Entwurf)');
     expect(draft.parentElement?.textContent).toMatch(/Lebenszyklus-Stand: Entwurf/);
 
     // Wirkungsbeitrag qualitativ statt nackter Zahl (Dok. 06 P04; Muster aus dem Twin).

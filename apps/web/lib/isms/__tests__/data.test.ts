@@ -134,7 +134,7 @@ describe('buildIsmsCoreView – Nordwerk (ISMS-Kerngraph vollständig aufgelöst
     expect(control!.evidenced_by.map((e) => e.name).sort()).toEqual(
       [
         'Restore-Test-Protokoll Q2/2026',
-        'Audit-Readiness-Evidence-Pack Q2/2026 (synthetisch)',
+        'Audit-Readiness-Evidence-Pack Q2/2026',
       ].sort(),
     );
     expect(control!.evidenced_by.every((e) => e.edge_status === 'geprüft')).toBe(true);
