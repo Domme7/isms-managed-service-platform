@@ -2676,6 +2676,107 @@ summary {
   }
 }
 
+/* ===========================================================================
+ * Eigenständiges Cockpit (DR-0017): full-screen, ohne Shell-Chrome, volle Breite.
+ * ========================================================================= */
+.ck-standalone {
+  min-height: 100vh;
+}
+.ck-standalone .ck-cockpit {
+  min-height: 100vh;
+  border-radius: 0;
+  padding: 1.5rem clamp(1rem, 4vw, 3.5rem) 3rem;
+}
+.ck-kopf-rechts {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.ck-mandant {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--ck-ink-soft);
+}
+.ck-mandant-label {
+  font-weight: 600;
+}
+.ck-mandant-select {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--ck-border);
+  background: var(--ck-surface);
+  color: var(--ck-ink);
+  cursor: pointer;
+  max-width: 240px;
+}
+.ck-mandant-select:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+}
+
+/* Die acht Bereiche als Kacheln zum Tieferklicken */
+.ck-bereiche {
+  margin: 1.75rem 0 0;
+}
+.ck-bereiche-titel {
+  font-size: 0.95rem;
+  margin: 0 0 0.75rem;
+  border: none;
+  padding: 0;
+  color: var(--ck-ink);
+}
+.ck-bereich-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 0.7rem;
+}
+.ck-bereich-kachel {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  color: var(--ck-ink);
+  text-decoration: none;
+  transition:
+    background 0.12s ease,
+    transform 0.12s ease,
+    border-color 0.12s ease;
+}
+.ck-bereich-kachel:hover {
+  background: var(--ck-surface-2);
+  transform: translateY(-1px);
+  border-color: var(--ck-info);
+}
+.ck-bereich-kachel:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+}
+.ck-bereich-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.ck-bereich-mehr {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--tw-accent);
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+.ck-bereich-kachel:hover .ck-bereich-mehr {
+  opacity: 1;
+}
+
 .ck-warnungen {
   margin: 1.75rem 0 0;
 }

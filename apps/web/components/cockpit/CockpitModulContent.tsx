@@ -17,6 +17,7 @@
  */
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
 
 import { buildCockpitModul, type ModulKachel, type ModulKnoten } from '../../lib/cockpit/module';
@@ -26,9 +27,11 @@ import {
   type RecordingWave,
 } from '../../lib/heute/data';
 import { worldForRole, type DemoRole, type ExperienceWorld } from '../../lib/shell/roles';
+import { NAV_PLACES } from '../../lib/shell/places';
 import {
   kundenSicht,
   mandantenwechselSichtbar,
+  orteFuerRolle,
   rollenReichweiteSatz,
 } from '../../lib/shell/sphaere';
 import { CockpitLegende } from './CockpitLegende';
@@ -45,9 +48,12 @@ const COCKPIT_THEME_KEY = 'isms-cockpit-theme-v1';
 export function CockpitModulContent({
   role,
   tenant,
+  kopfZusatz,
 }: {
   role: DemoRole | null;
   tenant: DemoTenant;
+  /** Eigenständiger Kopf-Zusatz (z. B. Mandant-Wechsler) – von `CockpitModulView` gestellt. */
+  kopfZusatz?: ReactNode;
 }) {
   const [theme, setTheme] = useState<CockpitTheme>('hell');
   useEffect(() => {
@@ -80,7 +86,10 @@ export function CockpitModulContent({
           <p className="tw-eyebrow">Cockpit</p>
           <h1>Cockpit</h1>
         </div>
-        <ThemeSchalter theme={theme} onToggle={wechsleTheme} />
+        <div className="ck-kopf-rechts">
+          {kopfZusatz}
+          <ThemeSchalter theme={theme} onToggle={wechsleTheme} />
+        </div>
       </div>
 
       <p className="tw-question">
@@ -106,12 +115,9 @@ export function CockpitModulContent({
             </>
           )}
 
+          <BereichKacheln role={role} />
+
           <SphaerenNotiz role={role} />
-          <p className="ck-heute-link">
-            <Link className="tw-cta" href="/heute">
-              Zur ausführlichen Tagesansicht „Heute" →
-            </Link>
-          </p>
           <SeitenbausteineHinweis ort="cockpit" />
         </>
       ) : (
@@ -345,6 +351,49 @@ function KachelInhalt({ kachel }: { kachel: ModulKachel }) {
   );
 }
 
+/* -----------------------------------------------------------------------------
+ * Die acht Bereiche als Kacheln zum Tieferklicken (DR-0017): ersetzen die Sidebar –
+ * Navigation läuft übers Eintauchen. Ziel = der jeweilige Ort (sphärengerecht via
+ * `orteFuerRolle`); die Übergangsroute rendert vorerst die bestehende Bereichsseite.
+ * --------------------------------------------------------------------------- */
+
+const BEREICH_ICON: Readonly<Record<string, string>> = {
+  heute: 'ti-news',
+  kunden: 'ti-building',
+  isms: 'ti-shield',
+  entscheidungen: 'ti-file-check',
+  services: 'ti-server',
+  reports: 'ti-chart-bar',
+  wissen: 'ti-book',
+  administration: 'ti-settings',
+};
+
+function BereichKacheln({ role }: { role: DemoRole | null }) {
+  const orte = orteFuerRolle(NAV_PLACES, role);
+  return (
+    <section className="ck-bereiche" aria-labelledby="ck-bereiche-titel">
+      <h2 id="ck-bereiche-titel" className="ck-bereiche-titel">
+        Bereiche — tiefer eintauchen
+      </h2>
+      <ul className="ck-bereich-grid" aria-label="Bereiche zum Eintauchen">
+        {orte.map((ort) => (
+          <li key={ort.id}>
+            <Link className="ck-bereich-kachel" href={ort.href}>
+              <span className="ck-kachel-ic">
+                <IconGlyph name={BEREICH_ICON[ort.id] ?? 'ti-box'} />
+              </span>
+              <span className="ck-bereich-label">{ort.label}</span>
+              <span className="ck-bereich-mehr" aria-hidden="true">
+                öffnen →
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 /** Inline-SVG-Icons (dekorativ, aria-hidden) – selbst-enthalten, keine Font-Dependency. */
 function IconGlyph({ name }: { name: string }) {
   return (
@@ -466,6 +515,38 @@ function iconPaths(name: string) {
           <circle cx="12" cy="12" r="8" />
           <circle cx="12" cy="12" r="4" />
           <circle cx="12" cy="12" r="1" />
+        </>
+      );
+    case 'ti-building':
+      return (
+        <>
+          <path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16" />
+          <path d="M14 8h5a1 1 0 0 1 1 1v12" />
+          <path d="M3 21h18" />
+          <path d="M8 8h2M8 12h2M8 16h2" />
+        </>
+      );
+    case 'ti-chart-bar':
+      return (
+        <>
+          <path d="M4 4v16h16" />
+          <rect x="7" y="11" width="3" height="6" />
+          <rect x="12" y="7" width="3" height="10" />
+          <rect x="17" y="13" width="3" height="4" />
+        </>
+      );
+    case 'ti-book':
+      return (
+        <>
+          <path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z" />
+          <path d="M5 18a2 2 0 0 1 2-2h11" />
+        </>
+      );
+    case 'ti-settings':
+      return (
+        <>
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 3v2M12 19v2M5 12H3M21 12h-2M6 6l1.5 1.5M16.5 16.5 18 18M6 18l1.5-1.5M16.5 7.5 18 6" />
         </>
       );
     default:
