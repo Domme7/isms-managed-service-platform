@@ -131,16 +131,23 @@
   Kunde-Einstieg mit den 8 Bereichen als Kacheln (`BereichKacheln`, seit DR-0016). Ergänzt: eine
   **Rückkehr-Brotkrume „Portfolio › [Mandant]"** für die Berater-Sicht (schließt den Drill-Loop
   Portfolio↔Cockpit); die Kundensicht trägt bewusst keine Rückkehr (kein Portfolio darüber). web 864.
+- ✅ **DR-0017 Stage 4 (Sidebar raus → Drill-Brotkrume) fertig:** `ShellNav` (8-Orte-Sidebar)
+  gelöscht; die Shell trägt jetzt `ShellBreadcrumb` — Kundensicht „Cockpit › [Bereich]", Berater-Sicht
+  „Portfolio › Cockpit › [Bereich]" (der Portfolio-Rücksprung erscheint nur in der Portfolio-Sphäre).
+  Navigation läuft nur noch per Eintauchen aus den Cockpit-Kacheln (`BereichKacheln`); die Bereich-
+  Seiten behalten ihren Inhalt, verlieren die laterale Nav. `AppShell` rendert Brotkrume statt Sidebar
+  (navOpen-Toggle-Verdrahtung raus; `Topbar`-Toggle nur noch bedingt). `shell.test.tsx`-Nav-Block auf
+  das Drill-Modell umgeschrieben (Brotkrume/aria-current/Sphäre statt 8-Orte-Sidebar); die „8 Orte"-
+  Deckung als `BereichKacheln`-Test ins `cockpit-modul.test.tsx` verschoben (Kunden-Kachel folgt der
+  Sphäre: R03→/kunden, R08→/twin). Totes Sidebar-CSS (`.shell-nav*`, `--shell-nav-w`, responsive
+  Nav-Einklapper) entfernt; `.shell-body` auf eine Spalte. Konzept-Override Dok. 06-D01 in
+  `ShellBreadcrumb`-Kopf als DR-0005-Spannung benannt (von DR-0017/DR-0006 gedeckt). Browser: beide
+  Sphären am `/isms` bzw. `/services` verifiziert (keine Sidebar, kein Toggle, keine Konsolenfehler).
+  **web: lint 0 · typecheck 0 · 865 grün (55 Dateien).**
 - ⏭️ **Verbleibend an DR-0017 (GROSS, sorgfältig):**
   - **Stage 3 — 8 Bereiche im Dashboard-Stil:** je Bereich (Heute/Kunden/ISMS/Entscheidungen/Services/
     Reports/Wissen/Administration) in die Bento-/Dive-Sprache überführen, Dive bis Zwilling.
     Mehr-Iterationen-Aufwand (je Bereich ein eigener, getesteter Umbau).
-  - **Stage 4 — Sidebar raus + Drill-Routing:** `ShellNav` (8-Orte-Sidebar) durch eine Breadcrumb-
-    Leiste ersetzen; die Bereich-Seiten behalten Inhalt, verlieren die laterale Nav (Navigation nur
-    noch per Eintauchen vom Cockpit). **Umfang: ~25 Nav-Assertions in `shell.test.tsx`** + UX-Shift +
-    Konzept-Override (Dok. 06-D01, von DR-0017 gedeckt). Plan: AppShell rendert Breadcrump+Topbar statt
-    ShellNav; shell.test-Nav-Block auf das Drill-Modell umschreiben; `orteFuerRolle`/`ShellNav` als
-    tote/reduzierte Fläche prüfen. Fokussiert im nächsten Durchgang, nie roter Zwischenstand.
 - **Owner-Gates weiter offen (nicht autonom):** WP-021 Slice 7 (numerische Bewertungen, E-02),
   Eisenhower/Fristen (E-02), echte Auth (WP-030), DB→UI (FINDING-0004).
 - ~~⏳ **WP-021 Slice 5 (MediNova Clinics Holding):** Entwurf `medinova-graph.ts` liegt fertig auf Platte~~

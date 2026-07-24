@@ -11,7 +11,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { DEMO_TENANTS, TENANT_ID, type DemoTenant } from '@isms/demo-seed';
@@ -46,6 +46,35 @@ describe('Bento-Cockpit – Kopf, Kontextleiste, Übersicht', () => {
     // Kundensicht (ISMS Manager) ist selbst der Einstieg – kein Portfolio darüber, keine Brotkrume.
     rerender(<CockpitModulContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
     expect(screen.queryByRole('link', { name: 'Portfolio' })).not.toBeInTheDocument();
+  });
+
+  it('BereichKacheln: die acht Bereiche als Kacheln — die Nav lebt seit DR-0017 im Cockpit (keine Sidebar)', () => {
+    render(<CockpitModulContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
+    const bereiche = screen.getByRole('list', { name: 'Bereiche zum Eintauchen' });
+    expect(within(bereiche).getAllByRole('link')).toHaveLength(8);
+    for (const label of [
+      'Heute',
+      'Kunden',
+      'ISMS',
+      'Entscheidungen',
+      'Services',
+      'Reports',
+      'Wissen',
+      'Administration',
+    ]) {
+      expect(within(bereiche).getByRole('link', { name: new RegExp(label) })).toBeInTheDocument();
+    }
+    // Der Bereich „Kunden" folgt der Sphäre: Kundenrolle (R03) → eigener Kundenbereich (/kunden).
+    expect(within(bereiche).getByRole('link', { name: /Kunden/ })).toHaveAttribute(
+      'href',
+      '/kunden',
+    );
+  });
+
+  it('BereichKacheln: in der Betreibersicht (R08) führt „Kunden" ins Portfolio (/twin)', () => {
+    render(<CockpitModulContent role={role('R08')} tenant={tenant(TENANT_ID.NORDWERK)} />);
+    const bereiche = screen.getByRole('list', { name: 'Bereiche zum Eintauchen' });
+    expect(within(bereiche).getByRole('link', { name: /Kunden/ })).toHaveAttribute('href', '/twin');
   });
 
   it('führt mit Leitfrage und rendert das Bento aus echten Daten', () => {

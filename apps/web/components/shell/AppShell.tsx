@@ -30,11 +30,11 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { ShellNav } from './ShellNav';
+import { ShellBreadcrumb } from './ShellBreadcrumb';
 import { Topbar } from './Topbar';
 import type { NavPlace, PlaceId } from '../../lib/shell/places';
 import type { DemoRole } from '../../lib/shell/roles';
-import { rollenReichweiteSatz } from '../../lib/shell/sphaere';
+import { kundenSicht, rollenReichweiteSatz } from '../../lib/shell/sphaere';
 import type { DemoTenant } from '@isms/demo-seed';
 import type { ResolvedSession } from '../../lib/shell/session';
 
@@ -82,14 +82,12 @@ export function AppShell({
   onSignOut: () => void;
   children: ReactNode;
 }) {
-  const [navOpen, setNavOpen] = useState(false);
   /** Angefragter, noch NICHT aktiver Mandant – `null`, wenn keine Bestätigung offen ist. */
   const [pendingTenantId, setPendingTenantId] = useState<string | null>(null);
   /** Letzte vollzogene Kontextänderung – bleibt sichtbar, bis sie geschlossen wird. */
   const [contextChange, setContextChange] = useState<ContextChange | null>(null);
   const confirmRef = useRef<HTMLDivElement | null>(null);
   const announceRef = useRef<HTMLDivElement | null>(null);
-  const navId = 'shell-nav';
   /** ID des Mandanten-Selects – Ziel der Fokus-Rückführung nach „Abbrechen" (Code F5). */
   const tenantSelectId = 'shell-mandant-select';
 
@@ -196,9 +194,6 @@ export function AppShell({
         onSwitchRole={switchRole}
         onRequestTenantSwitch={requestTenantSwitch}
         onSignOut={signOut}
-        onToggleNav={() => setNavOpen((open) => !open)}
-        navOpen={navOpen}
-        navControlsId={navId}
         tenantSelectId={tenantSelectId}
       />
 
@@ -299,13 +294,15 @@ export function AppShell({
              Mandantengrenze („nur der aktive Mandant") stehen unverändert im Seiteninhalt und
              sind weiterhin per Wächtertest belegt. */}
 
-      <div className="shell-body" data-nav-open={navOpen ? 'true' : 'false'}>
-        <ShellNav
-          places={places}
-          activeId={activeId}
-          id={navId}
-          onNavigate={() => setNavOpen(false)}
-        />
+      {/* DR-0017 Stage 4: die Brotkrume ersetzt die Seiten-Sidebar (kein Klick-Reiter mehr). Die
+          acht Bereiche sind Kacheln im Cockpit (`BereichKacheln`); von einer Bereich-Seite führt
+          nur der Drill-Pfad zurück (Portfolio › Cockpit › Bereich). */}
+      <ShellBreadcrumb
+        places={places}
+        activeId={activeId}
+        zeigePortfolio={session ? kundenSicht(session.role) === 'portfolio' : false}
+      />
+      <div className="shell-body">
         {/* tabIndex -1: programmatisches Fokusziel (Skip-Link-Ziel und Fokus-Rückführung nach
             dem Schließen der Wechsel-Rückmeldung, Code F5) – nicht in der Tab-Reihenfolge. */}
         <main id="inhalt" className="shell-main" tabIndex={-1}>

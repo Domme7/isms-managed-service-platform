@@ -18,7 +18,6 @@
   --shell-teal: #0b6e6e;
   --shell-teal-soft: #e2f1f1;
   --shell-topbar-h: 3.5rem;
-  --shell-nav-w: 232px;
   --shell-demo: #7a4b00;
   --shell-demo-bg: #fdf1d6;
   --shell-demo-line: #ecd9a6;
@@ -809,72 +808,12 @@ summary {
   cursor: pointer;
 }
 
-/* --- Body: Seitennavigation + Inhalt -------------------------------------- */
+/* --- Body: nur noch Inhalt (Seiten-Sidebar mit DR-0017 Stage 4 entfallen) --- */
 .shell-body {
   flex: 1;
   display: grid;
-  grid-template-columns: var(--shell-nav-w) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
-}
-
-.shell-nav {
-  position: sticky;
-  top: var(--shell-topbar-h);
-  align-self: start;
-  border-right: 1px solid var(--tw-line);
-  background: var(--tw-surface);
-  padding: 0.85rem 0.6rem;
-  min-height: calc(100vh - var(--shell-topbar-h));
-}
-.shell-nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-.shell-nav-item {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.55rem 0.65rem;
-  border-radius: 8px;
-  color: var(--tw-ink);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-.shell-nav-item:hover {
-  background: var(--tw-surface-2);
-}
-.shell-nav-marker {
-  width: 3px;
-  height: 1.15rem;
-  border-radius: 3px;
-  background: transparent;
-  flex: none;
-}
-.shell-nav-item--active {
-  background: var(--shell-teal-soft);
-  color: #08403f;
-}
-.shell-nav-item--active .shell-nav-marker {
-  background: var(--shell-teal);
-}
-.shell-nav-label {
-  flex: 1;
-}
-.shell-nav-soon {
-  font-size: 0.62rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--tw-muted);
-  background: var(--tw-surface-2);
-  border: 1px solid var(--tw-line);
-  border-radius: 999px;
-  padding: 0.05rem 0.4rem;
 }
 
 .shell-main {
@@ -891,29 +830,6 @@ summary {
 .shell-main :where(h1, h2, h3)[id],
 .shell-main [id]:target {
   scroll-margin-top: calc(var(--shell-topbar-h) + 1rem);
-}
-
-/* --- Responsive: Nav einklappbar ------------------------------------------ */
-@media (max-width: 860px) {
-  .shell-nav-toggle {
-    display: inline-flex;
-  }
-  .shell-body {
-    grid-template-columns: 1fr;
-  }
-  .shell-nav {
-    position: static;
-    min-height: 0;
-    border-right: none;
-    border-bottom: 1px solid var(--tw-line);
-    display: none;
-  }
-  .shell-body[data-nav-open="true"] .shell-nav {
-    display: block;
-  }
-  .shell-nav-list {
-    flex-direction: column;
-  }
 }
 
 /* =============================================================================
@@ -3804,4 +3720,29 @@ summary {
 }
 .ck-brotkrume-hier {
   color: var(--ck-ink-soft);
+}
+
+/* Shell-Brotkrume (DR-0017 Stage 4): ersetzt die Seiten-Sidebar; Drill-Pfad zurück. */
+.shell-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  padding: 0.5rem clamp(0.75rem, 3vw, 1.5rem);
+  font-size: 0.82rem;
+  color: var(--ck-muted, #5b6172);
+  border-bottom: 1px solid var(--ck-border, #d9dce3);
+}
+.shell-breadcrumb-link {
+  color: var(--ck-info, #3a4ea8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.shell-breadcrumb-link:hover,
+.shell-breadcrumb-link:focus-visible {
+  text-decoration: underline;
+}
+.shell-breadcrumb-current {
+  color: var(--ck-ink-soft, #454b5e);
+  font-weight: 600;
 }

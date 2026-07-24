@@ -25,7 +25,7 @@ import { LoginForm } from '../LoginForm';
 import { SessionProvider } from '../SessionProvider';
 import { NAV_PLACES } from '../../../lib/shell/places';
 import { DEMO_ROLES, getRole } from '../../../lib/shell/roles';
-import { orteFuerRolle, rollenReichweiteSatz } from '../../../lib/shell/sphaere';
+import { rollenReichweiteSatz } from '../../../lib/shell/sphaere';
 import {
   SESSION_STORAGE_KEY,
   parseSession,
@@ -84,45 +84,38 @@ function renderShell(
   return props;
 }
 
-describe('AppShell – Navigation der acht Orte', () => {
-  it('rendert genau acht Navigationsorte mit ihren Labels', () => {
+describe('AppShell – Brotkrume statt Sidebar (DR-0017 Stage 4)', () => {
+  it('rendert die Drill-Brotkrume mit Cockpit-Rücksprung; keine Acht-Orte-Sidebar mehr', () => {
     renderShell();
-    const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
-    const links = within(nav).getAllByRole('link');
-    expect(links).toHaveLength(8);
-    for (const label of [
-      'Heute',
-      'Kunden',
-      'ISMS',
-      'Entscheidungen',
-      'Services',
-      'Reports',
-      'Wissen',
-      'Administration',
-    ]) {
-      expect(within(nav).getByRole('link', { name: new RegExp(label) })).toBeInTheDocument();
-    }
+    const pfad = screen.getByRole('navigation', { name: 'Navigationspfad' });
+    expect(within(pfad).getByRole('link', { name: 'Cockpit' })).toHaveAttribute('href', '/cockpit');
+    // Die feste Acht-Orte-Sidebar ist mit DR-0017 entfallen (Navigation nur per Eintauchen); die
+    // acht Bereiche leben als Kacheln im Cockpit. Auch der Sidebar-Hamburger ist weg.
+    expect(screen.queryByRole('navigation', { name: 'Hauptnavigation' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /Navigation ein-\/ausblenden/ }),
+    ).not.toBeInTheDocument();
   });
 
-  it('kennzeichnet genau die noch nicht ausgebauten Orte als „noch nicht verfügbar"', () => {
-    // WP-017 Slice 2: „Entscheidungen" ist live und darf diese Kennzeichnung NICHT mehr tragen.
-    // Abgeleitet aus `NAV_PLACES` statt hartkodiert – der Test zieht mit jedem weiteren Ort mit.
-    renderShell();
-    const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
-    for (const place of NAV_PLACES) {
-      const link = within(nav).getByRole('link', { name: new RegExp(place.label) });
-      const nichtVerfuegbar = (link.textContent ?? '').includes('noch nicht verfügbar');
-      expect(nichtVerfuegbar, `Ort „${place.label}"`).toBe(place.live !== true);
-    }
-    expect(NAV_PLACES.filter((p) => p.live === true).map((p) => p.id)).toContain('entscheidungen');
+  it('benennt den aktiven Bereich am Ende des Drill-Pfads (aria-current)', () => {
+    renderShell({ activeId: 'isms' });
+    const pfad = screen.getByRole('navigation', { name: 'Navigationspfad' });
+    expect(within(pfad).getByText('ISMS')).toHaveAttribute('aria-current', 'page');
   });
 
-  it('markiert den aktiven Ort mit aria-current="page"', () => {
-    renderShell({ activeId: 'kunden' });
-    const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
-    const kunden = within(nav).getByRole('link', { name: /Kunden/ });
-    expect(kunden).toHaveAttribute('aria-current', 'page');
-    expect(within(nav).getByRole('link', { name: /Heute/ })).not.toHaveAttribute('aria-current');
+  it('Portfolio-Sicht (Berater): der Drill-Pfad trägt den Portfolio-Rücksprung', () => {
+    renderShell({ session: SERVICE_LEAD_NORDWERK });
+    const pfad = screen.getByRole('navigation', { name: 'Navigationspfad' });
+    expect(within(pfad).getByRole('link', { name: 'Portfolio' })).toHaveAttribute(
+      'href',
+      '/portfolio',
+    );
+  });
+
+  it('Kundensicht: der Drill-Pfad trägt keinen Portfolio-Rücksprung (kein Portfolio darüber)', () => {
+    renderShell({ session: EXECUTIVE_NORDWERK });
+    const pfad = screen.getByRole('navigation', { name: 'Navigationspfad' });
+    expect(within(pfad).queryByRole('link', { name: 'Portfolio' })).not.toBeInTheDocument();
   });
 
   it('stellt main-Landmark und Skip-Link bereit', () => {
@@ -370,82 +363,19 @@ describe('AppShell – Mandantenwechsler folgt der Sphäre (DR-0013 Nr. 11)', ()
   });
 });
 
-describe('AppShell – Ort „Kunden" führt sphärengerecht (DR-0013 Nr. 11)', () => {
-  it('Kundenrolle und Auditor: der Ort „Kunden" führt in den eigenen Kundenbereich', () => {
-    for (const roleId of ['R01', 'R03', 'R06', 'R07']) {
-      const { unmount } = render(
-        <AppShell
-          places={orteFuerRolle(NAV_PLACES, getRole(roleId) ?? null)}
-          activeId="kunden"
-          session={resolveSession({ roleId, tenantId: TENANT_ID.NORDWERK }) as ResolvedSession}
-          hydrated
-          roles={DEMO_ROLES}
-          tenants={DEMO_TENANTS}
-          onSwitchRole={vi.fn()}
-          onSwitchTenant={vi.fn()}
-          onSignOut={vi.fn()}
-        >
-          <p>Inhalt</p>
-        </AppShell>,
-      );
-      const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
-      expect(within(nav).getByRole('link', { name: /Kunden/ }), `Rolle ${roleId}`).toHaveAttribute(
-        'href',
-        '/kunden',
-      );
-      // Die Struktur der acht Orte bleibt unverändert (06-D01).
-      expect(within(nav).getAllByRole('link')).toHaveLength(8);
-      unmount();
-    }
-  });
-
-  it('Betreiberrollen, Administrator und neutral: der Ort „Kunden" führt ins Portfolio', () => {
-    for (const roleId of ['R08', 'R09', 'R10', 'R11', 'R12', null]) {
-      const rolle = roleId ? (getRole(roleId) ?? null) : null;
-      const { unmount } = render(
-        <AppShell
-          places={orteFuerRolle(NAV_PLACES, rolle)}
-          activeId="kunden"
-          session={
-            resolveSession(
-              roleId ? { roleId, tenantId: TENANT_ID.NORDWERK } : { tenantId: TENANT_ID.NORDWERK },
-            ) as ResolvedSession
-          }
-          hydrated
-          roles={DEMO_ROLES}
-          tenants={DEMO_TENANTS}
-          onSwitchRole={vi.fn()}
-          onSwitchTenant={vi.fn()}
-          onSignOut={vi.fn()}
-        >
-          <p>Inhalt</p>
-        </AppShell>,
-      );
-      const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
-      expect(
-        within(nav).getByRole('link', { name: /Kunden/ }),
-        `Rolle ${roleId ?? 'neutral'}`,
-      ).toHaveAttribute('href', '/twin');
-      unmount();
-    }
-  });
-});
-
-describe('AppShell – Ort „Kunden" eingebettet', () => {
-  it('rendert den Explorer innerhalb der Shell und der Kunden-Ort zeigt auf /twin', () => {
+// Das SPHÄRENGERECHTE Ziel des Ortes „Kunden" (Kundenrolle → /kunden, Betreiber → /twin) ist seit
+// DR-0017 (Brotkrume statt Sidebar) NICHT mehr Teil der Shell: die acht Bereiche sind Cockpit-
+// Kacheln. Die Regel selbst (`kundenOrtHref`/`orteFuerRolle`) ist unverändert und in
+// `lib/shell/__tests__/sphaere.test.ts` erschöpfend unit-getestet; hier bleibt nur die Einbettung
+// des Seiteninhalts in die Shell.
+describe('AppShell – Seiteninhalt eingebettet (DR-0017: Brotkrume statt Sidebar)', () => {
+  it('rendert den Seiteninhalt im main-Landmark der Shell', () => {
     renderShell(
       { activeId: 'kunden', session: NEUTRAL_NORDWERK },
       <TenantOverview tenants={DEMO_TENANTS} />,
     );
-
-    // Explorer-Inhalt liegt im main-Landmark der Shell.
     const main = screen.getByRole('main');
-    // Nav-Label = Seitentitel (DR-0013 Nr. 9): der Ort „Kunden" heißt auch auf der Seite so.
     expect(within(main).getByRole('heading', { level: 1, name: 'Kunden' })).toBeInTheDocument();
-
-    // Der Nav-Ort „Kunden" verlinkt den Explorer.
-    const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' });
-    expect(within(nav).getByRole('link', { name: /Kunden/ })).toHaveAttribute('href', '/twin');
   });
 });
 
@@ -567,7 +497,8 @@ describe('LoginPage – Anmeldung erzeugt die NEUTRALE Sitzung (AC 5/6)', () => 
  *
  * An ihre Stelle tritt die positive Meilenstein-Assertion in
  * `lib/shell/__tests__/shell-logic.test.ts` („alle acht Orte sind live"), die rot wird, sobald
- * ein Ort je zurückgestuft würde. Die Navigations-Kennzeichnung für nicht-live Orte bleibt in
- * `ShellNav` erhalten und wird oben weiterhin gegen `NAV_PLACES` geprüft – die REGEL ist also
- * unverändert in Kraft, nur ihre Platzhalterseite ist gegenstandslos geworden.
+ * ein Ort je zurückgestuft würde. Die acht Orte selbst bleiben geprüft – jetzt als Kacheln im
+ * Cockpit (`cockpit-modul.test.tsx`, „BereichKacheln"), seit DR-0017 Stage 4 die feste
+ * Seiten-Sidebar (`ShellNav`) entfallen ist (Navigation nur noch per Eintauchen). Die REGEL ist
+ * also unverändert in Kraft, nur ihre Platzhalterseite ist gegenstandslos geworden.
  */

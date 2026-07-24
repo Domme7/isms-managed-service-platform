@@ -91,16 +91,21 @@ export function Topbar({
   return (
     <header className="shell-topbar">
       <div className="shell-topbar-left">
-        <button
-          type="button"
-          className="shell-nav-toggle"
-          aria-controls={navControlsId}
-          aria-expanded={navOpen}
-          onClick={onToggleNav}
-        >
-          <span aria-hidden="true">☰</span>
-          <span className="shell-visually-hidden">Navigation ein-/ausblenden</span>
-        </button>
+        {/* Nav-Toggle nur, wenn die Shell eine ein-/ausklappbare Seitennavigation stellt. Seit
+            DR-0017 Stage 4 (Drill-only, Brotkrume statt Sidebar) reicht die Shell kein
+            `onToggleNav` mehr durch – der Hamburger entfällt dann. */}
+        {onToggleNav ? (
+          <button
+            type="button"
+            className="shell-nav-toggle"
+            aria-controls={navControlsId}
+            aria-expanded={navOpen}
+            onClick={onToggleNav}
+          >
+            <span aria-hidden="true">☰</span>
+            <span className="shell-visually-hidden">Navigation ein-/ausblenden</span>
+          </button>
+        ) : null}
         <Link href="/heute" className="shell-brand">
           <span className="shell-brand-mark" aria-hidden="true">
             ISMS
