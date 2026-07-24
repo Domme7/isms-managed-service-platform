@@ -24,6 +24,18 @@
       "verstoesse": []
     },
     {
+      "slug": "willkommen",
+      "pfad": "/willkommen",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
+      "slug": "login",
+      "pfad": "/login",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
+    },
+    {
       "slug": "heute",
       "pfad": "/heute",
       "anzahlVerstoesse": {},
