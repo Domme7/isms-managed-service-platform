@@ -3783,3 +3783,25 @@ summary {
 .login-neutral {
   margin-top: 0.6rem;
 }
+
+/* Brotkrume im Cockpit (DR-0017): Rückkehr aus dem Kunden ins Portfolio (nur Portfolio-Sicht). */
+.ck-brotkrume {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--ck-muted);
+}
+.ck-brotkrume-link {
+  color: var(--ck-info);
+  text-decoration: none;
+  font-weight: 600;
+}
+.ck-brotkrume-link:hover,
+.ck-brotkrume-link:focus-visible {
+  text-decoration: underline;
+}
+.ck-brotkrume-hier {
+  color: var(--ck-ink-soft);
+}

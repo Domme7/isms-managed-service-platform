@@ -36,6 +36,18 @@ function kachel(container: HTMLElement, key: string): HTMLElement {
 }
 
 describe('Bento-Cockpit – Kopf, Kontextleiste, Übersicht', () => {
+  it('Portfolio-Sicht (Berater) trägt die Rückkehr-Brotkrume „Portfolio"; Kundensicht nicht (DR-0017)', () => {
+    const { rerender } = render(
+      <CockpitModulContent role={role('R08')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    // Berater taucht aus dem Portfolio ein → Rückkehr-Link ins Portfolio.
+    expect(screen.getByRole('link', { name: 'Portfolio' })).toHaveAttribute('href', '/portfolio');
+
+    // Kundensicht (ISMS Manager) ist selbst der Einstieg – kein Portfolio darüber, keine Brotkrume.
+    rerender(<CockpitModulContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
+    expect(screen.queryByRole('link', { name: 'Portfolio' })).not.toBeInTheDocument();
+  });
+
   it('führt mit Leitfrage und rendert das Bento aus echten Daten', () => {
     const { container } = render(
       <CockpitModulContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,

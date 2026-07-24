@@ -24,7 +24,7 @@ import { buildCockpitModul, type ModulKachel, type ModulKnoten } from '../../lib
 import { buildMissionControl } from '../../lib/heute/data';
 import type { DemoRole } from '../../lib/shell/roles';
 import { NAV_PLACES } from '../../lib/shell/places';
-import { orteFuerRolle } from '../../lib/shell/sphaere';
+import { kundenSicht, orteFuerRolle } from '../../lib/shell/sphaere';
 import { CockpitRadar } from './CockpitRadar';
 import { CoverageRing } from './CoverageRing';
 import { EmptyTenantKachel } from '../shell/DashboardKacheln';
@@ -71,6 +71,20 @@ export function CockpitModulContent({
 
   return (
     <div className="ck-cockpit" data-ck-theme={theme}>
+      {/* Brotkrume statt Sidebar (DR-0017): die Portfolio-Sicht (Berater) taucht aus dem Portfolio
+          in diesen Kunden ein und kann zurück. Die Kundensicht ist selbst der Einstieg (kein
+          Portfolio darüber) und trägt deshalb keine Rückkehr. */}
+      {kundenSicht(role) === 'portfolio' ? (
+        <nav className="ck-brotkrume" aria-label="Navigationspfad">
+          <Link className="ck-brotkrume-link" href="/portfolio">
+            Portfolio
+          </Link>
+          <span className="ck-brotkrume-sep" aria-hidden="true">
+            ›
+          </span>
+          <span className="ck-brotkrume-hier">{tenant.display_name}</span>
+        </nav>
+      ) : null}
       <div className="ck-kopf">
         <div>
           <p className="tw-eyebrow">Cockpit</p>
