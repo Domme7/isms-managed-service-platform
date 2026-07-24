@@ -1,5 +1,6 @@
 # Latest Handover
 
+- **Aktuell:** `HND-20260724-sprint.md`
 - **Modus:** Owner-Auftrag „setz alles um, usability first, modernes Cockpit, nichts nur Show" + „mehr parallel".
   Autonomer Weiterbau; owner-gated Materie (echte Auth/DB) zurückgestellt (DR-0015). Entscheidungen: [DR-0014], [DR-0015].
 - **MEILENSTEIN — Modernes Cockpit fertig ([DR-0014]):** `/cockpit` ist die Startseite nach Login, moderne 2026-
