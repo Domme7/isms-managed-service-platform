@@ -55,7 +55,7 @@ getrennte Login-Welten) · **WP-021 Slice 1 (Nordstern tief → Ampeln leuchten 
 Struktur-Assistent · Antwort-Modus · Reports/Wissen/Administration · digitaler Zwilling/Objekt-360.
 
 **Als Nächstes (offen, in Reihenfolge):**
-1. **Cockpit-Redesign (DR-0016 / WP-034)** — kompaktes Dashboard + Drill-down + Tauch-Animation. **Owner wählte Variante A „Bento-Mosaik" (2026-07-24) → wird jetzt full-width gebaut (Slice 2).**
+1. **Cockpit-Redesign (DR-0016 / WP-034)** — ✅ **gebaut (Slice 2)**: `/cockpit` ist das Bento-Mosaik (Owner-Wahl Variante A) mit Radar aus den vier Abdeckungen, verschieden großen Ampel-Kacheln und Eintauch-Drilldown; alte A/B/C-Ansicht unter „Heute". 869 Tests + axe 0 (hell/dunkel/Detail) grün, HEAD `be684d0`; Gate-Review läuft. Offene Iteration (optional): Radar prominenter, mehr Charts, coolere Animation (O-WP034-05).
 2. **WP-021 Slices 3–6** — die vier weiteren Firmen reich (je eigene Ampel-Verteilung).
 3. **Synthetische Preisbänder** (O-KUNDE-01-Umstellung, mit Security) · **WP-033/U-15** (Demo-Wörter vom Einstieg raus).
 4. **E-02 → echte Decision Cards** (Change Proposal → Contract/Seed; CCP-008-Entwurf liegt).

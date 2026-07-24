@@ -54,4 +54,23 @@ Der Owner will vor der Festlegung ausprobieren (aus DR-0016):
 ## Offene Fragen
 - O-WP034-01: Ablösung der A/B/C-Personalisierung durch das Dashboard-Erlebnis? · O-WP034-02: Welche Charttypen je
   Kennzahl fachlich korrekt (Radar-Achsen = welche Domänen)? · O-WP034-03: Drill-down als eigene Routen vs.
-  In-Page-Ebenen?
+  In-Page-Ebenen? · O-WP034-04: DRY-Zusammenführung der wortgleich kopierten Bausteine
+  (ThemeSchalter/CockpitContextBar/SphaerenNotiz/CockpitLuecken) aus `CockpitVariantenContent` · O-WP034-05:
+  Radar-Hero prominenter/größer + „mehr Charts" + „coolere Animation" (Owner-Iterationswünsche, optional).
+
+## Bau-Stand (2026-07-24) — Slice 2 gebaut ✅
+
+`/cockpit` ist auf die **Bento-Mosaik-Ansicht** umgestellt (Owner-Wahl Variante A). Umgesetzt:
+- **Ehrliche Radar-Ableitung** `lib/cockpit/radar.ts` (Achsen = die vier realen Abdeckungen, Wert = `covered/total`;
+  leere Grundgesamtheit → Zentrum + benannt, n≤2 → neutral) + `radar.test.ts` (3 Tests gegen echte Seed-Daten).
+- **Komponenten** `CockpitRadar.tsx` (aria-hidden SVG + Text-Werteliste), `CockpitBentoContent.tsx`
+  (Bento-Grid verschiedener Größen + Eintauch-Drilldown in die vollständige Kachel, Fokus-Management,
+  Brotkrumen/Zurück), `CockpitBentoView.tsx` (Session-Wrapper). CSS-Abschnitt „Bento-Mosaik" in `globals.css`
+  (Eintauch-Animation `prefers-reduced-motion`-fest).
+- **Datenlogik wiederverwendet:** `buildHeuteDashboard`/`buildMissionControl`/`coverageTileStatus`/Warnungen/
+  Lebenszyklus/Legende — nichts erfunden; jede Kachel taucht in ihre reale Begründung + Quell-Link.
+- **Verifikation:** Web 869 Tests grün (10 neue in `cockpit-bento.test.tsx`), Lint + Typecheck grün, **qa:visual
+  axe 0** auf `cockpit`/`cockpit-eintauchen`/`cockpit-dunkel` (Screenshots `docs/project/visual/WP-034/`).
+  Adversarialer Gate-Review (Ehrlichkeit/UX/Code/Security/a11y) angestoßen. HEAD `be684d0`.
+- **Alte Ansicht** `CockpitVariantenContent` (A/B/C) bleibt getestet erhalten und ist über „Heute" erreichbar;
+  Ablösung/Löschung ist Owner-Entscheidung (O-WP034-01).
