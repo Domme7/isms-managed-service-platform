@@ -95,6 +95,19 @@
   entfernt/aktualisiert; die 2 WP-032-„kein Suchfeld"-Assertions auf die neue Realität umgestellt.
   6 Komponententests (Leak-Schutz sichtbar, Sphäre, Leerzustände). web 889 grün; Browser: „Auftrag"
   → 8 Treffer (nur eigener Mandant), Vertraulich-Maske sichtbar, keine Konsolenfehler.
+- **AE-10 (WP-029 kuratierte Cockpit-Personalisierung):** Regel Null ergab zwei belegte
+  Personalisierungen — §6.2 „bevorzugte Detailtiefe speichern" (schon in HeuteView) und die
+  WORK_QUEUE-Aussage „Kacheln umsortieren/anheften". Der **Management-Modus** (Dok. 10 §6.3, „Wenn ich
+  Geschäftsführer wäre") ist **NICHT autonom baubar**: er reduziert auf Investitions-/Nichtstun-Option,
+  erwartete Wirkung und Freigabebedarf — Decision-Center-Daten, die der Datenbestand nachweislich NICHT
+  trägt (in der „Ohne Datengrundlage"-Liste als fehlend belegt) → **Owner/Daten-Gate**, nicht erfunden
+  (DR-0008). **Autonom gebaut:** „**Bereiche anheften**" — react-freier Kern `lib/cockpit/
+  personalisierung.ts` (parse/serialize/toggle/`sortByPins`, versionierter Schlüssel, mandanten-/
+  rollenfrei = Cross-Tenant-Schutz) + Pin-Schalter je BereichKachel im Cockpit; angeheftete Bereiche
+  zuerst, **NUR Umordnung, nie Ausblenden** (Invariante Dok. 06 §6.2, alle 8 bleiben sichtbar). 7 Kern-
+  + 1 Komponententest; web 897 grün; Browser: „Administration" anheften → rückt vor + persistiert, alle
+  8 da, keine Konsolenfehler. **Owner-Gate notiert:** Management-Modus + gespeicherte Sichten/Filter
+  brauchen Decision-Center-/filterbare Daten (E-02/Phasen 3–9).
 
 ## Offene Fragen an den Owner (nicht blockierend — Default gewählt, jederzeit umstellbar)
 - **OF-1 (2 Profile):** Sollen die 12 Rollen-Perspektiven wirklich ganz raus, oder nur der

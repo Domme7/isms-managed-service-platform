@@ -21,6 +21,13 @@ import type { ReactNode } from 'react';
 import type { DemoTenant } from '@isms/demo-seed';
 
 import { buildCockpitModul, type ModulKachel, type ModulKnoten } from '../../lib/cockpit/module';
+import {
+  COCKPIT_PINS_KEY,
+  parsePins,
+  serializePins,
+  sortByPins,
+  togglePin,
+} from '../../lib/cockpit/personalisierung';
 import { COCKPIT_THEME_KEY, type CockpitTheme } from '../../lib/cockpit/theme';
 import { buildMissionControl } from '../../lib/heute/data';
 import type { DemoRole } from '../../lib/shell/roles';
@@ -368,25 +375,62 @@ const BEREICH_ICON: Readonly<Record<string, string>> = {
 
 function BereichKacheln({ role }: { role: DemoRole | null }) {
   const orte = orteFuerRolle(NAV_PLACES, role);
+
+  // Kuratierte Personalisierung (WP-029): angeheftete Bereiche zuerst, gerätelokal gemerkt. Es wird
+  // NUR umgeordnet, nie etwas ausgeblendet – alle Bereiche bleiben sichtbar (Invariante Dok. 06 §6.2).
+  const [pins, setPins] = useState<readonly string[]>([]);
+  useEffect(() => {
+    try {
+      setPins(parsePins(window.localStorage.getItem(COCKPIT_PINS_KEY)));
+    } catch {
+      // Speicher nicht verfügbar (z. B. privater Modus) – ohne Anheftung.
+    }
+  }, []);
+  const anheften = (id: string) => {
+    setPins((prev) => {
+      const next = togglePin(prev, id);
+      try {
+        window.localStorage.setItem(COCKPIT_PINS_KEY, serializePins(next));
+      } catch {
+        // Speicher nicht verfügbar – die Wahl gilt dann nur für diese Sitzung.
+      }
+      return next;
+    });
+  };
+
   return (
     <section className="ck-bereiche" aria-labelledby="ck-bereiche-titel">
       <h2 id="ck-bereiche-titel" className="ck-bereiche-titel">
         Bereiche — tiefer eintauchen
       </h2>
       <ul className="ck-bereich-grid" aria-label="Bereiche zum Eintauchen">
-        {orte.map((ort) => (
-          <li key={ort.id}>
-            <Link className="ck-bereich-kachel" href={ort.href}>
-              <span className="ck-kachel-ic">
-                <IconGlyph name={BEREICH_ICON[ort.id] ?? 'ti-box'} />
-              </span>
-              <span className="ck-bereich-label">{ort.label}</span>
-              <span className="ck-bereich-mehr" aria-hidden="true">
-                öffnen →
-              </span>
-            </Link>
-          </li>
-        ))}
+        {sortByPins(orte, pins).map((ort) => {
+          const gepinnt = pins.includes(ort.id);
+          return (
+            <li key={ort.id} className="ck-bereich-item">
+              <Link className="ck-bereich-kachel" href={ort.href}>
+                <span className="ck-kachel-ic">
+                  <IconGlyph name={BEREICH_ICON[ort.id] ?? 'ti-box'} />
+                </span>
+                <span className="ck-bereich-label">{ort.label}</span>
+                <span className="ck-bereich-mehr" aria-hidden="true">
+                  öffnen →
+                </span>
+              </Link>
+              <button
+                type="button"
+                className="ck-bereich-pin"
+                aria-pressed={gepinnt}
+                onClick={() => anheften(ort.id)}
+              >
+                <span aria-hidden="true">{gepinnt ? '★' : '☆'}</span>
+                <span className="shell-visually-hidden">
+                  {gepinnt ? `${ort.label} lösen` : `${ort.label} anheften`}
+                </span>
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

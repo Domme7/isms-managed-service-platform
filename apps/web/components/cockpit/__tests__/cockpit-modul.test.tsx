@@ -77,6 +77,26 @@ describe('Bento-Cockpit – Kopf, Kontextleiste, Übersicht', () => {
     expect(within(bereiche).getByRole('link', { name: /Kunden/ })).toHaveAttribute('href', '/twin');
   });
 
+  it('BereichKacheln: „anheften" (WP-029) stellt einen Bereich voran – ohne dass etwas verschwindet', () => {
+    window.localStorage.clear();
+    render(<CockpitModulContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
+    const bereiche = screen.getByRole('list', { name: 'Bereiche zum Eintauchen' });
+    // Je Bereich ein Anheften-Schalter (anfangs keiner angeheftet).
+    expect(within(bereiche).getAllByRole('button', { name: /anheften/ })).toHaveLength(8);
+
+    fireEvent.click(within(bereiche).getByRole('button', { name: /Administration anheften/ }));
+
+    // Nichts ausgeblendet (Invariante Dok. 06 §6.2): weiterhin acht Bereiche …
+    const linksNachher = within(bereiche).getAllByRole('link');
+    expect(linksNachher).toHaveLength(8);
+    // … und „Administration" steht jetzt vorne, der Schalter meldet den Zustand und lässt sich lösen.
+    expect(linksNachher[0]?.textContent).toContain('Administration');
+    expect(within(bereiche).getByRole('button', { name: /Administration lösen/ })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+  });
+
   it('führt mit Leitfrage und rendert das Bento aus echten Daten', () => {
     const { container } = render(
       <CockpitModulContent role={role('R01')} tenant={tenant(TENANT_ID.NORDWERK)} />,

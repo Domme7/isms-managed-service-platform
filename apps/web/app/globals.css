@@ -2696,6 +2696,44 @@ summary {
 .ck-bereich-kachel:hover .ck-bereich-mehr {
   opacity: 1;
 }
+/* Kuratierte Personalisierung (WP-029): Bereich anheften. Nur Umordnung, kein Ausblenden. */
+.ck-bereich-item {
+  position: relative;
+}
+.ck-bereich-pin {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ck-muted);
+  opacity: 0.5;
+  transition:
+    opacity 0.12s ease,
+    color 0.12s ease;
+}
+.ck-bereich-pin[aria-pressed="true"] {
+  color: var(--tw-accent);
+  opacity: 1;
+}
+.ck-bereich-pin:focus-visible {
+  opacity: 1;
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+}
+.ck-bereich-item:hover .ck-bereich-pin {
+  opacity: 1;
+}
 
 .ck-warnungen {
   margin: 1.75rem 0 0;
