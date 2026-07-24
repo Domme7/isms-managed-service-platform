@@ -8,12 +8,12 @@
  * ausführliche A/B/C-Tagesansicht bleibt unter „Heute" erreichbar. Datenlogik wiederverwendet
  * (`buildHeuteDashboard`/`buildMissionControl`), „nichts nur Show" (DR-0008/DR-0014).
  */
-import { CockpitBentoView } from '../../../components/cockpit/CockpitBentoView';
+import { CockpitModulView } from '../../../components/cockpit/CockpitModulView';
 
 export const metadata = {
   title: 'Cockpit – ISMS Managed Service Platform',
 };
 
 export default function CockpitPage() {
-  return <CockpitBentoView />;
+  return <CockpitModulView />;
 }
