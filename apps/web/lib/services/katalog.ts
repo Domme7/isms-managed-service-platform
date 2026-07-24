@@ -21,13 +21,15 @@
  *      Angebots-UX", Unterabschnitt „Opportunity Card" („Verbot der automatischen Buchung");
  *      dazu der Hinweis aus „Service-Tiefen statt starrer Goldpakete".
  *
- * PREISFREIHEIT ABSOLUT (O-KUNDE-01, DR-0008): Keine Zahl, kein Währungszeichen, kein Preisband
- * wird übernommen. Die Preisbestandteile der Quellstruktur – Angebotskarte-Frage 8
- * („Wie wird der Preis gebildet?") und Paketbestandteil „eine illustrative Preisbandbreite" –
- * erscheinen ausschließlich als BENANNTE LÜCKE (`istPreisluecke: true`), nie als Wert. Die
- * Dok.-14-Abschnitte „Preisverfassung und Preisformel", „Illustrative Managed-Service-Pakete",
- * „Illustrative Einzelservice-Bänder", „Öffentliche Marktanker" werden GAR NICHT übernommen;
- * ihre Existenz wird nur als Lücke benannt (siehe UI-Text und O-WP006-05 / O-KUNDE-01).
+ * PREISE (O-KUNDE-01 — seit DR-0015 Punkt 8 UMGESTELLT): Der Katalog war bis DR-0015 STRIKT
+ * preisfrei (DR-0008). **DR-0015 (Owner, 2026-07-24)** erlaubt gekennzeichnete, SYNTHETISCHE
+ * Beispielpreise im Servicekatalog/den Paketen (keine realen; DR-0011-konform ohne „Demo"-Etikett).
+ * Konkret: die Dok.-14-„Illustrativen Plattformbänder" leben in `preisbaender.ts` und werden im
+ * Servicekatalog angezeigt. In DIESER Datei bleiben die OFFER-/PAKET-spezifischen Preis-FORMELN
+ * weiterhin eine BENANNTE LÜCKE (`istPreisluecke: true`): Angebotskarte-Frage 8 („Wie wird der Preis
+ * gebildet?") und Paketbestandteil „eine illustrative Preisbandbreite" tragen keine je-Offer-Zahl –
+ * die entsteht erst mit einem freigegebenen Angebot. Weitere Dok.-14-Bänder („Illustrative
+ * Managed-Service-Pakete", „Illustrative Einzelservice-Bänder") folgen als eigene Scheiben.
  *
  * KEIN OBJEKTVERTRAG: Service Family, Service Offer und Package sind KEINE kanonischen
  * Objekttypen (Dok. 07 F01–F09; O-WP006-02 / vgl. O-WP012-01). Der Katalog lebt deshalb als

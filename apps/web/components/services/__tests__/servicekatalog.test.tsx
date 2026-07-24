@@ -63,37 +63,44 @@ describe('Servicekatalog – Slice 2', () => {
     }
   });
 
-  it('AC7: preisfrei – kein Währungszeichen/EUR/Zahlenband; Preisstellen sind benannte Lücken', () => {
-    for (const tenantId of [
-      TENANT_ID.NORDWERK,
-      TENANT_ID.CONSULTING_OPERATOR,
-      TENANT_ID.GREENGRID,
-    ]) {
-      const { container, unmount } = render(
-        <ServicekatalogContent role={role('R03')} tenant={tenant(tenantId)} />,
-      );
-      const text = container.textContent ?? '';
-      for (const verboten of [
-        /€/,
-        /\bEUR\b/,
-        /\bUSD\b/,
-        /\$/,
-        /\d+\s?%/,
-        /\d[\d.,]*\s?(Euro|Mio)/,
-        GELDBAND,
-      ]) {
-        expect(text, `Servicekatalog/${tenantId}: „${verboten}"`).not.toMatch(verboten);
-      }
-      // Die Preisstellen (Angebotskarte-Frage 8, Paketbestandteil) erscheinen als benannte Lücke.
-      expect(text).toContain('Wie wird der Preis gebildet?');
-      expect(text).toMatch(/bewusst ohne Preise|nicht hinterlegt – der Katalog ist bewusst ohne/);
-      unmount();
-    }
-    // Negativbeweis: ein währungsloses Geldband würde die Guardrail jetzt auslösen (ohne das neue
-    // Muster wäre es durchgerutscht) – die gerenderten Katalogtexte tragen keines.
+  it('AC7 (DR-0015 P8): zeigt die illustrativen Plattformbänder – ehrlich als Produktannahme, ohne „Demo"-Etikett', () => {
+    // Die Plattformbänder sind mandantenneutral (kein Bezug auf Seed-Daten); ein Mandant genügt.
+    const { container } = render(
+      <ServicekatalogContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const text = container.textContent ?? '';
+    // Die synthetischen Bänder aus Dok. 14 werden gezeigt (Katalog ist nicht mehr strikt preisfrei).
+    expect(text).toContain('Illustrative Plattformbänder');
+    expect(text).toContain('EUR 500–1.500');
+    expect(text).toContain('EUR 4.000–12.000+');
+    // Provider/Practice: KEINE erfundene Zahl, sondern die benannte individuelle Vereinbarung.
+    expect(text).toContain('individuelle Plattform- und Portfoliovereinbarung');
+    // Ehrlich als Produktannahme gekennzeichnet. (Das „Demo"-Etikett-Verbot aus DR-0011 prüft der
+    // `produktsprache`-Wächter; der Bänder-Hinweistext selbst ist in `preisbaender.test.ts` gegen
+    // „Demo"/„Simulation" gesichert – hier NICHT blanket auf „Simulation" prüfen, das träfe das
+    // legitime Fachwort „Wirkungssimulationen".)
+    expect(text).toMatch(/Produktannahmen/);
+    // Weiterhin keine Fremdwährung und kein erfundener Prozent-Score.
+    expect(text).not.toMatch(/\bUSD\b/);
+    expect(text).not.toMatch(/\$/);
+    expect(text).not.toMatch(/\d+\s?%/);
+  });
+
+  it('AC7b: die Offer-/Paket-Preisformel bleibt eine benannte Lücke (kein je-Offer-Preis erfunden)', () => {
+    const { container } = render(
+      <ServicekatalogContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
+    );
+    const text = container.textContent ?? '';
+    expect(text).toContain('Wie wird der Preis gebildet?');
+    expect(text).toMatch(/benannte Lücke|nicht hinterlegt/);
+  });
+
+  it('GELDBAND-Wächter erkennt währungslose Geldbänder, ohne Fehlalarm auf Rhythmen', () => {
+    // Negativbeweis: ein währungsloses Geldband würde die Guardrail auslösen (ohne das Muster wäre
+    // es durchgerutscht) …
     expect('3.500-6.500 pro Monat', 'währungsloses Geldband muss auffallen').toMatch(GELDBAND);
     expect('3.500 bis 6.500', 'Band OHNE Kadenzwort muss auffallen').toMatch(GELDBAND);
-    // Gegenprobe: legitime Rhythmen/Zahlen dürfen NICHT auslösen (kein Fehlalarm).
+    // … legitime Rhythmen/Einzelzahlen dürfen NICHT auslösen (kein Fehlalarm).
     expect('einmalig / 6-16 Wochen', 'kleiner Wochen-Rhythmus').not.toMatch(GELDBAND);
     expect('T-180 bis Post-Audit', 'Einzelzahl ohne zweite Zahl').not.toMatch(GELDBAND);
   });

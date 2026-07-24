@@ -54,12 +54,16 @@
   als „Produktannahmen … synthetische Designannahmen und keine realen Preise" markiert. **Slice 1
   (fertig):** react-freier Datenträger `lib/services/preisbaender.ts` (4 Plattformbänder worttreu,
   Provider ohne erfundene Zahl = benannte „individuelle Vereinbarung", `formatPreisband`, Ehrlichkeits-
-  zeile ohne „Demo"-Wort), 5 Tests, web 874 grün. **Slice 2 (nächster Schritt):** Anzeige im Services-/
-  Servicekatalog-Bereich + **Guardrail-Umstellung** (der Preisfrei-Wächtertest UND der veraltete
-  `katalog.ts`-„PREISFREIHEIT ABSOLUT"-Kopf müssen auf „synthetische, gekennzeichnete Preise erlaubt;
-  keine realen; kein ‚Demo'-Wort" umgestellt werden) — heikler, mit Security-Blick (DR-0015 „mit
-  Security"). Weitere Bänder (Pakete, Einzel-Managed-Services) folgen als eigene Scheiben (Dok. 14
-  „Illustrative Managed-Service-Pakete"/„Illustrative Einzelservice-Bänder", je vollständig gelesen).
+  zeile ohne „Demo"-Wort), 5 Tests, web 874 grün. **Slice 2 (FERTIG):** Die Plattformbänder werden
+  jetzt im Servicekatalog (`/services/katalog`) angezeigt (neue `PlattformbaenderSection`, ehrlich
+  „Produktannahmen, kein Angebot"). **Guardrail umgestellt:** der Preisfrei-Wächter AC7 ging von „strikt
+  preisfrei" auf „illustrative Bänder gezeigt, ehrlich gekennzeichnet; Offer-/Paket-PreisFORMEL bleibt
+  benannte Lücke; keine Fremdwährung/kein Prozent-Score"; das „Demo"-Etikett-Verbot (DR-0011) prüft
+  weiter der `produktsprache`-Wächter (NICHT blanket auf „Simulation" — das träfe das Fachwort
+  „Wirkungssimulationen"). Veralteten `katalog.ts`-„PREISFREIHEIT ABSOLUT"-Kopf + die „ohne Preise"-
+  Rahmungen korrigiert. web 876 grün, browserverifiziert. **Weitere Bänder** (Pakete, Einzel-Managed-
+  Services aus Dok. 14 „Illustrative Managed-Service-Pakete"/„Einzelservice-Bänder") folgen als eigene
+  Scheiben, je vollständig gelesen.
 
 ## Offene Fragen an den Owner (nicht blockierend — Default gewählt, jederzeit umstellbar)
 - **OF-1 (2 Profile):** Sollen die 12 Rollen-Perspektiven wirklich ganz raus, oder nur der

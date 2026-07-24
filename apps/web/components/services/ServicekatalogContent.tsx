@@ -40,16 +40,26 @@ import {
   SERVICE_TIEFEN,
   TIEFEN_HINWEIS,
 } from '../../lib/services/katalog';
+import {
+  PLATTFORM_BAENDER,
+  PLATTFORM_BAND_HINWEIS,
+  formatPreisband,
+} from '../../lib/services/preisbaender';
 import { buildServicesPageContext, getManagedServicesForTenant } from '../../lib/services/data';
 import { objectDetailHref } from '../../lib/twin/routes';
 import { PageContextBar } from '../shell/PageContextBar';
 import { ScopeKontextWert } from '../shell/ScopeKontext';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
 
-/** Sichtbarer Text der Preis-Lücke – EINE Quelle (O-KUNDE-01, kein Betrag, keine Zahl). */
+/**
+ * Sichtbarer Text der OFFER-/PAKET-Preislücke. Seit DR-0015 Punkt 8 zeigt der Katalog
+ * illustrative Plattformbänder (s. `PlattformbaenderSection`); die PreisFORMEL je einzelnem
+ * Offer/Paket bleibt jedoch eine benannte Lücke bis zu einem freigegebenen Angebot.
+ */
 const PREIS_LUECKE_TEXT =
-  'in dieser Stufe nicht hinterlegt – der Katalog ist bewusst ohne Preise. Wie ein Preis ' +
-  'gebildet wird, entsteht erst mit einem freigegebenen Angebot in einer späteren Stufe.';
+  'für ein einzelnes Paket bzw. einen einzelnen Service nicht hinterlegt – wie ein konkreter ' +
+  'Preis gebildet wird, entsteht erst mit einem freigegebenen Angebot in einer späteren Stufe. ' +
+  'Illustrative Plattform-Preisbänder nennt der Katalog weiter oben.';
 
 export function ServicekatalogContent({
   role,
@@ -73,9 +83,9 @@ export function ServicekatalogContent({
       </p>
 
       <p className="tw-lead">
-        Zum Ansehen: die Katalogstruktur aus dem Konzept – ohne Preise, ohne Buchung. Eine Buchung
-        oder Aktivierung folgt in einer späteren Stufe erst nach menschlicher Freigabe; hier gibt es
-        keine Auswahl, keine Empfehlung und keinen Warenkorb.
+        Zum Ansehen: die Katalogstruktur aus dem Konzept, mit illustrativen Plattform-Preisbändern –
+        ohne Buchung. Eine Buchung oder Aktivierung folgt in einer späteren Stufe erst nach
+        menschlicher Freigabe; hier gibt es keine Auswahl, keine Empfehlung und keinen Warenkorb.
       </p>
 
       <RollenRahmung role={role} />
@@ -104,6 +114,7 @@ export function ServicekatalogContent({
       <ServiceOffersSection />
       <ServiceTiefenSection />
       <PaketarchitekturSection />
+      <PlattformbaenderSection />
       <AngebotskarteSection />
       <LeitplankenSection />
 
@@ -293,6 +304,32 @@ function PaketarchitekturSection() {
 }
 
 /* -----------------------------------------------------------------------------
+ * Illustrative Plattformbänder (Dok. 14 „Illustrative Plattformbänder"; DR-0015 Punkt 8).
+ * Synthetische Produktannahmen, kein Angebot; DR-0011-konform ohne „Demo"-Etikett – die
+ * Ehrlichkeit trägt das konzept-eigene Wort „illustrativ"/„Produktannahme".
+ * --------------------------------------------------------------------------- */
+
+function PlattformbaenderSection() {
+  return (
+    <section aria-labelledby="katalog-plattformbaender">
+      <h2 id="katalog-plattformbaender">Illustrative Plattformbänder</h2>
+      <p className="sv-edge-note">{PLATTFORM_BAND_HINWEIS}</p>
+      <ul className="sv-items">
+        {PLATTFORM_BAENDER.map((band) => (
+          <li key={band.niveau}>
+            <span className="sv-item-name">
+              {band.niveau} — {band.band ? formatPreisband(band.band) : band.bandHinweis}
+            </span>
+            <span className="sv-item-meta">{band.scope}</span>
+            <span className="sv-item-note">{band.kernfunktionen}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/* -----------------------------------------------------------------------------
  * Angebotskarte je Service (10 Fragen, Frage 8 = Preis-Lücke)
  * --------------------------------------------------------------------------- */
 
@@ -302,7 +339,8 @@ function AngebotskarteSection() {
       <h2 id="katalog-angebotskarte">Angebotskarte je Service</h2>
       <p className="sv-edge-note">
         Jeder Service wird im Katalog mit derselben Struktur beschrieben – zehn Fragen. Frage 8
-        (Preisbildung) ist in dieser Stufe eine benannte Lücke: der Katalog bleibt preisfrei.
+        (Preisbildung) bleibt eine benannte Lücke: der Katalog nennt illustrative Plattformbänder,
+        aber keine Preisformel je einzelnem Service.
       </p>
       <ol className="sv-items">
         {ANGEBOTSKARTE_FRAGEN.map((frage) => (
