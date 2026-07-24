@@ -52,5 +52,12 @@
   prozessvokabular, seitenbausteine, kontextleiste, leerzustand) **auf `CockpitModulContent` umgezogen**,
   neuer Komponententest `cockpit-modul.test.tsx` (8). **835 Tests + lint + typecheck grün.** Schließt
   Gate-Befunde AE-1 (A/B/C verwaist) + Guard-Abdeckung (O-WP034-04).
-- **✅ SCHRITT 1 (Kunde-Cockpit modular) FERTIG.**
-- ⏳ Schritt 2 (5 Profile) · 3 (Mandanten füllen) · 4 (Berater-Cockpit-Konzept).
+- **✅ SCHRITT 1 (Kunde-Cockpit modular) FERTIG** (`040372c`).
+- ✅ **Schritt 4 (Konzept)**: Berater-Portfolio-Cockpit als **Entwurf** gezeigt (Mockup
+  `berater_portfolio_cockpit_konzept`) + Konzeptdoc `docs/project/design/BERATER_PORTFOLIO_COCKPIT_KONZEPT.md`
+  — Teil 1 echte Kunden-Rangliste nach Lücken-Last, Teil 2 Eisenhower/E-02 (geplant). Braucht Schritt 3 für
+  ein echtes Portfolio; Owner-Reaktion auf den Entwurf steht aus.
+- ⏳ **Schritt 2 (5 Profile)** + **Schritt 3 (Mandanten füllen, WP-021 Slices 3–6)** — beides Code-Änderungen
+  mit Test-Count-Churn (all-or-nothing für grüne Suite), bewusst für einen fokussierten Durchgang gelassen,
+  damit kein halbfertiger, roter Zwischenstand entsteht. Nächster Einstieg: WP-021 Slices 3–6 (AE-2-Mapping),
+  dann 5-Profile-Login, dann Berater-Cockpit Teil 1 bauen.
