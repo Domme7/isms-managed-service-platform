@@ -52,7 +52,13 @@ export function ScopeKontextWert({
     <>
       {praefix ? <>{praefix} · </> : null}
       {anzahl(scopeIds.length, 'Scope erfasst', 'Scopes erfasst')}
-      <details className="od-context-details">
+      {/* EIGENE KLASSE (Nachfix nach Gate-Runde 2): Der Scope-Aufklappteil trug bisher dieselbe
+          Klasse `.od-context-details` wie die Vollständigkeitszeile der Kontextleiste. Ein
+          Wächter, der die Vollständigkeitszeile über `.od-context-details` suchte, traf damit
+          auch dieses Element und wäre grün geblieben, wenn die Vollständigkeitszeile verschwände
+          (dieselbe Blindheits-Klasse wie der snake_case-Fund). Eigene Klasse macht die beiden
+          `<details>` unterscheidbar; das Styling teilen sie weiterhin (globals.css). */}
+      <details className="od-context-scope-details">
         <summary>Kennungen anzeigen</summary>
         <ul>
           {scopeIds.map((scopeId) => (

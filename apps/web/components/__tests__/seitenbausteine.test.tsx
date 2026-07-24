@@ -139,6 +139,63 @@ describe('Seitenbausteine-Konvention auf den Orten der Konvention (Dok. 06)', ()
     });
   }
 
+  /**
+   * NEUER WÄCHTER (Nachfix nach Gate-Runde 2): Die zugeklappte Summary-Zeile führt mit der
+   * Nutzerfrage UND trägt den Nenner („x von y"). Der erste Fix-Pass hatte mit dem Konzeptbegriff
+   * versehentlich die Grundgesamtheit gestrichen (Zahl ohne Nenner). Ohne diesen Wächter konnte
+   * der SICHTBARE Zähltext still von `bausteinAbdeckung(ort)` wegdriften – geprüft wird deshalb
+   * mechanisch, dass die drei Zahlen (ohne Datengrundlage / Nenner / teilweise) exakt den
+   * Statuszählungen der Zuordnung entsprechen.
+   */
+  for (const ort of Object.keys(RENDERER_JE_ORT) as BausteinOrt[]) {
+    it(`Ort „${ort}": Summary führt mit der Nutzerfrage und trägt den Nenner „x von y"`, () => {
+      const { container, unmount } = RENDERER_JE_ORT[ort]();
+      const hinweis = hinweisElement(container);
+      const summary = hinweis.querySelector<HTMLElement>('summary.pb-summary');
+      if (!summary) throw new Error(`${ort}: Summary-Zeile fehlt`);
+      const text = summary.textContent ?? '';
+
+      // (1) Sie FÜHRT mit der Nutzerfrage (kein Konzept-Vokabular am Anfang).
+      expect(text.startsWith('Was diese Seite heute nicht zeigt:'), `${ort}: falsche Führung`).toBe(
+        true,
+      );
+      // Kein Konzeptbegriff zurück im UI (DR-0013 Nr. 5).
+      expect(text, `${ort}: Konzeptbegriff im UI`).not.toMatch(/verbindliche Seitenbausteine/i);
+
+      // (2) Die Zahlen stimmen mechanisch mit der Zuordnung überein.
+      const zuordnung = bausteinAbdeckung(ort);
+      const ohneTraeger = zuordnung.filter((z) => z.status === 'ohne_traeger').length;
+      const teilweise = zuordnung.filter((z) => z.status === 'teilweise').length;
+      const gesamt = zuordnung.length; // der „von 9"-Nenner, aus der Datenquelle gelesen
+
+      const erwarteterOhne =
+        ohneTraeger > 0
+          ? `${ohneTraeger} von ${gesamt} Angaben ohne Datengrundlage`
+          : `keine von ${gesamt} Angaben ohne Datengrundlage`;
+      expect(text, `${ort}: „ohne Datengrundlage"-Zählung driftet`).toContain(erwarteterOhne);
+
+      if (teilweise > 0) {
+        expect(text, `${ort}: „teilweise"-Zählung driftet`).toContain(
+          `${teilweise} weitere nur teilweise belegt`,
+        );
+      } else {
+        expect(text, `${ort}: teilweise=0, aber Text behauptet welche`).not.toMatch(
+          /weitere nur teilweise belegt/,
+        );
+      }
+
+      // EIN Begriff durchgehalten: Summary und Detailüberschrift nennen „ohne Datengrundlage".
+      if (ohneTraeger > 0) {
+        expect(
+          within(hinweis).getByText('Ohne Datengrundlage auf dieser Seite'),
+          `${ort}: Detailüberschrift nutzt einen anderen Begriff`,
+        ).toBeInTheDocument();
+      }
+
+      unmount();
+    });
+  }
+
   it('der Hinweis bleibt auch im Leerzustand eines Mandanten stehen (Aussage über die Seite)', () => {
     const { container, unmount } = render(
       <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,

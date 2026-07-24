@@ -95,7 +95,7 @@ import {
 // `lib/shell/places.ts` stehen und wird dort begründet – hier wäre sie nur noch ein Satz,
 // den die Seite im nächsten Absatz zurücknehmen müsste.
 import { worldForRole, type DemoRole, type ExperienceWorld } from '../../lib/shell/roles';
-import { ROLLEN_REICHWEITE_SATZ } from '../../lib/shell/sphaere';
+import { rollenReichweiteSatz } from '../../lib/shell/sphaere';
 import {
   CoverageKachel,
   EmptyTenantKachel,
@@ -350,14 +350,16 @@ function NeutralerEinstiegHinweis() {
   // Zwei Sätze seit dem Review-Pass (Product-Finding: kürzer); der Verzicht auf einen
   // erzwungenen Rundgang (Dok. 04 J01) bleibt EIGENSCHAFT des Hinweises (passiv, optional) –
   // er muss nicht mehr als Satz dabeistehen.
-  // Reichweitensatz aus EINER Quelle (`ROLLEN_REICHWEITE_SATZ`): seit der Sphärenkopplung wäre
-  // „ändert nur Betonung und Reihenfolge, nie die Daten" schlicht falsch (WP-028-Fixpass).
+  // Reichweitensatz aus EINER Quelle (`rollenReichweiteSatz`): seit der Sphärenkopplung wäre
+  // „ändert nur Betonung und Reihenfolge, nie die Daten" schlicht falsch (WP-028-Fixpass). Der
+  // neutrale Einstieg hat die Portfolio-Sphäre (`kundenSicht(null) === 'portfolio'`) – der Satz
+  // benennt entsprechend Portfolio-Übersicht und Mandantenwechsel (Nachfix nach Gate-Runde 2).
   return (
     <div className="ht-neutral" role="note">
       <p className="ht-neutral-text">
         <strong>Neutraler strategischer Einstieg:</strong> Sie sehen den vollständigen Überblick
         ohne Rollen-Personalisierung. Optional können Sie oben unter „Rolle" eine Produktrolle
-        wählen; sie ist jederzeit wieder abwählbar. {ROLLEN_REICHWEITE_SATZ}
+        wählen; sie ist jederzeit wieder abwählbar. {rollenReichweiteSatz(null)}
       </p>
     </div>
   );
@@ -372,16 +374,18 @@ function NeutralerEinstiegHinweis() {
  * und ohne Design-Theorie; die vollständige Herleitung der Reihenfolge lebt in
  * `lib/heute/rollenvarianten.ts`.
  *
- * WORTLAUT AUS EINER QUELLE (WP-028-Fixpass, Product-Auflage): `ROLLEN_REICHWEITE_SATZ`. Der
+ * WORTLAUT AUS EINER QUELLE (WP-028-Fixpass, Product-Auflage): `rollenReichweiteSatz(role)`. Der
  * frühere Satz („ändert nur Betonung und Reihenfolge, nie die Daten") war seit der
- * Sphärenkopplung unrichtig – die Rolle entscheidet über den Einstieg des Ortes „Kunden".
+ * Sphärenkopplung unrichtig – die Rolle entscheidet über den Einstieg des Ortes „Kunden" sowie
+ * über Portfolio-Übersicht und Mandantenwechsel. Der Satz wird je Sphäre der AKTIVEN Rolle
+ * gebildet (Nachfix nach Gate-Runde 2).
  */
 function RollenAnsichtHinweis({ role }: { role: DemoRole }) {
   return (
     <div className="ht-neutral" role="note">
       <p className="ht-neutral-text">
-        <strong>Ansicht {role.name}:</strong> {ROLLEN_REICHWEITE_SATZ} Die Rolle ist jederzeit oben
-        wieder abwählbar.
+        <strong>Ansicht {role.name}:</strong> {rollenReichweiteSatz(role)} Die Rolle ist jederzeit
+        oben wieder abwählbar.
       </p>
     </div>
   );
@@ -659,7 +663,7 @@ function StandortSection({
            Zustand – benannt statt leer, ohne erfundene Rollenangaben. */
         <p className="tw-muted">
           Keine Rolle gewählt – Sie arbeiten im neutralen Einstieg. Die Rollenwahl oben in der
-          Leiste ist optional. {ROLLEN_REICHWEITE_SATZ}
+          Leiste ist optional. {rollenReichweiteSatz(null)}
         </p>
       )}
       {/* Quelle „eine Wahrheit je Rolle": Dok. 06 06-D05 (Signatur seit dem Review-Pass nur

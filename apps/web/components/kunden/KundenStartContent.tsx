@@ -26,7 +26,7 @@
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
 import { worldForRole, type DemoRole } from '../../lib/shell/roles';
-import { ROLLEN_REICHWEITE_SATZ } from '../../lib/shell/sphaere';
+import { ANSICHT_NICHT_BERECHTIGUNG_SATZ, rollenReichweiteSatz } from '../../lib/shell/sphaere';
 import { buildCustomerWorkspace, type WorkspaceObjectRef } from '../../lib/kunden/data';
 import type { ManagedServiceView } from '../../lib/services/data';
 import { objectDetailHref } from '../../lib/twin/routes';
@@ -149,7 +149,7 @@ function RollenRahmung({ role }: { role: DemoRole | null }) {
         <p className="ht-neutral-text">
           <strong>Neutraler Einstieg:</strong> Sie sehen den Kundenbereich ohne Rollen-Rahmung.
           Optional können Sie oben eine Produktrolle wählen; sie ist jederzeit wieder abwählbar.{' '}
-          {ROLLEN_REICHWEITE_SATZ}
+          {rollenReichweiteSatz(null)}
         </p>
       </div>
     );
@@ -158,10 +158,16 @@ function RollenRahmung({ role }: { role: DemoRole | null }) {
   if (role.sphere === 'Kunde') {
     return (
       <div className="ht-neutral" role="note">
+        {/* NUR, WAS DIESE ANSICHT ZEIGT (Nachfix nach Gate-Runde 2, `EigenerMandantEinstieg`-
+            Muster): Der frühere Zusatz „keine Inhalte anderer Mandanten und keine
+            mandantenübergreifende Auswertung" war eine EXISTENZAUSSAGE über fremde Mandanten,
+            auch negativ – dieselbe Klasse, die die Mandantengrenze verbietet. Gesagt wird jetzt
+            ausschließlich, was diese Ansicht zeigt, plus die gemeinsame Ansicht-≠-Berechtigung-
+            Aussage aus `sphaere.ts`. */}
         <p className="ht-neutral-text">
           <strong>Kundensphäre – Ihr Unternehmen:</strong> Sie sehen diesen Bereich als {role.name}{' '}
-          ({role.responsibility}). Angezeigt wird ausschließlich der aktive Mandant – keine Inhalte
-          anderer Mandanten und keine mandantenübergreifende Auswertung.
+          ({role.responsibility}). Diese Ansicht zeigt ausschließlich den aktiven Mandanten.{' '}
+          {ANSICHT_NICHT_BERECHTIGUNG_SATZ}
         </p>
       </div>
     );

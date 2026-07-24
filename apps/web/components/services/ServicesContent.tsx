@@ -29,7 +29,7 @@
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
 import type { DemoRole } from '../../lib/shell/roles';
-import { kundenSicht } from '../../lib/shell/sphaere';
+import { kundenSicht, mandantenwechselSichtbar } from '../../lib/shell/sphaere';
 import {
   buildPortfolioOverview,
   buildServicesPageContext,
@@ -105,7 +105,7 @@ export function ServicesContent({
             ))}
           </ul>
         ) : (
-          <EmptyServices tenant={tenant} />
+          <EmptyServices tenant={tenant} mandantwechselSichtbar={mandantenwechselSichtbar(role)} />
         )}
       </section>
 
@@ -135,7 +135,14 @@ export function ServicesContent({
  * (Die Portfolio-Übersicht der Consulting & Service World bleibt davon getrennt: eine
  * dokumentierte mandantenübergreifende Verdichtung, kein Leerzustand – O-WP012-03.)
  */
-function EmptyServices({ tenant }: { tenant: DemoTenant }) {
+function EmptyServices({
+  tenant,
+  mandantwechselSichtbar,
+}: {
+  tenant: DemoTenant;
+  /** Sphärengerecht (Nachfix nach Gate-Runde 2): steht der Mandantenwechsel überhaupt zur Verfügung? */
+  mandantwechselSichtbar: boolean;
+}) {
   return (
     <div className="tw-empty" role="note">
       <h3>Keine Managed Services für {tenant.display_name}</h3>
@@ -148,12 +155,18 @@ function EmptyServices({ tenant }: { tenant: DemoTenant }) {
         Bewusst kein Platzhalter-Inhalt: hier erscheinen ausschließlich aus dem Datenbestand
         abgeleitete Services – keine erfundenen Angebote und keine Preise.
       </p>
-      {/* Nächster Schritt im Empty-State (Dok. 06 §17, UX-Review MINOR-3). */}
-      <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
-        <Link className="tw-cta" href="/login">
-          Mandant wechseln →
-        </Link>
-      </p>
+      {/* Nächster Schritt im Empty-State (Dok. 06 §17, UX-Review MINOR-3). SPHÄRENGERECHT
+          (Nachfix nach Gate-Runde 2): Die „Mandant wechseln"-CTA erscheint nur, wenn der
+          Mandantenwechsel für diese Sicht überhaupt angeboten wird (`mandantenwechselSichtbar`) –
+          in der Ein-Unternehmens-Sicht (Kundenrollen, Auditor) gäbe es keinen Wechsel, den die CTA
+          anbieten könnte, deshalb entfällt sie ersatzlos (kein Ersatzlink, keine Behauptung). */}
+      {mandantwechselSichtbar ? (
+        <p className="tw-empty-actions" style={{ marginBottom: 0 }}>
+          <Link className="tw-cta" href="/login">
+            Mandant wechseln →
+          </Link>
+        </p>
+      ) : null}
     </div>
   );
 }

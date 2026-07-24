@@ -56,26 +56,53 @@ export type KundenSicht =
   | 'ein_unternehmen';
 
 /**
- * DER EINE Satz über die Reichweite der Rollenwahl – Quelle für alle Stellen, die ihn zeigen
+ * DIE Reichweite der Rollenwahl in EINEM Satz – Quelle für alle Stellen, die sie zeigen
  * (Kopfleisten-Rückmeldung, neutraler Einstieg, Rollen-Ansichtshinweis, Anmeldung,
  * Kundenbereich). Wächter: `components/__tests__/rollenreichweite.test.tsx`.
  *
- * WARUM ER SICH GEÄNDERT HAT (WP-028-Fixpass, Product-Auflage): Bis hierher stand app-weit
- * „die Rolle ändert nur Betonung und Reihenfolge, nie die Daten". Seit der Sphärenkopplung
- * (DR-0013 Nr. 11 / DR-0012, `kundenSicht`) stimmt das nicht mehr: Die Rolle entscheidet, ob
- * der Ort „Kunden" ein Mandanten-Portfolio oder das eigene Unternehmen eröffnet – und
- * dieselbe Sphäre steuert die Portfolio-Verdichtung auf `/services` und den Mandantenwechsler
- * in der Kopfleiste. Der Satz wird deshalb PRÄZISIERT, nicht gestrichen: er benennt die
- * Änderung, die es wirklich gibt, und hält gleichzeitig die zwei Zusagen fest, die weiterhin
- * gelten (derselbe Datenbestand des aktiven Mandanten; keine Berechtigung).
+ * WARUM EINE FUNKTION STATT EINER KONSTANTE (Nachfix nach Gate-Runde 2): Der frühere EINE Satz
+ * („… ändert Reihenfolge, Hervorhebung und den Einstieg des Ortes „Kunden"") nannte nur EINE der
+ * drei Wirkungen der Sphäre und verschwieg die zwei anderen, die beide sicherheitsmaterial sind:
+ *  1. ob eine mandantenÜBERGREIFENDE Portfolio-Übersicht erscheint (`kundenSicht` auf `/services`
+ *     und `/twin`),
+ *  2. ob die Kopfleiste einen Mandantenwechsel anbietet (`mandantenwechselSichtbar`).
+ * Eine Rollensicht, die BEIDES still ändert, im Reichweitensatz aber nur eine Wirkung benennt,
+ * ist eine unvollständige Sicherheitsaussage. Der Satz wird deshalb JE SPHÄRE gebildet – aus
+ * DERSELBEN Quelle `kundenSicht(role)`, die die Wirkungen tatsächlich steuert – und nennt alle drei.
  *
- * WORTWAHL: „Hervorhebung" statt „Betonung" (DR-0013 Nr. 5 nennt „Betonung" ausdrücklich als
- * Design-Theorie-Wort, das aus der Oberfläche verschwindet). „Reihenfolge" bleibt, weil es
- * beschreibt, was der Nutzer sieht, und kein Fachbegriff der Gestaltung ist.
+ * WAS IN JEDER FASSUNG UNVERÄNDERT BLEIBT (Ehrlichkeits-Substanz): „nicht den Datenbestand des
+ * aktiven Mandanten" und „keine Berechtigung". Und KEIN Design-Theorie-Wort („Betonung",
+ * DR-0013 Nr. 5) – „Hervorhebung" und „Reihenfolge" beschreiben, was der Nutzer sieht.
  */
-export const ROLLEN_REICHWEITE_SATZ =
-  'Die Rolle ändert Reihenfolge, Hervorhebung und den Einstieg des Ortes „Kunden" – nicht den ' +
-  'Datenbestand des aktiven Mandanten und keine Berechtigung.';
+export function rollenReichweiteSatz(role: DemoRole | null): string {
+  if (kundenSicht(role) === 'portfolio') {
+    return (
+      'Die Rolle ändert Reihenfolge und Hervorhebung, öffnet den Ort „Kunden" als ' +
+      'mandantenübergreifende Portfolio-Übersicht und bietet in der Kopfleiste einen ' +
+      'Mandantenwechsel an – nicht den Datenbestand des aktiven Mandanten und keine Berechtigung.'
+    );
+  }
+  return (
+    'Die Rolle ändert Reihenfolge und Hervorhebung und öffnet den Ort „Kunden" als das eigene ' +
+    'Unternehmen – ohne mandantenübergreifende Portfolio-Übersicht und ohne Mandantenwechsel in ' +
+    'der Kopfleiste, nicht den Datenbestand des aktiven Mandanten und keine Berechtigung.'
+  );
+}
+
+/**
+ * DIE Sicherheitsaussage der rollenbezogenen Sicht in EINEM Satz – Ansicht, nicht Berechtigung.
+ * Quelle für die Stellen, an denen ein Bedienelement sphärengerecht verschwindet und das ohne
+ * Wort wie eine DURCHGESETZTE Grenze aussähe: der feste Mandant der Kopfleiste (`Topbar`), der
+ * Ein-Unternehmens-Einstieg (`EigenerMandantEinstieg`) und die Kundenrahmung des Kundenbereichs
+ * (`KundenStartContent`). Wächter: `rollenreichweite.test.tsx`.
+ *
+ * WARUM EINE QUELLE (Nachfix nach Gate-Runde 2): Derselbe Satz existierte in zwei Wortlauten und
+ * ohne Wächter – genau das Muster, das der Fix-Pass beim Reichweitensatz behoben hat. Serverseitig
+ * durchgesetzte Rechte entstehen erst mit Dok. 19 (`.claude/rules/security.md`, FINDING-0004);
+ * bis dahin darf keine Oberfläche eine Berechtigung behaupten.
+ */
+export const ANSICHT_NICHT_BERECHTIGUNG_SATZ =
+  'Diese Sicht bestimmt die Ansicht, nicht die Berechtigung.';
 
 /** Route des eigenen Kundenbereichs (Ein-Unternehmens-Cockpit, Dok. 06 S02). */
 export const KUNDENBEREICH_HREF = '/kunden';

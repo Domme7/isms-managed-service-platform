@@ -13,6 +13,13 @@
  * Rückweg führt zum Ort „Kunden" – wohin dieser Ort führt, entscheidet die Sphäre der aktiven
  * Rolle (`lib/shell/sphaere.ts`), deshalb ist der Link neutral beschriftet und behauptet
  * keine Mandantenliste.
+ *
+ * 08-D07-ABGRENZUNG (Nachfix nach Gate-Runde 2): Die Objektkarten zeigen Lebenszyklus-Stände
+ * (ObjectCard) und die Beziehungsliste einen „Status der Beziehung" – dieselbe Lage wie auf
+ * `/isms` und Objekt-360, wo der 08-D07-Rahmungssatz seit jeher steht. Er fehlte hier als
+ * einzige Objektstände-Seite. Der wortgleiche Satz (per Wächter in `twin.test.tsx` gegen
+ * `ObjectDetailView` festgenagelt) steht jetzt einmal ruhig am Seitenende, wo Stände gezeigt
+ * werden.
  */
 import Link from 'next/link';
 import type { TenantDetailModel } from '../../lib/twin/data';
@@ -52,6 +59,19 @@ export function TenantDetailView({ model }: { model: TenantDetailModel }) {
       ) : (
         <EmptyGraphState tenantName={tenant.display_name} />
       )}
+
+      {/* 08-D07-Abgrenzung, WORTGLEICH mit `ObjectDetailView`/`IsmsContent` (s. Kopfnotiz).
+          Nur wo Stände gezeigt werden (hasGraph): im Leerzustand gibt es keine Status-Angaben,
+          über die der Satz sprechen könnte. `p.tw-muted` wie das Bestandsmuster. */}
+      {hasGraph ? (
+        <p className="tw-muted">
+          <strong>Zum Verständnis:</strong> Alle hier gezeigten Status-Angaben der Objekte sind
+          Lebenszyklus-Stände aus dem Datenbestand – <strong>keine Prüfergebnisse</strong> und keine
+          bewertete Wirksamkeit. Der „Status der Beziehung" ist dagegen ein Feld der Beziehung
+          selbst und kann je nach Beziehungstyp auch einen Prüfstatus tragen: Ein Nachweisbezug kann
+          etwa einen Zeitraum und einen Prüfstatus tragen.
+        </p>
+      ) : null}
     </>
   );
 }

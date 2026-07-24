@@ -21,10 +21,15 @@
  *
  * INVARIANTE (Dok. 06 „Detailtiefe", letzter Satz): „sicherheitskritische Warnungen bleiben
  * jedoch immer sichtbar." Im heutigen Produkt existiert KEINE sicherheitskritische Warnung,
- * die eine Tiefe unterdrücken könnte; die querschnittliche Kontextleiste, der permanente
- * Demo-Hinweis der Shell und die Ehrlichkeitsabschnitte bleiben unabhängig von der Tiefe
- * sichtbar. Jedes künftige WP, das sicherheitskritische Warnungen einführt, MUSS sie
- * außerhalb der Tiefensteuerung rendern.
+ * die eine Tiefe unterdrücken könnte. Unabhängig von der Tiefe sichtbar bleiben die Artefakte,
+ * die es wirklich gibt (Nachfix nach Gate-Runde 2 – der frühere „permanente Demo-Hinweis der
+ * Shell" wurde mit DR-0011 entfernt und existiert nicht mehr):
+ *   1. die querschnittliche Kontextleiste (Mandant, Rolle, Scope, Datenstand),
+ *   2. der Reichweiten-/Ansichtshinweis der Rollenwahl (`rollenReichweiteSatz`,
+ *      Ansicht-≠-Berechtigung),
+ *   3. die Ehrlichkeitsblöcke (Seitenbausteine-Hinweis, benannte Datenlücken, 08-D07-Rahmung).
+ * Jedes künftige WP, das sicherheitskritische Warnungen einführt, MUSS sie außerhalb der
+ * Tiefensteuerung rendern.
  *
  * // OFFENE FRAGE O-WP020-01 (registriert): Wo und wie granular die bevorzugte Tiefe
  * // gespeichert wird (je Ort? je Nutzer?), lässt das Konzept offen (06-O09). Hier: EINE

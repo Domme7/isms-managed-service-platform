@@ -9,12 +9,13 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { DEMO_SEED, TENANT_ID } from '@isms/demo-seed';
+import { DEMO_SEED, NORDWERK_OBJECT_ID, TENANT_ID } from '@isms/demo-seed';
+import { ObjectDetailView } from '../ObjectDetailView';
 import { RelationshipList } from '../RelationshipList';
 import { TenantDetailView } from '../TenantDetailView';
 import { TenantOverview } from '../TenantOverview';
 import { buildTenantDetail, getTenant, type ResolvedRelationship } from '../../../lib/twin/data';
-import { objectDetailHref } from '../../../lib/twin/object-detail';
+import { buildObjectDetail, objectDetailHref } from '../../../lib/twin/object-detail';
 
 function tenantOrThrow(tenantId: string) {
   const tenant = getTenant(tenantId);
@@ -87,6 +88,39 @@ describe('TenantDetailView – Nordwerk (mit Graph)', () => {
     for (const object of nordwerkObjects) {
       expect(screen.queryByText(object.object_id)).not.toBeInTheDocument();
     }
+  });
+
+  /**
+   * 08-D07-Rahmung (Nachfix nach Gate-Runde 2): Die Mandanten-Detailseite zeigt Lebenszyklus-
+   * Stände (Objektkarten) und einen „Status der Beziehung" (Beziehungsliste), trug aber als
+   * einzige Objektstände-Seite keinen 08-D07-Rahmungssatz. Er ist jetzt da – und WORTGLEICH mit
+   * `ObjectDetailView` (sonst driften die vier Fundstellen des Satzes still auseinander).
+   */
+  it('trägt den 08-D07-Rahmungssatz WORTGLEICH mit ObjectDetailView', () => {
+    const satzAus = (container: HTMLElement): string => {
+      const treffer = Array.from(container.querySelectorAll('p.tw-muted')).find((p) =>
+        (p.textContent ?? '').startsWith('Zum Verständnis:'),
+      );
+      if (!treffer) throw new Error('Rahmungssatz „Zum Verständnis:" nicht gefunden');
+      return treffer.textContent ?? '';
+    };
+
+    const objektModell = buildObjectDetail(
+      TENANT_ID.NORDWERK,
+      NORDWERK_OBJECT_ID.RISK_BETRIEBSUNTERBRECHUNG,
+    );
+    if (!objektModell) throw new Error('Testfixture fehlt: Objekt-360-Modell');
+    const objekt = render(<ObjectDetailView model={objektModell} />);
+    const referenz = satzAus(objekt.container);
+    objekt.unmount();
+
+    const mandant = render(<TenantDetailView model={model} />);
+    expect(satzAus(mandant.container)).toBe(referenz);
+    // Der Wortlaut selbst bleibt festgenagelt (er trägt die Aussage 08-D07).
+    expect(referenz).toMatch(/Lebenszyklus-Stände aus dem Datenbestand/);
+    expect(referenz).toMatch(/keine Prüfergebnisse/);
+    expect(referenz).toMatch(/Status der Beziehung/);
+    mandant.unmount();
   });
 });
 
@@ -207,5 +241,13 @@ describe('TenantDetailView – Empty-State (ohne Graph)', () => {
       expect(html).not.toContain(fremd.display_name);
       expect(html).not.toContain(fremd.tenant_id);
     }
+
+    // Ohne Graph gibt es keine Status-Angaben – der 08-D07-Rahmungssatz spricht dann über nichts
+    // und steht deshalb bewusst NICHT (Nachfix nach Gate-Runde 2: der Satz ist an `hasGraph`
+    // gekoppelt).
+    const rahmung = Array.from(container.querySelectorAll('p.tw-muted')).find((p) =>
+      (p.textContent ?? '').startsWith('Zum Verständnis:'),
+    );
+    expect(rahmung, 'Rahmungssatz im Leerzustand (keine Stände)').toBeUndefined();
   });
 });

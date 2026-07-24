@@ -25,7 +25,7 @@ import { LoginForm } from '../LoginForm';
 import { SessionProvider } from '../SessionProvider';
 import { NAV_PLACES } from '../../../lib/shell/places';
 import { DEMO_ROLES, getRole } from '../../../lib/shell/roles';
-import { ROLLEN_REICHWEITE_SATZ, orteFuerRolle } from '../../../lib/shell/sphaere';
+import { orteFuerRolle, rollenReichweiteSatz } from '../../../lib/shell/sphaere';
 import {
   SESSION_STORAGE_KEY,
   parseSession,
@@ -275,14 +275,11 @@ describe('AppShell – Rollenwechsel als sichtbarer Moduswechsel (Dok. 06 „Rol
     expect(status.textContent).toContain('Auditor');
     expect(status.textContent).not.toMatch(/R\d{2}/);
     // Und sie sagt, was der Wechsel ändert UND was nicht.
-    // WORTLAUT PRÄZISIERT (WP-028-Fixpass, Product-Auflage): „Die Rolle ändert Blickwinkel und
-    // Reihenfolge der Ansichten – Daten und Mandant bleiben unverändert" verschwieg seit der
-    // Sphärenkopplung (DR-0012 / DR-0013 Nr. 11) die eine Änderung, die es wirklich gibt: den
-    // EINSTIEG des Ortes „Kunden". Die Rückmeldung nutzt jetzt den gemeinsamen Wortlaut aus
-    // `lib/shell/sphaere.ts` – die Zusage „nicht der Datenbestand des aktiven Mandanten und
-    // keine Berechtigung" ist Teil desselben Satzes und bleibt damit geprüft (nicht
-    // abgeschwächt, sondern richtiggestellt).
-    expect(status.textContent).toContain(ROLLEN_REICHWEITE_SATZ);
+    // WORTLAUT SPHÄRENGERECHT (Nachfix nach Gate-Runde 2): Die Rückmeldung nennt den Satz der
+    // NEUEN Rolle. R07 (Auditor, Unabhängig → Ein-Unternehmens-Sphäre) bekommt genau die
+    // Ein-Unternehmens-Fassung; die Zusage „nicht den Datenbestand des aktiven Mandanten und
+    // keine Berechtigung" ist Teil desselben Satzes und bleibt geprüft.
+    expect(status.textContent).toContain(rollenReichweiteSatz(getRole('R07') ?? null));
     expect(status.textContent).toMatch(/nicht den Datenbestand des aktiven Mandanten/);
   });
 
@@ -302,7 +299,8 @@ describe('AppShell – Rollenwechsel als sichtbarer Moduswechsel (Dok. 06 „Rol
     expect(status.textContent).toContain('Rolle abgewählt');
     expect(status.textContent).toContain('Executive Sponsor');
     expect(status.textContent).toContain('Ansicht ohne Rolle');
-    expect(status.textContent).toContain(ROLLEN_REICHWEITE_SATZ);
+    // Neu = neutral ⇒ Portfolio-Fassung des Reichweitensatzes (kundenSicht(null) === 'portfolio').
+    expect(status.textContent).toContain(rollenReichweiteSatz(null));
   });
 
   it('AC 7: aus dem neutralen Zustand benennt die Rückmeldung die Wahl („Rolle gewählt")', () => {

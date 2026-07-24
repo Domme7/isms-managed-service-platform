@@ -29,7 +29,8 @@
  * Kundenbereich), und in DIESER Datei stand „ohne Träger" in drei der vier `fokusLueckenText`.
  * Beides ist jetzt wirklich weg:
  *  - „Betonung" → „Hervorhebung"; die app-weiten Sätze kommen aus EINER Quelle
- *    (`ROLLEN_REICHWEITE_SATZ` in `lib/shell/sphaere.ts`).
+ *    (`rollenReichweiteSatz(role)` in `lib/shell/sphaere.ts` – seit dem Nachfix nach Gate-Runde 2
+ *    eine sphärengerechte Funktion statt einer Konstante).
  *  - „ohne Träger" / „Missionsfokus" (Konzept-Spaltenname) → „Vom Fokus dieser Ansicht im
  *    Datenbestand nicht belegt: …".
  * Die AUSSAGE der Lückentexte ist unverändert – nur ihr Vokabular ist Produktsprache statt

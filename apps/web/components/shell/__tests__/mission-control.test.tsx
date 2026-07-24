@@ -53,7 +53,7 @@ import {
   varianteForRole,
 } from '../../../lib/heute/rollenvarianten';
 import { getPlace } from '../../../lib/shell/places';
-import { ROLLEN_REICHWEITE_SATZ } from '../../../lib/shell/sphaere';
+import { rollenReichweiteSatz } from '../../../lib/shell/sphaere';
 import { DEMO_ROLES, getRole, type DemoRole } from '../../../lib/shell/roles';
 import { SESSION_STORAGE_KEY, serializeSession } from '../../../lib/shell/session';
 
@@ -485,15 +485,13 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
       .closest('li') as HTMLElement;
     expect(zwilling.textContent ?? '').not.toContain(getPlace('kunden').question);
     expect(zwilling.textContent ?? '').not.toMatch(/Portfolio/);
-    // Die Leitfragen der beiden Orte, deren Zielseite sie beantwortet, bleiben sichtbar.
-    expect(within(abschnitt).getByText(getPlace('isms').question)).toBeInTheDocument();
-    expect(within(abschnitt).getByText(getPlace('services').question)).toBeInTheDocument();
-    // Die Leitfrage des Ortes „Entscheidungen" dagegen NICHT: die Zielseite beantwortet sie
-    // ausdrücklich nicht, ungerahmt wäre sie hier ein Versprechen.
-    const entscheidungen = within(abschnitt)
-      .getByRole('link', { name: 'Entscheidungen' })
-      .closest('li') as HTMLElement;
-    expect(entscheidungen.textContent ?? '').not.toContain(getPlace('entscheidungen').question);
+    // KEIN Ebene-3-Einstieg wirbt mehr mit der aspirativen Ortsleitfrage (Nachfix nach
+    // Gate-Runde 2, DR-0013 Nr. 1): keine Zielseite rendert ihre `place.question` als Überschrift.
+    // Vorher standen ISMS und Services hier mit ihrer aspirativen Frage – jetzt tragen alle
+    // Einstiege KEINE Frage mehr (Label und Bestandsangabe genügen).
+    for (const ort of ['isms', 'services', 'entscheidungen'] as const) {
+      expect(abschnitt.textContent ?? '', ort).not.toContain(getPlace(ort).question);
+    }
   });
 
   it('benennt einen Ort ohne Bestand, statt ihn auszublenden (Consulting Operator)', () => {
@@ -1301,13 +1299,11 @@ describe('HeuteView – neutraler Einstieg nach Anmeldung ohne Rollenwahl (AC 6)
     const rollenHinweis = mitRolle.container.querySelector('.ht-neutral');
     expect(rollenHinweis).not.toBeNull();
     expect(rollenHinweis?.textContent).toContain('Ansicht ISMS Manager');
-    // WORTLAUT PRÄZISIERT (WP-028-Fixpass, Product-Auflage): „ändert nur Betonung und
-    // Reihenfolge, nie die Daten" war seit der Sphärenkopplung (DR-0012/DR-0013 Nr. 11)
-    // schlicht unrichtig – die Rolle entscheidet über den Einstieg des Ortes „Kunden". Geprüft
-    // wird jetzt der EINE gemeinsame Wortlaut aus `lib/shell/sphaere.ts`; die Zusagen, die
-    // weiterhin gelten (derselbe Datenbestand, keine Berechtigung), sind Teil dieses Satzes
-    // und werden im Wächter `components/__tests__/rollenreichweite.test.tsx` festgenagelt.
-    expect(rollenHinweis?.textContent).toContain(ROLLEN_REICHWEITE_SATZ);
+    // WORTLAUT SPHÄRENGERECHT (Nachfix nach Gate-Runde 2): der Satz wird je Sphäre der aktiven
+    // Rolle gebildet. R03 (ISMS Manager, Kunde → Ein-Unternehmens-Fassung) bekommt genau diese.
+    // Die Zusagen (derselbe Datenbestand, keine Berechtigung) sind Teil des Satzes und werden im
+    // Wächter `components/__tests__/rollenreichweite.test.tsx` je Sphäre festgenagelt.
+    expect(rollenHinweis?.textContent).toContain(rollenReichweiteSatz(role('R03')));
     expect(rollenHinweis?.textContent).not.toContain('Neutraler strategischer Einstieg');
     expect(rollenHinweis?.textContent).not.toMatch(/R\d{2}/);
     mitRolle.unmount();

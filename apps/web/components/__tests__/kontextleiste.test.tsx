@@ -176,14 +176,20 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
       // „Kontextleiste zeigt Belegtes, nicht Abwesenheit"). Regel-erhaltend geprüft wird
       // stattdessen: (a) es bleibt kein Leerfeld (`.od-context-gap`) in der Leiste; (b) die
       // Aussage geht nicht verloren – die VOLLSTÄNDIGEN Begründungen (weiterhin die eine Quelle
-      // CONTEXT_GAPS) stehen aufklappbar in EINER Vollständigkeitszeile (`.od-context-details`)
-      // unverändert im DOM (DR-0013-Grenze: benannte Lücke bleibt, nur ruhiger platziert).
+      // CONTEXT_GAPS) stehen aufklappbar in EINER Vollständigkeitszeile unverändert im DOM
+      // (DR-0013-Grenze: benannte Lücke bleibt, nur ruhiger platziert).
+      //
+      // SELEKTOR PRÄZISIERT (Nachfix nach Gate-Runde 2): Der Scope-Wert der Leiste trägt einen
+      // eigenen Aufklappteil, der bis zum Nachfix ebenfalls `.od-context-details` hieß. Der lose
+      // Selektor `.od-context-details` traf damit auch ihn – die Assertion wäre grün geblieben,
+      // wenn die Vollständigkeitszeile verschwände. Gesucht wird deshalb der `.od-context-details`
+      // UNTERHALB der Vollständigkeitszeile (`.od-context-hinweis`), nicht irgendeiner in der Leiste.
       expect(
         kontext.querySelectorAll('.od-context-gap'),
         `${ort}: Leerfeld-Wand geblieben`,
       ).toHaveLength(0);
       expect(
-        kontext.querySelector('.od-context-details'),
+        kontext.querySelector('.od-context-hinweis .od-context-details'),
         `${ort}: Vollständigkeitszeile fehlt`,
       ).not.toBeNull();
       for (const begruendung of Object.values(CONTEXT_GAPS)) {
@@ -311,8 +317,9 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
 
     // Kein Leerfeld mehr; die drei benannten Lücken stehen aufklappbar in der Leiste (DR-0013).
+    // Selektor auf die Vollständigkeitszeile präzisiert (s. o.), nicht den Scope-Aufklappteil.
     expect(kontext.querySelectorAll('.od-context-gap')).toHaveLength(0);
-    expect(kontext.querySelector('.od-context-details')).not.toBeNull();
+    expect(kontext.querySelector('.od-context-hinweis .od-context-details')).not.toBeNull();
     for (const begruendung of Object.values(CONTEXT_GAPS)) {
       expect(kontext.textContent ?? '').toContain(begruendung);
     }

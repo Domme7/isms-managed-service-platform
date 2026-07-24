@@ -198,6 +198,45 @@ describe('badgeFuerAbdeckung – Positivliste (DR-0008, O-WP020-07)', () => {
 });
 
 /* -----------------------------------------------------------------------------
+ * 1b. STAND_HINWEIS – objektklassen-neutral (Nachfix nach Gate-Runde 2)
+ * --------------------------------------------------------------------------- */
+
+describe('STAND_HINWEIS – objektklassen-neutraler Wortlaut', () => {
+  it('kein Hinweis trägt ein Objektklassen-Nomen (flache Vertragsunion, nur nach Statuswert)', () => {
+    for (const [status, hinweis] of Object.entries(STAND_HINWEIS)) {
+      if (hinweis === null) continue;
+      // STAND_HINWEIS ist NUR nach dem Statuswert geschlüsselt; derselbe Wert kann mehreren
+      // Objektklassen gehören. Ein Klassennomen wäre für jeden geteilten Wert potenziell falsch.
+      expect(hinweis, `${status}: Objektklasse im Hinweis`).not.toMatch(
+        /des Controls|des Risikos|des Nachweises|der Maßnahme/,
+      );
+      expect(hinweis, `${status}: führt nicht mit „erfasster Stand"`).toMatch(/^erfasster Stand/);
+    }
+  });
+
+  it('„Wirksamkeitsprüfung" (ein Maßnahmen-Stand) trägt die klassenfreie Wirksamkeits-Lesart', () => {
+    // Vor dem Nachfix hing „erfasster Stand DES CONTROLS …" an einem MASSNAHMEN-Stand (falsch).
+    expect(STAND_HINWEIS.Wirksamkeitsprüfung).toBe(
+      'erfasster Stand – kein Wirksamkeitsurteil dieser Anwendung',
+    );
+    // Wortgleich mit dem Control-Stand „wirksam" – EINE Lesart über beide Objektklassen.
+    expect(STAND_HINWEIS.Wirksamkeitsprüfung).toBe(STAND_HINWEIS.wirksam);
+    expect(STAND_HINWEIS.Wirksamkeitsprüfung).not.toMatch(/Control/);
+  });
+
+  it('„abgelehnt" ist kollisionsfest über beide Lebenszyklen (Nachweis + Entscheidung)', () => {
+    // „abgelehnt" gehört zum Nachweis- UND zum Entscheidungs-Lebenszyklus. Die reine Prüf-Lesart
+    // (wie bei „akzeptiert") verschwieg die Entscheidungs-Seite; der Hinweis deckt jetzt beide ab.
+    expect(STAND_HINWEIS.abgelehnt).toBe(
+      'erfasster Stand – weder Prüfergebnis noch Entscheidung dieser Anwendung',
+    );
+    expect(STAND_HINWEIS.abgelehnt).not.toBe(STAND_HINWEIS.akzeptiert);
+    expect(STAND_HINWEIS.abgelehnt).toMatch(/Prüfergebnis/);
+    expect(STAND_HINWEIS.abgelehnt).toMatch(/Entscheidung/);
+  });
+});
+
+/* -----------------------------------------------------------------------------
  * 2. Dashboard des aktiven Mandanten (echter Seed, unabhängig nachgerechnet)
  * --------------------------------------------------------------------------- */
 

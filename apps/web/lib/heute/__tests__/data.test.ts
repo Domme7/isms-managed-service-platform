@@ -550,22 +550,27 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
     expect(model.placeEntryPoints[0].href).toBe(tenantDetailHref(TENANT_ID.NORDWERK));
   });
 
-  it('trägt an Zwilling und Entscheidungen KEINE Leitfrage (die Zielseite beantwortet sie nicht)', () => {
+  it('trägt an KEINEM Ebene-3-Einstieg eine aspirative Ortsleitfrage (die Zielseite führt anders)', () => {
     const model = modelOrThrow(TENANT_ID.NORDWERK);
     const [zwilling, isms, entscheidungen, services] = model.placeEntryPoints;
 
-    // Der Einstieg führt in den Workspace GENAU DIESES Mandanten, nicht ins Portfolio – eine
-    // Portfolio-Sicht ist auf „Heute" Nicht-Ziel. Die Leitfrage des Ortes „Kunden" entfällt
-    // deshalb hier (Review-Fix), bleibt aber an den beiden anderen Orten unverändert.
+    // KEIN Einstieg wirbt mehr mit der aspirativen Ortsleitfrage (Nachfix nach Gate-Runde 2,
+    // DR-0013 Nr. 1). Vorher trugen ISMS und Services `place.question` – aber KEINE Zielseite
+    // rendert ihre aspirative Leitfrage als Überschrift: `/isms` führt mit „Wie ist die Risiko-
+    // und Control-Lage von <Mandant>?", `/services` mit „Welche Services laufen für <Mandant> …?".
+    // Ungerahmt am Einstieg warb die aspirative Frage mit einer fremden Erwartung. Jetzt tragen
+    // alle vier Einstiege KEINE Frage (Muster der bereits bereinigten Zwilling/Entscheidungen).
     expect(zwilling.question).toBeUndefined();
-    expect(isms.question).toBe(getPlace('isms').question);
-    expect(services.question).toBe(getPlace('services').question);
-    expect(getPlace('kunden').question).toMatch(/Portfolio/);
-
-    // Dieselbe Regel am Ort „Entscheidungen": dessen Leitfrage ist eine Dringlichkeitsfrage, die
-    // die Zielseite ausdrücklich NICHT beantwortet. Ungerahmt am Einstieg erzeugte sie genau die
-    // Erwartung, die die Zielseite ausräumt.
+    expect(isms.question).toBeUndefined();
     expect(entscheidungen.question).toBeUndefined();
+    expect(services.question).toBeUndefined();
+
+    // Gegenprobe: die Ortskonstanten tragen ihre aspirative Frage weiterhin (sie leben im
+    // Nav-Modell, werden nur an diesen Einstiegen nicht gerendert – ob der Wortlaut selbst
+    // überarbeitet wird, ist Produkt-/Owner-Frage O-WP032-02).
+    expect(getPlace('kunden').question).toMatch(/Portfolio/);
+    expect(getPlace('isms').question).toMatch(/Warum ist ein Risiko hoch/);
+    expect(getPlace('services').question).toMatch(/mit welcher Qualität/);
     expect(getPlace('entscheidungen').question).toMatch(/jetzt erforderlich/);
   });
 

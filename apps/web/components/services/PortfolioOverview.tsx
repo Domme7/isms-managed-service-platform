@@ -28,13 +28,14 @@ export function PortfolioOverview({ entries }: { entries: readonly PortfolioTena
       <h2 id="portfolio">Portfolio: Alle Mandanten</h2>
       {/* Klartext ohne interne Arbeits-IDs (UX-Review MINOR-2); fachlicher Hintergrund der
           rein mandantenweisen Aggregation: OFFENE FRAGE O-WP012-03, Dok. 07 P09.
-          Der Satz nennt seit dem WP-028-Fixpass keine Welt mehr als Bedingung: die Sichtbarkeit
-          hängt an der Sphäre der Perspektive, und der frühere Wortlaut war nach der
-          Vereinheitlichung schlicht falsch (der neutrale Einstieg sieht diesen Abschnitt). */}
+          KEIN ERFUNDENER WELTBEGRIFF (Nachfix nach Gate-Runde 2): „Portfolio-Arbeitswelt" war ein
+          im Konzept nicht belegter Weltbegriff – die vier Erlebniswelten heißen anders (Dok. 06
+          §5). Der Satz sagt jetzt nur, was diese Übersicht TUT (Ansicht ordnen, nicht Zugriff
+          entscheiden), ohne eine Welt zu benennen. */}
       <p className="tw-muted">
         Welche Mandanten haben welche Services? Aggregation je Mandant nebeneinander – ohne
-        mandantenübergreifende Verknüpfung. Diese Übersicht gehört zur Portfolio-Arbeitswelt; sie
-        ordnet die Ansicht und entscheidet nicht über Zugriff.
+        mandantenübergreifende Verknüpfung. Diese Übersicht ordnet die Ansicht und entscheidet nicht
+        über Zugriff.
       </p>
       <ul className="tw-grid">
         {entries.map((entry) => (

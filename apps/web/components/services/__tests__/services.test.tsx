@@ -331,11 +331,12 @@ describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
     expect(container.textContent).not.toContain('Consulting Operator Demo');
     expect(container.textContent).not.toContain(TENANT_ID.NORDWERK);
     expect(container.textContent).not.toContain(TENANT_ID.CONSULTING_OPERATOR);
-    // Nächster Schritt bleibt erhalten (Dok. 06 §17).
-    expect(screen.getByRole('link', { name: /Mandant wechseln/ })).toHaveAttribute(
-      'href',
-      '/login',
-    );
+    // SPHÄRENGERECHT (Nachfix nach Gate-Runde 2): R03 ist Ein-Unternehmens-Sphäre – der
+    // Mandantenwechsel wird nicht angeboten, also fehlt die „Mandant wechseln"-CTA hier
+    // ERSATZLOS (`mandantenwechselSichtbar` ist falsch). Ein Bedienelement, das ohne Wort
+    // verschwindet, täuschte sonst eine durchgesetzte Grenze vor. Für eine Portfolio-Rolle
+    // steht die CTA weiterhin (Test darunter).
+    expect(screen.queryByRole('link', { name: /Mandant wechseln/ })).toBeNull();
   });
 
   it('R08 sieht trotz Empty-State weiterhin das Portfolio (dokumentierte Verdichtung)', () => {
@@ -351,6 +352,12 @@ describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
     // Die Portfolio-Sicht (O-WP012-03) ist KEIN Leerzustand und bleibt für die
     // Consulting & Service World sichtbar.
     expect(screen.getByRole('heading', { name: 'Portfolio: Alle Mandanten' })).toBeInTheDocument();
+    // In der Portfolio-Sphäre wird der Mandantenwechsel angeboten – die Leerzustands-CTA steht
+    // (Gegenprobe zum R03-Fall: die CTA hängt an `mandantenwechselSichtbar`, nicht am Zustand).
+    expect(screen.getByRole('link', { name: /Mandant wechseln/ })).toHaveAttribute(
+      'href',
+      '/login',
+    );
   });
 });
 

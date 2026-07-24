@@ -353,16 +353,27 @@ const LIFECYCLE_KATALOG: readonly string[] = [...new Set<string>(ALL_LIFECYCLE_S
  * Bearbeitungsstände – bleibt `null`: dort gibt es nichts richtigzustellen, und ein Hinweis
  * ohne Anlass wäre wieder eine Wand aus Vorbehalt (DR-0013).
  *
- * Vier Lesarten, damit die Formulierung nicht je Stand auseinanderläuft:
- *  - PRUEFUNG: das Ergebnis einer Prüfung (inkl. Annahme/Ablehnung eines Nachweises),
+ * STRUKTURELLE GRENZE (Nachfix nach Gate-Runde 2): `LifecycleStatus` ist eine FLACHE Union über
+ * ALLE Objektklassen (Objekt, Information, Risiko, Control, Maßnahme, Nachweis, Entscheidung,
+ * Managed Service, Audit) – derselbe Statuswert kann mehreren Klassen gehören. STAND_HINWEIS ist
+ * ausschließlich nach dem STATUSWERT geschlüsselt, nicht nach der Objektklasse. Ein Wortlaut muss
+ * deshalb über alle Klassen NEUTRAL sein, die diesen Wert teilen. Der Altstand verstieß zweimal
+ * dagegen: WIRKSAMKEIT trug „des Controls", hing aber auch an `Wirksamkeitsprüfung` (einem
+ * MASSNAHMEN-Stand); und `abgelehnt` gehört zu ZWEI Lebenszyklen (Nachweis UND Entscheidung), die
+ * generische Prüf-Lesart verschwieg dabei die Entscheidungs-Seite. Beide sind jetzt kollisionsfest.
+ *
+ * Lesarten, damit die Formulierung nicht je Stand auseinanderläuft – alle objektklassen-neutral:
+ *  - PRUEFUNG: das Ergebnis einer Prüfung (inkl. Annahme eines Nachweises),
  *  - BEWERTUNG: das Ergebnis einer Bewertung (auch ihr ausdrückliches Fehlen),
- *  - WIRKSAMKEIT: eine Aussage über Wirksamkeit,
- *  - FREIGABE: eine Freigabe-/Genehmigungsentscheidung.
+ *  - WIRKSAMKEIT: eine Aussage über Wirksamkeit (ohne Objektklasse – auch Maßnahmen-Phasen),
+ *  - FREIGABE: eine Freigabe-/Genehmigungsentscheidung,
+ *  - ABLEHNUNG: kollisionsfest für `abgelehnt` – deckt Nachweis-Prüfung UND Entscheidung ab.
  */
 const PRUEFUNG = 'erfasster Stand – kein Prüfergebnis dieser Anwendung';
 const BEWERTUNG = 'erfasster Stand – kein Ergebnis einer Bewertung durch diese Anwendung';
-const WIRKSAMKEIT = 'erfasster Stand des Controls – kein Wirksamkeitsurteil dieser Anwendung';
+const WIRKSAMKEIT = 'erfasster Stand – kein Wirksamkeitsurteil dieser Anwendung';
 const FREIGABE = 'erfasster Stand – keine Freigabe und keine Entscheidung dieser Anwendung';
+const ABLEHNUNG = 'erfasster Stand – weder Prüfergebnis noch Entscheidung dieser Anwendung';
 
 export const STAND_HINWEIS: Readonly<Record<LifecycleStatus, string | null>> = {
   /* Generischer Objekt-Lebenszyklus (Dok. 07, Abschnitt „Lebenszyklus und Status") */
@@ -401,14 +412,14 @@ export const STAND_HINWEIS: Readonly<Record<LifecycleStatus, string | null>> = {
   'in Arbeit': null,
   blockiert: null,
   Nachweis: null, // Phase „Nachweis wird erbracht", keine Prüfaussage
-  Wirksamkeitsprüfung: WIRKSAMKEIT, // Phasenname mit Prüf-Anmutung
+  Wirksamkeitsprüfung: WIRKSAMKEIT, // MASSNAHMEN-Phase mit Wirksamkeits-Anmutung – neutral (nicht „des Controls")
   abgeschlossen: null, // Bearbeitungsstand
 
   /* Nachweis (Evidence) */
   angefordert: null,
   geliefert: null,
   akzeptiert: PRUEFUNG, // das Ergebnis der Nachweisprüfung – die Asymmetrie des Altstands
-  abgelehnt: PRUEFUNG, // symmetrisch zu „akzeptiert"; gilt auch im Entscheidungs-Lebenszyklus
+  abgelehnt: ABLEHNUNG, // gehört zu ZWEI Lebenszyklen (Nachweis + Entscheidung) – kollisionsfest
   abgelaufen: null, // Zeitablauf, kein Urteil
 
   /* Entscheidung */

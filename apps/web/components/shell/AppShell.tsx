@@ -33,7 +33,7 @@ import { ShellNav } from './ShellNav';
 import { Topbar } from './Topbar';
 import type { NavPlace, PlaceId } from '../../lib/shell/places';
 import type { DemoRole } from '../../lib/shell/roles';
-import { ROLLEN_REICHWEITE_SATZ } from '../../lib/shell/sphaere';
+import { rollenReichweiteSatz } from '../../lib/shell/sphaere';
 import type { DemoTenant } from '@isms/demo-seed';
 import type { ResolvedSession } from '../../lib/shell/session';
 
@@ -46,6 +46,12 @@ interface ContextChange {
   readonly from: string;
   /** Anzeigename des neuen Kontexts. */
   readonly to: string;
+  /**
+   * Reichweitensatz der NEUEN Rolle (nur bei `kind === 'role'`). Aus `rollenReichweiteSatz(toRole)`
+   * zum Wechselzeitpunkt gebildet, weil der Satz seit dem Nachfix je Sphäre variiert – die
+   * Rückmeldung soll die Reichweite der Sicht ansagen, in die gerade gewechselt wurde.
+   */
+  readonly reichweiteSatz?: string;
 }
 
 /** Anzeigename des neutralen Zustands in Wechsel-Rückmeldungen (DR-0009). */
@@ -156,7 +162,16 @@ export function AppShell({
     const titel =
       session.role === null ? 'Rolle gewählt' : toRole ? 'Rolle gewechselt' : 'Rolle abgewählt';
     onSwitchRole(roleId);
-    setContextChange({ kind: 'role', titel, from, to });
+    // Reichweitensatz der Sphäre, in die gewechselt wird (Nachfix nach Gate-Runde 2): variiert je
+    // Sphäre – die Rückmeldung nennt genau die Wirkungen der NEUEN Sicht (Portfolio-Übersicht,
+    // Mandantenwechsel), nicht nur den Einstieg des Ortes „Kunden".
+    setContextChange({
+      kind: 'role',
+      titel,
+      from,
+      to,
+      reichweiteSatz: rollenReichweiteSatz(toRole ?? null),
+    });
   }
 
   function signOut(): void {
@@ -250,8 +265,9 @@ export function AppShell({
                   {/* Reichweitensatz aus EINER Quelle (WP-028-Fixpass, Product-Auflage): Seit der
                       Sphärenkopplung ändert der Rollenwechsel auch den EINSTIEG des Ortes
                       „Kunden" – „Daten und Mandant bleiben unverändert" allein verschwieg das.
-                      Die zwei Zusagen, die weiterhin gelten, stehen unverändert im Satz. */}
-                  {ROLLEN_REICHWEITE_SATZ}
+                      Der Satz variiert je Sphäre der NEUEN Rolle (Nachfix); die zwei Zusagen, die
+                      weiterhin gelten, stehen in jeder Fassung im Satz. */}
+                  {contextChange.reichweiteSatz}
                 </>
               )}
             </p>

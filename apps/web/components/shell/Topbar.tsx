@@ -48,7 +48,7 @@ import Link from 'next/link';
 import type { DemoRole } from '../../lib/shell/roles';
 import type { DemoTenant } from '@isms/demo-seed';
 import type { ResolvedSession } from '../../lib/shell/session';
-import { mandantenwechselSichtbar } from '../../lib/shell/sphaere';
+import { ANSICHT_NICHT_BERECHTIGUNG_SATZ, mandantenwechselSichtbar } from '../../lib/shell/sphaere';
 
 /** Select-Wert des neutralen Zustands (kein Rollen-ID-Namensraum: R01–R12 bleiben frei). */
 const NEUTRAL_VALUE = '';
@@ -182,9 +182,11 @@ export function Topbar({
                 <dl className="shell-switch-field shell-switch-field--fest">
                   <dt className="shell-switch-label">Mandant</dt>
                   <dd className="shell-switch-value">{session.tenant.display_name}</dd>
-                  <dd className="shell-switch-note">
-                    Diese Sicht bestimmt die Ansicht, nicht die Berechtigung.
-                  </dd>
+                  {/* Ansicht-≠-Berechtigung aus EINER Quelle (Nachfix nach Gate-Runde 2): derselbe
+                      Satz stand bis hierher in zwei Wortlauten (hier + `EigenerMandantEinstieg`)
+                      und ohne Wächter. Jetzt `ANSICHT_NICHT_BERECHTIGUNG_SATZ` aus `sphaere.ts`,
+                      per `rollenreichweite.test.tsx` an beiden Stellen geprüft. */}
+                  <dd className="shell-switch-note">{ANSICHT_NICHT_BERECHTIGUNG_SATZ}</dd>
                 </dl>
               )}
             </div>

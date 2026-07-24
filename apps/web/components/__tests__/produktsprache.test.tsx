@@ -124,11 +124,64 @@ function alleSeedTexte(wert: unknown, gesammelt: Set<string> = new Set()): Set<s
 }
 
 /**
- * Genau die Seed-Texte, die einen verbotenen Begriff tragen – absteigend nach Länge, damit
- * längere Texte vor ihren Teilstücken maskiert werden. Das ist die vollständige, mechanisch
- * erzeugte Ausnahmemenge; sie schrumpft mit dem Seed-Textpass (WP-033) von selbst.
+ * Feldnamen, deren Werte KENNUNGEN oder Enum-Werte sind (IDs, Typen, Kinds, Stände) – niemals
+ * freier Anzeigetext. Ein Demo-Wort in EINEM dieser Felder, das in der Oberfläche erschiene, wäre
+ * ein UI-Fehler und darf deshalb NICHT durch die Seed-Ausnahme weißgewaschen werden.
  */
-const SEED_MASKEN: readonly string[] = [...alleSeedTexte(DEMO_SEED)]
+const KENNUNGSFELDER: ReadonlySet<string> = new Set([
+  'object_id',
+  'tenant_id',
+  'scope_id',
+  'source_id',
+  'owner_id',
+  'source_object_id',
+  'target_id',
+  'relationship_id',
+  'decision_id',
+  'service_id',
+  'id',
+  'object_type',
+  'relationship_type',
+  'source_kind',
+  'owner_kind',
+  'assertion_kind',
+  'lifecycle_status',
+]);
+
+/**
+ * Seed-Zeichenketten aus ANZEIGETEXT-Feldern – rekursiv, aber OHNE die Werte der KENNUNGSFELDER.
+ *
+ * ⚠️ ENG GEZOGEN IM NACHFIX (QA-Auflage, dieselbe Blindheits-Klasse wie beim snake_case-Fund):
+ * Bis hierher maskierte `SEED_MASKEN` über `alleSeedTexte` JEDE Seed-Zeichenkette mit einem
+ * Demo-Wort – auch die von IDs, Typen und Ständen. Damit hätte der Wächter ein Demo-Wort, das aus
+ * einem KENNUNGSFELD in die Oberfläche leakt, weißgewaschen. Die Prosa-Grenze der Snake-Maske
+ * (Leerzeichen + Mindestlänge) taugt hier NICHT: der legitime Quellverweis „demo-workshop-nordwerk"
+ * ist ein bindestrich-Slug ohne Leerzeichen, der sehr wohl gerendert wird – eine reine
+ * Prosa-Grenze würde ihn fälschlich freilegen. Deshalb der Feld-Ansatz: maskiert werden alle
+ * Werte AUSSER denen der Kennungs-/Enum-Felder. Neue Anzeigefelder sind automatisch abgedeckt
+ * (sie tragen Daten), ein neues Demo-Wort in einer ID/einem Enum wird dagegen wieder geprüft.
+ */
+function seedAnzeigeTexte(
+  wert: unknown,
+  key: string | null,
+  gesammelt: Set<string> = new Set(),
+): Set<string> {
+  if (typeof wert === 'string') {
+    if (key === null || !KENNUNGSFELDER.has(key)) gesammelt.add(wert);
+  } else if (Array.isArray(wert)) {
+    for (const eintrag of wert) seedAnzeigeTexte(eintrag, key, gesammelt);
+  } else if (wert && typeof wert === 'object') {
+    for (const [k, v] of Object.entries(wert)) seedAnzeigeTexte(v, k, gesammelt);
+  }
+  return gesammelt;
+}
+
+/**
+ * Genau die ANZEIGETEXT-Seed-Texte, die einen verbotenen Begriff tragen – absteigend nach Länge,
+ * damit längere Texte vor ihren Teilstücken maskiert werden. Die vollständige, mechanisch erzeugte
+ * Ausnahmemenge; sie schrumpft mit dem Seed-Textpass (WP-033) von selbst.
+ */
+const SEED_MASKEN: readonly string[] = [...seedAnzeigeTexte(DEMO_SEED, null)]
   .filter((s) => gefundeneMuster(s).length > 0)
   .sort((a, b) => b.length - a.length);
 
@@ -531,5 +584,19 @@ describe('Produktsprache: keine Demo-/Simulations-Kennzeichnung im Produkttext (
     // nie den gesamten Text (ein leerer Rest wäre ein blinder Wächter).
     const beispiel = 'Für Consulting Operator Demo ist im Datenbestand nichts erfasst.';
     expect(ohneAusnahmen(beispiel).trim().length).toBeGreaterThan(20);
+
+    // (4) DE-BLINDUNG (Nachfix nach Gate-Runde 2): Ein Demo-Wort in einem KENNUNGSFELD wird
+    // NICHT in die Ausnahmemenge aufgenommen (anders als der alte `alleSeedTexte`-Ansatz). Sonst
+    // könnte ein aus einer ID/einem Enum geleaktes Demo-Wort still weißgewaschen werden.
+    const probe = seedAnzeigeTexte(
+      { object_id: 'demo-leak-id', display_name: 'Ein synthetisches Anzeige-Objekt' },
+      null,
+    );
+    expect(probe.has('demo-leak-id'), 'ID-Feld darf nicht maskiert werden').toBe(false);
+    expect(probe.has('Ein synthetisches Anzeige-Objekt'), 'Anzeigefeld muss maskiert werden').toBe(
+      true,
+    );
+    // Der reale, gerenderte Quellverweis-Slug bleibt trotzdem gedeckt (er ist ein Anzeige-Feld).
+    expect(SEED_MASKEN).toContain('demo-workshop-nordwerk');
   });
 });

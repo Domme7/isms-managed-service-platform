@@ -22,7 +22,7 @@
 import Link from 'next/link';
 import type { DemoTenant } from '@isms/demo-seed';
 import type { DemoRole } from '../../lib/shell/roles';
-import { KUNDENBEREICH_HREF } from '../../lib/shell/sphaere';
+import { ANSICHT_NICHT_BERECHTIGUNG_SATZ, KUNDENBEREICH_HREF } from '../../lib/shell/sphaere';
 import { tenantDetailHref } from '../../lib/twin/routes';
 import { PageContextBar } from '../shell/PageContextBar';
 import { ScopeKontextWert } from '../shell/ScopeKontext';
@@ -131,10 +131,14 @@ export function EigenerMandantEinstieg({
             einlösen kann (serverseitige Rechte entstehen erst mit Dok. 19). Der Satz stellt das
             richtig, ohne etwas über andere Mandanten zu sagen: er spricht ausschließlich über
             DIESE Ansicht und ihre Reichweite. */}
+        {/* Ansicht-≠-Berechtigung aus EINER Quelle (Nachfix nach Gate-Runde 2): der Kern-Satz
+            stand bis hierher in einem eigenen Wortlaut (hier + `Topbar`) und ohne Wächter. Der
+            Zusatz „jederzeit umstellbar" bleibt als Kontext dieser Ansicht, der Sicherheits-Kern
+            kommt aus `ANSICHT_NICHT_BERECHTIGUNG_SATZ`. */}
         <p className="tw-muted">
           In dieser Rollensicht zeigt der Ort „Kunden" das eigene Unternehmen: ausschließlich{' '}
-          {tenant.display_name}. Diese Sicht bestimmt, was hier angezeigt wird – sie ist keine
-          geprüfte Berechtigung; die Ansicht selbst bleibt oben in der Leiste jederzeit umstellbar.
+          {tenant.display_name}. {ANSICHT_NICHT_BERECHTIGUNG_SATZ} Die Ansicht selbst bleibt oben in
+          der Leiste jederzeit umstellbar.
         </p>
       </section>
 

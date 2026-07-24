@@ -527,7 +527,12 @@ export function derivePlaceEntryPoints(
       placeId: isms.id,
       label: isms.label,
       href: isms.href,
-      question: isms.question,
+      // KEINE fremde aspirative Leitfrage an diesem Einstieg (Nachfix nach Gate-Runde 2, DR-0013
+      // Nr. 1): `isms.question` („Warum ist ein Risiko hoch, welche Controls wirken …") ist die
+      // ASPIRATIVE Ortsleitfrage – die Zielseite `/isms` beantwortet sie NICHT, sie führt mit
+      // „Wie ist die Risiko- und Control-Lage von <Mandant>?". Ungerahmt an diesem Ebene-3-Einstieg
+      // warb sie mit einer fremden Erwartung, die die Zielseite ausräumt (Muster der bereits
+      // bereinigten Einstiege Zwilling/Entscheidungen). Label und Bestandsangabe sagen, was dort steht.
       stock: [
         {
           label:
@@ -551,7 +556,10 @@ export function derivePlaceEntryPoints(
       placeId: services.id,
       label: services.label,
       href: services.href,
-      question: services.question,
+      // Wie am ISMS-Einstieg (Nachfix nach Gate-Runde 2, DR-0013 Nr. 1): `services.question`
+      // („Was wird geliefert, mit welcher Qualität und welchem Wert?") ist die aspirative
+      // Ortsleitfrage; die Zielseite `/services` führt mit „Welche Services laufen für <Mandant>
+      // und was liefern sie?". Der Ebene-3-Einstieg trägt sie deshalb NICHT mehr.
       stock: [{ label: 'Managed Services', count: stock.managedServiceCount }],
     },
   ].map((entry) => ({ ...entry, isEmpty: entry.stock.every((item) => item.count === 0) }));
