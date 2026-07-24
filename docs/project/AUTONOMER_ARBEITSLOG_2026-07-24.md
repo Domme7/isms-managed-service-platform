@@ -127,12 +127,22 @@
   „Weitere Ansichten" (OF-1: Rollen-Logik bleibt). DR-0005-Spannung DR-0015→Profil-Modell im
   `LoginProfile`-Kopf benannt. `LoginProfile` + 4 Komponenten- + 2 Page-Tests; Login visuell geprüft.
   web 863 grün.
-- ⏭️ **Nächster autonomer Punkt: DR-0017 Stages 2–4** (Liste-A-Punkte 4–6): Stage 2 Kunde-Dashboard-
-  Einstieg (die 8 Bereiche als Kacheln — im Cockpit teils schon da via `BereichKacheln`), Stage 3
-  Bereiche im Dashboard-Stil (Dive bis Zwilling), Stage 4 Sidebar raus + Routing auf Drill,
-  Guard-Tests anpassen. Danach Cleanup/DRY, Preisbänder, WP-033, WP-027/029, Politur.
-  - **Owner-Gates weiter offen (nicht autonom):** WP-021 Slice 7 (numerische Bewertungen, E-02),
-    Eisenhower/Fristen (E-02), echte Auth (WP-030), DB→UI (FINDING-0004).
+- ✅ **DR-0017 Stage 2 (Kunde-Dashboard-Einstieg) im Kern fertig** (`5d644e5`): Das Cockpit IST der
+  Kunde-Einstieg mit den 8 Bereichen als Kacheln (`BereichKacheln`, seit DR-0016). Ergänzt: eine
+  **Rückkehr-Brotkrume „Portfolio › [Mandant]"** für die Berater-Sicht (schließt den Drill-Loop
+  Portfolio↔Cockpit); die Kundensicht trägt bewusst keine Rückkehr (kein Portfolio darüber). web 864.
+- ⏭️ **Verbleibend an DR-0017 (GROSS, sorgfältig):**
+  - **Stage 3 — 8 Bereiche im Dashboard-Stil:** je Bereich (Heute/Kunden/ISMS/Entscheidungen/Services/
+    Reports/Wissen/Administration) in die Bento-/Dive-Sprache überführen, Dive bis Zwilling.
+    Mehr-Iterationen-Aufwand (je Bereich ein eigener, getesteter Umbau).
+  - **Stage 4 — Sidebar raus + Drill-Routing:** `ShellNav` (8-Orte-Sidebar) durch eine Breadcrumb-
+    Leiste ersetzen; die Bereich-Seiten behalten Inhalt, verlieren die laterale Nav (Navigation nur
+    noch per Eintauchen vom Cockpit). **Umfang: ~25 Nav-Assertions in `shell.test.tsx`** + UX-Shift +
+    Konzept-Override (Dok. 06-D01, von DR-0017 gedeckt). Plan: AppShell rendert Breadcrump+Topbar statt
+    ShellNav; shell.test-Nav-Block auf das Drill-Modell umschreiben; `orteFuerRolle`/`ShellNav` als
+    tote/reduzierte Fläche prüfen. Fokussiert im nächsten Durchgang, nie roter Zwischenstand.
+- **Owner-Gates weiter offen (nicht autonom):** WP-021 Slice 7 (numerische Bewertungen, E-02),
+  Eisenhower/Fristen (E-02), echte Auth (WP-030), DB→UI (FINDING-0004).
 - ~~⏳ **WP-021 Slice 5 (MediNova Clinics Holding):** Entwurf `medinova-graph.ts` liegt fertig auf Platte~~
   (Workflow, 30 Objekte/36 Kanten, inkl. F05 Lieferkette), noch **nicht verdrahtet**. Integration wie
   Rheinbank: Slot `tenant-medicore`, Anzeige→MediNova; `seed.ts`/`index`/`seed-facts`/`seed.spec`/
