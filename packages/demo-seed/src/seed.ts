@@ -25,8 +25,10 @@ import { NORDSTERN_OBJECTS, NORDSTERN_RELATIONSHIPS } from './nordstern-graph';
  * OT-/Fertigungsseite, Konstruktionsdaten, bevorstehender Kunden-Audit) inklusive bewusster
  * Deckungslücken und der Dok-07-Demo-Graph-Pflicht (Konflikt/veraltete Quelle/Trust-State);
  * stabile `tenant_id`, keine Änderung an bestehenden Objekten/Beziehungen.
+ * 1.4.0 (WP-021 Slice 3 Vorstufe): zwei weitere Dok-16-Kundenmandanten (AlpenCloud, GreenGrid)
+ * als Empty-State ergänzt — Mandantenwelt auf sechs erweitert; noch KEINE neuen Objekte/Kanten.
  */
-export const SEED_VERSION = '1.3.0';
+export const SEED_VERSION = '1.4.0';
 
 export interface DemoSeed {
   readonly version: string;
@@ -38,8 +40,8 @@ export interface DemoSeed {
 /**
  * Der vollständige Demo-Seed: ISMS-Kerngraph (Nordwerk) + Managed-Service-Schicht
  * (Nordwerk und Consulting Operator Demo) + Entscheidungsschicht (nur Nordwerk).
- * Finovia und MediCore bleiben bewusst ohne Objekte (Empty-State-Nachweis; Graphen folgen in
- * späteren WPs).
+ * Finovia, MediCore, AlpenCloud und GreenGrid bleiben (noch) ohne Objekte (Empty-State-Nachweis);
+ * AlpenCloud/Rheinbank-Slot/MediNova-Slot folgen in WP-021 Slices 3–5, GreenGrid bleibt leer.
  *
  * REIHENFOLGE (bewusst): die Entscheidungsschicht wird HINTER der Managed-Service-Schicht
  * angehängt. Dadurch bleibt innerhalb der Objektfamilie F09 das erste Objekt unverändert – und

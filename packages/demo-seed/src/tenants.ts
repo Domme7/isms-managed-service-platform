@@ -1,9 +1,19 @@
 /**
  * Vier synthetische Demo-Mandanten des digitalen Zwillings.
  *
- * QUELLE (Namen, verbindlich): Dok. 07 v1.0, Abschnitt 20 ("Synthetische Demodaten"):
- *   "Die Demoumgebung nutzt Nordwerk Manufacturing SE, Finovia Digital Bank AG,
- *    MediCore Health Services GmbH und Consulting Operator Demo."
+ * QUELLE (kanonische Demo-Welt, verbindlich): Dok. 16 §34.1 „Demo-Unternehmen" — die fünf
+ * Kundenfirmen Nordstern Manufacturing SE, AlpenCloud GmbH, Rheinbank Digital AG,
+ * MediNova Clinics Holding und GreenGrid Energy Services, plus der Provider „Consulting
+ * Operator Demo" (Dok. 07 §20 / Dok. 13–15).
+ *
+ * DR-0005-Spannung (benannt, nicht still aufgelöst): Dok. 07 §20 nennt eine ältere Vierer-Liste
+ * (Nordwerk / Finovia / MediCore / Consulting Operator). Die kanonische Demo-Dramaturgie steht in
+ * Dok. 16 §34.1; sie gilt (DR-0006 + WP-021 Human Gate „Dok-16-Fünferliste"). Auflösung wie beim
+ * Flaggschiff (Nordwerk→Nordstern): der `tenant_id` bleibt stabil (P02, nicht identitätsstiftend),
+ * nur `display_name`/Inhalt wandern auf das Dok-16-Profil. Umbau inkrementell über WP-021
+ * (Slice 1 Nordstern ✓; Slice 3 AlpenCloud neu; Slice 4 Finovia-Slot→Rheinbank; Slice 5
+ * MediCore-Slot→MediNova; Slice 6 GreenGrid neu, bleibt leer). Solange ein Slot noch den alten
+ * Dok-07-Anzeigenamen trägt, ist das der dokumentierte Zwischenstand, kein Widerspruch.
  *
  * INHALT (bewusst synthetisch, Demo-Datenregel `.claude/rules/demo-data.md`):
  * Branche und Kontextbeschreibung sind frei erfunden. KEINE realen Unternehmen,
@@ -30,14 +40,18 @@ export const TENANT_ID = {
   NORDWERK: 'tenant-nordwerk',
   FINOVIA: 'tenant-finovia',
   MEDICORE: 'tenant-medicore',
+  ALPENCLOUD: 'tenant-alpencloud',
+  GREENGRID: 'tenant-greengrid',
   CONSULTING_OPERATOR: 'tenant-consulting-operator',
 } as const;
 
 /**
- * Die vier Demo-Mandanten. Ausmodelliert sind derzeit Nordwerk (ISMS-Kerngraph +
- * Managed-Service-Schicht) und der Consulting Operator Demo (Managed-Service-Schicht,
- * WP-012 Slice 1). Finovia und MediCore bleiben bewusst ohne Objekte – sie belegen den
- * Empty-State und folgen in späteren Work Packages (konsistent zu Dok. 07 §20).
+ * Die sechs Demo-Mandanten (fünf Dok-16-Kundenfirmen + Provider). Ausmodelliert sind derzeit
+ * Nordstern/Nordwerk (ISMS-Kerngraph + Managed-Service- + Entscheidungsschicht) und der Consulting
+ * Operator Demo (Managed-Service-Schicht, WP-012 Slice 1). Die übrigen Kundenfirmen folgen in
+ * WP-021 Slices 3–5 (AlpenCloud, Rheinbank-Slot, MediNova-Slot); GreenGrid bleibt bewusst OHNE
+ * Objektgraph (getrennter, noch nicht erhobener Discovery-Scope + Owner-Direktive „ein Mandant
+ * bleibt leer"). Bis dahin belegen die noch leeren Slots den Empty-State.
  */
 export const DEMO_TENANTS: readonly DemoTenant[] = [
   {
@@ -73,6 +87,33 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
       'Synthetischer Gesundheitsdienstleister mit besonders schützenswerten ' +
       'Gesundheitsdaten. ISMS-Fokus auf Datenschutz, Zugriffskontrolle und ' +
       'Verfügbarkeit patientennaher Systeme.',
+    has_object_graph: false,
+  },
+  {
+    // Dok. 16 §34.1 Nr. 2: Cloud-Softwareanbieter, schnelles Wachstum, Zertifizierungsziel,
+    // hohe Automatisierungsbereitschaft. Neuer Mandant (WP-021 Slice 3); Objektgraph folgt.
+    tenant_id: TENANT_ID.ALPENCLOUD,
+    display_name: 'AlpenCloud GmbH',
+    industry: 'Cloud-Softwareanbieter / SaaS (synthetisch)',
+    description:
+      'Synthetischer Cloud-Softwareanbieter mit schnellem Wachstum und einem ' +
+      'Zertifizierungsziel. ISMS-Fokus auf Automatisierung der Nachweisführung, Absicherung ' +
+      'der Cloud-Ressourcen und Schritthalten der Kontrollabdeckung mit dem Wachstum.',
+    has_object_graph: false,
+  },
+  {
+    // Dok. 16 §34.1 Nr. 5: M&A-Szenario mit neu erworbener Tochtergesellschaft und getrenntem
+    // Discovery-Scope. Neuer Mandant (WP-021 Slice 6); bleibt bewusst OHNE Objektgraph — der
+    // getrennte Erhebungsumfang der erworbenen Tochter ist noch nicht aufgenommen, der ehrliche
+    // Leerzustand (kein erfundener Zwilling) ist hier die Aussage (Owner-Direktive „ein Mandant
+    // bleibt leer").
+    tenant_id: TENANT_ID.GREENGRID,
+    display_name: 'GreenGrid Energy Services',
+    industry: 'Energiedienstleistung (synthetisch)',
+    description:
+      'Synthetischer Energiedienstleister in einem Zusammenschluss-Szenario: eine neu ' +
+      'erworbene Tochtergesellschaft mit getrenntem Erhebungsumfang. ISMS-Fokus auf die ' +
+      'getrennte Aufnahme der Tochter, bevor Objekte, Risiken und Nachweise erfasst sind.',
     has_object_graph: false,
   },
   {

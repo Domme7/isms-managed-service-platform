@@ -89,9 +89,13 @@ describe('Demo-Seed – Tenant-Isolation (P09, D11, Dok. 19)', () => {
     expect(byTenant(TENANT_ID.NORDWERK)).toHaveLength(58);
     // Consulting Operator Demo: eigene Serviceschicht (WP-012 Slice 1).
     expect(byTenant(TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(9);
-    // Finovia/MediCore bleiben bewusst leer (Empty-State-Nachweis in der UI).
+    // Finovia/MediCore/AlpenCloud/GreenGrid tragen (noch) keine Objekte — Empty-State-Nachweis.
+    // Finovia→Rheinbank / MediCore→MediNova / AlpenCloud werden in WP-021 Slices 3–5 gefüllt;
+    // GreenGrid bleibt bewusst leer (getrennter Discovery-Scope, Owner-Direktive).
     expect(byTenant(TENANT_ID.FINOVIA)).toEqual([]);
     expect(byTenant(TENANT_ID.MEDICORE)).toEqual([]);
+    expect(byTenant(TENANT_ID.ALPENCLOUD)).toEqual([]);
+    expect(byTenant(TENANT_ID.GREENGRID)).toEqual([]);
   });
 
   it('Beziehungen verteilen sich exakt auf die ausmodellierten Mandanten (pro Tenant)', () => {
@@ -103,6 +107,8 @@ describe('Demo-Seed – Tenant-Isolation (P09, D11, Dok. 19)', () => {
     expect(byTenant(TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(11);
     expect(byTenant(TENANT_ID.FINOVIA)).toEqual([]);
     expect(byTenant(TENANT_ID.MEDICORE)).toEqual([]);
+    expect(byTenant(TENANT_ID.ALPENCLOUD)).toEqual([]);
+    expect(byTenant(TENANT_ID.GREENGRID)).toEqual([]);
   });
 
   it('ein Mandant sieht ausschließlich seine eigenen Objekte (Sichtprüfung je Tenant)', () => {
@@ -209,8 +215,8 @@ describe('Demo-Seed – Vokabular-Konformität (kanonische Contract-Vokabulare)'
 });
 
 describe('Demo-Seed – Mandanten & Determinismus', () => {
-  it('genau vier Demo-Mandanten mit stabilen, eindeutigen IDs', () => {
-    expect(tenants).toHaveLength(4);
+  it('genau sechs Demo-Mandanten mit stabilen, eindeutigen IDs', () => {
+    expect(tenants).toHaveLength(6);
     expect(findDuplicateIds(tenants.map((t) => t.tenant_id))).toEqual([]);
   });
 
@@ -345,7 +351,13 @@ describe('Demo-Seed – Entscheidungsschicht (WP-017 Slice 1)', () => {
     ]);
     expect([...new Set(decisions.map((d) => d.tenant_id))]).toEqual([TENANT_ID.NORDWERK]);
     // Gegenprobe: kein anderer Mandant trägt eine Entscheidung (O-WP017-08).
-    for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+    for (const tenantId of [
+      TENANT_ID.CONSULTING_OPERATOR,
+      TENANT_ID.FINOVIA,
+      TENANT_ID.MEDICORE,
+      TENANT_ID.ALPENCLOUD,
+      TENANT_ID.GREENGRID,
+    ]) {
       expect(decisions.filter((d) => d.tenant_id === tenantId)).toEqual([]);
     }
   });
