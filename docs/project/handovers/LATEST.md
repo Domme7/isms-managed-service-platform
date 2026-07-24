@@ -1,28 +1,28 @@
 # Latest Handover
 
 - **Aktuell:** `HND-20260724-sprint.md`
-- **Modus:** Produktkorrektur-Sprint (DR-0010) + Owner-Auftrag „alles umsetzen, **usability first**",
-  **autonomer Weiterbau ohne Rückfragen**; owner-gated Materie wird vorbereitet und vorgelegt, nicht eigenmächtig gebaut.
-- **Stand:** Alle acht Shell-Orte live · Antwort-Modus (WP-028) + Reports/Wissen/Administration (WP-032)
-  **abgenommen** · **WP-006 Slice 2+3** (Servicekatalog `/services/katalog` + Struktur-Assistent
-  `/kunden/struktur`) **inhaltlich abgenommen** (Gate 1+2 + Fix-Pass, keine Regression; offen nur der
-  gebündelte `qa:visual`-Lauf). WP-024 Treue-Check + FINDING-0008 fertig.
-- **Neu geliefert (nicht-bindend, Owner-gated):**
-  - **Research/Innovation:** `research/briefs/` (Wettbewerb/Regulatorik/Markt-Web), `research/ideas/IDEEN_BACKLOG_2026-07-24.md`
-    (14 Ideen BL-01..14), `research/change-proposals/CCP-005/006/007_*_DRAFT.md`.
-  - **Usability-Audit:** `docs/project/usability/USABILITY_AUDIT_2026-07-24.md` (22 Fixes U-01..22, Top-10 + Quick-Wins).
-  - **Cockpit-Design:** `docs/project/design/WP-025_COCKPIT_VARIANTEN_KONZEPT.md`.
-- **Läuft gerade:** WP-025 **Cockpit-Varianten-Bau** im **isolierten Worktree** (agentbasiert, apps/web).
-- **Testlage:** **886 Tests grün** (web 756 · contracts 55 · demo-seed 54 · db 19 · api 2), lint + typecheck +
-  format:check grün, beide GitHub-CI-Workflows grün.
-- **Branch:** `main` · **Remote:** privat, alles bis `c64f5e8` gepusht.
-- **Exact Next Step:** (1) Cockpit-Worktree landet → verifizieren/mergen, dabei die 3 WP-006-Runde-2-Nits
-  folden (O-WP006-xx→10, length>80-Guards, GELDBAND-Robustheit). (2) Gebündelter `qa:visual` (Cockpit + WP-006),
-  Cockpit-Screenshots dem Owner vorlegen (DR-0010 Nr. 3 STOPP-Punkt). (3) **Usability-Quick-Wins** (non-invasiv):
-  U-16 Topbar-CSS-Renderfehler, U-03 „Begriffe→Wissen", U-02 Login-Mandant-Erklärung, U-17 Objekt-ID ausblenden,
-  U-13 „Ansicht zurücksetzen"-Tooltip, U-20 Leerzustand-Nächster-Schritt. (4) **WP-033/U-15** Seed-Textpass
-  („synthetisch/Demo" vom Einstiegsschirm entfernen — koppelt an `produktsprache`-Wächter, deshalb nach Cockpit).
-  (5) **BL-01 Trust-/Confidence-Layer** (non-invasiv). (6) U-01 Erstkontakt-Orientierung (Product-Lead-Sichtung).
-- **Harte Owner-Gates (vorbereitet, NICHT autonom):** FINDING-0004/RLS → DB→UI · WP-030 echte Auth ·
-  CCP-001..004 + **CCP-005/006/007** + E-02 (Contract) · BL-05 AIMS-Zusage · BL-08 Framework-Lizenz ·
-  BL-14 Pricing · WP-021 Demo-Firmenliste (O-WP006-01) · U-06/U-08/U-11/U-12 (Product/QA-Sichtung).
+- **Modus:** Owner-Auftrag „setz alles um, **usability first**" + „modernes 2026-Cockpit, nichts nur Show".
+  Autonomer Weiterbau; owner-gated Materie (Auth/DB, Preise-Guardrail, Contract) wird vorbereitet/vorgelegt.
+- **Frische Owner-Entscheidungen (2026-07-24): [DR-0014] modernes Cockpit + [DR-0015] acht Kursentscheidungen.**
+  - Cockpit: moderne 2026-Dashboard-Sprache (Ampeln, Warnungen, Deckungsringe, farbig) = Umsetzung von DR-0008;
+    „nichts nur Show" = jedes Element datengetragen UND funktional (Drill-down). Cockpit wird Landing; A/B/C bleibt Personalisierung.
+  - Kurs: Produkt-Tiefe zuerst (nicht Auth/DB); **E-02 bauen** (Change Proposal → Contract/Seed); **alle vier
+    Research-Verbesserungen** (Trust-Layer/CCP-005, Regulatory Change/CCP-006, Register of Information/CCP-007, AIMS/BL-05);
+    **Demo-Welt = Dok.-16-Fünferliste** (löst O-WP006-01, WP-021, mit synthetischen Bewertungsdaten); getrennte
+    Berater-/Kunden-Anmeldewelten JETZT (simuliert); **synthetische Beispielpreise** (Guardrail O-KUNDE-01 umgestellt).
+- **Läuft gerade:** **Modern-Cockpit-Rebuild** (DR-0014, funktional + datengetragen) im isolierten Worktree.
+  Die erste A/B/C-Version ist bereits in `main` (`7d569e2`) und wird durch das moderne Cockpit ersetzt.
+- **Abgenommen:** WP-028, WP-032, **WP-006 Slice 2+3** (Gate 1+2 + Fix-Pass, keine Regression). WP-024, FINDING-0008.
+- **Geliefert (nicht-bindend):** `research/` (3 Briefs + Ideen-Backlog BL-01..14 + CCP-005/006/007),
+  `docs/project/usability/USABILITY_AUDIT_2026-07-24.md` (U-01..22), `docs/project/design/WP-025_COCKPIT_VARIANTEN_KONZEPT.md`.
+- **Testlage:** vor dem Modern-Rebuild `main`=`7d569e2`: web 796 grün, typecheck/lint grün, axe 0 (18 Motive), CI grün.
+- **Branch:** `main` · **Remote:** privat, gepusht.
+- **Exact Next Step:** (1) Modern-Cockpit-Worktree landet → verifizieren, **„nichts-nur-Show"-Gate** (jedes Element
+  datengetragen + funktionaler Drill-down), mergen. (2) `qa:visual` → moderne Cockpit-Screenshots dem Owner zeigen.
+  (3) DR-0015-Programm, usability-first: getrennte Login-Welten (simuliert) · synthetische Preise (O-KUNDE-01-Umstellung,
+  Security) · WP-033/U-15 Demo-Wörter vom Einstieg · Usability-Quick-Wins (U-16 Topbar-CSS, U-03, U-02, U-17, U-13) ·
+  **E-02** (CP → Contract/Seed) → **Decision Center** · **WP-021** Dok.-16-Demo-Welt + synthetische Bewertungen ·
+  CCP-005/006/007 Verbesserungen · moderne Bildsprache über die anderen Seiten.
+- **WP-006-Rest:** 3 Runde-2-Nits (O-WP006-xx→10, length>80-Guards, GELDBAND-Robustheit) in den Modern-Cockpit-Merge folden.
+- **Harte Owner-Gates (weiterhin nicht autonom):** echte Auth (WP-030) · DB→UI (FINDING-0004/RLS) · reale Preise (nie) ·
+  Contract-Änderungen brauchen je Human Gate (E-02/CCP sind freigegeben, PDF-gegenlesen).
