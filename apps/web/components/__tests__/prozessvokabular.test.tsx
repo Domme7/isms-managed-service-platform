@@ -152,7 +152,7 @@ function rollenMandantenMatrix(
       render: () => renderOrt(demoRole, tenant(TENANT_ID.NORDWERK)),
     });
   }
-  for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
     for (const roleId of ['R01', 'R08', null]) {
       varianten.push({
         kontext: `${ort} · ${roleId ?? 'neutral'} · ${tenantId}`,
@@ -227,7 +227,7 @@ const RENDERER_JE_LIVE_ORT = {
         render(
           <EigenerMandantEinstieg
             role={role('R07')}
-            tenant={tenant(TENANT_ID.FINOVIA)}
+            tenant={tenant(TENANT_ID.GREENGRID)}
             objectCount={0}
             relationshipCount={0}
             scopeIds={[]}
@@ -259,7 +259,7 @@ const RENDERER_JE_LIVE_ORT = {
     {
       kontext: '/kunden · R03 · finovia (leer)',
       render: () =>
-        render(<KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />),
+        render(<KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.GREENGRID)} />),
     },
     {
       kontext: '/kunden · neutral · medicore (leer)',

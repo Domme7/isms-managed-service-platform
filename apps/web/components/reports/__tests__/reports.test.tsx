@@ -187,7 +187,7 @@ describe('Reports – AC 8: keine Erzeugung, kein Export, keine Preise', () => {
   const FIXTURES = [
     { tenantId: TENANT_ID.NORDWERK, roleId: 'R02' },
     { tenantId: TENANT_ID.CONSULTING_OPERATOR, roleId: 'R10' },
-    { tenantId: TENANT_ID.FINOVIA, roleId: 'R03' },
+    { tenantId: TENANT_ID.GREENGRID, roleId: 'R03' },
     { tenantId: TENANT_ID.MEDICORE, roleId: null },
   ];
 
@@ -300,7 +300,7 @@ describe('Reports – AC 9: Mandantengrenze und Leerzustand', () => {
     });
   }
 
-  for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
     it(`${tenantId}: leere Grundlage mandantenlokal benannt, Struktur bleibt sichtbar`, () => {
       const { container, unmount } = render(
         <ReportsContent role={role('R03')} tenant={tenant(tenantId)} />,
@@ -339,7 +339,7 @@ describe('Reports – Antwort-Modus und Produktsprache (DR-0013 / DR-0011)', () 
   });
 
   it('kein internes Vokabular im eigenen Seiteninhalt', () => {
-    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.FINOVIA]) {
+    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.GREENGRID]) {
       const { container, unmount } = render(
         <ReportsContent role={role('R02')} tenant={tenant(tenantId)} />,
       );

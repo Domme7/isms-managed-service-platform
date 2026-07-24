@@ -150,7 +150,7 @@ describe('groupObjectsByFamily', () => {
   });
 
   it('Finovia bleibt ohne Objekte (Empty-State-Nachweis)', () => {
-    expect(getObjectsForTenant(TENANT_ID.FINOVIA)).toEqual([]);
+    expect(getObjectsForTenant(TENANT_ID.GREENGRID)).toEqual([]);
   });
 });
 

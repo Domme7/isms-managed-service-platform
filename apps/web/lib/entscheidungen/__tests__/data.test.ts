@@ -351,7 +351,7 @@ describe('Entscheidungsregister – Leerfälle sind nicht derselbe Fall', () => 
     expect(model.scopeIds).toEqual([]);
   });
 
-  for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
     it(`${tenantId}: gar kein Datenbestand – wohldefiniertes leeres Modell`, () => {
       const model = registerOrThrow(tenantId);
       expect(model.isEmpty).toBe(true);

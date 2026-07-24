@@ -25,7 +25,7 @@ function erwarteteAnzahl(tenantId: string): number {
 }
 
 describe('buildCockpitWarnungen – ehrlicher Leerzustand', () => {
-  for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
     it(`leerer Mandant ${tenantId}: keine erfundene Warnung`, () => {
       expect(buildCockpitWarnungen(tenantId)).toEqual([]);
     });

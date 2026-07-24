@@ -148,7 +148,7 @@ describe('deriveRecordingWaves – Erfassungswellen werden abgeleitet, nicht ang
   it('liefert für einen Mandanten ohne Daten keine Welle (statt einer erfundenen)', () => {
     expect(deriveRecordingWaves([], [])).toEqual([]);
     expect(
-      deriveRecordingWaves(objectsOf(TENANT_ID.FINOVIA), relationshipsOf(TENANT_ID.FINOVIA)),
+      deriveRecordingWaves(objectsOf(TENANT_ID.GREENGRID), relationshipsOf(TENANT_ID.GREENGRID)),
     ).toEqual([]);
   });
 
@@ -582,11 +582,11 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
   });
 
   it('benennt leere Orte, statt sie zu verstecken (06-D01)', () => {
-    const model = modelOrThrow(TENANT_ID.FINOVIA);
+    const model = modelOrThrow(TENANT_ID.GREENGRID);
     expect(model.placeEntryPoints).toHaveLength(4);
     expect(model.placeEntryPoints.every((p) => p.isEmpty)).toBe(true);
     expect(model.placeEntryPoints.map((p) => p.href)).toEqual([
-      `/twin/${TENANT_ID.FINOVIA}`,
+      `/twin/${TENANT_ID.GREENGRID}`,
       '/isms',
       '/entscheidungen',
       '/services',
@@ -634,7 +634,7 @@ describe('buildMissionControl – Bestand, Empty-State und Mandantengrenze', () 
   });
 
   it('liefert für einen bewusst leeren Mandanten ein vollständiges, leeres Modell', () => {
-    for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
       const model = modelOrThrow(tenantId);
       expect(model.tenantStanding.isEmpty).toBe(true);
       expect(model.tenantStanding.objectCount).toBe(0);

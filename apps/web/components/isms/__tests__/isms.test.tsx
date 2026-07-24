@@ -458,12 +458,12 @@ describe('IsmsContent – Empty-State (Mandanten ohne ISMS-Kernobjekte)', () => 
   });
 
   it('zeigt für Finovia den Empty-State ohne Services-Hinweis', () => {
-    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />);
+    render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.GREENGRID)} />);
 
     expect(
       screen.getByRole('heading', {
         level: 3,
-        name: 'Keine ISMS-Kernobjekte für Finovia Digital Bank AG',
+        name: 'Keine ISMS-Kernobjekte für GreenGrid Energy Services',
       }),
     ).toBeInTheDocument();
     // Finovia trägt im Seed auch keine Services – der Hinweis darf nicht erscheinen.

@@ -84,7 +84,7 @@ const FREMDER_MANDANT = [
 ];
 
 /** Mandanten ohne eigenen Objektgraphen — hier greifen die Leerzustände. */
-const LEERE_MANDANTEN = [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE];
+const LEERE_MANDANTEN = [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE];
 
 describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandantenfähigkeit", P09)', () => {
   /**
@@ -275,7 +275,7 @@ describe('Kunden-Startseite spricht nie über fremde Mandanten (Kundensphäre, P
     { tenantId: TENANT_ID.NORDWERK, roleId: 'R03' }, // voll, Kundenrolle
     { tenantId: TENANT_ID.NORDWERK, roleId: null }, // voll, neutral
     { tenantId: TENANT_ID.CONSULTING_OPERATOR, roleId: 'R08' }, // Services vorhanden, Betreiberrolle
-    { tenantId: TENANT_ID.FINOVIA, roleId: 'R03' }, // leer
+    { tenantId: TENANT_ID.GREENGRID, roleId: 'R03' }, // leer
     { tenantId: TENANT_ID.MEDICORE, roleId: null }, // leer, neutral
   ];
 
@@ -299,12 +299,12 @@ describe('Kunden-Startseite spricht nie über fremde Mandanten (Kundensphäre, P
 
   it('der leere Mandant zeigt eine mandantenlokale Einladung mit Katalog- und Struktur-Einstieg', () => {
     const { container } = render(
-      <KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+      <KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.GREENGRID)} />,
     );
     const text = container.textContent ?? '';
     // Einladung statt leerer Platzhalter (Dok. 03 „Anfängererlebnis"): nennt beide nächsten
     // Schritte (Servicekatalog + Struktur-Assistent) mandantenlokal, ohne Fremdmandanten.
-    expect(text).toContain('Finovia Digital Bank AG');
+    expect(text).toContain('GreenGrid Energy Services');
     expect(text).toContain('Servicekatalog');
     expect(text).toContain('Struktur-Assistent');
   });
@@ -347,7 +347,7 @@ describe('Servicekatalog und Struktur-Assistent halten die Kundensphäre (P09/FI
     { tenantId: TENANT_ID.NORDWERK, roleId: 'R03' },
     { tenantId: TENANT_ID.NORDWERK, roleId: null },
     { tenantId: TENANT_ID.CONSULTING_OPERATOR, roleId: 'R08' },
-    { tenantId: TENANT_ID.FINOVIA, roleId: 'R03' },
+    { tenantId: TENANT_ID.GREENGRID, roleId: 'R03' },
     { tenantId: TENANT_ID.MEDICORE, roleId: null },
   ];
 
@@ -385,12 +385,12 @@ describe('Servicekatalog und Struktur-Assistent halten die Kundensphäre (P09/FI
 
   it('der Servicekatalog zeigt für einen leeren Mandanten die Katalogstruktur ohne Fremdmandant', () => {
     const { container } = render(
-      <ServicekatalogContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+      <ServicekatalogContent role={role('R03')} tenant={tenant(TENANT_ID.GREENGRID)} />,
     );
     const text = container.textContent ?? '';
     // Katalogstruktur bleibt sichtbar (Konzept); die aktiven Services sind mandantenlokal leer.
     expect(text).toContain('Servicefamilien');
-    expect(text).toContain('Finovia Digital Bank AG');
+    expect(text).toContain('GreenGrid Energy Services');
     expect(text).toContain('keine aktiven Services erfasst');
   });
 
@@ -554,11 +554,11 @@ function WechselHarness({ startTenantId }: { startTenantId: string }) {
 
 describe('Mandantenwechsel ist eine angekündigte Kontextänderung (Dok. 06 CROSS-TENANT-SCHUTZ)', () => {
   const NORDWERK_NAME = 'Nordstern Manufacturing SE';
-  const FINOVIA_NAME = 'Finovia Digital Bank AG';
+  const GREENGRID_NAME = 'GreenGrid Energy Services';
 
   function wechselAnfordern(): void {
     fireEvent.change(screen.getByLabelText('Ansicht: Mandant'), {
-      target: { value: TENANT_ID.FINOVIA },
+      target: { value: TENANT_ID.GREENGRID },
     });
   }
 
@@ -569,17 +569,17 @@ describe('Mandantenwechsel ist eine angekündigte Kontextänderung (Dok. 06 CROS
     const bestaetigung = screen.getByRole('group', { name: 'Mandantenwechsel bestätigen' });
     // Beide Mandanten stehen BENANNT in der Ankündigung (Text, nicht nur Farbe).
     expect(bestaetigung.textContent).toContain(NORDWERK_NAME);
-    expect(bestaetigung.textContent).toContain(FINOVIA_NAME);
+    expect(bestaetigung.textContent).toContain(GREENGRID_NAME);
     // Es gibt einen expliziten Bestätigungs- und einen Abbrechen-Schritt.
     expect(
-      within(bestaetigung).getByRole('button', { name: `Zu ${FINOVIA_NAME} wechseln` }),
+      within(bestaetigung).getByRole('button', { name: `Zu ${GREENGRID_NAME} wechseln` }),
     ).toBeInTheDocument();
     expect(within(bestaetigung).getByRole('button', { name: 'Abbrechen' })).toBeInTheDocument();
 
     // Vor der Bestätigung ist NICHTS gewechselt: der Inhalt zeigt weiter den alten Mandanten.
     const main = screen.getByRole('main');
     expect(main.textContent).toContain(NORDWERK_NAME);
-    expect(main.textContent).not.toContain(FINOVIA_NAME);
+    expect(main.textContent).not.toContain(GREENGRID_NAME);
   });
 
   it('Abbrechen verwirft den Wechselwunsch vollständig', () => {
@@ -601,19 +601,19 @@ describe('Mandantenwechsel ist eine angekündigte Kontextänderung (Dok. 06 CROS
   it('nach Bestätigung: sichtbare benannte Rückmeldung, danach lebt kein Zustand des alten Mandanten weiter', () => {
     render(<WechselHarness startTenantId={TENANT_ID.NORDWERK} />);
     wechselAnfordern();
-    fireEvent.click(screen.getByRole('button', { name: `Zu ${FINOVIA_NAME} wechseln` }));
+    fireEvent.click(screen.getByRole('button', { name: `Zu ${GREENGRID_NAME} wechseln` }));
 
     // (2) Sichtbare, benannte Rückmeldung: Live-Region nennt beide Mandanten, trägt Text +
     // Symbol (Form) – eine reine Farbänderung würde diesen Test nicht bestehen.
     const status = screen.getByRole('status');
     expect(status.textContent).toContain('Kontextänderung');
     expect(status.textContent).toContain(NORDWERK_NAME);
-    expect(status.textContent).toContain(FINOVIA_NAME);
+    expect(status.textContent).toContain(GREENGRID_NAME);
     expect(status.querySelector('[aria-hidden="true"]')).not.toBeNull();
 
     // Der Inhalt zeigt bereits ausschließlich den neuen Mandanten (ehrlicher Leerzustand).
     const main = screen.getByRole('main');
-    expect(main.textContent).toContain(FINOVIA_NAME);
+    expect(main.textContent).toContain(GREENGRID_NAME);
     expect(main.textContent).not.toContain(NORDWERK_NAME);
     expect(main.textContent).not.toContain(TENANT_ID.NORDWERK);
 
@@ -642,7 +642,7 @@ describe('Mandantenwechsel ist eine angekündigte Kontextänderung (Dok. 06 CROS
     expect(screen.getByRole('main').textContent).toContain(NORDWERK_NAME);
 
     wechselAnfordern();
-    fireEvent.click(screen.getByRole('button', { name: `Zu ${FINOVIA_NAME} wechseln` }));
+    fireEvent.click(screen.getByRole('button', { name: `Zu ${GREENGRID_NAME} wechseln` }));
     fireEvent.click(screen.getByRole('button', { name: 'Hinweis schließen' }));
 
     // Die Tiefe blieb (mandantenfreier Anzeigezustand) …
@@ -655,7 +655,7 @@ describe('Mandantenwechsel ist eine angekündigte Kontextänderung (Dok. 06 CROS
     expect(text.length).toBeGreaterThan(80);
     expect(text).not.toContain(NORDWERK_NAME);
     expect(text).not.toContain(TENANT_ID.NORDWERK);
-    expect(screen.getByRole('main').textContent).toContain(FINOVIA_NAME);
+    expect(screen.getByRole('main').textContent).toContain(GREENGRID_NAME);
   });
 
   it('Negativbeweis der Ankündigung selbst: ohne Wechselwunsch existiert keine Ankündigung', () => {

@@ -276,11 +276,11 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     // Finovia trägt keinen Objektgraphen – Datenstand/Scope müssen als ehrlicher Leerwert
     // erscheinen, nicht als erfundener Wert; die drei Lückentexte bleiben unverändert.
     const { unmount } = render(
-      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.GREENGRID)} />,
     );
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
 
-    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Finovia Digital Bank AG');
+    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('GreenGrid Energy Services');
     expect(kontext.querySelectorAll('time')).toHaveLength(0);
     // Label seit dem WP-028-Fixpass „Scopes …" statt „Scope-Kennungen …": in der Leiste steht
     // die ZÄHLUNG, die Kennungen stehen im Aufklappteil (DR-0013 Nr. 2 nennt Scope-IDs unter
@@ -342,10 +342,10 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
 
   it('Kunden-Startseite (leerer Mandant): Leiste vollständig, kein erfundener Scope/Datenstand', () => {
     const { unmount } = render(
-      <KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+      <KundenStartContent role={role('R03')} tenant={tenant(TENANT_ID.GREENGRID)} />,
     );
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
-    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Finovia Digital Bank AG');
+    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('GreenGrid Energy Services');
     expect(kontext.querySelectorAll('time')).toHaveLength(0);
     expect(eintrag(kontext, 'Scopes des Kundenbereichs').dd).toBe('keine Scope-Zuordnung erfasst');
     // Kein Leerfeld mehr; die benannte Lücke steht aufklappbar in der Leiste (DR-0013).

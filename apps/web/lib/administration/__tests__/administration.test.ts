@@ -162,7 +162,7 @@ describe('buildAdministrationModel – Konfigurationsstand strikt mandantenlokal
   }
 
   it('ein Mandant ohne Bestand liefert einen ehrlichen Leerstand statt erfundener Werte', () => {
-    for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
       const model = buildAdministrationModel(tenant(tenantId));
       expect(model.isEmpty).toBe(true);
       expect(model.scopeIds).toEqual([]);

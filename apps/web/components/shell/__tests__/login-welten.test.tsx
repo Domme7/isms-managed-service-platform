@@ -113,12 +113,12 @@ describe('LoginWelten – zwei sichtbar getrennte Einstiege (DR-0015 Nr. 7)', ()
       target: { value: 'R05' },
     });
     fireEvent.change(screen.getByLabelText('Mandant für die Kundensicht'), {
-      target: { value: TENANT_ID.FINOVIA },
+      target: { value: TENANT_ID.GREENGRID },
     });
     const kunde = screen.getByRole('region', { name: 'Kunde' });
     fireEvent.click(within(kunde).getByRole('button', { name: /öffnen$/ }));
 
-    expect(onEnter).toHaveBeenCalledWith('R05', TENANT_ID.FINOVIA);
+    expect(onEnter).toHaveBeenCalledWith('R05', TENANT_ID.GREENGRID);
   });
 
   it('die Beraterwelt setzt eine Betreiberrolle', () => {
@@ -171,12 +171,12 @@ describe('LoginPage – der Welten-Eintritt schreibt eine Sitzung MIT Rolle und 
     );
     // Der neutrale `LoginForm` liegt im Aufklapper – seine Felder sind trotzdem im DOM.
     fireEvent.change(screen.getByLabelText('Mandant wählen'), {
-      target: { value: TENANT_ID.FINOVIA },
+      target: { value: TENANT_ID.GREENGRID },
     });
     fireEvent.click(screen.getByRole('button', { name: /anmelden$/i }));
 
     const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
-    expect(gespeichert).toEqual({ tenantId: TENANT_ID.FINOVIA });
+    expect(gespeichert).toEqual({ tenantId: TENANT_ID.GREENGRID });
     expect(gespeichert?.roleId).toBeUndefined();
     expect(routerPush).toHaveBeenCalledWith('/cockpit');
   });

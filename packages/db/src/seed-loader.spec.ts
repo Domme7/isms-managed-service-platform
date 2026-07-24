@@ -11,15 +11,16 @@ const TENANT_OPERATOR = 'tenant-consulting-operator';
 
 /**
  * Erwarteter Seed-Umfang (bewusst hart kodiert, damit stille Fixture-Drift auffällt):
- * Gesamt 67 Objekte / 95 Beziehungen, davon Nordwerk/Nordstern 58/84 (ISMS-Kerngraph 17/15 aus
+ * Gesamt 127 Objekte / 163 Beziehungen. Davon Nordwerk/Nordstern 58/84 (ISMS-Kerngraph 17/15 aus
  * WP-003, Managed-Service-Schicht 14/28 aus WP-012, Entscheidungsschicht 3/8 aus WP-017,
- * Nordstern-ISMS-Erweiterung 24/33 aus WP-021 Slice 1) und Consulting Operator Demo 9/11.
- * Der stabile `tenant_id` bleibt `tenant-nordwerk` – nur Anzeigename und Objektzahl wachsen
- * (WP-021: reines Zahlen-Nachziehen der Fixture, keine Änderung an Loader/Isolation).
+ * Nordstern-ISMS-Erweiterung 24/33 aus WP-021 Slice 1), AlpenCloud 30/34 (WP-021 Slice 3),
+ * Rheinbank (Slot `tenant-finovia`) 30/34 (WP-021 Slice 4) und Consulting Operator Demo 9/11.
+ * Die stabilen `tenant_id` bleiben – nur Anzeigenamen und Objektzahlen wachsen (WP-021: reines
+ * Zahlen-Nachziehen der Fixture, keine Änderung an Loader/Isolation).
  */
 const EXPECTED = {
-  totalObjects: 67,
-  totalRelationships: 95,
+  totalObjects: 127,
+  totalRelationships: 163,
   nordwerkObjects: 58,
   nordwerkRelationships: 84,
   operatorObjects: 9,
@@ -63,8 +64,7 @@ describe('Seed-Loader – Count-Abgleich, Idempotenz, referenzielle Integrität'
       relationships: EXPECTED.totalRelationships,
     });
 
-    // Tenant-scoped gelesen ergibt die Summe wieder exakt den Seed-Umfang – ohne dass ein
-    // Mandant Objekte des anderen sieht.
+    // Nordwerk und Consulting Operator behalten ihre bekannten Counts (Stichprobe, tenant-scoped).
     const nordwerkObjs = await objectsRepo.listByTenant(handle.db, TENANT_NORDWERK);
     const nordwerkRels = await relationshipsRepo.listByTenant(handle.db, TENANT_NORDWERK);
     const operatorObjs = await objectsRepo.listByTenant(handle.db, TENANT_OPERATOR);
@@ -74,8 +74,18 @@ describe('Seed-Loader – Count-Abgleich, Idempotenz, referenzielle Integrität'
     expect(nordwerkRels).toHaveLength(EXPECTED.nordwerkRelationships);
     expect(operatorObjs).toHaveLength(EXPECTED.operatorObjects);
     expect(operatorRels).toHaveLength(EXPECTED.operatorRelationships);
-    expect(nordwerkObjs.length + operatorObjs.length).toBe(DEMO_SEED.objects.length);
-    expect(nordwerkRels.length + operatorRels.length).toBe(DEMO_SEED.relationships.length);
+
+    // Voll-Partition über ALLE Mandanten deckt den Seed lückenlos ab (tenant-scoped, ohne Verlust
+    // und ohne dass ein Mandant Objekte eines anderen sieht). Seit WP-021 tragen mehrere Mandanten
+    // Objekte – die Summe wird deshalb über alle Mandanten gebildet, nicht nur über zwei.
+    const perTenant = await Promise.all(
+      DEMO_SEED.tenants.map(async (t) => ({
+        objs: (await objectsRepo.listByTenant(handle.db, t.tenant_id)).length,
+        rels: (await relationshipsRepo.listByTenant(handle.db, t.tenant_id)).length,
+      })),
+    );
+    expect(perTenant.reduce((sum, p) => sum + p.objs, 0)).toBe(DEMO_SEED.objects.length);
+    expect(perTenant.reduce((sum, p) => sum + p.rels, 0)).toBe(DEMO_SEED.relationships.length);
   });
 
   it('ist idempotent: zweimal laden ⇒ gleiche Counts, keine Duplikate', async () => {

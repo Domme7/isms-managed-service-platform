@@ -37,7 +37,7 @@ describe('getManagedServicesForTenant – Auflösung je Mandant', () => {
   it('liefert 3 Services für Nordwerk, 2 für den Consulting Operator, 0 für Finovia/MediCore', () => {
     expect(getManagedServicesForTenant(TENANT_ID.NORDWERK)).toHaveLength(3);
     expect(getManagedServicesForTenant(TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(2);
-    expect(getManagedServicesForTenant(TENANT_ID.FINOVIA)).toHaveLength(0);
+    expect(getManagedServicesForTenant(TENANT_ID.GREENGRID)).toHaveLength(0);
     expect(getManagedServicesForTenant(TENANT_ID.MEDICORE)).toHaveLength(0);
   });
 
@@ -158,13 +158,13 @@ describe('getManagedServicesForTenant – Auflösung je Mandant', () => {
 });
 
 describe('buildPortfolioOverview – Aggregation je Mandant (O-WP012-03)', () => {
-  it('aggregiert alle vier Mandanten in Seed-Reihenfolge mit korrekten Zählern (3/0/0/2)', () => {
+  it('aggregiert alle sechs Mandanten in Seed-Reihenfolge mit korrekten Zählern (3/0/0/0/0/2)', () => {
     const entries = buildPortfolioOverview();
 
     expect(entries.map((e) => e.tenant.tenant_id)).toEqual(
       DEMO_SEED.tenants.map((t) => t.tenant_id),
     );
-    expect(entries.map((e) => e.service_count)).toEqual([3, 0, 0, 2]);
+    expect(entries.map((e) => e.service_count)).toEqual([3, 0, 0, 0, 0, 2]);
     // Zähler und Liste sind konsistent (nur Objekte des jeweiligen Mandanten).
     for (const entry of entries) {
       expect(entry.services).toHaveLength(entry.service_count);

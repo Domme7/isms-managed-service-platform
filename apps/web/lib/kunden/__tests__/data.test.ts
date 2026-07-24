@@ -58,7 +58,7 @@ describe('buildCustomerWorkspace – mandantenlokale Ableitung', () => {
   });
 
   it('leerer Mandant (Finovia): alles leer, isEmpty=true, kein erfundener Datenstand', () => {
-    const model = buildCustomerWorkspace(tenant(TENANT_ID.FINOVIA));
+    const model = buildCustomerWorkspace(tenant(TENANT_ID.GREENGRID));
     expect(model.isEmpty).toBe(true);
     expect(model.scopeIds).toEqual([]);
     expect(model.objectives).toEqual([]);

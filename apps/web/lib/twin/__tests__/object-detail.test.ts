@@ -44,7 +44,7 @@ describe('buildObjectDetail – Tenant-Isolation (Sicherheitsgrenze)', () => {
     expect(
       buildObjectDetail(TENANT_ID.CONSULTING_OPERATOR, O.RISK_BETRIEBSUNTERBRECHUNG),
     ).toBeUndefined();
-    expect(buildObjectDetail(TENANT_ID.FINOVIA, O.RISK_BETRIEBSUNTERBRECHUNG)).toBeUndefined();
+    expect(buildObjectDetail(TENANT_ID.GREENGRID, O.RISK_BETRIEBSUNTERBRECHUNG)).toBeUndefined();
 
     // Und in die Gegenrichtung ebenso.
     expect(
@@ -56,8 +56,8 @@ describe('buildObjectDetail – Tenant-Isolation (Sicherheitsgrenze)', () => {
   });
 
   it('antwortet auf unbekannte IDs identisch wie auf mandantenfremde (kein Sonderfall)', () => {
-    const fremd = buildObjectDetail(TENANT_ID.FINOVIA, O.PROC_AUFTRAGSABWICKLUNG);
-    const unbekannt = buildObjectDetail(TENANT_ID.FINOVIA, 'gibt-es-nicht');
+    const fremd = buildObjectDetail(TENANT_ID.GREENGRID, O.PROC_AUFTRAGSABWICKLUNG);
+    const unbekannt = buildObjectDetail(TENANT_ID.GREENGRID, 'gibt-es-nicht');
     const unbekannterMandant = buildObjectDetail('tenant-gibt-es-nicht', O.PROC_AUFTRAGSABWICKLUNG);
 
     expect(fremd).toBeUndefined();

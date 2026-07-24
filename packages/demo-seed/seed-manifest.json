@@ -1,5 +1,5 @@
 {
-  "seed_version": "1.5.0",
+  "seed_version": "1.6.0",
   "generated_by": "@isms/demo-seed",
   "deterministic": true,
   "reset_hint": "Reine In-Memory-/Datei-Fixture ohne Datenbank. 'Reset' = erneuter Import von DEMO_SEED (packages/demo-seed/src/seed.ts). Alle object_id/relationship_id/tenant_id sowie valid_time/record_time sind fest kodiert (kein Date.now(), kein Zufall) -> jeder Lauf ist identisch.",
@@ -24,8 +24,8 @@
     },
     {
       "tenant_id": "tenant-finovia",
-      "display_name": "Finovia Digital Bank AG",
-      "has_object_graph": false
+      "display_name": "Rheinbank Digital AG",
+      "has_object_graph": true
     },
     {
       "tenant_id": "tenant-medicore",
@@ -50,11 +50,11 @@
   ],
   "counts": {
     "tenants": 6,
-    "objects": 97,
-    "relationships": 129,
+    "objects": 127,
+    "relationships": 163,
     "objects_by_tenant": {
       "tenant-nordwerk": 58,
-      "tenant-finovia": 0,
+      "tenant-finovia": 30,
       "tenant-medicore": 0,
       "tenant-alpencloud": 30,
       "tenant-greengrid": 0,
@@ -62,7 +62,7 @@
     },
     "relationships_by_tenant": {
       "tenant-nordwerk": 84,
-      "tenant-finovia": 0,
+      "tenant-finovia": 34,
       "tenant-medicore": 0,
       "tenant-alpencloud": 34,
       "tenant-greengrid": 0,
@@ -74,7 +74,8 @@
       "managed_service_consulting_operator": { "objects": 9, "relationships": 11 },
       "decisions_nordwerk": { "objects": 3, "relationships": 8 },
       "isms_erweiterung_nordstern": { "objects": 24, "relationships": 33 },
-      "isms_graph_alpencloud": { "objects": 30, "relationships": 34 }
+      "isms_graph_alpencloud": { "objects": 30, "relationships": 34 },
+      "isms_graph_rheinbank": { "objects": 30, "relationships": 34 }
     }
   },
   "recording_waves": [
@@ -96,6 +97,12 @@
       "layer": "isms_graph_alpencloud",
       "objects": 30,
       "relationships": 34
+    },
+    {
+      "recorded_on": "2026-05-15",
+      "layer": "isms_graph_rheinbank",
+      "objects": 30,
+      "relationships": 34
     }
   ],
   "object_families_used": ["F01", "F02", "F03", "F04", "F06", "F07", "F08", "F09"],
@@ -104,11 +111,13 @@
     "located_at",
     "owns",
     "supports",
+    "operates",
     "depends_on",
     "processes",
     "exposes",
     "threatens",
     "affects",
+    "caused_by",
     "mitigates",
     "implements",
     "satisfies",
@@ -126,7 +135,7 @@
   "decision_note": "Die Abloesung ist FACHLICH modelliert (R24 zwischen zwei eigenstaendigen Objekten, Dok. 07 Abschnitt 9): der abgeloeste Stand traegt ein geschlossenes valid_time-Intervall, behaelt aber version 1 und KEIN record_time.replaced_at und bleibt vollstaendig sichtbar (Abloesung ohne historische Ueberschreibung). Damit traegt der Seed erstmals eine belegte Versionshistorie - die entsprechenden Produktaussagen sind abgeleitet, nicht hartkodiert.",
   "managed_service_chain": "SLA/Deliverable/Review --part_of--> Managed Service; Managed Service/Deliverable --delivered_by--> Team (Delivery-Verantwortung im selben Mandanten); Risk/Control/Control Implementation/Evidence --covered_by--> Managed Service (liegt im Serviceumfang); Managed Service --requires--> Control/Evidence; Managed Service/Control --contributes_to--> Objective/KPI; Deliverable Evidence-Pack --evidences--> Control; Risk --affects--> Objective.",
   "nordstern_chain": "Standort Werk Nord / Werk Sued / OU Konstruktion --part_of--> Organisation; Netzwerkzone OT und Asset Maschinendaten --located_at--> Standort Werk Nord; Geschaeftsprozess Fertigungssteuerung --supports--> Business Capability Produktionsverfuegbarkeit; Fertigungssteuerung/System MES --processes--> Asset Maschinendaten (+ Konstruktionsdaten); Weakness Fernwartung --exposes--> Maschinendaten; Threat Industriespionage --threatens--> Risk Scenario OT-Kompromittierung / Konstruktionsdaten; Risk Produktionsausfall --affects--> Fertigungssteuerung/Maschinendaten und wird durch Control Netzsegmentierung --mitigates--> gemindert; Control Implementation OT-Firewall/VLAN --implements--> Netzsegmentierung; Control Netzsegmentierung/Zugriffskontrolle --satisfies--> Requirement A.8.20 / A.8.3; Evidence Zugriffsreview --evidences--> Zugriffskontrolle (Netzsegmentierung bleibt BEWUSST ohne Nachweis); Measure Fernwartungshaertung --remediates--> Weakness / --mitigates--> Szenario; Audit Kunden-Audit --requires--> Zugriffskontrolle/Evidence/Backup-Control (im Pruefumfang). BEWUSSTE LUECKEN: Risk Abfluss Konstruktionsdaten OHNE mitigates; Asset Maschinendaten OHNE Owner und aus veralteter Quelle (2024); Weakness Fernwartung mit zwei widerspruechlichen Quellen (Konflikt, Dimension Konsistenz).",
-  "storyline": "Nordstern Manufacturing SE (synthetischer europaeischer Fertigungskonzern, Flaggschiff der Demo, Dok. 16 34.1) betreibt in 'Werk Nord - Produktion' den Kernprozess 'Auftragsabwicklung', der die 'Kundenauftragsdaten' verarbeitet. Eine ungepatchte ERP-Integrationsschnittstelle exponiert diese Daten; eine Ransomware-Bedrohung droht sie zu verschluesseln. Daraus entsteht das Risiko einer Betriebsunterbrechung. Ein Backup-&-Recovery-Control (lokal umgesetzt als Backup-Job, erfuellt Requirement A.8.13) mindert das Risiko; ein Restore-Test-Protokoll belegt seine Wirksamkeit. Eine Patch-Management-Massnahme behandelt die Schwaeche und mindert das Szenario. Darauf setzt die Managed-Service-Schicht auf: drei synthetische Service Instances (kontinuierliches Risiko- & Control-Monitoring, Nachweis-/Evidence-Betrieb, Management- & Entscheidungsreporting) decken Risiko, Control, Control-Implementierung und Nachweis ab, liefern SLA und Deliverables und zahlen auf das Ziel 'Auditfaehigkeit' sowie die KPI 'Nachweisquote priorisierter Controls' ein. Ein Outcome Review Q2/2026 prueft, ob die Wirkung eingetreten ist; der Reporting-Service steht deshalb im Zustand 'Review' und sein Management-Report ist bewusst noch Entwurf. Der Consulting Operator Demo traegt als zweiter Mandant zwei eigene Service Instances (Audit-Readiness-Betrieb aktiv, Policy-Lifecycle-Betrieb konfiguriert), damit die spaetere Portfolio-Sicht mehrere Mandanten zeigt. AlpenCloud GmbH traegt seit WP-021 Slice 3 einen eigenen ISMS-Graphen (30 Objekte / 34 Kanten, eigene vierte Erfassungswelle 2026-04-15): Cloud-Softwareanbieter mit schnellem Wachstum und Zertifizierungsziel (ISO/IEC 27001, synthetischer Demo-Katalog), gute Control-Abdeckung mit bewussten Wachstums-Deckungsluecken - das API-Gateway-Control ohne Nachweis (R15), das Wachstums-/Zertifizierungsrisiko ohne Minderung (R12), die neu hinzugekommenen Telemetrie-/Logdaten ohne Owner. Dok-07-Demo-Graph-Pflicht ueber belegte Felder: Konflikt (widerspruechliche Scan- vs. Selbstauskunft-Quellen an der Integrations-Schnittstelle), veraltete Quelle (Telemetrie-Inventar-Import 2024) und erklaerbarer Trust-State (Zertifizierungsrisiko ungeprueft, affects-Kante confidence 0.4). KEINE numerische Bewertung (Slice 7, gated). Finovia, MediCore und GreenGrid bleiben (noch) ohne Objekte und belegen den Empty-State (der Rheinbank-Slot 'tenant-finovia' und der MediNova-Slot 'tenant-medicore' folgen in WP-021 Slices 4-5, GreenGrid bleibt bewusst leer - getrennter, noch nicht erhobener Discovery-Scope). Darueber liegt die Entscheidungsschicht (nur Nordwerk): das Risiko wurde zuerst allein ueber Backup und Wiederherstellung abgesichert; dieser Stand ist fachlich beendet und wurde durch einen Nachfolgestand abgeloest, der zusaetzlich die Haertung der ERP-Schnittstelle umfasst. Der abgeloeste Stand bleibt sichtbar und ist durch das Restore-Test-Protokoll belegt. Eine dritte, offene Entscheidung betrifft den Berichtsrhythmus des Reporting-Service, der selbst im Zustand 'Review' steht. Alle drei Entscheidungen verantwortet die CISO-Rolle. Seit WP-021 Slice 1 ist das Flaggschiff reich ausgebaut (Anzeigename 'Nordstern', stabile tenant_id 'tenant-nordwerk'): ein zweiter Standort (Werk Sued), die OT-/Fertigungsseite (Produktionsverfuegbarkeit, MES, OT-Produktionsnetz, Maschinendaten), der Schutz der Konstruktionsdaten und ein bevorstehender Kunden-Audit (Q3/2026, in Vorbereitung). Bewusst gesetzte Deckungsluecken lassen die belegten Cockpit-Ampeln unterschiedlich ausschlagen: von drei Controls tragen zwei einen Nachweis (Netzsegmentierung bleibt ohne -> amber), von drei Risiken sind zwei gemindert (Abfluss der Konstruktionsdaten bleibt ohne Minderung -> amber), und die Maschinendaten tragen keinen Owner. Die Dok-07-Demo-Graph-Pflicht ist ueber belegte Felder erfuellt: ein Konflikt (widerspruechliche Quellen an der Fernwartungs-Schwaeche), eine veraltete Quelle (Maschinendaten aus dem Inventar-Import 2024) und ein erklaerbarer Trust-State (Abfluss-Risiko: ungeprueft, niedriger Vertrauensgrad, offene Wirkungsabschaetzung). KEINE numerische Bewertung - die bleibt Slice 7 (gated).",
+  "storyline": "Nordstern Manufacturing SE (synthetischer europaeischer Fertigungskonzern, Flaggschiff der Demo, Dok. 16 34.1) betreibt in 'Werk Nord - Produktion' den Kernprozess 'Auftragsabwicklung', der die 'Kundenauftragsdaten' verarbeitet. Eine ungepatchte ERP-Integrationsschnittstelle exponiert diese Daten; eine Ransomware-Bedrohung droht sie zu verschluesseln. Daraus entsteht das Risiko einer Betriebsunterbrechung. Ein Backup-&-Recovery-Control (lokal umgesetzt als Backup-Job, erfuellt Requirement A.8.13) mindert das Risiko; ein Restore-Test-Protokoll belegt seine Wirksamkeit. Eine Patch-Management-Massnahme behandelt die Schwaeche und mindert das Szenario. Darauf setzt die Managed-Service-Schicht auf: drei synthetische Service Instances (kontinuierliches Risiko- & Control-Monitoring, Nachweis-/Evidence-Betrieb, Management- & Entscheidungsreporting) decken Risiko, Control, Control-Implementierung und Nachweis ab, liefern SLA und Deliverables und zahlen auf das Ziel 'Auditfaehigkeit' sowie die KPI 'Nachweisquote priorisierter Controls' ein. Ein Outcome Review Q2/2026 prueft, ob die Wirkung eingetreten ist; der Reporting-Service steht deshalb im Zustand 'Review' und sein Management-Report ist bewusst noch Entwurf. Der Consulting Operator Demo traegt als zweiter Mandant zwei eigene Service Instances (Audit-Readiness-Betrieb aktiv, Policy-Lifecycle-Betrieb konfiguriert), damit die spaetere Portfolio-Sicht mehrere Mandanten zeigt. AlpenCloud GmbH traegt seit WP-021 Slice 3 einen eigenen ISMS-Graphen (30 Objekte / 34 Kanten, eigene vierte Erfassungswelle 2026-04-15): Cloud-Softwareanbieter mit schnellem Wachstum und Zertifizierungsziel (ISO/IEC 27001, synthetischer Demo-Katalog), gute Control-Abdeckung mit bewussten Wachstums-Deckungsluecken - das API-Gateway-Control ohne Nachweis (R15), das Wachstums-/Zertifizierungsrisiko ohne Minderung (R12), die neu hinzugekommenen Telemetrie-/Logdaten ohne Owner. Dok-07-Demo-Graph-Pflicht ueber belegte Felder: Konflikt (widerspruechliche Scan- vs. Selbstauskunft-Quellen an der Integrations-Schnittstelle), veraltete Quelle (Telemetrie-Inventar-Import 2024) und erklaerbarer Trust-State (Zertifizierungsrisiko ungeprueft, affects-Kante confidence 0.4). KEINE numerische Bewertung (Slice 7, gated). Rheinbank Digital AG (Slot 'tenant-finovia') traegt seit WP-021 Slice 4 einen eigenen ISMS-Graphen (30 Objekte / 34 Kanten, Erfassungswelle 2026-05-15): stark regulierter Finanzdienstleister mit mehreren Zielprofilen, hoher Nachweistiefe und strikter Datenresidenz; bewusste Deckungsluecken (Datenresidenz-Control ohne aktuellen Nachweis, Datenresidenzverstoss-Risiko ohne Minderung, Transaktionsprotokolle ohne Owner), Dok-07-Pflichten ueber belegte Felder (Konflikt an der Residenz-Konfiguration, veraltete Residenz-Attestierung 2024, erklaerbarer Trust-State am Residenzrisiko); neue Beziehungstypen operates + caused_by. MediCore und GreenGrid bleiben (noch) ohne Objekte und belegen den Empty-State (der MediNova-Slot 'tenant-medicore' folgt in WP-021 Slice 5, GreenGrid bleibt bewusst leer - getrennter, noch nicht erhobener Discovery-Scope). Darueber liegt die Entscheidungsschicht (nur Nordwerk): das Risiko wurde zuerst allein ueber Backup und Wiederherstellung abgesichert; dieser Stand ist fachlich beendet und wurde durch einen Nachfolgestand abgeloest, der zusaetzlich die Haertung der ERP-Schnittstelle umfasst. Der abgeloeste Stand bleibt sichtbar und ist durch das Restore-Test-Protokoll belegt. Eine dritte, offene Entscheidung betrifft den Berichtsrhythmus des Reporting-Service, der selbst im Zustand 'Review' steht. Alle drei Entscheidungen verantwortet die CISO-Rolle. Seit WP-021 Slice 1 ist das Flaggschiff reich ausgebaut (Anzeigename 'Nordstern', stabile tenant_id 'tenant-nordwerk'): ein zweiter Standort (Werk Sued), die OT-/Fertigungsseite (Produktionsverfuegbarkeit, MES, OT-Produktionsnetz, Maschinendaten), der Schutz der Konstruktionsdaten und ein bevorstehender Kunden-Audit (Q3/2026, in Vorbereitung). Bewusst gesetzte Deckungsluecken lassen die belegten Cockpit-Ampeln unterschiedlich ausschlagen: von drei Controls tragen zwei einen Nachweis (Netzsegmentierung bleibt ohne -> amber), von drei Risiken sind zwei gemindert (Abfluss der Konstruktionsdaten bleibt ohne Minderung -> amber), und die Maschinendaten tragen keinen Owner. Die Dok-07-Demo-Graph-Pflicht ist ueber belegte Felder erfuellt: ein Konflikt (widerspruechliche Quellen an der Fernwartungs-Schwaeche), eine veraltete Quelle (Maschinendaten aus dem Inventar-Import 2024) und ein erklaerbarer Trust-State (Abfluss-Risiko: ungeprueft, niedriger Vertrauensgrad, offene Wirkungsabschaetzung). KEINE numerische Bewertung - die bleibt Slice 7 (gated).",
   "open_questions": [
     "O-WP012-01: Dok. 13 trennt Service Definition / Service Offer / Service Instance; Dok. 07 kennt nur den Typ 'Managed Service'. Nur die Service Instance ist materialisiert.",
     "O-WP012-02: 'Service Run' (Dok. 13) und 'Work Package' (Dok. 15) haben keinen kanonischen Objekttyp; Deliverables haengen direkt an der Service Instance.",

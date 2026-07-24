@@ -238,7 +238,7 @@ describe('buildIsmsCoreView – Nordwerk (ISMS-Kerngraph vollständig aufgelöst
 
 describe('buildIsmsCoreView – Tenant-Isolation und Empty-Sicht (Acceptance 5/6)', () => {
   it('liefert für Finovia und MediCore eine vollständig leere ISMS-Sicht', () => {
-    for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
       const view = buildIsmsCoreView(tenantId);
       expect(view.isEmpty).toBe(true);
       expect(view.risks).toHaveLength(0);
@@ -284,6 +284,10 @@ describe('buildIsmsCoreView – Tenant-Isolation und Empty-Sicht (Acceptance 5/6
   });
 
   it('getIsmsCoreTenants leitet die Mandanten mit ISMS-Kernobjekten aus dem Seed ab (nicht hartkodiert)', () => {
-    expect(getIsmsCoreTenants().map((t) => t.tenant_id)).toEqual([TENANT_ID.NORDWERK]);
+    expect(getIsmsCoreTenants().map((t) => t.tenant_id)).toEqual([
+      TENANT_ID.NORDWERK,
+      TENANT_ID.FINOVIA,
+      TENANT_ID.ALPENCLOUD,
+    ]);
   });
 });

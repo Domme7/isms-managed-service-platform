@@ -449,7 +449,7 @@ describe('EntscheidungenContent – Mandantentrennung (Dok. 07 §17/P09)', () =>
     }
   });
 
-  for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA]) {
+  for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.GREENGRID]) {
     it(`zeigt für ${tenantId} keinen Namen und keine ID eines fremden Mandanten`, () => {
       const { container } = render(
         <EntscheidungenContent role={role('R01')} tenant={tenant(tenantId)} />,
@@ -510,7 +510,7 @@ describe('EntscheidungenContent – Leerzustände', () => {
    * viele Mandanten die Entscheidungsschicht ausmodelliert ist; ein Mandant ohne Entscheidungen
    * erfuhr damit, dass ein anderer welche trägt (Review-Fix).
    */
-  for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
     it(`${tenantId}: der Leerzustand sagt nichts über andere Mandanten`, () => {
       const { container } = render(
         <EntscheidungenContent role={role('R05')} tenant={tenant(tenantId)} />,
@@ -533,7 +533,7 @@ describe('EntscheidungenContent – Leerzustände', () => {
     });
   }
 
-  for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
     it(`${tenantId}: gar kein Datenbestand – anders formuliert als ein Mandant mit Graph`, () => {
       const leer = tenant(tenantId);
       render(<EntscheidungenContent role={role('R05')} tenant={leer} />);
@@ -709,7 +709,7 @@ describe('EntscheidungenContent – kein Score, keine Priorisierung, keine Gelda
       for (const tenantId of [
         TENANT_ID.NORDWERK,
         TENANT_ID.CONSULTING_OPERATOR,
-        TENANT_ID.FINOVIA,
+        TENANT_ID.GREENGRID,
       ]) {
         const kennung = demoRole?.id ?? 'neutral';
         const { container, unmount } = render(
@@ -976,7 +976,7 @@ describe('EntscheidungenContent – Ehrlichkeitsblock „Was eine Entscheidung h
  * --------------------------------------------------------------------------- */
 
 describe('EntscheidungenContent – Heading-Hierarchie', () => {
-  for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA]) {
+  for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.GREENGRID]) {
     it(`beginnt bei h1 und springt für ${tenantId} keine Ebene`, () => {
       render(<EntscheidungenContent role={role('R01')} tenant={tenant(tenantId)} />);
       const level = screen

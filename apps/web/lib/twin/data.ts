@@ -265,6 +265,13 @@ const REL_TYPE_TO_LABEL_DE: Readonly<Record<string, string>> = {
   satisfies: 'erfüllt',
   evidences: 'belegt',
   remediates: 'behebt',
+  // Neue Beziehungstypen der WP-021-Firmengraphen (Slices 3/4, Dok. 07 §9): AlpenCloud und
+  // Rheinbank tragen Laufzeit-/Speicherabhängigkeiten (R06 „depends_on"); Rheinbank zusätzlich die
+  // operative Betriebsverantwortung (R04 „operates") und eine Ursachenhypothese (R11 „caused_by",
+  // Risiko ← Schwäche).
+  depends_on: 'hängt ab von',
+  operates: 'betreibt',
+  caused_by: 'verursacht durch',
   // Managed-Service-Schicht (WP-012, Dok. 07 §9 R19–R22):
   requires: 'benötigt',
   contributes_to: 'trägt bei zu',

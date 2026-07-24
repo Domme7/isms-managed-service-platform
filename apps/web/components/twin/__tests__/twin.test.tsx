@@ -24,10 +24,10 @@ function tenantOrThrow(tenantId: string) {
 }
 
 describe('TenantOverview', () => {
-  it('listet alle vier Demo-Mandanten', () => {
+  it('listet alle sechs Demo-Mandanten', () => {
     render(<TenantOverview tenants={DEMO_SEED.tenants} />);
 
-    expect(DEMO_SEED.tenants).toHaveLength(4);
+    expect(DEMO_SEED.tenants).toHaveLength(6);
     for (const tenant of DEMO_SEED.tenants) {
       expect(screen.getByText(tenant.display_name)).toBeInTheDocument();
     }
@@ -42,7 +42,7 @@ describe('TenantOverview', () => {
     const withoutGraph = DEMO_SEED.tenants.filter((t) => !t.has_object_graph);
 
     expect(withGraph.length).toBeGreaterThanOrEqual(2);
-    expect(withoutGraph.map((t) => t.tenant_id)).toContain(TENANT_ID.FINOVIA);
+    expect(withoutGraph.map((t) => t.tenant_id)).toContain(TENANT_ID.GREENGRID);
     // EIN LEITBEGRIFF (WP-028 Slice 4, DR-0013 Nr. 9): „Objektgraph"/„Zwilling" waren zwei
     // Namen für dieselbe Sache; sichtbar heißt sie durchgehend „digitaler Zwilling".
     expect(screen.getAllByText('digitaler Zwilling erfasst')).toHaveLength(withGraph.length);
@@ -216,13 +216,13 @@ describe('TenantDetailView – Empty-State (ohne Graph)', () => {
     // Empty-State nannte fremde Mandanten samt Links („Ausmodelliert ist bislang …") – die
     // vierte Fundstelle der Leerzustands-Leak-Klasse (Dok. 07 „Mandantenfähigkeit"/P09).
     // Dieser Test hatte den Leak festgeschrieben; jetzt beweist er das Gegenteil.
-    const model = buildTenantDetail(tenantOrThrow(TENANT_ID.FINOVIA));
+    const model = buildTenantDetail(tenantOrThrow(TENANT_ID.GREENGRID));
     const { container } = render(<TenantDetailView model={model} />);
 
     expect(model.objectCount).toBe(0);
     expect(
       screen.getByRole('heading', {
-        name: 'Kein digitaler Zwilling für Finovia Digital Bank AG erfasst',
+        name: 'Kein digitaler Zwilling für GreenGrid Energy Services erfasst',
       }),
     ).toBeInTheDocument();
     // Kein Objekt-/Beziehungsbereich, wenn kein Graph vorhanden ist.
@@ -237,7 +237,7 @@ describe('TenantDetailView – Empty-State (ohne Graph)', () => {
     );
     // Negativbeweis: kein Name und keine ID eines anderen Mandanten im DOM.
     const html = container.innerHTML;
-    for (const fremd of DEMO_SEED.tenants.filter((t) => t.tenant_id !== TENANT_ID.FINOVIA)) {
+    for (const fremd of DEMO_SEED.tenants.filter((t) => t.tenant_id !== TENANT_ID.GREENGRID)) {
       expect(html).not.toContain(fremd.display_name);
       expect(html).not.toContain(fremd.tenant_id);
     }

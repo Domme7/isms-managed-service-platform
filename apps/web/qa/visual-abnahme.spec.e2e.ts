@@ -307,7 +307,7 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
     {
       slug: 'heute-leerer-mandant',
       pfad: '/heute',
-      sitzung: serializeSession({ roleId: 'R01', tenantId: TENANT_ID.FINOVIA }),
+      sitzung: serializeSession({ roleId: 'R01', tenantId: TENANT_ID.GREENGRID }),
       ausschnitt: null,
       mitAxe: true, // neuer Seitenzustand (Datenlücken-Kachel)
     },

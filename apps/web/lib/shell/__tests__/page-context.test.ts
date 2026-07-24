@@ -61,8 +61,8 @@ describe('derivePageContextFacts', () => {
 
   it('leerer Mandant im echten Seed: Finovia liefert keine Fakten', () => {
     const facts = derivePageContextFacts(
-      getObjectsForTenant(TENANT_ID.FINOVIA),
-      getRelationshipsForTenant(TENANT_ID.FINOVIA),
+      getObjectsForTenant(TENANT_ID.GREENGRID),
+      getRelationshipsForTenant(TENANT_ID.GREENGRID),
     );
     expect(facts.scopeIds).toEqual([]);
     expect(facts.recordedOn).toBeUndefined();

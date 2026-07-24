@@ -79,7 +79,7 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
     // Alle vier Mandanten nebeneinander (reine Aggregation je Mandant, O-WP012-03).
     for (const tenantName of [
       'Nordstern Manufacturing SE',
-      'Finovia Digital Bank AG',
+      'GreenGrid Energy Services',
       'MediCore Health Services GmbH',
       'Consulting Operator Demo',
     ]) {
@@ -87,13 +87,14 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
         within(portfolio).getByRole('heading', { level: 3, name: tenantName }),
       ).toBeInTheDocument();
     }
-    // Zähler aus dem Seed abgeleitet: 3 / 0 / 0 / 2.
+    // Zähler aus dem Seed abgeleitet: Nordwerk 3, Consulting Operator 2, die vier übrigen
+    // Kundenmandanten (Rheinbank/MediCore/AlpenCloud/GreenGrid) je 0 Managed Services.
     expect(within(portfolio).getByText('3 Managed Services')).toBeInTheDocument();
     expect(within(portfolio).getByText('2 Managed Services')).toBeInTheDocument();
-    expect(within(portfolio).getAllByText('0 Managed Services')).toHaveLength(2);
+    expect(within(portfolio).getAllByText('0 Managed Services')).toHaveLength(4);
     expect(
       within(portfolio).getAllByText('Keine Managed Services im aktuellen Datenbestand.'),
-    ).toHaveLength(2);
+    ).toHaveLength(4);
   });
 });
 
@@ -313,13 +314,13 @@ describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
     // Bewusst R03 (Customer Operations World): ohne die – dokumentiert mandantenübergreifende –
     // Portfolio-Sicht lässt sich die Mandantenlokalität des Leerzustands über den ganzen
     // Seiteninhalt prüfen.
-    const { role, tenant } = session('R03', TENANT_ID.FINOVIA);
+    const { role, tenant } = session('R03', TENANT_ID.GREENGRID);
     const { container } = render(<ServicesContent role={role} tenant={tenant} />);
 
     expect(
       screen.getByRole('heading', {
         level: 3,
-        name: 'Keine Managed Services für Finovia Digital Bank AG',
+        name: 'Keine Managed Services für GreenGrid Energy Services',
       }),
     ).toBeInTheDocument();
     expect(
@@ -340,13 +341,13 @@ describe('ServicesContent – Empty-State (Finovia ohne Services)', () => {
   });
 
   it('R08 sieht trotz Empty-State weiterhin das Portfolio (dokumentierte Verdichtung)', () => {
-    const { role, tenant } = session('R08', TENANT_ID.FINOVIA);
+    const { role, tenant } = session('R08', TENANT_ID.GREENGRID);
     render(<ServicesContent role={role} tenant={tenant} />);
 
     expect(
       screen.getByRole('heading', {
         level: 3,
-        name: 'Keine Managed Services für Finovia Digital Bank AG',
+        name: 'Keine Managed Services für GreenGrid Energy Services',
       }),
     ).toBeInTheDocument();
     // Die Portfolio-Sicht (O-WP012-03) ist KEIN Leerzustand und bleibt für die

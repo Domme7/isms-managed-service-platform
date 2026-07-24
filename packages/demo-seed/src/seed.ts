@@ -14,6 +14,7 @@ import { MANAGED_SERVICE_OBJECTS, MANAGED_SERVICE_RELATIONSHIPS } from './manage
 import { DECISION_OBJECTS, DECISION_RELATIONSHIPS } from './decisions';
 import { NORDSTERN_OBJECTS, NORDSTERN_RELATIONSHIPS } from './nordstern-graph';
 import { ALPENCLOUD_OBJECTS, ALPENCLOUD_RELATIONSHIPS } from './alpencloud-graph';
+import { RHEINBANK_OBJECTS, RHEINBANK_RELATIONSHIPS } from './rheinbank-graph';
 
 /**
  * Version der Seed-Grundlage (SemVer). Muss zu `seed-manifest.json` passen.
@@ -31,8 +32,12 @@ import { ALPENCLOUD_OBJECTS, ALPENCLOUD_RELATIONSHIPS } from './alpencloud-graph
  * 1.5.0 (WP-021 Slice 3): AlpenCloud GmbH erhält einen eigenen ISMS-Graphen (30 Objekte, 34 Kanten,
  * eigene vierte Erfassungswelle 2026-04-15) mit bewussten Deckungslücken + Dok-07-Demo-Graph-Pflicht;
  * KEINE numerische Bewertung (Slice 7, gated). Neuer Beziehungstyp `depends_on` erstmals belegt.
+ * 1.6.0 (WP-021 Slice 4): Rheinbank Digital AG (Slot `tenant-finovia`, Anzeige→Rheinbank) erhält einen
+ * eigenen ISMS-Graphen (30 Objekte, 34 Kanten, eigene Erfassungswelle 2026-05-15) mit bewussten
+ * Deckungslücken + Dok-07-Demo-Graph-Pflicht; neue Beziehungstypen `operates` (R04) + `caused_by`
+ * (R11) erstmals belegt; KEINE numerische Bewertung (Slice 7, gated).
  */
-export const SEED_VERSION = '1.5.0';
+export const SEED_VERSION = '1.6.0';
 
 export interface DemoSeed {
   readonly version: string;
@@ -44,9 +49,9 @@ export interface DemoSeed {
 /**
  * Der vollständige Demo-Seed: ISMS-Kerngraph (Nordwerk) + Managed-Service-Schicht
  * (Nordwerk und Consulting Operator Demo) + Entscheidungsschicht (nur Nordwerk).
- * AlpenCloud trägt seit WP-021 Slice 3 einen eigenen ISMS-Graphen. Finovia, MediCore und GreenGrid
- * bleiben (noch) ohne Objekte (Empty-State); Rheinbank-Slot/MediNova-Slot folgen in Slices 4–5,
- * GreenGrid bleibt bewusst leer.
+ * AlpenCloud (Slice 3) und Rheinbank (Slice 4, Slot `tenant-finovia`) tragen eigene ISMS-Graphen.
+ * MediCore und GreenGrid bleiben (noch) ohne Objekte (Empty-State); der MediNova-Slot folgt in
+ * Slice 5, GreenGrid bleibt bewusst leer.
  *
  * REIHENFOLGE (bewusst): die Entscheidungsschicht wird HINTER der Managed-Service-Schicht
  * angehängt. Dadurch bleibt innerhalb der Objektfamilie F09 das erste Objekt unverändert – und
@@ -67,6 +72,7 @@ export const DEMO_SEED: DemoSeed = {
     ...DECISION_OBJECTS,
     ...NORDSTERN_OBJECTS,
     ...ALPENCLOUD_OBJECTS,
+    ...RHEINBANK_OBJECTS,
   ],
   relationships: [
     ...NORDWERK_RELATIONSHIPS,
@@ -74,5 +80,6 @@ export const DEMO_SEED: DemoSeed = {
     ...DECISION_RELATIONSHIPS,
     ...NORDSTERN_RELATIONSHIPS,
     ...ALPENCLOUD_RELATIONSHIPS,
+    ...RHEINBANK_RELATIONSHIPS,
   ],
 };

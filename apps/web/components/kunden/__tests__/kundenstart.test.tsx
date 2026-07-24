@@ -92,7 +92,7 @@ describe('Kunden-Startseite „verwalten" – Slice 1', () => {
   });
 
   it('AC3: leerer Mandant zeigt eine mandantenlokale Einladung mit Einstieg in Katalog und Struktur-Assistent', () => {
-    for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
       const { container, unmount } = render(
         <KundenStartContent role={role('R03')} tenant={tenant(tenantId)} />,
       );
@@ -172,7 +172,11 @@ describe('Kunden-Startseite „verwalten" – Slice 1', () => {
   });
 
   it('preisfrei: kein Währungszeichen, kein Betrag, kein Prozent im gerenderten Text (O-KUNDE-01)', () => {
-    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA]) {
+    for (const tenantId of [
+      TENANT_ID.NORDWERK,
+      TENANT_ID.CONSULTING_OPERATOR,
+      TENANT_ID.GREENGRID,
+    ]) {
       const { container, unmount } = render(
         <KundenStartContent role={role('R03')} tenant={tenant(tenantId)} />,
       );

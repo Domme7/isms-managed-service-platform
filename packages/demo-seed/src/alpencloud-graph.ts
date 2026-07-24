@@ -252,7 +252,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
   alpencloudObject({
     object_id: A.ROLE_CISO,
     object_type: 'fachliche Rolle',
-    display_name: 'CISO (Informationssicherheitsbeauftragte Rolle)',
+    display_name: 'Informationssicherheitsbeauftragte Rolle (CISO, Cloud-Betrieb)',
     description:
       'Fachliche Rolle statt Einzelperson (Datenminimierung, Dok. 07 P12/D12). Fachliche Ownerin ' +
       'von Controls, Risiken, Zertifizierungsziel und dem bevorstehenden Zertifizierungsaudit.',
@@ -603,7 +603,7 @@ export const ALPENCLOUD_OBJECTS: readonly ObjectEnvelope[] = [
     display_name: 'Erstzertifizierung ISO/IEC 27001',
     description:
       'Synthetisches Ziel: die Erstzertifizierung nach ISO/IEC 27001 zu erreichen (Zertifizierungs- ' +
-      'ziel, Dok. 16 §34.1 Nr. 2). KEIN numerischer Zielwert/KPI erfasst (Slice 7, gated).',
+      'ziel, Dok. 16 §34.1 Nr. 2). Kein numerischer Zielwert und keine Kennzahl sind erfasst.',
     lifecycle_status: 'Freigegeben',
     owner_ids: [{ owner_id: A.ROLE_CISO, owner_kind: 'fachlich', role: 'Objective Owner' }],
   }),

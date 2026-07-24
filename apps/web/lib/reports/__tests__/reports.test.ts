@@ -212,7 +212,7 @@ describe('buildReportGrundlage – zählt nur, was die Fachorte ohnehin zeigen',
   }
 
   it('ein Mandant ohne Bestand liefert eine leere Grundlage ohne erfundene Werte', () => {
-    for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
       const model = buildReportGrundlage(tenant(tenantId));
       expect(model.isEmpty).toBe(true);
       expect(model.context.recordedOn).toBeUndefined();

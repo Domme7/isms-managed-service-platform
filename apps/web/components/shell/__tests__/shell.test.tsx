@@ -187,7 +187,7 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
   it('wechselt NICHT still: die Select-Auswahl öffnet erst den Bestätigungsschritt', () => {
     const props = renderShell({ session: SERVICE_LEAD_NORDWERK });
     fireEvent.change(screen.getByLabelText('Ansicht: Mandant'), {
-      target: { value: TENANT_ID.FINOVIA },
+      target: { value: TENANT_ID.GREENGRID },
     });
 
     // Kein stiller Wechsel: der Callback ist noch NICHT gefeuert.
@@ -196,19 +196,19 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
     // Der Bestätigungsschritt benennt alten UND neuen Mandanten (Text + Struktur).
     const bestaetigung = screen.getByRole('group', { name: 'Mandantenwechsel bestätigen' });
     expect(bestaetigung.textContent).toContain('Nordstern Manufacturing SE');
-    expect(bestaetigung.textContent).toContain('Finovia Digital Bank AG');
+    expect(bestaetigung.textContent).toContain('GreenGrid Energy Services');
 
     // Erst die explizite Bestätigung wechselt.
     fireEvent.click(
-      within(bestaetigung).getByRole('button', { name: 'Zu Finovia Digital Bank AG wechseln' }),
+      within(bestaetigung).getByRole('button', { name: 'Zu GreenGrid Energy Services wechseln' }),
     );
-    expect(props.onSwitchTenant).toHaveBeenCalledWith(TENANT_ID.FINOVIA);
+    expect(props.onSwitchTenant).toHaveBeenCalledWith(TENANT_ID.GREENGRID);
 
     // Danach: benannte, sichtbare Rückmeldung als Live-Region mit beiden Namen und Symbol.
     const status = screen.getByRole('status');
     expect(status.textContent).toContain('Kontextänderung');
     expect(status.textContent).toContain('Nordstern Manufacturing SE');
-    expect(status.textContent).toContain('Finovia Digital Bank AG');
+    expect(status.textContent).toContain('GreenGrid Energy Services');
     expect(status.querySelector('[aria-hidden="true"]')).not.toBeNull();
 
     // Die Rückmeldung ist schließbar (kein Timeout, keine Animation).
@@ -222,7 +222,7 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
   it('Abbrechen (Button oder Escape) verwirft den Wechselwunsch ohne Callback', () => {
     const props = renderShell({ session: SERVICE_LEAD_NORDWERK });
     fireEvent.change(screen.getByLabelText('Ansicht: Mandant'), {
-      target: { value: TENANT_ID.FINOVIA },
+      target: { value: TENANT_ID.GREENGRID },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Abbrechen' }));
     expect(props.onSwitchTenant).not.toHaveBeenCalled();
@@ -235,7 +235,7 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
 
     // Escape bricht ebenfalls ab (Tastaturweg).
     fireEvent.change(screen.getByLabelText('Ansicht: Mandant'), {
-      target: { value: TENANT_ID.FINOVIA },
+      target: { value: TENANT_ID.GREENGRID },
     });
     fireEvent.keyDown(screen.getByRole('group', { name: 'Mandantenwechsel bestätigen' }), {
       key: 'Escape',
@@ -479,11 +479,11 @@ describe('LoginForm – NUR der Mandant ist wählbar (WP-020 AC 5, DR-0009)', ()
     );
 
     fireEvent.change(screen.getByLabelText('Mandant wählen'), {
-      target: { value: TENANT_ID.FINOVIA },
+      target: { value: TENANT_ID.GREENGRID },
     });
     // Der Submit-Button spiegelt die Auswahl im Klartext – ohne Rollenbehauptung.
-    fireEvent.click(screen.getByRole('button', { name: 'Bei Finovia Digital Bank AG anmelden' }));
-    expect(onSubmit).toHaveBeenCalledWith(TENANT_ID.FINOVIA);
+    fireEvent.click(screen.getByRole('button', { name: 'Bei GreenGrid Energy Services anmelden' }));
+    expect(onSubmit).toHaveBeenCalledWith(TENANT_ID.GREENGRID);
   });
 });
 

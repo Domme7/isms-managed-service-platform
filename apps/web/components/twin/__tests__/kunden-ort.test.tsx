@@ -113,10 +113,10 @@ describe('Ort „Kunden" – Einstieg folgt der Sphäre (DR-0013 Nr. 11)', () =>
   });
 
   it('leerer Mandant: die Ein-Unternehmens-Sicht sagt es, ohne etwas zu erfinden', () => {
-    const { container } = renderOrt('R03', TENANT_ID.FINOVIA);
+    const { container } = renderOrt('R03', TENANT_ID.GREENGRID);
     expect(container.textContent).toMatch(/noch nichts erfasst/);
     // Kein erfundenes Datum, keine erfundene Zahl.
     expect(container.querySelectorAll('time')).toHaveLength(0);
-    expect(container.textContent).toContain('Finovia Digital Bank AG');
+    expect(container.textContent).toContain('GreenGrid Energy Services');
   });
 });

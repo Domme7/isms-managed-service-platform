@@ -107,7 +107,7 @@ describe('Wissen – AC 10: Glossar vollständig und in Domänensprache', () => 
   });
 
   it('NEGATIVBEWEIS: keine Familien-/Beziehungskennung und kein technischer Beziehungsname', () => {
-    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.FINOVIA]) {
+    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.GREENGRID]) {
       const { container, unmount } = render(
         <WissenContent role={role('R03')} tenant={tenant(tenantId)} />,
       );
@@ -213,7 +213,7 @@ describe('Wissen – AC 12: read-only und mandantenunabhängig', () => {
     ).textContent;
     referenz.unmount();
 
-    for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.CONSULTING_OPERATOR]) {
+    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.CONSULTING_OPERATOR]) {
       const { container, unmount } = render(
         <WissenContent role={role('R03')} tenant={tenant(tenantId)} />,
       );

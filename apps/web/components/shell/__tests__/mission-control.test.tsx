@@ -633,7 +633,7 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
  * --------------------------------------------------------------------------- */
 
 describe('MissionControlContent – Empty-States für Mandanten ohne Datenbestand', () => {
-  for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
     const leer = tenant(tenantId);
 
     it(`zeigt für ${leer.display_name} einen ehrlichen Leerzustand mit nächstem Schritt`, () => {
@@ -908,7 +908,7 @@ describe('MissionControlContent – Rollenvarianten (Dok. 06 Tabelle „Rollenva
 
   it('leerer Mandant: kein Rollenfokus – ohne Kacheln gibt es nichts zu betonen', () => {
     const { container } = render(
-      <MissionControlContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+      <MissionControlContent role={role('R03')} tenant={tenant(TENANT_ID.GREENGRID)} />,
     );
     expect(container.querySelector('.rv-fokus')).toBeNull();
     expect(container.querySelector('.db-tile[data-tile-id="datenluecke"]')).not.toBeNull();
@@ -995,7 +995,7 @@ describe('MissionControlContent – kein Score, keine Ampel, keine Empfehlung', 
       for (const tenantId of [
         TENANT_ID.NORDWERK,
         TENANT_ID.CONSULTING_OPERATOR,
-        TENANT_ID.FINOVIA,
+        TENANT_ID.GREENGRID,
       ]) {
         const { container, unmount } = render(
           <MissionControlContent role={demoRole} tenant={tenant(tenantId)} />,
@@ -1041,7 +1041,7 @@ describe('MissionControlContent – kein Score, keine Ampel, keine Empfehlung', 
         // dort gibt es bewusst keinen Rollenfokus).
         const fokusZuordnung = demoRole ? varianteForRole(demoRole.id) : null;
         const fokusVariante = fokusZuordnung?.variante ?? null;
-        if (fokusVariante && tenantId !== TENANT_ID.FINOVIA) {
+        if (fokusVariante && tenantId !== TENANT_ID.GREENGRID) {
           // Der GERENDERTE Lückentext ist mandantenabhängig (ISMS-Manager ergänzt die
           // Review-Existenz nur, wenn der Mandant einen Review trägt) – exakt das strippen,
           // was der Block wirklich zeigt, dieselbe Ableitung wie das Produkt (`hatReview`).
@@ -1419,7 +1419,11 @@ describe('MissionControlContent – Dashboard-Kacheln (Selbsterklärung, Badges,
    * unverändert scharf und wird zusätzlich um das Formmuster ergänzt.
    */
   it('vergibt kein Badge außerhalb der Positivliste und kein Urteil (kein hoch/mittel/gering)', () => {
-    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA]) {
+    for (const tenantId of [
+      TENANT_ID.NORDWERK,
+      TENANT_ID.CONSULTING_OPERATOR,
+      TENANT_ID.GREENGRID,
+    ]) {
       const model = buildHeuteDashboard(tenantId);
       if (!model) throw new Error(`Testfixture fehlt: ${tenantId}`);
       const { container, unmount } = render(
@@ -1453,7 +1457,7 @@ describe('MissionControlContent – Dashboard-Kacheln (Selbsterklärung, Badges,
 
   it('zeigt für leere Mandanten EINE Datenlücken-Kachel statt einer Kachelwand', () => {
     const { container } = render(
-      <MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+      <MissionControlContent role={role('R01')} tenant={tenant(TENANT_ID.GREENGRID)} />,
     );
     const kacheln = Array.from(container.querySelectorAll('.db-tile'));
     expect(kacheln).toHaveLength(1);
@@ -1462,7 +1466,7 @@ describe('MissionControlContent – Dashboard-Kacheln (Selbsterklärung, Badges,
     // Auch die Datenlücken-Kachel erklärt sich: Regel + Drill-down in den (leeren) Zwilling.
     expect(kacheln[0].querySelector('details.db-regel')).not.toBeNull();
     expect(kacheln[0].querySelector('.db-drill a')?.getAttribute('href')).toBe(
-      `/twin/${TENANT_ID.FINOVIA}`,
+      `/twin/${TENANT_ID.GREENGRID}`,
     );
   });
 

@@ -64,7 +64,11 @@ describe('Servicekatalog – Slice 2', () => {
   });
 
   it('AC7: preisfrei – kein Währungszeichen/EUR/Zahlenband; Preisstellen sind benannte Lücken', () => {
-    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA]) {
+    for (const tenantId of [
+      TENANT_ID.NORDWERK,
+      TENANT_ID.CONSULTING_OPERATOR,
+      TENANT_ID.GREENGRID,
+    ]) {
       const { container, unmount } = render(
         <ServicekatalogContent role={role('R03')} tenant={tenant(tenantId)} />,
       );

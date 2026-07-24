@@ -133,7 +133,7 @@ describe('Administration – AC 2: keine echten Rechte, keine Schreib-Hebel, kei
   const FIXTURES = [
     { tenantId: TENANT_ID.NORDWERK, roleId: 'R12' },
     { tenantId: TENANT_ID.CONSULTING_OPERATOR, roleId: 'R08' },
-    { tenantId: TENANT_ID.FINOVIA, roleId: 'R03' },
+    { tenantId: TENANT_ID.GREENGRID, roleId: 'R03' },
     { tenantId: TENANT_ID.MEDICORE, roleId: null },
   ];
 
@@ -190,7 +190,7 @@ describe('Administration – AC 2: keine echten Rechte, keine Schreib-Hebel, kei
   });
 
   it('kein erfundener Zustand: keine Ampel, kein Prozent, keine Verfügbarkeitszahl (DR-0008)', () => {
-    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.FINOVIA]) {
+    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.GREENGRID]) {
       const { container, unmount } = render(
         <AdministrationContent role={role('R12')} tenant={tenant(tenantId)} />,
       );
@@ -333,7 +333,7 @@ describe('Administration – AC 4: Modelle und Lücken benannt statt gefüllt', 
 });
 
 describe('Administration – AC 5: Leerzustand als ehrliche Datenlücke', () => {
-  for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
     it(`${tenantId}: mandantenlokaler Leerzustand, Rollenmodell bleibt sichtbar`, () => {
       const { container, unmount } = render(
         <AdministrationContent role={role('R12')} tenant={tenant(tenantId)} />,
@@ -378,7 +378,7 @@ describe('Administration – Antwort-Modus und Produktsprache (DR-0013 / DR-0011
   });
 
   it('kein internes Vokabular im eigenen Seiteninhalt', () => {
-    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.FINOVIA]) {
+    for (const tenantId of [TENANT_ID.NORDWERK, TENANT_ID.GREENGRID]) {
       const { container, unmount } = render(
         <AdministrationContent role={role('R12')} tenant={tenant(tenantId)} />,
       );

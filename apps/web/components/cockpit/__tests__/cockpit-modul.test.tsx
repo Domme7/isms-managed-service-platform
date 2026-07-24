@@ -118,7 +118,7 @@ describe('Bento-Cockpit – neutral', () => {
 });
 
 describe('Bento-Cockpit – leerer Mandant', () => {
-  for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
     it(`${tenantId}: ehrlicher Leerzustand ohne Bento und ohne fremden Mandanten`, () => {
       const { container } = render(
         <CockpitModulContent role={role('R01')} tenant={tenant(tenantId)} />,

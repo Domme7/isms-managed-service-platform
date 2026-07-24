@@ -242,7 +242,7 @@ describe('Seitenbausteine-Konvention auf den Orten der Konvention (Dok. 06)', ()
 
   it('der Hinweis bleibt auch im Leerzustand eines Mandanten stehen (Aussage über die Seite)', () => {
     const { container, unmount } = render(
-      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.FINOVIA)} />,
+      <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.GREENGRID)} />,
     );
     expect(hinweisElement(container)).toBeInTheDocument();
     unmount();

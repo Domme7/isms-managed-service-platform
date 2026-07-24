@@ -415,7 +415,7 @@ describe('Dashboard-Badges – nur Regeln der Positivliste, kein Urteil', () => 
  * --------------------------------------------------------------------------- */
 
 describe('buildHeuteDashboard – leere Mandanten und Mandantengrenze', () => {
-  for (const tenantId of [TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
     it(`${tenantId}: EINE ehrliche Datenlücken-Kachel statt einer „0 von 0"-Wand`, () => {
       const model = buildHeuteDashboard(tenantId);
       if (!model) throw new Error(`Testfixture fehlt: ${tenantId}`);
@@ -492,7 +492,11 @@ describe('buildIsmsVerdichtung – Verteilung und Abdeckungen des Ortes „ISMS"
   });
 
   it('liefert für Mandanten ohne ISMS-Kernobjekte undefined (eigener Leerzustand der Seite)', () => {
-    for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.FINOVIA, TENANT_ID.MEDICORE]) {
+    for (const tenantId of [
+      TENANT_ID.CONSULTING_OPERATOR,
+      TENANT_ID.GREENGRID,
+      TENANT_ID.MEDICORE,
+    ]) {
       expect(buildIsmsVerdichtung(tenantId), tenantId).toBeUndefined();
     }
   });
