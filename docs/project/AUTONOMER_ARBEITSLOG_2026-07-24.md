@@ -109,9 +109,21 @@
     Risiko-Level, KPI-Zielwerte) = **E-02-Owner-Gate**, blockiert (CCP-003/005/008). (b) *Minor autonom:*
     CCP-008-Trägerschema-Vorschlag (`research/change-proposals/`) + Firmen-Storylines in
     `packages/demo-seed/README.md` (AC-10) — nachziehbar, blockiert nichts.
-- ⏭️ **Nächster autonomer Punkt: DR-0017 Stage 1 — Berater-Portfolio-Dashboard-Einstieg** (jetzt
-  datenreich: 4 Firmen mit echten Graphen + 1 leer → echte Rangliste nach Datenlücken je Kunde,
-  „krassere" Heatmap Kunde×Bereich). Danach 5-Profile-Login, DR-0017 Stages 2–4.
+- ✅ **DR-0017 Stage 1 (Berater-Portfolio-Einstieg) KOMPLETT (Liste-A-Punkt 2):**
+  - `53bb388` **1a Datenschicht** `lib/portfolio/data.ts`: `buildPortfolioDashboard()` verdichtet je
+    Kunde die belegten `x-von-y`-Abdeckungen (keine 2. Zählregel); Rang nach echter ISMS-Lücken-Last;
+    Provider ausgeschlossen; GreenGrid = Empty-State. 9 Tests.
+  - `f02cf48` **1b UI** `/portfolio` (eigenständig, kein NAV_PLACES-Ort): Kunden-Rangliste (Nordstern
+    39 > MediNova 23 > Rheinbank 17 > AlpenCloud 16 > GreenGrid leer) + **Heatmap Kunde×Abdeckung**;
+    Eintauchen → Kunde-Cockpit (end-to-end im Browser verifiziert, keine Konsolenfehler). In
+    produktsprache+prozessvokabular registriert. 7 Komponententests.
+  - `8bbe16d` **1c Routing** `einstiegHref(role)`: Berater→`/portfolio`, Kunde→`/cockpit`, neutral→
+    Portfolio. Login + Root-Redirect verdrahtet. web 857 grün.
+  - **Ehrlich getrennt:** Teil 1 (Lücken-Last-Rangliste + Heatmap) = echte Daten. Teil 2
+    (Eisenhower/Fristen/Dringlichkeit) = **E-02-Owner-Gate**, als benannte Lücke gezeigt, nicht gebaut.
+- ⏭️ **Nächster autonomer Punkt: 5-Profile-Login** (Liste-A-Punkt 3): Firmen als Kunden-Profile +
+  Berater/Admin; feine 12-Rollen aus dem Login-Einstieg raus (interne Sphären-Logik bleibt, OF-1).
+  Danach DR-0017 Stages 2–4 (Kunde-Dashboard-Einstieg, Bereiche als Kacheln, Sidebar raus).
 - ~~⏳ **WP-021 Slice 5 (MediNova Clinics Holding):** Entwurf `medinova-graph.ts` liegt fertig auf Platte~~
   (Workflow, 30 Objekte/36 Kanten, inkl. F05 Lieferkette), noch **nicht verdrahtet**. Integration wie
   Rheinbank: Slot `tenant-medicore`, Anzeige→MediNova; `seed.ts`/`index`/`seed-facts`/`seed.spec`/
