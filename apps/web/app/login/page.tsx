@@ -22,7 +22,9 @@ import { useRouter } from 'next/navigation';
 import { LoginForm } from '../../components/shell/LoginForm';
 import { LoginWelten } from '../../components/shell/LoginWelten';
 import { useSession } from '../../components/shell/SessionProvider';
+import { DEMO_ROLES } from '../../lib/shell/roles';
 import { defaultSession } from '../../lib/shell/session';
+import { einstiegHref } from '../../lib/shell/sphaere';
 import { DEMO_TENANTS } from '@isms/demo-seed';
 
 export default function LoginPage() {
@@ -31,11 +33,13 @@ export default function LoginPage() {
 
   const initial = session ?? defaultSession();
 
-  // Beide Wege enden im Cockpit (Startseite, DR-0010 Nr. 3). Eine bestehende Sitzung wird nur
-  // durch den Submit überschrieben (nicht beim bloßen Öffnen der Seite).
+  // Sphärengerechter Einstieg (DR-0017 Stage 1): die Berater-/Portfolio-Sicht landet auf dem
+  // Berater-Portfolio (alle Kunden), die Kunde-Sicht direkt auf dem eigenen Cockpit. Eine
+  // bestehende Sitzung wird nur durch den Submit überschrieben (nicht beim bloßen Öffnen).
   const eintreten = (roleId: string | null, tenantId: string) => {
     signIn(roleId, tenantId);
-    router.push('/cockpit');
+    const role = roleId ? (DEMO_ROLES.find((r) => r.id === roleId) ?? null) : null;
+    router.push(einstiegHref(role));
   };
 
   return (

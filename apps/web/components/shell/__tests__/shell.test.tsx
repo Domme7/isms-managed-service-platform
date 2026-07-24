@@ -519,7 +519,7 @@ describe('LoginPage – Anmeldung erzeugt die NEUTRALE Sitzung (AC 5/6)', () => 
     expect(screen.queryAllByRole('radio')).toHaveLength(0);
   });
 
-  it('schreibt beim Anmelden eine ROLLENLOSE Sitzung und führt ins Cockpit (Startseite)', () => {
+  it('schreibt beim Anmelden eine ROLLENLOSE Sitzung und führt ins Berater-Portfolio (neutral = Portfolio-Sicht)', () => {
     render(
       <SessionProvider>
         <LoginPage />
@@ -533,8 +533,8 @@ describe('LoginPage – Anmeldung erzeugt die NEUTRALE Sitzung (AC 5/6)', () => 
     const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
     expect(gespeichert).toEqual({ tenantId: TENANT_ID.NORDWERK });
     expect(gespeichert?.roleId).toBeUndefined();
-    // Cockpit ist seit DR-0010 Nr. 3 die Startseite nach der Anmeldung (vorher „/heute").
-    expect(routerPush).toHaveBeenCalledWith('/cockpit');
+    // Neutral = Portfolio-Sphäre (DR-0017 Stage 1): der Einstieg führt auf das Berater-Portfolio.
+    expect(routerPush).toHaveBeenCalledWith('/portfolio');
   });
 
   it('startet auch nach einer Alt-Sitzung MIT Rolle neutral (Mandant zuerst, Rolle in der App)', () => {

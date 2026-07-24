@@ -20,15 +20,18 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSession } from '../components/shell/SessionProvider';
+import { einstiegHref } from '../lib/shell/sphaere';
 
 export default function Home() {
   const router = useRouter();
-  const { session, hydrated } = useSession();
+  const { resolved, hydrated } = useSession();
 
   useEffect(() => {
     if (!hydrated) return;
-    router.replace(session ? '/cockpit' : '/willkommen');
-  }, [hydrated, session, router]);
+    // Sphärengerechter Einstieg (DR-0017 Stage 1): Berater/Portfolio → Berater-Portfolio,
+    // Kunde → eigenes Cockpit; nicht angemeldet → Produkt-Landing.
+    router.replace(resolved ? einstiegHref(resolved.role) : '/willkommen');
+  }, [hydrated, resolved, router]);
 
   return (
     <main className="tw-container" aria-busy={!hydrated}>

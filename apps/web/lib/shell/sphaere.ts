@@ -107,6 +107,20 @@ export const ANSICHT_NICHT_BERECHTIGUNG_SATZ =
 /** Route des eigenen Kundenbereichs (Ein-Unternehmens-Cockpit, Dok. 06 S02). */
 export const KUNDENBEREICH_HREF = '/kunden';
 
+/**
+ * Einstieg NACH der Anmeldung je Sphäre (DR-0017 Stage 1): Die Portfolio-Sicht (Berater/Betreiber
+ * bzw. neutral) landet auf dem Berater-Portfolio (alle Kunden auf einen Blick); die
+ * Ein-Unternehmens-Sicht (Kunde/Auditor) landet direkt auf dem eigenen Cockpit. Dieselbe Sphären-
+ * Regel wie `kundenSicht` — kein zweiter Schalter.
+ */
+export const BERATER_EINSTIEG_HREF = '/portfolio';
+export const KUNDE_EINSTIEG_HREF = '/cockpit';
+
+/** Zielroute des Einstiegs nach der Anmeldung für die aktive Perspektive. */
+export function einstiegHref(role: DemoRole | null): string {
+  return kundenSicht(role) === 'portfolio' ? BERATER_EINSTIEG_HREF : KUNDE_EINSTIEG_HREF;
+}
+
 /** Route des Mandanten-Portfolios (Übersicht, Dok. 06 „Portfolio und Customer Workspaces"). */
 export const PORTFOLIO_HREF = '/twin';
 

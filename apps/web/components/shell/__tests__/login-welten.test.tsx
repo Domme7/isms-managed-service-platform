@@ -137,7 +137,7 @@ describe('LoginWelten – zwei sichtbar getrennte Einstiege (DR-0015 Nr. 7)', ()
   });
 });
 
-describe('LoginPage – der Welten-Eintritt schreibt eine Sitzung MIT Rolle und führt ins Cockpit', () => {
+describe('LoginPage – der Welten-Eintritt schreibt eine Sitzung MIT Rolle und führt sphärengerecht (Kunde→Cockpit, Berater→Portfolio)', () => {
   beforeEach(() => {
     window.localStorage.clear();
     routerPush.mockClear();
@@ -160,7 +160,26 @@ describe('LoginPage – der Welten-Eintritt schreibt eine Sitzung MIT Rolle und 
 
     const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
     expect(gespeichert).toEqual({ roleId: 'R03', tenantId: TENANT_ID.NORDWERK });
+    // Kunde = Ein-Unternehmens-Sicht: der Einstieg führt direkt auf das eigene Cockpit.
     expect(routerPush).toHaveBeenCalledWith('/cockpit');
+  });
+
+  it('Beraterwelt: schreibt eine Betreiberrolle und pusht /portfolio (Berater-Einstieg, DR-0017)', () => {
+    render(
+      <SessionProvider>
+        <LoginPage />
+      </SessionProvider>,
+    );
+    fireEvent.change(screen.getByLabelText('Rolle für die Beratersicht'), {
+      target: { value: 'R09' },
+    });
+    const berater = screen.getByRole('region', { name: 'Berater' });
+    fireEvent.click(within(berater).getByRole('button', { name: /öffnen$/ }));
+
+    const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
+    expect(gespeichert?.roleId).toBe('R09');
+    // Betreiber = Portfolio-Sphäre: der Einstieg führt auf das Berater-Portfolio (alle Kunden).
+    expect(routerPush).toHaveBeenCalledWith('/portfolio');
   });
 
   it('der neutrale Einstieg (DR-0009) bleibt als dritte Option erhalten und schreibt keine Rolle', () => {
@@ -178,6 +197,7 @@ describe('LoginPage – der Welten-Eintritt schreibt eine Sitzung MIT Rolle und 
     const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
     expect(gespeichert).toEqual({ tenantId: TENANT_ID.GREENGRID });
     expect(gespeichert?.roleId).toBeUndefined();
-    expect(routerPush).toHaveBeenCalledWith('/cockpit');
+    // Neutral = Portfolio-Sphäre (DR-0009/DR-0017): der Einstieg führt auf das Berater-Portfolio.
+    expect(routerPush).toHaveBeenCalledWith('/portfolio');
   });
 });
