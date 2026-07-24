@@ -61,3 +61,10 @@ Owner):**
 Diese Varianten kommen als nächste Iteration (Design-Vorschauen), bevor der echte Bau des Cockpit-Redesigns
 final festgezurrt wird. **Der aktuelle Stand ist bereits owner-abgesegnet und darf gebaut werden**, falls vor
 der Experiment-Runde weitergearbeitet wird.
+
+## Nachtrag: Owner-Wahl (2026-07-24)
+
+Aus den zwei gezeigten Design-Varianten hat der Owner **Variante A „Bento-Mosaik"** gewählt (O-Ton „ich liebe
+Variante A"): lebendiges Bento-Raster, Radar-Abdeckungsprofil oben groß, **verschiedene Kachelgrößen**, kräftige
+Eintauch-Animation, ehrliche datengetragene Kacheln mit echten Drill-downs. **Diese Variante wird full-width ins
+Produkt gebaut (WP-034 Slice 2).** Variante B („Radar-Fokus") bleibt als dokumentierte Alternative.

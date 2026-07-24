@@ -6,6 +6,9 @@
   viel zu lang" + interaktive Dive-Vorschau **owner-abgesegnet 2026-07-24**), DR-0014, DR-0008.
 - **Owner-Stand:** Die Drill-down-/Eintauch-Richtung ist **freigegeben (darf gebaut werden)**. Vor der finalen
   Festlegung zeigt Slice 1 dem Owner **Design-Varianten zur Auswahl** (siehe unten).
+- **✅ Slice-1-Ergebnis (2026-07-24):** zwei Varianten gezeigt (A „Bento-Mosaik", B „Radar-Fokus"); **der Owner
+  wählte Variante A** („ich liebe Variante A"). **Slice 2 (Umsetzung full-width ins echte Cockpit) ist jetzt der
+  aktive Schritt.**
 
 ## Ziel
 Das lange Scroll-Cockpit wird ein **kompaktes Grafik-Dashboard**, in das man sich per Klick **progressiv tiefer
