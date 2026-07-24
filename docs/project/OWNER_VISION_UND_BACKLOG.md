@@ -42,6 +42,11 @@ langgezogen."*
   motion` respektieren; axe 0.
 - **Umsetzung:** eigenes WP; die gebaute Datenlogik bleibt, nur Präsentation/Navigation neu. (Ersetzt das
   heutige Langscroll-Cockpit; A/B/C-Personalisierung wird dabei neu bewertet.)
+- **✅ Owner-Freigabe (2026-07-24):** die interaktive Drill-down-/„Eintauch"-Vorschau **gefällt dem Owner
+  sehr gut** und ist die verbindliche Basis (darf gebaut werden). **Vor der finalen Festlegung noch
+  ausprobieren** (Design-Experimente, dann wählt der Owner): (1) mehr Charts; (2) unterschiedliche
+  Kachelgrößen (nicht uniform, Wichtiges größer); (3) Radar-/Web-Chart + andere Grafiktypen wo sinnvoll;
+  (4) coolere/stärkere Animation. Details: [DR-0016](../decisions/DR-0016_cockpit_redesign_drilldown_dashboard.md).
 
 ## 4. Fahrplan (Sequenz, usability-first)
 
