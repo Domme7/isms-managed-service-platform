@@ -24,7 +24,7 @@ const KPI_LABEL: Readonly<Record<CoverageTile['id'], string>> = {
   controls_nachweis: 'Controls mit Nachweis',
   risiken_minderung: 'Risiken mit Minderung',
   objekte_owner: 'Objekte mit Owner',
-  kanten_vertrauensgrad: 'Beziehungen mit Vertrauensgrad',
+  kanten_vertrauensgrad: 'Beziehungen mit Vertrauensangabe',
 };
 
 function stockTile(dashboard: HeuteDashboardModel, id: StockTile['id']): StockTile | undefined {
@@ -60,7 +60,14 @@ function RingKachel({ tile }: { tile: CoverageTile }) {
           </>
         ) : (
           <>
-            <CoverageRing covered={tile.covered} total={tile.total} status={status} />
+            {/* Bei kleiner Grundgesamtheit (n≤2) KEINE gefüllte Ring-Geometrie: ein voller Ring
+                über „1 von 1" läse sich wie eine vollständige Landschaft, obwohl genau ein Fall
+                erfasst ist (DR-0013 Nr. 7 / Parität zum Heute-Dashboard: `badgeFuerAbdeckung`
+                unterdrückt hier Balken+Badge). Es bleiben nur die nackte Zahl „x von y" und der
+                Kleinheits-Hinweis – die Zahl behauptet nichts über Vollständigkeit. */}
+            {tile.kleineGrundgesamtheit ? null : (
+              <CoverageRing covered={tile.covered} total={tile.total} status={status} />
+            )}
             {/* Barrierefreie Aussage als Text (der Ring selbst ist aria-hidden). */}
             <span className="ck-kpi-wert">
               {tile.covered} von {tile.total}

@@ -99,12 +99,14 @@ describe('Servicekatalog-Konstanten – Vollzähligkeit (am PDF verifiziert)', (
 
 /**
  * Geldartiges Zahlenband OHNE Währungstoken (Security-Auflage): ein Band wie „3.500-6.500 pro
- * Monat" bliebe von der reinen Währungstoken-Liste unentdeckt – ausgerechnet an der strengsten
- * Guardrail (O-KUNDE-01). Dieses Muster erfasst zwei Zahlen im Band, gefolgt von einem
- * Geld-Rhythmuswort.
+ * Monat" ODER – ganz ohne Kadenzwort – „3.500 bis 6.500" bliebe von der reinen Währungstoken-
+ * Liste unentdeckt, ausgerechnet an der strengsten Guardrail (O-KUNDE-01). Erfasst zwei
+ * GELDGROSSE Zahlen (Tausenderpunkt/-komma oder ≥4 Ziffern), verbunden durch „-", „–" oder
+ * „bis"; das Kadenzwort ist optional. Kleine Rhythmen wie „6-16 Wochen" oder Einzelzahlen wie
+ * „T-180 bis Post-Audit" lösen bewusst NICHT aus (kein Fehlalarm auf legitime Rhythmen/Zahlen).
  */
 const GELDBAND =
-  /\d[\d.,]*\s?[-–]\s?\d[\d.,]*\s?(pro\s?Monat|monatlich|einmalig|\/\s?Monat|Monatsbereich)/i;
+  /(?:\d{1,3}(?:[.,]\d{3})+|\d{4,})\s?(?:bis|[-–])\s?(?:\d{1,3}(?:[.,]\d{3})+|\d{4,})(?:\s?(?:pro\s?Monat|monatlich|einmalig|\/\s?Monat|Monatsbereich))?/i;
 
 describe('Servicekatalog-Konstanten – Preisfreiheit der Quelle (O-KUNDE-01)', () => {
   it('keine Konstante trägt ein Währungszeichen, EUR/USD, einen Prozentwert oder ein Geldband', () => {
@@ -134,5 +136,9 @@ describe('Servicekatalog-Konstanten – Preisfreiheit der Quelle (O-KUNDE-01)', 
     // Muster wäre es durchgerutscht) – die Konstanten tragen keines.
     expect('3.500-6.500 pro Monat', 'währungsloses Geldband muss auffallen').toMatch(GELDBAND);
     expect('1200 – 1800 monatlich', 'Geldband mit Gedankenstrich muss auffallen').toMatch(GELDBAND);
+    expect('3.500 bis 6.500', 'Band OHNE Kadenzwort muss auffallen').toMatch(GELDBAND);
+    // Gegenprobe: legitime Rhythmen/Zahlen dürfen NICHT auslösen (kein Fehlalarm).
+    expect('einmalig / 6-16 Wochen', 'kleiner Wochen-Rhythmus').not.toMatch(GELDBAND);
+    expect('T-180 bis Post-Audit', 'Einzelzahl ohne zweite Zahl').not.toMatch(GELDBAND);
   });
 });

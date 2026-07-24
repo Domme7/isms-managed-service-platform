@@ -1622,15 +1622,18 @@ summary {
 }
 
 /* Varianten-Umschalter: Auswahl = Radio-Form + Rahmen + Text, nie nur Farbe (06-D11). */
+/* Stil-Personalisierung: kompaktes, untergeordnetes Segment-Control (kein Vergleichsblock).
+   Eine Zeile Segmente + eine ruhige Hinweiszeile – bewusst niedrig, damit die eigentliche
+   Antwort („Zustand auf einen Blick") oben bleibt (WP-025-Fixpass, Antwort-Modus). */
 .ck-schalter {
   border: 1px solid var(--tw-line);
   border-radius: 10px;
-  padding: 0.8rem 1rem 1rem;
-  margin: 0 0 1.5rem;
+  padding: 0.45rem 0.7rem 0.55rem;
+  margin: 0 0 1rem;
   background: var(--tw-surface);
 }
 .ck-schalter > legend {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1638,22 +1641,18 @@ summary {
   padding: 0 0.35rem;
 }
 .ck-schalter-optionen {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 0.7rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 .ck-schalter-option {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-areas:
-    "radio titel"
-    "radio nutzer"
-    "leitidee leitidee";
-  align-items: start;
-  gap: 0.15rem 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   border: 1px solid var(--tw-line);
-  border-radius: 8px;
-  padding: 0.6rem 0.75rem;
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+  background: var(--tw-surface-2);
   cursor: pointer;
 }
 .ck-schalter-option:hover {
@@ -1661,27 +1660,19 @@ summary {
 }
 .ck-schalter-option--aktiv {
   border-color: var(--shell-navy);
-  background: var(--tw-surface-2);
+  background: var(--tw-surface);
   box-shadow: 0 0 0 1px var(--shell-navy) inset;
 }
 .ck-schalter-option input {
-  grid-area: radio;
-  margin-top: 0.25rem;
+  margin: 0;
 }
 .ck-schalter-titel {
-  grid-area: titel;
-  font-weight: 700;
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 0.82rem;
 }
-.ck-schalter-nutzer {
-  grid-area: nutzer;
-  font-size: 0.76rem;
-  color: var(--tw-muted);
-}
-.ck-schalter-leitidee {
-  grid-area: leitidee;
-  margin-top: 0.35rem;
-  font-size: 0.8rem;
+.ck-schalter-hinweis {
+  margin: 0.4rem 0 0;
+  font-size: 0.78rem;
   color: var(--tw-ink-soft);
 }
 
@@ -1778,7 +1769,7 @@ summary {
   border-radius: 14px;
 }
 
-.ck-cockpit[data-ck-theme="dark"] {
+.ck-cockpit[data-ck-theme="dunkel"] {
   --ck-surface: #191c24;
   --ck-surface-2: #20242e;
   --ck-surface-3: #2a2f3b;

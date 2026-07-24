@@ -1,9 +1,10 @@
 /**
- * Cockpit-Start-Varianten (WP-025, DR-0010 Nr. 3 / DR-0012 Stufe A).
+ * Cockpit-Stile (WP-025, DR-0010 Nr. 3 / DR-0012 Stufe A).
  *
- * DREI erlebbar unterschiedliche Startseiten-Entwürfe auf DEMSELBEN belegten Datenmodell
- * (`buildHeuteDashboard` / `buildMissionControl`) – zum visuellen Owner-Vergleich, nach dem der
- * Sprint anhält (Owner wählt Stil/Hybrid, O-WP025-05). Sie unterscheiden sich in
+ * DREI erlebbar unterschiedliche Ausprägungen DERSELBEN Startseite auf DEMSELBEN belegten
+ * Datenmodell (`buildHeuteDashboard` / `buildMissionControl`) – eine dezente Personalisierung:
+ * Stil A ist der Default (das eine polierte Cockpit für den Erstbesucher), B und C sind
+ * untergeordnete Alternativen, deren Wahl gemerkt wird (O-WP025-05). Sie unterscheiden sich in
  * Informationsarchitektur und Erstkontakt, NICHT in der Datenmenge (P02 „eine Wahrheit, mehrere
  * Perspektiven"; Dok. 06 06-D05).
  *
@@ -22,7 +23,7 @@
  *  - Dok. 10, Abschnitt „Management-Modus": Umschalter „Wenn ich Geschäftsführer wäre" (Variante
  *    C, reduzierende Vorschau – siehe `CockpitVariantenContent`).
  *
- * KEIN NEUER HAUPTNAV-ORT (06-D01, acht Orte fix): Die Vergleichsseite lebt unter „Heute"
+ * KEIN NEUER HAUPTNAV-ORT (06-D01, acht Orte fix): Das Cockpit lebt unter „Heute"
  * (Route `/cockpit`, im Navigations-Match dem Ort „Heute" zugeordnet – `lib/shell/places.ts`).
  *
  * React-frei und deterministisch testbar (Muster `lib/heute/detailtiefe.ts`).
@@ -58,10 +59,10 @@ export interface CockpitVarianteMeta {
 }
 
 /**
- * Die drei Varianten. Reihenfolge = Vergleichsreihenfolge (A → B → C, von „nah am heutigen
- * Stand" zu „höchster konzeptioneller Anspruch"). Sichtbarer Text bewusst OHNE Bewertungs- oder
- * Design-Vokabular („Ampel", „Trend", „Score" …): Die Varianten unterscheiden sich in der
- * Informationsarchitektur, nicht in einer erfundenen Bewertung (DR-0008).
+ * Die drei Stile. Reihenfolge = Personalisierungs-Reihenfolge (A → B → C, von „nah am heutigen
+ * Stand" zu „höchster konzeptioneller Anspruch"); A ist der Default. Sichtbarer Text bewusst OHNE
+ * Bewertungs- oder Design-Vokabular („Ampel", „Trend", „Score" …): Die Stile unterscheiden sich
+ * in der Informationsarchitektur, nicht in einer erfundenen Bewertung (DR-0008).
  */
 export const COCKPIT_VARIANTEN: readonly CockpitVarianteMeta[] = [
   {

@@ -10,6 +10,8 @@
  *  5. Sphärentrennung Kunde/Betreiber (DR-0012); neutral-fähig (DR-0009).
  *  6. Negativbeweise: kein fremder Mandant im DOM; Trend/Puls u. ä. nur als benannte Lücke.
  */
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
@@ -66,7 +68,7 @@ describe('CockpitVariantenContent – Kopf und Varianten-Umschalter', () => {
     expect(container.textContent ?? '').not.toContain('seit meinem letzten Besuch verändert');
 
     const schalter = screen
-      .getByRole('group', { name: 'Cockpit-Ansicht wählen (bleibt gespeichert)' })
+      .getByRole('group', { name: 'Cockpit-Stil (wird gespeichert)' })
       .querySelectorAll('input[type="radio"]');
     expect(schalter).toHaveLength(3);
   });
@@ -78,9 +80,9 @@ describe('CockpitVariantenContent – Kopf und Varianten-Umschalter', () => {
     // Standard ist A.
     expect(buehne(container).getAttribute('data-cockpit-variante')).toBe('a');
     // Umschalten auf B und C.
-    fireEvent.click(screen.getByRole('radio', { name: /Variante B/ }));
+    fireEvent.click(screen.getByRole('radio', { name: /Stil B/ }));
     expect(buehne(container).getAttribute('data-cockpit-variante')).toBe('b');
-    fireEvent.click(screen.getByRole('radio', { name: /Variante C/ }));
+    fireEvent.click(screen.getByRole('radio', { name: /Stil C/ }));
     expect(buehne(container).getAttribute('data-cockpit-variante')).toBe('c');
   });
 
@@ -469,10 +471,12 @@ describe('Cockpit – KPI-Band mit Deckungsringen (echte Werte, funktionale Link
     if (!dashboard) throw new Error('Dashboard fehlt');
 
     const ringKacheln = buehne(container).querySelectorAll('.ck-kpi--ring');
+    // Jede Abdeckungskachel wird gerendert (auch die mit kleiner Grundgesamtheit) …
     expect(ringKacheln).toHaveLength(dashboard.coverage.length);
-    expect(buehne(container).querySelectorAll('.ck-ring svg')).toHaveLength(
-      dashboard.coverage.length,
-    );
+    // … aber eine gefüllte Ring-Geometrie tragen NUR die nicht-leeren, nicht-kleinen Abdeckungen
+    // (DR-0013 Nr. 7: kein voller Ring über „1 von 1"). Anzahl aus der Ableitung, nicht konstant.
+    const mitRing = dashboard.coverage.filter((t) => !t.isEmpty && !t.kleineGrundgesamtheit).length;
+    expect(buehne(container).querySelectorAll('.ck-ring svg')).toHaveLength(mitRing);
 
     // Die Farbverteilung folgt der Ableitung, nicht einer Konstante.
     const erwartet = dashboard.coverage.map((t) => coverageTileStatus(t)).sort();
@@ -513,6 +517,49 @@ describe('Cockpit – KPI-Band mit Deckungsringen (echte Werte, funktionale Link
     )) {
       expect(zahl.textContent ?? '').not.toMatch(/%|Prozent/);
     }
+  });
+
+  it('kleine Grundgesamtheit: KEIN gefüllter Ring über „x von y" – nur Zahl + Kleinheits-Hinweis (DR-0013 Nr. 7)', () => {
+    const { container } = render(
+      <CockpitVariantenContent
+        role={role('R01')}
+        tenant={tenant(TENANT_ID.NORDWERK)}
+        variante="a"
+      />,
+    );
+    const dashboard = buildHeuteDashboard(TENANT_ID.NORDWERK);
+    if (!dashboard) throw new Error('Dashboard fehlt');
+
+    // Testannahme: Nordwerk (1 Control / 1 Risiko) trägt mindestens eine kleine Grundgesamtheit –
+    // sonst prüft dieser Regressionstest ins Leere.
+    const kleine = dashboard.coverage.filter((t) => !t.isEmpty && t.kleineGrundgesamtheit);
+    expect(
+      kleine.length,
+      'Nordwerk ohne kleine Grundgesamtheit – Fixtur passt nicht',
+    ).toBeGreaterThan(0);
+
+    // In JEDER Ring-Kachel mit Kleinheits-Hinweis darf KEIN gefüllter Ring (`.ck-ring-fill`)
+    // stehen; die nackte Zahl „x von y" bleibt aber sichtbar (nichts wird verschwiegen).
+    const ringKacheln = Array.from(
+      buehne(container).querySelectorAll<HTMLElement>('.ck-kpi--ring'),
+    );
+    let gepruefteKleine = 0;
+    for (const kachel of ringKacheln) {
+      if (kachel.querySelector('.ck-kpi-klein') === null) continue;
+      gepruefteKleine += 1;
+      const label = kachel.querySelector('.ck-kpi-label')?.textContent ?? '';
+      expect(
+        kachel.querySelector('.ck-ring'),
+        `Ring bei kleiner Grundgesamtheit (${label})`,
+      ).toBeNull();
+      expect(
+        kachel.querySelector('.ck-ring-fill'),
+        `voll gefüllter Ring über kleiner Grundgesamtheit (${label})`,
+      ).toBeNull();
+      expect(kachel.querySelector('.ck-kpi-wert')?.textContent ?? '').toMatch(/\d+ von \d+/);
+    }
+    // Es wurden auch wirklich alle abgeleiteten kleinen Abdeckungen im DOM gefunden.
+    expect(gepruefteKleine).toBe(kleine.length);
   });
 });
 
@@ -617,25 +664,57 @@ describe('Cockpit – Lebenszyklus-Ampelleiste (echte Verteilung)', () => {
 });
 
 describe('Cockpit – Hell/Dunkel und Startseiten-Rückweg', () => {
-  it('schaltet Hell/Dunkel über einen benannten Umschalter (nie nur Farbe)', () => {
+  it('schaltet Hell/Dunkel um und remappt die --ck-*-Token WIRKLICH (nicht nur das Attribut)', () => {
     window.localStorage.clear();
-    const { container } = render(
-      <CockpitVariantenContent
-        role={role('R01')}
-        tenant={tenant(TENANT_ID.NORDWERK)}
-        variante="a"
-      />,
-    );
-    const wrapper = container.querySelector('.ck-cockpit') as HTMLElement;
-    expect(wrapper.getAttribute('data-ck-theme')).toBe('hell');
+    // Die echte Produktions-CSS in jsdom laden: jsdom lädt `globals.css` nicht automatisch, löst
+    // aber Custom-Property-Remaps über Attribut-Selektoren auf (nicht `var()`). Damit KOPPELT
+    // dieser Test den vom Client emittierten Attributwert („dunkel") an den CSS-Selektor. Stünde
+    // im CSS wieder `[data-ck-theme="dark"]`, remappt KEIN Token und der Test wird rot – ein
+    // reiner Attribut-Flip genügt nie wieder.
+    const css = readFileSync(resolve(process.cwd(), 'app/globals.css'), 'utf8');
+    const style = document.createElement('style');
+    style.textContent = css;
+    document.head.appendChild(style);
 
-    const toggle = screen.getByRole('button', { name: /Dunkles Design/ });
-    expect(toggle.getAttribute('aria-pressed')).toBe('false');
-    fireEvent.click(toggle);
-    expect(wrapper.getAttribute('data-ck-theme')).toBe('dunkel');
-    expect(screen.getByRole('button', { name: /Helles Design/ }).getAttribute('aria-pressed')).toBe(
-      'true',
-    );
+    try {
+      const { container } = render(
+        <CockpitVariantenContent
+          role={role('R01')}
+          tenant={tenant(TENANT_ID.NORDWERK)}
+          variante="a"
+        />,
+      );
+      const wrapper = container.querySelector('.ck-cockpit') as HTMLElement;
+      expect(wrapper.getAttribute('data-ck-theme')).toBe('hell');
+      const tokenHell = getComputedStyle(wrapper).getPropertyValue('--ck-panel-bg').trim();
+
+      const toggle = screen.getByRole('button', { name: /Dunkles Design/ });
+      expect(toggle.getAttribute('aria-pressed')).toBe('false');
+      fireEvent.click(toggle);
+
+      // Attribut + Beschriftung (nie nur Farbe) …
+      expect(wrapper.getAttribute('data-ck-theme')).toBe('dunkel');
+      expect(
+        screen.getByRole('button', { name: /Helles Design/ }).getAttribute('aria-pressed'),
+      ).toBe('true');
+
+      // … UND eine tatsächlich remappte Wirkung: der Dunkelmodus setzt ein --ck-*-Token neu.
+      const tokenDunkel = getComputedStyle(wrapper).getPropertyValue('--ck-panel-bg').trim();
+      expect(
+        tokenDunkel.length,
+        'Dunkelmodus setzt --ck-panel-bg nicht – der CSS-Selektor greift den Attributwert nicht',
+      ).toBeGreaterThan(0);
+      expect(tokenDunkel, 'Dunkelmodus-Token identisch zu Hell – der Remap wirkt nicht').not.toBe(
+        tokenHell,
+      );
+
+      // Zurück auf Hell: der Remap verschwindet wieder (der Umschalter wirkt in beide Richtungen).
+      fireEvent.click(screen.getByRole('button', { name: /Helles Design/ }));
+      expect(wrapper.getAttribute('data-ck-theme')).toBe('hell');
+      expect(getComputedStyle(wrapper).getPropertyValue('--ck-panel-bg').trim()).toBe(tokenHell);
+    } finally {
+      style.remove();
+    }
   });
 
   it('führt zurück zur ausführlichen Tagesansicht „Heute" (Einstiegslink umgekehrt)', () => {

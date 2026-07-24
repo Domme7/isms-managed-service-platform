@@ -32,11 +32,14 @@ function role(roleId: string): DemoRole {
 
 /**
  * Geldartiges Zahlenband OHNE Währungstoken (Security-Auflage): ein Band wie „3.500-6.500 pro
- * Monat" bliebe von der reinen Währungstoken-Liste unentdeckt – ausgerechnet an der strengsten
- * Guardrail (O-KUNDE-01). Erfasst zwei Zahlen im Band, gefolgt von einem Geld-Rhythmuswort.
+ * Monat" ODER – ganz ohne Kadenzwort – „3.500 bis 6.500" bliebe von der reinen Währungstoken-
+ * Liste unentdeckt, ausgerechnet an der strengsten Guardrail (O-KUNDE-01). Erfasst zwei
+ * GELDGROSSE Zahlen (Tausenderpunkt/-komma oder ≥4 Ziffern), verbunden durch „-", „–" oder
+ * „bis"; das Kadenzwort ist optional. Kleine Rhythmen wie „6-16 Wochen" oder Einzelzahlen wie
+ * „T-180 bis Post-Audit" lösen bewusst NICHT aus (kein Fehlalarm auf legitime Rhythmen/Zahlen).
  */
 const GELDBAND =
-  /\d[\d.,]*\s?[-–]\s?\d[\d.,]*\s?(pro\s?Monat|monatlich|einmalig|\/\s?Monat|Monatsbereich)/i;
+  /(?:\d{1,3}(?:[.,]\d{3})+|\d{4,})\s?(?:bis|[-–])\s?(?:\d{1,3}(?:[.,]\d{3})+|\d{4,})(?:\s?(?:pro\s?Monat|monatlich|einmalig|\/\s?Monat|Monatsbereich))?/i;
 
 describe('Servicekatalog – Slice 2', () => {
   it('AC6: zeigt alle 12 Familien, 15 Offers, 4 Tiefen und 6 Pakete vollständig und quellentreu', () => {
@@ -85,6 +88,10 @@ describe('Servicekatalog – Slice 2', () => {
     // Negativbeweis: ein währungsloses Geldband würde die Guardrail jetzt auslösen (ohne das neue
     // Muster wäre es durchgerutscht) – die gerenderten Katalogtexte tragen keines.
     expect('3.500-6.500 pro Monat', 'währungsloses Geldband muss auffallen').toMatch(GELDBAND);
+    expect('3.500 bis 6.500', 'Band OHNE Kadenzwort muss auffallen').toMatch(GELDBAND);
+    // Gegenprobe: legitime Rhythmen/Zahlen dürfen NICHT auslösen (kein Fehlalarm).
+    expect('einmalig / 6-16 Wochen', 'kleiner Wochen-Rhythmus').not.toMatch(GELDBAND);
+    expect('T-180 bis Post-Audit', 'Einzelzahl ohne zweite Zahl').not.toMatch(GELDBAND);
   });
 
   it('AC8: zwei getrennte Herkünfte, keine behauptete Zuordnung Instanz↔Offer', () => {

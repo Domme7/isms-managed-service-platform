@@ -83,6 +83,7 @@ import {
 import {
   COCKPIT_STANDARD,
   COCKPIT_VARIANTEN,
+  getCockpitVariante,
   type CockpitVarianteId,
 } from '../../lib/cockpit/varianten';
 import {
@@ -125,8 +126,8 @@ export function CockpitVariantenContent({
     : fallbackVariante;
   const wechsleVariante = onVarianteChange ?? setFallbackVariante;
 
-  // Detailtiefe der Variante B ist reiner Anzeigezustand dieser Komponente (Vergleichs-Spike);
-  // die echte Persistenz einer bevorzugten Tiefe gehört zu WP-029 (O-WP025-01).
+  // Detailtiefe der Variante B ist reiner Anzeigezustand dieser Komponente; die echte Persistenz
+  // einer bevorzugten Tiefe gehört zum vollen Personalisierungs-Baukasten WP-029 (O-WP025-01).
   const [tiefe, setTiefe] = useState<Detailtiefe>(initialTiefe);
 
   // Hell/Dunkel – reiner Anzeigezustand, mandanten-/rollenfrei persistiert (Cross-Tenant-Schutz).
@@ -274,7 +275,14 @@ function ThemeSchalter({ theme, onToggle }: { theme: CockpitTheme; onToggle: () 
 }
 
 /* -----------------------------------------------------------------------------
- * Umschalter der drei Varianten (Text + Radio-Form, nie nur Farbe – 06-D11)
+ * Stil-Personalisierung (untergeordnetes Control, nicht ein prominenter Vergleichsblock)
+ *
+ * DEZENTE PERSONALISIERUNG (WP-025-Fixpass, DR-0014): Das Cockpit ist die externe Startseite;
+ * ein Erstbesucher will EIN poliertes Cockpit (Stil A, Default), keinen Entwurfs-Vergleich.
+ * Deshalb ist der Stil-Wechsel ein kompaktes, untergeordnetes Segment-Control („Cockpit-Stil:
+ * A/B/C") – kein drei-spaltiger Vergleichsblock, der die eigentliche Antwort nach unten drückt.
+ * Radio-Form + Text (nie nur Farbe – 06-D11); die ausführliche Leitidee des AKTIVEN Stils steht
+ * als eine ruhige Hinweiszeile, die der übrigen Stile als `title` (Personalisierung, kein Test).
  * --------------------------------------------------------------------------- */
 
 function VariantenSchalter({
@@ -285,9 +293,10 @@ function VariantenSchalter({
   onChange: (variante: CockpitVarianteId) => void;
 }) {
   const gruppe = useId();
+  const aktiv = getCockpitVariante(variante);
   return (
     <fieldset className="ck-schalter">
-      <legend>Cockpit-Ansicht wählen (bleibt gespeichert)</legend>
+      <legend>Cockpit-Stil (wird gespeichert)</legend>
       <div className="ck-schalter-optionen">
         {COCKPIT_VARIANTEN.map((meta) => (
           <label
@@ -297,6 +306,7 @@ function VariantenSchalter({
                 ? 'ck-schalter-option ck-schalter-option--aktiv'
                 : 'ck-schalter-option'
             }
+            title={`${meta.zielnutzer} – ${meta.leitidee}`}
           >
             <input
               type="radio"
@@ -305,12 +315,12 @@ function VariantenSchalter({
               checked={meta.id === variante}
               onChange={() => onChange(meta.id)}
             />
-            <span className="ck-schalter-titel">{`Variante ${meta.kennung} · ${meta.name}`}</span>
-            <span className="ck-schalter-nutzer">{meta.zielnutzer}</span>
-            <span className="ck-schalter-leitidee">{meta.leitidee}</span>
+            <span className="ck-schalter-titel">{`Stil ${meta.kennung} · ${meta.name}`}</span>
           </label>
         ))}
       </div>
+      {/* Eine ruhige Hinweiszeile zum AKTIVEN Stil – Kontext ohne den alten 3-Zeilen-je-Option-Block. */}
+      <p className="ck-schalter-hinweis">{aktiv.leitidee}</p>
     </fieldset>
   );
 }

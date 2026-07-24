@@ -9,10 +9,19 @@
  * VIER QUELLEN (genau die im Auftrag benannten echten Lücken):
  *  1. Controls ohne Nachweis      – `controls.filter(c => c.evidenced_by.length === 0)`.
  *  2. Risiken ohne Minderung      – `risks.filter(r => r.mitigated_by.length === 0)`.
- *  3. Kanonische Strukturtypen, die der heutige Datenbestand NICHT materialisiert
- *     (`MATERIALISIERUNGS_LUECKEN` aus `lib/kunden/struktur.ts`: u. a. Strategie-DNA, Zielprofil).
+ *  3. Kanonische Katalog-Strukturtypen, die der AKTIVE Mandant NICHT als Objekttyp materialisiert
+ *     – abgeleitet aus `getObjectsForTenant(tenantId)` gegen den Kandidatenkatalog
+ *     `MATERIALISIERUNGS_LUECKEN` (`lib/kunden/struktur.ts`, u. a. Strategie-DNA, Target Profile).
+ *     Die Warnung schrumpft automatisch, sobald ein Typ materialisiert wird; ist keiner der
+ *     Katalogtypen mehr offen, entfällt sie (kein statischer Alarm über eine überholte Lücke).
  *  4. Modell-Datenlücke Risiko↔Szenario – der Objektvertrag legt keine direkte Kante fest
  *     (dokumentierte offene Modellfrage; hier BENANNT, nicht konstruiert).
+ *
+ * SCHWERE = OFFENGELEGTE AMPEL-REGEL (keine zweite Skala): Der Ampel-Status jeder Deckungslücke
+ * kommt aus `coverageStatus(covered, total, klein)` (`lib/cockpit/ampel.ts`) – also derselben
+ * Regel wie die Deckungskacheln. Damit gilt auch hier die Kleinheitsregel (DR-0013 Nr. 7): eine
+ * kleine Grundgesamtheit (n≤2) ist NEUTRAL (`info`), kein Alarm – „0 von 1 Control ohne Nachweis"
+ * ist kein roter Alarm, sondern zu wenig Grundgesamtheit für eine Aussage.
  *
  * EHRLICHER LEERZUSTAND (DR-0013 Nr. 11 / Mandantengrenze): Ein Mandant ohne Datenbestand
  * (Finovia/MediCore) erhält KEINE Warnungen – es wird keine Lücke erfunden, und es fällt kein Wort
@@ -27,12 +36,13 @@
  */
 
 import { anzahl } from '../heute/data';
+import { istKleineGrundgesamtheit } from '../heute/dashboard';
 import { buildIsmsCoreView } from '../isms/data';
 import { MATERIALISIERUNGS_LUECKEN } from '../kunden/struktur';
 import { getPlace } from '../shell/places';
 import { getObjectsForTenant, getRelationshipsForTenant, getTenant } from '../twin/data';
 import { objectDetailHref } from '../twin/routes';
-import type { CockpitStatus } from './ampel';
+import { coverageStatus, type CockpitStatus } from './ampel';
 
 /** Ein betroffenes Lückenobjekt mit direktem Weg auf seine Objekt-360-Seite. */
 export interface CockpitWarnungObjekt {
@@ -75,10 +85,15 @@ export function buildCockpitWarnungen(tenantId: string): CockpitWarnung[] {
   // (1) Controls ohne eingehende Nachweis-Beziehung.
   const controlsLuecke = core.controls.filter((c) => c.evidenced_by.length === 0);
   if (controlsLuecke.length > 0) {
-    const alleOhne = controlsLuecke.length === core.controls.length;
     warnungen.push({
       id: 'controls_ohne_nachweis',
-      status: alleOhne ? 'alert' : 'warn',
+      // Schwere aus der offengelegten Ampel-Regel (inkl. Kleinheitsregel): x = Controls MIT
+      // Nachweis, y = alle Controls. Kleine Grundgesamtheit → neutral (info), kein Alarm.
+      status: coverageStatus(
+        core.controls.length - controlsLuecke.length,
+        core.controls.length,
+        istKleineGrundgesamtheit(core.controls.length),
+      ),
       titel: anzahl(controlsLuecke.length, 'Control ohne Nachweis', 'Controls ohne Nachweis'),
       begruendung:
         `Von ${anzahl(core.controls.length, 'erfassten Control', 'erfassten Controls')} ` +
@@ -95,10 +110,15 @@ export function buildCockpitWarnungen(tenantId: string): CockpitWarnung[] {
   // (2) Risiken ohne eingehende Minderungs-Beziehung.
   const risikenLuecke = core.risks.filter((r) => r.mitigated_by.length === 0);
   if (risikenLuecke.length > 0) {
-    const alleOhne = risikenLuecke.length === core.risks.length;
     warnungen.push({
       id: 'risiken_ohne_minderung',
-      status: alleOhne ? 'alert' : 'warn',
+      // Schwere aus der offengelegten Ampel-Regel (inkl. Kleinheitsregel): x = Risiken MIT
+      // Minderung, y = alle Risiken. Kleine Grundgesamtheit → neutral (info), kein Alarm.
+      status: coverageStatus(
+        core.risks.length - risikenLuecke.length,
+        core.risks.length,
+        istKleineGrundgesamtheit(core.risks.length),
+      ),
       titel: anzahl(risikenLuecke.length, 'Risiko ohne Minderung', 'Risiken ohne Minderung'),
       begruendung:
         `Von ${anzahl(core.risks.length, 'erfassten Risiko', 'erfassten Risiken')} ` +
@@ -112,18 +132,29 @@ export function buildCockpitWarnungen(tenantId: string): CockpitWarnung[] {
     });
   }
 
-  // (3) Kanonische Strukturtypen, die der Datenbestand nicht materialisiert (neutraler Stand).
-  warnungen.push({
-    id: 'strukturtypen_nicht_angelegt',
-    status: 'info',
-    titel: 'Kanonische Strukturtypen nicht angelegt',
-    begruendung:
-      `Im Datenbestand dieses Mandanten sind mehrere im Modell vorgesehene Strukturtypen nicht ` +
-      `angelegt: ${MATERIALISIERUNGS_LUECKEN.join(', ')}. Diese Strukturen erklärt der ` +
-      `Struktur-Assistent, statt leere Objekte oder Beispielwerte zu erfinden.`,
-    ziel: { label: 'Struktur-Assistent öffnen', href: '/kunden/struktur' },
-    objekte: [],
-  });
+  // (3) Kanonische Katalog-Strukturtypen, die der AKTIVE Mandant nicht als Objekttyp trägt
+  //     (neutraler Stand). Abgeleitet aus den tatsächlichen Objekttypen von
+  //     `getObjectsForTenant` gegen den Kandidatenkatalog `MATERIALISIERUNGS_LUECKEN`: Sobald
+  //     ein Typ materialisiert wird, verschwindet er aus der Liste; ist keiner mehr offen,
+  //     entfällt die Warnung ganz (kein statischer Alarm über eine überholte Lücke).
+  const vorhandeneObjekttypen = new Set<string>(objects.map((o) => o.object_type));
+  const fehlendeStrukturtypen = MATERIALISIERUNGS_LUECKEN.filter(
+    (typ) => !vorhandeneObjekttypen.has(typ),
+  );
+  if (fehlendeStrukturtypen.length > 0) {
+    warnungen.push({
+      id: 'strukturtypen_nicht_angelegt',
+      status: 'info',
+      titel: 'Kanonische Strukturtypen nicht angelegt',
+      begruendung:
+        `Der Datenbestand dieses Mandanten legt ` +
+        `${anzahl(fehlendeStrukturtypen.length, 'kanonischen Strukturtyp', 'kanonische Strukturtypen')} ` +
+        `des Modells nicht an: ${fehlendeStrukturtypen.join(', ')}. Diese Strukturen erklärt der ` +
+        `Struktur-Assistent, statt leere Objekte oder Beispielwerte zu erfinden.`,
+      ziel: { label: 'Struktur-Assistent öffnen', href: '/kunden/struktur' },
+      objekte: [],
+    });
+  }
 
   // (4) Modell-Datenlücke Risiko↔Szenario – nur benennen, wenn beide Seiten erfasst sind.
   if (core.risks.length > 0 && core.scenarios.length > 0) {

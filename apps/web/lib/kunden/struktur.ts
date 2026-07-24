@@ -385,7 +385,7 @@ export const GUIDED_QUICKSTART: readonly string[] = [
  * Die Gegenstände, die eine menschliche Freigabe benötigen (16-D07), worttreu. Werden als
  * Strukturinhalt GEZEIGT, nicht simuliert – der Assistent löst keine Freigabe aus.
  *
- * DOPPELZITAT-DELTA (benannt, nicht still aufgelöst – O-WP006-xx): Das Verfassungsprinzip OL07
+ * DOPPELZITAT-DELTA (benannt, nicht still aufgelöst – O-WP006-10): Das Verfassungsprinzip OL07
  * (Abschnitt „Onboarding- und Lifecycle-Verfassung") nennt ZUSÄTZLICH „kommerzielle Baseline"
  * – also sechs Gegenstände: „Scope, Zielprofil, Risikotoleranz, Serviceübernahme, kommerzielle
  * Baseline und Go-live". Hier bewusst NICHT übernommen, weil (a) die bindende Entscheidung 16-D07

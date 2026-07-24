@@ -23,7 +23,7 @@ function statusSymbol(status: CockpitWarnung['status']): string {
 export function CockpitWarnungen({ warnungen }: { warnungen: readonly CockpitWarnung[] }) {
   return (
     <section className="ck-warnungen" aria-labelledby="ck-warnungen-titel">
-      <h2 id="ck-warnungen-titel">Was Aufmerksamkeit verdient</h2>
+      <h2 id="ck-warnungen-titel">Offene Datenlücken</h2>
       {warnungen.length === 0 ? (
         <p className="ck-warnungen-leer" role="note">
           Aus dem Datenbestand dieses Mandanten leitet sich keine Datenlücke als Warnung ab. Es wird

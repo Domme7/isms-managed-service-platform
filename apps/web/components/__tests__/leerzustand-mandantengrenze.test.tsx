@@ -373,6 +373,8 @@ describe('Servicekatalog und Struktur-Assistent halten die Kundensphäre (P09/FI
         <ServicekatalogContent role={role('R08')} tenant={tenant(tenantId)} />,
       );
       const text = container.textContent ?? '';
+      // Blindheitsschutz: ohne gerenderten Inhalt wären die not.toMatch-Proben leer bestanden.
+      expect(text.length).toBeGreaterThan(80);
       for (const verboten of [/Auslastung/i, /Profitabilit/i, /Mandantenvergleich/i]) {
         expect(text, `Servicekatalog/${tenantId}: „${verboten}"`).not.toMatch(verboten);
       }
@@ -391,6 +393,8 @@ describe('Servicekatalog und Struktur-Assistent halten die Kundensphäre (P09/FI
         <StrukturAssistentContent role={role('R08')} tenant={tenant(tenantId)} />,
       );
       const text = container.textContent ?? '';
+      // Blindheitsschutz: ohne gerenderten Inhalt wären die not.toMatch-Proben leer bestanden.
+      expect(text.length).toBeGreaterThan(80);
       for (const verboten of [
         /Portfolio/i,
         /Auslastung/i,

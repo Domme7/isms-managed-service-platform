@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * „Cockpit" – Vergleichsseite der drei Start-Varianten (WP-025, DR-0010 Nr. 3 / DR-0012 Stufe A).
+ * „Cockpit" – die externe Startseite mit dezenter Stil-Personalisierung (WP-025, DR-0010 Nr. 3 /
+ * DR-0012 Stufe A).
  *
  * Sitzungs-/Zustandsrahmen analog `HeuteView`: Loading (vor Hydration), „nicht angemeldet" mit
- * Link zur Anmeldung, sonst der Varianten-Vergleich für die aktive Rolle und den aktiven
- * Mandanten. Der Inhalt liegt in `CockpitVariantenContent` und ist damit ohne Session-Mock
- * testbar.
+ * Link zur Anmeldung, sonst das Cockpit für die aktive Rolle und den aktiven Mandanten. Der
+ * Inhalt liegt in `CockpitVariantenContent` und ist damit ohne Session-Mock testbar.
  *
- * VARIANTEN-WAHL (DR-0012 Stufe A – kuratierte Personalisierung, EIN Andockpunkt): Diese View
- * hält die gewählte Variante und persistiert sie unter dem VERSIONIERTEN, MANDANTENFREIEN
+ * STIL-WAHL (DR-0012 Stufe A – kuratierte Personalisierung, EIN Andockpunkt): Diese View
+ * hält den gewählten Stil und persistiert ihn unter dem VERSIONIERTEN, MANDANTENFREIEN
  * Schlüssel `COCKPIT_STORAGE_KEY` (Muster `DETAILTIEFE_STORAGE_KEY`). Gespeichert wird
  * AUSSCHLIESSLICH die Kennung („a"|„b"|„c") – kein Mandanten-, Rollen- oder Objektbezug, damit
  * beim Mandantenwechsel kein Zustand des alten Mandanten weiterlebt (Cross-Tenant-Schutz). Der
