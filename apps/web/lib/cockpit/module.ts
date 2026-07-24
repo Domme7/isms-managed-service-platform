@@ -102,7 +102,7 @@ const ICON: Readonly<Record<string, string>> = {
   kanten_vertrauensgrad: 'ti-link',
   bestand: 'ti-box',
   isms_kern: 'ti-shield',
-  entscheidungen: 'ti-gavel',
+  entscheidungen: 'ti-file-check',
   services: 'ti-server',
   luecken: 'ti-alert-circle',
   lebenszyklus: 'ti-history',

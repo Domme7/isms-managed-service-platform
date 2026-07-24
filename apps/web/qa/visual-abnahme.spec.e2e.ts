@@ -362,7 +362,7 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
     await page.goto('/cockpit');
     await warteAufSeite(page);
     // Auf das gerenderte Bento warten (statt zu schlafen; kein Hydration-Rennen).
-    await expect(page.locator('.ck-bento')).toBeVisible();
+    await expect(page.locator('.ck-bento-grid')).toBeVisible();
     await page.screenshot({
       path: path.join(outDir as string, `cockpit.${testInfo.project.name}.png`),
       fullPage: true,
@@ -378,8 +378,8 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
     test.skip(testInfo.project.name !== 'desktop', 'Cockpit-Eintauchen nur Desktop.');
     await page.goto('/cockpit');
     await warteAufSeite(page);
-    await page.locator('[data-tilekey="radar"]').click();
-    await expect(page.locator('.ck-bento-detail')).toBeVisible();
+    await page.locator('[data-kachel="k_controls_nachweis"]').click();
+    await expect(page.locator('.ck-modul-detail')).toBeVisible();
     await page.screenshot({
       path: path.join(outDir as string, `cockpit-eintauchen.${testInfo.project.name}.png`),
       fullPage: true,
@@ -399,7 +399,7 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
     );
     await page.goto('/cockpit');
     await warteAufSeite(page);
-    await expect(page.locator('.ck-bento')).toBeVisible();
+    await expect(page.locator('.ck-bento-grid')).toBeVisible();
     await page.screenshot({
       path: path.join(outDir as string, `cockpit-dunkel.${testInfo.project.name}.png`),
       fullPage: true,

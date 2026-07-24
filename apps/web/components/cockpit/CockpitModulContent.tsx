@@ -168,7 +168,7 @@ function CockpitModulBuehne({ baum }: { baum: NonNullable<ReturnType<typeof buil
       <div className="ck-modul-bar">
         {istWurzel ? null : (
           <button type="button" className="ck-modul-back" onClick={zurueck}>
-            <i className="ti ti-arrow-left" aria-hidden="true" /> zurück
+            <span aria-hidden="true">←</span> zurück
           </button>
         )}
         <nav className="ck-modul-crumb" aria-label="Pfad im Cockpit">
@@ -267,7 +267,7 @@ function KachelInhalt({ kachel }: { kachel: ModulKachel }) {
   const kopf = (
     <span className="ck-kachel-hd">
       <span className="ck-kachel-ic">
-        <i className={`ti ${kachel.icon}`} aria-hidden="true" />
+        <IconGlyph name={kachel.icon} />
       </span>
       <span className="ck-kachel-lab">{kachel.label}</span>
     </span>
@@ -278,6 +278,9 @@ function KachelInhalt({ kachel }: { kachel: ModulKachel }) {
       <>
         {kopf}
         <span className="ck-kachel-h">{kachel.briefing.headline}</span>
+        <span className="ck-kachel-hero-p">
+          Ehrliche Tageslage – jede Zahl aus dem erfassten Datenbestand.
+        </span>
         <span className="ck-kachel-chips">
           {kachel.briefing.punkte.map((p) => (
             <span key={p.text} className={`ck-chip ck-status--${p.status}`}>
@@ -337,6 +340,134 @@ function KachelInhalt({ kachel }: { kachel: ModulKachel }) {
       </span>
     </>
   );
+}
+
+/** Inline-SVG-Icons (dekorativ, aria-hidden) – selbst-enthalten, keine Font-Dependency. */
+function IconGlyph({ name }: { name: string }) {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {iconPaths(name)}
+    </svg>
+  );
+}
+
+function iconPaths(name: string) {
+  switch (name) {
+    case 'ti-news':
+      return (
+        <>
+          <rect x="4" y="4" width="16" height="16" rx="2" />
+          <path d="M8 9h8M8 13h8M8 17h5" />
+        </>
+      );
+    case 'ti-chart-dots':
+      return (
+        <>
+          <path d="M4 5v15h16" />
+          <circle cx="9" cy="14" r="1.4" />
+          <circle cx="13" cy="10" r="1.4" />
+          <circle cx="17" cy="13" r="1.4" />
+        </>
+      );
+    case 'ti-shield-check':
+      return (
+        <>
+          <path d="M12 3l7 3v5c0 4.5-3 7.5-7 8.5-4-1-7-4-7-8.5V6z" />
+          <path d="M9 12l2 2 4-4" />
+        </>
+      );
+    case 'ti-shield':
+      return <path d="M12 3l7 3v5c0 4.5-3 7.5-7 8.5-4-1-7-4-7-8.5V6z" />;
+    case 'ti-alert-triangle':
+      return (
+        <>
+          <path d="M12 4l9 15H3z" />
+          <path d="M12 10v4M12 16.5h.01" />
+        </>
+      );
+    case 'ti-alert-circle':
+      return (
+        <>
+          <circle cx="12" cy="12" r="8" />
+          <path d="M12 8v4M12 15.5h.01" />
+        </>
+      );
+    case 'ti-user-check':
+      return (
+        <>
+          <circle cx="9" cy="8" r="3" />
+          <path d="M4 20c0-3 2.2-5 5-5 1.1 0 2.1.3 3 .9" />
+          <path d="M15 13l2 2 3-3" />
+        </>
+      );
+    case 'ti-link':
+      return (
+        <>
+          <path d="M9 15l6-6" />
+          <path d="M11 6l1-1a4 4 0 0 1 6 6l-1 1" />
+          <path d="M13 18l-1 1a4 4 0 0 1-6-6l1-1" />
+        </>
+      );
+    case 'ti-box':
+      return (
+        <>
+          <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
+          <path d="M4 7.5l8 4.5 8-4.5M12 12v9" />
+        </>
+      );
+    case 'ti-server':
+      return (
+        <>
+          <rect x="4" y="4" width="16" height="6" rx="1.5" />
+          <rect x="4" y="14" width="16" height="6" rx="1.5" />
+          <path d="M8 7h.01M8 17h.01" />
+        </>
+      );
+    case 'ti-history':
+      return (
+        <>
+          <path d="M4 12a8 8 0 1 0 2.3-5.6" />
+          <path d="M4 4v3h3" />
+          <path d="M12 8v4l3 2" />
+        </>
+      );
+    case 'ti-database':
+      return (
+        <>
+          <ellipse cx="12" cy="6" rx="7" ry="3" />
+          <path d="M5 6v12c0 1.6 3.1 3 7 3s7-1.4 7-3V6" />
+          <path d="M5 12c0 1.6 3.1 3 7 3s7-1.4 7-3" />
+        </>
+      );
+    case 'ti-file-check':
+      return (
+        <>
+          <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+          <path d="M14 3v6h6" />
+          <path d="M9 15l2 2 4-4" />
+        </>
+      );
+    case 'ti-target':
+      return (
+        <>
+          <circle cx="12" cy="12" r="8" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="12" cy="12" r="1" />
+        </>
+      );
+    default:
+      return <circle cx="12" cy="12" r="7" />;
+  }
 }
 
 /* -----------------------------------------------------------------------------
