@@ -2021,6 +2021,270 @@ summary {
   color: var(--ck-muted);
 }
 
+/* ===========================================================================
+ * Bento-Mosaik (WP-034 Slice 2, DR-0016 – Owner-Wahl Variante A): kompaktes
+ * Dashboard mit verschieden großen, klickbaren Kacheln + Eintauch-Detail.
+ * Farben aus den --ck-*-Tokens (Dunkelmodus zieht automatisch mit). Keine
+ * Verläufe; die Eintauch-Animation respektiert prefers-reduced-motion.
+ * ========================================================================= */
+.ck-bento-buehne {
+  margin: 0 0 1.5rem;
+}
+.ck-bento {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(118px, auto);
+  gap: 0.85rem;
+}
+.ck-bento-zelle {
+  display: flex;
+}
+.ck-bento-zelle--hero {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.ck-bento-zelle--breit {
+  grid-column: span 2;
+}
+.ck-bento-zelle--hoch {
+  grid-row: span 2;
+}
+.ck-bento-kachel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-top: 3px solid var(--ck-accent, var(--ck-border));
+  border-radius: 12px;
+  padding: 0.8rem 0.9rem 0.7rem;
+  color: var(--ck-ink);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    transform 0.12s ease;
+}
+.ck-bento-kachel:hover {
+  background: var(--ck-surface-2);
+  transform: translateY(-1px);
+}
+.ck-bento-kachel:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+}
+.ck-bento-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ck-ink-soft);
+}
+.ck-bento-num {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--ck-ink);
+}
+.ck-bento-num--leer {
+  font-size: 1.3rem;
+}
+.ck-bento-sub {
+  font-size: 0.76rem;
+  color: var(--ck-muted);
+}
+.ck-bento-wert {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ck-ink);
+}
+.ck-bento-status {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--ck-accent);
+}
+.ck-bento-klein {
+  font-size: 0.72rem;
+  color: var(--ck-muted);
+}
+.ck-bento-mehr {
+  margin-top: auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--tw-accent);
+}
+.ck-bento-kachel--ring {
+  align-items: center;
+  text-align: center;
+}
+.ck-bento-kachel--ring .ck-bento-label,
+.ck-bento-kachel--ring .ck-bento-mehr {
+  align-self: stretch;
+  text-align: left;
+}
+.ck-bento-kachel--ring .ck-ring,
+.ck-bento-kachel--ring .ck-ring-svg {
+  width: 72px;
+  height: 72px;
+}
+.ck-bento-kachel--radar {
+  gap: 0.4rem;
+}
+
+/* Radar / Web-Chart (aria-hidden SVG + barrierefreie Werteliste) */
+.ck-radar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+.ck-radar-svg {
+  width: 100%;
+  max-width: 156px;
+  height: auto;
+}
+.ck-radar-gitter,
+.ck-radar-achse {
+  stroke: var(--ck-border);
+  stroke-width: 1;
+}
+.ck-radar-flaeche {
+  fill: var(--ck-info-soft);
+  stroke: var(--ck-ink-soft);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.ck-radar-punkt {
+  stroke: var(--ck-surface);
+  stroke-width: 1.5;
+}
+.ck-radar-werte {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.28rem;
+  width: 100%;
+}
+.ck-radar-werte li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.74rem;
+}
+.ck-radar-punktmarke {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ck-accent, var(--ck-info));
+  flex: none;
+  align-self: center;
+}
+.ck-radar-wert-label {
+  color: var(--ck-ink-soft);
+}
+.ck-radar-wert-zahl {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--ck-ink);
+}
+
+/* Eintauch-Detail: vollständige Kachel + Brotkrumen + Zurück */
+@keyframes ck-dive {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.ck-bento-detail {
+  animation: ck-dive 0.32s ease;
+}
+.ck-bento-detail:focus {
+  outline: none;
+}
+.ck-bento-crumb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 0 0 1rem;
+}
+.ck-bento-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--ck-border);
+  background: var(--ck-surface);
+  color: var(--ck-ink);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ck-bento-back:hover {
+  background: var(--ck-surface-2);
+}
+.ck-bento-back:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+}
+.ck-bento-pfad {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ck-ink-soft);
+}
+.ck-bento-pfad strong {
+  color: var(--ck-ink);
+  font-weight: 700;
+}
+.ck-bento-detail-lead {
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  color: var(--ck-ink-soft);
+  max-width: 82ch;
+}
+.ck-bento-detail-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+@media (max-width: 640px) {
+  .ck-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ck-bento-zelle--hero {
+    grid-column: span 2;
+  }
+  .ck-bento-zelle--breit {
+    grid-column: span 2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ck-bento-detail {
+    animation: none;
+  }
+  .ck-bento-kachel {
+    transition: none;
+  }
+  .ck-bento-kachel:hover {
+    transform: none;
+  }
+}
+
 .ck-warnungen {
   margin: 1.75rem 0 0;
 }

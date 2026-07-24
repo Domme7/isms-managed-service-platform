@@ -24,7 +24,6 @@ import path from 'node:path';
 import { AxeBuilder } from '@axe-core/playwright';
 import { NORDWERK_OBJECT_ID, TENANT_ID } from '@isms/demo-seed';
 import { expect, test } from '@playwright/test';
-import { COCKPIT_STORAGE_KEY, serializeCockpitVariante } from '../lib/cockpit/varianten';
 import { NAV_PLACES } from '../lib/shell/places';
 import { getRole } from '../lib/shell/roles';
 import { SESSION_STORAGE_KEY, serializeSession } from '../lib/shell/session';
@@ -353,66 +352,54 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
   }
 
   /**
-   * COCKPIT-VARIANTEN (WP-025, DR-0010 Nr. 3 – der eigentliche Owner-Vergleichspunkt): Die
-   * Vergleichsseite `/cockpit` hängt unter „Heute" (kein neuer Nav-Ort). Jede der drei Varianten
-   * wird deterministisch über den mandantenfreien localStorage-Schlüssel `COCKPIT_STORAGE_KEY`
-   * angesteuert und erst nach Erscheinen ihres eindeutigen Bühnen-Ankers geschossen (kein
-   * Hydration-Rennen). Alle drei werden ge-axed (eigenständige DOM-Zustände: Kachelraster,
-   * Fragenkette, Weltband + Management-Modus). Default-Perspektive R01/Nordwerk (AC-gepinnt).
+   * COCKPIT (WP-034 Slice 2, DR-0016 – Bento-Mosaik, Owner-Wahl Variante A): Die Startseite
+   * `/cockpit` hängt unter „Heute" (kein neuer Nav-Ort). Das kompakte Bento-Dashboard wird als
+   * ganze Seite geschossen (fullPage: Radar-Hero, Ring-/Zahlkacheln, Warnungen und Lebenszyklus-
+   * Leiste liegen unter der Falz) und ge-axed. Default-Perspektive R01/Nordwerk (beforeEach).
    */
-  for (const variante of ['a', 'b', 'c'] as const) {
-    test(`cockpit-variante-${variante} (/cockpit, WP-025 Owner-Vergleich)`, async ({
-      page,
-    }, testInfo) => {
-      test.skip(
-        testInfo.project.name !== 'desktop',
-        'Cockpit-Varianten nur Desktop (Owner-Vergleich).',
-      );
-      // Session (beforeEach setzt R01/Nordwerk) + die deterministische Varianten-Wahl.
-      await page.addInitScript(
-        ([key, value]) => {
-          window.localStorage.setItem(key, value);
-        },
-        [COCKPIT_STORAGE_KEY, serializeCockpitVariante(variante)] as const,
-      );
-      await page.goto('/cockpit');
-      await warteAufSeite(page);
-      // Auf den eindeutigen Bühnen-Anker der Variante warten (statt zu schlafen).
-      await expect(page.locator(`[data-cockpit-variante="${variante}"]`)).toBeVisible();
-      // fullPage NUR hier: die Cockpit-Varianten sind der visuelle Owner-Vergleichspunkt
-      // (DR-0010 Nr. 3 / DR-0014); der ganze moderne Aufbau (KPI-Band, Warnungen, Lebenszyklus-
-      // Leiste) liegt unter der Falz. Die allgemeinen SEITEN bleiben Viewport-Shots (Z. 243).
-      await page.screenshot({
-        path: path.join(
-          outDir as string,
-          `cockpit-variante-${variante}.${testInfo.project.name}.png`,
-        ),
-        fullPage: true,
-      });
-      await sammleAxe(page, `cockpit-variante-${variante}`, '/cockpit');
+  test('cockpit (/cockpit, Bento-Übersicht)', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'Cockpit-Motiv nur Desktop.');
+    await page.goto('/cockpit');
+    await warteAufSeite(page);
+    // Auf das gerenderte Bento warten (statt zu schlafen; kein Hydration-Rennen).
+    await expect(page.locator('.ck-bento')).toBeVisible();
+    await page.screenshot({
+      path: path.join(outDir as string, `cockpit.${testInfo.project.name}.png`),
+      fullPage: true,
     });
-  }
+    await sammleAxe(page, 'cockpit', '/cockpit');
+  });
 
-  // Dunkelmodus des Cockpits (DR-0014, Fix nach Gate-Runde 1): Variante A mit gespeichertem Theme
-  // 'dunkel' – belegt visuell, dass der Umschalter wirklich greift, und prueft den Dunkel-Kontrast
-  // mit axe (der Theme-Schluessel ist modul-lokal, hier als Literal gesetzt).
-  test('cockpit-dunkel (/cockpit, Variante A · Dunkelmodus)', async ({ page }, testInfo) => {
+  // Eintauchen: Klick auf den Radar-Hero öffnet das Detail (die vier Abdeckungen als vollständige
+  // Kacheln). Belegt visuell den Drill-down und prüft den Detailzustand eigenständig mit axe.
+  test('cockpit-eintauchen (/cockpit, Detail nach Klick auf den Radar)', async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'Cockpit-Eintauchen nur Desktop.');
+    await page.goto('/cockpit');
+    await warteAufSeite(page);
+    await page.locator('[data-tilekey="radar"]').click();
+    await expect(page.locator('.ck-bento-detail')).toBeVisible();
+    await page.screenshot({
+      path: path.join(outDir as string, `cockpit-eintauchen.${testInfo.project.name}.png`),
+      fullPage: true,
+    });
+    await sammleAxe(page, 'cockpit-eintauchen', '/cockpit');
+  });
+
+  // Dunkelmodus des Cockpits (DR-0014): gespeichertes Theme 'dunkel' – belegt visuell, dass der
+  // Umschalter wirklich greift, und prüft den Dunkel-Kontrast mit axe (Theme-Schlüssel als Literal).
+  test('cockpit-dunkel (/cockpit, Dunkelmodus)', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop', 'Cockpit-Dunkelmodus nur Desktop.');
     await page.addInitScript(
-      ([vk, vv, tk, tv]) => {
-        window.localStorage.setItem(vk, vv);
+      ([tk, tv]) => {
         window.localStorage.setItem(tk, tv);
       },
-      [
-        COCKPIT_STORAGE_KEY,
-        serializeCockpitVariante('a'),
-        'isms-cockpit-theme-v1',
-        'dunkel',
-      ] as const,
+      ['isms-cockpit-theme-v1', 'dunkel'] as const,
     );
     await page.goto('/cockpit');
     await warteAufSeite(page);
-    await expect(page.locator('[data-cockpit-variante="a"]')).toBeVisible();
+    await expect(page.locator('.ck-bento')).toBeVisible();
     await page.screenshot({
       path: path.join(outDir as string, `cockpit-dunkel.${testInfo.project.name}.png`),
       fullPage: true,
