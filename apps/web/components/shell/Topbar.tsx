@@ -64,9 +64,6 @@ export function Topbar({
   onSwitchRole,
   onRequestTenantSwitch,
   onSignOut,
-  onToggleNav,
-  navOpen,
-  navControlsId = 'shell-nav',
   tenantSelectId,
 }: {
   session: ResolvedSession | null;
@@ -79,9 +76,6 @@ export function Topbar({
   onRequestTenantSwitch: (tenantId: string) => void;
   /** Verwirft die gewählte Ansicht (Rolle + Mandant) – es gibt keine Anmeldung zu beenden. */
   onSignOut: () => void;
-  onToggleNav?: () => void;
-  navOpen?: boolean;
-  navControlsId?: string;
   /** Optionale DOM-ID des Mandanten-Selects (Fokus-Rückführung nach „Abbrechen", Code F5). */
   tenantSelectId?: string;
 }) {
@@ -91,21 +85,6 @@ export function Topbar({
   return (
     <header className="shell-topbar">
       <div className="shell-topbar-left">
-        {/* Nav-Toggle nur, wenn die Shell eine ein-/ausklappbare Seitennavigation stellt. Seit
-            DR-0017 Stage 4 (Drill-only, Brotkrume statt Sidebar) reicht die Shell kein
-            `onToggleNav` mehr durch – der Hamburger entfällt dann. */}
-        {onToggleNav ? (
-          <button
-            type="button"
-            className="shell-nav-toggle"
-            aria-controls={navControlsId}
-            aria-expanded={navOpen}
-            onClick={onToggleNav}
-          >
-            <span aria-hidden="true">☰</span>
-            <span className="shell-visually-hidden">Navigation ein-/ausblenden</span>
-          </button>
-        ) : null}
         <Link href="/heute" className="shell-brand">
           <span className="shell-brand-mark" aria-hidden="true">
             ISMS

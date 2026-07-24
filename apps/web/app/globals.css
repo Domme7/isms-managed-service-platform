@@ -608,19 +608,6 @@ summary {
    Produktmarke) und `.shell-demo-banner` (der permanente Demo-Hinweis unter der Kopfleiste).
    Beide waren reine Meta-Kennzeichnung; die Datenehrlichkeit lebt unverändert im Inhalt. */
 
-.shell-nav-toggle {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 6px;
-  padding: 0.3rem 0.55rem;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
 /* U-16 (Usability-Audit 2026-07-24): Spalte aus Auswahlzeile + ruhiger Notiz. Die Notiz sitzt
    jetzt UNTER der Auswahl statt in ihr – dadurch tragen Rolle-Select und fester Mandant gleich
    viele Zeilen und richten sich auf gemeinsamer Grundlinie aus (`.shell-switch` unten). */
