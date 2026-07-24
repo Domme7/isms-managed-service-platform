@@ -388,4 +388,26 @@ test.describe('Sichtbare Abnahme (Screenshots + axe)', () => {
       await sammleAxe(page, `cockpit-variante-${variante}`, '/cockpit');
     });
   }
+
+  // Dunkelmodus des Cockpits (DR-0014, Fix nach Gate-Runde 1): Variante A mit gespeichertem Theme
+  // 'dunkel' – belegt visuell, dass der Umschalter wirklich greift, und prueft den Dunkel-Kontrast
+  // mit axe (der Theme-Schluessel ist modul-lokal, hier als Literal gesetzt).
+  test('cockpit-dunkel (/cockpit, Variante A · Dunkelmodus)', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'Cockpit-Dunkelmodus nur Desktop.');
+    await page.addInitScript(
+      ([vk, vv, tk, tv]) => {
+        window.localStorage.setItem(vk, vv);
+        window.localStorage.setItem(tk, tv);
+      },
+      [COCKPIT_STORAGE_KEY, serializeCockpitVariante('a'), 'isms-cockpit-theme-v1', 'dunkel'] as const,
+    );
+    await page.goto('/cockpit');
+    await warteAufSeite(page);
+    await expect(page.locator('[data-cockpit-variante="a"]')).toBeVisible();
+    await page.screenshot({
+      path: path.join(outDir as string, `cockpit-dunkel.${testInfo.project.name}.png`),
+      fullPage: true,
+    });
+    await sammleAxe(page, 'cockpit-dunkel', '/cockpit');
+  });
 });

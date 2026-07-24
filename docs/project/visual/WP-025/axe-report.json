@@ -124,6 +124,12 @@
       "pfad": "/cockpit",
       "anzahlVerstoesse": {},
       "verstoesse": []
+    },
+    {
+      "slug": "cockpit-dunkel",
+      "pfad": "/cockpit",
+      "anzahlVerstoesse": {},
+      "verstoesse": []
     }
   ]
 }

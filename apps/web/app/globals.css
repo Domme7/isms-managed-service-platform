@@ -1609,13 +1609,13 @@ summary {
 }
 
 /* =============================================================================
-   Cockpit-Varianten-Vergleich (WP-025, DR-0010 Nr. 3): drei Start-Entwürfe auf
-   EINEM Datenmodell. Reine Layout-Schicht – reuse der db-/ht-/rv-/sv-Bausteine;
-   die ck-Klassen tragen nur den Varianten-Umschalter, das Weltband und den
+   Cockpit – moderne Dashboard-Schicht (WP-025, DR-0014): eine Startseite; A/B/C ist
+   dezente Stil-Personalisierung (DR-0012), kein Varianten-Vergleich. Reine Layout-Schicht –
+   reuse der db-/ht-/rv-/sv-Bausteine; die ck-Klassen tragen nur den Stil-Umschalter, das Weltband und den
    Management-Modus. Keine Animation (nichts, was prefers-reduced-motion bräuchte).
    ========================================================================== */
 
-/* Einstiegslink von „Heute" in den Vergleich (rollen-neutral, eigene Klasse). */
+/* Einstiegslink von „Heute" ins Cockpit (rollen-neutral, eigene Klasse). */
 .ht-cockpit {
   margin: 0 0 1.25rem;
   font-size: 0.9rem;
@@ -1796,7 +1796,20 @@ summary {
   --tw-surface-2: #191c24;
   --tw-accent: #93a4ff;
   --tw-focus: #93a4ff;
+
+  /* Wiederverwendete Heute-Dashboard-Kacheln (.db-*) ziehen Textfarben aus --shell-* (ausserhalb
+     des Cockpit-Scopes definiert, im Dunkelmodus sonst nicht remappt -> dunkler Text auf dunklem
+     Grund, axe color-contrast). --shell-navy ist reine Vorder-/Rahmenfarbe -> hier hell. */
+  --shell-navy: var(--ck-ink);
   color: var(--ck-ink);
+}
+
+/* Teal-Vordergrund der wiederverwendeten Kacheln (Regel-Aufklapper, Drill-down-Link) im
+   Dunkelmodus auf helles Teal statt des dunklen #0b6e6e. --shell-teal wird NICHT global umgemappt
+   (auch als Hintergrund genutzt); nur die Vordergrund-Nutzungen werden hier ueberschrieben. */
+.ck-cockpit[data-ck-theme="dunkel"] .db-regel > summary,
+.ck-cockpit[data-ck-theme="dunkel"] .db-drill {
+  color: #5ecfce;
 }
 
 .ck-kopf {
