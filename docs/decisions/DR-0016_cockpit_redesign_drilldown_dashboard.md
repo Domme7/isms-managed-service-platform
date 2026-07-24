@@ -62,6 +62,37 @@ Diese Varianten kommen als nächste Iteration (Design-Vorschauen), bevor der ech
 final festgezurrt wird. **Der aktuelle Stand ist bereits owner-abgesegnet und darf gebaut werden**, falls vor
 der Experiment-Runde weitergearbeitet wird.
 
+## Nachtrag 3: Modular-Dashboard-Richtung (2026-07-24, owner-abgesegnet)
+
+Der erste Bau (Bento, `be684d0`) war dem Owner **weiterhin zu langgezogen** — Ursache: unter dem kompakten
+Grid lagen weiter GESTAPELTE Blöcke (Warnungen, Lebenszyklus-Leiste, „Was fehlt", Seitenbausteine). An einer
+polierten Vorschau hat der Owner die **finale Richtung abgesegnet** („so sieht das Dashboard gut aus — bau
+genau so um"):
+
+1. **Ein kompaktes Dashboard auf EINEM Screen** (kein Langscroll), viele verschiedene Grafiken in
+   verschiedenen Größen. **Alles andere** (Warnungen, Lebenszyklus, „was fehlt", jeder Bereich) wird zu
+   **Kacheln, in die man eintaucht** — nichts mehr darunter gestapelt.
+2. **Modular N-fach verzweigend:** Kachel → Bereich → tiefer → Objekt; wachsende Brotkrume; „zurück" pro
+   Ebene. Bereiche sind selbst Kacheln (Beispiel: „Heute" → Tages-Briefing → einzelne Punkte).
+3. **Design-Politur:** Icon je Bereich (getönt nach Status), reicher Briefing-Hero mit Status-Chips, Ringe
+   mit Wert in der Mitte, verfeinerter Radar, sauberes Meter; ruhige Typo; flach; Eintauch-Animation
+   `prefers-reduced-motion`-fest.
+4. **Ehrlichkeit bleibt (Regel Null):** „Nachrichten/Briefing" hat HEUTE keinen Datenträger (Aufgaben-/
+   Nachrichtenobjekte fehlen im Modell → benannte Lücke „Morning Mission"). Das Briefing ist deshalb die
+   **ehrliche Tageslage** (was ist erfasst, wo Lücken, größte offene Stelle), KEIN erfundener Posteingang;
+   ein echtes Postfach wäre eine eigene Daten-Erweiterung (später, Owner-Gate).
+5. **Umsetzung:** der bisherige Bento-Bau (Radar/Abdeckungen/Warnungen/Lebenszyklus-Logik) wird in dieses
+   modulare N-Ebenen-Schema überführt (Pfad-Stack statt gestapelter Blöcke); Datenlogik bleibt.
+
+**Gate-Befunde vom Bento-Zwischenstand (in den Umbau einzuarbeiten):**
+- **A/B/C ist verwaist** (major): die Aussage „A/B/C bleibt unter Heute erreichbar" ist falsch (‚/heute' zeigt
+  die Detailtiefe-Ansicht, kein A/B/C). Falsche Aussagen in `page.tsx`, `CockpitBentoContent.tsx`, `WP-034`
+  korrigieren; A/B/C **offiziell ausmustern** (schließt O-WP034-01) und `CockpitView`/`CockpitVariantenContent`/
+  `varianten.ts` löschen bzw. als archiviert kennzeichnen — keine stille Widerspruchsauflösung (DR-0005).
+- **Guard-Abdeckung** (major): die Vokabular-/Sphären-/Leerzustand-Wächter rendern noch die ALTE Ansicht, nicht
+  die neue Live-Route. Guards auf die neue Ansicht ausweiten ODER die gemeinsamen Bausteine in ein getestetes
+  Modul ziehen (O-WP034-04).
+
 ## Nachtrag: Owner-Wahl (2026-07-24)
 
 Aus den zwei gezeigten Design-Varianten hat der Owner **Variante A „Bento-Mosaik"** gewählt (O-Ton „ich liebe

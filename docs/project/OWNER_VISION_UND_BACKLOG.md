@@ -55,7 +55,12 @@ getrennte Login-Welten) · **WP-021 Slice 1 (Nordstern tief → Ampeln leuchten 
 Struktur-Assistent · Antwort-Modus · Reports/Wissen/Administration · digitaler Zwilling/Objekt-360.
 
 **Als Nächstes (offen, in Reihenfolge):**
-1. **Cockpit-Redesign (DR-0016 / WP-034)** — ✅ **gebaut (Slice 2)**: `/cockpit` ist das Bento-Mosaik (Owner-Wahl Variante A) mit Radar aus den vier Abdeckungen, verschieden großen Ampel-Kacheln und Eintauch-Drilldown; alte A/B/C-Ansicht unter „Heute". 869 Tests + axe 0 (hell/dunkel/Detail) grün, HEAD `be684d0`; Gate-Review läuft. Offene Iteration (optional): Radar prominenter, mehr Charts, coolere Animation (O-WP034-05).
+**Owner-Programm (2026-07-24, in dieser Reihenfolge):**
+1. **Kunde-Cockpit modular umbauen (DR-0016 Nachtrag 3)** — der Bento-Bau (Slice 2, `be684d0`) war dem Owner **noch zu langgezogen** (gestapelte Blöcke unter dem Grid). Freigegebene finale Richtung: **ein kompaktes Ein-Screen-Dashboard, alles per Eintauchen modular verzweigend** (Warnungen/Lebenszyklus/„was fehlt"/Bereiche = Kacheln), poliert (Icons/Hero-Chips/Ringe mit Wert/Radar/Meter). Iterativ bauen, bis es dem Entwurf gleicht (Bauen→Screenshot→Kritiker→nachbessern). Gate-Befunde einarbeiten: A/B/C ausmustern (O-WP034-01), Guards auf die neue Live-Ansicht (O-WP034-04).
+2. **Rollen → 2 Profile** (Kunde + Berater); die 12 rollenspezifischen Perspektiven vorerst raus (später evtl. zurück oder ins Cockpit integriert).
+3. **Mandanten füllen** (WP-021 Slices 3–6: AlpenCloud/Rheinbank/MediNova/GreenGrid reich) — auch Basis fürs Berater-Cockpit.
+4. **Berater-Portfolio-Cockpit** (über alle Kunden: wo dringend / welche Termine) — **erst Konzept + Entwurf** zeigen, dann bauen. Ehrlichkeit: echte Fristen/Dringlichkeit = E-02 (Owner-Gate); vorerst Portfolio-Rangliste nach echten Datenlücken je Kunde, „Termine" als benannte Lücke.
+5. **Dann:** gemeinsam neu bewerten.
 2. **WP-021 Slices 3–6** — die vier weiteren Firmen reich (je eigene Ampel-Verteilung).
 3. **Synthetische Preisbänder** (O-KUNDE-01-Umstellung, mit Security) · **WP-033/U-15** (Demo-Wörter vom Einstieg raus).
 4. **E-02 → echte Decision Cards** (Change Proposal → Contract/Seed; CCP-008-Entwurf liegt).
