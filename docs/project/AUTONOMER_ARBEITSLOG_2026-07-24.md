@@ -29,6 +29,14 @@
 - **AE-3 (Berater-Cockpit):** wird **erst als Konzept + Mockup** gezeigt (Owner-Wunsch), nicht
   blind gebaut. Ehrliche Basis heute = Portfolio-Rangliste nach echten Datenlücken je Kunde; echte
   Fristen/Dringlichkeit = E-02/Eisenhower (Owner-Gate).
+- **AE-4 (WP-021 Mandanten-Mapping konkret, verfeinert AE-2):** Kanonische Demo-Welt = die fünf
+  Dok-16-§34.1-Firmen + Provider. Mapping (stabile `tenant_id`, Anzeigename/Inhalt auf Dok-16):
+  Nordstern=`tenant-nordwerk` (reich ✓); AlpenCloud=**neu** `tenant-alpencloud` (Slice 3);
+  Rheinbank=Slot `tenant-finovia` (Slice 4, Umbenennung+Graph gebündelt); MediNova=Slot
+  `tenant-medicore` (Slice 5, gebündelt); GreenGrid=**neu** `tenant-greengrid` — **bleibt bewusst
+  LEER** (Owner-Direktive „ein Mandant bleibt leer" + Dok-16-Profil „getrennter Discovery-Scope").
+  DR-0005-Spannung Dok-07 §20 ↔ Dok-16 §34.1 im `tenants.ts`-Kopf benannt. Sequenz: erst beide
+  Neuen als Leer-Mandanten, dann Graphen **einzeln** füllen — nie roter Zwischenstand.
 
 ## Offene Fragen an den Owner (nicht blockierend — Default gewählt, jederzeit umstellbar)
 - **OF-1 (2 Profile):** Sollen die 12 Rollen-Perspektiven wirklich ganz raus, oder nur der
@@ -61,5 +69,16 @@
   Vor dem Bau erweiterten „krasseren" Entwurf zeigen.
 - ⏳ **Schritt 2 (5 Profile)** + **Schritt 3 (Mandanten füllen, WP-021 Slices 3–6)** — beides Code-Änderungen
   mit Test-Count-Churn (all-or-nothing für grüne Suite), bewusst für einen fokussierten Durchgang gelassen,
-  damit kein halbfertiger, roter Zwischenstand entsteht. Nächster Einstieg: WP-021 Slices 3–6 (AE-2-Mapping),
-  dann 5-Profile-Login, dann Berater-Cockpit Teil 1 bauen.
+  damit kein halbfertiger, roter Zwischenstand entsteht.
+
+### Autonomer /loop-Durchgang (2026-07-24, Owner gab Liste A frei)
+- ✅ **Cockpit-Hinweisblöcke raus** (`25c6639`): Kontextleiste/Legende/Sphären-/Seitenbausteine-Hinweis
+  aus dem eigenständigen Cockpit entfernt; eine ehrliche Datenstand-Zeile bleibt; Cockpit aus den
+  Shell-Seiten-Konventionen (Seitenbausteine/Kontextleiste) herausgenommen (DR-0017, dokumentiert). 826
+  Web-Tests grün.
+- ✅ **WP-021 Teilschritt 1a** (`54bebbe`): AlpenCloud + GreenGrid als leere Dok-16-Mandanten ergänzt
+  (Mandantenwelt 6); `seed.spec` + Manifest 1.4.0 nachgezogen; demo-seed 63 + db 19 + web 826 grün.
+- ⏳ **WP-021 Slice 3 (AlpenCloud-Graph)**: Hintergrund-Subagent entwirft `alpencloud-graph.ts` nach
+  Nordstern-Vorlage (bewusste Lücken + Dok-07-Pflichten, keine numerische Bewertung = Slice 7 gated);
+  Integration + Verifikation + Commit durch mich nach Rückmeldung. Danach Slice 4/5 (Rheinbank/MediNova
+  Umbenennung+Graph gebündelt), dann 5-Profile-Login, Berater-Portfolio-Entry, DR-0017 Stages 2–4.
