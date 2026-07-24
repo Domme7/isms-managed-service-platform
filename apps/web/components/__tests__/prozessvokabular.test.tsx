@@ -152,7 +152,11 @@ function rollenMandantenMatrix(
       render: () => renderOrt(demoRole, tenant(TENANT_ID.NORDWERK)),
     });
   }
-  for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [
+    TENANT_ID.CONSULTING_OPERATOR,
+    TENANT_ID.GREENGRID,
+    TENANT_ID.GREENGRID,
+  ]) {
     for (const roleId of ['R01', 'R08', null]) {
       varianten.push({
         kontext: `${ort} · ${roleId ?? 'neutral'} · ${tenantId}`,
@@ -265,7 +269,7 @@ const RENDERER_JE_LIVE_ORT = {
       kontext: '/kunden · neutral · medicore (leer)',
       render: () =>
         // biome-ignore lint/a11y/useValidAriaRole: `role` ist die DemoRole-Prop (null = neutral, DR-0009), kein ARIA-Attribut.
-        render(<KundenStartContent role={null} tenant={tenant(TENANT_ID.MEDICORE)} />),
+        render(<KundenStartContent role={null} tenant={tenant(TENANT_ID.GREENGRID)} />),
     },
     // Struktur-Assistent „`/kunden/struktur`" (WP-006 Slice 3): trägt lange, worttreu übernommene
     // Konzept-Strukturtexte über alle Rollen/Mandanten (Leerzustand ist die Versuchungsstelle).

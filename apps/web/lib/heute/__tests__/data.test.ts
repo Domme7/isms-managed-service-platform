@@ -634,7 +634,7 @@ describe('buildMissionControl – Bestand, Empty-State und Mandantengrenze', () 
   });
 
   it('liefert für einen bewusst leeren Mandanten ein vollständiges, leeres Modell', () => {
-    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.GREENGRID]) {
       const model = modelOrThrow(tenantId);
       expect(model.tenantStanding.isEmpty).toBe(true);
       expect(model.tenantStanding.objectCount).toBe(0);

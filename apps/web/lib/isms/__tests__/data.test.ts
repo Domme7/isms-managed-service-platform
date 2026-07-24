@@ -6,8 +6,9 @@
  *    (threatens/exposes), Requirement+Framework (satisfies/part_of) und Evidence-Zuordnung
  *    (evidences mit Kantenstatus),
  *  - getrennte Stände: Control „wirksam" vs. Implementation „implementiert" (08-D07),
- *  - Tenant-Isolation inkl. Negativ-Beweis: Finovia/MediCore UND Consulting Operator liefern
- *    eine leere ISMS-Sicht, obwohl der Operator Managed Services trägt (WP-013 Acceptance 5/6),
+ *  - Tenant-Isolation inkl. Negativ-Beweis: der dauerhaft leere Mandant (GreenGrid) UND der
+ *    Consulting Operator liefern eine leere ISMS-Sicht, obwohl der Operator Managed Services
+ *    trägt (WP-013 Acceptance 5/6),
  *  - Auflösungs-Beweis: keine rohen Seed-IDs als Anzeigenamen.
  */
 import { describe, expect, it } from 'vitest';
@@ -237,8 +238,8 @@ describe('buildIsmsCoreView – Nordwerk (ISMS-Kerngraph vollständig aufgelöst
 });
 
 describe('buildIsmsCoreView – Tenant-Isolation und Empty-Sicht (Acceptance 5/6)', () => {
-  it('liefert für Finovia und MediCore eine vollständig leere ISMS-Sicht', () => {
-    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+  it('liefert für den dauerhaft leeren Mandanten (GreenGrid) eine vollständig leere ISMS-Sicht', () => {
+    for (const tenantId of [TENANT_ID.GREENGRID]) {
       const view = buildIsmsCoreView(tenantId);
       expect(view.isEmpty).toBe(true);
       expect(view.risks).toHaveLength(0);
@@ -287,6 +288,7 @@ describe('buildIsmsCoreView – Tenant-Isolation und Empty-Sicht (Acceptance 5/6
     expect(getIsmsCoreTenants().map((t) => t.tenant_id)).toEqual([
       TENANT_ID.NORDWERK,
       TENANT_ID.FINOVIA,
+      TENANT_ID.MEDICORE,
       TENANT_ID.ALPENCLOUD,
     ]);
   });

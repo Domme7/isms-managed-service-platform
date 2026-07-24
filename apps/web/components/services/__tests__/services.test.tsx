@@ -80,7 +80,7 @@ describe('ServicesContent – Mandanten-Sicht (R08 + Nordwerk)', () => {
     for (const tenantName of [
       'Nordstern Manufacturing SE',
       'GreenGrid Energy Services',
-      'MediCore Health Services GmbH',
+      'MediNova Clinics Holding',
       'Consulting Operator Demo',
     ]) {
       expect(

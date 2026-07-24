@@ -25,6 +25,7 @@ import { NORDWERK_OBJECTS, NORDWERK_RELATIONSHIPS } from './nordwerk-graph';
 import { NORDSTERN_OBJECTS, NORDSTERN_RELATIONSHIPS } from './nordstern-graph';
 import { ALPENCLOUD_OBJECTS, ALPENCLOUD_RELATIONSHIPS } from './alpencloud-graph';
 import { RHEINBANK_OBJECTS, RHEINBANK_RELATIONSHIPS } from './rheinbank-graph';
+import { MEDINOVA_OBJECTS, MEDINOVA_RELATIONSHIPS } from './medinova-graph';
 import { DEMO_SEED } from './seed';
 
 /** Zählpaar Objekte/Beziehungen. */
@@ -79,6 +80,11 @@ const SEED_LAYERS: ReadonlyArray<{
     key: 'isms_graph_rheinbank',
     objects: RHEINBANK_OBJECTS,
     relationships: RHEINBANK_RELATIONSHIPS,
+  },
+  {
+    key: 'isms_graph_medinova',
+    objects: MEDINOVA_OBJECTS,
+    relationships: MEDINOVA_RELATIONSHIPS,
   },
 ];
 

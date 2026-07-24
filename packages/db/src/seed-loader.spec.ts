@@ -11,16 +11,17 @@ const TENANT_OPERATOR = 'tenant-consulting-operator';
 
 /**
  * Erwarteter Seed-Umfang (bewusst hart kodiert, damit stille Fixture-Drift auffällt):
- * Gesamt 127 Objekte / 163 Beziehungen. Davon Nordwerk/Nordstern 58/84 (ISMS-Kerngraph 17/15 aus
+ * Gesamt 157 Objekte / 199 Beziehungen. Davon Nordwerk/Nordstern 58/84 (ISMS-Kerngraph 17/15 aus
  * WP-003, Managed-Service-Schicht 14/28 aus WP-012, Entscheidungsschicht 3/8 aus WP-017,
  * Nordstern-ISMS-Erweiterung 24/33 aus WP-021 Slice 1), AlpenCloud 30/34 (WP-021 Slice 3),
- * Rheinbank (Slot `tenant-finovia`) 30/34 (WP-021 Slice 4) und Consulting Operator Demo 9/11.
- * Die stabilen `tenant_id` bleiben – nur Anzeigenamen und Objektzahlen wachsen (WP-021: reines
- * Zahlen-Nachziehen der Fixture, keine Änderung an Loader/Isolation).
+ * Rheinbank (Slot `tenant-finovia`) 30/34 (WP-021 Slice 4), MediNova (Slot `tenant-medicore`) 30/36
+ * (WP-021 Slice 5, erster F05-Mandant) und Consulting Operator Demo 9/11. Die stabilen `tenant_id`
+ * bleiben – nur Anzeigenamen und Objektzahlen wachsen (WP-021: reines Zahlen-Nachziehen der
+ * Fixture, keine Änderung an Loader/Isolation).
  */
 const EXPECTED = {
-  totalObjects: 127,
-  totalRelationships: 163,
+  totalObjects: 157,
+  totalRelationships: 199,
   nordwerkObjects: 58,
   nordwerkRelationships: 84,
   operatorObjects: 9,

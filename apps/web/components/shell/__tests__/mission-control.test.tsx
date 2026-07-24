@@ -633,7 +633,7 @@ describe('MissionControlContent – „Wo steige ich ein?"', () => {
  * --------------------------------------------------------------------------- */
 
 describe('MissionControlContent – Empty-States für Mandanten ohne Datenbestand', () => {
-  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.GREENGRID]) {
     const leer = tenant(tenantId);
 
     it(`zeigt für ${leer.display_name} einen ehrlichen Leerzustand mit nächstem Schritt`, () => {

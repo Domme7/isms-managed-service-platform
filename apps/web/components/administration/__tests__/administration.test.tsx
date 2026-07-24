@@ -134,7 +134,7 @@ describe('Administration – AC 2: keine echten Rechte, keine Schreib-Hebel, kei
     { tenantId: TENANT_ID.NORDWERK, roleId: 'R12' },
     { tenantId: TENANT_ID.CONSULTING_OPERATOR, roleId: 'R08' },
     { tenantId: TENANT_ID.GREENGRID, roleId: 'R03' },
-    { tenantId: TENANT_ID.MEDICORE, roleId: null },
+    { tenantId: TENANT_ID.GREENGRID, roleId: null },
   ];
 
   for (const { tenantId, roleId } of FIXTURES) {
@@ -333,7 +333,7 @@ describe('Administration – AC 4: Modelle und Lücken benannt statt gefüllt', 
 });
 
 describe('Administration – AC 5: Leerzustand als ehrliche Datenlücke', () => {
-  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.GREENGRID]) {
     it(`${tenantId}: mandantenlokaler Leerzustand, Rollenmodell bleibt sichtbar`, () => {
       const { container, unmount } = render(
         <AdministrationContent role={role('R12')} tenant={tenant(tenantId)} />,

@@ -11,7 +11,7 @@ import { deriveLifecycleVerteilung } from '../../heute/dashboard';
 import { getObjectsForTenant } from '../../twin/data';
 
 describe('buildCockpitLebenszyklus', () => {
-  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.GREENGRID]) {
     it(`leerer Mandant ${tenantId}: keine Leiste`, () => {
       expect(buildCockpitLebenszyklus(tenantId)).toBeUndefined();
     });

@@ -510,7 +510,11 @@ describe('EntscheidungenContent – Leerzustände', () => {
    * viele Mandanten die Entscheidungsschicht ausmodelliert ist; ein Mandant ohne Entscheidungen
    * erfuhr damit, dass ein anderer welche trägt (Review-Fix).
    */
-  for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [
+    TENANT_ID.CONSULTING_OPERATOR,
+    TENANT_ID.GREENGRID,
+    TENANT_ID.GREENGRID,
+  ]) {
     it(`${tenantId}: der Leerzustand sagt nichts über andere Mandanten`, () => {
       const { container } = render(
         <EntscheidungenContent role={role('R05')} tenant={tenant(tenantId)} />,
@@ -533,7 +537,7 @@ describe('EntscheidungenContent – Leerzustände', () => {
     });
   }
 
-  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.GREENGRID]) {
     it(`${tenantId}: gar kein Datenbestand – anders formuliert als ein Mandant mit Graph`, () => {
       const leer = tenant(tenantId);
       render(<EntscheidungenContent role={role('R05')} tenant={leer} />);

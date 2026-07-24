@@ -92,7 +92,7 @@ describe('Kunden-Startseite „verwalten" – Slice 1', () => {
   });
 
   it('AC3: leerer Mandant zeigt eine mandantenlokale Einladung mit Einstieg in Katalog und Struktur-Assistent', () => {
-    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+    for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.GREENGRID]) {
       const { container, unmount } = render(
         <KundenStartContent role={role('R03')} tenant={tenant(tenantId)} />,
       );

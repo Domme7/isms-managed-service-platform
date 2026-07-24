@@ -15,6 +15,7 @@ import { DECISION_OBJECTS, DECISION_RELATIONSHIPS } from './decisions';
 import { NORDSTERN_OBJECTS, NORDSTERN_RELATIONSHIPS } from './nordstern-graph';
 import { ALPENCLOUD_OBJECTS, ALPENCLOUD_RELATIONSHIPS } from './alpencloud-graph';
 import { RHEINBANK_OBJECTS, RHEINBANK_RELATIONSHIPS } from './rheinbank-graph';
+import { MEDINOVA_OBJECTS, MEDINOVA_RELATIONSHIPS } from './medinova-graph';
 
 /**
  * Version der Seed-Grundlage (SemVer). Muss zu `seed-manifest.json` passen.
@@ -36,8 +37,12 @@ import { RHEINBANK_OBJECTS, RHEINBANK_RELATIONSHIPS } from './rheinbank-graph';
  * eigenen ISMS-Graphen (30 Objekte, 34 Kanten, eigene Erfassungswelle 2026-05-15) mit bewussten
  * Deckungslücken + Dok-07-Demo-Graph-Pflicht; neue Beziehungstypen `operates` (R04) + `caused_by`
  * (R11) erstmals belegt; KEINE numerische Bewertung (Slice 7, gated).
+ * 1.7.0 (WP-021 Slice 5): MediNova Clinics Holding (Slot `tenant-medicore`, Anzeige→MediNova) erhält
+ * einen eigenen ISMS-Graphen (30 Objekte, 36 Kanten, eigene Erfassungswelle 2026-06-15) mit MEHREREN
+ * bewussten Deckungslücken + Dok-07-Demo-Graph-Pflicht; erster Mandant mit Objektfamilie F05
+ * (Lieferkette: Lieferant/Unterauftragnehmer); KEINE numerische Bewertung (Slice 7, gated).
  */
-export const SEED_VERSION = '1.6.0';
+export const SEED_VERSION = '1.7.0';
 
 export interface DemoSeed {
   readonly version: string;
@@ -49,9 +54,9 @@ export interface DemoSeed {
 /**
  * Der vollständige Demo-Seed: ISMS-Kerngraph (Nordwerk) + Managed-Service-Schicht
  * (Nordwerk und Consulting Operator Demo) + Entscheidungsschicht (nur Nordwerk).
- * AlpenCloud (Slice 3) und Rheinbank (Slice 4, Slot `tenant-finovia`) tragen eigene ISMS-Graphen.
- * MediCore und GreenGrid bleiben (noch) ohne Objekte (Empty-State); der MediNova-Slot folgt in
- * Slice 5, GreenGrid bleibt bewusst leer.
+ * AlpenCloud (Slice 3), Rheinbank (Slice 4, Slot `tenant-finovia`) und MediNova (Slice 5, Slot
+ * `tenant-medicore`) tragen eigene ISMS-Graphen. NUR GreenGrid bleibt bewusst OHNE Objekte
+ * (der dauerhaft leere Mandant, Empty-State-Nachweis).
  *
  * REIHENFOLGE (bewusst): die Entscheidungsschicht wird HINTER der Managed-Service-Schicht
  * angehängt. Dadurch bleibt innerhalb der Objektfamilie F09 das erste Objekt unverändert – und
@@ -73,6 +78,7 @@ export const DEMO_SEED: DemoSeed = {
     ...NORDSTERN_OBJECTS,
     ...ALPENCLOUD_OBJECTS,
     ...RHEINBANK_OBJECTS,
+    ...MEDINOVA_OBJECTS,
   ],
   relationships: [
     ...NORDWERK_RELATIONSHIPS,
@@ -81,5 +87,6 @@ export const DEMO_SEED: DemoSeed = {
     ...NORDSTERN_RELATIONSHIPS,
     ...ALPENCLOUD_RELATIONSHIPS,
     ...RHEINBANK_RELATIONSHIPS,
+    ...MEDINOVA_RELATIONSHIPS,
   ],
 };

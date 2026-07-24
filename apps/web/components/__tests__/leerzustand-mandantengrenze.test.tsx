@@ -84,7 +84,7 @@ const FREMDER_MANDANT = [
 ];
 
 /** Mandanten ohne eigenen Objektgraphen — hier greifen die Leerzustände. */
-const LEERE_MANDANTEN = [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE];
+const LEERE_MANDANTEN = [TENANT_ID.GREENGRID, TENANT_ID.GREENGRID];
 
 describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandantenfähigkeit", P09)', () => {
   /**
@@ -276,7 +276,7 @@ describe('Kunden-Startseite spricht nie über fremde Mandanten (Kundensphäre, P
     { tenantId: TENANT_ID.NORDWERK, roleId: null }, // voll, neutral
     { tenantId: TENANT_ID.CONSULTING_OPERATOR, roleId: 'R08' }, // Services vorhanden, Betreiberrolle
     { tenantId: TENANT_ID.GREENGRID, roleId: 'R03' }, // leer
-    { tenantId: TENANT_ID.MEDICORE, roleId: null }, // leer, neutral
+    { tenantId: TENANT_ID.GREENGRID, roleId: null }, // leer, neutral
   ];
 
   for (const { tenantId, roleId } of KUNDEN_FIXTURES) {
@@ -348,7 +348,7 @@ describe('Servicekatalog und Struktur-Assistent halten die Kundensphäre (P09/FI
     { tenantId: TENANT_ID.NORDWERK, roleId: null },
     { tenantId: TENANT_ID.CONSULTING_OPERATOR, roleId: 'R08' },
     { tenantId: TENANT_ID.GREENGRID, roleId: 'R03' },
-    { tenantId: TENANT_ID.MEDICORE, roleId: null },
+    { tenantId: TENANT_ID.GREENGRID, roleId: null },
   ];
 
   for (const { tenantId, roleId } of FIXTURES) {

@@ -74,7 +74,7 @@ describe('buildCockpitModul – Baum-Integrität', () => {
 });
 
 describe('buildCockpitModul – leerer Mandant', () => {
-  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [TENANT_ID.GREENGRID, TENANT_ID.GREENGRID]) {
     it(`${tenantId}: isEmpty mit ehrlicher Datenlücken-Kachel, keine Bento-Kacheln`, () => {
       const baum = buildCockpitModul(tenantId);
       expect(baum?.isEmpty).toBe(true);

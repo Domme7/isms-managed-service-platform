@@ -15,6 +15,7 @@ import { NORDWERK_DECISION_OBJECT_ID } from './decisions';
 import { NORDSTERN_OBJECT_ID } from './nordstern-graph';
 import { ALPENCLOUD_OBJECT_ID } from './alpencloud-graph';
 import { RHEINBANK_OBJECT_ID } from './rheinbank-graph';
+import { MEDINOVA_OBJECT_ID } from './medinova-graph';
 import {
   findCrossTenantRelationships,
   findDanglingRelationships,
@@ -91,12 +92,11 @@ describe('Demo-Seed – Tenant-Isolation (P09, D11, Dok. 19)', () => {
     expect(byTenant(TENANT_ID.NORDWERK)).toHaveLength(58);
     // Consulting Operator Demo: eigene Serviceschicht (WP-012 Slice 1).
     expect(byTenant(TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(9);
-    // AlpenCloud (Slice 3) + Rheinbank (Slice 4, Slot tenant-finovia) tragen eigene ISMS-Graphen.
+    // AlpenCloud (3) + Rheinbank (4, Slot finovia) + MediNova (5, Slot medicore) tragen ISMS-Graphen.
     expect(byTenant(TENANT_ID.ALPENCLOUD)).toHaveLength(30);
     expect(byTenant(TENANT_ID.FINOVIA)).toHaveLength(30);
-    // MediCore/GreenGrid tragen (noch) keine Objekte — Empty-State-Nachweis.
-    // MediCore→MediNova wird in WP-021 Slice 5 gefüllt; GreenGrid bleibt bewusst leer.
-    expect(byTenant(TENANT_ID.MEDICORE)).toEqual([]);
+    expect(byTenant(TENANT_ID.MEDICORE)).toHaveLength(30);
+    // NUR GreenGrid bleibt bewusst leer (der dauerhaft leere Mandant, Empty-State-Nachweis).
     expect(byTenant(TENANT_ID.GREENGRID)).toEqual([]);
   });
 
@@ -107,10 +107,10 @@ describe('Demo-Seed – Tenant-Isolation (P09, D11, Dok. 19)', () => {
     // Entscheidungsschicht + 33 Kanten Nordstern-ISMS-Erweiterung (WP-021 Slice 1) = 84.
     expect(byTenant(TENANT_ID.NORDWERK)).toHaveLength(84);
     expect(byTenant(TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(11);
-    // AlpenCloud: 34 Kanten (Slice 3); Rheinbank: 34 Kanten (Slice 4).
+    // AlpenCloud 34 (Slice 3); Rheinbank 34 (Slice 4); MediNova 36 (Slice 5).
     expect(byTenant(TENANT_ID.ALPENCLOUD)).toHaveLength(34);
     expect(byTenant(TENANT_ID.FINOVIA)).toHaveLength(34);
-    expect(byTenant(TENANT_ID.MEDICORE)).toEqual([]);
+    expect(byTenant(TENANT_ID.MEDICORE)).toHaveLength(36);
     expect(byTenant(TENANT_ID.GREENGRID)).toEqual([]);
   });
 
@@ -233,12 +233,13 @@ describe('Demo-Seed – Mandanten & Determinismus', () => {
     }
   });
 
-  it('ausmodelliert sind Nordwerk, Rheinbank (Slot Finovia), AlpenCloud und der Consulting Operator', () => {
+  it('ausmodelliert: Nordwerk, Rheinbank (Finovia), MediNova (MediCore), AlpenCloud, Consulting Operator', () => {
     const withGraph = tenants.filter((t) => t.has_object_graph).map((t) => t.tenant_id);
     // Reihenfolge folgt DEMO_TENANTS: nordwerk, finovia, medicore, alpencloud, greengrid, operator.
     expect(withGraph).toEqual([
       TENANT_ID.NORDWERK,
       TENANT_ID.FINOVIA,
+      TENANT_ID.MEDICORE,
       TENANT_ID.ALPENCLOUD,
       TENANT_ID.CONSULTING_OPERATOR,
     ]);
@@ -482,7 +483,14 @@ describe('Demo-Seed – Entscheidungsschicht (WP-017 Slice 1)', () => {
         ].map((iso) => iso.slice(0, 10)),
       ),
     ].sort();
-    expect(tage).toEqual(['2026-01-15', '2026-02-16', '2026-03-16', '2026-04-15', '2026-05-15']);
+    expect(tage).toEqual([
+      '2026-01-15',
+      '2026-02-16',
+      '2026-03-16',
+      '2026-04-15',
+      '2026-05-15',
+      '2026-06-15',
+    ]);
 
     const decisionEdges = relationships.filter((r) =>
       decisions.some((d) => d.object_id === r.source_id || d.object_id === r.target_id),
@@ -750,6 +758,93 @@ describe('Demo-Seed – Rheinbank: Dok-07-Demo-Graph-Pflicht über belegte Felde
   it('KEIN neues Contract-Trägerfeld: kein Assessment-Feld leckt in tags_custom_fields', () => {
     const rb = objects.filter((o) => o.tenant_id === TENANT_ID.FINOVIA);
     for (const o of rb) {
+      expect(o.tags_custom_fields ?? undefined).toBeUndefined();
+    }
+  });
+});
+
+describe('Demo-Seed – MediNova: bewusste Deckungslücken (WP-021 Slice 5)', () => {
+  const M = MEDINOVA_OBJECT_ID;
+  const mnObjects = objects.filter((o) => o.tenant_id === TENANT_ID.MEDICORE);
+  const mnRels = relationships.filter((r) => r.tenant_id === TENANT_ID.MEDICORE);
+  const incoming = (type: string, targetId: string) =>
+    mnRels.filter((r) => r.relationship_type === type && r.target_id === targetId);
+  const objectById = new Map(mnObjects.map((o) => [o.object_id, o] as const));
+
+  it('belegt als erster Mandant die Objektfamilie F05 (Lieferant/Unterauftragnehmer)', () => {
+    const lieferkette = mnObjects.filter(
+      (o) => o.object_type === 'Lieferant' || o.object_type === 'Unterauftragnehmer',
+    );
+    expect(lieferkette.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('trägt eine Control-Grundgesamtheit über der Kleinheitsschwelle (n ≥ 3)', () => {
+    const controls = mnObjects.filter((o) => o.object_type === 'Control');
+    expect(controls.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('mindestens ein Control ohne eingehende Nachweis-Kante (R15) – „Control ohne Nachweis"', () => {
+    const controls = mnObjects.filter((o) => o.object_type === 'Control');
+    const ohneNachweis = controls.filter((c) => incoming('evidences', c.object_id).length === 0);
+    expect(ohneNachweis.map((c) => c.object_id)).toContain(M.CTRL_LIEFERANTENSTEUERUNG);
+    expect(controls.some((c) => incoming('evidences', c.object_id).length > 0)).toBe(true);
+  });
+
+  it('mehrere Risiken ohne Minderungs-Kante (R12) – dezentral, spürbar mehr Lücken', () => {
+    const risks = mnObjects.filter((o) => o.object_type === 'Risk');
+    expect(risks.length).toBeGreaterThanOrEqual(3);
+    const ohneMinderung = risks.filter((r) => incoming('mitigates', r.object_id).length === 0);
+    expect(ohneMinderung.map((r) => r.object_id)).toContain(M.RISK_LIEFERANTEN_ABHAENGIGKEIT);
+    expect(ohneMinderung.map((r) => r.object_id)).toContain(M.RISK_STANDORT_VERFUEGBARKEIT);
+    // Gegenprobe: mindestens ein Risiko IST gemindert (amber, nicht komplett rot).
+    expect(risks.some((r) => incoming('mitigates', r.object_id).length > 0)).toBe(true);
+  });
+
+  it('das kritische, ausgelagerte Kernsystem (KIS) trägt keinen internen Owner', () => {
+    const kis = objectById.get(M.SYSTEM_KIS);
+    expect(kis, 'SYSTEM_KIS fehlt').toBeDefined();
+    expect(kis?.owner_ids).toEqual([]);
+    expect(kis?.classification.protection_need).toBe('hoch');
+  });
+});
+
+describe('Demo-Seed – MediNova: Dok-07-Demo-Graph-Pflicht über belegte Felder (WP-021 Slice 5)', () => {
+  const M = MEDINOVA_OBJECT_ID;
+  const objectById = new Map(objects.map((o) => [o.object_id, o] as const));
+
+  it('KONFLIKT: ein Objekt trägt widersprüchliche Quellen + Dimension „Konsistenz"', () => {
+    const weak = objectById.get(M.WEAK_LIEFERANTEN_MONITORING);
+    expect(weak, 'WEAK_LIEFERANTEN_MONITORING fehlt').toBeDefined();
+    expect(weak!.source_refs.length).toBeGreaterThanOrEqual(2);
+    const konsistenz = weak!.quality_state.dimensions.find((d) => d.dimension === 'Konsistenz');
+    expect(konsistenz?.note ?? '').toMatch(/Konflikt/i);
+  });
+
+  it('VERALTETE QUELLE: ein Lieferant trägt eine alte Quelle (2023) + Dimension „Aktualität"', () => {
+    const labor = objectById.get(M.LIEFERANT_LABOR);
+    expect(labor, 'LIEFERANT_LABOR fehlt').toBeDefined();
+    expect(labor!.source_refs.some((s) => /2023/.test(s.reference))).toBe(true);
+    const aktualitaet = labor!.quality_state.dimensions.find((d) => d.dimension === 'Aktualität');
+    expect(aktualitaet?.note ?? '').toMatch(/veraltet/i);
+  });
+
+  it('ERKLÄRBARER TRUST-STATE: ungeprüfte Bestätigung + Herkunft + niedriger Kanten-Vertrauensgrad', () => {
+    const risk = objectById.get(M.RISK_LIEFERANTEN_ABHAENGIGKEIT);
+    expect(risk, 'RISK_LIEFERANTEN_ABHAENGIGKEIT fehlt').toBeDefined();
+    const bestaetigung = risk!.quality_state.dimensions.find((d) => d.dimension === 'Bestätigung');
+    expect(bestaetigung?.confirmation_level).toBe('Ungeprüft');
+    expect(risk!.quality_state.dimensions.some((d) => d.dimension === 'Herkunft')).toBe(true);
+    const affects = relationships.filter(
+      (r) => r.relationship_type === 'affects' && r.source_id === risk!.object_id,
+    );
+    expect(affects.length).toBeGreaterThanOrEqual(1);
+    expect(affects.every((r) => typeof r.confidence === 'number')).toBe(true);
+    expect(Math.min(...affects.map((r) => r.confidence ?? 1))).toBeLessThan(0.5);
+  });
+
+  it('KEIN neues Contract-Trägerfeld: kein Assessment-Feld leckt in tags_custom_fields', () => {
+    const mn = objects.filter((o) => o.tenant_id === TENANT_ID.MEDICORE);
+    for (const o of mn) {
       expect(o.tags_custom_fields ?? undefined).toBeUndefined();
     }
   });

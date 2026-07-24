@@ -49,10 +49,10 @@ export const TENANT_ID = {
  * Die sechs Demo-Mandanten (fünf Dok-16-Kundenfirmen + Provider). Ausmodelliert sind derzeit
  * Nordstern/Nordwerk (ISMS-Kerngraph + Managed-Service- + Entscheidungsschicht) und der Consulting
  * Operator Demo (Managed-Service-Schicht, WP-012 Slice 1). Die übrigen Kundenfirmen folgen in
- * WP-021 Slices 3–5: AlpenCloud (✓) und Rheinbank (✓, Slot `tenant-finovia`) tragen eigene
- * ISMS-Graphen; der MediNova-Slot (`tenant-medicore`) folgt in Slice 5. GreenGrid bleibt bewusst
- * OHNE Objektgraph (getrennter, noch nicht erhobener Discovery-Scope + Owner-Direktive „ein Mandant
- * bleibt leer"). Bis dahin belegt der MediCore-Slot den Empty-State.
+ * WP-021 Slices 3–5: AlpenCloud (✓), Rheinbank (✓, Slot `tenant-finovia`) und MediNova (✓, Slot
+ * `tenant-medicore`) tragen eigene ISMS-Graphen. NUR GreenGrid bleibt bewusst OHNE Objektgraph
+ * (getrennter, noch nicht erhobener Discovery-Scope + Owner-Direktive „ein Mandant bleibt leer") —
+ * das dauerhafte Empty-State-Beispiel.
  */
 export const DEMO_TENANTS: readonly DemoTenant[] = [
   {
@@ -85,14 +85,17 @@ export const DEMO_TENANTS: readonly DemoTenant[] = [
     has_object_graph: true,
   },
   {
+    // Dok. 16 §34.1 Nr. 4: dezentrale Gesundheitsgruppe, kritische Verfügbarkeit, Lieferanten- und
+    // Standortkomplexität. Slot `tenant-medicore` (stabile ID), Anzeige→MediNova (WP-021 Slice 5);
+    // eigener ISMS-Graph (erster Mandant mit F05 Lieferkette).
     tenant_id: TENANT_ID.MEDICORE,
-    display_name: 'MediCore Health Services GmbH',
-    industry: 'Gesundheitsdienstleistung / eHealth (synthetisch)',
+    display_name: 'MediNova Clinics Holding',
+    industry: 'Dezentrale Gesundheitsgruppe / Klinikverbund (synthetisch)',
     description:
-      'Synthetischer Gesundheitsdienstleister mit besonders schützenswerten ' +
-      'Gesundheitsdaten. ISMS-Fokus auf Datenschutz, Zugriffskontrolle und ' +
-      'Verfügbarkeit patientennaher Systeme.',
-    has_object_graph: false,
+      'Synthetische, dezentrale Gesundheitsgruppe mit mehreren Standorten und hoher ' +
+      'Lieferantenkomplexität. ISMS-Fokus auf kritische Verfügbarkeit der patientennahen Systeme, ' +
+      'Steuerung ausgelagerter IT-Dienstleister und Schutz der Patientendaten über die Standorte.',
+    has_object_graph: true,
   },
   {
     // Dok. 16 §34.1 Nr. 2: Cloud-Softwareanbieter, schnelles Wachstum, Zertifizierungsziel,

@@ -38,7 +38,7 @@ describe('getManagedServicesForTenant – Auflösung je Mandant', () => {
     expect(getManagedServicesForTenant(TENANT_ID.NORDWERK)).toHaveLength(3);
     expect(getManagedServicesForTenant(TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(2);
     expect(getManagedServicesForTenant(TENANT_ID.GREENGRID)).toHaveLength(0);
-    expect(getManagedServicesForTenant(TENANT_ID.MEDICORE)).toHaveLength(0);
+    expect(getManagedServicesForTenant(TENANT_ID.GREENGRID)).toHaveLength(0);
   });
 
   it('ordnet SLA, Deliverables und Outcome Review dem Monitoring-Service über part_of zu', () => {

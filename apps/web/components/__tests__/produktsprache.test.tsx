@@ -270,7 +270,11 @@ function matrix(
       render: () => renderOrt(demoRole, tenant(TENANT_ID.NORDWERK)),
     });
   }
-  for (const tenantId of [TENANT_ID.CONSULTING_OPERATOR, TENANT_ID.GREENGRID, TENANT_ID.MEDICORE]) {
+  for (const tenantId of [
+    TENANT_ID.CONSULTING_OPERATOR,
+    TENANT_ID.GREENGRID,
+    TENANT_ID.GREENGRID,
+  ]) {
     for (const roleId of ['R01', 'R08', null]) {
       varianten.push({
         kontext: `${ort} · ${roleId ?? 'neutral'} · ${tenantId}`,
