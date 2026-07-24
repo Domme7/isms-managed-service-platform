@@ -119,7 +119,7 @@ describe('Reports – AC 7: belegbare Datengrundlage ohne Wertung', () => {
   it('zeigt gezählte Grundgesamtheiten des aktiven Mandanten mit Ermittlungsregel', () => {
     render(<ReportsContent role={role('R02')} tenant={tenant(TENANT_ID.NORDWERK)} />);
     const grundlage = screen
-      .getByRole('heading', { level: 2, name: 'Datengrundlage von Nordwerk Manufacturing SE' })
+      .getByRole('heading', { level: 2, name: 'Datengrundlage von Nordstern Manufacturing SE' })
       .closest('section');
     if (!grundlage) throw new Error('Abschnitt „Datengrundlage" fehlt');
     const text = (grundlage as HTMLElement).textContent ?? '';
@@ -157,7 +157,7 @@ describe('Reports – AC 7: belegbare Datengrundlage ohne Wertung', () => {
       <ReportsContent role={role('R02')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
     const grundlage = screen
-      .getByRole('heading', { level: 2, name: 'Datengrundlage von Nordwerk Manufacturing SE' })
+      .getByRole('heading', { level: 2, name: 'Datengrundlage von Nordstern Manufacturing SE' })
       .closest('section');
     const text = (grundlage as HTMLElement).textContent ?? '';
 
@@ -372,7 +372,7 @@ describe('Reports – Antwort-Modus und Produktsprache (DR-0013 / DR-0011)', () 
     );
     expect((container.textContent ?? '').length).toBeGreaterThan(200);
     for (const name of [
-      'Datengrundlage von Nordwerk Manufacturing SE',
+      'Datengrundlage von Nordstern Manufacturing SE',
       'Welche Berichte die Plattform vorsieht',
       'Wiederverwendbare Präsentationsfälle',
       'Woraus ein Bericht besteht',

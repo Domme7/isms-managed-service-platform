@@ -209,7 +209,7 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
     for (const legitim of [
       '34 Objekte dieses Mandanten',
       '51 Beziehungen dieses Mandanten im Datenbestand',
-      'Datenbestand von Nordwerk Manufacturing SE (nur der aktive Mandant)',
+      'Datenbestand von Nordstern Manufacturing SE (nur der aktive Mandant)',
       'Gezählt wird ausschließlich der aktive Mandant.',
     ]) {
       for (const muster of FREMDER_MANDANT) {
@@ -230,7 +230,7 @@ describe('Leerzustände sprechen nie über fremde Mandanten (Dok. 07 „Mandante
     for (const muster of FREMDER_MANDANT) {
       expect(text).not.toMatch(muster);
     }
-    expect(text).not.toContain('Nordwerk Manufacturing SE');
+    expect(text).not.toContain('Nordstern Manufacturing SE');
     expect(text).not.toContain(TENANT_ID.NORDWERK);
   });
 });
@@ -558,7 +558,7 @@ function WechselHarness({ startTenantId }: { startTenantId: string }) {
 }
 
 describe('Mandantenwechsel ist eine angekündigte Kontextänderung (Dok. 06 CROSS-TENANT-SCHUTZ)', () => {
-  const NORDWERK_NAME = 'Nordwerk Manufacturing SE';
+  const NORDWERK_NAME = 'Nordstern Manufacturing SE';
   const FINOVIA_NAME = 'Finovia Digital Bank AG';
 
   function wechselAnfordern(): void {

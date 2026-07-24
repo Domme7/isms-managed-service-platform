@@ -1,5 +1,5 @@
 {
-  "seed_version": "1.2.0",
+  "seed_version": "1.3.0",
   "generated_by": "@isms/demo-seed",
   "deterministic": true,
   "reset_hint": "Reine In-Memory-/Datei-Fixture ohne Datenbank. 'Reset' = erneuter Import von DEMO_SEED (packages/demo-seed/src/seed.ts). Alle object_id/relationship_id/tenant_id sowie valid_time/record_time sind fest kodiert (kein Date.now(), kein Zufall) -> jeder Lauf ist identisch.",
@@ -13,12 +13,13 @@
   "content_sources": {
     "isms_core_graph": "Dok. 07 (Struktur) + synthetische Workshop-Fixture (WP-003 Slice 2)",
     "managed_service_layer": "Dok. 13 (Service Instance, Deliverable, Outcome Review, Shared Responsibility), Dok. 14 (Service Offers SO02-SO06/SO12, Service-Level-Baender Abschnitt 8.4 als illustrative Designannahmen), Dok. 15 (Portfolio/Engagement - nur soweit kanonisch abbildbar); WP-012 Slice 1",
-    "decision_layer": "Dok. 07 (F09 'Decision Record', Objektvertrag Abschnitt 7, Lebenszyklus Abschnitt 8, Beziehungen R03/R15/R23/R24, Bitemporalitaet Abschnitt 11), Dok. 10 Abschnitt 9.2 (Decision Record, Korrektur als neue Version oder Nachtrag), Dok. 05 Abschnitt 7 (Entscheidungs-Lifecycle); WP-017 Slice 1. KEINE Decision Card nach Dok. 10 Abschnitt 'Decision Cards' / 'Pflichtfelder' (9.1) - neun ihrer 14 Pflichtfelder (Ausloeser, Baseline, Optionen, Wirkung, Ressourcen, Abhaengigkeiten, Empfehlung, Frist, Outcome Check) haben im Objektvertrag keinen Traeger, die uebrigen fuenf (Entscheidungsfrage, Zielbezug, Confidence, 'Owner und Approver', Provenance) nur teilweise."
+    "decision_layer": "Dok. 07 (F09 'Decision Record', Objektvertrag Abschnitt 7, Lebenszyklus Abschnitt 8, Beziehungen R03/R15/R23/R24, Bitemporalitaet Abschnitt 11), Dok. 10 Abschnitt 9.2 (Decision Record, Korrektur als neue Version oder Nachtrag), Dok. 05 Abschnitt 7 (Entscheidungs-Lifecycle); WP-017 Slice 1. KEINE Decision Card nach Dok. 10 Abschnitt 'Decision Cards' / 'Pflichtfelder' (9.1) - neun ihrer 14 Pflichtfelder (Ausloeser, Baseline, Optionen, Wirkung, Ressourcen, Abhaengigkeiten, Empfehlung, Frist, Outcome Check) haben im Objektvertrag keinen Traeger, die uebrigen fuenf (Entscheidungsfrage, Zielbezug, Confidence, 'Owner und Approver', Provenance) nur teilweise.",
+    "isms_erweiterung_nordstern": "Dok. 16 Abschnitt 'Synthetische Demo-Daten und Demo-Dramaturgie' (34.1 'Demo-Unternehmen': Flaggschiff Nordstern Manufacturing SE - europaeischer Produzent, Zielreife 3, begrenzte interne Kapazitaet, zwei Standorte, bevorstehender Kunden-Audit) + Dok. 07 Abschnitt 'Synthetische Demodaten' (Demo-Graph-Pflicht: je Tenant mindestens ein Konflikt, eine veraltete Quelle, ein erklaerbarer Trust-State) ueber belegte Felder; WP-021 Slice 1. Additive ISMS-Erweiterung (zweiter Standort, OT-/Fertigungsseite, Konstruktionsdaten, Kunden-Audit) mit bewussten Deckungsluecken (Control ohne Nachweis, Risiko ohne Minderung, kritisches Objekt ohne Owner). KEINE numerische Bewertung (Reifegrad/Risiko-Level) - die brauchen ein Traegerschema (E-02, CCP-008, Slice 7)."
   },
   "tenants": [
     {
       "tenant_id": "tenant-nordwerk",
-      "display_name": "Nordwerk Manufacturing SE",
+      "display_name": "Nordstern Manufacturing SE",
       "has_object_graph": true
     },
     {
@@ -39,16 +40,16 @@
   ],
   "counts": {
     "tenants": 4,
-    "objects": 43,
-    "relationships": 62,
+    "objects": 67,
+    "relationships": 95,
     "objects_by_tenant": {
-      "tenant-nordwerk": 34,
+      "tenant-nordwerk": 58,
       "tenant-finovia": 0,
       "tenant-medicore": 0,
       "tenant-consulting-operator": 9
     },
     "relationships_by_tenant": {
-      "tenant-nordwerk": 51,
+      "tenant-nordwerk": 84,
       "tenant-finovia": 0,
       "tenant-medicore": 0,
       "tenant-consulting-operator": 11
@@ -57,15 +58,16 @@
       "isms_core_nordwerk": { "objects": 17, "relationships": 15 },
       "managed_service_nordwerk": { "objects": 14, "relationships": 28 },
       "managed_service_consulting_operator": { "objects": 9, "relationships": 11 },
-      "decisions_nordwerk": { "objects": 3, "relationships": 8 }
+      "decisions_nordwerk": { "objects": 3, "relationships": 8 },
+      "isms_erweiterung_nordstern": { "objects": 24, "relationships": 33 }
     }
   },
   "recording_waves": [
     {
       "recorded_on": "2026-01-15",
-      "layer": "isms_core_nordwerk",
-      "objects": 17,
-      "relationships": 15
+      "layer": "isms_core_nordwerk + isms_erweiterung_nordstern",
+      "objects": 41,
+      "relationships": 48
     },
     {
       "recorded_on": "2026-02-16",
@@ -75,10 +77,12 @@
     },
     { "recorded_on": "2026-03-16", "layer": "decisions_nordwerk", "objects": 3, "relationships": 8 }
   ],
-  "object_families_used": ["F01", "F02", "F03", "F06", "F07", "F08", "F09"],
+  "object_families_used": ["F01", "F02", "F03", "F04", "F06", "F07", "F08", "F09"],
   "relationship_types_used": [
     "part_of",
+    "located_at",
     "owns",
+    "supports",
     "processes",
     "exposes",
     "threatens",
@@ -99,7 +103,8 @@
   "decision_chain": "Risk Betriebsunterbrechung --decided_in--> Decision Record 'Absicherung ueber Backup/Wiederherstellung' (abgeloest, fachlich gueltig 2026-01-05 bis 2026-03-01); Risk Betriebsunterbrechung --decided_in--> Decision Record 'Absicherung zusaetzlich ueber Haertung der ERP-Schnittstelle' (Nachfolger, fachlich gueltig ab 2026-03-01); Nachfolger --supersedes--> Vorgaenger (R24, Nachfolger ist die Quelle); Evidence Restore-Test --evidences--> Decision Record (abgeloester Stand); Managed Service 'Management- & Entscheidungsreporting' --decided_in--> Decision Record 'Berichtsrhythmus' (offener Stand); fachliche Rolle CISO --owns--> jede der drei Entscheidungen.",
   "decision_note": "Die Abloesung ist FACHLICH modelliert (R24 zwischen zwei eigenstaendigen Objekten, Dok. 07 Abschnitt 9): der abgeloeste Stand traegt ein geschlossenes valid_time-Intervall, behaelt aber version 1 und KEIN record_time.replaced_at und bleibt vollstaendig sichtbar (Abloesung ohne historische Ueberschreibung). Damit traegt der Seed erstmals eine belegte Versionshistorie - die entsprechenden Produktaussagen sind abgeleitet, nicht hartkodiert.",
   "managed_service_chain": "SLA/Deliverable/Review --part_of--> Managed Service; Managed Service/Deliverable --delivered_by--> Team (Delivery-Verantwortung im selben Mandanten); Risk/Control/Control Implementation/Evidence --covered_by--> Managed Service (liegt im Serviceumfang); Managed Service --requires--> Control/Evidence; Managed Service/Control --contributes_to--> Objective/KPI; Deliverable Evidence-Pack --evidences--> Control; Risk --affects--> Objective.",
-  "storyline": "Nordwerk Manufacturing SE (synthetischer Fertigungskonzern) betreibt in 'Werk Nord - Produktion' den Kernprozess 'Auftragsabwicklung', der die 'Kundenauftragsdaten' verarbeitet. Eine ungepatchte ERP-Integrationsschnittstelle exponiert diese Daten; eine Ransomware-Bedrohung droht sie zu verschluesseln. Daraus entsteht das Risiko einer Betriebsunterbrechung. Ein Backup-&-Recovery-Control (lokal umgesetzt als Backup-Job, erfuellt Requirement A.8.13) mindert das Risiko; ein Restore-Test-Protokoll belegt seine Wirksamkeit. Eine Patch-Management-Massnahme behandelt die Schwaeche und mindert das Szenario. Darauf setzt die Managed-Service-Schicht auf: drei synthetische Service Instances (kontinuierliches Risiko- & Control-Monitoring, Nachweis-/Evidence-Betrieb, Management- & Entscheidungsreporting) decken Risiko, Control, Control-Implementierung und Nachweis ab, liefern SLA und Deliverables und zahlen auf das Ziel 'Auditfaehigkeit' sowie die KPI 'Nachweisquote priorisierter Controls' ein. Ein Outcome Review Q2/2026 prueft, ob die Wirkung eingetreten ist; der Reporting-Service steht deshalb im Zustand 'Review' und sein Management-Report ist bewusst noch Entwurf. Der Consulting Operator Demo traegt als zweiter Mandant zwei eigene Service Instances (Audit-Readiness-Betrieb aktiv, Policy-Lifecycle-Betrieb konfiguriert), damit die spaetere Portfolio-Sicht mehrere Mandanten zeigt. Finovia und MediCore bleiben bewusst ohne Objekte und belegen den Empty-State. Darueber liegt die Entscheidungsschicht (nur Nordwerk): das Risiko wurde zuerst allein ueber Backup und Wiederherstellung abgesichert; dieser Stand ist fachlich beendet und wurde durch einen Nachfolgestand abgeloest, der zusaetzlich die Haertung der ERP-Schnittstelle umfasst. Der abgeloeste Stand bleibt sichtbar und ist durch das Restore-Test-Protokoll belegt. Eine dritte, offene Entscheidung betrifft den Berichtsrhythmus des Reporting-Service, der selbst im Zustand 'Review' steht. Alle drei Entscheidungen verantwortet die CISO-Rolle.",
+  "nordstern_chain": "Standort Werk Nord / Werk Sued / OU Konstruktion --part_of--> Organisation; Netzwerkzone OT und Asset Maschinendaten --located_at--> Standort Werk Nord; Geschaeftsprozess Fertigungssteuerung --supports--> Business Capability Produktionsverfuegbarkeit; Fertigungssteuerung/System MES --processes--> Asset Maschinendaten (+ Konstruktionsdaten); Weakness Fernwartung --exposes--> Maschinendaten; Threat Industriespionage --threatens--> Risk Scenario OT-Kompromittierung / Konstruktionsdaten; Risk Produktionsausfall --affects--> Fertigungssteuerung/Maschinendaten und wird durch Control Netzsegmentierung --mitigates--> gemindert; Control Implementation OT-Firewall/VLAN --implements--> Netzsegmentierung; Control Netzsegmentierung/Zugriffskontrolle --satisfies--> Requirement A.8.20 / A.8.3; Evidence Zugriffsreview --evidences--> Zugriffskontrolle (Netzsegmentierung bleibt BEWUSST ohne Nachweis); Measure Fernwartungshaertung --remediates--> Weakness / --mitigates--> Szenario; Audit Kunden-Audit --requires--> Zugriffskontrolle/Evidence/Backup-Control (im Pruefumfang). BEWUSSTE LUECKEN: Risk Abfluss Konstruktionsdaten OHNE mitigates; Asset Maschinendaten OHNE Owner und aus veralteter Quelle (2024); Weakness Fernwartung mit zwei widerspruechlichen Quellen (Konflikt, Dimension Konsistenz).",
+  "storyline": "Nordstern Manufacturing SE (synthetischer europaeischer Fertigungskonzern, Flaggschiff der Demo, Dok. 16 34.1) betreibt in 'Werk Nord - Produktion' den Kernprozess 'Auftragsabwicklung', der die 'Kundenauftragsdaten' verarbeitet. Eine ungepatchte ERP-Integrationsschnittstelle exponiert diese Daten; eine Ransomware-Bedrohung droht sie zu verschluesseln. Daraus entsteht das Risiko einer Betriebsunterbrechung. Ein Backup-&-Recovery-Control (lokal umgesetzt als Backup-Job, erfuellt Requirement A.8.13) mindert das Risiko; ein Restore-Test-Protokoll belegt seine Wirksamkeit. Eine Patch-Management-Massnahme behandelt die Schwaeche und mindert das Szenario. Darauf setzt die Managed-Service-Schicht auf: drei synthetische Service Instances (kontinuierliches Risiko- & Control-Monitoring, Nachweis-/Evidence-Betrieb, Management- & Entscheidungsreporting) decken Risiko, Control, Control-Implementierung und Nachweis ab, liefern SLA und Deliverables und zahlen auf das Ziel 'Auditfaehigkeit' sowie die KPI 'Nachweisquote priorisierter Controls' ein. Ein Outcome Review Q2/2026 prueft, ob die Wirkung eingetreten ist; der Reporting-Service steht deshalb im Zustand 'Review' und sein Management-Report ist bewusst noch Entwurf. Der Consulting Operator Demo traegt als zweiter Mandant zwei eigene Service Instances (Audit-Readiness-Betrieb aktiv, Policy-Lifecycle-Betrieb konfiguriert), damit die spaetere Portfolio-Sicht mehrere Mandanten zeigt. Finovia und MediCore bleiben bewusst ohne Objekte und belegen den Empty-State. Darueber liegt die Entscheidungsschicht (nur Nordwerk): das Risiko wurde zuerst allein ueber Backup und Wiederherstellung abgesichert; dieser Stand ist fachlich beendet und wurde durch einen Nachfolgestand abgeloest, der zusaetzlich die Haertung der ERP-Schnittstelle umfasst. Der abgeloeste Stand bleibt sichtbar und ist durch das Restore-Test-Protokoll belegt. Eine dritte, offene Entscheidung betrifft den Berichtsrhythmus des Reporting-Service, der selbst im Zustand 'Review' steht. Alle drei Entscheidungen verantwortet die CISO-Rolle. Seit WP-021 Slice 1 ist das Flaggschiff reich ausgebaut (Anzeigename 'Nordstern', stabile tenant_id 'tenant-nordwerk'): ein zweiter Standort (Werk Sued), die OT-/Fertigungsseite (Produktionsverfuegbarkeit, MES, OT-Produktionsnetz, Maschinendaten), der Schutz der Konstruktionsdaten und ein bevorstehender Kunden-Audit (Q3/2026, in Vorbereitung). Bewusst gesetzte Deckungsluecken lassen die belegten Cockpit-Ampeln unterschiedlich ausschlagen: von drei Controls tragen zwei einen Nachweis (Netzsegmentierung bleibt ohne -> amber), von drei Risiken sind zwei gemindert (Abfluss der Konstruktionsdaten bleibt ohne Minderung -> amber), und die Maschinendaten tragen keinen Owner. Die Dok-07-Demo-Graph-Pflicht ist ueber belegte Felder erfuellt: ein Konflikt (widerspruechliche Quellen an der Fernwartungs-Schwaeche), eine veraltete Quelle (Maschinendaten aus dem Inventar-Import 2024) und ein erklaerbarer Trust-State (Abfluss-Risiko: ungeprueft, niedriger Vertrauensgrad, offene Wirkungsabschaetzung). KEINE numerische Bewertung - die bleibt Slice 7 (gated).",
   "open_questions": [
     "O-WP012-01: Dok. 13 trennt Service Definition / Service Offer / Service Instance; Dok. 07 kennt nur den Typ 'Managed Service'. Nur die Service Instance ist materialisiert.",
     "O-WP012-02: 'Service Run' (Dok. 13) und 'Work Package' (Dok. 15) haben keinen kanonischen Objekttyp; Deliverables haengen direkt an der Service Instance.",

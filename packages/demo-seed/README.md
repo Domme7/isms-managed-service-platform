@@ -2,10 +2,11 @@
 
 Deterministische, **rein synthetische** Demo-Datenbasis des digitalen Unternehmenszwillings
 (WP-003 Slice 2: ISMS-Kerngraph; WP-012 Slice 1: Managed-Service-Schicht; WP-017 Slice 1:
-Entscheidungsschicht). Reine typisierte Daten + Integritätshelfer – **keine Datenbank, kein ORM,
-keine UI**. Der Seed wird später nur auf Repositories gemappt.
+Entscheidungsschicht; WP-021 Slice 1: Nordstern-ISMS-Erweiterung des Flaggschiffs). Reine
+typisierte Daten + Integritätshelfer – **keine Datenbank, kein ORM, keine UI**. Der Seed wird
+später nur auf Repositories gemappt.
 
-Aktuelle Seed-Version: **1.2.0** · **43 Objekte / 62 Beziehungen** über zwei Mandanten.
+Aktuelle Seed-Version: **1.3.0** · **67 Objekte / 95 Beziehungen** über zwei Mandanten.
 
 ## Struktur vs. Inhalt
 
@@ -19,14 +20,20 @@ Aktuelle Seed-Version: **1.2.0** · **43 Objekte / 62 Beziehungen** über zwei M
   und **keine Preise**. SLA-Zahlen sind illustrative Designannahmen (Dok. 14 §8.4), keine
   Vertragszusagen.
 
-## Vier Demo-Mandanten (Dok. 07 §20)
+## Vier Demo-Mandanten (Namen: Dok. 07 §20; Flaggschiff-Name Dok. 16 §34.1)
 
 | tenant_id | Anzeigename | Objekte / Beziehungen | Inhalt |
 |---|---|---|---|
-| `tenant-nordwerk` | Nordwerk Manufacturing SE | 34 / 51 | ISMS-Kerngraph (17/15) + Managed-Service-Schicht (14/28) + Entscheidungsschicht (3/8) |
-| `tenant-finovia` | Finovia Digital Bank AG | 0 / 0 | bewusst leer (Empty-State) |
-| `tenant-medicore` | MediCore Health Services GmbH | 0 / 0 | bewusst leer (spätere WPs) |
+| `tenant-nordwerk` | **Nordstern Manufacturing SE** | 58 / 84 | ISMS-Kerngraph (17/15) + Managed-Service-Schicht (14/28) + Entscheidungsschicht (3/8) + **Nordstern-ISMS-Erweiterung (24/33)** |
+| `tenant-finovia` | Finovia Digital Bank AG | 0 / 0 | bewusst leer (Empty-State; Rheinbank folgt in WP-021 Slice 4) |
+| `tenant-medicore` | MediCore Health Services GmbH | 0 / 0 | bewusst leer (MediNova folgt in WP-021 Slice 5) |
 | `tenant-consulting-operator` | Consulting Operator Demo | 9 / 11 | Managed-Service-Schicht (WP-012) |
+
+> **Flaggschiff-Umbenennung (WP-021 Slice 1, minimal-disruptiv):** Der Anzeigename des
+> `tenant-nordwerk` wandert per Dok. 16 §34.1 auf **„Nordstern Manufacturing SE"**. Die
+> **stabile `tenant_id` bleibt `tenant-nordwerk`** und **alle Objekt-/Beziehungs-IDs bleiben
+> `nordwerk-*`** – der `display_name` ist laut Dok. 07 §7 „änderbar, nicht identitätsstiftend"
+> (P02). So bricht keine der bestehenden ID-Referenzen; nur Anzeigename und Inhalt wachsen.
 
 Alle `tenant_id` sind stabil und unveränderlich (P02) und bilden eine harte
 Mandantengrenze (P09, D11, Dok. 19). Der Seed enthält **keine** Cross-Tenant-Beziehung; die
@@ -71,6 +78,67 @@ fachliche Rolle   --R03 owns-->        Geschäftsprozess
 > Hinweis: Einige Pfeile zeigen relativ zur erzählten Kette „rückwärts“ (z. B. `evidences`
 > ist per Vertrag `Evidence -> Control`). Das ist korrekt: die Richtung folgt strikt der in
 > Dok. 07 §9 definierten Semantik des jeweiligen Beziehungstyps, nicht der Leserichtung.
+
+## Nordstern-ISMS-Erweiterung (WP-021 Slice 1, `src/nordstern-graph.ts`)
+
+Reicher Ausbau des Flaggschiffs entlang des **Dok-16-§34.1-Profils** („europäischer Produzent,
+Zielreife 3, begrenzte interne Kapazität, **zwei Standorte**, **bevorstehender Kunden-Audit**"):
+**24 Objekte / 33 Beziehungen** über F02–F04, F06–F08. Ein **zweiter Standort** (Werk Süd), die
+**OT-/Fertigungsseite** (Business Capability *Produktionsverfügbarkeit*, Prozess
+*Fertigungssteuerung*, System *MES*, Netzwerkzone *OT-Produktionsnetz*, Asset *Maschinendaten*),
+der Schutz der **Konstruktionsdaten** und der **bevorstehende Kunden-Audit** (`Audit`,
+`Vorbereitung`). **Keine numerische Bewertung** (Reifegrad/Risiko-Level) – die brauchen ein
+Trägerschema (E-02, CCP-008) und sind **Slice 7** (gated).
+
+### Bewusste Deckungslücken (damit die belegten Ampeln unterschiedlich ausschlagen)
+
+| Lücke | Objekt | Wirkung auf die belegte Ampel |
+|---|---|---|
+| **Control ohne Nachweis** (kein R15) | `nordwerk-ctrl-netzsegmentierung` | Controls: **2 von 3** belegt → **amber** (`warn`) |
+| **Risiko ohne Minderung** (kein R12) | `nordwerk-risk-abfluss-konstruktionsdaten` | Risiken: **2 von 3** gemindert → **amber** (`warn`) |
+| **kritisches Objekt ohne Owner** | `nordwerk-asset-maschinendaten` | Owner-Abdeckung: **21 von 58** → **amber** |
+
+Die Grundgesamtheit liegt bei **n = 3** (Controls) bzw. **n = 3** (Risiken) — über der
+Kleinheitsschwelle (n≤2 = neutral, DR-0013 Nr. 7), damit die Ringe **echt** ausschlagen.
+
+### Erwartete belegte Ampel-Verteilung des Flaggschiffs (WP-020-Schicht, ohne neue Träger)
+
+| Deckungskachel | belegt | Status |
+|---|---|---|
+| Controls mit Nachweis (R15) | 2 von 3 | **amber** (`warn`) |
+| Risiken mit Minderung (R12) | 2 von 3 | **amber** (`warn`) |
+| Objekte mit benanntem Owner (`owner_ids`) | 21 von 58 | **amber** (`warn`) |
+| Beziehungen mit Vertrauensgrad (`confidence`) | 19 von 84 | **amber** (`warn`) |
+
+Dazu die vier Cockpit-Warnungen des Flaggschiffs: *Controls ohne Nachweis* (amber),
+*Risiken ohne Minderung* (amber) sowie die zwei neutralen Modell-/Strukturhinweise (`info`).
+
+### Dok-07-Demo-Graph-Pflicht (über belegte Felder, kein neuer Träger)
+
+| Pflicht | Träger im Seed |
+|---|---|
+| **ein Konflikt** | `nordwerk-weak-fernwartung-ot`: zwei widersprüchliche `source_refs` (Scan „offen“ vs. Selbstauskunft „gehärtet“) + Dimension **Konsistenz** mit Vermerk |
+| **eine veraltete Quelle** | `nordwerk-asset-maschinendaten`: `source_kind: Importjob`, Referenz `…inventar-2024` + Dimension **Aktualität** („seither nicht aktualisiert“) |
+| **ein erklärbarer Trust-State** | `nordwerk-risk-abfluss-konstruktionsdaten`: `confirmation_level: Ungeprüft` + Dimensionen **Herkunft**/**Vollständigkeit**; die `affects`-Kante trägt `confidence 0,4` (niedrig) |
+
+### Kanonische Nordstern-Kette (source → target, Richtung laut Contract)
+
+```
+Standort/Org.-Einheit --R01 part_of-->      Organisation
+Netzwerkzone/Asset    --R02 located_at-->   Standort Werk Nord
+Prozess               --R05 supports-->     Business Capability
+Prozess/System        --R07 processes-->    Information Asset (Maschinen-/Konstruktionsdaten)
+Weakness              --R08 exposes-->      Information Asset
+Threat                --R09 threatens-->    Risk Scenario / Information Asset
+Risk                  --R10 affects-->      Prozess / Information Asset
+Control               --R12 mitigates-->    Risk / Risk Scenario   (Abfluss-Risiko BEWUSST ohne)
+Control Impl.         --R13 implements-->   Control
+Control               --R14 satisfies-->    Requirement (A.8.20 / A.8.3)
+Evidence              --R15 evidences-->    Control                (Netzsegmentierung BEWUSST ohne)
+Measure               --R18 remediates-->   Weakness
+Audit (Kunden-Audit)  --R19 requires-->     Control / Evidence     (Prüfumfang)
+fachliche Rolle       --R03 owns-->         Prozess/Control/Risk
+```
 
 ## Managed-Service-Schicht (WP-012 Slice 1, `src/managed-services.ts`)
 
@@ -185,9 +253,14 @@ identisch. Bitemporalität ist sichtbar, und der Seed trägt **drei** Erfassungs
 
 | erfasst am | Schicht | Objekte / Beziehungen | fachlich gültig ab |
 |---|---|---|---|
-| 2026-01-15 | ISMS-Kerngraph (Nordwerk) | 17 / 15 | 2026-01-01 |
-| 2026-02-16 | Managed-Service-Schicht (Nordwerk + Consulting Operator) | 23 / 39 | 2026-02-01 |
-| 2026-03-16 | Entscheidungsschicht (Nordwerk) | 3 / 8 | je Objekt gesetzt (2026-01-05 bzw. 2026-03-01) |
+| 2026-01-15 | ISMS-Kerngraph + Nordstern-ISMS-Erweiterung (Nordstern) | 41 / 48 | 2026-01-01 |
+| 2026-02-16 | Managed-Service-Schicht (Nordstern + Consulting Operator) | 23 / 39 | 2026-02-01 |
+| 2026-03-16 | Entscheidungsschicht (Nordstern) | 3 / 8 | je Objekt gesetzt (2026-01-05 bzw. 2026-03-01) |
+
+Die Nordstern-ISMS-Erweiterung liegt bewusst in **derselben ersten Welle** wie der Kerngraph
+(fachlich gültig ab 2026-01-01, erfasst 2026-01-15) – sie ist die volle anfängliche Modellierung
+des Flaggschiffs, kein späterer Nachtrag; das Manifest-Muster erlaubt mehrere Schichten je Welle
+(vgl. Welle 2026-02-16).
 
 Für **jedes** Objekt und **jede** Beziehung gilt `valid_time.from < record_time.recorded_at`.
 Die Entscheidungsschicht ist die erste Schicht mit **objektweise** gesetzter fachlicher
@@ -197,6 +270,8 @@ Gültigkeit, weil der abgelöste Stand ein geschlossenes Intervall braucht.
 
 - `DEMO_TENANTS`, `TENANT_ID`, `DemoTenant`
 - `NORDWERK_OBJECTS`, `NORDWERK_RELATIONSHIPS`, `NORDWERK_OBJECT_ID` (ISMS-Kerngraph)
+- `NORDSTERN_OBJECTS`, `NORDSTERN_RELATIONSHIPS`, `NORDSTERN_OBJECT_ID`
+  (Nordstern-ISMS-Erweiterung, WP-021 Slice 1)
 - `NORDWERK_SERVICE_OBJECTS`, `NORDWERK_SERVICE_RELATIONSHIPS`, `NORDWERK_SERVICE_OBJECT_ID`,
   `OPERATOR_OBJECTS`, `OPERATOR_RELATIONSHIPS`, `OPERATOR_OBJECT_ID`,
   `MANAGED_SERVICE_OBJECTS`, `MANAGED_SERVICE_RELATIONSHIPS` (Serviceschicht)
@@ -214,7 +289,7 @@ Gültigkeit, weil der abgelöste Stand ein geschlossenes Intervall braucht.
 2. **Stabile/eindeutige IDs** – keine doppelten `object_id`/`relationship_id`; der
    Duplikat-Detektor wird zusätzlich per Negativ-Beweis geprüft.
 3. **Tenant-Isolation** – jede Beziehung ist tenant-konsistent, die Objekt-/Kantenzahl wird
-   **pro Mandant** geprüft (Nordwerk 34/51, Operator 9/11, Finovia/MediCore 0/0) und keine
+   **pro Mandant** geprüft (Nordstern 58/84, Operator 9/11, Finovia/MediCore 0/0) und keine
    Mandantensicht enthält fremde Objekte; ein bewusst konstruierter Cross-Tenant-Fall wird vom
    Isolationsprüfer erkannt (beweist die Isolation).
 4. **Referenzielle Integrität** – jede Beziehung zeigt auf existierende Objekte; Negativ-Beweise
@@ -235,5 +310,11 @@ Gültigkeit, weil der abgelöste Stand ein geschlossenes Intervall braucht.
    `version` bleibt 1 und `replaced_at` ungesetzt; Guardrail gegen Frist-, Aufwands-,
    Kapazitäts-, Prioritäts-, Alternativen-, Baseline- und Wirkungsangaben in Namen, Beschreibungen
    und Kantentexten der Schicht.
-9. **Manifest-Konsistenz** – `seed-manifest.json` stimmt in Version, Gesamt- und Pro-Tenant-Counts,
-   `has_object_graph`, `object_families_used` und `relationship_types_used` mit `DEMO_SEED` überein.
+9. **Nordstern-Deckungslücken & Demo-Graph-Pflicht (WP-021 Slice 1)** – das Flaggschiff trägt eine
+   Control- und eine Risiko-Grundgesamtheit über der Kleinheitsschwelle (n = 3), je mit einer
+   bewussten Lücke (Control ohne R15, Risiko ohne R12) und einem kritischen Objekt ohne Owner; die
+   Dok-07-Demo-Graph-Pflicht (Konflikt, veraltete Quelle, erklärbarer Trust-State) ist über belegte
+   Felder nachgewiesen; ein Guardrail belegt, dass **kein** Assessment-Feld in `tags_custom_fields`
+   leckt (E-02 bleibt gated).
+10. **Manifest-Konsistenz** – `seed-manifest.json` stimmt in Version, Gesamt- und Pro-Tenant-Counts,
+    `has_object_graph`, `object_families_used` und `relationship_types_used` mit `DEMO_SEED` überein.

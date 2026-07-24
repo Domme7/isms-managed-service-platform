@@ -12,6 +12,7 @@ import {
 import { DEMO_SEED, SEED_VERSION } from './seed';
 import { DEMO_TENANTS, TENANT_ID } from './tenants';
 import { NORDWERK_DECISION_OBJECT_ID } from './decisions';
+import { NORDSTERN_OBJECT_ID } from './nordstern-graph';
 import {
   findCrossTenantRelationships,
   findDanglingRelationships,
@@ -82,9 +83,10 @@ describe('Demo-Seed – Tenant-Isolation (P09, D11, Dok. 19)', () => {
   it('Objekte verteilen sich exakt auf die ausmodellierten Mandanten (pro Tenant)', () => {
     const byTenant = (tenantId: string) => objects.filter((o) => o.tenant_id === tenantId);
 
-    // Nordwerk: 17 Objekte ISMS-Kerngraph (WP-003) + 14 Objekte Serviceschicht (WP-012)
-    // + 3 Objekte Entscheidungsschicht (WP-017).
-    expect(byTenant(TENANT_ID.NORDWERK)).toHaveLength(34);
+    // Nordwerk/Nordstern: 17 Objekte ISMS-Kerngraph (WP-003) + 14 Objekte Serviceschicht (WP-012)
+    // + 3 Objekte Entscheidungsschicht (WP-017) + 24 Objekte Nordstern-ISMS-Erweiterung
+    // (WP-021 Slice 1) = 58. Stabile tenant_id `tenant-nordwerk`, nur der Anzeigename wandert.
+    expect(byTenant(TENANT_ID.NORDWERK)).toHaveLength(58);
     // Consulting Operator Demo: eigene Serviceschicht (WP-012 Slice 1).
     expect(byTenant(TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(9);
     // Finovia/MediCore bleiben bewusst leer (Empty-State-Nachweis in der UI).
@@ -95,8 +97,9 @@ describe('Demo-Seed – Tenant-Isolation (P09, D11, Dok. 19)', () => {
   it('Beziehungen verteilen sich exakt auf die ausmodellierten Mandanten (pro Tenant)', () => {
     const byTenant = (tenantId: string) => relationships.filter((r) => r.tenant_id === tenantId);
 
-    // Nordwerk: 15 Kanten Kerngraph + 28 Kanten Serviceschicht + 8 Kanten Entscheidungsschicht.
-    expect(byTenant(TENANT_ID.NORDWERK)).toHaveLength(51);
+    // Nordwerk/Nordstern: 15 Kanten Kerngraph + 28 Kanten Serviceschicht + 8 Kanten
+    // Entscheidungsschicht + 33 Kanten Nordstern-ISMS-Erweiterung (WP-021 Slice 1) = 84.
+    expect(byTenant(TENANT_ID.NORDWERK)).toHaveLength(84);
     expect(byTenant(TENANT_ID.CONSULTING_OPERATOR)).toHaveLength(11);
     expect(byTenant(TENANT_ID.FINOVIA)).toEqual([]);
     expect(byTenant(TENANT_ID.MEDICORE)).toEqual([]);
@@ -469,6 +472,99 @@ describe('Demo-Seed – Entscheidungsschicht (WP-017 Slice 1)', () => {
       expect(Date.parse(entry.valid_time.from)).toBeLessThan(
         Date.parse(entry.record_time.recorded_at),
       );
+    }
+  });
+});
+
+describe('Demo-Seed – Flaggschiff Nordstern: bewusste Deckungslücken (WP-021 Slice 1)', () => {
+  const N = NORDSTERN_OBJECT_ID;
+  const nordwerkObjects = objects.filter((o) => o.tenant_id === TENANT_ID.NORDWERK);
+  const nordwerkRels = relationships.filter((r) => r.tenant_id === TENANT_ID.NORDWERK);
+  const incoming = (type: string, targetId: string) =>
+    nordwerkRels.filter((r) => r.relationship_type === type && r.target_id === targetId);
+  const objectById = new Map(nordwerkObjects.map((o) => [o.object_id, o] as const));
+
+  it('trägt eine Control-Grundgesamtheit über der Kleinheitsschwelle (n = 3, damit die Ampel echt ausschlägt)', () => {
+    const controls = nordwerkObjects.filter((o) => o.object_type === 'Control');
+    expect(controls.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('mindestens ein Control trägt KEINE eingehende Nachweis-Kante (R15) – „Control ohne Nachweis"', () => {
+    const controls = nordwerkObjects.filter((o) => o.object_type === 'Control');
+    const ohneNachweis = controls.filter((c) => incoming('evidences', c.object_id).length === 0);
+    expect(ohneNachweis.length).toBeGreaterThanOrEqual(1);
+    // Die bewusst gesetzte Lücke ist die Netzsegmentierungs-Control.
+    expect(ohneNachweis.map((c) => c.object_id)).toContain(N.CTRL_NETZSEGMENTIERUNG);
+    // Gegenprobe: mindestens ein Control ist belegt (sonst wäre die Ampel rot statt amber).
+    expect(controls.some((c) => incoming('evidences', c.object_id).length > 0)).toBe(true);
+  });
+
+  it('trägt eine Risiko-Grundgesamtheit über der Kleinheitsschwelle (n = 3)', () => {
+    const risks = nordwerkObjects.filter((o) => o.object_type === 'Risk');
+    expect(risks.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('mindestens ein Risiko trägt KEINE eingehende Minderungs-Kante (R12) – „Risiko ohne Minderung"', () => {
+    const risks = nordwerkObjects.filter((o) => o.object_type === 'Risk');
+    const ohneMinderung = risks.filter((r) => incoming('mitigates', r.object_id).length === 0);
+    expect(ohneMinderung.length).toBeGreaterThanOrEqual(1);
+    expect(ohneMinderung.map((r) => r.object_id)).toContain(N.RISK_ABFLUSS_KONSTRUKTIONSDATEN);
+    // Gegenprobe: mindestens ein Risiko IST gemindert (amber, nicht rot).
+    expect(risks.some((r) => incoming('mitigates', r.object_id).length > 0)).toBe(true);
+  });
+
+  it('mindestens ein kritisches Objekt trägt KEINEN benannten Owner', () => {
+    const maschinendaten = objectById.get(N.ASSET_MASCHINENDATEN);
+    expect(maschinendaten, 'ASSET_MASCHINENDATEN fehlt').toBeDefined();
+    expect(maschinendaten?.owner_ids).toEqual([]);
+    // Schutzbedarf „hoch" belegt die Kritikalität des ownerlosen Objekts.
+    expect(maschinendaten?.classification.protection_need).toBe('hoch');
+  });
+});
+
+describe('Demo-Seed – Flaggschiff Nordstern: Dok-07-Demo-Graph-Pflicht über belegte Felder (WP-021 Slice 1)', () => {
+  const N = NORDSTERN_OBJECT_ID;
+  const objectById = new Map(objects.map((o) => [o.object_id, o] as const));
+
+  it('KONFLIKT: mindestens ein Objekt trägt widersprüchliche Quellen + Dimension „Konsistenz"', () => {
+    const weak = objectById.get(N.WEAK_FERNWARTUNG);
+    expect(weak, 'WEAK_FERNWARTUNG fehlt').toBeDefined();
+    // Zwei Quellen mit unterschiedlicher Priorität (Scan vs. Selbstauskunft).
+    expect(weak!.source_refs.length).toBeGreaterThanOrEqual(2);
+    const konsistenz = weak!.quality_state.dimensions.find((d) => d.dimension === 'Konsistenz');
+    expect(konsistenz, 'Dimension „Konsistenz" fehlt').toBeDefined();
+    expect(konsistenz?.note ?? '').toMatch(/Konflikt/i);
+  });
+
+  it('VERALTETE QUELLE: mindestens ein Objekt trägt eine alte Quelle + Dimension „Aktualität"', () => {
+    const asset = objectById.get(N.ASSET_MASCHINENDATEN);
+    expect(asset, 'ASSET_MASCHINENDATEN fehlt').toBeDefined();
+    expect(asset!.source_refs.some((s) => /2024/.test(s.reference))).toBe(true);
+    const aktualitaet = asset!.quality_state.dimensions.find((d) => d.dimension === 'Aktualität');
+    expect(aktualitaet?.note ?? '').toMatch(/veraltet/i);
+  });
+
+  it('ERKLÄRBARER TRUST-STATE: ungeprüfte Bestätigung + Herkunft + niedriger Kanten-Vertrauensgrad', () => {
+    const risk = objectById.get(N.RISK_ABFLUSS_KONSTRUKTIONSDATEN);
+    expect(risk, 'RISK_ABFLUSS_KONSTRUKTIONSDATEN fehlt').toBeDefined();
+    const bestaetigung = risk!.quality_state.dimensions.find((d) => d.dimension === 'Bestätigung');
+    expect(bestaetigung?.confirmation_level).toBe('Ungeprüft');
+    expect(risk!.quality_state.dimensions.some((d) => d.dimension === 'Herkunft')).toBe(true);
+    // Die zugehörige affects-Kante trägt einen erfassten, niedrigen Vertrauensgrad.
+    const affects = relationships.filter(
+      (r) => r.relationship_type === 'affects' && r.source_id === risk!.object_id,
+    );
+    expect(affects.length).toBeGreaterThanOrEqual(1);
+    expect(affects.every((r) => typeof r.confidence === 'number')).toBe(true);
+    expect(Math.min(...affects.map((r) => r.confidence ?? 1))).toBeLessThan(0.5);
+  });
+
+  it('KEIN neues Contract-Trägerfeld: kein Assessment-Feld leckt in tags_custom_fields (E-02 bleibt gated)', () => {
+    // Slice 1 trägt ausdrücklich KEINE numerische Bewertung. Weder Reifegrad noch Risiko-Level
+    // existieren als erfasstes Feld; `tags_custom_fields` bleibt im Flaggschiff ungenutzt.
+    const nordwerk = objects.filter((o) => o.tenant_id === TENANT_ID.NORDWERK);
+    for (const o of nordwerk) {
+      expect(o.tags_custom_fields ?? undefined).toBeUndefined();
     }
   });
 });

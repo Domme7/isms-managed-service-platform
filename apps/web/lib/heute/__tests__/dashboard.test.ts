@@ -4,7 +4,7 @@
  * Geprüft wird gegen den echten `DEMO_SEED` UND gegen synthetische Fixtures:
  *  1. Jede Kachel-Zahl ist abgeleitet, nicht hartkodiert – die Zählwege werden hier unabhängig
  *     aus den Seed-Kanten/-Feldern nachgerechnet (Referenz: `python scripts/seed_facts.py`,
- *     Seed 1.2.0: Nordwerk 34/51, Consulting Operator 9/11, Finovia/MediCore 0/0).
+ *     Seed 1.3.0: Nordstern 58/84, Consulting Operator 9/11, Finovia/MediCore 0/0).
  *  2. Jede Kachel erklärt sich selbst: Frage, Scope, Datenstand (so weit erfasst),
  *     Ermittlungsregel, Drill-down (Struktur, nicht Wortlaut – Lektion 11).
  *  3. Ampel-Grenze (DR-0008/O-WP020-07): jedes Badge beruht auf einer Regel der Positivliste
@@ -35,6 +35,7 @@ import {
   type TileExplanation,
 } from '../dashboard';
 import { getPlace } from '../../shell/places';
+import { coverageTileStatus } from '../../cockpit/ampel';
 import { tenantDetailHref } from '../../twin/routes';
 import { fixtureObject } from './fixtures';
 
@@ -244,15 +245,15 @@ describe('buildHeuteDashboard – Nordwerk (Zahlen unabhängig nachgerechnet)', 
   const model = buildHeuteDashboard(TENANT_ID.NORDWERK);
   if (!model) throw new Error('Testfixture fehlt: Nordwerk-Dashboard');
 
-  it('Bestandskachel: 34 Objekte / 51 Beziehungen (Seed 1.2.0, seed_facts-Referenz)', () => {
+  it('Bestandskachel: 58 Objekte / 84 Beziehungen (Seed 1.3.0, seed_facts-Referenz)', () => {
     const bestand = model.stockTiles.find((t) => t.id === 'bestand');
     expect(bestand?.values).toEqual([
       { label: 'Objekte', count: nordwerkObjekte().length },
       { label: 'Beziehungen', count: nordwerkKanten().length },
     ]);
-    // Anker gegen stilles Wegdriften der Referenzzahlen (Seed 1.2.0).
-    expect(nordwerkObjekte()).toHaveLength(34);
-    expect(nordwerkKanten()).toHaveLength(51);
+    // Anker gegen stilles Wegdriften der Referenzzahlen (Seed 1.3.0, WP-021 Slice 1).
+    expect(nordwerkObjekte()).toHaveLength(58);
+    expect(nordwerkKanten()).toHaveLength(84);
   });
 
   it('Abdeckung Controls↔Nachweis entspricht der unabhängigen R15-Nachrechnung', () => {
@@ -520,20 +521,33 @@ describe('buildIsmsVerdichtung – Verteilung und Abdeckungen des Ortes „ISMS"
   });
 
   /**
-   * Nordwerk trägt genau ein Control und genau ein Risiko. Vor WP-028 zeigten beide Kacheln
-   * „1 von 1" mit Vollbalken und grünem Häkchen – für einen CISO die Anmutung einer
-   * vollständigen Control-Landschaft (Usability-Audit). Jetzt: Zahl bleibt, Erfolgssymbolik
-   * geht, die absolute Kleinheit steht als Text da.
+   * WP-021 Slice 1: Das Flaggschiff Nordstern trägt jetzt DREI Controls und DREI Risiken (vorher
+   * genau je eines → neutrale „1 von 1"-Kacheln). Mit bewussten Deckungslücken (ein Control ohne
+   * Nachweis, ein Risiko ohne Minderung) liegt die Grundgesamtheit ÜBER der Kleinheitsschwelle
+   * (n = 3) und die belegte Ampel schlägt ECHT amber aus (`warn`) – der Kern der reichen Demo-Welt.
+   * Die numerischen Bewertungen (Reifegrad/Risiko-Level) bleiben Slice 7 vorbehalten (gated).
    */
-  it('Nordwerk: die beiden ISMS-Abdeckungen sind kleine Grundgesamtheiten (n = 1)', () => {
+  it('Nordstern: beide ISMS-Abdeckungen liegen über der Kleinheitsschwelle (n = 3) und tragen ein Lücken-Badge', () => {
     const verdichtung = buildIsmsVerdichtung(TENANT_ID.NORDWERK);
-    if (!verdichtung) throw new Error('Testfixture fehlt: Nordwerk-Verdichtung');
+    if (!verdichtung) throw new Error('Testfixture fehlt: Nordstern-Verdichtung');
 
     for (const tile of verdichtung.coverage) {
-      expect(tile.total, tile.id).toBeLessThanOrEqual(KLEINE_GRUNDGESAMTHEIT);
-      expect(tile.kleineGrundgesamtheit, tile.id).toBe(true);
-      expect(tile.badge, `${tile.id}: kein Erfolgs-Badge bei n≤2`).toBeUndefined();
-      expect(tile.kleinheitText, tile.id).toMatch(/^Kleine Grundgesamtheit: nur 1 /);
+      expect(tile.total, tile.id).toBeGreaterThan(KLEINE_GRUNDGESAMTHEIT);
+      expect(tile.kleineGrundgesamtheit, tile.id).toBe(false);
+      expect(tile.kleinheitText, tile.id).toBeUndefined();
+      // Eine erfasste Datenlücke: 2 von 3 → zahlengebundenes Lücken-Badge (kein Erfolgs-Badge).
+      expect(tile.covered, tile.id).toBeLessThan(tile.total);
+      expect(tile.badge?.rule, tile.id).toBe('luecke_erfasst');
+      expect(tile.badge?.text, tile.id).toMatch(/^Datenlücke: \d+ /);
+    }
+  });
+
+  it('Nordstern: die belegte Ampel der ISMS-Abdeckungen schlägt echt amber (warn) aus', () => {
+    const verdichtung = buildIsmsVerdichtung(TENANT_ID.NORDWERK);
+    if (!verdichtung) throw new Error('Testfixture fehlt: Nordstern-Verdichtung');
+    for (const tile of verdichtung.coverage) {
+      // 0 < covered < total, n > 2 → warn (amber), nicht neutral und nicht rot.
+      expect(coverageTileStatus(tile), tile.id).toBe('warn');
     }
   });
 

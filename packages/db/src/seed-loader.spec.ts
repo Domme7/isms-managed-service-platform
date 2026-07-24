@@ -11,15 +11,17 @@ const TENANT_OPERATOR = 'tenant-consulting-operator';
 
 /**
  * Erwarteter Seed-Umfang (bewusst hart kodiert, damit stille Fixture-Drift auffällt):
- * Gesamt 43 Objekte / 62 Beziehungen, davon Nordwerk 34/51 (ISMS-Kerngraph 17/15 aus WP-003,
- * Managed-Service-Schicht 14/28 aus WP-012, Entscheidungsschicht 3/8 aus WP-017) und
- * Consulting Operator Demo 9/11.
+ * Gesamt 67 Objekte / 95 Beziehungen, davon Nordwerk/Nordstern 58/84 (ISMS-Kerngraph 17/15 aus
+ * WP-003, Managed-Service-Schicht 14/28 aus WP-012, Entscheidungsschicht 3/8 aus WP-017,
+ * Nordstern-ISMS-Erweiterung 24/33 aus WP-021 Slice 1) und Consulting Operator Demo 9/11.
+ * Der stabile `tenant_id` bleibt `tenant-nordwerk` – nur Anzeigename und Objektzahl wachsen
+ * (WP-021: reines Zahlen-Nachziehen der Fixture, keine Änderung an Loader/Isolation).
  */
 const EXPECTED = {
-  totalObjects: 43,
-  totalRelationships: 62,
-  nordwerkObjects: 34,
-  nordwerkRelationships: 51,
+  totalObjects: 67,
+  totalRelationships: 95,
+  nordwerkObjects: 58,
+  nordwerkRelationships: 84,
   operatorObjects: 9,
   operatorRelationships: 11,
 } as const;
@@ -39,7 +41,7 @@ describe('Seed-Loader – Count-Abgleich, Idempotenz, referenzielle Integrität'
     await handle.close();
   });
 
-  it('DEMO_SEED umfasst 43 Objekte und 62 Beziehungen (Fixture-Kontrolle)', () => {
+  it('DEMO_SEED umfasst 67 Objekte und 95 Beziehungen (Fixture-Kontrolle)', () => {
     expect(DEMO_SEED.objects).toHaveLength(EXPECTED.totalObjects);
     expect(DEMO_SEED.relationships).toHaveLength(EXPECTED.totalRelationships);
 

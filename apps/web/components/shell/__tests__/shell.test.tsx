@@ -152,7 +152,7 @@ describe('AppShell – aktive Rolle + Mandant in der Topbar', () => {
     expect(roleSelect.textContent ?? '').not.toMatch(/R\d{2}/);
     expect(
       within(tenantSelect).getByRole<HTMLOptionElement>('option', {
-        name: /Nordwerk Manufacturing SE/,
+        name: /Nordstern Manufacturing SE/,
       }).selected,
     ).toBe(true);
   });
@@ -195,7 +195,7 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
 
     // Der Bestätigungsschritt benennt alten UND neuen Mandanten (Text + Struktur).
     const bestaetigung = screen.getByRole('group', { name: 'Mandantenwechsel bestätigen' });
-    expect(bestaetigung.textContent).toContain('Nordwerk Manufacturing SE');
+    expect(bestaetigung.textContent).toContain('Nordstern Manufacturing SE');
     expect(bestaetigung.textContent).toContain('Finovia Digital Bank AG');
 
     // Erst die explizite Bestätigung wechselt.
@@ -207,7 +207,7 @@ describe('AppShell – Mandantenwechsel nur mit Bestätigung (CROSS-TENANT-SCHUT
     // Danach: benannte, sichtbare Rückmeldung als Live-Region mit beiden Namen und Symbol.
     const status = screen.getByRole('status');
     expect(status.textContent).toContain('Kontextänderung');
-    expect(status.textContent).toContain('Nordwerk Manufacturing SE');
+    expect(status.textContent).toContain('Nordstern Manufacturing SE');
     expect(status.textContent).toContain('Finovia Digital Bank AG');
     expect(status.querySelector('[aria-hidden="true"]')).not.toBeNull();
 
@@ -344,7 +344,7 @@ describe('AppShell – Mandantenwechsler folgt der Sphäre (DR-0013 Nr. 11)', ()
     renderShell();
     expect(screen.queryByLabelText('Ansicht: Mandant')).toBeNull();
     const kopf = screen.getByRole('group', { name: 'Ansicht: Rolle und Mandant' });
-    expect(kopf.textContent).toContain('Nordwerk Manufacturing SE');
+    expect(kopf.textContent).toContain('Nordstern Manufacturing SE');
     // Keine Aussage über fremde Mandanten – weder Name noch Zahl.
     for (const fremd of DEMO_TENANTS.filter((x) => x.tenant_id !== TENANT_ID.NORDWERK)) {
       expect(kopf.textContent).not.toContain(fremd.display_name);

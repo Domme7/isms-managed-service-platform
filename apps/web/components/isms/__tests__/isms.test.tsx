@@ -48,7 +48,7 @@ describe('IsmsContent – Nordwerk (vier Sektionen mit aufgelösten Karten)', ()
     render(<IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />);
 
     expect(
-      screen.getByText('Wie ist die Risiko- und Control-Lage von Nordwerk Manufacturing SE?'),
+      screen.getByText('Wie ist die Risiko- und Control-Lage von Nordstern Manufacturing SE?'),
     ).toBeInTheDocument();
 
     for (const section of ['Risiken', 'Controls', 'Maßnahmen', 'Nachweise']) {
@@ -223,12 +223,15 @@ describe('IsmsContent – verdichteter Überblick (WP-020, DR-0008)', () => {
   });
 
   /**
-   * WP-028 Slice 3 (DR-0013 Nr. 7): „1 von 1" mit Vollbalken und grünem Häkchen las sich wie
-   * eine vollständige Control-Landschaft. Nordwerk trägt genau ein Control und ein Risiko.
+   * WP-021 Slice 1 – Kehrwert des früheren „1 von 1"-Regressionstests: Das Flaggschiff Nordstern
+   * trägt jetzt drei Controls und drei Risiken (vorher je eines → kleine Grundgesamtheit), jeweils
+   * mit einer bewussten Deckungslücke. Damit liegen beide ISMS-Abdeckungen ÜBER der Schwelle und
+   * zeigen Balken + zahlengebundenes Lücken-Badge statt eines Kleinheits-Hinweises. Das
+   * Grundverhalten bei n≤2 bleibt in `lib/heute/__tests__/dashboard.test.ts` unit-getestet.
    */
-  it('zeigt bei kleiner Grundgesamtheit die Kleinheit statt Vollbalken und Erfolgs-Badge', () => {
+  it('zeigt für die ISMS-Abdeckungen Balken + Lücken-Badge (n≥3, keine Kleinheit mehr)', () => {
     const verdichtung = buildIsmsVerdichtung(TENANT_ID.NORDWERK);
-    if (!verdichtung) throw new Error('Testfixture fehlt: Nordwerk-Verdichtung');
+    if (!verdichtung) throw new Error('Testfixture fehlt: Nordstern-Verdichtung');
     const { container } = render(
       <IsmsContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
@@ -236,17 +239,17 @@ describe('IsmsContent – verdichteter Überblick (WP-020, DR-0008)', () => {
     for (const tile of verdichtung.coverage) {
       const kachel = container.querySelector(`.db-tile[data-tile-id="${tile.id}"]`);
       if (!kachel) throw new Error(`Kachel fehlt: ${tile.id}`);
-      expect(tile.kleineGrundgesamtheit, tile.id).toBe(true);
-      // Die Zahl bleibt vollständig sichtbar (Ehrlichkeit unverändert) …
+      expect(tile.kleineGrundgesamtheit, tile.id).toBe(false);
+      // Die Zahl bleibt vollständig sichtbar …
       expect(kachel.querySelector('.db-wert-zahl')?.textContent).toBe(
         `${tile.covered} von ${tile.total}`,
       );
-      // … aber ohne Erfolgssymbolik.
-      expect(kachel.querySelector('.db-badge'), tile.id).toBeNull();
-      expect(kachel.querySelector('.db-balken'), tile.id).toBeNull();
-      expect(kachel.querySelector('.db-kleinheit')?.textContent, tile.id).toMatch(
-        /^Kleine Grundgesamtheit: nur 1 /,
-      );
+      // … und da eine erfasste Datenlücke besteht (2 von 3), stehen Balken UND Lücken-Badge da,
+      // aber KEIN Kleinheits-Hinweis.
+      expect(kachel.querySelector('.db-badge'), tile.id).not.toBeNull();
+      expect(kachel.querySelector('.db-badge')?.textContent ?? '', tile.id).toMatch(/Datenlücke/);
+      expect(kachel.querySelector('.db-balken'), tile.id).not.toBeNull();
+      expect(kachel.querySelector('.db-kleinheit'), tile.id).toBeNull();
     }
   });
 });
@@ -271,7 +274,7 @@ describe('IsmsContent – Antwort-Modus (DR-0013)', () => {
     );
     const lead = container.querySelector('p.tw-lead');
     expect(lead?.textContent).toContain(`${gesamt} ISMS-Kernobjekte`);
-    // Singular/Plural aus dem gemeinsamen Helfer – Nordwerk trägt genau ein Control.
+    // Zählwert aus dem gemeinsamen Helfer – seit WP-021 Slice 1 trägt das Flaggschiff drei Controls.
     expect(lead?.textContent).toContain(`${view.controls.length} Control`);
     expect(lead?.textContent).toContain(view.context.recordedOnDisplay ?? '');
   });
@@ -441,7 +444,7 @@ describe('IsmsContent – Empty-State (Mandanten ohne ISMS-Kernobjekte)', () => 
       screen.getByText(/Der Ort bleibt erreichbar und zeigt hier ausschließlich, was für diesen/),
     ).toBeInTheDocument();
     expect(document.body.textContent ?? '').not.toMatch(/anderen? (Demo-)?Mandanten/i);
-    expect(document.body.textContent ?? '').not.toContain('Nordwerk Manufacturing SE');
+    expect(document.body.textContent ?? '').not.toContain('Nordstern Manufacturing SE');
     // Ehrlicher Hinweis: der Betreiber ist Erbringer, nicht Empfänger (UX-Review MINOR-7).
     expect(screen.getByText(/sind Managed-Service-Objekte modelliert/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Services' })).toHaveAttribute('href', '/services');

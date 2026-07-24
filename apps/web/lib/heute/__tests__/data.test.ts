@@ -96,10 +96,13 @@ describe('deriveRecordingWaves – Erfassungswellen werden abgeleitet, nicht ang
     expect(waves).toHaveLength(3);
 
     expect(waves.map((w) => w.dateDisplay)).toEqual(['15.01.2026', '16.02.2026', '16.03.2026']);
+    // WP-021 Slice 1: die Nordstern-ISMS-Erweiterung ist Teil der ersten Erfassungswelle
+    // (fachlich gültig ab 2026-01-01, erfasst 2026-01-15) – dieselbe Welle wie der Kerngraph.
+    // Deshalb wächst Welle 1 von 17/15 auf 41/48; die Zahl der Wellen bleibt drei.
     expect(waves[0]).toMatchObject({
       recordedOn: '2026-01-15',
-      objectCount: 17,
-      relationshipCount: 15,
+      objectCount: 41,
+      relationshipCount: 48,
     });
     expect(waves[1]).toMatchObject({
       recordedOn: '2026-02-16',
@@ -365,12 +368,14 @@ describe('deriveObservations – gezählt, nicht bewertet', () => {
     const observations = deriveObservations(objects, relationships);
     const byId = new Map(observations.map((o) => [o.id, o] as const));
 
-    expect(byId.get('ohne_owner')).toMatchObject({ count: 22, total: 34 });
+    // WP-021 Slice 1: Flaggschiff Nordstern reich ausgebaut (58 Objekte / 84 Beziehungen).
+    expect(byId.get('ohne_owner')).toMatchObject({ count: 37, total: 58 });
     expect(byId.get('scope_ohne_objekt')).toMatchObject({ count: 2, total: 2 });
-    expect(byId.get('kante_ohne_vertrauensgrad')).toMatchObject({ count: 40, total: 51 });
+    expect(byId.get('kante_ohne_vertrauensgrad')).toMatchObject({ count: 65, total: 84 });
     // Seit WP-017 zählen auch die drei `Decision Record`-Objekte zu den nachweisfähigen Typen
-    // (EVIDENCE_TARGET_TYPES); genau eine Entscheidung trägt eine `evidences`-Kante.
-    expect(byId.get('ohne_nachweisbezug')).toMatchObject({ count: 3, total: 5 });
+    // (EVIDENCE_TARGET_TYPES); mit den zwei neuen Controls + einer Maßnahme aus Slice 1 sind es
+    // 8 nachweisfähige Objekte, davon 3 belegt (Backup-Control, eine Entscheidung, Zugriffskontrolle).
+    expect(byId.get('ohne_nachweisbezug')).toMatchObject({ count: 5, total: 8 });
 
     // Unabhängige Gegenrechnung an den Rohdaten (der Test rechnet nicht die Funktion nach,
     // sondern die REGEL – so fällt eine geänderte Regel auf).
@@ -483,6 +488,8 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
       'F01',
       'F02',
       'F03',
+      // F04 (Technologie & Infrastruktur) seit WP-021 Slice 1 (MES-System, OT-Netzwerkzone).
+      'F04',
       'F06',
       'F07',
       'F08',
@@ -540,10 +547,10 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
       '/services',
     ]);
     expect(model.placeEntryPoints[0].stock).toEqual([
-      { label: 'Objekte', count: 34 },
-      { label: 'Beziehungen', count: 51 },
+      { label: 'Objekte', count: 58 },
+      { label: 'Beziehungen', count: 84 },
     ]);
-    expect(stockOf(model, 'isms')).toBe(6);
+    expect(stockOf(model, 'isms')).toBe(14);
     expect(stockOf(model, 'entscheidungen')).toBe(3);
     expect(stockOf(model, 'services')).toBe(3);
     expect(model.placeEntryPoints.every((p) => p.isEmpty === false)).toBe(true);
@@ -615,9 +622,9 @@ describe('Einstiegspunkte – Familienreihenfolge und Mandantentreue', () => {
 describe('buildMissionControl – Bestand, Empty-State und Mandantengrenze', () => {
   it('zeigt den aus dem Seed abgeleiteten Bestand des aktiven Mandanten', () => {
     const nordwerk = modelOrThrow(TENANT_ID.NORDWERK);
-    expect(nordwerk.tenantStanding.tenant.display_name).toBe('Nordwerk Manufacturing SE');
-    expect(nordwerk.tenantStanding.objectCount).toBe(34);
-    expect(nordwerk.tenantStanding.relationshipCount).toBe(51);
+    expect(nordwerk.tenantStanding.tenant.display_name).toBe('Nordstern Manufacturing SE');
+    expect(nordwerk.tenantStanding.objectCount).toBe(58);
+    expect(nordwerk.tenantStanding.relationshipCount).toBe(84);
     expect(nordwerk.tenantStanding.isEmpty).toBe(false);
 
     const operator = modelOrThrow(TENANT_ID.CONSULTING_OPERATOR);

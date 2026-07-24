@@ -154,7 +154,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
       const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
 
       // (2) Belegte Elemente mit belegten Werten.
-      expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+      expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordstern Manufacturing SE');
       // Regel-erhaltend geschärft (s. Kopfnotiz): exakt ein kanonischer Rollenname,
       // und kein Rollencode.
       const rolle = eintrag(kontext, 'Aktive Produktrolle').dd;
@@ -260,7 +260,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
 
       // Blindheitsschutz: die Seite hat wirklich Inhalt gerendert (keine Fehl-/Leerseite).
       expect((ergebnis.container.textContent ?? '').length).toBeGreaterThan(200);
-      expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+      expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordstern Manufacturing SE');
       expect(eintrag(kontext, 'Aktive Produktrolle').dd).toBe(CONTEXT_NEUTRAL_ROLE);
       // Negativbeweis: es wird keine Rollen-ID erfunden.
       expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
@@ -309,7 +309,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
     );
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
 
-    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordstern Manufacturing SE');
     expect(ROLLENNAMEN).toContain(eintrag(kontext, 'Aktive Produktrolle').dd);
     expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
     // Zählung in der Leiste, Kennungen im Aufklappteil (WP-028-Fixpass, DR-0013 Nr. 2):
@@ -365,7 +365,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
       <ServicekatalogContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
-    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordstern Manufacturing SE');
     expect(ROLLENNAMEN).toContain(eintrag(kontext, 'Aktive Produktrolle').dd);
     expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
     expect(kontext.querySelectorAll('time[datetime]').length).toBeGreaterThan(0);
@@ -397,7 +397,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
       <StrukturAssistentContent role={role('R03')} tenant={tenant(TENANT_ID.NORDWERK)} />,
     );
     const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
-    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+    expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordstern Manufacturing SE');
     expect(ROLLENNAMEN).toContain(eintrag(kontext, 'Aktive Produktrolle').dd);
     expect(eintrag(kontext, 'Aktive Produktrolle').dd).not.toMatch(/R\d{2}/);
     // Konzeptstruktur: kein Datum, ein ehrlicher Scope-/Datenstand-Text.
@@ -438,7 +438,7 @@ describe('Kontextleiste der Live-Hauptseiten (Dok. 06 „Sichtbarer Kontext")', 
         />,
       );
       const kontext = screen.getByRole('region', { name: 'Kontext dieser Seite' });
-      expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordwerk Manufacturing SE');
+      expect(eintrag(kontext, 'Aktiver Mandant').dd).toBe('Nordstern Manufacturing SE');
       const rolle = eintrag(kontext, 'Aktive Produktrolle').dd;
       expect(ROLLENNAMEN).toContain(rolle);
       expect(rolle).not.toMatch(/R\d{2}/);

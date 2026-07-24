@@ -121,7 +121,17 @@ describe('groupObjectsByFamily', () => {
     // Seit WP-012 trägt Nordwerk auch F09-Objekte (Managed Service, SLA, Deliverable,
     // Objective, KPI, Review) – die Detailseite muss sie mit anzeigen.
     const groups = groupObjectsByFamily(getObjectsForTenant(TENANT_ID.NORDWERK));
-    expect(groups.map((g) => g.id)).toEqual(['F01', 'F02', 'F03', 'F06', 'F07', 'F08', 'F09']);
+    // WP-021 Slice 1: das Flaggschiff trägt zusätzlich F04 (System MES, OT-Netzwerkzone).
+    expect(groups.map((g) => g.id)).toEqual([
+      'F01',
+      'F02',
+      'F03',
+      'F04',
+      'F06',
+      'F07',
+      'F08',
+      'F09',
+    ]);
 
     const f09 = groups.find((g) => g.id === 'F09');
     expect(f09?.objects.map((o) => o.object_type)).toContain('Managed Service');
@@ -203,6 +213,6 @@ describe('getModeledTenants', () => {
     const modeled = getModeledTenants();
     expect(modeled.length).toBeGreaterThanOrEqual(1);
     expect(modeled.every((t) => t.has_object_graph)).toBe(true);
-    expect(modeled.map((t) => t.display_name)).toContain('Nordwerk Manufacturing SE');
+    expect(modeled.map((t) => t.display_name)).toContain('Nordstern Manufacturing SE');
   });
 });
