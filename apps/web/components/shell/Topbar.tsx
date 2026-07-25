@@ -48,7 +48,11 @@ import Link from 'next/link';
 import type { DemoRole } from '../../lib/shell/roles';
 import type { DemoTenant } from '@isms/demo-seed';
 import type { ResolvedSession } from '../../lib/shell/session';
-import { ANSICHT_NICHT_BERECHTIGUNG_SATZ, mandantenwechselSichtbar } from '../../lib/shell/sphaere';
+import {
+  ANSICHT_NICHT_BERECHTIGUNG_SATZ,
+  einstiegHref,
+  mandantenwechselSichtbar,
+} from '../../lib/shell/sphaere';
 
 /** Select-Wert des neutralen Zustands (kein Rollen-ID-Namensraum: R01–R12 bleiben frei). */
 const NEUTRAL_VALUE = '';
@@ -82,10 +86,15 @@ export function Topbar({
   // Sphärengerecht: in der Ein-Unternehmens-Sicht ist der Mandant Kontext, keine Auswahl.
   const mandantWaehlbar = session ? mandantenwechselSichtbar(session.role) : true;
 
+  // Der Marken-Link führt in den Einstieg der aktiven Sphäre (Berater → Portfolio), nicht mehr auf
+  // den früheren Ort „Heute" (DR-0018 Stufe 2: die Navigation folgt der Welt-Struktur). Ohne
+  // Sitzung führt sie zur öffentlichen Landing.
+  const markeHref = session ? einstiegHref(session.role) : '/willkommen';
+
   return (
     <header className="shell-topbar">
       <div className="shell-topbar-left">
-        <Link href="/heute" className="shell-brand">
+        <Link href={markeHref} className="shell-brand">
           <span className="shell-brand-mark" aria-hidden="true">
             ISMS
           </span>

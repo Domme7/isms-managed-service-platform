@@ -97,6 +97,15 @@ describe('AppShell – Brotkrume statt Sidebar (DR-0017 Stage 4)', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('Marken-Link führt sphärengerecht in den Einstieg statt auf den alten Ort „Heute" (DR-0018 Stufe 2)', () => {
+    // Berater/Portfolio-Sicht → Portfolio; Kunde-Sicht → eigene Welt (Mein Dashboard).
+    renderShell({ session: SERVICE_LEAD_NORDWERK });
+    expect(screen.getByRole('link', { name: /Managed Service Platform/ })).toHaveAttribute(
+      'href',
+      '/portfolio',
+    );
+  });
+
   it('benennt den aktiven Bereich am Ende des Drill-Pfads (aria-current)', () => {
     renderShell({ activeId: 'isms' });
     const pfad = screen.getByRole('navigation', { name: 'Navigationspfad' });
