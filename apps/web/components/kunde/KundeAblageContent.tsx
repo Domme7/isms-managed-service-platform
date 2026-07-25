@@ -15,8 +15,10 @@ import Link from 'next/link';
 
 import type { DemoTenant } from '@isms/demo-seed';
 import { type AblageModell, buildAblage } from '../../lib/kunde/welt';
+import { ableitenPrioritaet } from '../../lib/portfolio/prioritaet';
 import { objectDetailHref } from '../../lib/twin/routes';
 import { objectTypeDisplay } from '../../lib/twin/data';
+import { PrioBadge } from '../prioritaet/PrioBadge';
 
 export function KundeAblageContent({ tenant }: { tenant: DemoTenant }) {
   const ablage: AblageModell = buildAblage(tenant.tenant_id);
@@ -56,6 +58,7 @@ export function KundeAblageContent({ tenant }: { tenant: DemoTenant }) {
                       <span className="kw-ablage-meta">
                         {objectTypeDisplay(o.object_type)} · {o.lifecycle_status}
                       </span>
+                      <PrioBadge prio={ableitenPrioritaet(o)} />
                     </Link>
                   </li>
                 ))}

@@ -3438,6 +3438,54 @@ summary {
   color: var(--ck-muted);
 }
 
+/* --- Prio-Badge (DR-0018 Stufe 4): abgeleitete Priorität + Frist je Objekt ---------------- */
+.prio-badge {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.55rem;
+  margin-top: 0.15rem;
+  font-size: 0.76rem;
+  line-height: 1.3;
+}
+.prio-badge-quadrant {
+  font-weight: 700;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+}
+.prio-badge-frist {
+  color: var(--ck-muted);
+}
+.prio-badge--sofort .prio-badge-quadrant {
+  color: #b4232a;
+  background: color-mix(in srgb, #b4232a 12%, transparent);
+}
+.prio-badge--einplanen .prio-badge-quadrant {
+  color: #9a6a00;
+  background: color-mix(in srgb, #9a6a00 14%, transparent);
+}
+.prio-badge--delegieren .prio-badge-quadrant {
+  color: #1f6f8b;
+  background: color-mix(in srgb, #1f6f8b 12%, transparent);
+}
+.prio-badge--spaeter .prio-badge-quadrant {
+  color: var(--ck-muted);
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+.tw-prio-zeile {
+  margin: 0.35rem 0 0;
+}
+.ck-cockpit[data-ck-theme="dunkel"] .prio-badge--sofort .prio-badge-quadrant {
+  color: #ff8a8f;
+}
+.ck-cockpit[data-ck-theme="dunkel"] .prio-badge--einplanen .prio-badge-quadrant {
+  color: #e9b64d;
+}
+.ck-cockpit[data-ck-theme="dunkel"] .prio-badge--delegieren .prio-badge-quadrant {
+  color: #6fc3dd;
+}
+
 .pf-portfolio {
   max-width: 1180px;
   margin: 0 auto;

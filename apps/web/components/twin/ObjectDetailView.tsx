@@ -36,6 +36,8 @@ import { objectTypeDisplay, relationshipTypeLabel } from '../../lib/twin/data';
 import { TRUST_LAYER_ANGABEN, countTrustAngaben } from '../../lib/twin/trust-layer';
 import { BegriffeWissenHinweis } from '../shell/BegriffeWissenHinweis';
 import { SeitenbausteineHinweis } from '../shell/SeitenbausteineHinweis';
+import { ableitenPrioritaet } from '../../lib/portfolio/prioritaet';
+import { PrioBadge } from '../prioritaet/PrioBadge';
 
 /* -----------------------------------------------------------------------------
  * Kleine Formathelfer (Klartext vor Fachsprache, Dok. 06 P03/P04)
@@ -247,6 +249,12 @@ export function ObjectDetailView({ model }: { model: ObjectDetailModel }) {
 
       <p className="tw-eyebrow">Objekt-360 · Digitaler Zwilling</p>
       <h1>{object.display_name}</h1>
+
+      {/* Abgeleitete Priorität + Frist (DR-0018 Stufe 4): read-time aus den echten Feldern, kein
+          gespeicherter Wert (E-02 bleibt gated). */}
+      <p className="tw-prio-zeile">
+        <PrioBadge prio={ableitenPrioritaet(object)} />
+      </p>
 
       {/* Leitfrage der Seite (Dok. 06 „Frage vor Navigation") */}
       <p className="tw-question">
