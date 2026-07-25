@@ -3111,6 +3111,14 @@ summary {
 .wk-cta:hover {
   background: #095757;
 }
+.wk-cta--sekundaer {
+  background: transparent;
+  color: var(--shell-teal);
+  border: 1.5px solid var(--shell-teal);
+}
+.wk-cta--sekundaer:hover {
+  background: color-mix(in srgb, var(--shell-teal) 12%, transparent);
+}
 .wk-cta-note {
   font-size: 0.85rem;
   color: var(--ck-muted);

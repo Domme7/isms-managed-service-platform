@@ -5,8 +5,8 @@
  * Eine Erklärseite und ein Anmelde-Formular beantworten zwei verschiedene Fragen („Was ist das?"
  * vs. „Wie komme ich rein?"). Eine eigene Route hält beide fokussiert, gibt der Erklärung Raum
  * für die moderne Bildsprache (DR-0014) und ist für Pitch/Portfolio/Investoren die erste,
- * absichtsvolle Fläche. `/` führt Nicht-Angemeldete hierher; von hier führt ein CTA zur
- * Anmeldung. Die Anmeldung selbst trägt die getrennten Berater-/Kunden-Welten (DR-0012/DR-0015).
+ * absichtsvolle Fläche. `/` führt Nicht-Angemeldete hierher; von hier führen zwei klare Einstiege
+ * (Berater / Kunde) in die Anmeldung, die die getrennten Welten trägt (DR-0012/DR-0015/DR-0018).
  *
  * EHRLICHKEIT BLEIBT SUBSTANZ (DR-0011/DR-0013): Der Text nennt ausschließlich, was die Plattform
  * IST und WILL – aus der Produktbeschreibung der `CLAUDE.md`. KEINE erfundenen Zahlen, KEINE
@@ -87,14 +87,14 @@ export function WillkommenContent() {
           Unternehmenszwilling verbindet – von Risiken, Controls und Nachweisen über das Decision
           Center bis zu Reporting und Beratung.
         </p>
-        <p className="wk-cta-row">
-          <Link className="wk-cta" href="/login">
-            Plattform ansehen<span aria-hidden="true"> →</span>
+        <div className="wk-cta-row">
+          <Link className="wk-cta" href="/login?welt=beratung">
+            Als Berater anmelden<span aria-hidden="true"> →</span>
           </Link>
-          <span className="wk-cta-note">
-            Berater- und Kundeneinstieg getrennt, ohne echtes Konto.
-          </span>
-        </p>
+          <Link className="wk-cta wk-cta--sekundaer" href="/login?welt=kunde">
+            Als Kunde anmelden<span aria-hidden="true"> →</span>
+          </Link>
+        </div>
       </section>
 
       {/* FÜR WEN: die vier rollenbezogenen Erlebniswelten (Dok. 06 §5, aus roles.ts) mit ihren
