@@ -1,8 +1,16 @@
 # Latest Handover
 
-- **Aktuell:** `HND-20260724-sprint.md`
-- **Modus:** Owner-Auftrag „setz alles um, usability first, modernes Cockpit, nichts nur Show" + „mehr parallel".
-  Autonomer Weiterbau; owner-gated Materie (echte Auth/DB) zurückgestellt (DR-0015). Entscheidungen: [DR-0014], [DR-0015].
+- **Aktuell (2026-07-25): DR-0018 „Großer Umbau", autonomer Loop über die 5-Stufen-Liste.**
+- **Modus:** Owner-Auftrag „durchklickbares Produkt in zwei Welten, ausblenden statt löschen, go live —
+  keine Demo-Etiketten mehr". Selbst-getakteter `/loop`; pro Stufe grün committen. Entscheidung: [DR-0018].
+- **DR-0018-Fortschritt:** Stufe 0 (DR-0018 + Handover) ✅ · Stufe 1 Landing mit zwei Login-Einstiegen
+  (Berater→`/login?welt=beratung`, Kunde→`/login?welt=kunde`), „ohne echtes Konto"-Caveat raus ✅
+  (`7058668`) · Eisenhower-Umschalter im Portfolio ✅ (`a10a52c`, aus echtem Datenzustand abgeleitet).
+  **Nächste Stufe:** 2 (Nicht-Struktur-Nav ausblenden, Kunde-Routing) → 3 Kunde-Welt (Mein Dashboard ·
+  Meine Ablage · Services buchen) → 4 Prio/Frist je Objekt → 5 GreenGrid füllen + Hedge-Etiketten raus.
+  Durchklick-Kette Berater steht: Landing → Login → Portfolio → (dive) Cockpit → (dive) Zwilling.
+- **Vorheriger Modus:** Owner-Auftrag „setz alles um, usability first, modernes Cockpit, nichts nur Show".
+  Owner-gated Materie (echte Auth/DB) zurückgestellt (DR-0015). Entscheidungen: [DR-0014], [DR-0015].
 - **MEILENSTEIN — Modernes Cockpit fertig ([DR-0014]):** `/cockpit` ist die Startseite nach Login, moderne 2026-
   Dashboard-Sprache (farbige KPI-Kacheln, SVG-Deckungsringe, Ampel-Legende, Warnungen-Panel „Offene Datenlücken",
   Lebenszyklus-Ampelleiste), **hell UND dunkel** (axe 0 auch im Dunkelmodus), A/B/C als dezente Stil-Personalisierung.

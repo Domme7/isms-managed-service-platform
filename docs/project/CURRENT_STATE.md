@@ -2,7 +2,20 @@
 
 > **👉 Owner-Vision, ALLE Entscheidungen & Backlog: [`OWNER_VISION_UND_BACKLOG.md`](OWNER_VISION_UND_BACKLOG.md) — dort zuerst lesen.**
 
-**Stand (2026-07-24, AKTUELL):** Modernes **Cockpit fertig** (hell/dunkel, Ampeln/Warnungen/Deckungsringe,
+**Stand (2026-07-25, AKTUELL — DR-0018 „Großer Umbau"):** Der Owner hat einen durchklickbaren
+Produktumbau in zwei Welten freigegeben ([DR-0018](../decisions/DR-0018_grosser_umbau_durchklickbares_produkt_go_live.md)):
+Landing → Login → **Berater-Welt** (Portfolio → Kunden-Cockpit → Zwilling, bleibt) bzw. **Kunde-Welt**
+(Mein Dashboard · Meine Ablage · Services buchen, neu). Prinzip **„ausblenden statt löschen"** (alle
+Kundendaten bleiben). Materielle Kursänderung: **Go-Live-Präsentation** — keine „Demo/Vorschau/
+illustrativ"-Etiketten mehr im UI; Daten bleiben aus echten Feldern berechnet, die Wahrheit über die
+drei Gates (Auth, Datei-Persistenz, E-02) steht in DR-0018. **Fortschritt gegen die 5-Stufen-Liste:**
+Stufe 0 (DR-0018 + dieser Handover) ✅; Stufe 1 Landing mit zwei Login-Einstiegen (Berater/Kunde) ✅
+(Commit `7058668`); Eisenhower-Priorisierung als Umschalter im Portfolio ✅ (`a10a52c`, aus echtem
+Datenzustand abgeleitet, E-02-Riegel unangetastet). **Als Nächstes:** Stufe 2 (Nicht-Struktur-Nav
+ausblenden) → Stufe 3 Kunde-Welt → Stufe 4 Prio/Frist je Objekt → Stufe 5 GreenGrid füllen + Politur.
+— *Der folgende Abschnitt ist der frühere Cockpit-Stand, historisch:*
+
+**Stand (2026-07-24):** Modernes **Cockpit fertig** (hell/dunkel, Ampeln/Warnungen/Deckungsringe,
 „nichts nur Show", [DR-0014]), **Einstiegswelt** (Landing `/willkommen` + getrennte Kunde/Berater-Login-Welten)
 und **WP-021 Slice 1** (Nordstern tief → Cockpit-Ampeln leuchten amber) **abgenommen**. **✅ Cockpit-Redesign
 gebaut** (WP-034 Slice 2, [DR-0016]): `/cockpit` ist jetzt das **Bento-Mosaik** (Owner-Wahl „Variante A") —
