@@ -3270,6 +3270,174 @@ summary {
   color: var(--ck-ink);
 }
 
+/* --- Kunde-Welt (DR-0018 Stufe 3): eigene schlanke Welt mit Kopf-Navigation --------------- */
+.kw-standalone {
+  min-height: 100vh;
+  background: var(--ck-surface-2);
+  color: var(--ck-ink);
+}
+.kw-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.kw-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  padding: 0.85rem clamp(1rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--ck-border);
+  background: var(--ck-surface);
+}
+.kw-brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.kw-mandant-name {
+  font-size: 1.05rem;
+}
+.kw-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-left: auto;
+}
+.kw-nav-link {
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--ck-border);
+  text-decoration: none;
+  color: var(--ck-ink-soft);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.kw-nav-link:hover {
+  color: var(--ck-ink);
+  border-color: var(--shell-teal);
+}
+.kw-nav-link--aktiv {
+  background: var(--shell-teal);
+  border-color: var(--shell-teal);
+  color: #ffffff;
+}
+.kw-abmelden {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--ck-border);
+  background: var(--ck-surface);
+  color: var(--ck-ink-soft);
+  cursor: pointer;
+}
+.kw-abmelden:hover {
+  color: var(--ck-ink);
+  border-color: var(--shell-teal);
+}
+.kw-abmelden:focus-visible,
+.kw-nav-link:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+}
+.kw-inhalt {
+  flex: 1;
+}
+.kw-inhalt .ck-cockpit,
+.kw-ablage,
+.kw-inhalt .sv-katalog {
+  padding: 1.5rem clamp(1rem, 4vw, 2.5rem) 3rem;
+}
+.kw-ablage {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.kw-page-head {
+  margin-bottom: 1.25rem;
+}
+.kw-page-lead {
+  margin: 0.35rem 0 0;
+  max-width: 70ch;
+  color: var(--ck-ink-soft);
+}
+.kw-ordner-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 1rem;
+}
+.kw-ordner {
+  border: 1px solid var(--ck-border);
+  border-radius: 14px;
+  background: var(--ck-surface);
+  padding: 1rem 1.1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.kw-ordner-kopf {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.kw-ordner-name {
+  margin: 0;
+  font-size: 1.05rem;
+  border: none;
+  padding: 0;
+}
+.kw-ordner-zahl {
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--shell-teal);
+  background: color-mix(in srgb, var(--shell-teal) 12%, transparent);
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+}
+.kw-ordner-frage {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ck-muted);
+}
+.kw-ordner-liste {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.kw-ablage-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.4rem 0.55rem;
+  border-radius: 9px;
+  border: 1px solid transparent;
+}
+.kw-ablage-link:hover {
+  border-color: var(--ck-border);
+  background: var(--ck-surface-2);
+}
+.kw-ablage-link:focus-visible {
+  outline: 3px solid var(--tw-focus);
+  outline-offset: 2px;
+}
+.kw-ablage-name {
+  font-weight: 600;
+}
+.kw-ablage-meta {
+  font-size: 0.8rem;
+  color: var(--ck-muted);
+}
+
 .pf-portfolio {
   max-width: 1180px;
   margin: 0 auto;

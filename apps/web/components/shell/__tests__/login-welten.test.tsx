@@ -155,7 +155,8 @@ describe('LoginPage – der Welten-Eintritt schreibt eine Sitzung MIT Rolle und 
     const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
     // Slot tenant-medicore trägt die Anzeige „MediNova"; Kunde-Sphäre → eigenes Cockpit.
     expect(gespeichert).toEqual({ roleId: 'R03', tenantId: TENANT_ID.MEDICORE });
-    expect(routerPush).toHaveBeenCalledWith('/cockpit');
+    // Kunde-Sphäre → eigene Kunde-Welt (Mein Dashboard, DR-0018 Stufe 3).
+    expect(routerPush).toHaveBeenCalledWith('/mein-dashboard');
   });
 
   it('Profil-Login (primär): „als Berater/Admin eintreten" schreibt R08 und pusht /portfolio', () => {
@@ -170,7 +171,7 @@ describe('LoginPage – der Welten-Eintritt schreibt eine Sitzung MIT Rolle und 
     expect(routerPush).toHaveBeenCalledWith('/portfolio');
   });
 
-  it('Kundenwelt: schreibt Rolle + Mandant und pusht /cockpit', () => {
+  it('Kundenwelt: schreibt Rolle + Mandant und pusht /mein-dashboard', () => {
     render(
       <SessionProvider>
         <LoginPage />
@@ -187,8 +188,8 @@ describe('LoginPage – der Welten-Eintritt schreibt eine Sitzung MIT Rolle und 
 
     const gespeichert = parseSession(window.localStorage.getItem(SESSION_STORAGE_KEY));
     expect(gespeichert).toEqual({ roleId: 'R03', tenantId: TENANT_ID.NORDWERK });
-    // Kunde = Ein-Unternehmens-Sicht: der Einstieg führt direkt auf das eigene Cockpit.
-    expect(routerPush).toHaveBeenCalledWith('/cockpit');
+    // Kunde = Ein-Unternehmens-Sicht: der Einstieg führt in die eigene Kunde-Welt (DR-0018).
+    expect(routerPush).toHaveBeenCalledWith('/mein-dashboard');
   });
 
   it('Beraterwelt: schreibt eine Betreiberrolle und pusht /portfolio (Berater-Einstieg, DR-0017)', () => {

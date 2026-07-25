@@ -114,7 +114,9 @@ export const KUNDENBEREICH_HREF = '/kunden';
  * Regel wie `kundenSicht` — kein zweiter Schalter.
  */
 export const BERATER_EINSTIEG_HREF = '/portfolio';
-export const KUNDE_EINSTIEG_HREF = '/cockpit';
+// DR-0018 Stufe 3: Die Kunde-Sicht landet in ihrer eigenen Welt (Mein Dashboard), nicht mehr auf
+// dem nackten Cockpit — von dort führen die drei Orte (Dashboard · Ablage · Services) weiter.
+export const KUNDE_EINSTIEG_HREF = '/mein-dashboard';
 
 /** Zielroute des Einstiegs nach der Anmeldung für die aktive Perspektive. */
 export function einstiegHref(role: DemoRole | null): string {
