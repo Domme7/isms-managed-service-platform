@@ -6,7 +6,13 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["apps/**", "packages/**", "*.json", "!packages/db/drizzle"]
+    "includes": [
+      "apps/**",
+      "packages/**",
+      "*.json",
+      "!packages/db/drizzle",
+      "!packages/demo-seed/seed-manifest.json"
+    ]
   },
   "formatter": {
     "enabled": true,
