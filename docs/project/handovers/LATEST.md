@@ -1,6 +1,8 @@
 # Latest Handover
 
-- **Aktuell (2026-07-25): DR-0018 „Großer Umbau", autonomer Loop über die 5-Stufen-Liste.**
+- **Aktuell:** `HND-20260725-dr0019.md` — DR-0019 Ein-Produkt-Fokus (kein Neuanfang; Firmen,
+  Portfolio, Cockpit bleiben; Master-Liste 1–6, Punkt 1 Drei-Tags-Modell ✅).
+- **Historie (Vormittag, 2026-07-25): DR-0018 „Großer Umbau", autonomer Loop über die 5-Stufen-Liste.**
 - **Modus:** Owner-Auftrag „durchklickbares Produkt in zwei Welten, ausblenden statt löschen, go live —
   keine Demo-Etiketten mehr". Selbst-getakteter `/loop`; pro Stufe grün committen. Entscheidung: [DR-0018].
 - **DR-0018-Fortschritt: Stufe 0–4 ✅ (committet+gepusht), Stufe 5 offen.** 0 DR-0018+Handover ·
