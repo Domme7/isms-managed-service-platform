@@ -9,10 +9,22 @@ Landing → Login → **Berater-Welt** (Portfolio → Kunden-Cockpit → Zwillin
 Kundendaten bleiben). Materielle Kursänderung: **Go-Live-Präsentation** — keine „Demo/Vorschau/
 illustrativ"-Etiketten mehr im UI; Daten bleiben aus echten Feldern berechnet, die Wahrheit über die
 drei Gates (Auth, Datei-Persistenz, E-02) steht in DR-0018. **Fortschritt gegen die 5-Stufen-Liste:**
-Stufe 0 (DR-0018 + dieser Handover) ✅; Stufe 1 Landing mit zwei Login-Einstiegen (Berater/Kunde) ✅
-(Commit `7058668`); Eisenhower-Priorisierung als Umschalter im Portfolio ✅ (`a10a52c`, aus echtem
-Datenzustand abgeleitet, E-02-Riegel unangetastet). **Als Nächstes:** Stufe 2 (Nicht-Struktur-Nav
-ausblenden) → Stufe 3 Kunde-Welt → Stufe 4 Prio/Frist je Objekt → Stufe 5 GreenGrid füllen + Politur.
+**Stufe 0–4 ✅** (alle committet+gepusht): DR-0018+Handover; Landing mit zwei Login-Einstiegen
+(`7058668`); Nicht-Struktur-Nav ausgeblendet (Marken-Link sphärengerecht, Sidebar via DR-0017 S4);
+Kunde-Welt neu (`(kunde)`-Route-Gruppe: Mein Dashboard · Meine Ablage/Verwaltungsordner über echte
+Objekte · Services buchen; Login-Kunde → `/mein-dashboard`); Prio+Frist je Objekt (geteilte
+`PrioBadge`, read-time via `ableitenPrioritaet`, E-02-Riegel unangetastet — in Meine Ablage + auf
+der Objekt-360-Seite). Web-Suite 918 grün. **Stufe 5 (offen):** (a) **GreenGrid reich füllen →
+5 volle Firmen** ist der große Rest — eigener Objektgraph `greengrid-graph.ts` analog
+`medinova-graph.ts` (30 Objekte/~34 Kanten, Erfassungswelle 2026-07-15, bewusste Deckungslücken,
+E-02/`tags_custom_fields`-Riegel halten) + seed.ts/tenants.ts verdrahten + Leere-Guards umschreiben
+(`seed.spec.ts` ~Z.100/114 `GREENGRID toEqual([])`, `seed-facts.ts`, Portfolio-Empty-State-Test) +
+Seed-Version-Bump + `pnpm --filter @isms/demo-seed build` VOR Web/DB-Tests. (b) verbliebene
+Hedge-Etiketten raus (Servicekatalog „illustrativ/ohne Buchung", Login „beschriftete Vorschau") —
+Guard-Tests mitziehen. (c) Bereich-Kacheln im Kunde-Dashboard sollen in der Kunde-Welt bleiben.
+(d) Bildsprache/Politur (Ablage-Pluralisierung ✅), Endabnahme axe 0. **Blocker (2026-07-25 ~15:00):
+wöchentliches API-Limit erreicht** — der GreenGrid-Subagent brach ab; Fill nächste Session (Muster
+oben, alles aus dem Repo fortsetzbar).
 — *Der folgende Abschnitt ist der frühere Cockpit-Stand, historisch:*
 
 **Stand (2026-07-24):** Modernes **Cockpit fertig** (hell/dunkel, Ampeln/Warnungen/Deckungsringe,

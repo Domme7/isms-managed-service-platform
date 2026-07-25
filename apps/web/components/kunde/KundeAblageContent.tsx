@@ -20,6 +20,11 @@ import { objectDetailHref } from '../../lib/twin/routes';
 import { objectTypeDisplay } from '../../lib/twin/data';
 import { PrioBadge } from '../prioritaet/PrioBadge';
 
+/** Deutsche Singular/Plural-Form: 1 → „1 Objekt", sonst „N Objekte". */
+function anzahl(n: number, singular: string, plural: string): string {
+  return `${n} ${n === 1 ? singular : plural}`;
+}
+
 export function KundeAblageContent({ tenant }: { tenant: DemoTenant }) {
   const ablage: AblageModell = buildAblage(tenant.tenant_id);
 
@@ -29,8 +34,9 @@ export function KundeAblageContent({ tenant }: { tenant: DemoTenant }) {
         <p className="tw-eyebrow">Meine Ablage</p>
         <h1 id="kw-ablage-titel">Meine Ablage</h1>
         <p className="kw-page-lead">
-          Ihre {ablage.objekteGesamt} erfassten Objekte, geordnet in {ablage.ordner.length}{' '}
-          Verwaltungsordner. Jeder Eintrag führt auf seine vollständige Objektseite.
+          Ihre {anzahl(ablage.objekteGesamt, 'erfasstes Objekt', 'erfassten Objekte')}, geordnet in{' '}
+          {anzahl(ablage.ordner.length, 'Verwaltungsordner', 'Verwaltungsordner')}. Jeder Eintrag
+          führt auf seine vollständige Objektseite.
         </p>
       </header>
 
@@ -44,7 +50,9 @@ export function KundeAblageContent({ tenant }: { tenant: DemoTenant }) {
             <li key={ordner.id} className="kw-ordner">
               <div className="kw-ordner-kopf">
                 <h2 className="kw-ordner-name">{ordner.name}</h2>
-                <span className="kw-ordner-zahl">{ordner.objects.length} Objekte</span>
+                <span className="kw-ordner-zahl">
+                  {anzahl(ordner.objects.length, 'Objekt', 'Objekte')}
+                </span>
               </div>
               <p className="kw-ordner-frage">{ordner.leitfrage}</p>
               <ul className="kw-ordner-liste">
