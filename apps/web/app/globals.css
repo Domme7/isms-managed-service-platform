@@ -3806,3 +3806,110 @@ summary {
   font-style: italic;
   color: var(--tw-muted);
 }
+
+/* Berater-Portfolio: Umschalter Datenlage ↔ Priorisierung + Eisenhower-Board (Owner 2026-07-25). */
+.pf-umschalter {
+  display: inline-flex;
+  border: 1px solid var(--ck-border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0 0 1.25rem;
+}
+.pf-tab {
+  padding: 0.5rem 1.1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ck-muted);
+}
+.pf-tab--aktiv {
+  background: var(--ck-surface-3);
+  color: var(--ck-ink);
+}
+.pf-eh-hinweis,
+.pf-eh-regel {
+  font-size: 0.82rem;
+  color: var(--ck-muted);
+  line-height: 1.55;
+  margin: 0 0 0.9rem;
+}
+.pf-eh-regel {
+  margin: 1rem 0 0;
+}
+.pf-eh-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+.pf-eh-quadrant {
+  border: 1px solid var(--ck-border);
+  border-top: 3px solid var(--ck-border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  background: var(--ck-surface);
+}
+.pf-eh-quadrant--sofort {
+  border-top-color: var(--ck-alert);
+}
+.pf-eh-quadrant--einplanen {
+  border-top-color: var(--ck-info);
+}
+.pf-eh-quadrant--delegieren {
+  border-top-color: var(--ck-warn);
+}
+.pf-eh-quadrant--spaeter {
+  border-top-color: var(--ck-muted);
+}
+.pf-eh-titel {
+  font-size: 0.98rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+  color: var(--ck-ink);
+}
+.pf-eh-sub {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--ck-muted);
+}
+.pf-eh-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.pf-eh-item {
+  width: 100%;
+  text-align: left;
+  background: var(--ck-surface-2);
+  border: 1px solid var(--ck-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pf-eh-item:hover,
+.pf-eh-item:focus-visible {
+  border-color: var(--ck-info);
+}
+.pf-eh-item-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ck-ink);
+}
+.pf-eh-item-meta,
+.pf-eh-item-frist {
+  font-size: 0.75rem;
+  color: var(--ck-muted);
+}
+.pf-eh-leer,
+.pf-eh-mehr {
+  font-size: 0.8rem;
+  color: var(--ck-muted);
+  margin: 0.3rem 0 0;
+}

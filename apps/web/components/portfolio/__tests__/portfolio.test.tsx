@@ -72,10 +72,21 @@ describe('PortfolioContent – Berater-Portfolio', () => {
     expect(screen.getByText(/Noch kein Datenbestand erfasst/)).toBeInTheDocument();
   });
 
-  it('trägt die Ehrlichkeitszeile (Farbe = Datenlage, kein Prüfergebnis) und die benannte E-02-Lücke', () => {
+  it('trägt die Ehrlichkeitszeile (kein Prüfergebnis) und den Umschalter zur Eisenhower-Priorisierung', () => {
     render(<PortfolioContent role={berater} />);
+    // Ehrlichkeitszeile bleibt: erfasste Datenlage nach Regel, kein Prüfergebnis/Score.
     expect(screen.getByText(/kein Prüfergebnis/)).toBeInTheDocument();
-    expect(screen.getByText(/Termine, Fristen und Dringlichkeit/)).toBeInTheDocument();
+    // Umschalter mit beiden Sichten.
+    expect(screen.getByRole('button', { name: 'Datenlage' })).toBeInTheDocument();
+    const prioTab = screen.getByRole('button', { name: 'Priorisierung' });
+
+    // Umschalten → Eisenhower-Board, ehrlich als ABLEITUNG benannt (kein erfundener Wert), Regel sichtbar.
+    fireEvent.click(prioTab);
+    expect(screen.getByText(/Abgeleitet aus dem Datenzustand/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Sofort erledigen/ })).toBeInTheDocument();
+    expect(screen.getByText(/Quadrant = Wichtigkeit/)).toBeInTheDocument();
+    // Die Frist ist als abgeleiteter Vorschlag gekennzeichnet, nicht als Kunden-Termin.
+    expect(screen.getByText(/abgeleiteter Vorschlag/)).toBeInTheDocument();
   });
 
   it('rendert ohne Rolle (neutral) vollständig – kein Rollenzusatz, aber die Rangliste steht', () => {
